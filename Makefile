@@ -1,7 +1,7 @@
 THRIFT_EXEC = thrift
 THRIFT_LANGUAGES = erlang go java
 
-FILES = $(wildcard *.thrift)
+FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
 define generate
