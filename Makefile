@@ -31,7 +31,7 @@ verify-%: $(DESTDIR)
 $(DESTDIR):
 	@mkdir -p $@
 
-clean:
+clean::
 	@rm -rfv $(DESTDIR)
 
 TARGETS = $(call targets,$(LANGUAGE))
@@ -50,6 +50,9 @@ doc: $(DOCTARGETS)
 $(DOCTARGETS): $(DOCDIR)/%.html: %.thrift
 	mkdir -p $(dir $@)
 	$(call generate,html,$(dir $@),$<)
+
+clean::
+	@rm -rfv $(DOCDIR)
 
 # Erlang
 
