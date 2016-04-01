@@ -198,6 +198,7 @@ code { line-height: 20px; }
 <td><a href="#Struct_Error">Error</a><br/>
 <a href="#Struct_Failure">Failure</a><br/>
 <a href="#Typedef_ID">ID</a><br/>
+<a href="#Struct_NotFound">NotFound</a><br/>
 <a href="#Typedef_Tag">Tag</a><br/>
 <a href="#Typedef_Timeout">Timeout</a><br/>
 <a href="#Struct_Timer">Timer</a><br/>
@@ -212,7 +213,10 @@ code { line-height: 20px; }
 <br/></div>
 <div class="definition"><h3 id="Typedef_Timestamp">Typedef: Timestamp</h3>
 <p><strong>Base type:</strong>&nbsp;<code>string</code></p>
-Отметка во времени в UTC согласно ISO 8601
+Отметка во времени согласно ISO 8601.
+
+Строка должна содержать дату и время в UTC в следующем формате:
+`2016-03-22T06:12:27Z`.
 <br/></div>
 <div class="definition"><h3 id="Typedef_Timeout">Typedef: Timeout</h3>
 <p><strong>Base type:</strong>&nbsp;<code>i32</code></p>
@@ -242,4 +246,7 @@ code { line-height: 20px; }
 <tr><td>1</td><td>error</td><td><code><a href="#Struct_Error">Error</a></code></td><td>Ошибка, которая привела к возникновению исключения
 </td><td>required</td><td></td></tr>
 </table><br/>Общее исключение
+<br/></div><div class="definition"><h3 id="Struct_NotFound">Exception: NotFound</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+</table><br/>Исключение, сигнализирующее об отсутствии объекта или процесса
 <br/></div></div></body></html>

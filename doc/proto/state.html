@@ -204,14 +204,18 @@ state processor – абстракции, реализующей шаг обра
 <li><a href="#Fn_Processor_processCall">processCall</a></li>
 <li><a href="#Fn_Processor_processSignal">processSignal</a></li>
 </ul>
-<a href="#Svc_Callee">Callee</a><br/>
+<a href="#Svc_Automaton">Automaton</a><br/>
 <ul>
-<li><a href="#Fn_Callee_call">call</a></li>
+<li><a href="#Fn_Automaton_call">call</a></li>
+<li><a href="#Fn_Automaton_destroy">destroy</a></li>
+<li><a href="#Fn_Automaton_repair">repair</a></li>
+<li><a href="#Fn_Automaton_start">start</a></li>
 </ul>
 </td>
-<td><a href="#Struct_Call">Call</a><br/>
+<td><a href="#Struct_Args">Args</a><br/>
+<a href="#Typedef_Call">Call</a><br/>
 <a href="#Struct_CallArgs">CallArgs</a><br/>
-<a href="#Struct_CallResponse">CallResponse</a><br/>
+<a href="#Typedef_CallResponse">CallResponse</a><br/>
 <a href="#Struct_CallResult">CallResult</a><br/>
 <a href="#Struct_ComplexAction">ComplexAction</a><br/>
 <a href="#Struct_Event">Event</a><br/>
@@ -223,6 +227,7 @@ state processor – абстракции, реализующей шаг обра
 <a href="#Struct_Signal">Signal</a><br/>
 <a href="#Struct_SignalArgs">SignalArgs</a><br/>
 <a href="#Struct_SignalResult">SignalResult</a><br/>
+<a href="#Struct_StartResult">StartResult</a><br/>
 <a href="#Struct_TagAction">TagAction</a><br/>
 <a href="#Struct_TimeoutSignal">TimeoutSignal</a><br/>
 </td>
@@ -233,6 +238,17 @@ state processor – абстракции, реализующей шаг обра
 <p><strong>Base type:</strong>&nbsp;<code>list&lt;<code><a href="#Struct_Event">Event</a></code>&gt;</code></p>
 Сложное состояние, выраженное в виде упорядоченного набора событий
 процессора.
+<br/></div>
+<div class="definition"><h3 id="Typedef_Call">Typedef: Call</h3>
+<p><strong>Base type:</strong>&nbsp;<code>binary</code></p>
+Внешний вызов.
+
+При помощи вызовов организовано общение автомата с внешним миром и
+получение на них ответов.
+<br/></div>
+<div class="definition"><h3 id="Typedef_CallResponse">Typedef: CallResponse</h3>
+<p><strong>Base type:</strong>&nbsp;<code>binary</code></p>
+Ответ на внешний вызов.
 <br/></div>
 <hr/><h2 id="Structs">Data structures</h2>
 <div class="definition"><h3 id="Struct_Event">Union: Event</h3>
@@ -246,10 +262,9 @@ state processor – абстракции, реализующей шаг обра
 </table><br/>Желаемое действие, продукт перехода в новое состояние.
 
 Возможные действия представляют собой ограниченный язык для управления
-прогрессом автомата, основанием для прихода сигналов, которые приводят
-к дальнейшим переходам состояния. Отсутствие заполненных полей будет
-интерпретировано буквально, то есть автомат перестанет прогрессировать
-в отсутствии внешних вызовов.
+прогрессом автомата, основанием для прихода сигналов или внешних вызовов,
+которые приводят к дальнейшим переходам состояния. Отсутствие заполненных
+полей будет интерпретировано буквально, как отсутствие желаемых действий.
 <br/></div><div class="definition"><h3 id="Struct_SetTimerAction">Struct: SetTimerAction</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>timer</td><td><code><a href="base.html#Struct_Timer">base.Timer</a></code></td><td>Критерий остановки таймера ожидания
@@ -267,6 +282,15 @@ state processor – абстракции, реализующей шаг обра
 После факта успешной ассоциации к автомату можно обратиться с внешним
 вызовом, используя указанное значение, то есть в процессор может поступить
 вызов `processCall` с указанным `tag` в качестве `Reference`.
+
+Это действие в общем случае неидемпотентно, то есть ассоциация связана с
+определённым моментом в истории, и в случае попытки использования одного и
+того же значения ассоциации в разные моменты истории процесса автомата он
+переходит в ошибочное состояние.
+
+То же самое происходит в случае попытки ассоциации одного и того значения с
+двумя или более различными процессами автомата, все они переходят в ошибочное
+состояние, – ситуация, требующая ручного вмешательства.
 <br/></div><div class="definition"><h3 id="Struct_Reference">Union: Reference</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>id</td><td><code><a href="base.html#Typedef_ID">base.ID</a></code></td><td>Основной идентификатор процесса автомата
@@ -274,26 +298,11 @@ state processor – абстракции, реализующей шаг обра
 <tr><td>2</td><td>tag</td><td><code><a href="base.html#Typedef_Tag">base.Tag</a></code></td><td>Ассоциация
 </td><td>optional</td><td></td></tr>
 </table><br/>Ссылка, уникально определяющая процесс автомата.
-<br/></div><div class="definition"><h3 id="Struct_Call">Union: Call</h3>
-<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>payload</td><td><code>binary</code></td><td>Данные вызова
-</td><td>optional</td><td></td></tr>
-</table><br/>Внешний вызов.
-
-При помощи вызовов организовано общение автомата с внешним миром и
-получение на них ответов.
-<br/></div><div class="definition"><h3 id="Struct_CallResponse">Union: CallResponse</h3>
-<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>payload</td><td><code>binary</code></td><td>Данные ответа
-</td><td>optional</td><td></td></tr>
-</table><br/>Ответ на внешний вызов.
 <br/></div><div class="definition"><h3 id="Struct_CallArgs">Struct: CallArgs</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>ref</td><td><code><a href="#Struct_Reference">Reference</a></code></td><td>Ссылка, по которой поступил вызов
+<tr><td>1</td><td>call</td><td><code><a href="#Typedef_Call">Call</a></code></td><td>Данные вызова
 </td><td>required</td><td></td></tr>
-<tr><td>2</td><td>call</td><td><code><a href="#Struct_Call">Call</a></code></td><td>Данные вызова
-</td><td>required</td><td></td></tr>
-<tr><td>3</td><td>history</td><td><code><a href="#Typedef_History">History</a></code></td><td>История автомата
+<tr><td>2</td><td>history</td><td><code><a href="#Typedef_History">History</a></code></td><td>История автомата
 </td><td>required</td><td></td></tr>
 </table><br/>Набор данных для обработки внешнего вызова.
 <br/></div><div class="definition"><h3 id="Struct_CallResult">Struct: CallResult</h3>
@@ -302,7 +311,7 @@ state processor – абстракции, реализующей шаг обра
 </td><td>required</td><td></td></tr>
 <tr><td>2</td><td>action</td><td><code><a href="#Struct_ComplexAction">ComplexAction</a></code></td><td>Действие, которое необходимо выполнить после обработки
 </td><td>required</td><td></td></tr>
-<tr><td>3</td><td>response</td><td><code><a href="#Struct_CallResponse">CallResponse</a></code></td><td>Данные ответа
+<tr><td>3</td><td>response</td><td><code><a href="#Typedef_CallResponse">CallResponse</a></code></td><td>Данные ответа
 </td><td>required</td><td></td></tr>
 </table><br/>Результат обработки внешнего вызова.
 <br/></div><div class="definition"><h3 id="Struct_Signal">Union: Signal</h3>
@@ -326,6 +335,7 @@ state processor – абстракции, реализующей шаг обра
 </table><br/>Сигнал, информирующий об окончании ожидания по таймеру.
 <br/></div><div class="definition"><h3 id="Struct_RepairSignal">Struct: RepairSignal</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>arg</td><td><code>binary</code></td><td></td><td>optional</td><td></td></tr>
 </table><br/>Сигнал, информирующий о необходимости восстановить работу автомата,
 опционально скорректировать своё состояние.
 <br/></div><div class="definition"><h3 id="Struct_SignalArgs">Struct: SignalArgs</h3>
@@ -342,6 +352,15 @@ state processor – абстракции, реализующей шаг обра
 <tr><td>2</td><td>action</td><td><code><a href="#Struct_ComplexAction">ComplexAction</a></code></td><td>Действие, которое необходимо выполнить после обработки
 </td><td>required</td><td></td></tr>
 </table><br/>Результат обработки сигнала.
+<br/></div><div class="definition"><h3 id="Struct_Args">Struct: Args</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>arg</td><td><code>binary</code></td><td>Неструктурированные данные.
+</td><td>required</td><td></td></tr>
+</table><br/>Универсальная расширяемая структура с набором аргументов.
+<br/></div><div class="definition"><h3 id="Struct_StartResult">Struct: StartResult</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>id</td><td><code><a href="base.html#Typedef_ID">base.ID</a></code></td><td></td><td>required</td><td></td></tr>
+</table><br/>Результат запуска процесса автомата.
 <br/></div><hr/><h2 id="Services">Services</h2>
 <h3 id="Svc_Processor">Service: Processor</h3>
 Процессор переходов состояния ограниченного конечного автомата.
@@ -354,10 +373,25 @@ state processor – абстракции, реализующей шаг обра
 <br/></div><div class="definition"><h4 id="Fn_Processor_processCall">Function: Processor.processCall</h4>
 <pre><code><a href="#Struct_CallResult">CallResult</a></code> processCall(<code><a href="#Struct_CallArgs">CallArgs</a></code> a)
 </pre>Обработать внешний вызов и сформировать ответ на него.
-<br/></div><h3 id="Svc_Callee">Service: Callee</h3>
-Обработчик внешних вызовов, например автомат.
-<br/><div class="definition"><h4 id="Fn_Callee_call">Function: Callee.call</h4>
-<pre><code><a href="#Struct_CallResponse">CallResponse</a></code> call(<code><a href="#Struct_Reference">Reference</a></code> ref,
-                  <code><a href="#Struct_Call">Call</a></code> c)
+<br/></div><h3 id="Svc_Automaton">Service: Automaton</h3>
+Сервис управления процессами автоматов, отвечающий за реализацию желаемых
+действий и поддержку состояния процессоров.
+<br/><div class="definition"><h4 id="Fn_Automaton_start">Function: Automaton.start</h4>
+<pre><code><a href="#Struct_StartResult">StartResult</a></code> start(<code><a href="#Struct_Args">Args</a></code> a)
+</pre>Запустить новый процесс автомата.
+<br/></div><div class="definition"><h4 id="Fn_Automaton_destroy">Function: Automaton.destroy</h4>
+<pre><code>void</code> destroy(<code><a href="#Struct_Reference">Reference</a></code> ref)
+    throws <code><a href="base.html#Struct_NotFound">base.NotFound</a></code>
+</pre>Уничтожить определённый процесс автомата.
+<br/></div><div class="definition"><h4 id="Fn_Automaton_repair">Function: Automaton.repair</h4>
+<pre><code>void</code> repair(<code><a href="#Struct_Reference">Reference</a></code> ref,
+            <code><a href="#Struct_Args">Args</a></code> a)
+    throws <code><a href="base.html#Struct_NotFound">base.NotFound</a></code>
+</pre>Попытаться перевести определённый процесс автомата из ошибочного
+состояния в штатное и продолжить его исполнение.
+<br/></div><div class="definition"><h4 id="Fn_Automaton_call">Function: Automaton.call</h4>
+<pre><code><a href="#Typedef_CallResponse">CallResponse</a></code> call(<code><a href="#Struct_Reference">Reference</a></code> ref,
+                  <code><a href="#Typedef_Call">Call</a></code> c)
+    throws <code><a href="base.html#Struct_NotFound">base.NotFound</a></code>
 </pre>Совершить вызов и дождаться на него ответа.
 <br/></div></div></body></html>
