@@ -1,2 +1,9 @@
 _gen
 *.sublime-workspace
+
+# wercker
+/_builds/
+/_cache/
+/_projects/
+/_steps/
+/_temp/
