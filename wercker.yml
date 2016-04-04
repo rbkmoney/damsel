@@ -1,0 +1,10 @@
+box: rbkmoney/thrift-compiler
+build:
+    steps:
+      - script:
+        name: check syntactic correctness
+        code: make all
+    after-steps:
+      - slack-notifier:
+        url: ${SLACK_WEBHOOK_URL}
+        username: "wercker"
