@@ -1,5 +1,6 @@
 THRIFT_EXEC = thrift
 THRIFT_LANGUAGES = erlang go java
+THRIFT_OPTIONS_html = standalone
 
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
@@ -14,7 +15,7 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: all clean
+.PHONY: all clean doc
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
@@ -30,7 +31,7 @@ verify-%: $(DESTDIR)
 $(DESTDIR):
 	@mkdir -p $@
 
-clean:
+clean::
 	@rm -rfv $(DESTDIR)
 
 TARGETS = $(call targets,$(LANGUAGE))
@@ -39,10 +40,29 @@ $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 	mkdir -p $@
 	$(call generate,$(LANGUAGE),$@,$<)
 
+# Docs
+
+DOCDIR = doc
+DOCTARGETS = $(patsubst %.thrift, $(DOCDIR)/%.html, $(FILES))
+
+doc: $(DOCTARGETS)
+
+$(DOCTARGETS): $(DOCDIR)/%.html: %.thrift
+	mkdir -p $(dir $@)
+	$(call generate,html,$(dir $@),$<)
+
+clean::
+	@rm -rfv $(DOCDIR)
+
 # Erlang
 
+ERLC ?= erlc
+
 ifeq ($(LANGUAGE), erlang)
-ERLC = erlc -v
+ifneq ($(shell which $(ERLC)),)
+
 $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
-	$(ERLC) -I$@ -o$@ $(shell find $@ -name "*.erl")
+	$(ERLC) -v -I$@ -o$@ $(shell find $@ -name "*.erl")
+
+endif
 endif
