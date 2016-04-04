@@ -32,7 +32,7 @@ $(DESTDIR):
 	@mkdir -p $@
 
 clean::
-	@rm -rfv $(DESTDIR)
+	rm -rf $(DESTDIR)
 
 TARGETS = $(call targets,$(LANGUAGE))
 
@@ -51,8 +51,12 @@ $(DOCTARGETS): $(DOCDIR)/%.html: %.thrift
 	mkdir -p $(dir $@)
 	$(call generate,html,$(dir $@),$<)
 
+# wercker
+
+WERCKERDIRS = _builds _cache _projects _steps _temp
+
 clean::
-	@rm -rfv $(DOCDIR)
+	rm -rf $(WERCKERDIRS)
 
 # Erlang
 
