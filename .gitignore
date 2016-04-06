@@ -1,4 +1,5 @@
-_gen
+/_gen/
+/_build/
 *.sublime-workspace
 
 # wercker
