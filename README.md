@@ -1,1 +1,3 @@
-# Hellgate protocol collection
+# Damsel
+
+Systemwide protocol collection.
