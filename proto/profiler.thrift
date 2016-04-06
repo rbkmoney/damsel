@@ -2,24 +2,39 @@
  * Определения структур и сервисов для работы с профилями
  */
 
-include "base.thrift"
-
 namespace java com.rbkmoney.profiler.thrift
+
+/**
+ * Уникальный идентификатор
+ */
+typedef string Uuid
+
+/** Данные для авторизации */
+struct LoginPass {
+    /** Логин, в качестве которого принимаем e-mail */
+    1: string login;
+    /** Пароль */
+    2: string password;
+}
+
+/** Данные необходимые для идентификации */
+union Credentials {
+    /** Данные для авторизации */
+    1: LoginPass loginPass;
+}
 
 /**
  * Набор данных по профилю
  */
 struct Profile {
-    /** Логин, может быть и e-mail-ом, но для внутренних сервисов, не обязательно e-mail */
-    1: required string login;
-    /** Пароль */
-    2: required string password;
-    /** E-mail */
-    3: required string email;
+    /** Данные для авторизации */
+    1: required LoginPass loginPass;
     /** Имя */
-    4: optional string firstName;
+    2: optional string firstName;
     /** Фамилия */
-    5: optional string lastName;
+    3: optional string lastName;
+    /** Mobile phone */
+    4: optional string mobilePhone;
 }
 
 /**
@@ -30,33 +45,42 @@ struct CreateProfileRequest {
 }
 
 /**
- * Ответ на создание профиля.
- * Возвращает профиль со всеми входящими данными и uuid, который присвоен данному профилю
+ * Ответ на создание профиля
+ * Возвращает уникальный идентификатор присвоенный профилю после его создания
  */
 struct CreateProfileResponse {
-    /** Набор данных по профилю */
-    1: required Profile profile;
     /** Уникальный номер присвоенный профилю в случае успешного создания */
-    2: required string uuid;
+    1: required Uuid uuid;
+}
+
+/**
+ * Запрос на обновление профиля
+ */
+struct UpdateProfileRequest {
+    1: required Profile profile;
+}
+
+/**
+ * Ответ на обновление профиля
+ */
+struct UpdateProfileResponse {
+    /** Уникальный номер присвоенный профилю в случае успешного обновления */
+    1: required Uuid uuid;
 }
 
 /**
  * Запрос на получение токена
  */
-struct GetProfileTokenRequest {
-    /** Набор данных по профилю */
-    1: required Profile profile;
-    /** Название Realm в keycloack в который необходимо отправить запрос на получение токена */
-    2: required string realm;
-    /** Название публичного приложения в Keycloak через которое будем получать токен */
-    3: required string clientId;
+struct GenereateAuthTokenRequest {
+    /** Набор данных необходимых для получения токена */
+    1: required Credentials credentials;
 }
 
 /**
  * Ответ на запрос получения токена
  */
-struct GetProfileTokenResponse {
-    1: required string token;
+struct GenereateAuthTokenResponse {
+    1: required string authToken;
 }
 
 /**
@@ -67,10 +91,15 @@ service ProfileService {
     /**
      * Создать новый профиль
      */
-    CreateProfileResponse createProfile(1:CreateProfileRequest createProfileRequest) throws (1: base.Failure ex),
+    CreateProfileResponse createProfile(1:CreateProfileRequest createProfileRequest),
 
     /**
-     * Получить токен профиля для последущего запроса по токену
+     * Обновить профиль
      */
-    GetProfileTokenResponse getProfileToken(1:GetProfileTokenRequest getProfileTokenRequest) throws (1: base.Failure ex),
+    UpdateProfileResponse updateProfile(1:UpdateProfileRequest updateProfileRequest),
+
+    /**
+     * Получить токен
+     */
+    GenereateAuthTokenResponse generateAuthToken(1:GenereateAuthTokenRequest genereateAuthTokenRequest),
 }
