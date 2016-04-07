@@ -2,7 +2,7 @@
  * Базовые, наиболее общие определения
  */
 
-namespace * hg
+namespace * dmsl
 
 /** Идентификатор */
 typedef string ID;

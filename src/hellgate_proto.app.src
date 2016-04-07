@@ -1,8 +1,0 @@
-{application, hellgate_proto, [
-    {description, "Central Thrift protocol station"},
-    {vsn, "0.1"},
-    {applications, [kernel, stdlib]},
-    {modules, []},
-    {maintainers, ["Andrey Mayorov"]},
-    {links, [{"Github", "https://github.com/rbkmoney/hellgate_proto"}]}
-]}.

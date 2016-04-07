@@ -8,7 +8,7 @@
 
 include "base.thrift"
 
-namespace * hg
+namespace * dmsl
 
 /**
  * Произвольное событие, продукт перехода в новое состояние.
