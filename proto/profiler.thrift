@@ -43,8 +43,8 @@ struct Profile {
 struct CreateProfileRequest {
     /** Набор данных по профилю */
     1: required Profile profile;
-    /** Данные для авторизации */
-    2: required LoginPass loginPass;
+    /** Данные необходимые для идентификации */
+    2: required Credentials credentials;
 }
 
 /**
@@ -62,8 +62,10 @@ struct CreateProfileResponse {
 struct UpdateProfileRequest {
     /** Набор данных по профилю */
     1: required Profile profile;
+    /** Данные необходимые для идентификации */
+    2: optional Credentials credentials;
     /** Уникальный номер присвоенный профилю */
-    2: required Uuid uuid;
+    3: required Uuid uuid;
 }
 
 /**
@@ -102,6 +104,12 @@ exception ProfileNotFound {
     1: required base.Error error;
 }
 
+/** Исключение, сигнализирующее о том, что переданы неверные данные для идентификации */
+exception ProfileWrongCredentials {
+    /** Ошибка, которая привела к возникновению исключения */
+    1: required base.Error error;
+}
+
 /**
  * Сервис управления профилями и токенами
  */
@@ -115,10 +123,10 @@ service ProfileService {
     /**
      * Обновить профиль
      */
-    UpdateProfileResponse updateProfile(1:UpdateProfileRequest updateProfileRequest) throws (1: ProfileNotFound pex),
+    UpdateProfileResponse updateProfile(1:UpdateProfileRequest updateProfileRequest) throws (1: ProfileNotFound pnfex),
 
     /**
      * Получить токен
      */
-    GenereateAuthTokenResponse generateAuthToken(1:GenereateAuthTokenRequest genereateAuthTokenRequest) throws (1: ProfileNotFound pex),
+    GenereateAuthTokenResponse generateAuthToken(1:GenereateAuthTokenRequest genereateAuthTokenRequest) throws (1: ProfileNotFound pnfex, 2: ProfileWrongCredentials pwcex),
 }
