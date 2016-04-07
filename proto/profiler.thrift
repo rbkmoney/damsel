@@ -2,6 +2,8 @@
  * Определения структур и сервисов для работы с профилями
  */
 
+include "base.thrift"
+
 namespace java com.rbkmoney.profiler.thrift
 
 /**
@@ -27,21 +29,22 @@ union Credentials {
  * Набор данных по профилю
  */
 struct Profile {
-    /** Данные для авторизации */
-    1: required LoginPass loginPass;
     /** Имя */
-    2: optional string firstName;
+    1: optional string firstName;
     /** Фамилия */
-    3: optional string lastName;
+    2: optional string lastName;
     /** Mobile phone */
-    4: optional string mobilePhone;
+    3: optional string mobilePhone;
 }
 
 /**
  * Запрос на создание профиля
  */
 struct CreateProfileRequest {
+    /** Набор данных по профилю */
     1: required Profile profile;
+    /** Данные для авторизации */
+    2: required LoginPass loginPass;
 }
 
 /**
@@ -57,7 +60,10 @@ struct CreateProfileResponse {
  * Запрос на обновление профиля
  */
 struct UpdateProfileRequest {
+    /** Набор данных по профилю */
     1: required Profile profile;
+    /** Уникальный номер присвоенный профилю */
+    2: required Uuid uuid;
 }
 
 /**
@@ -80,7 +86,20 @@ struct GenereateAuthTokenRequest {
  * Ответ на запрос получения токена
  */
 struct GenereateAuthTokenResponse {
+    /** Auth Token */
     1: required string authToken;
+}
+
+/** Исключение, сигнализирующее о том, что создаваемый профиль уже существует */
+exception ProfileExists {
+    /** Ошибка, которая привела к возникновению исключения */
+    1: required base.Error error;
+}
+
+/** Исключение, сигнализирующее о том, что профиль не существует */
+exception ProfileNotFound {
+    /** Ошибка, которая привела к возникновению исключения */
+    1: required base.Error error;
 }
 
 /**
@@ -91,15 +110,15 @@ service ProfileService {
     /**
      * Создать новый профиль
      */
-    CreateProfileResponse createProfile(1:CreateProfileRequest createProfileRequest),
+    CreateProfileResponse createProfile(1:CreateProfileRequest createProfileRequest) throws (1: ProfileExists pex),
 
     /**
      * Обновить профиль
      */
-    UpdateProfileResponse updateProfile(1:UpdateProfileRequest updateProfileRequest),
+    UpdateProfileResponse updateProfile(1:UpdateProfileRequest updateProfileRequest) throws (1: ProfileNotFound pex),
 
     /**
      * Получить токен
      */
-    GenereateAuthTokenResponse generateAuthToken(1:GenereateAuthTokenRequest genereateAuthTokenRequest),
+    GenereateAuthTokenResponse generateAuthToken(1:GenereateAuthTokenRequest genereateAuthTokenRequest) throws (1: ProfileNotFound pex),
 }
