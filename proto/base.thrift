@@ -15,6 +15,12 @@ typedef string ID;
  */
 typedef string Timestamp;
 
+/** Рациональное число. */
+struct Rational {
+    1: required i64 p
+    2: required i64 q
+}
+
 /** Отрезок времени в секундах */
 typedef i32 Timeout;
 
