@@ -3,7 +3,7 @@ build:
     steps:
       - script:
         name: check syntactic correctness
-        code: make all
+        code: make verify
     after-steps:
       - slack-notifier:
         url: ${SLACK_WEBHOOK_URL}
