@@ -15,11 +15,16 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: all clean doc
+.PHONY: all verify clean doc
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
-all: $(LANGUAGE_TARGETS)
+all: erlang
+
+erlang:
+	rebar3 compile
+
+verify: $(LANGUAGE_TARGETS)
 	@echo "Ok"
 
 verify-%: $(DESTDIR)
@@ -32,6 +37,7 @@ $(DESTDIR):
 	@mkdir -p $@
 
 clean::
+	rebar3 clean
 	rm -rf $(DESTDIR)
 
 TARGETS = $(call targets,$(LANGUAGE))
