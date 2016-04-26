@@ -25,7 +25,7 @@ struct CurrencyRef { 1: required string symbolic_code }
 
 struct CurrencyObject {
     1: required CurrencyRef ref
-    2: required CurrencyObject data
+    2: required Currency data
 }
 
 /** Распределение денежных потоков в системе. */
@@ -90,18 +90,26 @@ struct MerchantObject {
 struct Contract {
     1: required string number
     2: required base.Timestamp signed_at
-    3: required Party party
-    4: required list<ContractTerm> terms
+    3: required PartyRef party
+    4: required BankAccount account
+    5: required list<ContractTerm> terms
 }
 
-/** Юридическое лицо, выступающее стороной договора. */
+/** Лицо, выступающее стороной договора. */
 struct Party {
-    1: required LegalEntity legal
-    2: required BankAccount account
+    1: required string registered_name
+    2: required LegalEntity legal_entity
 }
 
 /** Форма юридического лица. */
 union LegalEntity {
+}
+
+struct PartyRef { 1: required ObjectID id }
+
+struct PartyObject {
+    1: required PartyRef ref
+    2: required Party data
 }
 
 /** Банковский счёт. */
@@ -110,6 +118,10 @@ struct BankAccount {
 
 /** Условие договора. */
 union ContractTerm {
+    1: CashDistributionTerm cash_distribution
+}
+
+struct CashDistributionTerm {
 }
 
 /* Shops */
@@ -138,17 +150,37 @@ struct CategoryObject {
 
 /* Payment methods */
 
+enum PaymentMethod {
+    bank_card = 1        // payment_card?
+}
+
+union PaymentTool {
+    1: BankCard bank_card
+}
+
+struct BankCard {
+    1: required i64 pan
+    2: required ExpDate exp_date
+    3: optional string holder
+    4: optional string cvv
+}
+
+struct ExpDate {
+    1: required i8 month
+    2: required i16 year
+}
+
 /** Способ платежа, категория платёжного средства. */
-struct PaymentMethod {
+struct PaymentMethodDefinition {
     1: required string name
     2: required string description = ""
 }
 
-struct PaymentMethodRef { 1: required ObjectID id }
+struct PaymentMethodRef { 1: required PaymentMethod id }
 
 struct PaymentMethodObject {
     1: required PaymentMethodRef ref
-    2: required PaymentMethod data
+    2: required PaymentMethodDefinition data
 }
 
 /* Conditions */
@@ -214,7 +246,8 @@ union Reference {
     4: CurrencyRef currency
     5: ConditionRef condition
     6: CashDistributionRef cash_distribution
-    7: MerchantPrototypeRef merchant_prototype
+    7: PartyRef party
+    8: MerchantPrototypeRef merchant_prototype
 }
 
 union Object {
@@ -224,7 +257,8 @@ union Object {
     4: CurrencyObject currency
     5: ConditionObject condition
     6: CashDistributionObject cash_distribution
-    7: MerchantPrototype merchant_prototype
+    7: PartyObject party
+    8: MerchantPrototype merchant_prototype
 }
 
 /* Domain */
