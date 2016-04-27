@@ -4,6 +4,8 @@
 
 include "base.thrift"
 
+namespace erl domain
+
 const i32 REVISION = 42
 
 typedef i32 ObjectID
