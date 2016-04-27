@@ -5,6 +5,8 @@
 
 include "domain.thrift"
 
+namespace erl domain
+
 /**
  * Маркер вершины истории.
  */
@@ -55,7 +57,7 @@ exception OperationConflict {}
 /**
  * Интерфейс сервиса конфигурации предметной области.
  */
-service DomainConfig {
+service Configurator {
 
     Version head ()
         throws ();
