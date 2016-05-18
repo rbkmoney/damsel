@@ -60,7 +60,7 @@ exception OperationConflict {}
 service Configurator {
 
     Version head ()
-        throws ();
+        throws (1: VersionNotFound ex1);
 
     Version pollHead ()
         throws ();
