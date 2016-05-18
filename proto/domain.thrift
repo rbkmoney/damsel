@@ -4,8 +4,6 @@
 
 include "base.thrift"
 
-namespace erl domain
-
 const i32 REVISION = 42
 
 typedef i32 ObjectID
@@ -28,6 +26,12 @@ struct CurrencyRef { 1: required string symbolic_code }
 struct CurrencyObject {
     1: required CurrencyRef ref
     2: required Currency data
+}
+
+/** Платёж, состоящий из суммы и валюты. */
+struct Payment {
+    1: required Amount amount
+    2: required CurrencyRef currency
 }
 
 /** Распределение денежных потоков в системе. */
@@ -232,12 +236,13 @@ struct FlowObject {
 
 /* Merchant prototype */
 
+struct MerchantPrototypeRef {}
+
 /** Прототип мерчанта по умолчанию. */
 struct MerchantPrototype {
-    1: required Merchant data
+    1: required MerchantPrototypeRef ref
+    2: required Merchant data
 }
-
-struct MerchantPrototypeRef {}
 
 /* Type enumerations */
 
@@ -265,6 +270,4 @@ union Object {
 
 /* Domain */
 
-struct Domain {
-    1: required map<Reference, Object> objects
-}
+typedef map<Reference, Object> Domain
