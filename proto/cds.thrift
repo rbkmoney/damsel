@@ -1,7 +1,32 @@
 typedef binary MasterKeyShare;
 typedef list<MasterKeyShare> MasterKeyShares;
-typedef binary Token;
-typedef binary CardData;
+typedef string Token
+typedef string Session
+
+enum BankCardPaymentSystem {
+    visa,
+    mastercard
+}
+
+struct CardData {
+	1: required string pan
+	2: required i8 month
+	3: required i8 year
+	4: required string cardholder_name
+	5: required string cvv
+}
+
+struct BankCard {
+    1: required Token token
+    2: required BankCardPaymentSystem payment_system
+    3: required string bin
+    4: required string masked_pan
+}
+
+struct putCardDataReturn {
+	1: required BankCard bank_card
+	2: required Session session
+}
 
 struct UnlockStatus {
 	1: bool unlocked
@@ -25,5 +50,5 @@ service CdsAdmin {
 
 service Cds {
 	CardData getCardData (1: Token token) throws (1: NotFound not_found, 2: Locked locked)
-	Token putCardData (1: CardData card_data) throws (1: Locked locked)
+	BankCard putCardData (1: CardData card_data) throws (1: Locked locked)
 }
