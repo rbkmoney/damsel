@@ -2,8 +2,6 @@
  * Базовые, наиболее общие определения
  */
 
-namespace * dmsl
-
 /** Идентификатор */
 typedef string ID;
 
@@ -14,6 +12,12 @@ typedef string ID;
  * `2016-03-22T06:12:27Z`.
  */
 typedef string Timestamp;
+
+/** Рациональное число. */
+struct Rational {
+    1: required i64 p
+    2: required i64 q
+}
 
 /** Отрезок времени в секундах */
 typedef i32 Timeout;

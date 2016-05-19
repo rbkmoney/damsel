@@ -4,8 +4,6 @@
 
 include "base.thrift"
 
-namespace * dmsl
-
 struct Shout {
     1: required string contents;
 }
