@@ -7,10 +7,10 @@ include "domain.thrift"
 
 /* Interface clients */
 
-typedef base.ID ClientID
+typedef base.ID UserID
 
-struct Client {
-    1: required ClientID id
+struct UserInfo {
+    1: required UserID id
 }
 
 /* Invoices */
@@ -33,7 +33,7 @@ typedef list<Event> Events
 
 union EventType {
     1: InvoiceStatusChanged invoice_status_changed
-    2: InvoicePaymentStatusChanged invoice_payment_finished
+    2: InvoicePaymentStatusChanged invoice_payment_status_changed
 }
 
 struct InvoiceStatusChanged {
@@ -41,7 +41,6 @@ struct InvoiceStatusChanged {
 }
 
 struct InvoicePaymentStatusChanged {
-    1: required domain.InvoiceID invoice_id
     2: required domain.InvoicePayment payment
 }
 
@@ -65,33 +64,33 @@ struct InvoicePaymentParams {
     3: required domain.PaymentSession session
 }
 
-exception InvalidClient {}
-exception InvoiceNotFound {}
+exception InvalidUser {}
+exception UserInvoiceNotFound {}
 exception EventNotFound {}
 exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
 
 service Invoicing {
 
-    domain.InvoiceID Create (1: Client client)
-        throws (1: InvalidClient ex1)
+    domain.InvoiceID Create (1: UserInfo user, 2: InvoiceParams params)
+        throws (1: InvalidUser ex1)
 
-    InvoiceState Get (1: Client client, 2: domain.InvoiceID id)
-        throws (1: InvalidClient ex1, 2: InvoiceNotFound ex2)
+    InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
+        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2)
 
-    Events GetEvents (1: Client client, 2: domain.InvoiceID id, 3: EventRange range)
-        throws (1: InvalidClient ex1, 2: InvoiceNotFound ex2, 3: EventNotFound ex3)
+    Events GetEvents (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
+        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: EventNotFound ex3)
 
     domain.InvoicePaymentID StartPayment (
-        1: Client client,
+        1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
     )
-        throws (1: InvalidClient ex1, 2: InvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
-    void Fulfill (1: Client client, 2: domain.InvoiceID id, 3: string reason)
-        throws (1: InvalidClient ex1, 2: InvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+    void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
-    void Void (1: Client client, 2: domain.InvoiceID id, 3: string reason)
-        throws (1: InvalidClient ex1, 2: InvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+    void Void (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
 }
