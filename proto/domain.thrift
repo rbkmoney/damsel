@@ -10,6 +10,8 @@ typedef i32 ObjectID
 
 /* Common */
 
+typedef base.Error OperationError
+
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
 
@@ -28,11 +30,54 @@ struct CurrencyObject {
     2: required Currency data
 }
 
-/** Платёж, состоящий из суммы и валюты. */
-struct Payment {
+/** Денежные средства, состоящий из суммы и валюты. */
+struct Funds {
     1: required Amount amount
     2: required CurrencyRef currency
 }
+
+/* Invoices */
+
+typedef base.ID InvoiceID
+typedef base.ID InvoicePaymentID
+typedef binary InvoiceContext
+typedef binary PaymentSession
+
+struct Invoice {
+    1: required InvoiceID id
+    2: required InvoiceStatus status
+    3: required string details
+    4: required string product
+    5: optional string description
+    6: required Funds cost
+    7: required InvoiceContext context
+}
+
+enum InvoiceStatus {
+    unpaid
+    paid
+    cancelled
+    fulfilled
+}
+
+struct InvoicePayment {
+    1: required InvoicePaymentID id
+    2: required InvoicePaymentStatus status
+    3: optional OperationError error
+    4: required Payer payer
+    5: required PaymentTool payment_tool
+    6: required PaymentSession session
+}
+
+enum InvoicePaymentStatus {
+    pending
+    succeeded
+    failed
+}
+
+struct Payer {}
+
+/* Cash flows */
 
 /** Распределение денежных потоков в системе. */
 struct CashDistribution {
@@ -164,17 +209,7 @@ union PaymentTool {
     1: BankCard bank_card
 }
 
-struct BankCard {
-    1: required i64 pan
-    2: required ExpDate exp_date
-    3: optional string holder
-    4: optional string cvv
-}
-
-struct ExpDate {
-    1: required i8 month
-    2: required i16 year
-}
+struct BankCard {}
 
 /** Способ платежа, категория платёжного средства. */
 struct PaymentMethodDefinition {
