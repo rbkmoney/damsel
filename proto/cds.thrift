@@ -58,5 +58,5 @@ service Storage {
     CardData GetCardData (1: Token token) throws (1: base.NotFound not_found, 2: Locked locked)
     CardData GetSessionCardData (1: Token token, 2: Session session)
         throws (1: base.NotFound not_found, 2: Locked locked)
-    BankCard PutCardData (1: CardData card_data) throws (1: Locked locked, 2: Invalid invalid)
+    PutCardDataResult PutCardData (1: CardData card_data) throws (1: Locked locked, 2: Invalid invalid)
 }
