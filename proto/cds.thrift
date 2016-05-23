@@ -35,15 +35,15 @@ struct PutCardDataResult {
 }
 
 union UnlockStatus {
-    1: bool unlocked
+    1: base.Ok ok
     2: i16 more_keys_needed
 }
 
-exception Invalid {}
+exception InvalidCardData {}
 
 exception NoKeyring {}
 
-exception Locked {}
+exception KeyringLocked {}
 
 exception KeyringExists {}
 
@@ -51,12 +51,13 @@ service Keyring {
     MasterKeyShares Init (1: i16 threshold, 2: i16 num_shares) throws (1: KeyringExists exists)
     UnlockStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
     void Lock () throws ()
-    void Rotate () throws (1: Locked locked)
+    void Rotate () throws (1: KeyringLocked locked)
 }
 
 service Storage {
-    CardData GetCardData (1: Token token) throws (1: base.NotFound not_found, 2: Locked locked)
+    CardData GetCardData (1: Token token) throws (1: base.NotFound not_found, 2: KeyringLocked locked)
     CardData GetSessionCardData (1: Token token, 2: Session session)
-        throws (1: base.NotFound not_found, 2: Locked locked)
-    PutCardDataResult PutCardData (1: CardData card_data) throws (1: Locked locked, 2: Invalid invalid)
+        throws (1: base.NotFound not_found, 2: KeyringLocked locked)
+    PutCardDataResult PutCardData (1: CardData card_data)
+        throws (1: InvalidCardData invalid, 2: KeyringLocked locked)
 }
