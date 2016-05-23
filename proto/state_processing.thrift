@@ -14,7 +14,7 @@ exception EventNotFound {}
 exception MachineNotFound {}
 
 typedef base.ID EventId;
-
+typedef binary EventBody;
 /**
  * Произвольное событие, продукт перехода в новое состояние.
  */
@@ -24,7 +24,7 @@ struct Event {
     /* Если поле не задано, то весь объект обозначает событие типа 'undefined'.
        Его смысл определяется прикладной логикой сервиса. */
     1: optional EventId id;
-    2: binary event;   /* Описание события */
+    2: EventBody body;   /* Описание события */
 }
 
 /**
@@ -115,8 +115,8 @@ struct CallArgs {
  * Результат обработки внешнего вызова.
  */
 struct CallResult {
-    /** Событие, порождённое в результате обработки */
-    1: required Event           ev;
+    /** Описание события, порождённого в результате обработки */
+    1: required EventBody           ev;
     /** Действие, которое необходимо выполнить после обработки */
     2: required ComplexAction   action;
     /** Данные ответа */
@@ -173,9 +173,9 @@ struct SignalArgs {
  */
 struct SignalResult {
     /** Событие, порождённое в результате обработки */
-    1: required Event           ev;
+    1: required EventBody ev;
     /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction   action;
+    2: required ComplexAction action;
 }
 
 /**
