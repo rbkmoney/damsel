@@ -13,7 +13,7 @@ namespace * state_processing
 exception EventNotFound {}
 exception MachineNotFound {}
 
-typedef base.ID EventId;
+typedef i64 EventId;
 typedef binary EventBody;
 /**
  * Произвольное событие, продукт перехода в новое состояние.
