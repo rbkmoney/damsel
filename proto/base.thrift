@@ -1,6 +1,7 @@
 /*
  * Базовые, наиболее общие определения
  */
+namespace * base
 
 /** Идентификатор */
 typedef string ID;
@@ -49,5 +50,3 @@ exception Failure {
 
 /** Исключение, сигнализирующее об отсутствии объекта или процесса */
 exception NotFound {}
-exception EventNotFound {}
-exception MachineNotFound {}
