@@ -8,8 +8,6 @@
 
 include "base.thrift"
 
-namespace * dmsl
-
 typedef base.ID EventId;
 
 /**
