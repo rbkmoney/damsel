@@ -45,3 +45,5 @@ exception Failure {
 
 /** Исключение, сигнализирующее об отсутствии объекта или процесса */
 exception NotFound {}
+exception EventNotFound {}
+exception MachineNotFound {}
