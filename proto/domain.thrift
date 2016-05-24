@@ -10,7 +10,13 @@ typedef i32 ObjectID
 
 /* Common */
 
-typedef base.Error OperationError
+// В идеале надо использовать `typedef` над `base.Error`, но сейчас это приводит к ошибкам кодогенератора Go
+struct OperationError {
+    /** Уникальный признак ошибки, пригодный для обработки машиной */
+    1: required string code;
+    /** Описание ошибки, пригодное для восприятия человеком */
+    2: optional string description;
+}
 
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
@@ -86,6 +92,10 @@ struct CashDistribution {
     3: required list<CashFlow> flows
 }
 
+/** Участник распределения денежных потоков. */
+// Порядок следования `typedef`-`struct` важен для кодогенератора Go
+typedef string CashFlowNode // FIXME: too broad
+
 /** Денежный поток между двумя участниками. */
 struct CashFlow {
     1: required CashFlowNode source
@@ -93,8 +103,6 @@ struct CashFlow {
     3: required CashVolume volume
 }
 
-/** Участник распределения денежных потоков. */
-typedef string CashFlowNode // FIXME: too broad
 
 /** Объём денежного потока. */
 union CashVolume {
