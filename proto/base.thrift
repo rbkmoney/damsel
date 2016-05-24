@@ -3,7 +3,10 @@
  */
 
 /** Идентификатор */
-typedef string ID;
+typedef string ID
+
+/** Непрозрачный для участника общения набор данных */
+typedef binary Opaque
 
 /**
  * Отметка во времени согласно ISO 8601.
@@ -12,6 +15,9 @@ typedef string ID;
  * `2016-03-22T06:12:27Z`.
  */
 typedef string Timestamp;
+
+/** Отображение из строки в строку */
+typedef map<string, string> StringMap
 
 /** Рациональное число. */
 struct Rational {
@@ -49,6 +55,11 @@ struct Error {
 exception Failure {
     /** Ошибка, которая привела к возникновению исключения */
     //Нельзя назвать поле `error` из-за особенностей генерации thrift Go - приводит к одинаковым именам для функции и поля структуры
+    1: required Error e;
+}
+
+exception TryLater {
+    /** Транзиентная ошибка, которая привела к возникновению исключения */
     1: required Error e;
 }
 
