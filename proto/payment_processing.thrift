@@ -5,8 +5,6 @@
 include "base.thrift"
 include "domain.thrift"
 
-namespace * payment_processing
-
 /* Interface clients */
 
 typedef base.ID UserID
