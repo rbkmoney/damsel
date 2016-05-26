@@ -67,6 +67,7 @@ struct InvoicePaymentParams {
 
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
+exception InvoicePaymentPending { 1: required domain.InvoicePaymentID id }
 exception InvoicePaymentNotFound {}
 exception EventNotFound {}
 exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
@@ -87,7 +88,12 @@ service Invoicing {
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
     )
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvalidInvoiceStatus ex3,
+            4: InvoicePaymentPending ex4
+        )
 
     domain.InvoicePayment GetPayment (1: UserInfo user, 2: domain.InvoicePaymentID id)
         throws (1: InvalidUser ex1, 2: InvoicePaymentNotFound ex2)
