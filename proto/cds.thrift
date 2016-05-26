@@ -1,14 +1,8 @@
 include "base.thrift"
+include "domain.thrift"
 
 typedef binary MasterKeyShare;
 typedef list<MasterKeyShare> MasterKeyShares;
-typedef string Token
-typedef string Session
-
-enum BankCardPaymentSystem {
-    visa
-    mastercard
-}
 
 struct ExpDate {
     1: required i8 month
@@ -22,16 +16,9 @@ struct CardData {
     4: required string cvv
 }
 
-struct BankCard {
-    1: required Token token
-    2: required BankCardPaymentSystem payment_system
-    3: required string bin
-    4: required string masked_pan
-}
-
 struct PutCardDataResult {
-    1: required BankCard bank_card
-    2: required Session session
+    1: required domain.BankCard bank_card
+    2: required domain.PaymentSession session
 }
 
 union UnlockStatus {
@@ -55,8 +42,9 @@ service Keyring {
 }
 
 service Storage {
-    CardData GetCardData (1: Token token) throws (1: base.NotFound not_found, 2: KeyringLocked locked)
-    CardData GetSessionCardData (1: Token token, 2: Session session)
+    CardData GetCardData (1: domain.Token token)
+        throws (1: base.NotFound not_found, 2: KeyringLocked locked)
+    CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSession session)
         throws (1: base.NotFound not_found, 2: KeyringLocked locked)
     PutCardDataResult PutCardData (1: CardData card_data)
         throws (1: InvalidCardData invalid, 2: KeyringLocked locked)

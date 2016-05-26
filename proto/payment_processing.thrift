@@ -54,8 +54,9 @@ struct EventRange {
 struct InvoiceParams {
     1: required string product
     2: optional string description
-    3: required domain.Funds cost
-    4: required domain.InvoiceContext context
+    3: required base.Timestamp due
+    4: required domain.Funds cost
+    5: required domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
@@ -66,6 +67,7 @@ struct InvoicePaymentParams {
 
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
+exception InvoicePaymentNotFound {}
 exception EventNotFound {}
 exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
 
@@ -86,6 +88,9 @@ service Invoicing {
         3: InvoicePaymentParams params
     )
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+
+    domain.InvoicePayment GetPayment (1: UserInfo user, 2: domain.InvoicePaymentID id)
+        throws (1: InvalidUser ex1, 2: InvoicePaymentNotFound ex2)
 
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
