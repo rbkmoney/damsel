@@ -51,12 +51,13 @@ typedef binary PaymentSession
 
 struct Invoice {
     1: required InvoiceID id
-    2: required InvoiceStatus status
-    3: required string details
-    4: required string product
-    5: optional string description
-    6: required Funds cost
-    7: required InvoiceContext context
+    2: required base.Timestamp created_at
+    3: required InvoiceStatus status
+    4: required string details
+    5: required string product
+    6: optional string description
+    7: required Funds cost
+    8: required InvoiceContext context
 }
 
 enum InvoiceStatus {
@@ -68,11 +69,12 @@ enum InvoiceStatus {
 
 struct InvoicePayment {
     1: required InvoicePaymentID id
-    2: required InvoicePaymentStatus status
-    3: optional OperationError error
-    4: required Payer payer
-    5: required PaymentTool payment_tool
-    6: required PaymentSession session
+    2: required base.Timestamp created_at
+    3: required InvoicePaymentStatus status
+    4: optional OperationError error
+    5: required Payer payer
+    6: required PaymentTool payment_tool
+    7: required PaymentSession session
 }
 
 enum InvoicePaymentStatus {
@@ -217,7 +219,19 @@ union PaymentTool {
     1: BankCard bank_card
 }
 
-struct BankCard {}
+typedef string Token
+
+struct BankCard {
+    1: required Token token
+    2: required BankCardPaymentSystem payment_system
+    3: required string bin
+    4: required string masked_pan
+}
+
+enum BankCardPaymentSystem {
+    visa
+    mastercard
+}
 
 /** Способ платежа, категория платёжного средства. */
 struct PaymentMethodDefinition {
