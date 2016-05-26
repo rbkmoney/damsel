@@ -11,13 +11,13 @@ include "base.thrift"
 exception EventNotFound {}
 exception MachineNotFound {}
 
-typedef i64 EventId;
+typedef i64 EventID;
 typedef binary EventBody;
 /**
  * Произвольное событие, продукт перехода в новое состояние.
  */
 struct Event {
-    1: EventId id;       /* Уникальный идентификатор события */
+    1: EventID id;       /* Уникальный идентификатор события */
     2: EventBody body;   /* Описание события */
 }
 
@@ -205,7 +205,7 @@ struct StartResult {
 
 /** Структура задает параметры для выборки событий */
 struct HistoryRange {
-    1: optional EventId after
+    1: optional EventID after
     2: optional i32 limit
 }
 
