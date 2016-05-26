@@ -81,7 +81,7 @@ struct InvoicePayment {
     2: required base.Timestamp created_at
     3: required InvoicePaymentStatus status
     4: optional TransactionInfo trx
-    5: optional OperationError error
+    5: optional OperationError err
     6: required Payer payer
     7: required PaymentTool payment_tool
     8: required PaymentSession session
