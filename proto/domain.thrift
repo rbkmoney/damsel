@@ -54,10 +54,11 @@ struct Invoice {
     2: required base.Timestamp created_at
     3: required InvoiceStatus status
     4: required string details
-    5: required string product
-    6: optional string description
-    7: required Funds cost
-    8: required InvoiceContext context
+    5: required base.Timestamp due
+    6: required string product
+    7: optional string description
+    8: required Funds cost
+    9: required InvoiceContext context
 }
 
 enum InvoiceStatus {
