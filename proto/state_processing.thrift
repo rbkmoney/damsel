@@ -8,11 +8,17 @@
 
 include "base.thrift"
 
+exception EventNotFound {}
+exception MachineNotFound {}
+
+typedef i64 EventID;
+typedef binary EventBody;
 /**
  * Произвольное событие, продукт перехода в новое состояние.
  */
-union Event {
-    1: binary                   event;
+struct Event {
+    1: EventID id;       /* Уникальный идентификатор события */
+    2: EventBody body;   /* Описание события */
 }
 
 /**
@@ -103,12 +109,12 @@ struct CallArgs {
  * Результат обработки внешнего вызова.
  */
 struct CallResult {
-    /** Событие, порождённое в результате обработки */
-    1: required Event           ev;
+    /** Описание события, порождённого в результате обработки */
+    1: required EventBody ev;
     /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction   action;
+    2: required ComplexAction action;
     /** Данные ответа */
-    3: required CallResponse    response;
+    3: required CallResponse response;
 }
 
 /**
@@ -161,9 +167,9 @@ struct SignalArgs {
  */
 struct SignalResult {
     /** Событие, порождённое в результате обработки */
-    1: required Event           ev;
+    1: required EventBody ev;
     /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction   action;
+    2: required ComplexAction action;
 }
 
 /**
@@ -197,9 +203,21 @@ struct StartResult {
     1: required base.ID         id;
 }
 
+/** Структура задает параметры для выборки событий */
+struct HistoryRange {
+    1: optional EventID after
+    2: optional i32 limit
+}
+
 /**
  * Сервис управления процессами автоматов, отвечающий за реализацию желаемых
  * действий и поддержку состояния процессоров.
+ *
+ * Для всех методов сервиса справедливы следующие утверждения:
+ *  - если в параметре к методу передан Reference с ссылкой на машину, которой не
+ *    существует, то метод выкинет исключение MachineNotFound
+ *  - если в структуре HistoryRange поле after содержит несуществующий id события,
+ *    то метод выкинет исключение EventNotFound
  */
 service Automaton {
 
@@ -211,17 +229,41 @@ service Automaton {
     /**
      * Уничтожить определённый процесс автомата.
      */
-    void destroy (1: Reference ref) throws (1: base.NotFound ex);
+    void destroy (1: Reference ref) throws (1: MachineNotFound ex);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a) throws (1: base.NotFound ex);
+    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c) throws (1: base.NotFound ex)
+    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex);
 
+    /**
+     *  Метод возвращает список событий (историю) машины ref,
+     *  начиная с события, следующего за событием range.after
+     *  Параметр range.limit задает максимальную длину возвращаемой истории.
+     * 
+     *  Если передан range.after последнего события для данной машины,
+     *  то возвращается пустой список.
+     *
+     *  Если передан range.after последнего события, то возвращается пустой список.
+     *  Если не указан range.after, то возвращается список событий, начиная с самого
+     *  первого в истории.
+     *
+     *  Если не указан range.limit, возвращается история с момента следующего
+     *  после after и до самого последнего в истории.
+     *  Если не указано и range.after, и range.limit, то возвращается вся история
+     *  целиком с самого начала.
+     *
+     *  Возвращаемый список событий упорядочен по моменту фиксирования его в
+     *  платежной системе: в начале списка располагаются события, произошедшие
+     *  раньше тех, которые располагаются в конце.
+     */
+
+    History getHistory (1: Reference ref, 2: HistoryRange range)
+         throws (1: MachineNotFound mch_ex, 2: EventNotFound ev_ex);
 }
