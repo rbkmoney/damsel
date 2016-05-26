@@ -8,8 +8,6 @@
 
 include "base.thrift"
 
-namespace * state_processing
-
 exception EventNotFound {}
 exception MachineNotFound {}
 
