@@ -315,7 +315,7 @@ union Reference {
     8: MerchantPrototypeRef merchant_prototype
 }
 
-union Object {
+union DomainObject {
     1: CategoryObject category
     2: PaymentMethodObject payment_method
     3: FlowObject flow
@@ -328,4 +328,4 @@ union Object {
 
 /* Domain */
 
-typedef map<Reference, Object> Domain
+typedef map<Reference, DomainObject> Domain

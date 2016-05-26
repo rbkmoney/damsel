@@ -39,11 +39,11 @@ union Operation {
 }
 
 struct InsertOp {
-    1: required domain.Object object;
+    1: required domain.DomainObject object;
 }
 
 struct UpdateOp {
-    1: required domain.Object object;
+    1: required domain.DomainObject object;
 }
 
 struct RemoveOp {
@@ -68,7 +68,7 @@ service Configurator {
     domain.Domain checkout (1: Version v)
         throws (1: VersionNotFound ex1);
 
-    domain.Object checkoutObject (1: Version v, 2: domain.Reference ref)
+    domain.DomainObject checkoutObject (1: Version v, 2: domain.Reference ref)
         throws (1: VersionNotFound ex1, 2: ObjectNotFound ex2);
 
     Version commit (1: Version v, 2: Operation op)
