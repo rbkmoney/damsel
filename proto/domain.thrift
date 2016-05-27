@@ -61,7 +61,7 @@ struct Invoice {
     1: required InvoiceID id
     2: required base.Timestamp created_at
     3: required InvoiceStatus status
-    4: required string details
+    4: optional string details
     5: required base.Timestamp due
     6: required string product
     7: optional string description
