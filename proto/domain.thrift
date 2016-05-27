@@ -39,7 +39,7 @@ struct CurrencyObject {
 /** Денежные средства, состоящий из суммы и валюты. */
 struct Funds {
     1: required Amount amount
-    2: required CurrencyRef currency
+    2: required Currency currency
 }
 
 /* Contractor transactions */

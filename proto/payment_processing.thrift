@@ -55,8 +55,9 @@ struct InvoiceParams {
     1: required string product
     2: optional string description
     3: required base.Timestamp due
-    4: required domain.Funds cost
-    5: required domain.InvoiceContext context
+    4: required domain.Amount amount
+    5: required domain.CurrencyRef currency
+    6: required domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
