@@ -4,7 +4,10 @@
 
 include "base.thrift"
 
-const i32 REVISION = 42
+typedef i32 SchemaRevision
+typedef i64 DataRevision
+
+const SchemaRevision SCHEMA_REVISION = 42
 
 typedef i32 ObjectID
 
@@ -58,15 +61,16 @@ typedef binary InvoiceContext
 typedef binary PaymentSession
 
 struct Invoice {
-    1: required InvoiceID id
-    2: required base.Timestamp created_at
-    3: required InvoiceStatus status
-    4: optional string details
-    5: required base.Timestamp due
-    6: required string product
-    7: optional string description
-    8: required Funds cost
-    9: required InvoiceContext context
+    1 : required InvoiceID id
+    2 : required base.Timestamp created_at
+    10: required DataRevision domain_revision
+    3 : required InvoiceStatus status
+    4 : optional string details
+    5 : required base.Timestamp due
+    6 : required string product
+    7 : optional string description
+    8 : required Funds cost
+    9 : required InvoiceContext context
 }
 
 enum InvoiceStatus {

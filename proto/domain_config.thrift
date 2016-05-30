@@ -16,7 +16,7 @@ struct Head {}
  * Вариант представления ревизии в истории.
  */
 union Revision {
-    1: i64 rev;
+    1: domain.DataRevision rev;
     2: Head head;
 }
 
@@ -25,7 +25,7 @@ union Revision {
  * точка в его истории набора объектов.
  */
 struct Version {
-    1: required i32 schema = domain.REVISION;
+    1: required domain.SchemaRevision schema = domain.SCHEMA_REVISION;
     2: required Revision data;
 }
 
