@@ -58,7 +58,7 @@ struct TransactionInfo {
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
 typedef binary InvoiceContext
-typedef binary PaymentSession
+typedef string PaymentSession
 
 struct Invoice {
     1 : required InvoiceID id
