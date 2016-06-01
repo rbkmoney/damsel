@@ -1,52 +1,106 @@
 include "base.thrift"
 include "domain.thrift"
 
+/**
+ * Непрозрачное для процессинга состояние прокси, связанное с определённой сессией взаимодействия
+ * с провайдером.
+ */
 typedef base.Opaque ProxyState
 
+/**
+ * Требование прокси к процессингу, отражающее дальнейший прогресс сессии взаимодействия
+ * с провайдером.
+ */
 union Intent {
-	1: FinishIntent finish
-	2: SleepIntent sleep
+    1: FinishIntent finish
+    2: SleepIntent sleep
 }
 
-union FinishStatus {
-	1: base.Ok ok
-	2: base.Error failure
-}
-
+/**
+ * Требование завершить сессию взаимодействия с провайдером.
+ */
 struct FinishIntent {
-	1: required FinishStatus status
+    1: required FinishStatus status
 }
 
+/**
+ * Статус, c которым завершилась сессия взаимодействия с провайдером.
+ */
+union FinishStatus {
+    /** Успешное завершение взаимодействия. */
+    1: base.Ok ok
+    /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
+    2: base.Error failure
+}
+
+/**
+ * Требование прервать на определённое время сессию взаимодействия, с намерением продолжить
+ * её потом.
+ */
 struct SleepIntent {
-	1: required base.Timer timer
+    /** Таймер, определяющий когда следует продолжить взаимодействие. */
+    1: required base.Timer timer
 }
 
+/**
+ * Данные платежа, необходимые для обращения к провайдеру.
+ */
 struct PaymentInfo {
-	1: required domain.Invoice invoice
-	2: required domain.InvoicePayment payment
-	3: required domain.ProxyOptions options
-	4: optional ProxyState state
+    1: required domain.Invoice invoice
+    2: required domain.InvoicePayment payment
+    3: required domain.ProxyOptions options
+    4: optional ProxyState state
 }
 
+/**
+ * Результат обращения к прокси в рамках текущей сессии.
+ *
+ * В результате обращения прокси может решить, следует ли:
+ *  - завершить сессию взаимодействия с провайдером (FinishIntent);
+ *  - или просто приостановить на определённое время (SleepIntent), обновив своё состояние, которое
+ *  - вернётся к нему в последующем запросе.
+ *
+ * Кроме того, прокси может связать с текущим платежом данные транзакции у провайдера для учёта
+ * в нашей системе, причём на эти данные налагаются следующие требования:
+ *  - данные должны быть связаны на момент завершения первой сессии взаимодействия с провайдером по
+ *    текущему платежу;
+ *  - идентификатор связанной транзакции _не может измениться_ при последующих обращениях в прокси
+ *    по текущему платежу.
+ */
 struct ProcessResult {
-	1: required Intent intent
-	2: optional domain.TransactionInfo trx
-	3: optional ProxyState next_state
+    1: required Intent intent
+    2: optional domain.TransactionInfo trx
+    3: optional ProxyState next_state
 }
 
 service ProviderProxy {
 
-	ProcessResult ProcessPayment (1: PaymentInfo payment)
-		throws (1: base.TryLater ex1)
+    /**
+     * Запрос в рамках сессии проведения платежа, по завершении которой процессинг должен обладать:
+     *  - фактом того, что провайдер _по крайней мере_ авторизовал списание денежных средств в
+     *    пользу системы;
+     *  - данными транзакции провайдера.
+     */
+    ProcessResult ProcessPayment (1: PaymentInfo payment)
+        throws (1: base.TryLater ex1)
 
-	ProcessResult CapturePayment (1: PaymentInfo payment)
-		throws (1: base.TryLater ex1)
+    /**
+     * Запрос в рамках сессии подтверждения платежа, по завершении которой процессинг должен
+     * быть уверен в том, что провайдер _по крайней мере_ подтвердил финансовые обязательства
+     * перед системой.
+     */
+    ProcessResult CapturePayment (1: PaymentInfo payment)
+        throws (1: base.TryLater ex1)
 
-	ProcessResult CancelPayment (1: PaymentInfo payment)
-		throws (1: base.TryLater ex1)
+    /**
+     * Запрос в рамках сессии отмены платежа, по завершении которой процессинг должен быть уверен
+     * в том, что провайдер аннулировал неподтверждённое списание денежных средств.
+     */
+    ProcessResult CancelPayment (1: PaymentInfo payment)
+        throws (1: base.TryLater ex1)
 
-	// TODO: discuss that shit
-	// void ValidateOptions (1: domain.ProxyOptions options)
-	// 	throws (1: InvalidProxyOptions ex1)
+    // TODO: discuss that shit
+    // void ValidateOptions (1: domain.ProxyOptions options)
+    //  throws (1: InvalidProxyOptions ex1)
 
 }
