@@ -76,13 +76,18 @@ exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
 service Invoicing {
 
     domain.InvoiceID Create (1: UserInfo user, 2: InvoiceParams params)
-        throws (1: InvalidUser ex1)
+        throws (1: InvalidUser ex1, 2: base.InvalidRequest ex2)
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2)
 
     Events GetEvents (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: EventNotFound ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: EventNotFound ex3,
+            4: base.InvalidRequest ex4
+        )
 
     domain.InvoicePaymentID StartPayment (
         1: UserInfo user,
@@ -93,7 +98,8 @@ service Invoicing {
             1: InvalidUser ex1,
             2: UserInvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
-            4: InvoicePaymentPending ex4
+            4: InvoicePaymentPending ex4,
+            5: base.InvalidRequest ex5
         )
 
     domain.InvoicePayment GetPayment (1: UserInfo user, 2: domain.InvoicePaymentID id)
