@@ -55,8 +55,9 @@ struct InvoiceParams {
     1: required string product
     2: optional string description
     3: required base.Timestamp due
-    4: required domain.Funds cost
-    5: required domain.InvoiceContext context
+    4: required domain.Amount amount
+    5: required domain.CurrencyRef currency
+    6: required domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
@@ -67,6 +68,7 @@ struct InvoicePaymentParams {
 
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
+exception InvoicePaymentPending { 1: required domain.InvoicePaymentID id }
 exception InvoicePaymentNotFound {}
 exception EventNotFound {}
 exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
@@ -74,20 +76,31 @@ exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
 service Invoicing {
 
     domain.InvoiceID Create (1: UserInfo user, 2: InvoiceParams params)
-        throws (1: InvalidUser ex1)
+        throws (1: InvalidUser ex1, 2: base.InvalidRequest ex2)
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2)
 
     Events GetEvents (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: EventNotFound ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: EventNotFound ex3,
+            4: base.InvalidRequest ex4
+        )
 
     domain.InvoicePaymentID StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
     )
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvalidInvoiceStatus ex3,
+            4: InvoicePaymentPending ex4,
+            5: base.InvalidRequest ex5
+        )
 
     domain.InvoicePayment GetPayment (1: UserInfo user, 2: domain.InvoicePaymentID id)
         throws (1: InvalidUser ex1, 2: InvoicePaymentNotFound ex2)

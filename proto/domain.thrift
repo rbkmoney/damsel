@@ -4,7 +4,10 @@
 
 include "base.thrift"
 
-const i32 REVISION = 42
+typedef i32 SchemaRevision
+typedef i64 DataRevision
+
+const SchemaRevision SCHEMA_REVISION = 42
 
 typedef i32 ObjectID
 
@@ -39,7 +42,15 @@ struct CurrencyObject {
 /** Денежные средства, состоящий из суммы и валюты. */
 struct Funds {
     1: required Amount amount
-    2: required CurrencyRef currency
+    2: required Currency currency
+}
+
+/* Contractor transactions */
+
+struct TransactionInfo {
+    1: required string id
+    2: optional base.Timestamp timestamp
+    3: required base.StringMap extra = []
 }
 
 /* Invoices */
@@ -47,18 +58,19 @@ struct Funds {
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
 typedef binary InvoiceContext
-typedef binary PaymentSession
+typedef string PaymentSession
 
 struct Invoice {
-    1: required InvoiceID id
-    2: required base.Timestamp created_at
-    3: required InvoiceStatus status
-    4: required string details
-    5: required base.Timestamp due
-    6: required string product
-    7: optional string description
-    8: required Funds cost
-    9: required InvoiceContext context
+    1 : required InvoiceID id
+    2 : required base.Timestamp created_at
+    10: required DataRevision domain_revision
+    3 : required InvoiceStatus status
+    4 : optional string details
+    5 : required base.Timestamp due
+    6 : required string product
+    7 : optional string description
+    8 : required Funds cost
+    9 : required InvoiceContext context
 }
 
 enum InvoiceStatus {
@@ -72,10 +84,11 @@ struct InvoicePayment {
     1: required InvoicePaymentID id
     2: required base.Timestamp created_at
     3: required InvoicePaymentStatus status
-    4: optional OperationError error
-    5: required Payer payer
-    6: required PaymentTool payment_tool
-    7: required PaymentSession session
+    4: optional TransactionInfo trx
+    5: optional OperationError err
+    6: required Payer payer
+    7: required PaymentTool payment_tool
+    8: required PaymentSession session
 }
 
 enum InvoicePaymentStatus {
@@ -292,6 +305,27 @@ struct FlowObject {
     2: required Flow data
 }
 
+/* Proxies */
+
+typedef base.StringMap ProxyOptions
+
+enum ProxyType {
+    provider
+}
+
+struct Proxy {
+    1: required ProxyType type
+    2: required string url
+    3: optional ProxyOptions options
+}
+
+struct ProxyRef { 1: required ObjectID id }
+
+struct ProxyObject {
+    1: required ProxyRef ref
+    2: required ProxyObject object
+}
+
 /* Merchant prototype */
 
 struct MerchantPrototypeRef {}
@@ -313,6 +347,7 @@ union Reference {
     6: CashDistributionRef cash_distribution
     7: PartyRef party
     8: MerchantPrototypeRef merchant_prototype
+    9: ProxyRef proxy
 }
 
 union DomainObject {
@@ -324,6 +359,7 @@ union DomainObject {
     6: CashDistributionObject cash_distribution
     7: PartyObject party
     8: MerchantPrototype merchant_prototype
+    9: ProxyObject proxy
 }
 
 /* Domain */
