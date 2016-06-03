@@ -7,11 +7,10 @@ Systemwide protocol collection.
 
 - __Namespace:__ 
 
-	В каждом файле нужно указывать `namespace` для соответствующего языка:
-	- java: 
+	В каждом файле нужно __обязательно__ указывать `namespace` для __*JAVA!!!*__:
 		
-			namespace java com.rbkmoney.damsel.<name>
+		namespace java com.rbkmoney.damsel.<name>
 			
-		Где `<name>` - имя, уникальное для Thrift IDL файлa в Damsel.
+	Где `<name>` - имя, уникальное для Thrift IDL файлa в Damsel.
 		
 
