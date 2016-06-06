@@ -13,6 +13,8 @@ exception MachineNotFound {}
 
 typedef i64 EventID;
 typedef binary EventBody;
+typedef list<binary> EventBodies;
+
 /**
  * Произвольное событие, продукт перехода в новое состояние.
  */
@@ -110,7 +112,7 @@ struct CallArgs {
  */
 struct CallResult {
     /** Описание события, порождённого в результате обработки */
-    1: required EventBody ev;
+    1: required EventBodies events;
     /** Действие, которое необходимо выполнить после обработки */
     2: required ComplexAction action;
     /** Данные ответа */
@@ -167,7 +169,7 @@ struct SignalArgs {
  */
 struct SignalResult {
     /** Событие, порождённое в результате обработки */
-    1: required EventBody ev;
+    1: required EventBodies events;
     /** Действие, которое необходимо выполнить после обработки */
     2: required ComplexAction action;
 }
