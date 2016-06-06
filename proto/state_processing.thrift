@@ -13,7 +13,7 @@ exception MachineNotFound {}
 
 typedef i64 EventID;
 typedef binary EventBody;
-typedef list<binary> EventBodies;
+typedef list<EventBody> EventBodies;
 
 /**
  * Произвольное событие, продукт перехода в новое состояние.
