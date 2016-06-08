@@ -10,6 +10,7 @@ include "base.thrift"
 
 exception EventNotFound {}
 exception MachineNotFound {}
+exception MachineFailed {}
 
 typedef i64 EventID;
 typedef binary EventBody;
@@ -235,12 +236,12 @@ service Automaton {
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex);
+    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex, 2: MachineFailed mf_ex);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex);
+    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex, 2: MachineFailed mf_ex);
 
     /**
      *  Метод возвращает список событий (историю) машины ref,
@@ -265,5 +266,5 @@ service Automaton {
      */
 
     History getHistory (1: Reference ref, 2: HistoryRange range)
-         throws (1: MachineNotFound mch_ex, 2: EventNotFound ev_ex);
+         throws (1: MachineNotFound mch_ex, 2: EventNotFound ev_ex, 3: MachineFailed mf_ex);
 }
