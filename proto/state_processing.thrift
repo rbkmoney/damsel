@@ -10,6 +10,7 @@ include "base.thrift"
 
 exception EventNotFound {}
 exception MachineNotFound {}
+exception MachineFailed {}
 
 typedef i64 EventID;
 typedef binary EventBody;
@@ -218,6 +219,8 @@ struct HistoryRange {
  *    существует, то метод выкинет исключение MachineNotFound
  *  - если в структуре HistoryRange поле after содержит несуществующий id события,
  *    то метод выкинет исключение EventNotFound
+ *  - если в процессе выполнения запроса машина перешла в некорректное состояние
+ *    то метод выкинет исключение MachineFailed
  */
 service Automaton {
 
@@ -229,18 +232,18 @@ service Automaton {
     /**
      * Уничтожить определённый процесс автомата.
      */
-    void destroy (1: Reference ref) throws (1: MachineNotFound ex);
+    void destroy (1: Reference ref) throws (1: MachineNotFound ex1);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex);
+    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex);
+    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
      *  Метод возвращает список событий (историю) машины ref,
@@ -265,5 +268,5 @@ service Automaton {
      */
 
     History getHistory (1: Reference ref, 2: HistoryRange range)
-         throws (1: MachineNotFound mch_ex, 2: EventNotFound ev_ex);
+         throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
 }
