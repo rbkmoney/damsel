@@ -12,7 +12,6 @@ exception EventNotFound {}
 exception MachineNotFound {}
 exception MachineFailed {}
 
-typedef i64 EventID;
 typedef binary EventBody;
 typedef list<EventBody> EventBodies;
 
@@ -20,7 +19,7 @@ typedef list<EventBody> EventBodies;
  * Произвольное событие, продукт перехода в новое состояние.
  */
 struct Event {
-    1: EventID id;       /* Уникальный идентификатор события */
+    1: base.EventID id;  /* Уникальный идентификатор события */
     2: EventBody body;   /* Описание события */
 }
 
@@ -208,7 +207,7 @@ struct StartResult {
 
 /** Структура задает параметры для выборки событий */
 struct HistoryRange {
-    1: optional EventID after
+    1: optional base.EventID after
     2: optional i32 limit
 }
 
@@ -251,7 +250,7 @@ service Automaton {
      *  Метод возвращает список событий (историю) машины ref,
      *  начиная с события, следующего за событием range.after
      *  Параметр range.limit задает максимальную длину возвращаемой истории.
-     * 
+     *
      *  Если передан range.after последнего события для данной машины,
      *  то возвращается пустой список.
      *

@@ -22,10 +22,8 @@ struct InvoiceState {
 
 /* Events */
 
-typedef base.ID EventID
-
 struct Event {
-    1: required EventID id
+    1: required base.EventID id
     2: required EventType ev
 }
 
@@ -45,7 +43,7 @@ struct InvoicePaymentStatusChanged {
 }
 
 struct EventRange {
-    1: optional EventID after
+    1: optional base.EventID after
     2: required i32 limit
 }
 
