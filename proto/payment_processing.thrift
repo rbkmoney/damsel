@@ -52,7 +52,7 @@ struct Event {
     /**
      * Содержание события.
      */
-    4: required EventPayload ev
+    4: required EventPayload payload
 
 }
 
