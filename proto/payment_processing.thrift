@@ -39,7 +39,7 @@ struct Event {
     /**
      * Идентификатор бизнес-объекта, источника события.
      */
-    3: required EventSource  source
+    2: required EventSource  source
 
     /**
      * Номер события в последовательности событий от указанного источника.
@@ -47,12 +47,12 @@ struct Event {
      * Номер первого события от источника всегда равен `1`, то есть `sequence`
      * принимает значения из диапазона `[1; 2^31)`
      */
-    4: required i32          sequence
+    3: required i32          sequence
 
     /**
      * Содержание события.
      */
-    2: required EventPayload ev
+    4: required EventPayload ev
 
 }
 
