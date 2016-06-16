@@ -6,6 +6,7 @@ include "base.thrift"
 include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
+namespace erlang payproc
 
 /* Interface clients */
 

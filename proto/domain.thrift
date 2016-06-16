@@ -4,6 +4,9 @@
 
 include "base.thrift"
 
+namespace java com.rbkmoney.damsel.domain
+namespace erlang domain
+
 typedef i32 SchemaRevision
 typedef i64 DataRevision
 
@@ -61,23 +64,27 @@ typedef binary InvoiceContext
 typedef string PaymentSession
 
 struct Invoice {
-    1 : required InvoiceID id
-    2 : required base.Timestamp created_at
-    10: required DataRevision domain_revision
-    3 : required InvoiceStatus status
-    4 : optional string details
-    5 : required base.Timestamp due
-    6 : required string product
-    7 : optional string description
-    8 : required Funds cost
-    9 : required InvoiceContext context
+    1: required InvoiceID id
+    2: required base.Timestamp created_at
+    3: required DataRevision domain_revision
+    4: required InvoiceStatus status
+    5: required base.Timestamp due
+    6: required string product
+    7: optional string description
+    8: required Funds cost
+    9: required InvoiceContext context
 }
 
-enum InvoiceStatus {
-    unpaid
-    paid
-    cancelled
-    fulfilled
+struct InvoiceUnpaid    {}
+struct InvoicePaid      {}
+struct InvoiceCancelled { 1: required string details }
+struct InvoiceFulfilled { 1: required string details }
+
+union InvoiceStatus {
+    1: InvoiceUnpaid unpaid
+    2: InvoicePaid paid
+    3: InvoiceCancelled cancelled
+    4: InvoiceFulfilled fulfilled
 }
 
 struct InvoicePayment {
@@ -85,16 +92,19 @@ struct InvoicePayment {
     2: required base.Timestamp created_at
     3: required InvoicePaymentStatus status
     4: optional TransactionInfo trx
-    5: optional OperationError err
-    6: required Payer payer
-    7: required PaymentTool payment_tool
-    8: required PaymentSession session
+    5: required Payer payer
+    6: required PaymentTool payment_tool
+    7: required PaymentSession session
 }
 
-enum InvoicePaymentStatus {
-    pending
-    succeeded
-    failed
+struct InvoicePaymentPending   {}
+struct InvoicePaymentSucceeded {}
+struct InvoicePaymentFailed    { 1: OperationError err }
+
+union InvoicePaymentStatus {
+    1: InvoicePaymentPending pending
+    2: InvoicePaymentSucceeded succeeded
+    3: InvoicePaymentFailed failed
 }
 
 struct Payer {}
