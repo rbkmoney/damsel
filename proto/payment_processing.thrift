@@ -24,61 +24,155 @@ struct InvoiceState {
 
 /* Events */
 
-// DISCUSS: should we share Event type between different consumers (say, capi and bm)
-//          or better not to?
-
+/**
+ * Событие, атомарный фрагмент истории бизнес-объекта, например инвойса.
+ */
 struct Event {
+
+    /**
+     * Идентификатор события.
+     * Монотонно возрастающее целочисленное значение, таким образом на множестве
+     * событий задаётся отношение полного порядка (total order).
+     */
     1: required base.EventID id
+
+    /**
+     * Идентификатор бизнес-объекта, источника события.
+     */
     3: required EventSource  source
-    4: required i32          sequence  // 1..(2^31 - 1)
+
+    /**
+     * Номер события в последовательности событий от указанного источника.
+     *
+     * Номер первого события от источника всегда равен `1`, то есть `sequence`
+     * принимает значения из диапазона `[1; 2^31)`
+     */
+    4: required i32          sequence
+
+    /**
+     * Содержание события.
+     */
     2: required EventPayload ev
+
 }
 
+/**
+ * Источник события, идентификатор бизнес-объекта, который породил его в
+ * процессе выполнения определённого бизнес-процесса.
+ */
 union EventSource {
+    /** Идентификатор инвойса, который породил событие. */
     1: domain.InvoiceID        invoice
 }
 
 typedef list<Event> Events
 
+/**
+ * Один из возможных вариантов содержания события.
+ */
 union EventPayload {
-    1: InvoiceCreated          invoice_created
-    2: InvoiceStatusChanged    invoice_status_changed
-    3: InvoicePaymentStarted   invoice_payment_started
-    4: InvoicePaymentSucceeded invoice_payment_succeeded
-    5: InvoicePaymentFailed    invoice_payment_failed
+    /** Некоторое событие, порождённое инвойсом. */
+    1: InvoiceEvent            invoice_event
 }
 
+/**
+ * Один из возможных вариантов события, порождённого инвойсом.
+ */
+union InvoiceEvent {
+    1: InvoiceCreated          invoice_created
+    2: InvoiceStatusChanged    invoice_status_changed
+    3: InvoicePaymentEvent     invoice_payment_event
+}
+
+/**
+ * Один из возможных вариантов события, порождённого платежом по инвойсу.
+ */
+union InvoicePaymentEvent {
+    1: InvoicePaymentStarted   invoice_payment_started
+    2: InvoicePaymentBound     invoice_payment_bound
+    3: InvoicePaymentSucceeded invoice_payment_succeeded
+    4: InvoicePaymentFailed    invoice_payment_failed
+}
+
+/**
+ * Событие о создании нового инвойса.
+ */
 struct InvoiceCreated {
+    /** Данные созданного инвойса. */
     1: required domain.Invoice invoice
 }
 
+/**
+ * Событие об изменении статуса инвойса.
+ */
 struct InvoiceStatusChanged {
+    /** Новый статус инвойса. */
     1: required domain.InvoiceStatus status
+    /** Человекочитаемые данные, связанные с изменением статуса. */
     2: optional string details
 }
 
+/**
+ * Событие об запуске платежа по инвойсу.
+ */
 struct InvoicePaymentStarted {
+    /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
 }
 
-struct InvoicePaymentSucceeded {
+/**
+ * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
+ * у провайдера.
+ */
+struct InvoicePaymentBound {
+    /** Идентификатор платежа по инвойсу. */
     1: required domain.InvoicePaymentID payment_id
+    /** Данные о связанной транзакции у провайдера. */
     2: required domain.TransactionInfo trx
-    // DISCUSS: what information should we provide alongside?
-    //          the first thing that comes to mind is an authcode
-    //          is TransactionInfo enough?
-    //          does extra info associated with trx need more structure?
 }
 
-struct InvoicePaymentFailed {
+/**
+ * Событие об успешном прохождении платежа по инвойсу.
+ */
+struct InvoicePaymentSucceeded {
+    /** Идентификатор платежа по инвойсу. */
     1: required domain.InvoicePaymentID payment_id
-    2: optional domain.TransactionInfo trx
-    3: required domain.OperationError error
 }
 
+/**
+ * Событие о неуспешном завершении платежа по инвойсу.
+ */
+struct InvoicePaymentFailed {
+    /** Идентификатор платежа по инвойсу. */
+    1: required domain.InvoicePaymentID payment_id
+    /** Данные ошибки, явившейся причиной завершения платежа. */
+    2: required domain.OperationError error
+}
+
+/**
+ * Диапазон для выборки событий.
+ */
 struct EventRange {
+
+    /**
+     * Идентификатор события, за которым должны следовать попадающие в выборку
+     * события.
+     *
+     * Если `after` не указано, в выборку попадут события с начала истории; если
+     * указано, например, `42`, то в выборку попадут события, случившиеся _после_
+     * события `42`.
+     */
     1: optional base.EventID after
+
+    /**
+     * Максимальное количество событий в выборке.
+     *
+     * В выборку может попасть количество событий, _не больше_ указанного в
+     * `limit`. Если в выборку попало событий _меньше_, чем значение `limit`,
+     * был достигнут конец текущей истории.
+     */
     2: required i32 limit
+
 }
 
 /* Invoicing service definitions */
@@ -147,13 +241,23 @@ service Invoicing {
 
 /* Event sink service definitions */
 
+/** Исключение, сигнализирующее о том, что последнего события не существует. */
 exception NoLastEvent {}
 
 service EventSink {
 
+    /**
+     * Получить последовательный набор событий из истории системы, от более
+     * ранних к более поздним, из диапазона, заданного `range`. Результат
+     * выполнения запроса может содержать от `0` до `range.limit` событий.
+     */
     Events GetEvents (1: EventRange range)
         throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2)
 
+    /**
+     * Получить идентификатор наиболее позднего известного на момент исполнения
+     * запроса события.
+     */
     base.EventID GetLastEventID ()
         throws (1: NoLastEvent ex1)
 
