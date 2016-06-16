@@ -147,12 +147,14 @@ service Invoicing {
 
 /* Event sink service definitions */
 
+exception NoLastEvent {}
+
 service EventSink {
 
     Events GetEvents (1: EventRange range)
         throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2)
 
     base.EventID GetLastEventID ()
-        throws (1: EventNotFound ex1)
+        throws (1: NoLastEvent ex1)
 
 }
