@@ -22,24 +22,57 @@ struct InvoiceState {
 
 /* Events */
 
+// DISCUSS: should we share Event type between different consumers (say, capi and bm)
+//          or better not to?
+
 struct Event {
     1: required base.EventID id
-    2: required EventType ev
+    3: required EventSource  source
+    4: required base.ID      source_id // DISCUSS: name it with something less confusing?
+    5: required i32          sequence  // 1..(2^31 - 1)
+    2: required EventPayload ev
+}
+
+enum EventSource {
+    invoice
 }
 
 typedef list<Event> Events
 
-union EventType {
-    1: InvoiceStatusChanged invoice_status_changed
-    2: InvoicePaymentStatusChanged invoice_payment_status_changed
+union EventPayload {
+    1: InvoiceCreated          invoice_created
+    2: InvoiceStatusChanged    invoice_status_changed
+    3: InvoicePaymentStarted   invoice_payment_started
+    4: InvoicePaymentSucceeded invoice_payment_succeeded
+    5: InvoicePaymentFailed    invoice_payment_failed
 }
 
-struct InvoiceStatusChanged {
+struct InvoiceCreated {
     1: required domain.Invoice invoice
 }
 
-struct InvoicePaymentStatusChanged {
-    2: required domain.InvoicePayment payment
+struct InvoiceStatusChanged {
+    1: required domain.InvoiceStatus status
+    2: optional string details
+}
+
+struct InvoicePaymentStarted {
+    1: required domain.InvoicePayment payment
+}
+
+struct InvoicePaymentSucceeded {
+    1: required domain.InvoicePaymentID payment_id
+    2: required domain.TransactionInfo trx
+    // DISCUSS: what information should we provide alongside?
+    //          the first thing that comes to mind is an authcode
+    //          is TransactionInfo enough?
+    //          does extra info associated with trx need more structure?
+}
+
+struct InvoicePaymentFailed {
+    1: required domain.InvoicePaymentID payment_id
+    2: optional domain.TransactionInfo trx
+    3: required domain.OperationError error
 }
 
 struct EventRange {
@@ -47,7 +80,7 @@ struct EventRange {
     2: required i32 limit
 }
 
-/* Service definitions */
+/* Invoicing service definitions */
 
 struct InvoiceParams {
     1: required string product
@@ -108,5 +141,17 @@ service Invoicing {
 
     void Void (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+
+}
+
+/* Event sink service definitions */
+
+service EventSink {
+
+    Events GetEvents (1: EventRange range)
+        throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2)
+
+    base.EventID GetLastEventID ()
+        throws (1: EventNotFound ex1)
 
 }
