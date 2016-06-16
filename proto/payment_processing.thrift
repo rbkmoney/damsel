@@ -30,13 +30,12 @@ struct InvoiceState {
 struct Event {
     1: required base.EventID id
     3: required EventSource  source
-    4: required base.ID      source_id // DISCUSS: name it with something less confusing?
-    5: required i32          sequence  // 1..(2^31 - 1)
+    4: required i32          sequence  // 1..(2^31 - 1)
     2: required EventPayload ev
 }
 
-enum EventSource {
-    invoice
+union EventSource {
+    1: domain.InvoiceID        invoice
 }
 
 typedef list<Event> Events
