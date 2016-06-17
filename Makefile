@@ -1,5 +1,6 @@
 THRIFT_EXEC = thrift
 THRIFT_LANGUAGES = erlang go java
+THRIFT_OPTIONS_erlang = scoped_typenames
 THRIFT_OPTIONS_html = standalone
 
 FILES = $(wildcard proto/*.thrift)
