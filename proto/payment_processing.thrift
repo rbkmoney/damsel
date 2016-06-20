@@ -237,7 +237,7 @@ service Invoicing {
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
-    void Void (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
+    void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
 }
