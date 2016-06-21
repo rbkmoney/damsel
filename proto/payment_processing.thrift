@@ -37,10 +37,17 @@ struct Event {
      */
     1: required base.EventID   id
 
+
+    /**
+     * Время создания события.
+     */
+    2: required base.Timestamp created_at
+
     /**
      * Идентификатор бизнес-объекта, источника события.
      */
-    2: required EventSource    source
+    3: required EventSource    source
+
 
     /**
      * Номер события в последовательности событий от указанного источника.
@@ -48,17 +55,12 @@ struct Event {
      * Номер первого события от источника всегда равен `1`, то есть `sequence`
      * принимает значения из диапазона `[1; 2^31)`
      */
-    3: required i32            sequence
+    4: required i32            sequence
 
     /**
      * Содержание события.
      */
-    4: required EventPayload   payload
-
-    /**
-     * Время создания события
-     */
-    5: required base.Timestamp created_at
+    5: required EventPayload   payload
 
 }
 
