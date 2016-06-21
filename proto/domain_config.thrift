@@ -11,31 +11,24 @@ namespace erl domain
  * Маркер вершины истории.
  */
 struct Head {}
+typedef i64 Version
 
 /**
  * Вариант представления ревизии в истории.
  */
-union Revision {
-    1: domain.DataRevision rev;
+union Reference {
+    1: Version version;
     2: Head head;
-}
-
-/**
- * Монотонно возрастающая версия монолитного набора объектов, определённая
- * точка в его истории набора объектов.
- */
-struct Version {
-    1: required domain.SchemaRevision schema = domain.SCHEMA_REVISION;
-    2: required Revision data;
 }
 
 /**
  * Возможные операции над набором объектов.
  */
+
 union Operation {
     1: InsertOp insert;
     2: UpdateOp update;
-    3: RemoveOp remove;
+    3: DeleteOp remove;
 }
 
 struct InsertOp {
@@ -46,7 +39,7 @@ struct UpdateOp {
     1: required domain.DomainObject object;
 }
 
-struct RemoveOp {
+struct DeleteOp {
     1: required domain.Reference ref;
 }
 
@@ -59,19 +52,14 @@ exception OperationConflict {}
  */
 service Configurator {
 
-    Version head ()
-        throws (1: VersionNotFound ex1);
-
-    Version pollHead ()
-        throws ();
-
-    domain.Domain checkout (1: Version v)
-        throws (1: VersionNotFound ex1);
-
-    domain.DomainObject checkoutObject (1: Version v, 2: domain.Reference ref)
+    domain.DomainObject checkoutObject (1: Reference version_ref, 2: domain.Reference object_ref)
         throws (1: VersionNotFound ex1, 2: ObjectNotFound ex2);
 
-    Version commit (1: Version v, 2: Operation op)
+}
+
+service ConfiguratorAdmin {
+
+    Version commit (1: Version v, 2: list<Operation> ops)
         throws (1: VersionNotFound ex1, 2: OperationConflict ex3);
 
 }
