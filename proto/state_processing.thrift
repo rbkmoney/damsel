@@ -8,6 +8,8 @@
 
 include "base.thrift"
 
+namespace java com.rbkmoney.damsel.state_processing
+
 exception EventNotFound {}
 exception MachineNotFound {}
 exception MachineFailed {}

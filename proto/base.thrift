@@ -2,6 +2,8 @@
  * Базовые, наиболее общие определения
  */
 
+ namespace java com.rbkmoney.damsel.base
+
 /** Идентификатор */
 typedef string ID
 
