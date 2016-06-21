@@ -1,6 +1,8 @@
 include "base.thrift"
 include "domain.thrift"
 
+namespace java com.rbkmoney.damsel.cds
+
 /** Часть мастер-ключа */
 typedef binary MasterKeyShare;
 

@@ -1,6 +1,8 @@
 include "base.thrift"
 include "domain.thrift"
 
+namespace java com.rbkmoney.damsel.proxy_provider
+
 /**
  * Непрозрачное для процессинга состояние прокси, связанное с определённой сессией взаимодействия
  * с провайдером.
