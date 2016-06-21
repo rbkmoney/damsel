@@ -35,12 +35,12 @@ struct Event {
      * Монотонно возрастающее целочисленное значение, таким образом на множестве
      * событий задаётся отношение полного порядка (total order).
      */
-    1: required base.EventID id
+    1: required base.EventID   id
 
     /**
      * Идентификатор бизнес-объекта, источника события.
      */
-    2: required EventSource  source
+    2: required EventSource    source
 
     /**
      * Номер события в последовательности событий от указанного источника.
@@ -48,12 +48,17 @@ struct Event {
      * Номер первого события от источника всегда равен `1`, то есть `sequence`
      * принимает значения из диапазона `[1; 2^31)`
      */
-    3: required i32          sequence
+    3: required i32            sequence
 
     /**
      * Содержание события.
      */
-    4: required EventPayload payload
+    4: required EventPayload   payload
+
+    /**
+     * Время создания события
+     */
+    5: required base.Timestamp created_at
 
 }
 
