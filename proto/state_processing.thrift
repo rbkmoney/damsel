@@ -21,7 +21,12 @@ typedef list<EventBody> EventBodies;
  * Произвольное событие, продукт перехода в новое состояние.
  */
 struct Event {
-    1: base.EventID id;  /* Уникальный идентификатор события */
+    /**
+     * Идентификатор события.
+     * Монотонно возрастающее целочисленное значение, таким образом на множестве
+     * событий задаётся отношение полного порядка (total order).
+     */
+    1: base.EventID id;
     2: EventBody body;   /* Описание события */
 }
 
@@ -235,18 +240,21 @@ service Automaton {
     /**
      * Уничтожить определённый процесс автомата.
      */
-    void destroy (1: Reference ref) throws (1: MachineNotFound ex1);
+    void destroy (1: Reference ref)
+         throws (1: MachineNotFound ex1);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    void repair (1: Reference ref, 2: Args a)
+         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    CallResponse call (1: Reference ref, 2: Call c)
+         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
      *  Метод возвращает список событий (историю) машины ref,
@@ -272,4 +280,32 @@ service Automaton {
 
     History getHistory (1: Reference ref, 2: HistoryRange range)
          throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
+}
+
+/**
+ * Сервис получения истории событий сразу всех машин.
+ */
+service EventSink {
+    /**
+     * Получить последовательный набор событий из истории системы, от более
+     * ранних к более поздним, из диапазона, заданного `range`. Результат
+     * выполнения запроса может содержать от `0` до `range.limit` событий.
+     *
+     * Если в `range.after` указан идентификатор неизвестного события, то есть
+     * события, не наблюдаемого клиентом ранее в известной ему истории,
+     * бросится исключение `EventNotFound`.
+     *
+     * Если в структуре range в поле limit передано отрицательное значение, то
+     * бросится исключение `InvalidRequest`.
+     */
+    History GetHistory (1: HistoryRange range)
+         throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
+
+    /**
+     * Получить идентификатор наиболее позднего известного на момент исполнения
+     * запроса события. Если в системе нет ни одного события, то бросится
+     * исключение NoLastEvent.
+     */
+    base.EventID GetLastEventID ()
+         throws (1: NoLastEvent ex1);
 }
