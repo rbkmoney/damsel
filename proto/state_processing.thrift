@@ -282,6 +282,9 @@ service Automaton {
          throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
 }
 
+/** Исключение, сигнализирующее о том, что последнего события не существует. */
+exception NoLastEvent {}
+
 /**
  * Сервис получения истории событий сразу всех машин.
  */
