@@ -27,7 +27,8 @@ struct Event {
      * событий задаётся отношение полного порядка (total order).
      */
     1: base.EventID id;
-    2: EventBody body;   /* Описание события */
+    2: EventBody body;        /* Описание события */
+    3: base.Timestamp ts;     /* Время происхождения события */
 }
 
 /**
@@ -85,10 +86,8 @@ struct TagAction {
  * Ссылка, уникально определяющая процесс автомата.
  */
 union Reference {
-    /** Основной идентификатор процесса автомата */
-    1: base.ID                  id;
-    /** Ассоциация */
-    2: base.Tag                 tag;
+    1: base.ID  id;   /** Основной идентификатор процесса автомата */
+    2: base.Tag tag;  /** Ассоциация */
 }
 
 /**
@@ -108,10 +107,8 @@ typedef binary CallResponse;
  * Набор данных для обработки внешнего вызова.
  */
 struct CallArgs {
-    /** Данные вызова */
-    1: required Call            call;
-    /** История автомата */
-    2: required History         history;
+    1: required Call     call;     /** Данные вызова */
+    2: required History  history;  /** История автомата */
 }
 
 /**
@@ -133,9 +130,9 @@ struct CallResult {
  * автомата и эволюции его состояния, то есть нарастанию истории.
  */
 union Signal {
-    1: InitSignal               init;
-    2: TimeoutSignal            timeout;
-    3: RepairSignal             repair;
+    1: InitSignal     init;
+    2: TimeoutSignal  timeout;
+    3: RepairSignal   repair;
 }
 
 /**
@@ -143,9 +140,9 @@ union Signal {
  */
 struct InitSignal {
     /** Основной идентификатор процесса автомата */
-    1: required base.ID         id;
+    1: required base.ID  id;
     /** Набор данных для инициализации */
-    2: required binary          arg;
+    2: required binary   arg;
 }
 
 /**
@@ -158,17 +155,15 @@ struct TimeoutSignal {}
  * опционально скорректировать своё состояние.
  */
 struct RepairSignal {
-    1: optional binary          arg;
+    1: optional binary  arg;
 }
 
 /**
  * Набор данных для обработки сигнала.
  */
 struct SignalArgs {
-    /** Поступивший сигнал */
-    1: required Signal          signal;
-    /** История автомата */
-    2: required History         history;
+    1: required Signal   signal;     /** Поступивший сигнал */
+    2: required History  history;    /** История автомата */
 }
 
 /**
