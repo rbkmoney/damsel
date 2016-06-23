@@ -308,9 +308,8 @@ service EventSink {
          throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
 
     /**
-     * Получить идентификатор наиболее позднего известного на момент исполнения
-     * запроса события. Если в системе нет ни одного события, то бросится
-     * исключение NoLastEvent.
+     * Получить идентификатор наиболее позднего события.
+     * Если в системе нет ни одного события, то бросится исключение NoLastEvent.
      */
     base.EventID GetLastEventID ()
          throws (1: NoLastEvent ex1);
