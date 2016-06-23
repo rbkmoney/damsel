@@ -24,8 +24,8 @@ union Reference {
 }
 
 /**
- * Снэпшот это определенная версии домена
- * в терминлологии конфигуратора
+ * Снэпшот это определенная версия данных
+ * конфигурации домена
  */
 typedef domain.Domain Snapshot
 
@@ -64,14 +64,26 @@ struct DeleteOp {
     1: required domain.DomainObject object;
 }
 
+/**
+ * Требуемая версия отсутствует
+ */
 exception VersionNotFound {}
+
+/**
+ * Объект не найден в домене
+ */
 exception ObjectNotFound {}
+
+/**
+ * Возникает в случаях, если коммит
+ * несовместим с уже примененными ранее
+ */
 exception OperationConflict {}
 
 /**
  * Интерфейс сервиса конфигурации предметной области.
  */
-service Configurator {
+service RepositoryClient {
     
     /**
      * Возвращает объект из домена определенной или последней версии
@@ -81,7 +93,7 @@ service Configurator {
 
 }
 
-service ConfiguratorAdmin {
+service Repository {
 
     /**
      * Применить изменения к определенной версии v.
@@ -98,7 +110,7 @@ service ConfiguratorAdmin {
         throws (1: VersionNotFound ex1)
 
     /**
-     * Получить новые коммиты начиная с версии v
+     * Получить новые коммиты следующие за версией v
      */
     History pull (1: Version v)
         throws (1: VersionNotFound ex1)
