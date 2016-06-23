@@ -1,3 +1,5 @@
+.DS_Store
+
 /_gen/
 /_build/
 *.sublime-workspace
