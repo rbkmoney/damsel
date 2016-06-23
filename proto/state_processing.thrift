@@ -226,7 +226,7 @@ struct HistoryRange {
      * указано, например, `42`, то в выборку попадут события, случившиеся _после_
      * события `42`.
      */
-    1: xoptional base.EventID after
+    1: optional base.EventID after
 
     /**
      * Максимальная длина выборки.
