@@ -26,9 +26,9 @@ struct Event {
      * Монотонно возрастающее целочисленное значение, таким образом на множестве
      * событий задаётся отношение полного порядка (total order).
      */
-    1: base.EventID id;
-    2: EventBody body;        /* Описание события */
-    3: base.Timestamp ts;     /* Время происхождения события */
+    1: required base.EventID    id;
+    2: required base.Timestamp  created_at;     /* Время происхождения события */
+    3: required EventBody       event_payload;  /* Описание события */
 }
 
 /**
