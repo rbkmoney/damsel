@@ -69,7 +69,7 @@ struct DeleteOp {
 
 struct CheckoutObjectResult {
     1: Version version
-    2: domain.DomainObject
+    2: domain.DomainObject object
 }
 
 /**
