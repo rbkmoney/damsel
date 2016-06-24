@@ -29,7 +29,7 @@ struct StockEvent {
 * Диапазон идентификаторов событий.
 * from_id - с какого ID (inclusive), если не задан, берется текущее минимальное значение.
 * to_id - по какой ID (inclusive), если не задан, берется текущее максимальное значение.
-* Если from и to не заданы, либо to > from - диапазон считается некорректным.
+* Если from и to не заданы, либо from > to - диапазон считается некорректным.
 */
 struct EventIDRange {
     1: optional EventID from_id;
@@ -40,7 +40,7 @@ struct EventIDRange {
 * Диапазон времени создания событий.
 * from_time - начальное время (inclusive), если не задан, берется текущее минимальное значение.
 * to_time - конечное время (inclusive), если не задан, берется текущее максимальное значение.
-* Если from_time и to_time не заданы, либо to > from - диапазон считается некорректным.
+* Если from_time и to_time не заданы, либо from > to  - диапазон считается некорректным.
 */
 struct EventTimeRange {
     1: required Timestamp from_time;
