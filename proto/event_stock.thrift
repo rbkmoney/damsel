@@ -2,6 +2,7 @@ include "base.thrift"
 include "payment_processing.thrift"
 
 namespace java com.rbkmoney.damsel.event_stock
+namespace erlang event_stock
 
 typedef list<StockEvent> StockEvents
 typedef base.EventID EventID
@@ -18,7 +19,7 @@ union SourceEvent {
 
 /**
 * Событие, которое BM отдает клиентам.
-* source_event - Исходное событие, к которому применятся фильтр.
+* source_event - Исходное событие, к которому применяeтся фильтр.
 */
 struct StockEvent {
     1: required SourceEvent source_event;
