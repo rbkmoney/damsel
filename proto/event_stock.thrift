@@ -109,13 +109,13 @@ struct PathFilterCondition {
 * Допустимые операторы условия фильтрации.
 */
 enum ConditionOperator {
-    EQ, // =  (some bind value)
-    NE, // <> (some bind value)
-    LT, // <  (some bind value)
-    LE, // <= (some bind value)
-    GT, // >  (some bind value)
-    GE, // >= (some bind value)
-    IN, // in (some bind values)
+    EQ // =  (some bind value)
+    NE // <> (some bind value)
+    LT // <  (some bind value)
+    LE // <= (some bind value)
+    GT // >  (some bind value)
+    GE // >= (some bind value)
+    IN // in (some bind values)
     NI // not in
 }
 
