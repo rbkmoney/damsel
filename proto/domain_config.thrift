@@ -67,6 +67,11 @@ struct DeleteOp {
     1: required domain.DomainObject object;
 }
 
+struct CheckoutObjectResult {
+    1: Version version
+    2: domain.DomainObject
+}
+
 /**
  * Требуемая версия отсутствует
  */
@@ -91,7 +96,7 @@ service RepositoryClient {
     /**
      * Возвращает объект из домена определенной или последней версии
      */
-    domain.DomainObject checkoutObject (1: Reference version_ref, 2: domain.Reference object_ref)
+    CheckoutObjectResult checkoutObject (1: Reference version_ref, 2: domain.Reference object_ref)
         throws (1: VersionNotFound ex1, 2: ObjectNotFound ex2);
 
 }
