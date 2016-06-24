@@ -27,7 +27,10 @@ union Reference {
  * Снэпшот это определенная версия данных
  * конфигурации домена
  */
-typedef domain.Domain Snapshot
+struct Snapshot {
+    1: Version version
+    2: domain.Domain domain
+}
 
 /**
  * Возможные операции над набором объектов.
@@ -106,7 +109,7 @@ service Repository {
     /**
      * Получить снэпшот конкретной версии
      */
-    Snapshot checkout (1: Version v)
+    Snapshot checkout (1: Reference r)
         throws (1: VersionNotFound ex1)
 
     /**
