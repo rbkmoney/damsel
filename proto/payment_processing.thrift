@@ -94,10 +94,10 @@ union InvoiceEvent {
  * Один из возможных вариантов события, порождённого платежом по инвойсу.
  */
 union InvoicePaymentEvent {
-    1: InvoicePaymentStarted   invoice_payment_started
-    2: InvoicePaymentBound     invoice_payment_bound
-    3: InvoicePaymentSucceeded invoice_payment_succeeded
-    4: InvoicePaymentFailed    invoice_payment_failed
+    1: InvoicePaymentStarted       invoice_payment_started
+    2: InvoicePaymentBound         invoice_payment_bound
+    3: InvoicePaymentStatusChanged invoice_payment_status_changed
+    4: InvoicePaymentStateChanged  invoice_payment_state_changed
 }
 
 /**
@@ -114,8 +114,6 @@ struct InvoiceCreated {
 struct InvoiceStatusChanged {
     /** Новый статус инвойса. */
     1: required domain.InvoiceStatus status
-    /** Человекочитаемые данные, связанные с изменением статуса. */
-    2: optional string details
 }
 
 /**
@@ -138,21 +136,23 @@ struct InvoicePaymentBound {
 }
 
 /**
- * Событие об успешном прохождении платежа по инвойсу.
+ * Событие об изменении непрозрачного состояния платежа в процессе обработки.
  */
-struct InvoicePaymentSucceeded {
+struct InvoicePaymentStateChanged {
     /** Идентификатор платежа по инвойсу. */
     1: required domain.InvoicePaymentID payment_id
+    /** Непрозрачное состояние. */
+    2: optional base.Opaque state
 }
 
 /**
- * Событие о неуспешном завершении платежа по инвойсу.
+ * Событие об изменении статуса платежа по инвойсу.
  */
-struct InvoicePaymentFailed {
+struct InvoicePaymentStatusChanged {
     /** Идентификатор платежа по инвойсу. */
     1: required domain.InvoicePaymentID payment_id
-    /** Данные ошибки, явившейся причиной завершения платежа. */
-    2: required domain.OperationError error
+    /** Статус платежа по инвойсу. */
+    2: required domain.InvoicePaymentStatus status
 }
 
 /**
