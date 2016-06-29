@@ -49,7 +49,7 @@ typedef map<Version, Commit> History
 union Operation {
     1: InsertOp insert;
     2: UpdateOp update;
-    3: DeleteOp remove;
+    3: DeleteOp delete;
 }
 
 struct InsertOp {
@@ -68,7 +68,7 @@ struct DeleteOp {
     1: required domain.DomainObject object;
 }
 
-struct CheckoutObjectResult {
+struct VersionedObject {
     1: Version version
     2: domain.DomainObject object
 }
@@ -97,7 +97,7 @@ service RepositoryClient {
     /**
      * Возвращает объект из домена определенной или последней версии
      */
-    CheckoutObjectResult checkoutObject (1: Reference version_ref, 2: domain.Reference object_ref)
+    VersionedObject checkoutObject (1: Reference version_ref, 2: domain.Reference object_ref)
         throws (1: VersionNotFound ex1, 2: ObjectNotFound ex2);
 
 }
@@ -105,23 +105,22 @@ service RepositoryClient {
 service Repository {
 
     /**
-     * Применить изменения к определенной версии v.
-     * Возвращает более старшую ближайшую к определенной версию, в которой содержатся
-     * изменения, представленные в коммите c
+     * Применить изменения к определенной версии.
+     * Возвращает следующую версию
      */
-    Version commit (1: Version v, 2: Commit c)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex3);
+    Version Commit (1: Version version, 2: Commit commit)
+        throws (1: VersionNotFound ex1, 2: OperationConflict ex2);
         
     /**
      * Получить снэпшот конкретной версии
      */
-    Snapshot checkout (1: Reference r)
+    Snapshot Checkout (1: Reference reference)
         throws (1: VersionNotFound ex1)
 
     /**
-     * Получить новые коммиты следующие за версией v
+     * Получить новые коммиты следующие за указанной версией
      */
-    History pull (1: Version v)
+    History Pull (1: Version version)
         throws (1: VersionNotFound ex1)
 
 }
