@@ -49,7 +49,7 @@ typedef map<Version, Commit> History
 union Operation {
     1: InsertOp insert;
     2: UpdateOp update;
-    3: DeleteOp delete;
+    3: RemoveOp remove;
 }
 
 struct InsertOp {
@@ -64,7 +64,7 @@ struct UpdateOp {
     2: required domain.DomainObject new_object;
 }
 
-struct DeleteOp {
+struct RemoveOp {
     1: required domain.DomainObject object;
 }
 
