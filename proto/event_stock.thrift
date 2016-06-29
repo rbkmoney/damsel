@@ -59,8 +59,8 @@ union EventTimeBound {
 * Если from > to  - диапазон считается некорректным.
 */
 struct EventTimeRange {
-    1: required EventIDBound from_time;
-    2: required EventIDBound to_time;
+    1: required EventTimeBound from_time;
+    2: required EventTimeBound to_time;
 }
 
 /**
