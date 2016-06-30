@@ -15,7 +15,6 @@ exception MachineNotFound {}
 exception MachineFailed {}
 
 typedef binary EventBody;
-typedef binary EventSource;
 typedef list<EventBody> EventBodies;
 
 /**
@@ -29,7 +28,7 @@ struct Event {
      */
     1: required base.EventID    id;
     2: required base.Timestamp  created_at;     /* Время происхождения события */
-    3: required EventSource     source;         /* Идентификатор объекта, породившего событие */
+    3: required base.ID         source;         /* Идентификатор объекта, породившего событие */
     4: required EventBody       event_payload;  /* Описание события */
 }
 
