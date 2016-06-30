@@ -15,6 +15,7 @@ exception MachineNotFound {}
 exception MachineFailed {}
 
 typedef binary EventBody;
+typedef binary EventSource;
 typedef list<EventBody> EventBodies;
 
 /**
@@ -28,7 +29,8 @@ struct Event {
      */
     1: required base.EventID    id;
     2: required base.Timestamp  created_at;     /* Время происхождения события */
-    3: required EventBody       event_payload;  /* Описание события */
+    3: required EventSource     source;         /* Идентификатор объекта, породившего событие */
+    4: required EventBody       event_payload;  /* Описание события */
 }
 
 /**
@@ -293,7 +295,8 @@ exception NoLastEvent {}
  */
 service EventSink {
     /**
-     * Метод возвращает список событий (историю) всех машин системы.
+     * Метод возвращает список событий (историю) всех машин системы, включая
+     * те машины, которые существовали в прошлом, но затем были удалены.
      *
      * Возвращаемый список событий упорядочен по моменту фиксирования его в
      * системе: в начале списка располагаются события, произошедшие
