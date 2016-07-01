@@ -8,6 +8,8 @@
 
 include "base.thrift"
 
+namespace java com.rbkmoney.damsel.state_processing
+
 exception EventNotFound {}
 exception MachineNotFound {}
 exception MachineFailed {}
@@ -19,8 +21,15 @@ typedef list<EventBody> EventBodies;
  * Произвольное событие, продукт перехода в новое состояние.
  */
 struct Event {
-    1: base.EventID id;  /* Уникальный идентификатор события */
-    2: EventBody body;   /* Описание события */
+    /**
+     * Идентификатор события.
+     * Монотонно возрастающее целочисленное значение, таким образом на множестве
+     * событий задаётся отношение полного порядка (total order).
+     */
+    1: required base.EventID    id;
+    2: required base.Timestamp  created_at;     /* Время происхождения события */
+    3: required base.ID         source;         /* Идентификатор объекта, породившего событие */
+    4: required EventBody       event_payload;  /* Описание события */
 }
 
 /**
@@ -78,10 +87,8 @@ struct TagAction {
  * Ссылка, уникально определяющая процесс автомата.
  */
 union Reference {
-    /** Основной идентификатор процесса автомата */
-    1: base.ID                  id;
-    /** Ассоциация */
-    2: base.Tag                 tag;
+    1: base.ID  id;   /** Основной идентификатор процесса автомата */
+    2: base.Tag tag;  /** Ассоциация */
 }
 
 /**
@@ -101,10 +108,8 @@ typedef binary CallResponse;
  * Набор данных для обработки внешнего вызова.
  */
 struct CallArgs {
-    /** Данные вызова */
-    1: required Call            call;
-    /** История автомата */
-    2: required History         history;
+    1: required Call     call;     /** Данные вызова */
+    2: required History  history;  /** История автомата */
 }
 
 /**
@@ -126,9 +131,9 @@ struct CallResult {
  * автомата и эволюции его состояния, то есть нарастанию истории.
  */
 union Signal {
-    1: InitSignal               init;
-    2: TimeoutSignal            timeout;
-    3: RepairSignal             repair;
+    1: InitSignal     init;
+    2: TimeoutSignal  timeout;
+    3: RepairSignal   repair;
 }
 
 /**
@@ -136,9 +141,9 @@ union Signal {
  */
 struct InitSignal {
     /** Основной идентификатор процесса автомата */
-    1: required base.ID         id;
+    1: required base.ID  id;
     /** Набор данных для инициализации */
-    2: required binary          arg;
+    2: required binary   arg;
 }
 
 /**
@@ -151,17 +156,15 @@ struct TimeoutSignal {}
  * опционально скорректировать своё состояние.
  */
 struct RepairSignal {
-    1: optional binary          arg;
+    1: optional binary  arg;
 }
 
 /**
  * Набор данных для обработки сигнала.
  */
 struct SignalArgs {
-    /** Поступивший сигнал */
-    1: required Signal          signal;
-    /** История автомата */
-    2: required History         history;
+    1: required Signal   signal;     /** Поступивший сигнал */
+    2: required History  history;    /** История автомата */
 }
 
 /**
@@ -205,9 +208,31 @@ struct StartResult {
     1: required base.ID         id;
 }
 
-/** Структура задает параметры для выборки событий */
+/**
+ * Структура задает параметры для выборки событий
+ *
+ */
 struct HistoryRange {
+    /**
+     * Идентификатор события, после которого следуют события,
+     * входящие в описываемую выборку. Если поле не указано,
+     * то в выборку попадут события с самого первого.
+     *
+     * Если `after` не указано, в выборку попадут события с начала истории; если
+     * указано, например, `42`, то в выборку попадут события, случившиеся _после_
+     * события `42`.
+     */
     1: optional base.EventID after
+
+    /**
+     * Максимальная длина выборки.
+     * Допустимо указывать любое значение >= 0.
+     *
+     * Если поле не задано, то длина выборки ничем не ограничена.
+     *
+     * Если в выборку попало событий _меньше_, чем значение `limit`,
+     * был достигнут конец текущей истории.
+     */
     2: optional i32 limit
 }
 
@@ -233,41 +258,56 @@ service Automaton {
     /**
      * Уничтожить определённый процесс автомата.
      */
-    void destroy (1: Reference ref) throws (1: MachineNotFound ex1);
+    void destroy (1: Reference ref)
+         throws (1: MachineNotFound ex1);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a) throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    void repair (1: Reference ref, 2: Args a)
+         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c) throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    CallResponse call (1: Reference ref, 2: Call c)
+         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
-     *  Метод возвращает список событий (историю) машины ref,
-     *  начиная с события, следующего за событием range.after
-     *  Параметр range.limit задает максимальную длину возвращаемой истории.
+     * Метод возвращает список событий (историю) машины ref
      *
-     *  Если передан range.after последнего события для данной машины,
-     *  то возвращается пустой список.
-     *
-     *  Если не указан range.after, то возвращается список событий, начиная с самого
-     *  первого в истории.
-     *
-     *  Если не указан range.limit, возвращается история с момента следующего
-     *  после after и до самого последнего в истории.
-     *
-     *  Если не указано и range.after, и range.limit, то возвращается вся история
-     *  целиком с самого начала.
-     *
-     *  Возвращаемый список событий упорядочен по моменту фиксирования его в
-     *  платежной системе: в начале списка располагаются события, произошедшие
-     *  раньше тех, которые располагаются в конце.
+     * Возвращаемый список событий упорядочен по моменту фиксирования его в
+     * системе: в начале списка располагаются события, произошедшие
+     * раньше тех, которые располагаются в конце.
      */
 
     History getHistory (1: Reference ref, 2: HistoryRange range)
          throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
+}
+
+/** Исключение, сигнализирующее о том, что последнего события не существует. */
+exception NoLastEvent {}
+
+/**
+ * Сервис получения истории событий сразу всех машин.
+ */
+service EventSink {
+    /**
+     * Метод возвращает список событий (историю) всех машин системы, включая
+     * те машины, которые существовали в прошлом, но затем были удалены.
+     *
+     * Возвращаемый список событий упорядочен по моменту фиксирования его в
+     * системе: в начале списка располагаются события, произошедшие
+     * раньше тех, которые располагаются в конце.
+     */
+    History GetHistory (1: HistoryRange range)
+         throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
+
+    /**
+     * Получить идентификатор наиболее позднего события.
+     * Если в системе нет ни одного события, то бросится исключение NoLastEvent.
+     */
+    base.EventID GetLastEventID ()
+         throws (1: NoLastEvent ex1);
 }

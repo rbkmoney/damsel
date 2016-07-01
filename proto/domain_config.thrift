@@ -5,8 +5,8 @@
 
 include "domain.thrift"
 
-namespace erl domain_config
 namespace java com.rbkmoney.damsel.domain_config
+namespace erl domain
 
 /**
  * Маркер вершины истории.

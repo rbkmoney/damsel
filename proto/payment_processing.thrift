@@ -35,12 +35,17 @@ struct Event {
      * Монотонно возрастающее целочисленное значение, таким образом на множестве
      * событий задаётся отношение полного порядка (total order).
      */
-    1: required base.EventID id
+    1: required base.EventID   id
+
+    /**
+     * Время создания события.
+     */
+    2: required base.Timestamp created_at
 
     /**
      * Идентификатор бизнес-объекта, источника события.
      */
-    2: required EventSource  source
+    3: required EventSource    source
 
     /**
      * Номер события в последовательности событий от указанного источника.
@@ -48,12 +53,12 @@ struct Event {
      * Номер первого события от источника всегда равен `1`, то есть `sequence`
      * принимает значения из диапазона `[1; 2^31)`
      */
-    3: required i32          sequence
+    4: required i32            sequence
 
     /**
      * Содержание события.
      */
-    4: required EventPayload payload
+    5: required EventPayload   payload
 
 }
 
@@ -237,7 +242,7 @@ service Invoicing {
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
-    void Void (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
+    void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
 
 }
