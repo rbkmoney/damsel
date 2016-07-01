@@ -13,26 +13,39 @@ namespace erl domain
  */
 struct Head {}
 
+typedef i64 Version
+
 /**
- * Вариант представления ревизии в истории.
+ * Референс может указывать либо на конкретную
+ * версию либо на наиболее актуальную.
  */
-union Revision {
-    1: domain.DataRevision rev;
+union Reference {
+    1: Version version;
     2: Head head;
 }
 
 /**
- * Монотонно возрастающая версия монолитного набора объектов, определённая
- * точка в его истории набора объектов.
+ * Снэпшот это определенная версия данных
+ * конфигурации домена
  */
-struct Version {
-    1: required domain.SchemaRevision schema = domain.SCHEMA_REVISION;
-    2: required Revision data;
+struct Snapshot {
+    1: Version version
+    2: domain.Domain domain
 }
 
 /**
  * Возможные операции над набором объектов.
  */
+ 
+struct Commit {
+    1: required list<Operation> ops
+}
+
+/**
+ * История это последовательность коммитов
+ */
+typedef map<Version, Commit> History
+
 union Operation {
     1: InsertOp insert;
     2: UpdateOp update;
@@ -43,36 +56,71 @@ struct InsertOp {
     1: required domain.DomainObject object;
 }
 
+/**
+ * Содержит значения до и после внесенных изменений
+ */
 struct UpdateOp {
-    1: required domain.DomainObject object;
+    1: required domain.DomainObject old_object;
+    2: required domain.DomainObject new_object;
 }
 
 struct RemoveOp {
-    1: required domain.Reference ref;
+    1: required domain.DomainObject object;
 }
 
+struct VersionedObject {
+    1: Version version
+    2: domain.DomainObject object
+}
+
+/**
+ * Требуемая версия отсутствует
+ */
 exception VersionNotFound {}
+
+/**
+ * Объект не найден в домене
+ */
 exception ObjectNotFound {}
+
+/**
+ * Возникает в случаях, если коммит
+ * несовместим с уже примененными ранее
+ */
 exception OperationConflict {}
 
 /**
  * Интерфейс сервиса конфигурации предметной области.
  */
-service Configurator {
-
-    Version head ()
-        throws (1: VersionNotFound ex1);
-
-    Version pollHead ()
-        throws ();
-
-    domain.Domain checkout (1: Version v)
-        throws (1: VersionNotFound ex1);
-
-    domain.DomainObject checkoutObject (1: Version v, 2: domain.Reference ref)
+service RepositoryClient {
+    
+    /**
+     * Возвращает объект из домена определенной или последней версии
+     */
+    VersionedObject checkoutObject (1: Reference version_ref, 2: domain.Reference object_ref)
         throws (1: VersionNotFound ex1, 2: ObjectNotFound ex2);
 
-    Version commit (1: Version v, 2: Operation op)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex3);
+}
+
+service Repository {
+
+    /**
+     * Применить изменения к определенной версии.
+     * Возвращает следующую версию
+     */
+    Version Commit (1: Version version, 2: Commit commit)
+        throws (1: VersionNotFound ex1, 2: OperationConflict ex2);
+        
+    /**
+     * Получить снэпшот конкретной версии
+     */
+    Snapshot Checkout (1: Reference reference)
+        throws (1: VersionNotFound ex1)
+
+    /**
+     * Получить новые коммиты следующие за указанной версией
+     */
+    History Pull (1: Version version)
+        throws (1: VersionNotFound ex1)
 
 }
