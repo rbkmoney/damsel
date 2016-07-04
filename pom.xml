@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.rbkmoney</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <groupId>com.rbkmoney.damsel_thrift</groupId>
+    <artifactId>damsel_thrift</artifactId>
+    <version>46419de</version>
+    <packaging>jar</packaging>
+
+    <name>Damsel Thrift</name>
+    <description>Generate trift object</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <woody-thrift.version>1.0.2</woody-thrift.version>
+        <thrift-maven-plugin.version>0.9.3-1</thrift-maven-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.rbkmoney.woody</groupId>
+            <artifactId>woody-thrift</artifactId>
+            <version>${woody-thrift.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <plugins>
+            <!-- THRIFT -->
+            <plugin>
+                <groupId>org.apache.thrift</groupId>
+                <artifactId>thrift-maven-plugin</artifactId>
+                <version>${thrift-maven-plugin.version}</version>
+                <configuration>
+                    <generator>java:fullcamel</generator>
+                    <thriftSourceRoot>${project.basedir}/damsel/proto</thriftSourceRoot>
+                    <thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>thrift-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
