@@ -8,7 +8,6 @@ typedef list<StockEvent> StockEvents
 typedef base.EventID EventID
 typedef base.Timestamp Timestamp
 typedef base.InvalidRequest InvalidRequest
-typedef payment_processing.NoLastEvent NoLastEvent
 
 /**
 * Исходное событие, полученное из HG или другого источника.
@@ -36,12 +35,12 @@ union EventIDBound {
 /**
 * Диапазон идентификаторов событий.
 * from_id - с какого ID.
-* to_id - по какой ID.
+* to_id - по какой ID. Если не задано - запрашиваются все данные от from_id.
 * Если from > to - диапазон считается некорректным.
 */
 struct EventIDRange {
     1: required EventIDBound from_id
-    2: required EventIDBound to_id
+    2: optional EventIDBound to_id
 }
 
 /**
@@ -55,12 +54,12 @@ union EventTimeBound {
 /**
 * Диапазон времени создания событий.
 * from_time - начальное время.
-* to_time - конечное время.
+* to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
 * Если from > to  - диапазон считается некорректным.
 */
 struct EventTimeRange {
     1: required EventTimeBound from_time;
-    2: required EventTimeBound to_time;
+    2: optional EventTimeBound to_time;
 }
 
 /**
@@ -90,6 +89,12 @@ exception DatasetTooBig {
     1: i32 limit;
 }
 
+/***
+* Ошибка доступа к отсутствующему элементу в хранилище событий.
+**/
+exception NoStockEvent {
+}
+
 
 /**
 * Интерфейс BM для клиентов.
@@ -101,12 +106,17 @@ service EventRepository {
     * Возвращает ошибку InvalidRequest, если диапазон фильтрации или лимит указан некорректно.
     * Возвращает ошибку DatasetTooBig, если результирующий блок данных слишком большой.
     */
-    StockEvents getEvents(1: EventConstraint constraint) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StockEvents GetEvents(1: EventConstraint constraint) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
     /**
     * Возвращает наиболее позднее известное на момент исполнения запроса событие.
     */
-    StockEvent getLastEvent () throws (1: NoLastEvent ex1)
+    StockEvent GetLastEvent () throws (1: NoStockEvent ex1)
+
+    /**
+     * Возвращает наиболее раннее событие, имеющееся в хранилище.
+     */
+    StockEvent GetFirstEvent () throws (1: NoStockEvent ex1)
 }
 
 
