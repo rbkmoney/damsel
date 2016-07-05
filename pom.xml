@@ -10,25 +10,23 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.rbkmoney.damsel_thrift</groupId>
-    <artifactId>damsel_thrift</artifactId>
+    <groupId>com.rbkmoney.damsel</groupId>
+    <artifactId>damsel</artifactId>
     <version>46419de</version>
     <packaging>jar</packaging>
 
-    <name>Damsel Thrift</name>
-    <description>Generate trift object</description>
+    <name>Damsel</name>
+    <description>Generates jar artifact containing compiled thrift classes based on generated thrift IDL files</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <woody-thrift.version>1.0.2</woody-thrift.version>
-        <thrift-maven-plugin.version>0.9.3-1</thrift-maven-plugin.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.rbkmoney.woody</groupId>
             <artifactId>woody-thrift</artifactId>
-            <version>${woody-thrift.version}</version>
+            <version>LATEST</version>
         </dependency>
     </dependencies>
 
@@ -40,10 +38,10 @@
             <plugin>
                 <groupId>org.apache.thrift</groupId>
                 <artifactId>thrift-maven-plugin</artifactId>
-                <version>${thrift-maven-plugin.version}</version>
+                <version>0.9.3-1</version>
                 <configuration>
                     <generator>java:fullcamel</generator>
-                    <thriftSourceRoot>${project.basedir}/damsel/proto</thriftSourceRoot>
+                    <thriftSourceRoot>${project.basedir}/proto</thriftSourceRoot>
                     <thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
                 </configuration>
                 <executions>
