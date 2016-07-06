@@ -1,0 +1,8 @@
+version: '2'
+services:
+  damsel:
+    image: rbkmoney/build:latest
+    volumes:
+      - .:/code
+    working_dir: /code
+    command: /sbin/init
