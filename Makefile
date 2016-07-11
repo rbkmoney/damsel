@@ -4,16 +4,17 @@ THRIFT_OPTIONS_erlang = scoped_typenames
 THRIFT_OPTIONS_java = fullcamel
 THRIFT_OPTIONS_html = standalone
 
-RELNAME := damsel
+RELNAME := dev
 
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-include utils.mk
 DOCKER = $(call which,docker)
 
 CALL_ANYWHERE := clean all compile doc deploy_nexus
 CALL_W_CONTAINER := $(CALL_ANYWHERE)
+
+include utils.mk
 
 define generate
 	$(THRIFT_EXEC) -r -strict --gen $(1):$(THRIFT_OPTIONS_$(1)) -out $(2) $(3)
@@ -25,12 +26,11 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: $(CALL_W_CONTAINER) all w_container_% $(UTIL_TARGETS)
+.PHONY: $(CALL_W_CONTAINER) all compile w_container_% $(UTIL_TARGETS)
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
-all: $(LANGUAGE_TARGETS)
-	@echo "Ok"
+all: compile
 
 compile: $(LANGUAGE_TARGETS)
 	@echo "Ok"
@@ -78,9 +78,6 @@ $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 endif
 endif
 
-
-w_container_%:
-	$(MAKE) -s $(subst w_container,run_w_container,$@)
 
 COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
 

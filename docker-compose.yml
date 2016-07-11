@@ -1,6 +1,6 @@
 version: '2'
 services:
-  damsel:
+  dev:
     image: rbkmoney/build:latest
     volumes:
       - .:/code
