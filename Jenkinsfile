@@ -15,10 +15,9 @@ pipeline('docker-host') {
       buildImg.pull()
     }
 
-    // Uncomment when fixed: make[1]: *** [_gen/erlang/proto/state_processing.thrift] Segmentation fault
-    //runStage('compile') {
-    //  sh "make w_container_compile"
-    //}
+    runStage('compile') {
+      sh "make w_container_compile"
+    }
 
     runStage('deploy_nexus') {
       sh "make w_container_deploy_nexus"
