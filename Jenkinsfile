@@ -19,8 +19,16 @@ pipeline('docker-host') {
       sh "make w_container_compile"
     }
 
-    runStage('deploy_nexus') {
-      sh "make w_container_deploy_nexus"
+    if (env.BRANCH_NAME != 'master') {
+        runStage('java_compile') {
+          sh "make w_container_java_compile"
+        }
+    }
+
+    if (env.BRANCH_NAME == 'master') {
+        runStage('deploy_nexus') {
+          sh "make w_container_deploy_nexus"
+        }
     }
 
     stage 'notify slack'
