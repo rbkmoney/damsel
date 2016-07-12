@@ -19,8 +19,15 @@ pipeline('docker-host') {
       sh "make w_container_compile"
     }
 
-    runStage('deploy_nexus') {
-      sh "make w_container_deploy_nexus"
+    runStage('java_compile') {
+      echo "${BRANCH_NAME} ${env.BRANCH_NAME}"
+      sh "make w_container_java_compile"
+    }
+
+    if (env.BRANCH_NAME == 'test_jenkinks') {
+        runStage('deploy_nexus') {
+          sh "make w_container_deploy_nexus"
+        }
     }
 
     stage 'notify slack'

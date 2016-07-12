@@ -81,6 +81,9 @@ endif
 
 COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
 
+java_compile:
+	mvn -s settings.xml compile
+
 deploy_nexus:
 	mvn -s settings.xml versions:set versions:commit -DnewVersion="$(COMMIT_HASH)" \
 	&& mvn deploy -s settings.xml -Dpath_to_thrift="$(THRIFT_EXEC)"

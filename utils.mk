@@ -21,18 +21,17 @@ to_dev_container:
 	$(DOCKER) run -it --rm -v $$PWD:$$PWD --workdir $$PWD $(BASE_IMAGE) /bin/bash
 
 w_container_%:
-	$(MAKE) -s $(subst w_container,run_w_container,$@)
+	$(MAKE) -s run_w_container_$*
 
 run_w_container_%: check_w_container_%
 	{ \
 	$(DOCKER_COMPOSE) up -d ; \
-	$(DOCKER_COMPOSE) exec -T $(RELNAME) make $(subst run_w_container_,,$@) ; \
+	$(DOCKER_COMPOSE) exec -T $(RELNAME) make $* ; \
 	res=$$? ; \
 	$(DOCKER_COMPOSE) down ; \
 	exit $$res ; \
 	}
 
-check_w_container_%: TARG = $(subst check_w_container_,,$@)
 check_w_container_%:
-	$(if $(filter $(TARG),$(CALL_W_CONTAINER)),,\
-	$(error "Error: target '$(TARG)' cannot be called w_container_"))
+	$(if $(filter $*,$(CALL_W_CONTAINER)),,\
+	$(error "Error: target '$*' cannot be called w_container_"))
