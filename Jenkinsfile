@@ -16,7 +16,9 @@ pipeline('docker-host') {
     }
 
     runStage('compile') {
-      sh "make w_container_compile"
+        sh "make ${env.BRANCH_NAME}"
+        sh 'git branch'
+     // sh "make w_container_compile"
     }
 
     runStage('java_compile') {
