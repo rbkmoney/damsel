@@ -16,8 +16,6 @@ pipeline('docker-host') {
     }
 
     runStage('compile') {
-        sh "make ${env.BRANCH_NAME}"
-        sh 'git branch'
      // sh "make w_container_compile"
     }
 
@@ -26,7 +24,7 @@ pipeline('docker-host') {
       sh "make w_container_java_compile"
     }
 
-    if (env.BRANCH_NAME == 'test_jenkinks') {
+    if (${env.BRANCH_NAME} == 'test_jenkinks') {
         runStage('deploy_nexus') {
           sh "make w_container_deploy_nexus"
         }
