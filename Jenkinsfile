@@ -20,6 +20,7 @@ pipeline('docker-host') {
     }
 
     runStage('java_compile') {
+      echo ${env.BRANCH_NAME}
       sh "make w_container_java_compile"
     }
 
