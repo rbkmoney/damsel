@@ -16,6 +16,12 @@ pipeline('docker-host') {
     }
 
     runStage('compile') {
+        if (env.BRANCH_NAME == 'PR-37'){
+            sh 'echo pr- ${env.BRANCH_NAME}'
+        }
+        if (env.BRANCH_NAME == 'PR-35'){
+            sh 'echo pr_ ${env.BRANCH_NAME}'
+        }
      // sh "make w_container_compile"
     }
 
@@ -24,7 +30,7 @@ pipeline('docker-host') {
       sh "make w_container_java_compile"
     }
 
-    if (${env.BRANCH_NAME} == 'test_jenkinks') {
+    if (env.BRANCH_NAME == 'test_jenkinks') {
         runStage('deploy_nexus') {
           sh "make w_container_deploy_nexus"
         }
