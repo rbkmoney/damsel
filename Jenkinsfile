@@ -15,14 +15,16 @@ pipeline('docker-host') {
       buildImg.pull()
     }
 
+    if (env.BRANCH_NAME == 'PR-37'){
     runStage('compile') {
-        if (env.BRANCH_NAME == 'PR-37'){
+
             sh "echo pr- ${env.BRANCH_NAME}"
-        }
+
         if (env.BRANCH_NAME == 'PR-35'){
             sh "echo pr_ ${env.BRANCH_NAME}"
         }
      // sh "make w_container_compile"
+    }
     }
 
     runStage('java_compile') {
