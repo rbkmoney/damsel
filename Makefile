@@ -11,7 +11,7 @@ DESTDIR = _gen
 
 DOCKER = $(call which,docker)
 
-CALL_ANYWHERE := clean all compile doc deploy_nexus
+CALL_ANYWHERE := clean all java_compile compile doc deploy_nexus
 CALL_W_CONTAINER := $(CALL_ANYWHERE)
 
 include utils.mk
