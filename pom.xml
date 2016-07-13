@@ -10,9 +10,9 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.rbkmoney.damsel</groupId>
+    <groupId>com.rbkmoney</groupId>
     <artifactId>damsel</artifactId>
-    <version>46419de</version>
+    <version>7eda08c</version>
     <packaging>jar</packaging>
 
     <name>Damsel</name>
@@ -43,7 +43,7 @@
                 <configuration>
                     <generator>java:fullcamel</generator>
                     <thriftSourceRoot>${project.basedir}/proto</thriftSourceRoot>
-                    <thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
+                    <thriftExecutable>${path_to_thrift}</thriftExecutable>
                 </configuration>
                 <executions>
                     <execution>
