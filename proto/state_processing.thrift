@@ -37,7 +37,12 @@ struct Event {
  * Сложное состояние, выраженное в виде упорядоченного набора событий
  * процессора.
  */
-typedef list<Event> History;
+struct History {
+    /** Сами события */
+    1: list<Event> events
+    /** Условия выборки, по которым события были получены. */
+    2: HistoryRange range
+}
 
 /**
  * Контекст автомата.
@@ -45,6 +50,25 @@ typedef list<Event> History;
  * (например в него можно положить свёрнутый из эвентов стейт).
  */
 typedef binary Context;
+
+/**
+ * Представление машины, для последующей работы с ней.
+ */
+struct Machine {
+    1: History history
+    2: Context context
+}
+
+/**
+ * Структура для описания какие конкретно поля нужны в машине при её получении.
+ * Она нужна, по сути, для оптимизации, чтобы каждый раз не со всеми данными работать.
+ */
+struct MachineQuery {
+    /** Какие эвенты из истории нужны */
+    1: HistoryRange range
+    /** Нужен ли контекст */
+    2: bool         include_context
+}
 
 /**
  * Желаемое действие, продукт перехода в новое состояние.
@@ -58,6 +82,9 @@ struct ComplexAction {
     1: optional SetTimerAction       set_timer;
     2: optional TagAction            tag;
     3: optional UpdateContextAction  update_context;
+    // TODO
+    // 4: optional TrimHistoryAction  trim_history;
+    // 5: optional DropMachineAction  drop_machine;
 }
 
 /**
@@ -126,9 +153,8 @@ typedef binary CallResponse;
  * Набор данных для обработки внешнего вызова.
  */
 struct CallArgs {
-    1: required Call     call;     /** Данные вызова */
-    2: required History  history;  /** История автомата */
-    3: optional Context  context;  /** Текущий контекст автомата */
+    1: required Call         call;     /** Данные вызова */
+    2: required Machine      machine;  /** Машина, которой пришел call */
 }
 
 /**
@@ -183,8 +209,7 @@ struct RepairSignal {
  */
 struct SignalArgs {
     1: required Signal   signal;     /** Поступивший сигнал */
-    2: required History  history;    /** История автомата */
-    3: optional Context  context;    /** Текущий контекст автомата */
+    2: required Machine  machine;    /** Машина, которой пришел сигнал */
 }
 
 /**
@@ -223,6 +248,12 @@ struct Args {
     1: required binary          arg;
 }
 
+
+enum Direction {
+    forward  = 1
+    backward = 2
+}
+
 /**
  * Структура задает параметры для выборки событий
  *
@@ -249,6 +280,11 @@ struct HistoryRange {
      * был достигнут конец текущей истории.
      */
     2: optional i32 limit
+
+    /**
+     * Направление истории, по-умолчанию вперёд.
+     */
+    3: optional Direction direction
 }
 
 /**
@@ -263,7 +299,7 @@ struct HistoryRange {
  *  - если в процессе выполнения запроса машина перешла в некорректное состояние
  *    то метод выкинет исключение MachineFailed
  */
-service Automaton {
+service Automation {
 
     /**
      * Запустить новый процесс автомата с заданным ID.
@@ -281,14 +317,14 @@ service Automaton {
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a)
+    void repair (1: Reference ref, 2: Args a, 3: MachineQuery mq)
          throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c)
-         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    CallResponse call (1: Reference ref, 2: Call c, 3: MachineQuery mq)
+         throws (1: MachineNotFound ex1, 2: MachineFailed ex2, 3: EventNotFound ex3);
 
     /**
      * Метод возвращает список событий (историю) машины ref
@@ -298,7 +334,7 @@ service Automaton {
      * раньше тех, которые располагаются в конце.
      */
 
-    History getHistory (1: Reference ref, 2: HistoryRange range)
+    Machine get (1: Reference ref, 2: MachineQuery mq)
          throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
 }
 
