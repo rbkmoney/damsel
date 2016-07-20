@@ -12,6 +12,7 @@ namespace java com.rbkmoney.damsel.state_processing
 
 exception EventNotFound {}
 exception MachineNotFound {}
+exception MachineAlreadyExists {}
 exception MachineFailed {}
 
 typedef binary EventBody;
@@ -222,11 +223,6 @@ struct Args {
     1: required binary          arg;
 }
 
-/** Результат запуска процесса автомата. */
-struct StartResult {
-    1: required base.ID         id;
-}
-
 /**
  * Структура задает параметры для выборки событий
  *
@@ -270,9 +266,10 @@ struct HistoryRange {
 service Automaton {
 
     /**
-     * Запустить новый процесс автомата.
+     * Запустить новый процесс автомата с заданным ID.
+     * Если машина с таким ID уже существует, то кинется иключение MachineAlreadyExists.
      */
-    StartResult start (1: Args a) throws ();
+    void start (1: base.ID id, 2: Args a) throws (1: MachineAlreadyExists ex1);
 
     /**
      * Уничтожить определённый процесс автомата.
