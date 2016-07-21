@@ -1,17 +1,19 @@
 THRIFT_EXEC = $(shell which thrift)
-THRIFT_LANGUAGES = erlang go java
+THRIFT_LANGUAGES = erlang java
 THRIFT_OPTIONS_erlang = scoped_typenames
 THRIFT_OPTIONS_java = fullcamel
 THRIFT_OPTIONS_html = standalone
 
-RELNAME := dev
+REGISTRY := dr.rbkmoney.com
+ORG_NAME := rbkmoney
+BASE_IMAGE := "$(REGISTRY)/$(ORG_NAME)/build:latest"
+
+RELNAME := damsel
 
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-DOCKER = $(call which,docker)
-
-CALL_ANYWHERE := clean all java_compile compile doc deploy_nexus
+CALL_ANYWHERE := clean all create java_compile compile doc deploy_nexus
 CALL_W_CONTAINER := $(CALL_ANYWHERE)
 
 include utils.mk
@@ -26,9 +28,13 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: $(CALL_W_CONTAINER) all compile w_container_% $(UTIL_TARGETS)
+.PHONY: $(CALL_W_CONTAINER) create $(UTIL_TARGETS)
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
+
+# Build failed without this file: _build/test/logs/index.html (Hi, jenkins_pipeline_lib)
+create:
+	mkdir -p _build/test/logs && touch _build/test/logs/index.html
 
 all: compile
 
@@ -82,8 +88,8 @@ endif
 COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
 
 java_compile:
-	mvn -s settings.xml compile
+	mvn compile
 
 deploy_nexus:
-	mvn -s settings.xml versions:set versions:commit -DnewVersion="$(COMMIT_HASH)" \
-	&& mvn deploy -s settings.xml -Dpath_to_thrift="$(THRIFT_EXEC)"
+	mvn versions:set versions:commit -DnewVersion="$(COMMIT_HASH)" \
+	&& mvn deploy -Dpath_to_thrift="$(THRIFT_EXEC)"
