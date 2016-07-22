@@ -250,8 +250,8 @@ struct Args {
 
 
 enum Direction {
-    forward  = 1
-    backward = 2
+    forward
+    backward
 }
 
 /**
@@ -284,7 +284,7 @@ struct HistoryRange {
     /**
      * Направление истории, по-умолчанию вперёд.
      */
-    3: optional Direction direction
+    3: optional Direction direction = Direction.forward
 }
 
 /**
@@ -299,7 +299,7 @@ struct HistoryRange {
  *  - если в процессе выполнения запроса машина перешла в некорректное состояние
  *    то метод выкинет исключение MachineFailed
  */
-service Automation {
+service Automaton {
 
     /**
      * Запустить новый процесс автомата с заданным ID.
@@ -318,7 +318,7 @@ service Automation {
      * состояния в штатное и продолжить его исполнение.
      */
     void repair (1: Reference ref, 2: Args a, 3: MachineQuery mq)
-         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+         throws (1: MachineNotFound ex1, 2: MachineFailed ex2, 3: EventNotFound ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
