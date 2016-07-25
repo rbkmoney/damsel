@@ -7,7 +7,7 @@ which = $(if $(shell which $(1) 2>/dev/null),\
 DOCKER = $(call which,docker)
 DOCKER_COMPOSE = $(call which,docker-compose)
 
-UTIL_TARGETS := to_dev_container w_container_% run_w_container_% check_w_container_%
+UTIL_TARGETS := to_dev_container w_container_% w_compose_% run_w_container_% check_w_container_%
 
 ifndef RELNAME
 $(error RELNAME is not set)
@@ -23,7 +23,16 @@ to_dev_container:
 w_container_%:
 	$(MAKE) -s run_w_container_$*
 
+w_compose_%:
+	$(MAKE) -s run_w_compose_$*
+
 run_w_container_%: check_w_container_%
+	{ \
+	$(DOCKER) run --rm -v $$PWD:$$PWD --workdir $$PWD $(BASE_IMAGE) make $* ; \
+	res=$$? ; exit $$res ; \
+	}
+
+run_w_compose_%: check_w_container_%
 	{ \
 	$(DOCKER_COMPOSE) up -d ; \
 	$(DOCKER_COMPOSE) exec -T $(RELNAME) make $* ; \
