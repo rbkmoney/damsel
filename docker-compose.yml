@@ -1,8 +1,0 @@
-version: '2'
-services:
-  dev:
-    image: rbkmoney/build:latest
-    volumes:
-      - .:/code
-    working_dir: /code
-    command: /sbin/init
