@@ -62,6 +62,9 @@ typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
 typedef binary InvoiceContext
 typedef string PaymentSession
+typedef string Fingerprint
+typedef string IPAddress
+
 
 struct Invoice {
     1: required InvoiceID id
@@ -93,8 +96,7 @@ struct InvoicePayment {
     3: required InvoicePaymentStatus status
     4: optional TransactionInfo trx
     5: required Payer payer
-    6: required PaymentTool payment_tool
-    7: required PaymentSession session
+    8: required Funds cost
 }
 
 struct InvoicePaymentPending   {}
@@ -107,7 +109,18 @@ union InvoicePaymentStatus {
     3: InvoicePaymentFailed failed
 }
 
-struct Payer {}
+struct Payer {
+    1: required PaymentTool payment_tool
+    2: required PaymentSession session
+    3: required PayerInfo payer_info
+}
+
+struct PayerInfo {
+    1: optional IPAddress ip_address
+    2: optional Fingerprint fingerprint
+}
+
+
 
 /* Cash flows */
 
