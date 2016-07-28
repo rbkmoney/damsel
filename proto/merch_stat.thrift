@@ -50,7 +50,7 @@ struct StatRequest {
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
 
-service MerchStat {
+service MerchantStatistics {
     list<StatPayment> GetPayments(1: StatRequest req) throws (1: InvalidRequest ex1)
     list<StatInvoice> GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1)
     list<StatCustomer> GetCustomers(1: StatRequest req) throws (1: InvalidRequest ex1)
