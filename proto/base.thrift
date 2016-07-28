@@ -56,6 +56,9 @@ struct Error {
     2: optional string description
 }
 
+/** Домен ошибок */
+typedef string ErrorDomain
+
 /** Общее исключение */
 exception Failure {
     /** Ошибка, которая привела к возникновению исключения */

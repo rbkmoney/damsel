@@ -346,6 +346,29 @@ struct MerchantPrototype {
     2: required Merchant data
 }
 
+/* Error mapping */
+
+struct ErrorMappingRuleSetRef {
+    /* domain to map from */
+    1: required base.ErrorDomain origin
+    /* domain to map to */
+    2: required base.ErrorDomain destination
+}
+
+struct ErrorMappingRule {
+    /* opaque rule for matching */
+    1: required base.Opaque match_pattern
+    /* opaque rule for transformation */
+    2: required base.Opaque mapping_rule
+}
+
+typedef list<ErrorMappingRule> ErrorMappingRuleSet
+
+struct ErrorMappingRuleSetObject {
+    1: ErrorMappingRuleSetRef ref
+    2: ErrorMappingRuleSet object
+}
+
 /* Type enumerations */
 
 union Reference {
@@ -358,6 +381,7 @@ union Reference {
     7: PartyRef party
     8: MerchantPrototypeRef merchant_prototype
     9: ProxyRef proxy
+    10: ErrorMappingRuleSetRef error_mapping_rule
 }
 
 union DomainObject {
@@ -370,6 +394,7 @@ union DomainObject {
     7: PartyObject party
     8: MerchantPrototype merchant_prototype
     9: ProxyObject proxy
+    10: ErrorMappingRuleSetObject error_mapping_rule
 }
 
 /* Domain */
