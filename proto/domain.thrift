@@ -112,10 +112,10 @@ union InvoicePaymentStatus {
 struct Payer {
     1: required PaymentTool payment_tool
     2: required PaymentSession session
-    3: required PayerInfo payer_info
+    3: required ClientInfo client_info
 }
 
-struct PayerInfo {
+struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
 }
