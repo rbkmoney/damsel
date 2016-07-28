@@ -6,7 +6,7 @@ include "base.thrift"
 include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.merch_stat
-namespace erlang merch_stat
+namespace erlang merchstat
 
 /**
  * Информация о платеже. Состоит из id инвойса платежа, доменной модели платежа и гео-данных.
