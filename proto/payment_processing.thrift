@@ -97,7 +97,6 @@ union InvoicePaymentEvent {
     1: InvoicePaymentStarted       invoice_payment_started
     2: InvoicePaymentBound         invoice_payment_bound
     3: InvoicePaymentStatusChanged invoice_payment_status_changed
-    4: InvoicePaymentStateChanged  invoice_payment_state_changed
 }
 
 /**
@@ -133,16 +132,6 @@ struct InvoicePaymentBound {
     1: required domain.InvoicePaymentID payment_id
     /** Данные о связанной транзакции у провайдера. */
     2: required domain.TransactionInfo trx
-}
-
-/**
- * Событие об изменении непрозрачного состояния платежа в процессе обработки.
- */
-struct InvoicePaymentStateChanged {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
-    /** Непрозрачное состояние. */
-    2: optional base.Opaque state
 }
 
 /**
