@@ -344,12 +344,17 @@ exception InvalidClaimStatus {
     1: required ClaimStatus status
 }
 
+union InvalidStatus {
+    1: domain.Blockage blockage
+    2: domain.Suspension suspension
+}
+
 exception InvalidPartyStatus {
-    1: required domain.PartyStatus status
+    1: required InvalidStatus status
 }
 
 exception InvalidShopStatus {
-    1: required domain.ShopStatus status
+    1: required InvalidStatus status
 }
 
 // Service
