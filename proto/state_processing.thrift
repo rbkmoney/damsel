@@ -250,20 +250,20 @@ service Automaton {
      * Запустить новый процесс автомата с заданным ID.
      * Если машина с таким ID уже существует, то кинется иключение MachineAlreadyExists.
      */
-    void start (1: base.Namespace ns, 2: base.ID id, 3: Args a)
+    void Start (1: base.Namespace ns, 2: base.ID id, 3: Args a)
          throws (1: NamespaceNotFound ex1, 1: MachineAlreadyExists ex2);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+    void Repair (1: base.Namespace ns, 2: Reference ref, 3: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: base.Namespace ns, 2: Reference ref, 3: Call c)
+    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Call c)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
@@ -274,7 +274,7 @@ service Automaton {
      * раньше тех, которые располагаются в конце.
      */
 
-    History getHistory (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+    History GetHistory (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
 
