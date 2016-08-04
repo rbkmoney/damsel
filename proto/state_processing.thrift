@@ -253,12 +253,6 @@ service Automaton {
     void start (1: base.ID id, 2: Args a) throws (1: MachineAlreadyExists ex1);
 
     /**
-     * Уничтожить определённый процесс автомата.
-     */
-    void destroy (1: Reference ref)
-         throws (1: MachineNotFound ex1);
-
-    /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
