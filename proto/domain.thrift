@@ -65,17 +65,18 @@ typedef string PaymentSession
 typedef string Fingerprint
 typedef string IPAddress
 
-
 struct Invoice {
     1: required InvoiceID id
-    2: required base.Timestamp created_at
-    3: required DataRevision domain_revision
-    4: required InvoiceStatus status
-    5: required base.Timestamp due
-    6: required string product
-    7: optional string description
-    8: required Funds cost
-    9: required InvoiceContext context
+    2: required PartyRef owner
+    3: required ShopID shop_id
+    4: required base.Timestamp created_at
+    5: required DataRevision domain_revision
+    6: required InvoiceStatus status
+    7: required base.Timestamp due
+    8: required string product
+    9: optional string description
+   10: required Funds cost
+   11: required InvoiceContext context
 }
 
 struct InvoiceUnpaid    {}
@@ -199,6 +200,11 @@ struct Party {
     3: required Blockage blockage
     4: required Suspension suspension
     5: required map<ShopID, Shop> shops = []
+}
+
+struct PartyRef {
+    1: required PartyID id
+    2: required DataRevision revision
 }
 
 /* Shops */
