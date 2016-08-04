@@ -19,6 +19,8 @@ exception MachineFailed {}
 typedef binary EventBody;
 typedef list<EventBody> EventBodies;
 
+typedef binary Args
+
 /**
  * Произвольное событие, продукт перехода в новое состояние.
  */
@@ -198,12 +200,6 @@ service Processor {
 
 }
 
-/** Универсальная расширяемая структура с набором аргументов. */
-struct Args {
-    /** Неструктурированные данные. */
-    1: required binary          arg;
-}
-
 /**
  * Структура задает параметры для выборки событий
  *
@@ -251,7 +247,7 @@ service Automaton {
      * Если машина с таким ID уже существует, то кинется иключение MachineAlreadyExists.
      */
     void Start (1: base.Namespace ns, 2: base.ID id, 3: Args a)
-         throws (1: NamespaceNotFound ex1, 1: MachineAlreadyExists ex2);
+         throws (1: NamespaceNotFound ex1, 2: MachineAlreadyExists ex2);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
