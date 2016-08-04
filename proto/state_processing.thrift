@@ -12,6 +12,7 @@ namespace java com.rbkmoney.damsel.state_processing
 
 exception EventNotFound {}
 exception MachineNotFound {}
+exception NamespaceNotFound {}
 exception MachineAlreadyExists {}
 exception MachineFailed {}
 
@@ -29,7 +30,6 @@ struct Event {
      */
     1: required base.EventID    id;
     2: required base.Timestamp  created_at;     /* Время происхождения события */
-    3: required base.ID         source;         /* Идентификатор объекта, породившего событие */
     4: required EventBody       event_payload;  /* Описание события */
 }
 
@@ -250,20 +250,21 @@ service Automaton {
      * Запустить новый процесс автомата с заданным ID.
      * Если машина с таким ID уже существует, то кинется иключение MachineAlreadyExists.
      */
-    void start (1: base.ID id, 2: Args a) throws (1: MachineAlreadyExists ex1);
+    void start (1: base.Namespace ns, 2: base.ID id, 3: Args a)
+         throws (1: NamespaceNotFound ex1, 1: MachineAlreadyExists ex2);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a)
-         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    void repair (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c)
-         throws (1: MachineNotFound ex1, 2: MachineFailed ex2);
+    CallResponse call (1: base.Namespace ns, 2: Reference ref, 3: Call c)
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Метод возвращает список событий (историю) машины ref
@@ -273,9 +274,24 @@ service Automaton {
      * раньше тех, которые располагаются в конце.
      */
 
-    History getHistory (1: Reference ref, 2: HistoryRange range)
-         throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
+    History getHistory (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
+
+
+/**
+ * Событие, содержащее в себе событие и его источник.
+ */
+struct SinkEvent {
+    1: required base.ID         source_id;      /* Идентификатор объекта, породившего событие */
+    2: required base.Namespace  source_ns;      /* Идентификатор пространства имён, породившего событие */
+    3: required Event           event;          /* Исходное событие */
+}
+
+/**
+ * Сложное состояние всей системы (всех машин), выраженное в виде упорядоченного набора событий.
+ */
+typedef list<SinkEvent> SinkHistory
 
 /** Исключение, сигнализирующее о том, что последнего события не существует. */
 exception NoLastEvent {}
@@ -292,7 +308,7 @@ service EventSink {
      * системе: в начале списка располагаются события, произошедшие
      * раньше тех, которые располагаются в конце.
      */
-    History GetHistory (1: HistoryRange range)
+    SinkHistory GetHistory (1: HistoryRange range)
          throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
 
     /**
