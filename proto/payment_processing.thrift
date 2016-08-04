@@ -255,20 +255,40 @@ struct ShopParams {
     3: required domain.ShopDetails details
 }
 
-union ShopChange {
+union PartyModification {
+    1: domain.Blockage blockage
+    2: domain.Suspension suspension
+    3: domain.Shop shop_creation
+    4: ShopModificationUnit shop_modification
+}
+
+typedef list<PartyModification> PartyChangeset
+
+struct ShopModificationUnit {
+    1: required ShopID id
+    2: ShopModification modification
+}
+
+union ShopModification {
+    1: domain.Blockage blockage
+    2: domain.Suspension suspension
+    3: ShopUpdate update
+}
+
+union ShopUpdateUnit {
     1: domain.Category category
     2: domain.ShopDetails details
     3: domain.Contractor contractor
 }
 
-typedef list<ShopChange> ShopChangeset
+typedef list<ShopUpdateUnit> ShopUpdate
 
 typedef base.ID ClaimID
 
 struct Claim {
     1: required ClaimID id
     2: required ClaimStatus status
-    3: required list<ClaimedEvent> changeset
+    3: required PartyChangeset changeset
 }
 
 union ClaimStatus {
@@ -298,7 +318,6 @@ union PartyEvent {
     1: PartyCreated party_created
     2: ClaimCreated claim_created
     3: ClaimStatusChanged claim_status_changed
-    4: ClaimedEvent claimed_event
 }
 
 struct PartyCreated {
@@ -312,38 +331,6 @@ struct ClaimCreated {
 struct ClaimStatusChanged {
     1: required ClaimID id
     2: required ClaimStatus status
-}
-
-union ClaimedEvent {
-    1: ClaimedPartyEvent claimed_party_event
-    2: ClaimedShopEvent claimed_shop_event
-}
-
-union ClaimedPartyEvent {
-    1: PartyStatusChanged party_status_changed
-}
-
-struct PartyStatusChanged {
-    1: required domain.PartyStatus status
-}
-
-union ClaimedShopEvent {
-    1: ShopCreated shop_created
-    2: ShopStatusChanged shop_status_changed
-    3: ShopUpdated shop_updated
-}
-
-struct ShopCreated {
-    1: required domain.Shop shop
-}
-
-struct ShopStatusChanged {
-    1: required domain.ShopStatus status
-}
-
-struct ShopUpdated {
-    1: required ShopID id
-    2: required ShopChangeset changeset
 }
 
 // Exceptions
@@ -383,7 +370,7 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopChangeset changeset)
+    ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
