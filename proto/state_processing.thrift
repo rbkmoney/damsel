@@ -40,13 +40,6 @@ struct Event {
 typedef list<Event> History;
 
 /**
- * Контекст автомата.
- * Основная его идея в том, что в него можно помещать некоторую ассоциированную информацию
- * (например в него можно положить свёрнутый из эвентов стейт).
- */
-typedef binary Context;
-
-/**
  * Желаемое действие, продукт перехода в новое состояние.
  *
  * Возможные действия представляют собой ограниченный язык для управления
@@ -55,9 +48,8 @@ typedef binary Context;
  * полей будет интерпретировано буквально, как отсутствие желаемых действий.
  */
 struct ComplexAction {
-    1: optional SetTimerAction       set_timer;
-    2: optional TagAction            tag;
-    3: optional UpdateContextAction  update_context;
+    1: optional SetTimerAction  set_timer;
+    2: optional TagAction       tag;
 }
 
 /**
@@ -93,15 +85,6 @@ struct TagAction {
 }
 
 /**
- * Действие обновления связанного с процессом автомата контекста.
- * На все последующие запросы в контексте придёт это значение, до его следующего обновления.
- */
-struct UpdateContextAction {
-    /** Контекст для обновления */
-    1: required Context        context;
-}
-
-/**
  * Ссылка, уникально определяющая процесс автомата.
  */
 union Reference {
@@ -128,7 +111,6 @@ typedef binary CallResponse;
 struct CallArgs {
     1: required Call     call;     /** Данные вызова */
     2: required History  history;  /** История автомата */
-    3: optional Context  context;  /** Текущий контекст автомата */
 }
 
 /**
@@ -184,7 +166,6 @@ struct RepairSignal {
 struct SignalArgs {
     1: required Signal   signal;     /** Поступивший сигнал */
     2: required History  history;    /** История автомата */
-    3: optional Context  context;    /** Текущий контекст автомата */
 }
 
 /**
