@@ -12,11 +12,14 @@ namespace java com.rbkmoney.damsel.state_processing
 
 exception EventNotFound {}
 exception MachineNotFound {}
+exception NamespaceNotFound {}
 exception MachineAlreadyExists {}
 exception MachineFailed {}
 
 typedef binary EventBody;
 typedef list<EventBody> EventBodies;
+
+typedef binary Args
 
 /**
  * Произвольное событие, продукт перехода в новое состояние.
@@ -29,7 +32,6 @@ struct Event {
      */
     1: required base.EventID    id;
     2: required base.Timestamp  created_at;     /* Время происхождения события */
-    3: required base.ID         source;         /* Идентификатор объекта, породившего событие */
     4: required EventBody       event_payload;  /* Описание события */
 }
 
@@ -37,38 +39,7 @@ struct Event {
  * Сложное состояние, выраженное в виде упорядоченного набора событий
  * процессора.
  */
-struct History {
-    /** Сами события */
-    1: list<Event> events
-    /** Условия выборки, по которым события были получены. */
-    2: HistoryRange range
-}
-
-/**
- * Контекст автомата.
- * Основная его идея в том, что в него можно помещать некоторую ассоциированную информацию
- * (например в него можно положить свёрнутый из эвентов стейт).
- */
-typedef binary Context;
-
-/**
- * Представление машины, для последующей работы с ней.
- */
-struct Machine {
-    1: History history
-    2: Context context
-}
-
-/**
- * Структура для описания какие конкретно поля нужны в машине при её получении.
- * Она нужна, по сути, для оптимизации, чтобы каждый раз не со всеми данными работать.
- */
-struct MachineQuery {
-    /** Какие эвенты из истории нужны */
-    1: HistoryRange range
-    /** Нужен ли контекст */
-    2: bool         include_context
-}
+typedef list<Event> History;
 
 /**
  * Желаемое действие, продукт перехода в новое состояние.
@@ -79,12 +50,8 @@ struct MachineQuery {
  * полей будет интерпретировано буквально, как отсутствие желаемых действий.
  */
 struct ComplexAction {
-    1: optional SetTimerAction       set_timer;
-    2: optional TagAction            tag;
-    3: optional UpdateContextAction  update_context;
-    // TODO
-    // 4: optional TrimHistoryAction  trim_history;
-    // 5: optional DropMachineAction  drop_machine;
+    1: optional SetTimerAction  set_timer;
+    2: optional TagAction       tag;
 }
 
 /**
@@ -120,15 +87,6 @@ struct TagAction {
 }
 
 /**
- * Действие обновления связанного с процессом автомата контекста.
- * На все последующие запросы в контексте придёт это значение, до его следующего обновления.
- */
-struct UpdateContextAction {
-    /** Контекст для обновления */
-    1: required Context        context;
-}
-
-/**
  * Ссылка, уникально определяющая процесс автомата.
  */
 union Reference {
@@ -153,8 +111,8 @@ typedef binary CallResponse;
  * Набор данных для обработки внешнего вызова.
  */
 struct CallArgs {
-    1: required Call         call;     /** Данные вызова */
-    2: required Machine      machine;  /** Машина, которой пришел call */
+    1: required Call     call;     /** Данные вызова */
+    2: required History  history;  /** История автомата */
 }
 
 /**
@@ -209,7 +167,7 @@ struct RepairSignal {
  */
 struct SignalArgs {
     1: required Signal   signal;     /** Поступивший сигнал */
-    2: required Machine  machine;    /** Машина, которой пришел сигнал */
+    2: required History  history;    /** История автомата */
 }
 
 /**
@@ -242,18 +200,6 @@ service Processor {
 
 }
 
-/** Универсальная расширяемая структура с набором аргументов. */
-struct Args {
-    /** Неструктурированные данные. */
-    1: required binary          arg;
-}
-
-
-enum Direction {
-    forward
-    backward
-}
-
 /**
  * Структура задает параметры для выборки событий
  *
@@ -280,11 +226,6 @@ struct HistoryRange {
      * был достигнут конец текущей истории.
      */
     2: optional i32 limit
-
-    /**
-     * Направление истории, по-умолчанию вперёд.
-     */
-    3: optional Direction direction = Direction.forward
 }
 
 /**
@@ -305,26 +246,21 @@ service Automaton {
      * Запустить новый процесс автомата с заданным ID.
      * Если машина с таким ID уже существует, то кинется иключение MachineAlreadyExists.
      */
-    void start (1: base.ID id, 2: Args a) throws (1: MachineAlreadyExists ex1);
-
-    /**
-     * Уничтожить определённый процесс автомата.
-     */
-    void destroy (1: Reference ref)
-         throws (1: MachineNotFound ex1);
+    void Start (1: base.Namespace ns, 2: base.ID id, 3: Args a)
+         throws (1: NamespaceNotFound ex1, 2: MachineAlreadyExists ex2);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void repair (1: Reference ref, 2: Args a, 3: MachineQuery mq)
-         throws (1: MachineNotFound ex1, 2: MachineFailed ex2, 3: EventNotFound ex3);
+    void Repair (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse call (1: Reference ref, 2: Call c, 3: MachineQuery mq)
-         throws (1: MachineNotFound ex1, 2: MachineFailed ex2, 3: EventNotFound ex3);
+    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Call c)
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Метод возвращает список событий (историю) машины ref
@@ -334,9 +270,24 @@ service Automaton {
      * раньше тех, которые располагаются в конце.
      */
 
-    Machine get (1: Reference ref, 2: MachineQuery mq)
-         throws (1: MachineNotFound ex1, 2: EventNotFound ex2);
+    History GetHistory (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
+
+
+/**
+ * Событие, содержащее в себе событие и его источник.
+ */
+struct SinkEvent {
+    1: required base.ID         source_id;      /* Идентификатор объекта, породившего событие */
+    2: required base.Namespace  source_ns;      /* Идентификатор пространства имён, породившего событие */
+    3: required Event           event;          /* Исходное событие */
+}
+
+/**
+ * Сложное состояние всей системы (всех машин), выраженное в виде упорядоченного набора событий.
+ */
+typedef list<SinkEvent> SinkHistory
 
 /** Исключение, сигнализирующее о том, что последнего события не существует. */
 exception NoLastEvent {}
@@ -353,7 +304,7 @@ service EventSink {
      * системе: в начале списка располагаются события, произошедшие
      * раньше тех, которые располагаются в конце.
      */
-    History GetHistory (1: HistoryRange range)
+    SinkHistory GetHistory (1: HistoryRange range)
          throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
 
     /**
