@@ -265,10 +265,7 @@ struct BankCard {
     4: required string masked_pan
 }
 
-enum BankCardPaymentSystem {
-    visa
-    mastercard
-}
+typedef string BankCardPaymentSystem
 
 /** Способ платежа, категория платёжного средства. */
 struct PaymentMethodDefinition {
@@ -359,6 +356,35 @@ struct MerchantPrototype {
     2: required Merchant data
 }
 
+/* Card validation */
+
+typedef string IINPrefix
+
+struct IINMapRef {
+}
+
+typedef map<IINPrefix, BankCardPaymentSystem> IINMap
+
+struct IINMapObject {
+    1: required IINMapRef ref
+    2: required IINMap data
+}
+
+struct CardValidationDataRef {
+    1: required BankCardPaymentSystem payment_system
+}
+
+struct CardValidationData {
+    1: required list<i32> length
+    2: required list<i32> cvv_length
+    3: required bool luhn
+}
+
+struct CardValidationDataObject {
+    1: required CardValidationDataRef ref
+    2: required CardValidationData data
+}
+
 /* Type enumerations */
 
 union Reference {
@@ -371,6 +397,7 @@ union Reference {
     7: PartyRef party
     8: MerchantPrototypeRef merchant_prototype
     9: ProxyRef proxy
+    10: CardValidationDataRef card_validation_data
 }
 
 union DomainObject {
@@ -383,6 +410,7 @@ union DomainObject {
     7: PartyObject party
     8: MerchantPrototype merchant_prototype
     9: ProxyObject proxy
+    10: CardValidationDataObject card_validation_data
 }
 
 /* Domain */
