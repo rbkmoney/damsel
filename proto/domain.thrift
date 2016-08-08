@@ -216,7 +216,7 @@ struct Shop {
     1: required ShopID id
     2: required Blockage blockage
     3: required Suspension suspension
-    4: required Category category
+    4: required CategoryRef category
     5: required ShopDetails details
     6: optional Contractor contractor
     7: optional ShopContract contract

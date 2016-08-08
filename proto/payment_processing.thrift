@@ -250,7 +250,7 @@ typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 
 struct ShopParams {
-    1: required domain.Category category
+    1: required domain.CategoryRef category
     2: required domain.ShopDetails details
     3: optional domain.Contractor contractor
 }
