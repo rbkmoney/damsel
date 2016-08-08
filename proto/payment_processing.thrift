@@ -185,8 +185,6 @@ struct InvoiceParams {
 
 struct InvoicePaymentParams {
     1: required domain.Payer payer
-    2: required domain.PaymentTool payment_tool
-    3: required domain.PaymentSession session
 }
 
 exception InvalidUser {}
