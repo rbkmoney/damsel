@@ -223,8 +223,9 @@ struct Shop {
 }
 
 struct ShopDetails {
-    1: optional string description
-    2: optional string location
+    1: required string name
+    2: optional string description
+    3: optional string location
 }
 
 /* Contracts */
