@@ -275,13 +275,11 @@ union ShopModification {
     3: ShopUpdate update
 }
 
-union ShopUpdateUnit {
-    1: domain.Category category
-    2: domain.ShopDetails details
-    3: domain.Contractor contractor
+struct ShopUpdate {
+    1: optional domain.Category category
+    2: optional domain.ShopDetails details
+    3: optional domain.Contractor contractor
 }
-
-typedef list<ShopUpdateUnit> ShopUpdate
 
 typedef base.ID ClaimID
 
