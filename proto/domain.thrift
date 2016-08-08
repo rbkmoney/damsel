@@ -196,10 +196,9 @@ typedef base.ID PartyID
 /** Участник. */
 struct Party {
     1: required PartyID id
-    2: required DataRevision revision = 1
-    3: required Blockage blockage
-    4: required Suspension suspension
-    5: required map<ShopID, Shop> shops = []
+    2: required Blockage blockage
+    3: required Suspension suspension
+    4: required map<ShopID, Shop> shops = []
 }
 
 struct PartyRef {

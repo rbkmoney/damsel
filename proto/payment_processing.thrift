@@ -249,6 +249,16 @@ service Invoicing {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 
+struct PartyState {
+    1: required domain.Party party
+    2: required domain.DataRevision revision
+}
+
+struct ShopState {
+    1: required domain.Shop shop
+    2: required domain.DataRevision revision
+}
+
 struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
@@ -319,7 +329,7 @@ union PartyEvent {
 }
 
 struct PartyCreated {
-    1: required domain.Party party
+    1: required PartyState party
 }
 
 struct ClaimCreated {
@@ -359,10 +369,10 @@ exception InvalidShopStatus {
 
 service PartyManagement {
 
-    domain.Party Create (1: UserInfo user, 2: PartyID party_id)
+    PartyState Create (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyExists ex2)
 
-    domain.Party Get (1: UserInfo user, 2: PartyID party_id)
+    PartyState Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
     ClaimResult CreateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopParams params)
@@ -372,6 +382,9 @@ service PartyManagement {
             3: InvalidPartyStatus ex3,
             4: base.InvalidRequest ex4
         )
+
+    ClaimResult GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
         throws (
