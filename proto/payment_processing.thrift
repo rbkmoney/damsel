@@ -79,6 +79,8 @@ typedef list<Event> Events
 union EventPayload {
     /** Некоторое событие, порождённое инвойсом. */
     1: InvoiceEvent            invoice_event
+    /** Некоторое событие, порождённое участником. */
+    2: PartyEvent              party_event
 }
 
 /**
