@@ -79,6 +79,8 @@ typedef list<Event> Events
 union EventPayload {
     /** Некоторое событие, порождённое инвойсом. */
     1: InvoiceEvent            invoice_event
+    /** Некоторое событие, порождённое участником. */
+    2: PartyEvent              party_event
 }
 
 /**
@@ -189,10 +191,16 @@ struct InvoicePaymentParams {
 
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
-exception InvoicePaymentPending { 1: required domain.InvoicePaymentID id }
 exception InvoicePaymentNotFound {}
 exception EventNotFound {}
-exception InvalidInvoiceStatus { 1: required domain.InvoiceStatus status }
+
+exception InvoicePaymentPending {
+    1: required domain.InvoicePaymentID id
+}
+
+exception InvalidInvoiceStatus {
+    1: required domain.InvoiceStatus status
+}
 
 service Invoicing {
 
@@ -231,6 +239,228 @@ service Invoicing {
 
     void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+
+}
+
+/* Party management service definitions */
+
+// Types
+
+typedef domain.PartyID PartyID
+typedef domain.ShopID  ShopID
+
+struct PartyState {
+    1: required domain.Party party
+    2: required domain.DataRevision revision
+}
+
+struct ShopState {
+    1: required domain.Shop shop
+    2: required domain.DataRevision revision
+}
+
+struct ShopParams {
+    1: required domain.CategoryObject category
+    2: required domain.ShopDetails details
+    3: optional domain.Contractor contractor
+}
+
+union PartyModification {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+    3: domain.Shop shop_creation
+    4: ShopModificationUnit shop_modification
+}
+
+typedef list<PartyModification> PartyChangeset
+
+struct ShopModificationUnit {
+    1: required ShopID id
+    2: ShopModification modification
+}
+
+union ShopModification {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+    3: ShopUpdate update
+}
+
+struct ShopUpdate {
+    1: optional domain.CategoryObject category
+    2: optional domain.ShopDetails details
+    3: optional domain.Contractor contractor
+}
+
+typedef base.ID ClaimID
+
+struct Claim {
+    1: required ClaimID id
+    2: required ClaimStatus status
+    3: required PartyChangeset changeset
+}
+
+union ClaimStatus {
+    1: ClaimPending pending
+    2: ClaimAccepted approved
+    3: ClaimDenied declined
+}
+
+struct ClaimPending {}
+
+struct ClaimAccepted {
+    1: required domain.DataRevision revision
+}
+
+struct ClaimDenied {
+    1: required string reason
+}
+
+struct ClaimResult {
+    1: required ClaimID id
+    2: required ClaimStatus status
+}
+
+// Events
+
+union PartyEvent {
+    1: PartyCreated party_created
+    2: ClaimCreated claim_created
+    3: ClaimStatusChanged claim_status_changed
+}
+
+struct PartyCreated {
+    1: required PartyState party
+}
+
+struct ClaimCreated {
+    1: required Claim claim
+}
+
+struct ClaimStatusChanged {
+    1: required ClaimID id
+    2: required ClaimStatus status
+}
+
+// Exceptions
+
+exception PartyExists {}
+exception PartyNotFound {}
+exception ShopNotFound {}
+exception ClaimNotFound {}
+
+exception InvalidClaimStatus {
+    1: required ClaimStatus status
+}
+
+union InvalidStatus {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+}
+
+exception InvalidPartyStatus {
+    1: required InvalidStatus status
+}
+
+exception InvalidShopStatus {
+    1: required InvalidStatus status
+}
+
+// Service
+
+service PartyManagement {
+
+    void Create (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyExists ex2)
+
+    PartyState Get (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
+    ClaimResult CreateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: InvalidPartyStatus ex3,
+            4: base.InvalidRequest ex4
+        )
+
+    ClaimResult GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
+
+    ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ShopNotFound ex3,
+            4: InvalidPartyStatus ex4,
+            5: InvalidShopStatus ex5,
+            6: base.InvalidRequest ex6
+        )
+
+    // TODO do we really need that?
+    // ClaimResult RemoveShop (1: UserInfo user, 2: PartyID party_id, 3: domain.ShopID shop_id)
+    //     throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
+
+    /* Claims */
+
+    Claim GetClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ClaimNotFound ex3)
+
+    Claim GetPendingClaim (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ClaimNotFound ex3)
+
+    void AcceptClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ClaimNotFound ex3,
+            4: InvalidClaimStatus ex4
+        )
+
+    void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ClaimNotFound ex3,
+            4: InvalidClaimStatus ex4
+        )
+
+    /* Party blocking / suspension */
+
+    ClaimResult Suspend (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    ClaimResult Activate (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    ClaimResult Block (1: UserInfo user, 2: PartyID party_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    ClaimResult Unblock (1: UserInfo user, 2: PartyID party_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    /* Shop blocking / suspension */
+
+    ClaimResult SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    ClaimResult ActivateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    ClaimResult BlockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    ClaimResult UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    /* Event polling */
+
+    Events GetEvents (1: UserInfo user, 2: domain.PartyID party_id, 3: EventRange range)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: EventNotFound ex3,
+            4: base.InvalidRequest ex4
+        )
 
 }
 

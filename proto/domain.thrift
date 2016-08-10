@@ -65,17 +65,18 @@ typedef string PaymentSession
 typedef string Fingerprint
 typedef string IPAddress
 
-
 struct Invoice {
     1: required InvoiceID id
-    2: required base.Timestamp created_at
-    3: required DataRevision domain_revision
-    4: required InvoiceStatus status
-    5: required base.Timestamp due
-    6: required string product
-    7: optional string description
-    8: required Funds cost
-    9: required InvoiceContext context
+    2: required PartyRef owner
+    3: required ShopID shop_id
+    4: required base.Timestamp created_at
+    5: required DataRevision domain_revision
+    6: required InvoiceStatus status
+    7: required base.Timestamp due
+    8: required string product
+    9: optional string description
+   10: required Funds cost
+   11: required InvoiceContext context
 }
 
 struct InvoiceUnpaid    {}
@@ -119,8 +120,6 @@ struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
 }
-
-
 
 /* Cash flows */
 
@@ -167,34 +166,81 @@ struct CashDistributionObject {
     2: required CashDistribution data
 }
 
-/* Merchants */
+/* Blocking and suspension */
 
-/** Мерчант. */
-struct Merchant {
-    1: optional Contract contract
-    2: required list<Shop> shops = []
+union Blocking {
+    1: Unblocked unblocked
+    2: Blocked   blocked
 }
 
-struct MerchantRef { 1: required base.ID id }
+struct Unblocked {
+    1: required string reason
+}
 
-struct MerchantObject {
-    1: required MerchantRef ref
-    2: required Merchant data
+struct Blocked {
+    1: required string reason
+}
+
+union Suspension {
+    1: Active    active
+    2: Suspended suspended
+}
+
+struct Active {}
+struct Suspended {}
+
+/* Parties */
+
+typedef base.ID PartyID
+
+/** Участник. */
+struct Party {
+    1: required PartyID id
+    2: required Blocking blocking
+    3: required Suspension suspension
+    4: required map<ShopID, Shop> shops = []
+}
+
+struct PartyRef {
+    1: required PartyID id
+    2: required DataRevision revision
+}
+
+/* Shops */
+
+typedef string ShopID
+
+/** Магазин мерчанта. */
+struct Shop {
+    1: required ShopID id
+    2: required Blocking blocking
+    3: required Suspension suspension
+    4: required CategoryObject category
+    5: required ShopDetails details
+    6: optional Contractor contractor
+    7: optional ShopContract contract
+}
+
+struct ShopDetails {
+    1: required string name
+    2: optional string description
+    3: optional string location
 }
 
 /* Contracts */
 
-/** Договор с юридическим лицом, в частности с мерчантом. */
-struct Contract {
+/** Договор между юридическими лицами, в частности между системой и участником. */
+struct ShopContract {
     1: required string number
-    2: required base.Timestamp signed_at
-    3: required PartyRef party
-    4: required BankAccount account
-    5: required list<ContractTerm> terms
+    2: required ContractorObject system_contractor
+    3: required base.Timestamp concluded_at
+    4: required base.Timestamp valid_since
+    5: required base.Timestamp valid_until
+    6: optional base.Timestamp terminated_at
 }
 
 /** Лицо, выступающее стороной договора. */
-struct Party {
+struct Contractor {
     1: required string registered_name
     2: required LegalEntity legal_entity
 }
@@ -203,32 +249,15 @@ struct Party {
 union LegalEntity {
 }
 
-struct PartyRef { 1: required ObjectID id }
+struct ContractorRef { 1: required ObjectID id }
 
-struct PartyObject {
-    1: required PartyRef ref
-    2: required Party data
+struct ContractorObject {
+    1: required ContractorRef ref
+    2: required Contractor data
 }
 
 /** Банковский счёт. */
 struct BankAccount {
-}
-
-/** Условие договора. */
-union ContractTerm {
-    1: CashDistributionTerm cash_distribution
-}
-
-struct CashDistributionTerm {
-}
-
-/* Shops */
-
-/** Магазин мерчанта. */
-struct Shop {
-    1: required string name
-    2: optional string url
-    3: required Category category
 }
 
 /* Categories */
@@ -351,12 +380,12 @@ struct ProxyObject {
 
 /* Merchant prototype */
 
-struct MerchantPrototypeRef {}
+struct PartyPrototypeRef {}
 
 /** Прототип мерчанта по умолчанию. */
-struct MerchantPrototype {
-    1: required MerchantPrototypeRef ref
-    2: required Merchant data
+struct PartyPrototype {
+    1: required PartyPrototypeRef ref
+    2: required Party data
 }
 
 /* Type enumerations */
@@ -368,8 +397,8 @@ union Reference {
     4: CurrencyRef currency
     5: ConditionRef condition
     6: CashDistributionRef cash_distribution
-    7: PartyRef party
-    8: MerchantPrototypeRef merchant_prototype
+    7: ContractorRef contractor
+    8: PartyPrototypeRef party_prototype
     9: ProxyRef proxy
 }
 
@@ -380,8 +409,8 @@ union DomainObject {
     4: CurrencyObject currency
     5: ConditionObject condition
     6: CashDistributionObject cash_distribution
-    7: PartyObject party
-    8: MerchantPrototype merchant_prototype
+    7: ContractorObject contractor
+    8: PartyPrototype party_prototype
     9: ProxyObject proxy
 }
 

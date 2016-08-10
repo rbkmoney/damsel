@@ -16,6 +16,10 @@ DESTDIR = _gen
 CALL_ANYWHERE := clean all create java_compile compile doc deploy_nexus
 CALL_W_CONTAINER := $(CALL_ANYWHERE)
 
+BASE_IMAGE ?= rbkmoney/build
+
+all: compile
+
 include utils.mk
 
 define generate
@@ -35,8 +39,6 @@ LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 # Build failed without this file: _build/test/logs/index.html (Hi, jenkins_pipeline_lib)
 create:
 	mkdir -p _build/test/logs && touch _build/test/logs/index.html
-
-all: compile
 
 compile: $(LANGUAGE_TARGETS)
 	@echo "Ok"
