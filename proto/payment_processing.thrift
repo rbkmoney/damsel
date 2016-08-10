@@ -371,7 +371,7 @@ exception InvalidShopStatus {
 
 service PartyManagement {
 
-    PartyState Create (1: UserInfo user, 2: PartyID party_id)
+    void Create (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyExists ex2)
 
     PartyState Get (1: UserInfo user, 2: PartyID party_id)
