@@ -166,9 +166,9 @@ struct CashDistributionObject {
     2: required CashDistribution data
 }
 
-/* Blockage and suspension */
+/* Blocking and suspension */
 
-union Blockage {
+union Blocking {
     1: Unblocked unblocked
     2: Blocked   blocked
 }
@@ -196,7 +196,7 @@ typedef base.ID PartyID
 /** Участник. */
 struct Party {
     1: required PartyID id
-    2: required Blockage blockage
+    2: required Blocking blocking
     3: required Suspension suspension
     4: required map<ShopID, Shop> shops = []
 }
@@ -213,9 +213,9 @@ typedef string ShopID
 /** Магазин мерчанта. */
 struct Shop {
     1: required ShopID id
-    2: required Blockage blockage
+    2: required Blocking blocking
     3: required Suspension suspension
-    4: required CategoryRef category
+    4: required CategoryObject category
     5: required ShopDetails details
     6: optional Contractor contractor
     7: optional ShopContract contract
@@ -232,7 +232,7 @@ struct ShopDetails {
 /** Договор между юридическими лицами, в частности между системой и участником. */
 struct ShopContract {
     1: required string number
-    2: required ContractorRef system_contractor
+    2: required ContractorObject system_contractor
     3: required base.Timestamp concluded_at
     4: required base.Timestamp valid_since
     5: required base.Timestamp valid_until

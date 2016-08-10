@@ -262,13 +262,13 @@ struct ShopState {
 }
 
 struct ShopParams {
-    1: required domain.CategoryRef category
+    1: required domain.CategoryObject category
     2: required domain.ShopDetails details
     3: optional domain.Contractor contractor
 }
 
 union PartyModification {
-    1: domain.Blockage blockage
+    1: domain.Blocking blocking
     2: domain.Suspension suspension
     3: domain.Shop shop_creation
     4: ShopModificationUnit shop_modification
@@ -282,13 +282,13 @@ struct ShopModificationUnit {
 }
 
 union ShopModification {
-    1: domain.Blockage blockage
+    1: domain.Blocking blocking
     2: domain.Suspension suspension
     3: ShopUpdate update
 }
 
 struct ShopUpdate {
-    1: optional domain.Category category
+    1: optional domain.CategoryObject category
     2: optional domain.ShopDetails details
     3: optional domain.Contractor contractor
 }
@@ -355,7 +355,7 @@ exception InvalidClaimStatus {
 }
 
 union InvalidStatus {
-    1: domain.Blockage blockage
+    1: domain.Blocking blocking
     2: domain.Suspension suspension
 }
 
