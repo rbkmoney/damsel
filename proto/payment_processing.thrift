@@ -177,6 +177,7 @@ struct EventRange {
 /* Invoicing service definitions */
 
 struct InvoiceParams {
+    7: required ShopID shop_id
     1: required string product
     2: optional string description
     3: required base.Timestamp due
