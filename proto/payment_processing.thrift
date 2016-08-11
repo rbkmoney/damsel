@@ -69,6 +69,8 @@ struct Event {
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
     1: domain.InvoiceID        invoice
+    /** Идентификатор участника, который породил событие. */
+    2: domain.PartyID          party
 }
 
 typedef list<Event> Events
