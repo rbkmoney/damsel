@@ -200,6 +200,11 @@ service Processor {
 
 }
 
+enum Direction {
+    forward  = 1
+    backward = 2
+}
+
 /**
  * Структура задает параметры для выборки событий
  *
@@ -226,6 +231,11 @@ struct HistoryRange {
      * был достигнут конец текущей истории.
      */
     2: optional i32 limit
+
+    /**
+     * Направление истории, по-умолчанию вперёд.
+     */
+    3: optional Direction direction = Direction.forward
 }
 
 /**
@@ -311,11 +321,4 @@ service EventSink {
      */
     SinkHistory GetHistory (1: HistoryRange range)
          throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
-
-    /**
-     * Получить идентификатор наиболее позднего события.
-     * Если в системе нет ни одного события, то бросится исключение NoLastEvent.
-     */
-    base.EventID GetLastEventID ()
-         throws (1: NoLastEvent ex1);
 }
