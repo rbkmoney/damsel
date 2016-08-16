@@ -1,4 +1,4 @@
-Я/**
+/**
  * Определения структур и сервисов для поддержания взаимодействия со
  * state processor – абстракции, реализующей шаг обработки (другими словами,
  * один переход состояния) ограниченного конечного автомата со сложным
@@ -95,14 +95,6 @@ union Reference {
 }
 
 /**
- * Внешний вызов.
- *
- * При помощи вызовов организовано общение автомата с внешним миром и
- * получение на них ответов.
- */
-typedef binary Call;
-
-/**
  * Ответ на внешний вызов.
  */
 typedef binary CallResponse;
@@ -111,7 +103,7 @@ typedef binary CallResponse;
  * Набор данных для обработки внешнего вызова.
  */
 struct CallArgs {
-    1: required Call     call;     /** Данные вызова */
+    1: required Args     arg;      /** Данные вызова */
     2: required History  history;  /** История автомата */
 }
 
@@ -269,7 +261,7 @@ service Automaton {
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Call c)
+    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
