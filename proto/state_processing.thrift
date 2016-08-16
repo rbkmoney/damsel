@@ -191,12 +191,12 @@ service Processor {
     /**
      * Обработать поступивший сигнал.
      */
-    SignalResult processSignal (1: SignalArgs a) throws ()
+    SignalResult ProcessSignal (1: SignalArgs a) throws ()
 
     /**
      * Обработать внешний вызов и сформировать ответ на него.
      */
-    CallResult processCall (1: CallArgs a) throws ()
+    CallResult ProcessCall (1: CallArgs a) throws ()
 
 }
 
