@@ -6,7 +6,7 @@ THRIFT_OPTIONS_html = standalone
 
 REGISTRY := dr.rbkmoney.com
 ORG_NAME := rbkmoney
-BASE_IMAGE := "$(REGISTRY)/$(ORG_NAME)/build:latest"
+BASE_IMAGE := "$(REGISTRY)/$(ORG_NAME)/build:530114ab63a7ff0379a2220169a0be61d3f7c64c"
 
 RELNAME := damsel
 
@@ -88,10 +88,11 @@ endif
 
 
 COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
+NUMBER_COMMITS = $(shell git rev-list --count HEAD)
 
 java_compile:
 	mvn compile
 
 deploy_nexus:
-	mvn versions:set versions:commit -DnewVersion="$(COMMIT_HASH)" \
+	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" \
 	&& mvn deploy -Dpath_to_thrift="$(THRIFT_EXEC)"
