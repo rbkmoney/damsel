@@ -95,14 +95,6 @@ union Reference {
 }
 
 /**
- * Внешний вызов.
- *
- * При помощи вызовов организовано общение автомата с внешним миром и
- * получение на них ответов.
- */
-typedef binary Call;
-
-/**
  * Ответ на внешний вызов.
  */
 typedef binary CallResponse;
@@ -111,7 +103,7 @@ typedef binary CallResponse;
  * Набор данных для обработки внешнего вызова.
  */
 struct CallArgs {
-    1: required Call     call;     /** Данные вызова */
+    1: required Args     arg;      /** Данные вызова */
     2: required History  history;  /** История автомата */
 }
 
@@ -191,13 +183,18 @@ service Processor {
     /**
      * Обработать поступивший сигнал.
      */
-    SignalResult processSignal (1: SignalArgs a) throws ()
+    SignalResult ProcessSignal (1: SignalArgs a) throws ()
 
     /**
      * Обработать внешний вызов и сформировать ответ на него.
      */
-    CallResult processCall (1: CallArgs a) throws ()
+    CallResult ProcessCall (1: CallArgs a) throws ()
 
+}
+
+enum Direction {
+    forward  = 1
+    backward = 2
 }
 
 /**
@@ -226,6 +223,11 @@ struct HistoryRange {
      * был достигнут конец текущей истории.
      */
     2: optional i32 limit
+
+    /**
+     * Направление истории, по-умолчанию вперёд.
+     */
+    3: optional Direction direction = Direction.forward
 }
 
 /**
@@ -259,7 +261,7 @@ service Automaton {
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Call c)
+    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
@@ -279,18 +281,20 @@ service Automaton {
  * Событие, содержащее в себе событие и его источник.
  */
 struct SinkEvent {
-    1: required base.ID         source_id;      /* Идентификатор объекта, породившего событие */
-    2: required base.Namespace  source_ns;      /* Идентификатор пространства имён, породившего событие */
-    3: required Event           event;          /* Исходное событие */
+    /**
+     * Идентификатор эвента EventSink'а, он отличается от идентификатора эвента машины.
+     * Эти идентификаторы total ordered, и они же используются для EventSink:GetHistory.
+     */
+    1: required base.EventID    id;
+    2: required base.ID         source_id;      /* Идентификатор объекта, породившего событие */
+    3: required base.Namespace  source_ns;      /* Идентификатор пространства имён, породившего событие */
+    4: required Event           event;          /* Исходное событие */
 }
 
 /**
  * Сложное состояние всей системы (всех машин), выраженное в виде упорядоченного набора событий.
  */
 typedef list<SinkEvent> SinkHistory
-
-/** Исключение, сигнализирующее о том, что последнего события не существует. */
-exception NoLastEvent {}
 
 /**
  * Сервис получения истории событий сразу всех машин.
@@ -306,11 +310,4 @@ service EventSink {
      */
     SinkHistory GetHistory (1: HistoryRange range)
          throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
-
-    /**
-     * Получить идентификатор наиболее позднего события.
-     * Если в системе нет ни одного события, то бросится исключение NoLastEvent.
-     */
-    base.EventID GetLastEventID ()
-         throws (1: NoLastEvent ex1);
 }
