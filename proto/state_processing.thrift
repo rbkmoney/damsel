@@ -296,9 +296,6 @@ struct SinkEvent {
  */
 typedef list<SinkEvent> SinkHistory
 
-/** Исключение, сигнализирующее о том, что последнего события не существует. */
-exception NoLastEvent {}
-
 /**
  * Сервис получения истории событий сразу всех машин.
  */
