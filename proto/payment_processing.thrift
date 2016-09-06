@@ -306,6 +306,7 @@ union ClaimStatus {
     1: ClaimPending pending
     2: ClaimAccepted approved
     3: ClaimDenied denied
+    4: ClaimRevoked revoked
 }
 
 struct ClaimPending {}
@@ -315,6 +316,10 @@ struct ClaimAccepted {
 }
 
 struct ClaimDenied {
+    1: required string reason
+}
+
+struct ClaimRevoked {
     1: required string reason
 }
 
@@ -420,6 +425,14 @@ service PartyManagement {
         )
 
     void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ClaimNotFound ex3,
+            4: InvalidClaimStatus ex4
+        )
+
+    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
