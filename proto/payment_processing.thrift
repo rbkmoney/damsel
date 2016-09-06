@@ -305,7 +305,7 @@ struct Claim {
 union ClaimStatus {
     1: ClaimPending pending
     2: ClaimAccepted approved
-    3: ClaimDenied declined
+    3: ClaimDenied denied
 }
 
 struct ClaimPending {}
