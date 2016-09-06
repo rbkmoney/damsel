@@ -386,7 +386,7 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+    ShopState GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
