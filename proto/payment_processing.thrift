@@ -304,7 +304,7 @@ struct Claim {
 
 union ClaimStatus {
     1: ClaimPending pending
-    2: ClaimAccepted approved
+    2: ClaimAccepted accepted
     3: ClaimDenied denied
     4: ClaimRevoked revoked
 }
