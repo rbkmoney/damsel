@@ -436,8 +436,9 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
-            3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4
+            3: InvalidPartyStatus ex3,
+            4: ClaimNotFound ex4,
+            5: InvalidClaimStatus ex5
         )
 
     /* Party blocking / suspension */
