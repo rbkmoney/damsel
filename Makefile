@@ -16,8 +16,6 @@ DESTDIR = _gen
 CALL_ANYWHERE := clean all create java_compile compile doc deploy_nexus
 CALL_W_CONTAINER := $(CALL_ANYWHERE)
 
-BASE_IMAGE ?= rbkmoney/build
-
 all: compile
 
 include utils.mk
