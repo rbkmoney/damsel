@@ -22,8 +22,8 @@ struct Account {
 }
 
 struct Posting {
-1: required AccountId from
-2: required AccountId to
+1: required AccountId from_id
+2: required AccountId to_id
 3: required domain.Amount amount
 4: required domain.CurrencyRef currency_ref
 5: required string description
