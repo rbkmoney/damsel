@@ -304,8 +304,9 @@ struct Claim {
 
 union ClaimStatus {
     1: ClaimPending pending
-    2: ClaimAccepted approved
-    3: ClaimDenied declined
+    2: ClaimAccepted accepted
+    3: ClaimDenied denied
+    4: ClaimRevoked revoked
 }
 
 struct ClaimPending {}
@@ -315,6 +316,10 @@ struct ClaimAccepted {
 }
 
 struct ClaimDenied {
+    1: required string reason
+}
+
+struct ClaimRevoked {
     1: required string reason
 }
 
@@ -386,7 +391,7 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+    ShopState GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
@@ -425,6 +430,15 @@ service PartyManagement {
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
             4: InvalidClaimStatus ex4
+        )
+
+    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: InvalidPartyStatus ex3,
+            4: ClaimNotFound ex4,
+            5: InvalidClaimStatus ex5
         )
 
     /* Party blocking / suspension */
