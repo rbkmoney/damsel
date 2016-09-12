@@ -71,5 +71,5 @@ service Accounter {
     PostingPlanLog RollbackPlan(1: PostingPlan plan) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
     PostingLogs GetPostingLogs(1: PlanID id) throws (1: PlanNotFound e1, 2:base.InvalidRequest e2)
     AccountID CreateAccount(1: Account prototype) throws (1:base.InvalidRequest e1)
-    Account GetAccountById(1: AccountID id) throws (1:AccountNotFound ex)
+    Account GetAccountByID(1: AccountID id) throws (1:AccountNotFound ex)
 }
