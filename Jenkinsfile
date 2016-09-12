@@ -1,28 +1,30 @@
 #!groovy
 
-// Args:
-// GitHub repo name
-// Jenkins agent label
-// Tracing artifacts to be stored alongside build logs
-pipeline("damsel", 'docker-host', "_build/") {
+build('damsel', 'docker-host') {
+    checkoutRepo()
+    loadBuildUtils()
 
-  runStage('compile') {
-    sh "make w_container_compile"
-  }
+    def pipeDefault
+      runStage('load pipeline') {
+      env.JENKINS_LIB = "build_utils/jenkins_lib"
+      pipeDefault = load("${env.JENKINS_LIB}/pipeDefault.groovy")
+    }
 
-  // Build failed without this file: _build/test/logs/index.html (Hi, jenkins_pipeline_lib)
-  runStage('folder_create') {
-    sh "make w_container_create"
-  }
+    pipeDefault() {
 
-  if (env.BRANCH_NAME == 'master') {
-      runStage('deploy_nexus') {
-        sh "make w_container_deploy_nexus"
+      runStage('compile') {
+        sh "make wc_compile"
       }
-  } else {
-      runStage('java_compile') {
-        sh "make w_container_java_compile"
+
+      runStage('Execute build container') {
+        withCredentials([[$class: 'FileBinding', credentialsId: 'java-maven-settings.xml', variable: 'SETTINGS_XML']]) {
+          if (env.BRANCH_NAME == 'master') {
+            sh 'make wc_deploy_nexus SETTINGS_XML=$SETTINGS_XML'
+          } else {
+            sh 'make wc_java_compile SETTINGS_XML=$SETTINGS_XML'
+          }
+        }
       }
-  }
+    }
 
 }
