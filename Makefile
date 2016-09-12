@@ -4,21 +4,28 @@ THRIFT_OPTIONS_erlang = scoped_typenames
 THRIFT_OPTIONS_java = fullcamel
 THRIFT_OPTIONS_html = standalone
 
-REGISTRY := dr.rbkmoney.com
-ORG_NAME := rbkmoney
-BASE_IMAGE := "$(REGISTRY)/$(ORG_NAME)/build:530114ab63a7ff0379a2220169a0be61d3f7c64c"
+UTILS_PATH := build_utils
+TEMPLATES_PATH := .
 
-RELNAME := damsel
+
+# Name of the service
+SERVICE_NAME := damsel
+# Service image default tag
+SERVICE_IMAGE_TAG ?= $(shell git rev-parse HEAD)
+# The tag for service image to be pushed with
+SERVICE_IMAGE_PUSH_TAG ?= $(SERVICE_IMAGE_TAG)
+
+
+BUILD_IMAGE_TAG := 753126790c9ecd763840d9fe58507335af02b875
 
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-CALL_ANYWHERE := clean all create java_compile compile doc deploy_nexus
-CALL_W_CONTAINER := $(CALL_ANYWHERE)
+CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus
 
 all: compile
 
-include utils.mk
+-include $(UTILS_PATH)/make_lib/utils_container.mk
 
 define generate
 	$(THRIFT_EXEC) -r -strict --gen $(1):$(THRIFT_OPTIONS_$(1)) -out $(2) $(3)
@@ -30,13 +37,10 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: $(CALL_W_CONTAINER) create $(UTIL_TARGETS)
+.PHONY: $(CALL_W_CONTAINER) create
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
-# Build failed without this file: _build/test/logs/index.html (Hi, jenkins_pipeline_lib)
-create:
-	mkdir -p _build/test/logs && touch _build/test/logs/index.html
 
 compile: $(LANGUAGE_TARGETS)
 	@echo "Ok"
@@ -84,13 +88,19 @@ $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 endif
 endif
 
+ifdef SETTINGS_XML
+DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
+DOCKER_RUN_OPTS += -e SETTINGS_XML=$(SETTINGS_XML)
+endif
 
 COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
 NUMBER_COMMITS = $(shell git rev-list --count HEAD)
 
 java_compile:
-	mvn compile
+	$(if $(SETTINGS_XML),,echo "SETTINGS_XML not defined" ; exit 1)
+	mvn compile -s $(SETTINGS_XML)
 
 deploy_nexus:
-	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" \
-	&& mvn deploy -Dpath_to_thrift="$(THRIFT_EXEC)"
+	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
+	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
+	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
