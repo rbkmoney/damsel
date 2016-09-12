@@ -27,6 +27,9 @@ struct OperationError {
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
 
+/** ID валюты */
+typedef string CurrencyID
+
 /** Валюта. */
 struct Currency {
     1: required string name
