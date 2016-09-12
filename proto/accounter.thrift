@@ -3,7 +3,7 @@ include 'domain.thrift'
 
 namespace java com.rbkmoney.damsel.accounter
 namespace erlang accounter
-typedef i64 PlanId
+typedef base.ID PlanID
 typedef i64 PostingId
 typedef i64 AccountId
 typedef list<PostingLog> PostingLogs
@@ -16,9 +16,10 @@ enum PostingOperation {
 
 struct Account {
 1: required AccountId id
-2: required domain.Amount amount
-3: required domain.CurrencyRef currency_ref
-4: optional string description
+2: required domain.Amount own_amount
+3: required domain.Amount available_amount
+4: required domain.CurrencyRef currency_ref
+5: optional string description
 }
 
 struct Posting {
@@ -30,48 +31,46 @@ struct Posting {
 }
 
 struct PostingPlan {
-1: required PlanId id
+1: required PlanID id
 2: required list<Posting> batch
 }
 
 struct PostingLog {
 1: required PostingId id
-2: required PlanId plan_id
+2: required PlanID plan_id
 3: required base.Timestamp created_at
 4: required PostingOperation operation
 5: required Posting posting
 }
 
 struct PostingPlanLog {
-1: required PlanId id
+1: required PlanID id
 2: required PostingLogs batch_log
 3: required map<AccountId, Account> affected_accounts
 }
 
-exception NoSuchAccount {
+exception AccountNotFound {
  1: required AccountId account_id
  }
 
-exception NoSuchPlan {
-1: required PlanId plan_id
+exception PlanNotFound {
+1: required PlanID plan_id
 }
 
 /**
 * Возникает в случае, если переданы некорректные параметры в одной или нескольких проводках
 */
-exception WrongPostingParams {
+exception InvalidPostingParams {
 1: required map<Posting, string> wrong_postings
-2: optional string reason;
 }
 
 
 service Accounter {
-PostingPlanLog HoldPlan(1: PostingPlan plan) throws (1:WrongPostingParams e1, 4:base.InvalidRequest e2)
-PostingPlanLog CommitPlan(1: PostingPlan plan) throws (1:WrongPostingParams e1, 4:base.InvalidRequest e2)
-PostingPlanLog RollbackPlan(1: PostingPlan plan) throws (1:WrongPostingParams e1, 4:base.InvalidRequest e2)
-PostingLogs getPostingLogs(1: PlanId id) throws (1: NoSuchPlan e1, 2:base.InvalidRequest e2)
-
-AccountId createAccount(1: Account prototype) throws (1:base.InvalidRequest e1)
-Account getAccountById(1: AccountId id) throws (1:NoSuchAccount ex)
+PostingPlanLog HoldPlan(1: PostingPlan plan) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
+PostingPlanLog CommitPlan(1: PostingPlan plan) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
+PostingPlanLog RollbackPlan(1: PostingPlan plan) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
+PostingLogs GetPostingLogs(1: PlanID id) throws (1: PlanNotFound e1, 2:base.InvalidRequest e2)
+AccountId CreateAccount(1: Account prototype) throws (1:base.InvalidRequest e1)
+Account GetAccountById(1: AccountId id) throws (1:AccountNotFound ex)
 
 }
