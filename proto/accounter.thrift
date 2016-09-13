@@ -6,16 +6,9 @@ namespace erlang accounter
 typedef base.ID PlanID
 typedef i64 PostingID
 typedef i64 AccountID
-typedef list<PostingLog> PostingLogs
-
-enum PostingOperation {
-    HOLD,
-    COMMIT,
-    ROLLBACK
-}
 
 struct AccountPrototype {
-    1: required domain.CurrencyID currency_id
+    1: required domain.CurrencySymbolicCode currency_sym_code
     2: optional string description
 }
 
@@ -23,7 +16,7 @@ struct Account {
     1: required AccountID id
     2: required domain.Amount own_amount
     3: required domain.Amount available_amount
-    4: required domain.CurrencyID currency_id
+    4: required domain.CurrencySymbolicCode currency_sym_code
     5: optional string description
 }
 
@@ -32,9 +25,8 @@ struct Posting {
     2: required AccountID from_id
     3: required AccountID to_id
     4: required domain.Amount amount
-    5: required domain.CurrencyID currency_id
-    6: required PostingOperation operation
-    8: required string description
+    5: required domain.CurrencySymbolicCode currency_sym_code
+    6: required string description
 }
 
 struct PostingPlan {
@@ -42,14 +34,9 @@ struct PostingPlan {
     2: required list<Posting> batch
 }
 
-struct PostingLog {
-    1: required base.Timestamp created_at
-    2: required Posting posting
-}
-
 struct PostingPlanLog {
-    4: required PostingPlan plan
-    5: optional map<AccountID, Account> affected_accounts
+    1: required PostingPlan plan
+    2: optional map<AccountID, Account> affected_accounts
 }
 
 exception AccountNotFound {
