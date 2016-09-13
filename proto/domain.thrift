@@ -27,15 +27,18 @@ struct OperationError {
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
 
+/** ID валюты */
+typedef string CurrencySymbolicCode
+
 /** Валюта. */
 struct Currency {
     1: required string name
-    2: required string symbolic_code
+    2: required CurrencySymbolicCode symbolic_code
     3: required i16 numeric_code
     4: required i16 exponent
 }
 
-struct CurrencyRef { 1: required string symbolic_code }
+struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
 
 struct CurrencyObject {
     1: required CurrencyRef ref
