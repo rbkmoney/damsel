@@ -27,7 +27,7 @@ struct LocationInfo {
     7: string rawResponse;
 }
 
-struct LocationName{
+struct GeoIdInfo{
    1: GeoId geonameId;
    2: string localeCode;
    3: string continentCode;
@@ -59,6 +59,6 @@ service EventRepository {
     /**
      * Возвращает текстовое описание места на указанном языке
      **/
-    LocationName getLocationInfo(1: GeoId geoId, 2: Lang lang)
+    GeoIdInfo getLocationInfo(1: GeoId geoId, 2: Lang lang)
 
 }
