@@ -51,8 +51,10 @@ struct GeoIdInfo{
 
 /** Исключение, сигнализирующее о том, что невозможно определить метоположение по укзаанному IP */
 exception GeoIp2Exception {}
-/** Исключение, сигнализирующее о том, что в базе нет описания для указанного geoId */
-exception GeoIpNotFoundException {}
+/** Исключение, сигнализирующее о том, что в базе нет описания для указанных geoId */
+exception GeoIpNotFoundException {
+    1: list<GeoId> geoIds
+}
 
 /**
 * Интерфейс Geo Service для клиентов.
@@ -65,6 +67,6 @@ service EventRepository {
     /**
      * Возвращает текстовое описание места на указанном языке
      **/
-    GeoIdInfo getLocationInfo(1: GeoId geoId, 2: Lang lang) throws (1:GeoIpNotFoundException ex1)
+    map <GeoId,GeoIdInfo> GetLocationInfo(1: Set<GeoId> geoIds, 2: Lang lang) throws (1:GeoIpNotFoundException ex1)
 
 }
