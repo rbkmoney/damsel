@@ -1,5 +1,5 @@
 include "base.thrift"
-namespace java com.rbkmoney.damsel.event_stock
+namespace java com.rbkmoney.damsel.geo_ip
 
 /**
 * IPv4 или IPv6 адрес
@@ -9,6 +9,11 @@ typedef string IpAdress
 * Идентификатор места по базе http://www.geonames.org/
 **/
 typedef i32 GeoId
+
+enum Lang{
+    ENG,
+    RU
+}
 
 struct LocationInfo {
     // geoId города
@@ -43,10 +48,11 @@ struct GeoIdInfo{
    13: string timeZone;
 }
 
-enum Lang{
-    RU,
-    ENG
-}
+
+/** Исключение, сигнализирующее о том, что невозможно определить метоположение по укзаанному IP */
+exception GeoIp2Exception {}
+/** Исключение, сигнализирующее о том, что в базе нет описания для указанного geoId */
+exception GeoIpNotFoundException {}
 
 /**
 * Интерфейс Geo Service для клиентов.
@@ -55,10 +61,10 @@ service EventRepository {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
     **/
-    map <IpAdress,LocationInfo> GetLocation(1:IpAdress ip),
+    map <IpAdress,LocationInfo> GetLocation(1:IpAdress ip) throws (1:GeoIp2Exception ex1),
     /**
      * Возвращает текстовое описание места на указанном языке
      **/
-    GeoIdInfo getLocationInfo(1: GeoId geoId, 2: Lang lang)
+    GeoIdInfo getLocationInfo(1: GeoId geoId, 2: Lang lang) throws (1:GeoIpNotFoundException ex1)
 
 }
