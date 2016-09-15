@@ -59,7 +59,7 @@ exception GeoIpNotFoundException {
 /**
 * Интерфейс Geo Service для клиентов.
 */
-service EventRepository {
+service GeoIpService {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
     **/
