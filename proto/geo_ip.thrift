@@ -63,10 +63,10 @@ service GeoIpService {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
     **/
-    map <IpAdress,LocationInfo> GetLocation(1:IpAdress ip) throws (1:GeoIp2Exception ex1),
+    map <IpAdress,LocationInfo> GetLocation(1:IpAdress ip) throws (1:GeoIp2Exception ex1)
     /**
      * Возвращает текстовое описание места на указанном языке
      **/
-    map <GeoId,GeoIdInfo> GetLocationInfo(1: Set<GeoId> geoIds, 2: Lang lang) throws (1:GeoIpNotFoundException ex1)
+    map <GeoId,GeoIdInfo> GetLocationInfo(1: set<GeoId> geoIds, 2: Lang lang) throws (1:GeoIpNotFoundException ex1)
 
 }
