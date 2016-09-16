@@ -18,10 +18,6 @@ struct LocationInfo {
     3: optional GeoId subdivision2GeoId;
     // geoId страны
     4: required GeoId countryGeoId;
-    // Долгота
-    5: optional double longitude
-    // Широта
-    6: optional double latitude;
     // Полное описание локации в json
     // полное описание на сайте https://www.maxmind.com/en/geoip2-city
     7: required string rawResponse;
@@ -58,11 +54,11 @@ service GeoIpService {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
     **/
-    map <IpAdress,LocationInfo> GetLocation(1:set<IpAdress> ip) throws (1:CantDetermineLocation ex1)
+    map <IpAdress,LocationInfo> GetLocation(1: set<IpAdress> ip) throws (1: CantDetermineLocation ex1)
     /**
      * Возвращает текстовое описание места на указанном языке
+     * geoIds - список geo-id по которым нужно получить информацию.
      * lang - язык ответа. Например: "RU", "ENG"
      **/
-    map <GeoIdInfo> GetLocationInfo(1: set<GeoId> geoIds, 2: String lang) throws (1:GeoIdNotFound ex1)
-
+    set <GeoIdInfo> GetLocationInfo ( 1: set<GeoId> geoIds, 2:String lang) throws (1: GeoIdNotFound ex1)
 }
