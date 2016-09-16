@@ -10,11 +10,6 @@ typedef string IpAdress
 **/
 typedef i32 GeoId
 
-enum Lang{
-    ENG,
-    RU
-}
-
 struct LocationInfo {
     // geoId города
     1: required GeoId cityGeoId;
@@ -66,7 +61,8 @@ service GeoIpService {
     map <IpAdress,LocationInfo> GetLocation(1:set<IpAdress> ip) throws (1:CantDetermineLocation ex1)
     /**
      * Возвращает текстовое описание места на указанном языке
+     * lang - язык ответа. Например: "RU", "ENG"
      **/
-    map <GeoIdInfo> GetLocationInfo(1: set<GeoId> geoIds, 2: Lang lang) throws (1:GeoIdNotFound ex1)
+    map <GeoIdInfo> GetLocationInfo(1: set<GeoId> geoIds, 2: String lang) throws (1:GeoIdNotFound ex1)
 
 }
