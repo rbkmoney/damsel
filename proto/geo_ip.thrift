@@ -11,37 +11,25 @@ typedef i32 GeoID
 struct LocationInfo {
     // GeoID города
     1: required GeoID cityGeoID;
-    // GeoID региона
-    2: optional GeoID subdivision1GeoID;
-    3: optional GeoID subdivision2GeoID;
     // GeoID страны
-    4: required GeoID countryGeoID;
+    2: required GeoID countryGeoID;
     // Полное описание локации в json
     // подробное описание на сайте https://www.maxmind.com/en/geoip2-city
-    7: required string rawResponse;
+    3: required string rawResponse;
 }
-
+// Информация о регоине
 struct SubdivisionInfo{
         // глубина в иерархии. Чем ниже тем цифра выше. Например 1 - Московская область. 2 - Подольский район.
        1: required i16 level
-       2: optional string subdivisionIsoCode;
-       3: optional string subdivisionName;
+       2: optional string subdivisionName;
 }
 
 // Информация о данном GeoID
 struct GeoIDInfo{
    1: required GeoID geonameId;
-   2: string localeCode;
-   3: string continentCode;
-   4: string continentName;
-   5: string countryIsoCode;
-   6: string countryName;
-   7: set<SubdivisionInfo> subdivisions;
-   8: optional string cityName;
-   9: optional string metroCode;
-   // Текстовое представление tz, напрмиер: "Europe/Moscow"
-   // Подробнее https://en.wikipedia.org/wiki/Tz_database
-   10: optional string timeZone;
+   2: string countryName;
+   3: set<SubdivisionInfo> subdivisions;
+   4: optional string cityName;
 }
 
 
