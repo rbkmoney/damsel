@@ -51,7 +51,7 @@ exception GeoIDNotFound {
 }
 
 /**
-* Интерфейс Geo Service для клиентов.
+* Интерфейс Geo Service для клиентов - "Columbus"
 */
 service GeoIpService {
     /**
@@ -63,5 +63,5 @@ service GeoIpService {
      * GeoIDs - список geo-id по которым нужно получить информацию.
      * lang - язык ответа. Например: "RU", "ENG"
      **/
-    set <GeoIDInfo> GetLocationInfo ( 1: set<GeoID> geoIDs, 2:string lang) throws (1: GeoIDNotFound ex1)
+    set <GeoIDInfo> GetLocationInfo (1: set<GeoID> geoIDs, 2: string lang) throws (1: GeoIDNotFound ex1)
 }
