@@ -4,6 +4,7 @@
 
 include "base.thrift"
 include "domain.thrift"
+include "user_interaction.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -101,6 +102,7 @@ union InvoicePaymentEvent {
     1: InvoicePaymentStarted       invoice_payment_started
     2: InvoicePaymentBound         invoice_payment_bound
     3: InvoicePaymentStatusChanged invoice_payment_status_changed
+    4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
 }
 
 /**
@@ -146,6 +148,16 @@ struct InvoicePaymentStatusChanged {
     1: required domain.InvoicePaymentID payment_id
     /** Статус платежа по инвойсу. */
     2: required domain.InvoicePaymentStatus status
+}
+
+/**
+ * Событие об запросе взаимодействия с плательщиком.
+ */
+struct InvoicePaymentInteractionRequested {
+    /** Идентификатор платежа по инвойсу. */
+    1: required domain.InvoicePaymentID payment_id
+    /** Необходимое взаимодействие */
+    2: required user_interaction.UserInteraction interaction
 }
 
 /**
