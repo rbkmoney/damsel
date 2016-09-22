@@ -1,5 +1,7 @@
 include "base.thrift"
 
+namespace java com.rbkmoney.damsel.user_interaction
+
 /**
  * Шаблон URI согласно [RFC6570](https://tools.ietf.org/html/rfc6570).
  */
