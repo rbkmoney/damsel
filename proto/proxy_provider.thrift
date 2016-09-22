@@ -2,6 +2,8 @@ include "base.thrift"
 include "proxy.thrift"
 include "domain.thrift"
 
+namespace java com.rbkmoney.damsel.proxy_provider
+
 typedef base.Opaque Callback
 typedef base.Opaque CallbackResponse
 
