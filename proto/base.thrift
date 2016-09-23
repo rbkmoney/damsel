@@ -2,7 +2,7 @@
  * Базовые, наиболее общие определения
  */
 
- namespace java com.rbkmoney.damsel.base
+namespace java com.rbkmoney.damsel.base
 
 /** Идентификатор */
 typedef string ID
@@ -15,6 +15,13 @@ typedef i64 EventID
 
 /** Непрозрачный для участника общения набор данных */
 typedef binary Opaque
+
+/** Набор данных, подлежащий интерпретации согласно типу содержимого. */
+struct Content {
+    /** Тип содержимого, согласно [RFC2046](https://www.ietf.org/rfc/rfc2046) */
+    1: required string type
+    2: required binary data
+}
 
 /**
  * Отметка во времени согласно RFC 3339.
