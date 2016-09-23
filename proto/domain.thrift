@@ -106,12 +106,14 @@ struct InvoicePayment {
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
+struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    { 1: OperationError err }
 
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
     4: InvoicePaymentProcessed processed
     2: InvoicePaymentCaptured captured
+    5: InvoicePaymentCancelled cancelled
     3: InvoicePaymentFailed failed
 }
 
