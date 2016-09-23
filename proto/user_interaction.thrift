@@ -3,28 +3,28 @@ include "base.thrift"
 namespace java com.rbkmoney.damsel.user_interaction
 
 /**
- * Шаблон URI согласно [RFC6570](https://tools.ietf.org/html/rfc6570).
+ * Строковый шаблон, грамматика согласно [RFC6570](https://tools.ietf.org/html/rfc6570).
  */
-typedef string URITemplate
+typedef string Template
 
 /**
  * Набор заголовков HTTP-запроса, каждый из которых может быть шаблонизирован.
  * Набор переменных указан ниже.
  */
-typedef map<string, URITemplate> HTTPHeaders
+typedef map<string, Template> HTTPHeaders
 
 /**
  * Тело HTTP-запроса, определяющее набор данных и тип содержимого.
  */
 union HTTPRequestBody {
-    /** Данные формы в виде шаблона URI, набор переменных указан ниже. */
-    1: URITemplate form
+    /** Данные формы в виде строкового шаблона, набор переменных указан ниже. */
+    1: Template form
     2: base.Content arbitrary
 }
 
 struct HTTPRequest {
     /** Шаблон URI запроса, набор переменных указан ниже. */
-    1: required URITemplate uri
+    1: required Template uri
     2: required HTTPHeaders headers = []
     3: optional HTTPRequestBody body
 }
