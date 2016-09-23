@@ -276,7 +276,6 @@ service Automaton {
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
 
-
 /**
  * Событие, содержащее в себе событие и его источник.
  */
@@ -294,7 +293,9 @@ struct SinkEvent {
 /**
  * Сложное состояние всей системы (всех машин), выраженное в виде упорядоченного набора событий.
  */
-typedef list<SinkEvent> SinkHistory
+typedef list<SinkEvent> SinkHistory;
+
+exception EventSinkNotFound {}
 
 /**
  * Сервис получения истории событий сразу всех машин.
@@ -308,6 +309,6 @@ service EventSink {
      * системе: в начале списка располагаются события, произошедшие
      * раньше тех, которые располагаются в конце.
      */
-    SinkHistory GetHistory (1: HistoryRange range)
-         throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2);
+    SinkHistory GetHistory (1: base.ID event_sink_id, 2: HistoryRange range)
+         throws (1: EventSinkNotFound ex1, 2: EventNotFound ex2, 3: base.InvalidRequest ex3);
 }
