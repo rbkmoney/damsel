@@ -104,12 +104,20 @@ struct InvoicePayment {
 }
 
 struct InvoicePaymentPending   {}
-struct InvoicePaymentSucceeded {}
+struct InvoicePaymentProcessed {}
+struct InvoicePaymentCaptured  {}
+struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    { 1: OperationError err }
 
+/**
+ * Статус платежа.
+ * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
+ */
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
-    2: InvoicePaymentSucceeded succeeded
+    4: InvoicePaymentProcessed processed
+    2: InvoicePaymentCaptured captured
+    5: InvoicePaymentCancelled cancelled
     3: InvoicePaymentFailed failed
 }
 
@@ -371,7 +379,7 @@ enum ProxyType {
 struct Proxy {
     1: required ProxyType type
     2: required string url
-    3: optional ProxyOptions options
+    3: optional ProxyOptions options = {}
 }
 
 struct ProxyRef { 1: required ObjectID id }
