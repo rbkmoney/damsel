@@ -1,4 +1,5 @@
 include "base.thrift"
+include "user_interaction.thrift"
 
 namespace java com.rbkmoney.damsel.proxy
 
@@ -61,4 +62,10 @@ struct SuspendIntent {
      * Если не задан явно, время ожидания определяется на стороне процессинга.
      */
     2: optional base.Timer timeout
+
+    /**
+     * Взаимодействие с пользователем, в случае если таковое необходимо для продолжения прогресса
+     * в рамках сессии взаимодействия.
+     */
+    3: optional user_interaction.UserInteraction user_interaction
 }
