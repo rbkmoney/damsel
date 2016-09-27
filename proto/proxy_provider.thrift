@@ -25,6 +25,7 @@ struct Session {
 
 /**
  * Целевое значение статуса платежа.
+ * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
  *
  * В момент, когда прокси успешно завершает сессию взаимодействия, процессинг считает,
  * что поставленная цель достигнута, и платёж перешёл в соответствующий статус.
@@ -108,13 +109,13 @@ service ProviderProxy {
     /**
      * Запрос к прокси на проведение взаимодействия с провайдером в рамках сессии.
      */
-    ProxyResult Process (1: Context context)
+    ProxyResult ProcessPayment (1: Context context)
         throws (1: base.TryLater ex1)
 
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии.
      */
-    CallbackResult HandleCallback (1: Callback callback, 2: Context context)
+    CallbackResult HandlePaymentCallback (1: Callback callback, 2: Context context)
         throws (1: base.TryLater ex1)
 
 }

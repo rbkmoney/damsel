@@ -109,6 +109,10 @@ struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    { 1: OperationError err }
 
+/**
+ * Статус платежа.
+ * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
+ */
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
     4: InvoicePaymentProcessed processed
