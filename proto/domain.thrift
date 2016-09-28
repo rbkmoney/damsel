@@ -202,6 +202,7 @@ struct Party {
     2: required Blocking blocking
     3: required Suspension suspension
     4: required map<ShopID, Shop> shops = []
+    5: required base.StringMap options = []
 }
 
 struct PartyRef {
