@@ -5,6 +5,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
+include 'accounter.thrift'
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -519,4 +520,56 @@ service EventSink {
     base.EventID GetLastEventID ()
         throws (1: NoLastEvent ex1)
 
+}
+
+/* Account management service definitions */
+
+
+// Accounts
+
+struct ShopAccount {
+    1: required accounter.AccountID general
+    2: required accounter.AccountID guarantee
+}
+
+enum AccountType {
+    general
+    guarantee
+}
+
+struct AccountInfo {
+    1: required accounter.AccountID account_id
+    2: required domain.Blocking debit_blocking
+    3: required domain.Blocking credit_blocking
+    4: required AccountType account_type
+}
+
+
+// Exceptions
+
+exception AccountNotFound {
+    1: required accounter.AccountID account_id
+}
+
+
+// Service
+
+service AccountManagement{
+    ClaimResult BlockDebit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
+
+    ClaimResult BlockCredit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
+
+    ClaimResult UnblockDebit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
+
+    ClaimResult UnblockCredit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
+
+    AccountInfo GetAccountInfoByID (1: UserInfo user, 2: accounter.AccountID account_id)
+        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
+
+    ShopAccount GetShopAccount (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountNotFound ex4)
 }
