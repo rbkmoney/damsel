@@ -386,7 +386,7 @@ struct ProxyRef { 1: required ObjectID id }
 
 struct ProxyObject {
     1: required ProxyRef ref
-    2: required ProxyObject object
+    2: required Proxy object
 }
 
 /* Merchant prototype */
