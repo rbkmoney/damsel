@@ -399,6 +399,27 @@ struct PartyPrototype {
     2: required Party data
 }
 
+/* Error mapping */
+
+struct ErrorMappingRuleRef {
+    /* domain to map from */
+    1: required base.ErrorDomain origin
+    /* domain to map to */
+    2: required base.ErrorDomain destination
+    /** error code to map, if it is undefined, then 
+     *  the rule is a fallback rule, i.e. it is matched 
+     *  for all the errors that don't match other rules
+     */
+    3: optional base.ErrorCode error_code
+}
+
+typedef base.Opaque ErrorMappingRule
+
+struct ErrorMappingRuleObject {
+    1: ErrorMappingRuleRef ref
+    2: ErrorMappingRule object
+}
+
 /* Type enumerations */
 
 union Reference {
@@ -411,6 +432,7 @@ union Reference {
     7: ContractorRef contractor
     8: PartyPrototypeRef party_prototype
     9: ProxyRef proxy
+    10: ErrorMappingRuleRef error_mapping_rule
 }
 
 union DomainObject {
@@ -423,6 +445,7 @@ union DomainObject {
     7: ContractorObject contractor
     8: PartyPrototype party_prototype
     9: ProxyObject proxy
+    10: ErrorMappingRuleObject error_mapping_rule
 }
 
 /* Domain */

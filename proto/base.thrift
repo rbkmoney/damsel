@@ -61,10 +61,16 @@ struct Ok {
 /** Общая ошибка */
 struct Error {
     /** Уникальный признак ошибки, пригодный для обработки машиной */
-    1: required string code
+    1: required ErrorCode code
     /** Описание ошибки, пригодное для восприятия человеком */
     2: optional string description
 }
+
+/** Код ошибки */
+typedef string ErrorCode
+
+/** Домен ошибок */
+typedef string ErrorDomain
 
 /** Общее исключение */
 exception Failure {
