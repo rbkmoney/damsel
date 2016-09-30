@@ -16,34 +16,13 @@ typedef i32 ObjectID
 
 /* Common */
 
-// В идеале надо использовать `typedef` над `base.Error`, но сейчас это приводит к ошибкам кодогенератора Go
-struct OperationError {
-    /** Уникальный признак ошибки, пригодный для обработки машиной */
-    1: required string code;
-    /** Описание ошибки, пригодное для восприятия человеком */
-    2: optional string description;
-}
+typedef base.Error OperationError
 
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
 
-/** ID валюты */
-typedef string CurrencySymbolicCode
-
-/** Валюта. */
-struct Currency {
-    1: required string name
-    2: required CurrencySymbolicCode symbolic_code
-    3: required i16 numeric_code
-    4: required i16 exponent
-}
-
-struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
-
-struct CurrencyObject {
-    1: required CurrencyRef ref
-    2: required Currency data
-}
+/** Номер счёта. */
+typedef i64 AccountID
 
 /** Денежные средства, состоящий из суммы и валюты. */
 struct Funds {
@@ -63,7 +42,8 @@ struct TransactionInfo {
 
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
-typedef binary InvoiceContext
+typedef base.Content InvoiceContext
+typedef base.Content InvoicePaymentContext
 typedef string PaymentSession
 typedef string Fingerprint
 typedef string IPAddress
@@ -79,7 +59,7 @@ struct Invoice {
     8: required string product
     9: optional string description
    10: required Funds cost
-   11: required InvoiceContext context
+   11: optional InvoiceContext context
 }
 
 struct InvoiceUnpaid    {}
@@ -101,6 +81,7 @@ struct InvoicePayment {
     4: optional TransactionInfo trx
     5: required Payer payer
     8: required Funds cost
+    6: optional InvoicePaymentContext context
 }
 
 struct InvoicePaymentPending   {}
@@ -130,51 +111,6 @@ struct Payer {
 struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
-}
-
-/* Cash flows */
-
-/** Распределение денежных потоков в системе. */
-struct CashDistribution {
-    1: required string name
-    2: required string description = ""
-    3: required list<CashFlow> flows
-}
-
-/** Участник распределения денежных потоков. */
-// Порядок следования `typedef`-`struct` важен для кодогенератора Go
-typedef string CashFlowNode // FIXME: too broad
-
-/** Денежный поток между двумя участниками. */
-struct CashFlow {
-    1: required CashFlowNode source
-    2: required CashFlowNode destination
-    3: required CashVolume volume
-}
-
-
-/** Объём денежного потока. */
-union CashVolume {
-    1: VolumeFixed fixed
-    2: VolumeShare share
-}
-
-/** Объём в абсолютных денежных единицах. */
-struct VolumeFixed {
-    1: required Amount amount
-}
-
-/** Объём в относительных единицах. */
-struct VolumeShare {
-    1: required base.Rational parts
-    2: optional CashFlowNode of
-}
-
-struct CashDistributionRef { 1: required ObjectID id }
-
-struct CashDistributionObject {
-    1: required CashDistributionRef ref
-    2: required CashDistribution data
 }
 
 /* Blocking and suspension */
@@ -226,10 +162,18 @@ struct Shop {
     1: required ShopID id
     2: required Blocking blocking
     3: required Suspension suspension
-    4: required CategoryObject category
-    5: required ShopDetails details
-    6: optional Contractor contractor
-    7: optional ShopContract contract
+    4: required ShopDetails details
+    5: required CategoryRef category
+    6: optional ShopAccountSet accounts
+    7: optional Contractor contractor
+    8: optional ShopContract contract
+    9: required ShopServices services
+}
+
+struct ShopAccountSet {
+    1: required CurrencyRef currency
+    2: required AccountID general
+    3: required AccountID guarantee
 }
 
 struct ShopDetails {
@@ -238,12 +182,45 @@ struct ShopDetails {
     3: optional string location
 }
 
+// Service
+//   Payments
+//     Regular
+//     Held
+//     Recurring
+//     ...
+//   ...
+
+struct ShopServices {
+    1: optional PaymentsService payments
+}
+
+struct PaymentsService {
+    1: required DataRevision domain_revision
+    2: required PaymentsServiceTermsRef terms
+}
+
+/* Service terms */
+
+struct PaymentsServiceTermsRef { 1: required ObjectID id }
+
+struct PaymentsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+    2: optional AmountLimitSelector limits
+    3: optional CashFlowSelector fees
+    4: optional GuaranteeFundTerms guarantee_fund
+}
+
+struct GuaranteeFundTerms {
+    1: optional AmountLimitSelector limits
+    2: optional CashFlowSelector fees
+}
+
 /* Contracts */
 
 /** Договор между юридическими лицами, в частности между системой и участником. */
 struct ShopContract {
     1: required string number
-    2: required ContractorObject system_contractor
+    2: required ContractorRef system_contractor
     3: required base.Timestamp concluded_at
     4: required base.Timestamp valid_since
     5: required base.Timestamp valid_until
@@ -273,23 +250,60 @@ struct BankAccount {
 
 /* Categories */
 
+struct CategoryRef { 1: required ObjectID id }
+
 /** Категория продаваемых товаров или услуг. */
 struct Category {
     1: required string name
     2: required string description = ""
 }
 
-struct CategoryRef { 1: required ObjectID id }
+/* Currencies */
 
-struct CategoryObject {
-    1: required CategoryRef ref
-    2: required Category data
+/** Символьный код, уникально идентифицирующий валюту. */
+typedef string CurrencySymbolicCode
+
+struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
+
+/** Валюта. */
+struct Currency {
+    1: required string name
+    2: required CurrencySymbolicCode symbolic_code
+    3: required i16 numeric_code
+    4: required i16 exponent
+}
+
+/* Limits */
+
+struct AmountLimit {
+    1: required AmountBound min
+    2: required AmountBound max
+}
+
+union AmountBound {
+    1: Amount inclusive
+    2: Amount exclusive
+}
+
+union AmountLimitSelector {
+    1: set<AmountLimitPredicate> predicates
+    2: set<AmountLimit> value
+}
+
+struct AmountLimitPredicate {
+    1: required Predicate if_
+    2: required AmountLimitSelector then_
 }
 
 /* Payment methods */
 
-enum PaymentMethod {
-    bank_card = 1        // payment_card?
+union PaymentMethod {
+    1: BankCardPaymentSystem bank_card
+}
+
+enum BankCardPaymentSystem {
+    visa
+    mastercard
 }
 
 union PaymentTool {
@@ -305,124 +319,285 @@ struct BankCard {
     4: required string masked_pan
 }
 
-enum BankCardPaymentSystem {
-    visa
-    mastercard
-}
+struct BankCardBINRangeRef { 1: required ObjectID id }
 
-/** Способ платежа, категория платёжного средства. */
-struct PaymentMethodDefinition {
+struct BankCardBINRange {
     1: required string name
-    2: required string description = ""
+    2: required string description
+    3: required set<string> bins
 }
 
 struct PaymentMethodRef { 1: required PaymentMethod id }
 
-struct PaymentMethodObject {
-    1: required PaymentMethodRef ref
-    2: required PaymentMethodDefinition data
-}
-
-/* Conditions */
-
-/** Условие применимости. */
-struct Condition {
+/** Способ платежа, категория платёжного средства. */
+struct PaymentMethodDefinition {
     1: required string name
-    2: required string description = ""
-    3: required ConditionDef definition
+    2: required string description
 }
 
-/** Варианты условий применимости. */
-union ConditionDef {
-    /// basis and combinators
-    1: bool value_is
-    2: set<ConditionDef> all_of
-    3: set<ConditionDef> one_of
-    4: ConditionDef is_not
-    /// primitives
-    5: ConditionRef condition_is
-    6: CategoryRef category_is
-    7: PaymentMethodRef payment_method_is
-    8: FlowRef flow_is
+union PaymentMethodSelector {
+    1: set<PaymentMethodPredicate> predicates
+    2: set<PaymentMethodRef> value
 }
 
-struct ConditionRef { 1: required ObjectID id }
-
-struct ConditionObject {
-    1: required ConditionRef ref
-    2: required Condition data
+struct PaymentMethodPredicate {
+    1: required Predicate if_
+    2: required PaymentMethodSelector then_
 }
 
 /* Flows */
 
-/** Операция над бизнес-объектом, в частности инвойсом. */
-struct Flow {
-    1: required string name
-    2: required string description = ""
+// TODO
+
+/* Cash flows */
+
+enum CashFlowParty {
+    merchant,
+    provider,
+    processing
 }
 
-struct FlowRef { 1: required ObjectID id }
+typedef string CashFlowConstant                         // DISCUSS too broad?
+typedef map<CashFlowConstant, Amount> CashFlowContext
 
-struct FlowObject {
-    1: required FlowRef ref
-    2: required Flow data
+/** Граф финансовых потоков. */
+typedef list<CashFlowPosting> CashFlow
+
+/** Счёт в графе финансовых потоков. */
+struct CashFlowAccount {
+    1: required CashFlowParty party
+    2: required string designation
+}
+
+/** Денежный поток между двумя участниками. */
+struct CashFlowPosting {
+    1: required CashFlowAccount source
+    2: required CashFlowAccount destination
+    3: required CashVolume volume
+}
+
+/** Объём финансовой проводки. */
+union CashVolume {
+    1: CashVolumeFixed fixed
+    2: CashVolumeShare share
+}
+
+/** Объём в абсолютных денежных единицах. */
+struct CashVolumeFixed {
+    1: required Amount amount
+}
+
+/** Объём в относительных единицах. */
+struct CashVolumeShare {
+    1: required base.Rational parts
+    2: required CashFlowConstant of
+}
+
+union CashFlowSelector {
+    1: set<CashFlowPredicate> predicates
+    2: CashFlow value
+}
+
+struct CashFlowPredicate {
+    1: required Predicate if_
+    2: required CashFlowSelector then_
+}
+
+/* Providers */
+
+struct ProviderRef { 1: required ObjectID id }
+
+struct Provider {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+    4: required TerminalSelector terminal
+}
+
+union ProviderSelector {
+    1: set<ProviderPredicate> predicates
+    2: set<ProviderRef> value
+}
+
+struct ProviderPredicate {
+    1: required Predicate if_
+    2: required ProviderSelector then_
+}
+
+struct TerminalRef { 1: required ObjectID id }
+
+struct Terminal {
+    1: required string name
+    2: required string description
+    3: required PaymentMethodRef payment_method
+    4: required CategoryRef category
+    5: required CurrencyRef currency
+    6: required CashFlow cash_flow
+    7: required TerminalAccountSet accounts
+    8: optional TerminalDescriptor descriptor
+}
+
+struct TerminalAccountSet {
+    1: required AccountID receipt
+    2: required AccountID compensation
+}
+
+union TerminalSelector {
+    1: set<TerminalPredicate> predicates
+    2: set<TerminalRef> value
+}
+
+struct TerminalPredicate {
+    1: required Predicate if_
+    2: required TerminalSelector then_
+}
+
+union TerminalDescriptor {
+    1: AcquiringTerminalDescriptor acquiring
+}
+
+struct AcquiringTerminalDescriptor {
+    1: required string terminal_id
+    2: required string merchant_id
+    3: required string mcc
+}
+
+/* Predicates / conditions */
+
+union Predicate {
+    1: Condition condition
+    2: Predicate is_not
+    3: set<Predicate> all_of
+    4: set<Predicate> any_of
+}
+
+union Condition {
+    1: CategoryRef category_is
+    2: CurrencyRef currency_is
+    3: PaymentMethodRef payment_method_is
+    4: PaymentToolCondition payment_tool
+}
+
+union PaymentToolCondition {
+    1: BankCardBINRangeRef bank_card_bin_in
 }
 
 /* Proxies */
 
 typedef base.StringMap ProxyOptions
 
-enum ProxyType {
-    provider
+struct ProxyRef { 1: required ObjectID id }
+
+struct ProxyDefinition {
+    1: required string url
+    2: optional ProxyOptions options = {}
 }
 
 struct Proxy {
-    1: required ProxyType type
-    2: required string url
-    3: optional ProxyOptions options = {}
-}
-
-struct ProxyRef { 1: required ObjectID id }
-
-struct ProxyObject {
     1: required ProxyRef ref
-    2: required ProxyObject object
+    2: required ProxyOptions additional
 }
 
 /* Merchant prototype */
 
-struct PartyPrototypeRef {}
+struct PartyPrototypeRef { 1: required ObjectID id }
 
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
-    1: required PartyPrototypeRef ref
-    2: required Party data
+    1: required ShopPrototype shop
+}
+
+struct ShopPrototype {
+    1: required CategoryRef category
+    2: required CurrencyRef currency
+    3: required ShopServices services
+}
+
+/* Root config */
+
+struct GlobalsRef {}
+
+struct Globals {
+    1: required PartyPrototypeRef party_prototype
+    2: required ProviderSelector providers
 }
 
 /* Type enumerations */
 
+struct CategoryObject {
+    1: required CategoryRef ref
+    2: required Category data
+}
+
+struct CurrencyObject {
+    1: required CurrencyRef ref
+    2: required Currency data
+}
+
+struct PaymentMethodObject {
+    1: required PaymentMethodRef ref
+    2: required PaymentMethodDefinition data
+}
+
+struct BankCardBINRangeObject {
+    1: required BankCardBINRangeRef ref
+    2: required BankCardBINRange data
+}
+
+struct PaymentsServiceTermsObject {
+    1: required PaymentsServiceTermsRef ref
+    2: required PaymentsServiceTerms data
+}
+
+struct ProviderObject {
+    1: required ProviderRef ref
+    2: required Provider data
+}
+
+struct TerminalObject {
+    1: required TerminalRef ref
+    2: required Terminal data
+}
+
+struct ProxyObject {
+    1: required ProxyRef ref
+    2: required ProxyDefinition data
+}
+
+struct PartyPrototypeObject {
+    1: required PartyPrototypeRef ref
+    2: required PartyPrototype data
+}
+
+struct GlobalsObject {
+    1: required GlobalsRef ref
+    2: required Globals data
+}
+
 union Reference {
     1: CategoryRef category
-    2: PaymentMethodRef payment_method
-    3: FlowRef flow
-    4: CurrencyRef currency
-    5: ConditionRef condition
-    6: CashDistributionRef cash_distribution
-    7: ContractorRef contractor
-    8: PartyPrototypeRef party_prototype
-    9: ProxyRef proxy
+    2: CurrencyRef currency
+    3: PaymentMethodRef payment_method
+    4: BankCardBINRangeRef bank_card_bin_range
+    5: PaymentsServiceTermsRef payments_service_terms
+    6: ProviderRef provider
+    7: TerminalRef terminal
+    8: ProxyRef proxy
+    9: PartyPrototypeRef party_prototype
+   10: GlobalsRef globals
 }
 
 union DomainObject {
     1: CategoryObject category
-    2: PaymentMethodObject payment_method
-    3: FlowObject flow
-    4: CurrencyObject currency
-    5: ConditionObject condition
-    6: CashDistributionObject cash_distribution
-    7: ContractorObject contractor
-    8: PartyPrototype party_prototype
-    9: ProxyObject proxy
+    2: CurrencyObject currency
+    3: PaymentMethodObject payment_method
+    4: BankCardBINRangeObject bank_card_bin_range
+    5: PaymentsServiceTermsObject payments_service_terms
+    6: ProviderObject provider
+    7: TerminalObject terminal
+    8: ProxyObject proxy
+    9: PartyPrototypeObject party_prototype
+   10: GlobalsObject globals
 }
 
 /* Domain */
