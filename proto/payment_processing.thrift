@@ -5,7 +5,6 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
-include 'accounter.thrift'
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -341,12 +340,20 @@ struct ClaimResult {
     2: required ClaimStatus status
 }
 
+struct AccountInfo {
+    1: required domain.AccountID account_id
+    2: required domain.Amount own_amount
+    3: required domain.Amount available_amount
+    4: required domain.CurrencySymbolicCode currency_sym_code
+}
+
 // Events
 
 union PartyEvent {
     1: PartyCreated party_created
     2: ClaimCreated claim_created
     3: ClaimStatusChanged claim_status_changed
+    4: AccountCreated account_created
 }
 
 struct PartyCreated {
@@ -360,6 +367,10 @@ struct ClaimCreated {
 struct ClaimStatusChanged {
     1: required ClaimID id
     2: required ClaimStatus status
+}
+
+struct AccountCreated {
+    1: required domain.AccountID account_id
 }
 
 // Exceptions
@@ -385,6 +396,12 @@ exception InvalidPartyStatus {
 exception InvalidShopStatus {
     1: required InvalidStatus status
 }
+
+exception AccountNotFound {
+    1: required domain.AccountID account_id
+}
+
+exception AccountSetNotFound {}
 
 // Service
 
@@ -492,6 +509,13 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
+    /* Accounts */
+
+    AccountInfo GetAccountInfoByID (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    domain.ShopAccountSet GetShopAccountSet (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountSetNotFound ex4)
 }
 
 /* Event sink service definitions */
@@ -520,56 +544,4 @@ service EventSink {
     base.EventID GetLastEventID ()
         throws (1: NoLastEvent ex1)
 
-}
-
-/* Account management service definitions */
-
-
-// Accounts
-
-struct ShopAccount {
-    1: required accounter.AccountID general
-    2: required accounter.AccountID guarantee
-}
-
-enum AccountType {
-    general
-    guarantee
-}
-
-struct AccountInfo {
-    1: required accounter.AccountID account_id
-    2: required domain.Blocking debit_blocking
-    3: required domain.Blocking credit_blocking
-    4: required AccountType account_type
-}
-
-
-// Exceptions
-
-exception AccountNotFound {
-    1: required accounter.AccountID account_id
-}
-
-
-// Service
-
-service AccountManagement{
-    ClaimResult BlockDebit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
-
-    ClaimResult BlockCredit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
-
-    ClaimResult UnblockDebit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
-
-    ClaimResult UnblockCredit (1: UserInfo user, 2: accounter.AccountID account_id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
-
-    AccountInfo GetAccountInfoByID (1: UserInfo user, 2: accounter.AccountID account_id)
-        throws (1: InvalidUser ex1, 2: AccountNotFound ex2)
-
-    ShopAccount GetShopAccount (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountNotFound ex4)
 }
