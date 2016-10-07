@@ -16,6 +16,12 @@ typedef i32 ObjectID
 
 /* Common */
 
+/** Контактная информация. **/
+struct ContactInfo {
+    1: optional string phone_number
+    2: optional string email
+}
+
 // В идеале надо использовать `typedef` над `base.Error`, но сейчас это приводит к ошибкам кодогенератора Go
 struct OperationError {
     /** Уникальный признак ошибки, пригодный для обработки машиной */
@@ -125,6 +131,7 @@ struct Payer {
     1: required PaymentTool payment_tool
     2: required PaymentSession session
     3: required ClientInfo client_info
+    4: optional ContactInfo contact_info
 }
 
 struct ClientInfo {
