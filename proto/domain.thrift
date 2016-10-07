@@ -94,7 +94,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
-struct InvoicePaymentFailed    { 1: OperationError err }
+struct InvoicePaymentFailed    { 1: required OperationError err }
 
 /**
  * Статус платежа.
