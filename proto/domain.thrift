@@ -62,7 +62,6 @@ struct TransactionInfo {
 /* Invoices */
 
 typedef base.ID InvoiceID
-typedef base.ID PayerID
 typedef base.ID InvoicePaymentID
 typedef binary InvoiceContext
 typedef string PaymentSession
@@ -126,12 +125,17 @@ struct Payer {
     1: required PaymentTool payment_tool
     2: required PaymentSession session
     3: required ClientInfo client_info
-    4: required PayerID id
+    4: optional PayerInfo payer_info
 }
 
 struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
+}
+
+struct PayerInfo {
+    1: optional string phone_number
+    2: optional string email
 }
 
 /* Cash flows */
