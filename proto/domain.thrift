@@ -30,8 +30,8 @@ typedef i64 Amount
 /** Номер счёта. */
 typedef i64 AccountID
 
-/** Денежные средства, состоящий из суммы и валюты. */
-struct Funds {
+/** Денежные средства, состоящие из суммы и валюты. */
+struct Cash {
     1: required Amount amount
     2: required Currency currency
 }
@@ -64,7 +64,7 @@ struct Invoice {
     7: required base.Timestamp due
     8: required string product
     9: optional string description
-   10: required Funds cost
+   10: required Cash cost
    11: optional InvoiceContext context
 }
 
@@ -86,7 +86,7 @@ struct InvoicePayment {
     3: required InvoicePaymentStatus status
     4: optional TransactionInfo trx
     5: required Payer payer
-    8: required Funds cost
+    8: required Cash cost
     6: optional InvoicePaymentContext context
 }
 
