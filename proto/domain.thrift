@@ -429,6 +429,12 @@ struct ProviderPredicate {
 
 struct TerminalRef { 1: required ObjectID id }
 
+/**
+ * Обобщённый терминал у провайдера.
+ *
+ * Представляет собой единицу предоставления услуг по процессингу платежей со
+ * стороны провайдера, согласно нашим с ним договорённостям.
+ */
 struct Terminal {
     1: required string name
     2: required string description
