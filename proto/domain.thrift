@@ -234,6 +234,8 @@ struct ShopContract {
     6: optional base.Timestamp terminated_at
 }
 
+struct ContractorRef { 1: required ObjectID id }
+
 /** Лицо, выступающее стороной договора. */
 struct Contractor {
     1: required string registered_name
@@ -244,12 +246,6 @@ struct Contractor {
 union LegalEntity {
 }
 
-struct ContractorRef { 1: required ObjectID id }
-
-struct ContractorObject {
-    1: required ContractorRef ref
-    2: required Contractor data
-}
 
 /** Банковский счёт. */
 struct BankAccount {
@@ -577,6 +573,11 @@ struct BankCardBINRangeObject {
     2: required BankCardBINRange data
 }
 
+struct ContractorObject {
+    1: required ContractorRef ref
+    2: required Contractor data
+}
+
 struct PaymentsServiceTermsObject {
     1: required PaymentsServiceTermsRef ref
     2: required PaymentsServiceTerms data
@@ -609,37 +610,39 @@ struct GlobalsObject {
 
 union Reference {
 
-    1: CategoryRef category
-    2: CurrencyRef currency
-    3: PaymentMethodRef payment_method
-    4: BankCardBINRangeRef bank_card_bin_range
-    5: PaymentsServiceTermsRef payments_service_terms
-    6: ProviderRef provider
-    7: TerminalRef terminal
-    8: ProxyRef proxy
-    9: PartyPrototypeRef party_prototype
-   10: GlobalsRef globals
+   1 : CategoryRef category
+   2 : CurrencyRef currency
+   3 : PaymentMethodRef payment_method
+   4 : ContractorRef contractor
+   5 : BankCardBINRangeRef bank_card_bin_range
+   6 : PaymentsServiceTermsRef payments_service_terms
+   7 : ProviderRef provider
+   8 : TerminalRef terminal
+   9 : ProxyRef proxy
+   10: PartyPrototypeRef party_prototype
+   11: GlobalsRef globals
 
-   11: DummyRef dummy
-   12: DummyLinkRef dummy_link
+   12: DummyRef dummy
+   13: DummyLinkRef dummy_link
 
 }
 
 union DomainObject {
 
-    1: CategoryObject category
-    2: CurrencyObject currency
-    3: PaymentMethodObject payment_method
-    4: BankCardBINRangeObject bank_card_bin_range
-    5: PaymentsServiceTermsObject payments_service_terms
-    6: ProviderObject provider
-    7: TerminalObject terminal
-    8: ProxyObject proxy
-    9: PartyPrototypeObject party_prototype
-   10: GlobalsObject globals
+    1 : CategoryObject category
+    2 : CurrencyObject currency
+    3 : PaymentMethodObject payment_method
+    4 : ContractorObject contractor
+    5 : BankCardBINRangeObject bank_card_bin_range
+    6 : PaymentsServiceTermsObject payments_service_terms
+    7 : ProviderObject provider
+    8 : TerminalObject terminal
+    9 : ProxyObject proxy
+    10: PartyPrototypeObject party_prototype
+    11: GlobalsObject globals
 
-   11: DummyObject dummy
-   12: DummyLinkObject dummy_link
+    12: DummyObject dummy
+    13: DummyLinkObject dummy_link
 
 }
 
