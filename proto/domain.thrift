@@ -406,6 +406,32 @@ struct PartyPrototype {
     2: required Party data
 }
 
+/** Dummy (for integrity test purpose) */
+struct Dummy {}
+
+struct DummyRef {
+    1: base.ID id
+}
+
+struct DummyObject {
+    1: DummyRef ref
+    2: Dummy data
+}
+
+struct DummyLink {
+    1: DummyRef link
+}
+
+struct DummyLinkRef {
+    1: base.ID id
+}
+
+struct DummyLinkObject {
+    1: DummyLinkRef ref
+    2: DummyLink data
+}
+
+
 /* Type enumerations */
 
 union Reference {
@@ -418,6 +444,8 @@ union Reference {
     7: ContractorRef contractor
     8: PartyPrototypeRef party_prototype
     9: ProxyRef proxy
+    10: DummyRef dummy
+    11: DummyLinkRef dummy_link
 }
 
 union DomainObject {
@@ -430,6 +458,8 @@ union DomainObject {
     7: ContractorObject contractor
     8: PartyPrototype party_prototype
     9: ProxyObject proxy
+    10: DummyObject dummy
+    11: DummyLinkObject dummy_link
 }
 
 /* Domain */
