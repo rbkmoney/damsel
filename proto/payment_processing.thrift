@@ -298,6 +298,7 @@ union ShopModification {
     1: domain.Blocking blocking
     2: domain.Suspension suspension
     3: ShopUpdate update
+    4: ShopAccountSetCreated accounts_created
 }
 
 struct ShopUpdate {
@@ -340,6 +341,13 @@ struct ClaimResult {
     2: required ClaimStatus status
 }
 
+struct ShopAccountState {
+    1: required domain.AccountID account_id
+    2: required domain.Amount own_amount
+    3: required domain.Amount available_amount
+    4: required domain.Currency currency
+}
+
 // Events
 
 union PartyEvent {
@@ -359,6 +367,10 @@ struct ClaimCreated {
 struct ClaimStatusChanged {
     1: required ClaimID id
     2: required ClaimStatus status
+}
+
+struct ShopAccountSetCreated {
+    1: required domain.ShopAccountSet accounts
 }
 
 // Exceptions
@@ -384,6 +396,12 @@ exception InvalidPartyStatus {
 exception InvalidShopStatus {
     1: required InvalidStatus status
 }
+
+exception AccountNotFound {
+    1: required domain.AccountID account_id
+}
+
+exception AccountSetNotFound {}
 
 // Service
 
@@ -491,6 +509,13 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
+    /* Accounts */
+
+    ShopAccountState GetShopAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    domain.ShopAccountSet GetShopAccountSet (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountSetNotFound ex4)
 }
 
 /* Event sink service definitions */
