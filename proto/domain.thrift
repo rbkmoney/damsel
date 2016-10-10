@@ -16,6 +16,12 @@ typedef i32 ObjectID
 
 /* Common */
 
+/** Контактная информация. **/
+struct ContactInfo {
+    1: optional string phone_number
+    2: optional string email
+}
+
 typedef base.Error OperationError
 
 /** Сумма в минимальных денежных единицах. */
@@ -24,8 +30,8 @@ typedef i64 Amount
 /** Номер счёта. */
 typedef i64 AccountID
 
-/** Денежные средства, состоящий из суммы и валюты. */
-struct Funds {
+/** Денежные средства, состоящие из суммы и валюты. */
+struct Cash {
     1: required Amount amount
     2: required Currency currency
 }
@@ -58,7 +64,7 @@ struct Invoice {
     7: required base.Timestamp due
     8: required string product
     9: optional string description
-   10: required Funds cost
+   10: required Cash cost
    11: optional InvoiceContext context
 }
 
@@ -80,7 +86,7 @@ struct InvoicePayment {
     3: required InvoicePaymentStatus status
     4: optional TransactionInfo trx
     5: required Payer payer
-    8: required Funds cost
+    8: required Cash cost
     6: optional InvoicePaymentContext context
 }
 
@@ -88,7 +94,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
-struct InvoicePaymentFailed    { 1: OperationError err }
+struct InvoicePaymentFailed    { 1: required OperationError err }
 
 /**
  * Статус платежа.
@@ -106,6 +112,7 @@ struct Payer {
     1: required PaymentTool payment_tool
     2: required PaymentSession session
     3: required ClientInfo client_info
+    4: required ContactInfo contact_info
 }
 
 struct ClientInfo {
@@ -227,6 +234,8 @@ struct ShopContract {
     6: optional base.Timestamp terminated_at
 }
 
+struct ContractorRef { 1: required ObjectID id }
+
 /** Лицо, выступающее стороной договора. */
 struct Contractor {
     1: required string registered_name
@@ -237,12 +246,6 @@ struct Contractor {
 union LegalEntity {
 }
 
-struct ContractorRef { 1: required ObjectID id }
-
-struct ContractorObject {
-    1: required ContractorRef ref
-    2: required Contractor data
-}
 
 /** Банковский счёт. */
 struct BankAccount {
@@ -426,6 +429,12 @@ struct ProviderPredicate {
 
 struct TerminalRef { 1: required ObjectID id }
 
+/**
+ * Обобщённый терминал у провайдера.
+ *
+ * Представляет собой единицу предоставления услуг по процессингу платежей со
+ * стороны провайдера, согласно нашим с ним договорённостям.
+ */
 struct Terminal {
     1: required string name
     2: required string description
@@ -522,6 +531,32 @@ struct Globals {
     2: required ProviderSelector providers
 }
 
+/** Dummy (for integrity test purpose) */
+struct Dummy {}
+
+struct DummyRef {
+    1: base.ID id
+}
+
+struct DummyObject {
+    1: DummyRef ref
+    2: Dummy data
+}
+
+struct DummyLink {
+    1: DummyRef link
+}
+
+struct DummyLinkRef {
+    1: base.ID id
+}
+
+struct DummyLinkObject {
+    1: DummyLinkRef ref
+    2: DummyLink data
+}
+
+
 /* Type enumerations */
 
 struct CategoryObject {
@@ -542,6 +577,11 @@ struct PaymentMethodObject {
 struct BankCardBINRangeObject {
     1: required BankCardBINRangeRef ref
     2: required BankCardBINRange data
+}
+
+struct ContractorObject {
+    1: required ContractorRef ref
+    2: required Contractor data
 }
 
 struct PaymentsServiceTermsObject {
@@ -575,29 +615,41 @@ struct GlobalsObject {
 }
 
 union Reference {
-    1: CategoryRef category
-    2: CurrencyRef currency
-    3: PaymentMethodRef payment_method
-    4: BankCardBINRangeRef bank_card_bin_range
-    5: PaymentsServiceTermsRef payments_service_terms
-    6: ProviderRef provider
-    7: TerminalRef terminal
-    8: ProxyRef proxy
-    9: PartyPrototypeRef party_prototype
-   10: GlobalsRef globals
+
+   1 : CategoryRef category
+   2 : CurrencyRef currency
+   3 : PaymentMethodRef payment_method
+   4 : ContractorRef contractor
+   5 : BankCardBINRangeRef bank_card_bin_range
+   6 : PaymentsServiceTermsRef payments_service_terms
+   7 : ProviderRef provider
+   8 : TerminalRef terminal
+   9 : ProxyRef proxy
+   10: PartyPrototypeRef party_prototype
+   11: GlobalsRef globals
+
+   12: DummyRef dummy
+   13: DummyLinkRef dummy_link
+
 }
 
 union DomainObject {
-    1: CategoryObject category
-    2: CurrencyObject currency
-    3: PaymentMethodObject payment_method
-    4: BankCardBINRangeObject bank_card_bin_range
-    5: PaymentsServiceTermsObject payments_service_terms
-    6: ProviderObject provider
-    7: TerminalObject terminal
-    8: ProxyObject proxy
-    9: PartyPrototypeObject party_prototype
-   10: GlobalsObject globals
+
+    1 : CategoryObject category
+    2 : CurrencyObject currency
+    3 : PaymentMethodObject payment_method
+    4 : ContractorObject contractor
+    5 : BankCardBINRangeObject bank_card_bin_range
+    6 : PaymentsServiceTermsObject payments_service_terms
+    7 : ProviderObject provider
+    8 : TerminalObject terminal
+    9 : ProxyObject proxy
+    10: PartyPrototypeObject party_prototype
+    11: GlobalsObject globals
+
+    12: DummyObject dummy
+    13: DummyLinkObject dummy_link
+
 }
 
 /* Domain */
