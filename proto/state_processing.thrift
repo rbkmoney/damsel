@@ -20,6 +20,7 @@ typedef binary EventBody;
 typedef list<EventBody> EventBodies;
 
 typedef binary Args
+typedef binary Status
 
 /**
  * Произвольное событие, продукт перехода в новое состояние.
@@ -34,12 +35,24 @@ struct Event {
     2: required base.Timestamp  created_at;     /* Время происхождения события */
     4: required EventBody       event_payload;  /* Описание события */
 }
+typedef list<Event> History;
 
 /**
- * Сложное состояние, выраженное в виде упорядоченного набора событий
- * процессора.
+ * Машина — конечный автомат, обрабатываемый State Processor'ом.
  */
-typedef list<Event> History;
+struct Machine {
+    /**
+     * Сложное состояние, выраженное в виде упорядоченного набора событий
+     * процессора.
+     */
+    1: required History history;
+    /**
+     * Статус — некоторый набор данных, характеризующий состояние, который
+     * в отличие от событий не сохраняется в историю, а каждый раз перезаписывается.
+     * Бывает полезен, чтобы сохранить данные между запросами не добавляя их в историю.
+     */
+    2: optional Status  status;
+}
 
 /**
  * Желаемое действие, продукт перехода в новое состояние.
@@ -104,19 +117,17 @@ typedef binary CallResponse;
  */
 struct CallArgs {
     1: required Args     arg;      /** Данные вызова */
-    2: required History  history;  /** История автомата */
+    2: required Machine  machine;  /** Данные по машине */
 }
 
 /**
  * Результат обработки внешнего вызова.
  */
 struct CallResult {
-    /** Список описаний событий, порождённых в результате обработки */
-    1: required EventBodies events;
-    /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction action;
-    /** Данные ответа */
-    3: required CallResponse response;
+    1: required CallResponse  response; /** Данные ответа */
+    2: required Status        status;   /** Новый статус автомата */
+    3: required EventBodies   events;   /** Список описаний событий, порождённых в результате обработки */
+    4: required ComplexAction action;   /** Действие, которое необходимо выполнить после обработки */
 }
 
 /**
@@ -159,17 +170,16 @@ struct RepairSignal {
  */
 struct SignalArgs {
     1: required Signal   signal;     /** Поступивший сигнал */
-    2: required History  history;    /** История автомата */
+    2: required Machine  machine;    /** Данные по машине */
 }
 
 /**
  * Результат обработки сигнала.
  */
 struct SignalResult {
-    /** Список описаний событий, порождённых в результате обработки */
-    1: required EventBodies events;
-    /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction action;
+    1: required Status        status; /** Новый статус автомата */
+    2: required EventBodies   events; /** Список описаний событий, порождённых в результате обработки */
+    3: required ComplexAction action; /** Действие, которое необходимо выполнить после обработки */
 }
 
 /**
@@ -265,14 +275,14 @@ service Automaton {
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
-     * Метод возвращает список событий (историю) машины ref
+     * Метод возвращает список событий (историю) и статус машины ref
      *
      * Возвращаемый список событий упорядочен по моменту фиксирования его в
      * системе: в начале списка располагаются события, произошедшие
      * раньше тех, которые располагаются в конце.
      */
 
-    History GetHistory (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+    Machine GetMachine (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
 
