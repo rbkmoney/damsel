@@ -275,7 +275,7 @@ struct ShopState {
 }
 
 struct ShopParams {
-    1: required domain.CategoryObject category
+    1: required domain.CategoryRef category
     2: required domain.ShopDetails details
     3: optional domain.Contractor contractor
 }
