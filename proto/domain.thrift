@@ -514,12 +514,12 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
     1: required ShopPrototype shop
+    2: required ShopServices default_services
 }
 
 struct ShopPrototype {
     1: required CategoryRef category
     2: required CurrencyRef currency
-    3: required ShopServices services
 }
 
 /* Root config */
