@@ -33,7 +33,6 @@ struct SessionData {
 /** возможные состояния сессии */
 union SessionState {
     1: SessionState_Cvv cvv
-    2: SessionState_Timeout timeout
     3: SessionState_Invalidated invalidated
 }
 
@@ -42,9 +41,6 @@ struct SessionState_Cvv {
     /** Код верификации [0-9]{3,4} */
     1: required string cvv
 }
-
-/** состояние когда cvv был удалён по таймауту */
-struct SessionState_Timeout {}
 
 /** состояние когда cvv был удалён с помощью вызова InvalidateSession */
 struct SessionState_Invalidated {
