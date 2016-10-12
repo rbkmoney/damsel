@@ -32,26 +32,12 @@ struct SessionData {
 
 /** возможные состояния сессии */
 union SessionState {
-    1: SessionState_Cvv cvv
-    3: SessionState_Invalidated invalidated
+    /** состояние в котором хранится код верификации [0-9]{3,4} */
+    1: string cvv
+    /** состояние когда cvv был удалён с помощью вызова InvalidateSession */
+    2: base.Opaque invalidated
+    /** возможно, здесь будет состояние для рекуррентных платежей */
 }
-
-/** состояние когда сессия хранит cvv */
-struct SessionState_Cvv {
-    /** Код верификации [0-9]{3,4} */
-    1: required string cvv
-}
-
-/** состояние когда cvv был удалён с помощью вызова InvalidateSession */
-struct SessionState_Invalidated {
-    1: required InvalidationData data
-}
-
-/** 
-  * возможно, здесь будет состояние для рекуррентных платежей  
-  */
-
-typedef base.Opaque InvalidationData
 
 struct PutCardDataResult {
     1: required domain.BankCard bank_card
@@ -99,7 +85,7 @@ service Storage {
     SessionData GetSession (1: domain.PaymentSession session)
         throws (1: base.NotFound not_found, 2: KeyringLocked locked)
     /** Удалить cvv и оставить данные о состоянии сессии */
-    void InvalidateSession(1: domain.PaymentSession session, 2: InvalidationData data)
+    void InvalidateSession(1: domain.PaymentSession session, 2: base.Opaque custom_data)
         throws (1: base.NotFound not_found, 2: KeyringLocked locked)
     /** Сохранить карточные данные */
     PutCardDataResult PutCardData (1: CardData card_data, 2: string cvv)
