@@ -334,7 +334,7 @@ union ShopModification {
 }
 
 struct ShopUpdate {
-    1: optional domain.CategoryObject category
+    1: optional domain.CategoryRef category
     2: optional domain.ShopDetails details
     3: optional domain.Contractor contractor
 }
