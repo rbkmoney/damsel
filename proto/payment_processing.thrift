@@ -191,13 +191,14 @@ struct EventRange {
 /* Invoicing service definitions */
 
 struct InvoiceParams {
-    7: required ShopID shop_id
-    1: required string product
-    2: optional string description
-    3: required base.Timestamp due
-    4: required domain.Amount amount
-    5: required domain.CurrencyRef currency
-    6: required domain.InvoiceContext context
+    1: required PartyID party_id
+    2: required ShopID shop_id
+    3: required string product
+    4: optional string description
+    5: required base.Timestamp due
+    6: required domain.Amount amount
+    7: required domain.CurrencyRef currency
+    8: required domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
@@ -220,10 +221,18 @@ exception InvalidInvoiceStatus {
 service Invoicing {
 
     domain.InvoiceID Create (1: UserInfo user, 2: InvoiceParams params)
-        throws (1: InvalidUser ex1, 2: base.InvalidRequest ex2)
+        throws (
+            1: InvalidUser ex1,
+            2: base.InvalidRequest ex2,
+            3: PartyNotFound ex3,
+            4: ShopNotFound ex4
+        )
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2
+        )
 
     Events GetEvents (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
         throws (
@@ -246,14 +255,31 @@ service Invoicing {
             5: base.InvalidRequest ex5
         )
 
-    domain.InvoicePayment GetPayment (1: UserInfo user, 2: domain.InvoicePaymentID id)
-        throws (1: InvalidUser ex1, 2: InvoicePaymentNotFound ex2)
+    domain.InvoicePayment GetPayment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3
+        )
 
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvalidInvoiceStatus ex3
+        )
 
     void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: UserInvoiceNotFound ex2, 3: InvalidInvoiceStatus ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvalidInvoiceStatus ex3,
+            4: InvoicePaymentPending ex4
+        )
 
 }
 
