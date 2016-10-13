@@ -205,6 +205,12 @@ struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
 
+// Exceptions
+
+// forward-declared
+exception PartyNotFound {}
+exception ShopNotFound {}
+
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
 exception InvoicePaymentNotFound {}
@@ -402,8 +408,6 @@ struct ShopAccountSetCreated {
 // Exceptions
 
 exception PartyExists {}
-exception PartyNotFound {}
-exception ShopNotFound {}
 exception ClaimNotFound {}
 
 exception InvalidClaimStatus {
