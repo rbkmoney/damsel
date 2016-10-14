@@ -126,7 +126,7 @@ struct InvoicePaymentRoute {
 }
 
 struct InvoicePaymentCashFlow {
-    1: required CashFlow final
+    1: required CashFlow final_cash_flow
     2: required map<CashFlowAccount, AccountID> account_map
 }
 
