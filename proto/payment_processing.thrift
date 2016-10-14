@@ -427,9 +427,7 @@ exception InvalidShopStatus {
     1: required InvalidStatus status
 }
 
-exception AccountNotFound {
-    1: required domain.AccountID account_id
-}
+exception AccountNotFound {}
 
 exception AccountSetNotFound {}
 
