@@ -545,7 +545,7 @@ struct SystemAccountSet {
     1: required string name
     2: required string description
     3: required CurrencyRef currency
-    4: required AccountID operations
+    4: required AccountID compensation
 }
 
 union SystemAccountSetSelector {
