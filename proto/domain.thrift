@@ -300,7 +300,7 @@ union AmountBound {
 
 union AmountLimitSelector {
     1: set<AmountLimitPredicate> predicates
-    2: set<AmountLimit> value
+    2: AmountLimit value
 }
 
 struct AmountLimitPredicate {
