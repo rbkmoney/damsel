@@ -120,6 +120,18 @@ struct ClientInfo {
     2: optional Fingerprint fingerprint
 }
 
+struct InvoicePaymentRoute {
+    1: required ProviderRef provider
+    2: required TerminalRef terminal
+}
+
+struct InvoicePaymentCashFlow {
+    /** Полностью вычисленный граф финансовых потоков с проводками всех участников. */
+    1: required CashFlow final_cash_flow
+    /** Отображение счетов в графе на номера счетов в системе учёта счетов. */
+    2: required map<CashFlowAccount, AccountID> account_map
+}
+
 /* Blocking and suspension */
 
 union Blocking {
@@ -290,7 +302,7 @@ union AmountBound {
 
 union AmountLimitSelector {
     1: set<AmountLimitPredicate> predicates
-    2: set<AmountLimit> value
+    2: AmountLimit value
 }
 
 struct AmountLimitPredicate {
@@ -357,10 +369,25 @@ struct PaymentMethodPredicate {
 enum CashFlowParty {
     merchant,
     provider,
-    processing
+    system
 }
 
-typedef string CashFlowConstant                         // DISCUSS too broad?
+// TODO
+//
+// union CashFlowAccount {
+//     1: MerchantAccount merchant_account
+//     2: ProviderAccount provider_account
+//     3: SystemAccount system_account
+// }
+// ...
+
+enum CashFlowConstant {
+    invoice_amount
+    payment_amount
+    // ...
+    // TODO
+}
+
 typedef map<CashFlowConstant, Amount> CashFlowContext
 
 /** Граф финансовых потоков. */
@@ -377,6 +404,7 @@ struct CashFlowPosting {
     1: required CashFlowAccount source
     2: required CashFlowAccount destination
     3: required CashVolume volume
+    4: optional string details = ""
 }
 
 /** Объём финансовой проводки. */
@@ -440,13 +468,14 @@ struct Terminal {
     2: required string description
     3: required PaymentMethodRef payment_method
     4: required CategoryRef category
-    5: required CurrencyRef currency
     6: required CashFlow cash_flow
     7: required TerminalAccountSet accounts
     8: optional TerminalDescriptor descriptor
+    9: optional ProxyOptions options = {}
 }
 
 struct TerminalAccountSet {
+    3: required CurrencyRef currency
     1: required AccountID receipt
     2: required AccountID compensation
 }
@@ -498,6 +527,9 @@ typedef base.StringMap ProxyOptions
 struct ProxyRef { 1: required ObjectID id }
 
 struct ProxyDefinition {
+    // TODO
+    // 1: required string name
+    // 2: required string description
     1: required string url
     2: optional ProxyOptions options = {}
 }
@@ -505,6 +537,27 @@ struct ProxyDefinition {
 struct Proxy {
     1: required ProxyRef ref
     2: required ProxyOptions additional
+}
+
+/* System accounts */
+
+struct SystemAccountSetRef { 1: required ObjectID id }
+
+struct SystemAccountSet {
+    1: required string name
+    2: required string description
+    3: required CurrencyRef currency
+    4: required AccountID compensation
+}
+
+union SystemAccountSetSelector {
+    1: set<SystemAccountSetPredicate> predicates
+    2: set<SystemAccountSetRef> value
+}
+
+struct SystemAccountSetPredicate {
+    1: required Predicate if_
+    2: required SystemAccountSetSelector then_
 }
 
 /* Merchant prototype */
@@ -519,6 +572,7 @@ struct PartyPrototype {
 
 struct ShopPrototype {
     1: required CategoryRef category
+    3: required ShopDetails details
     2: required CurrencyRef currency
 }
 
@@ -529,6 +583,7 @@ struct GlobalsRef {}
 struct Globals {
     1: required PartyPrototypeRef party_prototype
     2: required ProviderSelector providers
+    3: required SystemAccountSetSelector system_accounts
 }
 
 /** Dummy (for integrity test purpose) */
@@ -599,6 +654,11 @@ struct TerminalObject {
     2: required Terminal data
 }
 
+struct SystemAccountSetObject {
+    1: required SystemAccountSetRef ref
+    2: required SystemAccountSet data
+}
+
 struct ProxyObject {
     1: required ProxyRef ref
     2: required ProxyDefinition data
@@ -624,6 +684,7 @@ union Reference {
    6 : PaymentsServiceTermsRef payments_service_terms
    7 : ProviderRef provider
    8 : TerminalRef terminal
+   14: SystemAccountSetRef system_account_set
    9 : ProxyRef proxy
    10: PartyPrototypeRef party_prototype
    11: GlobalsRef globals
@@ -643,6 +704,7 @@ union DomainObject {
     6 : PaymentsServiceTermsObject payments_service_terms
     7 : ProviderObject provider
     8 : TerminalObject terminal
+    14: SystemAccountSetObject system_account_set
     9 : ProxyObject proxy
     10: PartyPrototypeObject party_prototype
     11: GlobalsObject globals

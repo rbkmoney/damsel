@@ -127,6 +127,10 @@ struct InvoiceStatusChanged {
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
+    /** Выбранный маршрут обработки платежа. */
+    2: optional domain.InvoicePaymentRoute route
+    /** Данные финансового взаимодействия. */
+    3: optional domain.InvoicePaymentCashFlow cash_flow
 }
 
 /**
