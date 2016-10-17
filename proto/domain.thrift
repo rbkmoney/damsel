@@ -570,6 +570,7 @@ struct PartyPrototype {
 
 struct ShopPrototype {
     1: required CategoryRef category
+    3: required ShopDetails details
     2: required CurrencyRef currency
 }
 
