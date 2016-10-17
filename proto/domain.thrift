@@ -126,7 +126,9 @@ struct InvoicePaymentRoute {
 }
 
 struct InvoicePaymentCashFlow {
+    /** Полностью вычисленный граф финансовых потоков с проводками всех участников. */
     1: required CashFlow final_cash_flow
+    /** Отображение счетов в графе на номера счетов в системе учёта счетов. */
     2: required map<CashFlowAccount, AccountID> account_map
 }
 
