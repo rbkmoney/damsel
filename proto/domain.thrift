@@ -267,16 +267,16 @@ struct BankAccount {
 
 struct CategoryRef { 1: required ObjectID id }
 
+enum CategoryType {
+    test
+    live
+}
+
 /** Категория продаваемых товаров или услуг. */
 struct Category {
     1: required string name
     2: required string description
     3: optional CategoryType type = CategoryType.test
-}
-
-enum CategoryType {
-    test
-    live
 }
 
 /* Currencies */
