@@ -3,6 +3,7 @@ include "proxy.thrift"
 include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.proxy_provider
+namespace erlang prxprv
 
 typedef base.Opaque Callback
 typedef base.Opaque CallbackResponse
@@ -11,8 +12,37 @@ typedef base.Opaque CallbackResponse
  * Данные платежа, необходимые для обращения к провайдеру.
  */
 struct PaymentInfo {
-    1: required domain.Invoice invoice
-    2: required domain.InvoicePayment payment
+    1: required Shop shop
+    2: required Invoice invoice
+    3: required InvoicePayment payment
+}
+
+struct Shop {
+    1: required domain.ShopID id
+    2: required domain.Category category
+    3: required domain.ShopDetails details
+}
+
+struct Invoice {
+    1: required domain.InvoiceID id
+    2: required base.Timestamp created_at
+    3: required base.Timestamp due
+    4: required string product
+    5: optional string description
+    6: required Cash cost
+}
+
+struct InvoicePayment {
+    1: required domain.InvoicePaymentID id
+    2: required base.Timestamp created_at
+    3: optional domain.TransactionInfo trx
+    4: required domain.Payer payer
+    5: required Cash cost
+}
+
+struct Cash {
+    1: required domain.Amount amount
+    2: required domain.Currency currency
 }
 
 /**
