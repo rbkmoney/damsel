@@ -6,6 +6,10 @@
 
  * Way to specify terminal attributes (more generally, attributes of technical interaction) for a specific merchant.
 
+ * Some proxies need to know provider profit / compensation.
+
+    Expose cash flow?
+
 # Proxies
 
  * In order to acquire foreign customers we need to store a _billing address_.
