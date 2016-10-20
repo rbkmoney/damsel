@@ -317,12 +317,12 @@ union PaymentMethod {
 }
 
 enum BankCardPaymentSystem {
+    visa
+    mastercard
     visaelectron
     maestro
     forbrugsforeningen
     dankort
-    visa
-    mastercard
     amex
     dinersclub
     discover
