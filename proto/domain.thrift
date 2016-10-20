@@ -255,7 +255,7 @@ struct Contractor {
 }
 
 /** Форма юридического лица. */
-union LegalEntity {
+struct LegalEntity {
 }
 
 
@@ -270,7 +270,13 @@ struct CategoryRef { 1: required ObjectID id }
 /** Категория продаваемых товаров или услуг. */
 struct Category {
     1: required string name
-    2: required string description = ""
+    2: required string description
+    3: optional CategoryType type = CategoryType.test
+}
+
+enum CategoryType {
+    test
+    live
 }
 
 /* Currencies */
@@ -470,7 +476,8 @@ struct Terminal {
     4: required CategoryRef category
     6: required CashFlow cash_flow
     7: required TerminalAccountSet accounts
-    8: optional TerminalDescriptor descriptor
+    // TODO
+    // 8: optional TerminalDescriptor descriptor
     9: optional ProxyOptions options = {}
 }
 
@@ -488,16 +495,6 @@ union TerminalSelector {
 struct TerminalPredicate {
     1: required Predicate if_
     2: required TerminalSelector then_
-}
-
-union TerminalDescriptor {
-    1: AcquiringTerminalDescriptor acquiring
-}
-
-struct AcquiringTerminalDescriptor {
-    1: required string terminal_id
-    2: required string merchant_id
-    3: required string mcc
 }
 
 /* Predicates / conditions */
