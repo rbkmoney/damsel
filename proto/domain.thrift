@@ -317,8 +317,18 @@ union PaymentMethod {
 }
 
 enum BankCardPaymentSystem {
+    visaelectron
+    maestro
+    forbrugsforeningen
+    dankort
     visa
     mastercard
+    amex
+    dinersclub
+    discover
+    unionpay
+    jcb
+    nspkmir
 }
 
 union PaymentTool {
