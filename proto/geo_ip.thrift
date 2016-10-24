@@ -22,25 +22,22 @@ struct LocationInfo {
 struct SubdivisionInfo{
         // глубина в иерархии. Чем ниже тем цифра выше. Например 1 - Московская область. 2 - Подольский район.
        1: required i16 level
-       2: optional string subdivision_name;
+       2: required string subdivision_name;
 }
 
-// Информация о данном GeoID
+/**
+* Информация о данном GeoID
+**/
 struct GeoIDInfo{
    1: required GeoID geoname_id;
-   2: string country_name;
-   3: set<SubdivisionInfo> subdivisions;
+   2: required string country_name;
+   3: optional set<SubdivisionInfo> subdivisions;
    4: optional string city_name;
 }
 
 
 /** Исключение, сигнализирующее о том, что невозможно определить местоположение по IP */
 exception CantDetermineLocation {
-}
-/** Исключение, сигнализирующее о том, что в базе нет описания для одного из указанных GeoID */
-exception LocationNotFound {
-    // список идентификаторов данных о которых нет в базе
-    1: list<GeoID> geo_ids
 }
 
 /**
@@ -55,6 +52,18 @@ service GeoIpService {
      * Возвращает текстовое описание места на указанном языке
      * GeoIDs - список geo-id по которым нужно получить информацию.
      * lang - язык ответа. Например: "RU", "ENG"
+     *
+     * если нет данных по такому geo-id - возвращает пустой GeoIDInfo
      **/
-    map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang) throws (1: LocationNotFound ex1)
+    map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang)
+
+    /**
+     * Возвращает наименование географического объект по указанному geoID.
+     * При передаче geoID страны - название страны
+     * При передаче geoID региона - название региона
+     * При передаче geoID города - название города
+     * и т.д.
+     **/
+    map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang)
+
 }

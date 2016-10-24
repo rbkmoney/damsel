@@ -12,3 +12,5 @@
 /_projects/
 /_steps/
 /_temp/
+
+*.iml
