@@ -64,6 +64,6 @@ service GeoIpService {
      * При передаче geoID города - название города
      * и т.д.
      **/
-    map <GeoID, string> getLocationName (1: set<GeoID> geo_ids, 2: string lang)
+    map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang)
 
 }
