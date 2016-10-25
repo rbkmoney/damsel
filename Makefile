@@ -1,4 +1,4 @@
-THRIFT_EXEC = $(shell which thrift)
+THRIFT_EXEC = $(or $(shell which thrift), $(error "`thrift' executable missing"))
 THRIFT_LANGUAGES = erlang java
 THRIFT_OPTIONS_erlang = scoped_typenames
 THRIFT_OPTIONS_java = fullcamel
