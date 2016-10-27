@@ -9,7 +9,7 @@ namespace erlang geo_ip
 **/
 typedef i32 GeoID
 
-const GeoID GEO_ID_NOT_FOUND = -1
+const GeoID GEO_ID_UNKNOWN = -1
 
 struct LocationInfo {
     // GeoID города
@@ -49,7 +49,7 @@ service GeoIpService {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
     * если IP некоректный то кидается InvalidRequest с этим IP
-    * если для IP не найдена страна или город то в LocationInfo, данное поле будет иметь значение GEO_ID_NOT_FOUND
+    * если для IP не найдена страна или город то в LocationInfo, данное поле будет иметь значение GEO_ID_UNKNOWN
     **/
     LocationInfo GetLocation (1: domain.IPAddress ip) throws (1: base.InvalidRequest ex1)
 
@@ -59,23 +59,23 @@ service GeoIpService {
     map <domain.IPAddress, LocationInfo> GetLocations (1: set <domain.IPAddress> ip) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Возвращает структуру с названием места на указанном языке
-     * geo_ids - список geo-id по которым нужно получить информацию.
-     * lang - язык ответа. Например: "RU", "ENG"
-     *
-     * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
-     **/
-    map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang)
+    * Возвращает структуру с названием места на указанном языке
+    * geo_ids - список geo-id по которым нужно получить информацию.
+    * lang - язык ответа. Например: "RU", "ENG"
+    *
+    * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
+    * если язык не поддерживается -> InvalidRequest
+    **/
+    map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
-    /**
-     * Возвращает наименование географического объект по указанному geoID.
+     /**
+     *  логика такая же как и в GetLocationInfo
+     * Возвращает наименование географического объекта по указанному geoID.
      * При передаче geoID страны - название страны
      * При передаче geoID региона - название региона
      * При передаче geoID города - название города
      * и т.д.
-     *
-     * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
      **/
-    map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang)
+     map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
 }
