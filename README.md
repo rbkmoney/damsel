@@ -1,5 +1,7 @@
 # Damsel
 
+[![Build Status](http://ci.rbkmoney.com/buildStatus/icon?job=rbkmoney_private/damsel/master)](http://ci.rbkmoney.com/job/rbkmoney_private/job/damsel/job/master/)
+
 Systemwide protocol collection.
 
 
