@@ -9,6 +9,8 @@ namespace erlang geo_ip
 **/
 typedef i32 GeoID
 
+const GeoID GEO_ID_UNKNOWN = -1
+
 struct LocationInfo {
     // GeoID города
     1: required GeoID city_geo_id;
@@ -46,24 +48,34 @@ exception CantDetermineLocation {
 service GeoIpService {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
+    * если IP некоректный то кидается InvalidRequest с этим IP
+    * если для IP не найдена страна или город то в LocationInfo, данное поле будет иметь значение GEO_ID_UNKNOWN
     **/
-    LocationInfo GetLocation (1: domain.IPAddress ip) throws (1: CantDetermineLocation ex1)
-    /**
-     * Возвращает текстовое описание места на указанном языке
-     * GeoIDs - список geo-id по которым нужно получить информацию.
-     * lang - язык ответа. Например: "RU", "ENG"
-     *
-     * если нет данных по такому geo-id - возвращает пустой GeoIDInfo
-     **/
-    map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang)
+    LocationInfo GetLocation (1: domain.IPAddress ip) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Возвращает наименование географического объект по указанному geoID.
+    *  тоже что и GetLocation, но для списка IP адресов
+    **/
+    map <domain.IPAddress, LocationInfo> GetLocations (1: set <domain.IPAddress> ip) throws (1: base.InvalidRequest ex1)
+
+    /**
+    * Возвращает структуру с названием места на указанном языке
+    * geo_ids - список geo-id по которым нужно получить информацию.
+    * lang - язык ответа. Например: "RU", "ENG"
+    *
+    * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
+    * если язык не поддерживается -> InvalidRequest
+    **/
+    map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
+
+     /**
+     *  логика такая же как и в GetLocationInfo
+     * Возвращает наименование географического объекта по указанному geoID.
      * При передаче geoID страны - название страны
      * При передаче geoID региона - название региона
      * При передаче geoID города - название города
      * и т.д.
      **/
-    map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang)
+     map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
 }
