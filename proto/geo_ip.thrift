@@ -9,6 +9,8 @@ namespace erlang geo_ip
 **/
 typedef i32 GeoID
 
+const GeoID GEO_ID_NOT_FOUND = -1
+
 struct LocationInfo {
     // GeoID города
     1: required GeoID city_geo_id;
@@ -46,14 +48,22 @@ exception CantDetermineLocation {
 service GeoIpService {
     /**
     * Возвращает информацию о предполагаемом местоположении по IP
+    * если IP некоректный то кидается InvalidRequest с этим IP
+    * если для IP не найдена страна или город то в LocationInfo, данное поле будет иметь значение GEO_ID_NOT_FOUND
     **/
-    LocationInfo GetLocation (1: domain.IPAddress ip) throws (1: CantDetermineLocation ex1)
+    LocationInfo GetLocation (1: domain.IPAddress ip) throws (1: base.InvalidRequest ex1)
+
     /**
-     * Возвращает текстовое описание места на указанном языке
-     * GeoIDs - список geo-id по которым нужно получить информацию.
+    *  тоже что и GetLocation, но для списка IP адресов
+    **/
+    map <domain.IPAddress, LocationInfo> GetLocations (1: set <domain.IPAddress> ip) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Возвращает структуру с названием места на указанном языке
+     * geo_ids - список geo-id по которым нужно получить информацию.
      * lang - язык ответа. Например: "RU", "ENG"
      *
-     * если нет данных по такому geo-id - возвращает пустой GeoIDInfo
+     * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
      **/
     map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang)
 
@@ -63,6 +73,8 @@ service GeoIpService {
      * При передаче geoID региона - название региона
      * При передаче geoID города - название города
      * и т.д.
+     *
+     * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
      **/
     map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang)
 
