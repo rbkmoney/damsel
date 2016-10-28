@@ -37,11 +37,6 @@ struct GeoIDInfo{
    4: optional string city_name;
 }
 
-
-/** Исключение, сигнализирующее о том, что невозможно определить местоположение по IP */
-exception CantDetermineLocation {
-}
-
 /**
 * Интерфейс Geo Service для клиентов - "Columbus"
 */
