@@ -20,6 +20,7 @@ typedef binary EventBody;
 typedef list<EventBody> EventBodies;
 
 typedef binary Args
+typedef binary AuxState
 
 /**
  * Произвольное событие, продукт перехода в новое состояние.
@@ -34,12 +35,27 @@ struct Event {
     2: required base.Timestamp  created_at;     /* Время происхождения события */
     4: required EventBody       event_payload;  /* Описание события */
 }
+typedef list<Event> History;
 
 /**
- * Сложное состояние, выраженное в виде упорядоченного набора событий
- * процессора.
+ * Машина — конечный автомат, обрабатываемый State Processor'ом.
  */
-typedef list<Event> History;
+struct Machine {
+    /**
+     * Сложное состояние, выраженное в виде упорядоченного набора событий
+     * процессора.
+     * Список событий упорядочен по моменту фиксирования его в
+     * системе: в начале списка располагаются события, произошедшие
+     * раньше тех, которые располагаются в конце.
+     */
+    1: required History history;
+    /**
+     * Вспомогательное состояние — это некоторый набор данных, характеризующий состояние,
+     * и в отличие от событий не сохраняется в историю, а каждый раз перезаписывается.
+     * Бывает полезен, чтобы сохранить данные между запросами, не добавляя их в историю.
+     */
+    2: optional AuxState  aux_state;
+}
 
 /**
  * Желаемое действие, продукт перехода в новое состояние.
@@ -95,6 +111,15 @@ union Reference {
 }
 
 /**
+ * Единица изменения _машины_.
+ * По сути, это переход в стейте конечного автомата.
+ */
+struct MachineStateChange {
+    1: required AuxState      aux_state; /** Новый вспомогательный стейт автомата */
+    2: required EventBodies   events;    /** Список описаний событий, порождённых в результате обработки */
+}
+
+/**
  * Ответ на внешний вызов.
  */
 typedef binary CallResponse;
@@ -104,19 +129,16 @@ typedef binary CallResponse;
  */
 struct CallArgs {
     1: required Args     arg;      /** Данные вызова */
-    2: required History  history;  /** История автомата */
+    2: required Machine  machine;  /** Данные по машине */
 }
 
 /**
  * Результат обработки внешнего вызова.
  */
 struct CallResult {
-    /** Список описаний событий, порождённых в результате обработки */
-    1: required EventBodies events;
-    /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction action;
-    /** Данные ответа */
-    3: required CallResponse response;
+    1: required CallResponse       response; /** Данные ответа */
+    2: required MachineStateChange change;   /** Изменения _машины_ */
+    3: required ComplexAction      action;   /** Действие, которое необходимо выполнить после обработки */
 }
 
 /**
@@ -159,17 +181,15 @@ struct RepairSignal {
  */
 struct SignalArgs {
     1: required Signal   signal;     /** Поступивший сигнал */
-    2: required History  history;    /** История автомата */
+    2: required Machine  machine;    /** Данные по машине */
 }
 
 /**
  * Результат обработки сигнала.
  */
 struct SignalResult {
-    /** Список описаний событий, порождённых в результате обработки */
-    1: required EventBodies events;
-    /** Действие, которое необходимо выполнить после обработки */
-    2: required ComplexAction action;
+    1: required MachineStateChange change; /** Изменения _машины_ */
+    2: required ComplexAction action;      /** _Действие_, которое необходимо выполнить после обработки _сигнала_ */
 }
 
 /**
@@ -265,14 +285,9 @@ service Automaton {
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
-     * Метод возвращает список событий (историю) машины ref
-     *
-     * Возвращаемый список событий упорядочен по моменту фиксирования его в
-     * системе: в начале списка располагаются события, произошедшие
-     * раньше тех, которые располагаются в конце.
+     * Метод возвращает _машину_ (Machine)
      */
-
-    History GetHistory (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+    Machine GetMachine (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
 
