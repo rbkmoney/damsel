@@ -35,7 +35,16 @@ struct Event {
     2: required base.Timestamp  created_at;     /* Время происхождения события */
     4: required EventBody       event_payload;  /* Описание события */
 }
-typedef list<Event> History;
+
+/**
+ * История — упорядоченный набор эвентов отражающий состояние машины для некоторого диапазона истории.
+ * Например, история машины отражающее изменения с 1 по 10.
+ * HistoryRange в данном случае будет {2, 9, forward}.
+ */
+struct History {
+    1: required list<Event>  events;
+    2: required HistoryRange range;
+}
 
 /**
  * Машина — конечный автомат, обрабатываемый State Processor'ом.
@@ -180,8 +189,8 @@ struct RepairSignal {
  * Набор данных для обработки сигнала.
  */
 struct SignalArgs {
-    1: required Signal   signal;     /** Поступивший сигнал */
-    2: required Machine  machine;    /** Данные по машине */
+    1: required Signal       signal;  /** Поступивший сигнал */
+    2: required Machine      machine; /** Данные по машине */
 }
 
 /**
@@ -275,13 +284,13 @@ service Automaton {
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void Repair (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+    void Repair (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range, 4: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range, 4: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
