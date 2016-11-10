@@ -50,6 +50,12 @@ struct History {
  * Машина — конечный автомат, обрабатываемый State Processor'ом.
  */
 struct Machine {
+    /** Пространство имён, в котором работает машина */
+    1: required base.Namespace ns;
+
+    /** Основной идентификатор машины */
+    2: required base.ID  id;
+
     /**
      * Сложное состояние, выраженное в виде упорядоченного набора событий
      * процессора.
@@ -57,13 +63,24 @@ struct Machine {
      * системе: в начале списка располагаются события, произошедшие
      * раньше тех, которые располагаются в конце.
      */
-    1: required History history;
+
+    3: required History history;
     /**
      * Вспомогательное состояние — это некоторый набор данных, характеризующий состояние,
      * и в отличие от событий не сохраняется в историю, а каждый раз перезаписывается.
      * Бывает полезен, чтобы сохранить данные между запросами, не добавляя их в историю.
      */
-    2: optional AuxState  aux_state;
+
+    4: optional AuxState aux_state;
+}
+
+/**
+ * Дескриптор машины
+ */
+struct MachineDescriptor {
+    1: required base.Namespace ns;
+    2: required Reference      ref;
+    3: required HistoryRange   range;
 }
 
 /**
@@ -166,10 +183,8 @@ union Signal {
  * Сигнал, информирующий о запуске автомата.
  */
 struct InitSignal {
-    /** Основной идентификатор процесса автомата */
-    1: required base.ID  id;
     /** Набор данных для инициализации */
-    2: required binary   arg;
+    1: required binary   arg;
 }
 
 /**
@@ -284,19 +299,19 @@ service Automaton {
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void Repair (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range, 4: Args a)
+    void Repair (1: MachineDescriptor desc, 4: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range, 4: Args a)
+    CallResponse Call (1: MachineDescriptor desc, 4: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Метод возвращает _машину_ (Machine)
      */
-    Machine GetMachine (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+    Machine GetMachine (1: MachineDescriptor desc)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
 
