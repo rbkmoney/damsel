@@ -37,9 +37,9 @@ struct Event {
 }
 
 /**
- * История — упорядоченный набор эвентов отражающий состояние машины для некоторого диапазона истории.
+ * История — упорядоченный набор эвентов отражающая состояние машины для некоторого диапазона истории.
  * Например, история машины отражающее изменения с 1 по 10.
- * HistoryRange в данном случае будет {2, 9, forward}.
+ * HistoryRange в данном случае будет {1, 9, forward}.
  */
 struct History {
     1: required list<Event>  events;
@@ -299,13 +299,13 @@ service Automaton {
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void Repair (1: MachineDescriptor desc, 4: Args a)
+    void Repair (1: MachineDescriptor desc, 2: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse Call (1: MachineDescriptor desc, 4: Args a)
+    CallResponse Call (1: MachineDescriptor desc, 2: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
