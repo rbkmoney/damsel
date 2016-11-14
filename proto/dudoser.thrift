@@ -6,9 +6,24 @@ namespace erlang dudoser
 
 typedef string MessageBody
 typedef string MessageSubject
-typedef string MessageTo
 typedef list<list<byte>> MessageAttachments
 
+struct MessageSender {
+    1:string name
+}
+
+union MessageReceiver {
+    1: SMSReceiver smsReceiver
+    2: MailReceiver mailReceiver
+}
+
+struct SMSReceiver{
+    1: string phone
+}
+
+struct MailReceiver{
+    1: string email
+}
 
 
 //Простой идентификатор шаблона
@@ -63,8 +78,9 @@ service DudoserService {
     **/
     bool send(1:MessageBody message,
                     2:MessageSubject subject,
-                    3:MessageTo to,
-                    4:MessageAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
+                    3:MessageSender sender,
+                    4:list<MessageReceiver> receivers,
+                    5:MessageAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
 
     /**
     * Отправка письма по шаблону.
@@ -72,8 +88,9 @@ service DudoserService {
     **/
     void sendByTemplate(1:base.StringMap parameters,
                         2:MessageTemplateID templateId,
-                        3:MessageTo to,
-                        4:MessageAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3, 4:MessageTemplateNotFound ex4)
+                        3:MessageSender sender,
+                        4:list<MessageReceiver> receivers,
+                        5:MessageAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3, 4:MessageTemplateNotFound ex4)
 
     /**
     * Добавление шаблона без привязки к магазину.
