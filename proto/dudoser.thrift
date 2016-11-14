@@ -52,7 +52,7 @@ exception MailTemplateNotFoundException {
 /**
 * Ошибка, если пытаются отправить слишком длинное письмо или шаблон
 **/
-exception MailDataTooBig {
+exception MailDataTooBigException {
     1: i32 limit;
 }
 
@@ -64,7 +64,7 @@ service DudoserService {
     bool sendMail(1:MailMessageBody message,
                     2:MailSubject subject,
                     3:MailTo to,
-                    4:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailSendException ex2, 3:MailDataTooBig ex3)
+                    4:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailSendException ex2, 3:MailDataTooBigException ex3)
 
     /**
     * Отправка письма по шаблону.
@@ -73,24 +73,24 @@ service DudoserService {
     void sendMailByTemplate(1:base.StringMap parameters,
                         2:MailTemplateID templateId,
                         3:MailTo to,
-                        4:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailSendException ex2, 3:MailDataTooBig ex3, 4:MailTemplateNotFoundException ex4)
+                        4:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailSendException ex2, 3:MailDataTooBigException ex3, 4:MailTemplateNotFoundException ex4)
 
     /**
     * Добавление шаблона без привязки к магазину.
-    * Паараметры - тело шаблона (возможно параметризованное), вложения
+    * Параметры - тело шаблона (возможно параметризованное), вложения
     * Результат - возвращается числовой идентификатор шаблона
     **/
     MailTemplateIDSimple addTemplate(1:MailTemplateBody template,
-                        2:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBig ex2)
+                        2:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBigException ex2)
 
     /**
-    * Добаавление шаблона с привязкой к магазину.
-    * Параметры - тело шаблона, косплексный идентификатор шаблона, описывающий привязку шаблона к магазину, вложения
+    * Добавление шаблона с привязкой к магазину.
+    * Параметры - тело шаблона, комплексный идентификатор шаблона, описывающий привязку шаблона к магазину, вложения
     * Результат - возвращается числовой идентификатор шаблона
     **/
     MailTemplateIDSimple addTemplateForShop(1:MailTemplateBody template,
                             2:MailTemplateID mailTemplateIDForShop,
-                            3:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBig ex2)
+                            3:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBigException ex2)
 
     /**
     * Редактирование существующего шаблона.
@@ -98,7 +98,7 @@ service DudoserService {
     **/
     void updateTemplate(1:MailTemplateID templateId,
                         2:MailTemplateBody template,
-                        3:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBig ex2, 3:MailTemplateNotFoundException ex3)
+                        3:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBigException ex2, 3:MailTemplateNotFoundException ex3)
     /**
     * Удаление шаблона.
     **/
