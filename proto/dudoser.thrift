@@ -98,7 +98,7 @@ service DudoserService {
     **/
     void updateTemplate(1:MailTemplateID templateId,
                         2:MailTemplateBody template,
-                        3:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBig ex3, 3:MailTemplateNotFoundException ex3)
+                        3:MailAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MailDataTooBig ex2, 3:MailTemplateNotFoundException ex3)
     /**
     * Удаление шаблона.
     **/
