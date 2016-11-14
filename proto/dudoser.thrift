@@ -4,26 +4,22 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.dudoser
 namespace erlang dudoser
 
-typedef string MessageBody
-typedef string MessageSubject
 typedef list<list<byte>> MessageAttachments
 
-struct MessageSender {
-    1:string name
+union Message{
+    1:MailMessage mailMessage
+    2:SMSMessage smsMessage
 }
 
-union MessageReceiver {
-    1: SMSReceiver smsReceiver
-    2: MailReceiver mailReceiver
+struct MailMessage {
+    1:string mailBody
+    2:string messageSubject
+    3:string sender
+    4:list<string> receivers
+    5:MessageAttachments messageAttachments
 }
 
-struct SMSReceiver{
-    1: string phone
-}
-
-struct MailReceiver{
-    1: string email
-}
+struct SMSMessage {}
 
 
 //Простой идентификатор шаблона
@@ -36,7 +32,7 @@ typedef i32 MessageTemplateIDSimple
 * shopID - идентификатор магазина
 */
 struct MessageTemplateIDComplex {
-    1: string messageType
+    1: required string messageType
     2: i32 merchantID
     3: domain.ShopID shopID
 }
@@ -76,11 +72,7 @@ service DudoserService {
     * Отправка готового письма.
     * Параметры - тело, тема письма, адрес, вложения
     **/
-    bool send(1:MessageBody message,
-                    2:MessageSubject subject,
-                    3:MessageSender sender,
-                    4:list<MessageReceiver> receivers,
-                    5:MessageAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
+    bool send(1:Message message) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
 
     /**
     * Отправка письма по шаблону.
@@ -88,9 +80,7 @@ service DudoserService {
     **/
     void sendByTemplate(1:base.StringMap parameters,
                         2:MessageTemplateID templateId,
-                        3:MessageSender sender,
-                        4:list<MessageReceiver> receivers,
-                        5:MessageAttachments attachments) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3, 4:MessageTemplateNotFound ex4)
+                        3:Message message) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3, 4:MessageTemplateNotFound ex4)
 
     /**
     * Добавление шаблона без привязки к магазину.
