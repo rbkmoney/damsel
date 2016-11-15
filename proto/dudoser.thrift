@@ -4,7 +4,7 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.dudoser
 namespace erlang dudoser
 
-typedef list<list<byte>> MessageAttachments
+typedef list<binary> MessageAttachments
 
 /**
 * Здесь могут быть и другие виды сообщений, например, SMSMessage, PushMessage
