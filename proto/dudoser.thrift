@@ -6,20 +6,21 @@ namespace erlang dudoser
 
 typedef list<list<byte>> MessageAttachments
 
+/**
+* Здесь могут быть и другие виды сообщений, например, SMSMessage, PushMessage
+**/
 union Message{
     1:MailMessage mailMessage
-    2:SMSMessage smsMessage
 }
 
 struct MailMessage {
-    1:string mailBody
-    2:string messageSubject
-    3:string sender
-    4:list<string> receivers
-    5:MessageAttachments messageAttachments
+    1:optional string mailBody
+    2:optional string subject
+    3:required string from
+    4:required list<string> to
+    5:optional MessageAttachments attachments
 }
 
-struct SMSMessage {}
 
 
 //Простой идентификатор шаблона
