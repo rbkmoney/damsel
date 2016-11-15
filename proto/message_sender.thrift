@@ -16,8 +16,8 @@ union Message{
 struct MailMessage {
     1:optional string mailBody
     2:optional string subject
-    3:required string from
-    4:required list<string> to
+    3:required string fromEmail
+    4:required list<string> toEmail
     5:optional MessageAttachments attachments
 }
 
