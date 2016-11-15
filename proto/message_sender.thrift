@@ -10,14 +10,14 @@ typedef list<binary> MessageAttachments
 * Здесь могут быть и другие виды сообщений, например, SMSMessage, PushMessage
 **/
 union Message{
-    1:MailMessage mailMessage
+    1:MailMessage mail_message
 }
 
 struct MailMessage {
-    1:required string mailBody
+    1:required string mail_body
     2:required string subject
-    3:required string fromEmail
-    4:required list<string> toEmail
+    3:required string from_email
+    4:required list<string> to_email
     5:optional MessageAttachments attachments
 }
 
