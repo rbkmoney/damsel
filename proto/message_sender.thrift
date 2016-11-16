@@ -6,7 +6,7 @@ namespace erlang message_sender
 
 struct MessageAttachment{
     1:string name
-    2:string type
+    2:optional string mime_type
     3:binary data
 }
 
@@ -19,8 +19,13 @@ union Message{
     1:MailMessage mail_message
 }
 
+struct MailBodyType {
+    1:string type
+    2:string data
+}
+
 struct MailMessage {
-    1:required string mail_body
+    1:required MailBodyType mail_body
     2:required string subject
     3:required string from_email
     4:required list<string> to_emails
