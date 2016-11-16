@@ -16,20 +16,20 @@ typedef list<MessageAttachment> MessageAttachments
 * Здесь могут быть и другие виды сообщений, например, SMSMessage, PushMessage
 **/
 union Message{
-    1:MailMessage mail_message
+    1: MailMessage mail_message
 }
 
 struct MailBodyType {
-    1:string type
-    2:string data
+    1: string type
+    2: string data
 }
 
 struct MailMessage {
-    1:required MailBodyType mail_body
-    2:required string subject
-    3:required string from_email
-    4:required list<string> to_emails
-    5:optional MessageAttachments attachments
+    1: required MailBodyType mail_body
+    2: required string subject
+    3: required string from_email
+    4: required list<string> to_emails
+    5: optional MessageAttachments attachments
 }
 
 /**
@@ -51,5 +51,5 @@ service MessageSenderService {
     * Отправка готового письма.
     * Параметр - сообщение
     **/
-    void send(1:Message message) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
+    void send(1: Message message) throws (1: base.InvalidRequest ex1, 2: MessageNotSend ex2, 3: MessageDataTooBig ex3)
 }
