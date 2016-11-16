@@ -35,12 +35,27 @@ struct Event {
     2: required base.Timestamp  created_at;     /* Время происхождения события */
     4: required EventBody       event_payload;  /* Описание события */
 }
+
+/**
+ * История — упорядоченный набор эвентов отражающая состояние машины для некоторого диапазона истории.
+ * Например, есть машина последний эвент у которой 11.
+ * Допустим, известна первая версия (эвент с номером 1, т.е. дельта между версиями 0 и 1)
+ * Нужно получить дельту изменений до 10й версии (т.е. эвенты со 2-го до 10-го).
+ * В таком случае HistoryRange для этой истории будет {1, 9, forward}
+ * (последний известный эвент — 1-й, и нужно 9 эвентов).
+ */
 typedef list<Event> History;
 
 /**
  * Машина — конечный автомат, обрабатываемый State Processor'ом.
  */
 struct Machine {
+    /** Пространство имён, в котором работает машина */
+    1: required base.Namespace ns;
+
+    /** Основной идентификатор машины */
+    2: required base.ID  id;
+
     /**
      * Сложное состояние, выраженное в виде упорядоченного набора событий
      * процессора.
@@ -48,13 +63,28 @@ struct Machine {
      * системе: в начале списка располагаются события, произошедшие
      * раньше тех, которые располагаются в конце.
      */
-    1: required History history;
+    3: required History history;
+
+    /**
+     * Диапазон с которым была запрошена история машины.
+     */
+    4: required HistoryRange history_range;
     /**
      * Вспомогательное состояние — это некоторый набор данных, характеризующий состояние,
      * и в отличие от событий не сохраняется в историю, а каждый раз перезаписывается.
      * Бывает полезен, чтобы сохранить данные между запросами, не добавляя их в историю.
      */
-    2: optional AuxState  aux_state;
+
+    5: optional AuxState aux_state;
+}
+
+/**
+ * Дескриптор машины
+ */
+struct MachineDescriptor {
+    1: required base.Namespace ns;
+    2: required Reference      ref;
+    3: required HistoryRange   range;
 }
 
 /**
@@ -157,10 +187,8 @@ union Signal {
  * Сигнал, информирующий о запуске автомата.
  */
 struct InitSignal {
-    /** Основной идентификатор процесса автомата */
-    1: required base.ID  id;
     /** Набор данных для инициализации */
-    2: required binary   arg;
+    1: required binary   arg;
 }
 
 /**
@@ -180,8 +208,8 @@ struct RepairSignal {
  * Набор данных для обработки сигнала.
  */
 struct SignalArgs {
-    1: required Signal   signal;     /** Поступивший сигнал */
-    2: required Machine  machine;    /** Данные по машине */
+    1: required Signal       signal;  /** Поступивший сигнал */
+    2: required Machine      machine; /** Данные по машине */
 }
 
 /**
@@ -275,19 +303,19 @@ service Automaton {
      * Попытаться перевести определённый процесс автомата из ошибочного
      * состояния в штатное и продолжить его исполнение.
      */
-    void Repair (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+    void Repair (1: MachineDescriptor desc, 2: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Совершить вызов и дождаться на него ответа.
      */
-    CallResponse Call (1: base.Namespace ns, 2: Reference ref, 3: Args a)
+    CallResponse Call (1: MachineDescriptor desc, 2: Args a)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
 
     /**
      * Метод возвращает _машину_ (Machine)
      */
-    Machine GetMachine (1: base.Namespace ns, 2: Reference ref, 3: HistoryRange range)
+    Machine GetMachine (1: MachineDescriptor desc)
          throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: EventNotFound ex3);
 }
 
