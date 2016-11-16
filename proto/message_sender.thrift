@@ -5,51 +5,54 @@ namespace java com.rbkmoney.damsel.message_sender
 namespace erlang message_sender
 
 struct MessageAttachment{
-    1:string name
-    2:optional string mime_type
-    3:binary data
+    1: required string name
+    2: optional string mime_type
+    3: required binary data
 }
 
 typedef list<MessageAttachment> MessageAttachments
 
 /**
-* Здесь могут быть и другие виды сообщений, например, SMSMessage, PushMessage
+* Здесь могут быть и другие виды сообщений, например, MessageSMS, MessagePush
 **/
 union Message{
-    1: MailMessage mail_message
+    1: MessageMail message_mail
 }
 
-struct MailBodyType {
-    1: string type
-    2: string data
+/**
+*
+**/
+struct MailBody {
+    // Content-Type письма (вместе с кодировкой). Например, "text/plain; charset=iso-8859-1"
+    1: optional string content_type
+    2: required string text
 }
 
-struct MailMessage {
-    1: required MailBodyType mail_body
-    2: required string subject
+struct MessageMail {
+    1: required MailBody mail_body
+    2: optional string subject
     3: required string from_email
     4: required list<string> to_emails
     5: optional MessageAttachments attachments
 }
 
 /**
-* Ошибки, возникающие при отправке письма.
+* Ошибки, возникающие при отправке сообщения во внешнюю систему.
 * Например, недоступен почтовый сервер
 **/
 exception MessageNotSend {
 }
 
 /**
-* Ошибка, если пытаются отправить слишком длинное письмо
+* Ошибка, если пытаются отправить слишком длинное сообщение
 **/
 exception MessageDataTooBig {
-    1: i32 limit;
+    1: i32 limit
 }
 
-service MessageSenderService {
+service MessageSender {
     /**
-    * Отправка готового письма.
-    * Параметр - сообщение
+    * Отправка сообщения.
     **/
     void send(1: Message message) throws (1: base.InvalidRequest ex1, 2: MessageNotSend ex2, 3: MessageDataTooBig ex3)
 }
