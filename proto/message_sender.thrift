@@ -4,7 +4,13 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.message_sender
 namespace erlang message_sender
 
-typedef list<binary> MessageAttachments
+struct MessageAttachment{
+    1:string name
+    2:string type
+    3:binary data
+}
+
+typedef list<MessageAttachment> MessageAttachments
 
 /**
 * Здесь могут быть и другие виды сообщений, например, SMSMessage, PushMessage
@@ -17,7 +23,7 @@ struct MailMessage {
     1:required string mail_body
     2:required string subject
     3:required string from_email
-    4:required list<string> to_email
+    4:required list<string> to_emails
     5:optional MessageAttachments attachments
 }
 
@@ -40,5 +46,5 @@ service MessageSenderService {
     * Отправка готового письма.
     * Параметр - сообщение
     **/
-    bool send(1:Message message) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
+    void send(1:Message message) throws (1: base.InvalidRequest ex1, 2:MessageNotSend ex2, 3:MessageDataTooBig ex3)
 }
