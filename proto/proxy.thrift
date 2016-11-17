@@ -9,6 +9,13 @@ namespace java com.rbkmoney.damsel.proxy
  */
 typedef base.Opaque ProxyState
 
+
+/**
+* Запрос/ответ прокси при обработке обратного вызова в рамках сессии.
+*/
+typedef base.Opaque Callback
+typedef base.Opaque CallbackResponse
+
 /**
  * Требование прокси к процессингу, отражающее дальнейший прогресс сессии взаимодействия
  * с третьей стороной.

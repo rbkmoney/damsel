@@ -5,9 +5,6 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
 
-typedef base.Opaque Callback
-typedef base.Opaque CallbackResponse
-
 /**
  * Данные платежа, необходимые для обращения к провайдеру.
  */
@@ -130,7 +127,7 @@ struct ProxyResult {
  * Результат обработки провайдерским прокси обратного вызова в рамках сессии.
  */
 struct CallbackResult {
-    1: required CallbackResponse response
+    1: required proxy.CallbackResponse response
     2: required ProxyResult result
 }
 
@@ -145,7 +142,7 @@ service ProviderProxy {
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии.
      */
-    CallbackResult HandlePaymentCallback (1: Callback callback, 2: Context context)
+    CallbackResult HandlePaymentCallback (1: proxy.Callback callback, 2: Context context)
         throws (1: base.TryLater ex1)
 
 }
@@ -154,6 +151,6 @@ service ProviderProxyHost {
     /**
      * Запрос к процессингу на обработку обратного вызова от провайдера.
      */
-    CallbackResponse ProcessCallback (1: base.Tag tag, 2: Callback callback)
+    proxy.CallbackResponse ProcessCallback (1: base.Tag tag, 2: proxy.Callback callback)
         throws (1: base.InvalidRequest ex1)
 }
