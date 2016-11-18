@@ -1,7 +1,7 @@
 include "base.thrift"
 include "proxy.thrift"
 include "domain.thrift"
-include "preauth_result.thrift"
+include "preauth.thrift"
 
 namespace java com.rbkmoney.damsel.proxy_preauth
 namespace erlang proxy_preauth
@@ -55,15 +55,46 @@ struct InvoicePayment {
 struct Binding {
     1: required string id
     2: optional base.Timestamp timestamp
-    3: optional preauth_result.Params auth_result_params
-    4: optional base.Opaque auth_state
+    3: required base.StringMap extra = []
 }
 
+
+/**
+ * Требование прокси к процессингу, отражающее дальнейший прогресс сессии взаимодействия
+ * с третьей стороной.
+ */
+union Intent {
+    1: FinishIntent finish
+    2: proxy.SleepIntent sleep
+    3: proxy.SuspendIntent suspend
+}
+
+/**
+ * Требование завершить сессию взаимодействия с третьей стороной.
+ */
+struct FinishIntent {
+    1: required FinishStatus status
+}
+
+typedef base.Error ThirdPartyError
+
+/**
+ * Статус, c которым завершилась сессия взаимодействия с третьей стороной.
+ */
+union FinishStatus {
+    /** Успешное завершение взаимодействия. */
+    1: preauth.Status ok
+    /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
+    2: ThirdPartyError failure
+}
+
+/**
+ * Результат взаимодействия с прокси
+ */
 struct ProxyResult {
-    1: required proxy.Intent intent
+    1: required Intent intent
     2: optional proxy.ProxyState next_state
-    3: optional preauth_result.Status auth_status
-    4: optional Binding binding
+    3: optional Binding binding
 }
 
 struct CallbackResult {
