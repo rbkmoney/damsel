@@ -6,15 +6,22 @@ include "preauth_result.thrift"
 namespace java com.rbkmoney.damsel.proxy_preauth
 namespace erlang proxy_preauth
 
+struct Context {
+    1: required Session session
+    2: required PaymentInfo payment
+    3: optional domain.ProxyOptions options = {}
+}
+
+/**
+ * Сессия взаимодействия с предавторизационным прокси
+ */
 struct Session {
     1: optional proxy.ProxyState state
 }
 
-struct Context {
-    1: required Session session
-    2: required PaymentInfo payment
-}
-
+/**
+ * Данные платежа, необходимые для предавторизации платежа.
+ */
 struct PaymentInfo {
     1: required Shop shop
     2: required Invoice invoice
@@ -42,21 +49,21 @@ struct InvoicePayment {
     4: required domain.Cash cost
 }
 
+/**
+ * Связь с третьей стороной - авторизатором платежей
+ */
 struct Binding {
     1: required string id
     2: optional base.Timestamp timestamp
+    3: optional preauth_result.Params auth_result_params
+    4: optional base.Opaque auth_state
 }
 
 struct ProxyResult {
     1: required proxy.Intent intent
     2: optional proxy.ProxyState next_state
-    3: optional AuthResult auth_result
+    3: optional preauth_result.Status auth_status
     4: optional Binding binding
-}
-
-struct AuthResult {
-    1: required preauth_result.Status status
-    2: optional preauth_result.Params params
 }
 
 struct CallbackResult {

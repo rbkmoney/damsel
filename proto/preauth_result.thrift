@@ -4,22 +4,22 @@ namespace java com.rbkmoney.damsel.preauth_result
 namespace erlang preauth_result
 
 union Status {
-    1: optional Grant grant
-    2: optional Deny deny
+    1: optional Granted granted
+    2: optional Denied denied
     3: optional Unavailable unavailable
 }
 
-struct Grant {}
-struct Deny {}
+struct Granted {}
+struct Denied {}
 struct Unavailable {}
 
 union Params{
-    1: optional Params3DSecure Params_3dsecure
+    1: Params3DSecure params_3dsecure
 }
 
 struct Params3DSecure {
-    1: optional byte ECI
-    2: optional string CAVV
-    3: optional string XID
-    4: optional string PARes
+    1: optional byte eci
+    2: optional string cavv
+    3: optional byte cavv_algo
+    4: optional string xid
 }
