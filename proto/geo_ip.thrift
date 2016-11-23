@@ -18,7 +18,7 @@ struct LocationInfo {
     2: required GeoID country_geo_id;
     // Полное описание локации в json
     // подробное описание на сайте https://www.maxmind.com/en/geoip2-city
-    3: required string raw_response;
+    3: optional string raw_response;
 }
 // Информация о регоине
 struct SubdivisionInfo{

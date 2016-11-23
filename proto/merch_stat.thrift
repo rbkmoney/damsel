@@ -4,6 +4,7 @@
 
 include "base.thrift"
 include "domain.thrift"
+include "geo_ip.thrift"
 
 namespace java com.rbkmoney.damsel.merch_stat
 namespace erlang merchstat
@@ -14,14 +15,7 @@ namespace erlang merchstat
 struct StatPayment {
     1: required domain.InvoiceID invoice_id
     2: required domain.InvoicePayment payment
-    3: optional GeoInfo geo_info
-}
-
-/**
-* Гео-данные платежа. Соcтоит из имени города (определяется по IP).
-*/
-struct GeoInfo {
-    1: optional string city_name
+    3: optional geo_ip.LocationInfo location_info
 }
 
 /**
