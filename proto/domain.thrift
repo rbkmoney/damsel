@@ -200,6 +200,15 @@ union ShopLocation {
     1: string url
 }
 
+/* Инспекция платежа */
+
+enum RiskScore {
+    low
+    medium
+    high
+    critical
+}
+
 /* Contracts */
 
 struct ContractorRef { 1: required ObjectID id }
@@ -344,7 +353,7 @@ struct Currency {
 }
 
 union CurrencySelector {
-    1: set<CurrencyPredicate> predicates 
+    1: set<CurrencyPredicate> predicates
     2: set<CurrencyRef> value
 }
 
