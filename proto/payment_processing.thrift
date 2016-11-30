@@ -99,10 +99,11 @@ union InvoiceEvent {
  * Один из возможных вариантов события, порождённого платежом по инвойсу.
  */
 union InvoicePaymentEvent {
-    1: InvoicePaymentStarted       invoice_payment_started
-    2: InvoicePaymentBound         invoice_payment_bound
-    3: InvoicePaymentStatusChanged invoice_payment_status_changed
+    1: InvoicePaymentStarted              invoice_payment_started
+    2: InvoicePaymentBound                invoice_payment_bound
+    3: InvoicePaymentStatusChanged        invoice_payment_status_changed
     4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
+    5: InvoicePaymentChargebackEvent      invoice_payment_chargeback_event
 }
 
 /**
@@ -164,6 +165,20 @@ struct InvoicePaymentInteractionRequested {
     2: required user_interaction.UserInteraction interaction
 }
 
+union InvoicePaymentChargebackEvent {
+    1: InvoicePaymentChargebackPosted        invoice_payment_chargeback_posted
+    2: InvoicePaymentChargebackStatusChanged invoice_payment_chargeback_status_changed
+}
+
+struct InvoicePaymentChargebackPosted {
+    1: required domain.InvoicePaymentChargeback chargeback
+}
+
+struct InvoicePaymentChargebackStatusChanged {
+    1: required domain.InvoicePaymentChargebackID id
+    2: required domain.InvoicePaymentChargebackStatus status
+}
+
 /**
  * Диапазон для выборки событий.
  */
@@ -209,6 +224,12 @@ struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
 
+struct InvoicePaymentChargebackParams {
+    1: required domain.ChargebackReason reason
+    2: required domain.TransactionInfo trx
+    3: optional domain.InvoicePaymentChargebackContext context
+}
+
 // Exceptions
 
 // forward-declared
@@ -218,6 +239,7 @@ exception ShopNotFound {}
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
 exception InvoicePaymentNotFound {}
+exception InvoicePaymentChargebackNotFound {}
 exception EventNotFound {}
 
 exception InvoicePaymentPending {
@@ -226,6 +248,14 @@ exception InvoicePaymentPending {
 
 exception InvalidInvoiceStatus {
     1: required domain.InvoiceStatus status
+}
+
+exception InvalidInvoicePaymentChargebackStatus {
+    1: required domain.InvoicePaymentChargebackStatus status
+}
+
+exception InvoicePaymentChargebackAlreadyPosted {
+    1: required domain.InvoicePaymentChargebackID id
 }
 
 service Invoicing {
@@ -274,6 +304,33 @@ service Invoicing {
             1: InvalidUser ex1,
             2: UserInvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3
+        )
+
+    domain.InvoicePaymentChargebackID PostPaymentChargeback (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id,
+        4: InvoicePaymentChargebackParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentChargebackAlreadyPosted ex4
+        )
+
+    void CancelPaymentChargeback (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id,
+        4: domain.InvoicePaymentChargebackID chargeback_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentChargebackNotFound ex4,
+            5: InvalidInvoicePaymentChargebackStatus ex5
         )
 
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)

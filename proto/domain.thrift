@@ -48,8 +48,10 @@ struct TransactionInfo {
 
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
+typedef base.ID InvoicePaymentChargebackID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
+typedef base.Content InvoicePaymentChargebackContext
 typedef string PaymentSession
 typedef string Fingerprint
 typedef string IPAddress
@@ -106,6 +108,38 @@ union InvoicePaymentStatus {
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
     3: InvoicePaymentFailed failed
+}
+
+struct InvoicePaymentChargeback {
+    1: required InvoicePaymentChargebackID id
+    2: required base.Timestamp created_at
+    3: required InvoicePaymentChargebackStatus status
+    4: required ChargebackReason reason
+    5: required Cash cost
+    6: required TransactionInfo trx
+    7: optional InvoicePaymentChargebackContext context
+}
+
+struct InvoicePaymentChargebackPosted {}
+struct InvoicePaymentChargebackCancelled {}
+
+union InvoicePaymentChargebackStatus {
+    1: InvoicePaymentChargebackPosted posted
+    2: InvoicePaymentChargebackCancelled cancelled
+}
+
+enum ChargebackReason {
+
+    product_not_provided
+    product_unacceptable
+    payment_not_recognized
+    refund_not_processed
+    subscription_cancelled
+
+    payment_fraudulent
+
+    unspecified
+
 }
 
 struct Payer {
