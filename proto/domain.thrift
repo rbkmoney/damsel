@@ -164,7 +164,8 @@ struct Party {
     1: required PartyID id
     2: required Blocking blocking
     3: required Suspension suspension
-    4: required map<ShopID, Shop> shops = []
+    4: required map<ContractId, Contract> contracts = []
+    5: required map<ShopID, Shop> shops = []
 }
 
 struct PartyRef {
@@ -184,9 +185,7 @@ struct Shop {
     4: required ShopDetails details
     5: required CategoryRef category
     6: optional ShopAccountSet accounts
-    7: optional Contractor contractor
-    8: optional ShopContract contract
-    9: required ShopServices services
+    7: optional ContractId contract
 }
 
 struct ShopAccountSet {
@@ -201,50 +200,7 @@ struct ShopDetails {
     3: optional string location
 }
 
-// Service
-//   Payments
-//     Regular
-//     Held
-//     Recurring
-//     ...
-//   ...
-
-struct ShopServices {
-    1: optional PaymentsService payments
-}
-
-struct PaymentsService {
-    1: required DataRevision domain_revision
-    2: required PaymentsServiceTermsRef terms
-}
-
-/* Service terms */
-
-struct PaymentsServiceTermsRef { 1: required ObjectID id }
-
-struct PaymentsServiceTerms {
-    1: optional PaymentMethodSelector payment_methods
-    2: optional AmountLimitSelector limits
-    3: optional CashFlowSelector fees
-    4: optional GuaranteeFundTerms guarantee_fund
-}
-
-struct GuaranteeFundTerms {
-    1: optional AmountLimitSelector limits
-    2: optional CashFlowSelector fees
-}
-
 /* Contracts */
-
-/** Договор между юридическими лицами, в частности между системой и участником. */
-struct ShopContract {
-    1: required string number
-    2: required ContractorRef system_contractor
-    3: required base.Timestamp concluded_at
-    4: required base.Timestamp valid_since
-    5: required base.Timestamp valid_until
-    6: optional base.Timestamp terminated_at
-}
 
 struct ContractorRef { 1: required ObjectID id }
 
@@ -263,6 +219,22 @@ struct LegalEntity {
 struct BankAccount {
 }
 
+typedef base.ID ContractId
+
+/** Договор */
+struct Contract {
+    1: required ContractId id
+    2: required string number
+    3: required ContractorRef system_contractor
+    4: required base.Timestamp concluded_at
+    5: required base.Timestamp valid_since
+    6: required base.Timestamp valid_until
+    7: optional base.Timestamp terminated_at
+    8: required TemplateId template
+    9: required list<Adjustment> adjustments = []
+}
+
+
 /* Categories */
 
 struct CategoryRef { 1: required ObjectID id }
@@ -277,6 +249,66 @@ struct Category {
     1: required string name
     2: required string description
     3: optional CategoryType type = CategoryType.test
+}
+
+typedef base.ID TemplateId
+
+/** Шаблон договора или поправки **/
+struct Template {
+    1: required TemplateId id
+    2: optional TemplateId parent_template
+    3: optional base.Timestamp concluded_at
+    4: optional base.Timestamp valid_since
+    5: optional base.Timestamp valid_until
+    6: required Terms terms
+}
+
+/** Поправки к договору **/
+struct Adjustment {
+    1: required i32 number
+    2: optional base.Timestamp concluded_at
+    3: optional base.Timestamp valid_since
+    4: optional base.Timestamp valid_until
+    5: required Terms terms
+}
+
+
+/** Условия **/
+// Service
+//   Payments
+//     Regular
+//     Held
+//     Recurring
+//     ...
+//   Payouts
+//   ...
+
+struct Terms {
+    1: optional PaymentsService payments
+    2: optional PayoutsService payouts
+}
+
+struct PaymentsService {
+    1: required DataRevision domain_revision
+    2: required PaymentsServiceTermsRef terms
+}
+
+struct PayoutsService {}
+
+/* Service terms */
+
+struct PaymentsServiceTermsRef { 1: required ObjectID id }
+
+struct PaymentsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+    2: optional AmountLimitSelector limits
+    3: optional CashFlowSelector fees
+    4: optional GuaranteeFundTerms guarantee_fund
+}
+
+struct GuaranteeFundTerms {
+    1: optional AmountLimitSelector limits
+    2: optional CashFlowSelector fees
 }
 
 /* Currencies */
@@ -574,7 +606,7 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
     1: required ShopPrototype shop
-    2: required ShopServices default_services
+    2: required Contract default_contract
 }
 
 struct ShopPrototype {
