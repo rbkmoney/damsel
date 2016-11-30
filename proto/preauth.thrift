@@ -26,8 +26,8 @@ union State {
 }
 
 struct State3DSecure {
-    1: optional byte eci
+    1: optional i8 eci
     2: optional string cavv
-    3: optional byte cavv_algo
+    3: optional i8 cavv_algo
     4: optional string xid
 }
