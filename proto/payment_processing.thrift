@@ -320,7 +320,7 @@ struct ContractParams {
     1: required domain.ContractorRef system_contractor
     2: required base.Timestamp valid_since
     3: required base.Timestamp valid_until
-    4: required domain.TemplateId template
+    4: required domain.TemplateRef template
 }
 
 union PartyModification {
@@ -339,7 +339,7 @@ struct ContractModificationUnit {
 
 union ContractModification {
     1: ContractTermination termination
-    2: AdjustmentCreated adjustment
+    2: AdjustmentCreation adjustment
 }
 
 struct ContractTermination {
@@ -347,7 +347,7 @@ struct ContractTermination {
     2: string reason
 }
 
-struct AdjustmentCreated {
+struct AdjustmentCreation {
     1: optional base.Timestamp valid_since
     2: optional base.Timestamp valid_until
     3: required domain.Terms terms
@@ -484,7 +484,7 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult CreateAdjustment (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract, 4: AdjustmentCreated params)
+    ClaimResult CreateAdjustment (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract, 4: AdjustmentCreation params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,

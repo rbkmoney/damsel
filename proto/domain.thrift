@@ -185,7 +185,7 @@ struct Shop {
     4: required ShopDetails details
     5: required CategoryRef category
     6: optional ShopAccountSet accounts
-    7: optional ContractId contract
+    7: optional ContractId contract_id
 }
 
 struct ShopAccountSet {
@@ -230,7 +230,7 @@ struct Contract {
     5: required base.Timestamp valid_since
     6: required base.Timestamp valid_until
     7: optional base.Timestamp terminated_at
-    8: required TemplateId template
+    8: required TemplateRef template
     9: required list<Adjustment> adjustments = []
 }
 
@@ -251,16 +251,15 @@ struct Category {
     3: optional CategoryType type = CategoryType.test
 }
 
-typedef base.ID TemplateId
+struct TemplateRef { 1: required ObjectID id }
 
 /** Шаблон договора или поправки **/
 struct Template {
-    1: required TemplateId id
-    2: optional TemplateId parent_template
-    3: optional base.Timestamp concluded_at
-    4: optional base.Timestamp valid_since
-    5: optional base.Timestamp valid_until
-    6: required Terms terms
+    1: optional TemplateRef parent_template
+    2: optional base.Timestamp concluded_at
+    3: optional base.Timestamp valid_since
+    4: optional base.Timestamp valid_until
+    5: required Terms terms
 }
 
 /** Поправки к договору **/
@@ -285,15 +284,12 @@ struct Adjustment {
 
 struct Terms {
     1: optional PaymentsService payments
-    2: optional PayoutsService payouts
 }
 
 struct PaymentsService {
     1: required DataRevision domain_revision
     2: required PaymentsServiceTermsRef terms
 }
-
-struct PayoutsService {}
 
 /* Service terms */
 
@@ -652,6 +648,10 @@ struct DummyLinkObject {
 
 
 /* Type enumerations */
+struct TemplateObject {
+    1: required TemplateRef ref
+    2: required Template data
+}
 
 struct CategoryObject {
     1: required CategoryRef ref
@@ -715,6 +715,7 @@ struct GlobalsObject {
 
 union Reference {
 
+   15: TemplateRef template
    1 : CategoryRef category
    2 : CurrencyRef currency
    3 : PaymentMethodRef payment_method
@@ -735,6 +736,7 @@ union Reference {
 
 union DomainObject {
 
+    15: TemplateObject template
     1 : CategoryObject category
     2 : CurrencyObject currency
     3 : PaymentMethodObject payment_method
