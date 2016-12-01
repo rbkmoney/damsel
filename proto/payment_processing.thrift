@@ -484,13 +484,12 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id)
+    ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id, 4: string reason)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ContractNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: base.InvalidRequest ex5
+            4: base.InvalidRequest ex4
         )
 
     ClaimResult CreateAdjustment (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id, 4: AdjustmentCreation params)
