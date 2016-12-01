@@ -313,7 +313,7 @@ struct ShopState {
 struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
-    3: required domain.ContractId contract
+    3: required domain.ContractId contract_id
 }
 
 struct ContractParams {
@@ -484,7 +484,16 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult CreateAdjustment (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract, 4: AdjustmentCreation params)
+    ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ContractNotFound ex3,
+            4: InvalidPartyStatus ex4,
+            5: base.InvalidRequest ex5
+        )
+
+    ClaimResult CreateAdjustment (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id, 4: AdjustmentCreation params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
