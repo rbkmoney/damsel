@@ -313,14 +313,12 @@ struct ShopState {
 struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
-    3: required domain.ContractId contract_id
+    3: required domain.ContractID contract_id
 }
 
 struct ContractParams {
-    1: required domain.ContractorRef system_contractor
-    2: required base.Timestamp valid_since
-    3: required base.Timestamp valid_until
-    4: required domain.TemplateRef template
+    1: required domain.Contractor contractor
+    4: required domain.ContractTemplateRef template
 }
 
 union PartyModification {
@@ -333,7 +331,7 @@ union PartyModification {
 }
 
 struct ContractModificationUnit {
-    1: required domain.ContractId id
+    1: required domain.ContractID id
     2: required ContractModification modification
 }
 
@@ -343,14 +341,12 @@ union ContractModification {
 }
 
 struct ContractTermination {
-    1: base.Timestamp terminated_at
-    2: string reason
+    1: required base.Timestamp terminated_at
+    2: optional string reason
 }
 
 struct AdjustmentCreation {
-    1: optional base.Timestamp valid_since
-    2: optional base.Timestamp valid_until
-    3: required domain.Terms terms
+    1: domain.ContractTemplateRef template
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -370,7 +366,7 @@ union ShopModification {
 struct ShopUpdate {
     1: optional domain.CategoryRef category
     2: optional domain.ShopDetails details
-    3: optional domain.ContractId contract_id
+    3: optional domain.ContractID contract_id
 }
 
 typedef base.ID ClaimID
@@ -484,7 +480,7 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id, 4: string reason)
+    ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id, 4: string reason)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
@@ -492,7 +488,12 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult CreateAdjustment (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractId contract_id, 4: AdjustmentCreation params)
+    ClaimResult CreateAdjustment (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: domain.ContractID contract_id,
+        4: AdjustmentCreation params
+    )
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,

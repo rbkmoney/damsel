@@ -164,7 +164,7 @@ struct Party {
     1: required PartyID id
     2: required Blocking blocking
     3: required Suspension suspension
-    4: required map<ContractId, Contract> contracts = []
+    4: required map<ContractID, Contract> contracts = []
     5: required map<ShopID, Shop> shops = []
 }
 
@@ -175,7 +175,7 @@ struct PartyRef {
 
 /* Shops */
 
-typedef string ShopID
+typedef i32 ShopID
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -185,7 +185,7 @@ struct Shop {
     4: required ShopDetails details
     5: required CategoryRef category
     6: optional ShopAccountSet accounts
-    7: optional ContractId contract_id
+    7: required ContractID contract_id
 }
 
 struct ShopAccountSet {
@@ -197,7 +197,11 @@ struct ShopAccountSet {
 struct ShopDetails {
     1: required string name
     2: optional string description
-    3: optional string location
+    3: optional ShopLocation location
+}
+
+union ShopLocation {
+    1: string url
 }
 
 /* Contracts */
@@ -219,19 +223,16 @@ struct LegalEntity {
 struct BankAccount {
 }
 
-typedef base.ID ContractId
+typedef i32 ContractID
 
 /** Договор */
 struct Contract {
-    1: required ContractId id
-    2: required string number
-    3: required ContractorRef system_contractor
-    4: required base.Timestamp concluded_at
-    5: required base.Timestamp valid_since
-    6: required base.Timestamp valid_until
-    7: optional base.Timestamp terminated_at
-    8: required TemplateRef template
-    9: required list<Adjustment> adjustments = []
+    1: required ContractID id
+    3: required Contractor contractor
+    4: optional base.Timestamp concluded_at
+    5: optional base.Timestamp terminated_at
+    6: required ContractTemplateRef template
+    7: required list<Adjustment> adjustments = []
 }
 
 
@@ -251,24 +252,32 @@ struct Category {
     3: optional CategoryType type = CategoryType.test
 }
 
-struct TemplateRef { 1: required ObjectID id }
+struct ContractTemplateRef { 1: required ObjectID id }
 
 /** Шаблон договора или поправки **/
-struct Template {
-    1: optional TemplateRef parent_template
-    2: optional base.Timestamp concluded_at
-    3: optional base.Timestamp valid_since
-    4: optional base.Timestamp valid_until
-    5: required Terms terms
+struct ContractTemplate {
+    1: optional ContractTemplateRef parent_template
+    2: optional Lifetime valid_since
+    3: optional Lifetime valid_until
+    4: required Terms terms
+}
+
+union Lifetime {
+    1: base.Timestamp timestamp
+    2: LifetimePeriod period
+}
+
+struct LifetimePeriod {
+    1: optional i16 years
+    2: optional i16 months
+    3: optional i16 days
 }
 
 /** Поправки к договору **/
 struct Adjustment {
-    1: required i32 number
+    1: required i32 id
     2: optional base.Timestamp concluded_at
-    3: optional base.Timestamp valid_since
-    4: optional base.Timestamp valid_until
-    5: required Terms terms
+    3: required ContractTemplateRef template
 }
 
 
@@ -283,17 +292,10 @@ struct Adjustment {
 //   ...
 
 struct Terms {
-    1: optional PaymentsService payments
-}
-
-struct PaymentsService {
-    1: required DataRevision domain_revision
-    2: required PaymentsServiceTermsRef terms
+    1: optional PaymentsServiceTerms payments
 }
 
 /* Service terms */
-
-struct PaymentsServiceTermsRef { 1: required ObjectID id }
 
 struct PaymentsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
@@ -648,9 +650,9 @@ struct DummyLinkObject {
 
 
 /* Type enumerations */
-struct TemplateObject {
-    1: required TemplateRef ref
-    2: required Template data
+struct ContractTemplateObject {
+    1: required ContractTemplateRef ref
+    2: required ContractTemplate data
 }
 
 struct CategoryObject {
@@ -676,11 +678,6 @@ struct BankCardBINRangeObject {
 struct ContractorObject {
     1: required ContractorRef ref
     2: required Contractor data
-}
-
-struct PaymentsServiceTermsObject {
-    1: required PaymentsServiceTermsRef ref
-    2: required PaymentsServiceTerms data
 }
 
 struct ProviderObject {
@@ -715,13 +712,12 @@ struct GlobalsObject {
 
 union Reference {
 
-   15: TemplateRef template
    1 : CategoryRef category
    2 : CurrencyRef currency
    3 : PaymentMethodRef payment_method
    4 : ContractorRef contractor
    5 : BankCardBINRangeRef bank_card_bin_range
-   6 : PaymentsServiceTermsRef payments_service_terms
+   6 : ContractTemplateRef template
    7 : ProviderRef provider
    8 : TerminalRef terminal
    14: SystemAccountSetRef system_account_set
@@ -736,13 +732,12 @@ union Reference {
 
 union DomainObject {
 
-    15: TemplateObject template
     1 : CategoryObject category
     2 : CurrencyObject currency
     3 : PaymentMethodObject payment_method
     4 : ContractorObject contractor
     5 : BankCardBINRangeObject bank_card_bin_range
-    6 : PaymentsServiceTermsObject payments_service_terms
+    6 : ContractTemplateObject template
     7 : ProviderObject provider
     8 : TerminalObject terminal
     14: SystemAccountSetObject system_account_set
