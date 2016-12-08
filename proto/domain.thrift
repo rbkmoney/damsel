@@ -56,10 +56,9 @@ typedef string IPAddress
 
 struct Invoice {
     1: required InvoiceID id
-    2: required PartyRef owner
+    2: required PartyID owner_id
     3: required ShopID shop_id
     4: required base.Timestamp created_at
-    5: required DataRevision domain_revision
     6: required InvoiceStatus status
     7: required base.Timestamp due
     8: required string product
@@ -166,11 +165,7 @@ struct Party {
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts = []
     5: required map<ShopID, Shop> shops = []
-}
-
-struct PartyRef {
-    1: required PartyID id
-    2: required DataRevision revision
+    6: required map<BankAccountID, BankAccount> external_accounts = []
 }
 
 /* Shops */
@@ -216,11 +211,23 @@ struct Contractor {
 
 /** Форма юридического лица. */
 struct LegalEntity {
+    1: required BankAccountInfo bank_account
 }
 
+typedef i32 BankAccountID
 
 /** Банковский счёт. */
+
+struct BankAccountInfo {
+    1: required string account
+    2: required string bank_name
+    3: required string bank_post_account
+    4: required string bank_bik
+}
+
 struct BankAccount {
+    1: required BankAccountID id
+    2: required BankAccountInfo account
 }
 
 typedef i32 ContractID
@@ -229,6 +236,7 @@ typedef i32 ContractID
 struct Contract {
     1: required ContractID id
     3: required Contractor contractor
+    8: required map<CurrencyRef, BankAccountID> payout_accounts
     4: optional base.Timestamp concluded_at
     5: optional base.Timestamp terminated_at
     6: required ContractTemplateRef template

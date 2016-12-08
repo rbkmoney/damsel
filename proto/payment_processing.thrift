@@ -300,16 +300,6 @@ service Invoicing {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 
-struct PartyState {
-    1: required domain.Party party
-    2: required domain.DataRevision revision
-}
-
-struct ShopState {
-    1: required domain.Shop shop
-    2: required domain.DataRevision revision
-}
-
 struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
@@ -318,7 +308,7 @@ struct ShopParams {
 
 struct ContractParams {
     1: required domain.Contractor contractor
-    4: required domain.ContractTemplateRef template
+    2: required domain.ContractTemplateRef template
 }
 
 union PartyModification {
@@ -328,6 +318,7 @@ union PartyModification {
     4: ContractModificationUnit contract_modification
     5: domain.Shop shop_creation
     6: ShopModificationUnit shop_modification
+    7: domain.BankAccount external_account_creation
 }
 
 struct ContractModificationUnit {
@@ -387,7 +378,7 @@ union ClaimStatus {
 struct ClaimPending {}
 
 struct ClaimAccepted {
-    1: required domain.DataRevision revision
+    1: required base.Timestamp accepted_at
 }
 
 struct ClaimDenied {
@@ -413,17 +404,9 @@ struct ShopAccountState {
 // Events
 
 union PartyEvent {
-    1: PartyCreated party_created
-    2: ClaimCreated claim_created
+    1: domain.Party party_created
+    2: Claim claim_created
     3: ClaimStatusChanged claim_status_changed
-}
-
-struct PartyCreated {
-    1: required PartyState party
-}
-
-struct ClaimCreated {
-    1: required Claim claim
 }
 
 struct ClaimStatusChanged {
@@ -469,7 +452,7 @@ service PartyManagement {
     void Create (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyExists ex2)
 
-    PartyState Get (1: UserInfo user, 2: PartyID party_id)
+    domain.Party Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
     ClaimResult CreateContract (1: UserInfo user, 2: PartyID party_id, 3: ContractParams params)
@@ -478,6 +461,13 @@ service PartyManagement {
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
             4: base.InvalidRequest ex4
+        )
+
+    domain.Contract GetContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ContractNotFound ex3
         )
 
     ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id, 4: string reason)
@@ -510,7 +500,7 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ShopState GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+    domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
