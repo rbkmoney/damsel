@@ -28,5 +28,4 @@ struct InvoicePayment {
 
 service InspectorProxy {
     domain.RiskScore InspectPayment (1: PaymentInfo payment_info)
-        throws (1: base.TryLater ex1)
 }

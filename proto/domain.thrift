@@ -87,6 +87,7 @@ struct InvoicePayment {
     5: required Payer payer
     8: required Cash cost
     6: optional InvoicePaymentContext context
+    9: optional RiskScore risk_score
 }
 
 struct InvoicePaymentPending   {}
@@ -203,10 +204,8 @@ union ShopLocation {
 /* Инспекция платежа */
 
 enum RiskScore {
-    low
-    medium
-    high
-    critical
+    low = 1
+    high = 100
 }
 
 /* Contracts */
@@ -563,16 +562,6 @@ struct Inspector {
     3: required Proxy proxy
 }
 
-union InspectorSelector {
-    1: set<InspectorPredicate> predicates
-    2: set<InspectorRef> value
-}
-
-struct InspectorPredicate {
-    1: required Predicate if_
-    2: required InspectorSelector then_
-}
-
 /**
  * Обобщённый терминал у провайдера.
  *
@@ -622,7 +611,6 @@ union Condition {
     2: CurrencyRef currency_is
     3: PaymentMethodRef payment_method_is
     4: PaymentToolCondition payment_tool
-    5: RiskScore risk_covered
 }
 
 union PaymentToolCondition {
@@ -693,7 +681,7 @@ struct Globals {
     1: required PartyPrototypeRef party_prototype
     2: required ProviderSelector providers
     3: required SystemAccountSetSelector system_accounts
-    4: required InspectorSelector inspectors
+    4: required InspectorRef inspector
 }
 
 /** Dummy (for integrity test purpose) */
