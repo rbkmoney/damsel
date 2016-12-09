@@ -103,6 +103,7 @@ union InvoicePaymentEvent {
     2: InvoicePaymentBound         invoice_payment_bound
     3: InvoicePaymentStatusChanged invoice_payment_status_changed
     4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
+    5: InvoicePaymentInspected invoice_payment_inspected
 }
 
 /**
@@ -162,6 +163,16 @@ struct InvoicePaymentInteractionRequested {
     1: required domain.InvoicePaymentID payment_id
     /** Необходимое взаимодействие */
     2: required user_interaction.UserInteraction interaction
+}
+
+/**
+ * Событие о прохождении инспекции
+ */
+struct InvoicePaymentInspected {
+    /** Идентификатор платежа по инвойсу. */
+    1: required domain.InvoicePaymentID payment_id
+    /** Результат инспекции */
+    2: required domain.RiskScore risk_score
 }
 
 /**

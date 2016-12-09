@@ -88,6 +88,7 @@ struct InvoicePayment {
     5: required Payer payer
     8: required Cash cost
     6: optional InvoicePaymentContext context
+    9: optional RiskScore risk_score
 }
 
 struct InvoicePaymentPending   {}
@@ -234,6 +235,13 @@ struct GuaranteeFundTerms {
     2: optional CashFlowSelector fees
 }
 
+/* Инспекция платежа */
+
+enum RiskScore {
+    low = 1
+    high = 100
+}
+
 /* Contracts */
 
 /** Договор между юридическими лицами, в частности между системой и участником. */
@@ -292,6 +300,28 @@ struct Currency {
     2: required CurrencySymbolicCode symbolic_code
     3: required i16 numeric_code
     4: required i16 exponent
+}
+
+union CurrencySelector {
+    1: set<CurrencyPredicate> predicates
+    2: set<CurrencyRef> value
+}
+
+struct CurrencyPredicate {
+    1: required Predicate if_
+    2: required CurrencySelector then_
+}
+
+/* Категории */
+
+union CategorySelector {
+    1: set<CategoryPredicate> predicates
+    2: set<CategoryRef> value
+}
+
+struct CategoryPredicate {
+    1: required Predicate if_
+    2: required CategorySelector then_
 }
 
 /* Limits */
@@ -473,6 +503,16 @@ struct ProviderPredicate {
 
 struct TerminalRef { 1: required ObjectID id }
 
+/** Inspectors */
+
+struct InspectorRef { 1: required ObjectID id }
+
+struct Inspector {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+}
+
 /**
  * Обобщённый терминал у провайдера.
  *
@@ -489,6 +529,7 @@ struct Terminal {
     // TODO
     // 8: optional TerminalDescriptor descriptor
     9: optional ProxyOptions options = {}
+    10: required RiskScore risk_coverage
 }
 
 struct TerminalAccountSet {
@@ -591,6 +632,7 @@ struct Globals {
     1: required PartyPrototypeRef party_prototype
     2: required ProviderSelector providers
     3: required SystemAccountSetSelector system_accounts
+    4: required InspectorRef inspector
 }
 
 /** Dummy (for integrity test purpose) */
@@ -661,6 +703,11 @@ struct TerminalObject {
     2: required Terminal data
 }
 
+struct InspectorObject {
+    1: required InspectorRef ref
+    2: required Inspector data
+}
+
 struct SystemAccountSetObject {
     1: required SystemAccountSetRef ref
     2: required SystemAccountSet data
@@ -691,6 +738,7 @@ union Reference {
    6 : PaymentsServiceTermsRef payments_service_terms
    7 : ProviderRef provider
    8 : TerminalRef terminal
+   15: InspectorRef inspector
    14: SystemAccountSetRef system_account_set
    9 : ProxyRef proxy
    10: PartyPrototypeRef party_prototype
@@ -711,6 +759,7 @@ union DomainObject {
     6 : PaymentsServiceTermsObject payments_service_terms
     7 : ProviderObject provider
     8 : TerminalObject terminal
+    15: InspectorObject inspector
     14: SystemAccountSetObject system_account_set
     9 : ProxyObject proxy
     10: PartyPrototypeObject party_prototype
