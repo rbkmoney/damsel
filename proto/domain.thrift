@@ -56,10 +56,9 @@ typedef string IPAddress
 
 struct Invoice {
     1: required InvoiceID id
-    2: required PartyRef owner
+    2: required PartyID owner_id
     3: required ShopID shop_id
     4: required base.Timestamp created_at
-    5: required DataRevision domain_revision
     6: required InvoiceStatus status
     7: required base.Timestamp due
     8: required string product
@@ -164,17 +163,14 @@ struct Party {
     1: required PartyID id
     2: required Blocking blocking
     3: required Suspension suspension
-    4: required map<ShopID, Shop> shops = []
-}
-
-struct PartyRef {
-    1: required PartyID id
-    2: required DataRevision revision
+    4: required map<ContractID, Contract> contracts = []
+    5: required map<ShopID, Shop> shops = []
+    6: required map<PayoutAccountID, PayoutAccount> payout_accounts = []
 }
 
 /* Shops */
 
-typedef string ShopID
+typedef i32 ShopID
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -184,9 +180,8 @@ struct Shop {
     4: required ShopDetails details
     5: required CategoryRef category
     6: optional ShopAccountSet accounts
-    7: optional Contractor contractor
-    8: optional ShopContract contract
-    9: required ShopServices services
+    7: required ContractID contract_id
+    8: required PayoutAccountID payout_account_id
 }
 
 struct ShopAccountSet {
@@ -198,53 +193,14 @@ struct ShopAccountSet {
 struct ShopDetails {
     1: required string name
     2: optional string description
-    3: optional string location
+    3: optional ShopLocation location
 }
 
-// Service
-//   Payments
-//     Regular
-//     Held
-//     Recurring
-//     ...
-//   ...
-
-struct ShopServices {
-    1: optional PaymentsService payments
-}
-
-struct PaymentsService {
-    1: required DataRevision domain_revision
-    2: required PaymentsServiceTermsRef terms
-}
-
-/* Service terms */
-
-struct PaymentsServiceTermsRef { 1: required ObjectID id }
-
-struct PaymentsServiceTerms {
-    1: optional PaymentMethodSelector payment_methods
-    2: optional AmountLimitSelector limits
-    3: optional CashFlowSelector fees
-    4: optional GuaranteeFundTerms guarantee_fund
-}
-
-struct GuaranteeFundTerms {
-    1: optional AmountLimitSelector limits
-    2: optional CashFlowSelector fees
+union ShopLocation {
+    1: string url
 }
 
 /* Contracts */
-
-/** Договор между юридическими лицами, в частности между системой и участником. */
-struct ShopContract {
-    1: required string number
-    2: required ContractorRef system_contractor
-    3: required base.Timestamp concluded_at
-    4: required base.Timestamp valid_since
-    5: required base.Timestamp valid_until
-    6: optional base.Timestamp terminated_at
-}
 
 struct ContractorRef { 1: required ObjectID id }
 
@@ -256,12 +212,42 @@ struct Contractor {
 
 /** Форма юридического лица. */
 struct LegalEntity {
+    1: required BankAccount bank_account
 }
-
 
 /** Банковский счёт. */
+
 struct BankAccount {
+    1: required string account
+    2: required string bank_name
+    3: required string bank_post_account
+    4: required string bank_bik
 }
+
+typedef i32 PayoutAccountID
+
+struct PayoutAccount {
+    1: required PayoutAccountID id
+    2: required CurrencyRef currency
+    3: required PayoutMethod method
+}
+
+union PayoutMethod {
+    1: BankAccount bank_account
+}
+
+typedef i32 ContractID
+
+/** Договор */
+struct Contract {
+    1: required ContractID id
+    3: required Contractor contractor
+    4: optional base.Timestamp concluded_at
+    5: optional base.Timestamp terminated_at
+    6: required ContractTemplateRef template
+    7: required list<ContractAdjustment> adjustments = []
+}
+
 
 /* Categories */
 
@@ -279,6 +265,69 @@ struct Category {
     3: optional CategoryType type = CategoryType.test
 }
 
+struct ContractTemplateRef { 1: required ObjectID id }
+
+/** Шаблон договора или поправки **/
+struct ContractTemplate {
+    1: optional ContractTemplateRef parent_template
+    2: optional Lifetime valid_since
+    3: optional Lifetime valid_until
+    4: required Terms terms
+}
+
+union Lifetime {
+    1: base.Timestamp timestamp
+    2: LifetimePeriod period
+}
+
+struct LifetimePeriod {
+    1: optional i16 years
+    2: optional i16 months
+    3: optional i16 days
+}
+
+/** Поправки к договору **/
+struct ContractAdjustment {
+    1: required i32 id
+    2: optional base.Timestamp concluded_at
+    3: required ContractTemplateRef template
+}
+
+
+/** Условия **/
+// Service
+//   Payments
+//     Regular
+//     Held
+//     Recurring
+//     ...
+//   Payouts
+//   ...
+
+struct Terms {
+    1: optional PaymentsServiceTerms payments
+}
+
+/* Service terms */
+
+struct PaymentsServiceTerms {
+    /* Shop level */
+    1: optional CurrencySelector currencies
+    2: optional CategorySelector categories
+    /* Invoice level*/
+    4: optional PaymentMethodSelector payment_methods
+    5: optional AmountLimitSelector amount_limit
+    /* Payment level */
+    6: optional CashFlowSelector fees
+    /* Undefined level */
+    3: optional GuaranteeFundTerms guarantee_fund
+}
+
+struct GuaranteeFundTerms {
+    1: optional AmountLimitSelector limits
+    2: optional CashFlowSelector fees
+}
+
 /* Currencies */
 
 /** Символьный код, уникально идентифицирующий валюту. */
@@ -292,6 +341,28 @@ struct Currency {
     2: required CurrencySymbolicCode symbolic_code
     3: required i16 numeric_code
     4: required i16 exponent
+}
+
+union CurrencySelector {
+    1: set<CurrencyPredicate> predicates 
+    2: set<CurrencyRef> value
+}
+
+struct CurrencyPredicate {
+    1: required Predicate if_
+    2: required CurrencySelector then_
+}
+
+/* Категории */
+
+union CategorySelector {
+    1: set<CategoryPredicate> predicates
+    2: set<CategoryRef> value
+}
+
+struct CategoryPredicate {
+    1: required Predicate if_
+    2: required CategorySelector then_
 }
 
 /* Limits */
@@ -574,7 +645,7 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
     1: required ShopPrototype shop
-    2: required ShopServices default_services
+    2: required Contract default_contract
 }
 
 struct ShopPrototype {
@@ -620,6 +691,10 @@ struct DummyLinkObject {
 
 
 /* Type enumerations */
+struct ContractTemplateObject {
+    1: required ContractTemplateRef ref
+    2: required ContractTemplate data
+}
 
 struct CategoryObject {
     1: required CategoryRef ref
@@ -644,11 +719,6 @@ struct BankCardBINRangeObject {
 struct ContractorObject {
     1: required ContractorRef ref
     2: required Contractor data
-}
-
-struct PaymentsServiceTermsObject {
-    1: required PaymentsServiceTermsRef ref
-    2: required PaymentsServiceTerms data
 }
 
 struct ProviderObject {
@@ -688,7 +758,7 @@ union Reference {
    3 : PaymentMethodRef payment_method
    4 : ContractorRef contractor
    5 : BankCardBINRangeRef bank_card_bin_range
-   6 : PaymentsServiceTermsRef payments_service_terms
+   6 : ContractTemplateRef template
    7 : ProviderRef provider
    8 : TerminalRef terminal
    14: SystemAccountSetRef system_account_set
@@ -708,7 +778,7 @@ union DomainObject {
     3 : PaymentMethodObject payment_method
     4 : ContractorObject contractor
     5 : BankCardBINRangeObject bank_card_bin_range
-    6 : PaymentsServiceTermsObject payments_service_terms
+    6 : ContractTemplateObject template
     7 : ProviderObject provider
     8 : TerminalObject terminal
     14: SystemAccountSetObject system_account_set
