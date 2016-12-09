@@ -314,12 +314,13 @@ struct PaymentsServiceTerms {
     /* Shop level */
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
-    3: optional GuaranteeFundTerms guarantee_fund
     /* Invoice level*/
     4: optional PaymentMethodSelector payment_methods
-    5: optional AmountLimitSelector limits
+    5: optional AmountLimitSelector amount_limit
     /* Payment level */
     6: optional CashFlowSelector fees
+    /* Undefined level */
+    3: optional GuaranteeFundTerms guarantee_fund
 }
 
 struct GuaranteeFundTerms {
@@ -344,7 +345,7 @@ struct Currency {
 
 union CurrencySelector {
     1: set<CurrencyPredicate> predicates 
-    2: CurrencyRef value
+    2: set<CurrencyRef> value
 }
 
 struct CurrencyPredicate {
@@ -356,7 +357,7 @@ struct CurrencyPredicate {
 
 union CategorySelector {
     1: set<CategoryPredicate> predicates
-    2: CategoryRef value
+    2: set<CategoryRef> value
 }
 
 struct CategoryPredicate {
