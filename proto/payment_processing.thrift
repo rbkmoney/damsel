@@ -300,15 +300,25 @@ service Invoicing {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 
+struct PayoutAccountParams {
+    1: required domain.CurrencyRef currency
+    2: required domain.PayoutMethod method
+}
+
 struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
+    4: required map<domain.CurrencyRef, domain.PayoutAccountID> payout_accounts
 }
 
 struct ContractParams {
     1: required domain.Contractor contractor
     2: required domain.ContractTemplateRef template
+}
+
+struct ContractAdjustmentParams {
+    1: required domain.ContractTemplateRef template
 }
 
 union PartyModification {
@@ -318,7 +328,7 @@ union PartyModification {
     4: ContractModificationUnit contract_modification
     5: domain.Shop shop_creation
     6: ShopModificationUnit shop_modification
-    7: domain.BankAccount external_account_creation
+    7: domain.PayoutAccount payout_account_creation
 }
 
 struct ContractModificationUnit {
@@ -328,16 +338,12 @@ struct ContractModificationUnit {
 
 union ContractModification {
     1: ContractTermination termination
-    2: AdjustmentCreation adjustment
+    2: domain.ContractAdjustment adjustment_creation
 }
 
 struct ContractTermination {
     1: required base.Timestamp terminated_at
     2: optional string reason
-}
-
-struct AdjustmentCreation {
-    1: domain.ContractTemplateRef template
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -358,6 +364,7 @@ struct ShopUpdate {
     1: optional domain.CategoryRef category
     2: optional domain.ShopDetails details
     3: optional domain.ContractID contract_id
+    4: optional map<domain.CurrencyRef, domain.PayoutAccountID> payout_accounts
 }
 
 typedef base.ID ClaimID
@@ -478,11 +485,11 @@ service PartyManagement {
             4: base.InvalidRequest ex4
         )
 
-    ClaimResult CreateAdjustment (
+    ClaimResult CreateContractAdjustment (
         1: UserInfo user,
         2: PartyID party_id,
         3: domain.ContractID contract_id,
-        4: AdjustmentCreation params
+        4: ContractAdjustmentParams params
     )
         throws (
             1: InvalidUser ex1,
@@ -490,6 +497,14 @@ service PartyManagement {
             3: ContractNotFound ex3,
             4: InvalidPartyStatus ex4,
             5: base.InvalidRequest ex5
+        )
+
+    ClaimResult CreatePayoutAccount (1: UserInfo user, 2: PartyID party_id, 3: PayoutAccountParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: InvalidPartyStatus ex3,
+            4: base.InvalidRequest ex4
         )
 
     ClaimResult CreateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopParams params)

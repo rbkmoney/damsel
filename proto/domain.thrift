@@ -165,7 +165,7 @@ struct Party {
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts = []
     5: required map<ShopID, Shop> shops = []
-    6: required map<BankAccountID, BankAccount> external_accounts = []
+    6: required map<PayoutAccountID, PayoutAccount> payout_accounts = []
 }
 
 /* Shops */
@@ -181,6 +181,7 @@ struct Shop {
     5: required CategoryRef category
     6: optional ShopAccountSet accounts
     7: required ContractID contract_id
+    8: required map<CurrencyRef, PayoutAccountID> payout_accounts
 }
 
 struct ShopAccountSet {
@@ -211,23 +212,28 @@ struct Contractor {
 
 /** Форма юридического лица. */
 struct LegalEntity {
-    1: required BankAccountInfo bank_account
+    1: required BankAccount bank_account
 }
-
-typedef i32 BankAccountID
 
 /** Банковский счёт. */
 
-struct BankAccountInfo {
+struct BankAccount {
     1: required string account
     2: required string bank_name
     3: required string bank_post_account
     4: required string bank_bik
 }
 
-struct BankAccount {
-    1: required BankAccountID id
-    2: required BankAccountInfo account
+typedef i32 PayoutAccountID
+
+struct PayoutAccount {
+    1: required PayoutAccountID id
+    2: required CurrencyRef currency
+    3: required PayoutMethod method
+}
+
+union PayoutMethod {
+    1: BankAccount bank_account
 }
 
 typedef i32 ContractID
@@ -236,11 +242,10 @@ typedef i32 ContractID
 struct Contract {
     1: required ContractID id
     3: required Contractor contractor
-    8: required map<CurrencyRef, BankAccountID> payout_accounts
     4: optional base.Timestamp concluded_at
     5: optional base.Timestamp terminated_at
     6: required ContractTemplateRef template
-    7: required list<Adjustment> adjustments = []
+    7: required list<ContractAdjustment> adjustments = []
 }
 
 
@@ -282,7 +287,7 @@ struct LifetimePeriod {
 }
 
 /** Поправки к договору **/
-struct Adjustment {
+struct ContractAdjustment {
     1: required i32 id
     2: optional base.Timestamp concluded_at
     3: required ContractTemplateRef template
