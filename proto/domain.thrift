@@ -214,13 +214,24 @@ struct ContractorRef { 1: required ObjectID id }
 
 /** Лицо, выступающее стороной договора. */
 struct Contractor {
-    1: required string registered_name
-    2: required LegalEntity legal_entity
+    1: required Entity entity
+    2: required BankAccount bank_account
 }
 
-/** Форма юридического лица. */
-struct LegalEntity {
-    1: required BankAccount bank_account
+union Entity {
+    1: RussianLegalEntity russian_legal_entity
+}
+
+/** Юридическое лицо-резидент РФ */
+struct RussianLegalEntity {
+    1: required string registered_name
+    2: required string registered_number
+    3: required string inn
+    4: required string actual_address
+    5: required string post_address
+    6: required string representative_position
+    7: required string representative_full_name
+    8: required string representative_document
 }
 
 /** Банковский счёт. */
