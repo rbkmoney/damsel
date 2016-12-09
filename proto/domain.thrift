@@ -181,7 +181,7 @@ struct Shop {
     5: required CategoryRef category
     6: optional ShopAccountSet accounts
     7: required ContractID contract_id
-    8: required map<CurrencyRef, PayoutAccountID> payout_accounts
+    8: required PayoutAccountID payout_account_id
 }
 
 struct ShopAccountSet {
@@ -311,10 +311,15 @@ struct Terms {
 /* Service terms */
 
 struct PaymentsServiceTerms {
-    1: optional PaymentMethodSelector payment_methods
-    2: optional AmountLimitSelector limits
-    3: optional CashFlowSelector fees
-    4: optional GuaranteeFundTerms guarantee_fund
+    /* Shop level */
+    1: optional CurrencySelector currencies
+    2: optional CategorySelector categories
+    3: optional GuaranteeFundTerms guarantee_fund
+    /* Invoice level*/
+    4: optional PaymentMethodSelector payment_methods
+    5: optional AmountLimitSelector limits
+    /* Payment level */
+    6: optional CashFlowSelector fees
 }
 
 struct GuaranteeFundTerms {
@@ -335,6 +340,28 @@ struct Currency {
     2: required CurrencySymbolicCode symbolic_code
     3: required i16 numeric_code
     4: required i16 exponent
+}
+
+union CurrencySelector {
+    1: set<CurrencyPredicate> predicates 
+    2: CurrencyRef value
+}
+
+struct CurrencyPredicate {
+    1: required Predicate if_
+    2: required CurrencySelector then_
+}
+
+/* Категории */
+
+union CategorySelector {
+    1: set<CategoryPredicate> predicates
+    2: CategoryRef value
+}
+
+struct CategoryPredicate {
+    1: required Predicate if_
+    2: required CategorySelector then_
 }
 
 /* Limits */

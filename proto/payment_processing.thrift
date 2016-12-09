@@ -309,7 +309,7 @@ struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
-    4: required map<domain.CurrencyRef, domain.PayoutAccountID> payout_accounts
+    4: required domain.PayoutAccountID payout_account_id
 }
 
 struct ContractParams {
@@ -364,7 +364,7 @@ struct ShopUpdate {
     1: optional domain.CategoryRef category
     2: optional domain.ShopDetails details
     3: optional domain.ContractID contract_id
-    4: optional map<domain.CurrencyRef, domain.PayoutAccountID> payout_accounts
+    4: optional domain.PayoutAccountID payout_account_id
 }
 
 typedef base.ID ClaimID
