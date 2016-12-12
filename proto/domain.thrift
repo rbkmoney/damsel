@@ -260,7 +260,7 @@ typedef i32 ContractID
 /** Договор */
 struct Contract {
     1: required ContractID id
-    3: required Contractor contractor
+    3: optional Contractor contractor
     4: optional base.Timestamp concluded_at
     5: optional base.Timestamp terminated_at
     6: required ContractTemplateRef template
@@ -675,7 +675,7 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
     1: required ShopPrototype shop
-    2: required Contract default_contract
+    2: required ContractTemplateRef test_contract_template
 }
 
 struct ShopPrototype {
@@ -693,6 +693,7 @@ struct Globals {
     2: required ProviderSelector providers
     3: required SystemAccountSetSelector system_accounts
     4: required InspectorRef inspector
+    5: required ContractTemplateRef default_contract_template
 }
 
 /** Dummy (for integrity test purpose) */
