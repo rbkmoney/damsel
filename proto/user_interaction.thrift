@@ -1,5 +1,3 @@
-include "base.thrift"
-
 namespace java com.rbkmoney.damsel.user_interaction
 
 /**

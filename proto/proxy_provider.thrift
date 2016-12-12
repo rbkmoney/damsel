@@ -46,7 +46,7 @@ struct Cash {
  * Данные сессии взаимодействия с провайдерским прокси.
  */
 struct Session {
-    1: required Target target
+    1: required TargetInvoicePaymentStatus target
     2: optional proxy.ProxyState state
 }
 
@@ -57,7 +57,7 @@ struct Session {
  * В момент, когда прокси успешно завершает сессию взаимодействия, процессинг считает,
  * что поставленная цель достигнута, и платёж перешёл в соответствующий статус.
  */
-union Target {
+union TargetInvoicePaymentStatus {
 
     /**
      * Платёж обработан.
@@ -137,20 +137,20 @@ service ProviderProxy {
      * Запрос к прокси на проведение взаимодействия с провайдером в рамках сессии.
      */
     ProxyResult ProcessPayment (1: Context context)
-        throws (1: base.TryLater ex1)
 
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии.
      */
     CallbackResult HandlePaymentCallback (1: proxy.Callback callback, 2: Context context)
-        throws (1: base.TryLater ex1)
 
 }
 
 service ProviderProxyHost {
+
     /**
      * Запрос к процессингу на обработку обратного вызова от провайдера.
      */
     proxy.CallbackResponse ProcessCallback (1: base.Tag tag, 2: proxy.Callback callback)
         throws (1: base.InvalidRequest ex1)
+
 }

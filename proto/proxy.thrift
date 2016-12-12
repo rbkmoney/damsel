@@ -38,9 +38,16 @@ struct FinishIntent {
  */
 union FinishStatus {
     /** Успешное завершение взаимодействия. */
-    1: base.Ok ok
+    1: Success success
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
-    2: base.Error failure
+    2: Failure failure
+}
+
+struct Success {}
+
+struct Failure {
+    1: required string code
+    2: optional string description
 }
 
 /**

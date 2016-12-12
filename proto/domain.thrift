@@ -22,7 +22,12 @@ struct ContactInfo {
     2: optional string email
 }
 
-typedef base.Error OperationError
+struct OperationFailure {
+    /** Уникальный признак ошибки, пригодный для обработки машиной */
+    1: required string code
+    /** Описание ошибки, пригодное для восприятия человеком */
+    2: optional string description
+}
 
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
@@ -33,7 +38,7 @@ typedef i64 AccountID
 /** Денежные средства, состоящие из суммы и валюты. */
 struct Cash {
     1: required Amount amount
-    2: required Currency currency
+    2: required CurrencyRef currency
 }
 
 /* Contractor transactions */
@@ -94,7 +99,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
-struct InvoicePaymentFailed    { 1: required OperationError err }
+struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 /**
  * Статус платежа.
@@ -588,7 +593,7 @@ struct Terminal {
     7: required TerminalAccountSet accounts
     // TODO
     // 8: optional TerminalDescriptor descriptor
-    9: optional ProxyOptions options = {}
+    9: optional ProxyOptions options
     10: required RiskScore risk_coverage
 }
 
@@ -620,12 +625,16 @@ union Predicate {
 union Condition {
     1: CategoryRef category_is
     2: CurrencyRef currency_is
-    3: PaymentMethodRef payment_method_is
-    4: PaymentToolCondition payment_tool
+    3: PaymentToolCondition payment_tool
 }
 
 union PaymentToolCondition {
-    1: BankCardBINRangeRef bank_card_bin_in
+    1: BankCardCondition bank_card
+}
+
+union BankCardCondition {
+    1: BankCardPaymentSystem payment_system_is
+    2: BankCardBINRangeRef bin_in
 }
 
 /* Proxies */
@@ -635,16 +644,15 @@ typedef base.StringMap ProxyOptions
 struct ProxyRef { 1: required ObjectID id }
 
 struct ProxyDefinition {
-    // TODO
-    // 1: required string name
-    // 2: required string description
-    1: required string url
-    2: optional ProxyOptions options = {}
+    1: required string name
+    2: required string description
+    3: required string url
+    4: required ProxyOptions options
 }
 
 struct Proxy {
     1: required ProxyRef ref
-    2: required ProxyOptions additional
+    2: optional ProxyOptions additional
 }
 
 /* System accounts */
