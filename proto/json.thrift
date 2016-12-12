@@ -2,13 +2,13 @@
  * Значение в JSON, согласно [RFC7159](https://tools.ietf.org/html/rfc7159).
  */
 union Value {
-    1: Null n
-    2: bool b
-    3: i64 i
-    4: double f
-    5: string s
-    6: Object o
-    7: Array a
+    1: Null nl
+    2: bool bl
+    3: i32 int      // от -(2^31) до (2^31 - 1)
+    4: double flt
+    5: string str   // UTF-8
+    6: Object obj   // Ключи свойств закодированы в UTF-8
+    7: Array arr
 }
 
 struct Null {}
