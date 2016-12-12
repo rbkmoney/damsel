@@ -23,8 +23,20 @@ struct CardData {
     2: required ExpDate exp_date
     /** Имя держателя */
     3: required string cardholder_name
-    /** Код верификации [0-9]{3,4} */
-    4: required string cvv
+}
+
+struct SessionData {
+    1: SessionState state
+    /** возможно здесь будет ещё что-то */
+}
+
+/** возможные состояния сессии */
+union SessionState {
+    /** состояние в котором хранится код верификации [0-9]{3,4} */
+    1: string cvv
+    /** состояние когда cvv был удалён с помощью вызова InvalidateSession */
+    2: base.Opaque invalidated
+    /** возможно, здесь будет состояние для рекуррентных платежей */
 }
 
 struct PutCardDataResult {
@@ -66,13 +78,16 @@ service Keyring {
 
 /** Интерфейс для приложений */
 service Storage {
-    /** Получить карточные данные без CVV */
+    /** Получить карточные данные */
     CardData GetCardData (1: domain.Token token)
         throws (1: base.NotFound not_found, 2: KeyringLocked locked)
-    /** Получить карточные данные c CVV */
-    CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSession session)
+    /** Получить сессию */
+    SessionData GetSession (1: domain.PaymentSession session)
+        throws (1: base.NotFound not_found, 2: KeyringLocked locked)
+    /** Удалить cvv и оставить данные о состоянии сессии */
+    void InvalidateSession(1: domain.PaymentSession session, 2: base.Opaque custom_data)
         throws (1: base.NotFound not_found, 2: KeyringLocked locked)
     /** Сохранить карточные данные */
-    PutCardDataResult PutCardData (1: CardData card_data)
+    PutCardDataResult PutCardData (1: CardData card_data, 2: string cvv)
         throws (1: InvalidCardData invalid, 2: KeyringLocked locked)
 }
