@@ -325,7 +325,7 @@ struct ShopParams {
 
 struct ContractParams {
     1: required domain.Contractor contractor
-    2: required domain.ContractTemplateRef template
+    2: optional domain.ContractTemplateRef template
 }
 
 struct ContractAdjustmentParams {
