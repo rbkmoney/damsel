@@ -132,7 +132,7 @@ struct InvoicePaymentRoute {
 
 struct InvoicePaymentCashFlow {
     /** Полностью вычисленный граф финансовых потоков с проводками всех участников. */
-    1: required CashFlow final_cash_flow
+    1: required FinalCashFlow final_cash_flow
     /** Отображение счетов в графе на номера счетов в системе учёта счетов. */
     2: required map<CashFlowAccount, AccountID> account_map
 }
@@ -185,14 +185,14 @@ struct Shop {
     3: required Suspension suspension
     4: required ShopDetails details
     5: required CategoryRef category
-    6: optional ShopAccountSet accounts
+    6: optional ShopAccount account
     7: required ContractID contract_id
     8: required PayoutAccountID payout_account_id
 }
 
-struct ShopAccountSet {
+struct ShopAccount {
     1: required CurrencyRef currency
-    2: required AccountID general
+    2: required AccountID settlement
     3: required AccountID guarantee
 }
 
@@ -477,20 +477,67 @@ struct PaymentMethodDecision {
 
 /* Cash flows */
 
-enum CashFlowParty {
-    merchant,
-    provider,
-    system
+/** Счёт в графе финансовых потоков. */
+union CashFlowAccount {
+    1: MerchantCashFlowAccount merchant
+    2: ProviderCashFlowAccount provider
+    3: SystemCashFlowAccount system
+    4: ExternalCashFlowAccount external
 }
 
-// TODO
-//
-// union CashFlowAccount {
-//     1: MerchantAccount merchant_account
-//     2: ProviderAccount provider_account
-//     3: SystemAccount system_account
-// }
-// ...
+enum MerchantCashFlowAccount {
+
+    /**
+     * Расчётный счёт:
+     *  - учёт прибыли по платежам в магазине;
+     *  - учёт возмещённых вознаграждений.
+     */
+    settlement
+
+    /**
+     * Счёт гарантийного депозита:
+     *  - учёт средств для погашения реализовавшихся рисков по мерчанту.
+     */
+    guarantee
+
+}
+
+enum ProviderCashFlowAccount {
+
+    /**
+     * Расчётный счёт:
+     *  - учёт полученных средств;
+     *  - учёт вознаграждений.
+     */
+    settlement
+
+}
+
+enum SystemCashFlowAccount {
+
+    /**
+     * Расчётный счёт:
+     *  - учёт полученных и возмещённых вознаграждений.
+     */
+    settlement
+
+}
+
+enum ExternalCashFlowAccount {
+
+    /**
+     * Счёт поступлений:
+     *  - учёт любых поступлений в систему извне.
+     */
+    income
+
+    /**
+     * Счёт выводов:
+     *  - учёт любых выводов из системы вовне.
+     */
+    outcome
+
+}
 
 enum CashFlowConstant {
     invoice_amount
@@ -504,24 +551,30 @@ typedef map<CashFlowConstant, Amount> CashFlowContext
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
 
-/** Счёт в графе финансовых потоков. */
-struct CashFlowAccount {
-    1: required CashFlowParty party
-    2: required string designation
-}
-
 /** Денежный поток между двумя участниками. */
 struct CashFlowPosting {
     1: required CashFlowAccount source
     2: required CashFlowAccount destination
     3: required CashVolume volume
-    4: optional string details = ""
+    4: optional string details
+}
+
+/** Полностью вычисленный граф финансовых потоков. */
+typedef list<FinalCashFlowPosting> FinalCashFlow
+
+/** Вычисленный денежный поток между двумя участниками. */
+struct FinalCashFlowPosting {
+    1: required CashFlowAccount source
+    2: required CashFlowAccount destination
+    3: required CashVolumeFixed volume
+    4: optional string details
 }
 
 /** Объём финансовой проводки. */
 union CashVolume {
     1: CashVolumeFixed fixed
     2: CashVolumeShare share
+    3: CashVolumeProduct product
 }
 
 /** Объём в абсолютных денежных единицах. */
@@ -533,6 +586,14 @@ struct CashVolumeFixed {
 struct CashVolumeShare {
     1: required base.Rational parts
     2: required CashFlowConstant of
+}
+
+/** Композиция различных объёмов. */
+union CashVolumeProduct {
+    /** Минимальный из полученных объёмов. */
+    1: set<CashVolume> min_of
+    /** Максимальный из полученных объёмов. */
+    2: set<CashVolume> max_of
 }
 
 union CashFlowSelector {
@@ -590,17 +651,16 @@ struct Terminal {
     3: required PaymentMethodRef payment_method
     4: required CategoryRef category
     6: required CashFlow cash_flow
-    7: required TerminalAccountSet accounts
+    7: required TerminalAccount account
     // TODO
     // 8: optional TerminalDescriptor descriptor
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
 }
 
-struct TerminalAccountSet {
-    3: required CurrencyRef currency
-    1: required AccountID receipt
-    2: required AccountID compensation
+struct TerminalAccount {
+    1: required CurrencyRef currency
+    2: required AccountID settlement
 }
 
 union TerminalSelector {
@@ -662,18 +722,46 @@ struct SystemAccountSetRef { 1: required ObjectID id }
 struct SystemAccountSet {
     1: required string name
     2: required string description
-    3: required CurrencyRef currency
-    4: required AccountID compensation
+    3: required map<CurrencyRef, SystemAccount> accounts
+}
+
+struct SystemAccount {
+    1: required AccountID settlement
 }
 
 union SystemAccountSetSelector {
     1: set<SystemAccountSetDecision> decisions
-    2: set<SystemAccountSetRef> value
+    2: SystemAccountSetRef value
 }
 
 struct SystemAccountSetDecision {
     1: required Predicate if_
     2: required SystemAccountSetSelector then_
+}
+
+/* External accounts */
+
+struct ExternalAccountSetRef { 1: required ObjectID id }
+
+struct ExternalAccountSet {
+    1: required string name
+    2: required string description
+    3: required map<CurrencyRef, ExternalAccount> accounts
+}
+
+struct ExternalAccount {
+    1: required AccountID income
+    2: required AccountID outcome
+}
+
+union ExternalAccountSetSelector {
+    1: set<ExternalAccountSetPredicate> predicates
+    2: ExternalAccountSetRef value
+}
+
+struct ExternalAccountSetPredicate {
+    1: required Predicate if_
+    2: required ExternalAccountSetSelector then_
 }
 
 /* Merchant prototype */
@@ -699,7 +787,8 @@ struct GlobalsRef {}
 struct Globals {
     1: required PartyPrototypeRef party_prototype
     2: required ProviderSelector providers
-    3: required SystemAccountSetSelector system_accounts
+    3: required SystemAccountSetSelector system_account_set
+    5: required ExternalAccountSetSelector external_account_set
     4: required InspectorRef inspector
     5: required ContractTemplateRef default_contract_template
 }
@@ -781,6 +870,11 @@ struct SystemAccountSetObject {
     2: required SystemAccountSet data
 }
 
+struct ExternalAccountSetObject {
+    1: required ExternalAccountSetRef ref
+    2: required ExternalAccountSet data
+}
+
 struct ProxyObject {
     1: required ProxyRef ref
     2: required ProxyDefinition data
@@ -798,43 +892,45 @@ struct GlobalsObject {
 
 union Reference {
 
-   1 : CategoryRef category
-   2 : CurrencyRef currency
-   3 : PaymentMethodRef payment_method
-   4 : ContractorRef contractor
-   5 : BankCardBINRangeRef bank_card_bin_range
-   6 : ContractTemplateRef template
-   7 : ProviderRef provider
-   8 : TerminalRef terminal
-   15: InspectorRef inspector
-   14: SystemAccountSetRef system_account_set
-   9 : ProxyRef proxy
-   10: PartyPrototypeRef party_prototype
-   11: GlobalsRef globals
+    1  : CategoryRef             category
+    2  : CurrencyRef             currency
+    3  : PaymentMethodRef        payment_method
+    4  : ContractorRef           contractor
+    5  : BankCardBINRangeRef     bank_card_bin_range
+    6  : ContractTemplateRef     contract_template
+    7  : ProviderRef             provider
+    8  : TerminalRef             terminal
+    15 : InspectorRef            inspector
+    14 : SystemAccountSetRef     system_account_set
+    16 : ExternalAccountSetRef   external_account_set
+    9  : ProxyRef                proxy
+    10 : PartyPrototypeRef       party_prototype
+    11 : GlobalsRef              globals
 
-   12: DummyRef dummy
-   13: DummyLinkRef dummy_link
+    12 : DummyRef                dummy
+    13 : DummyLinkRef            dummy_link
 
 }
 
 union DomainObject {
 
-    1 : CategoryObject category
-    2 : CurrencyObject currency
-    3 : PaymentMethodObject payment_method
-    4 : ContractorObject contractor
-    5 : BankCardBINRangeObject bank_card_bin_range
-    6 : ContractTemplateObject template
-    7 : ProviderObject provider
-    8 : TerminalObject terminal
-    15: InspectorObject inspector
-    14: SystemAccountSetObject system_account_set
-    9 : ProxyObject proxy
-    10: PartyPrototypeObject party_prototype
-    11: GlobalsObject globals
+    1  : CategoryObject             category
+    2  : CurrencyObject             currency
+    3  : PaymentMethodObject        payment_method
+    4  : ContractorObject           contractor
+    5  : BankCardBINRangeObject     bank_card_bin_range
+    6  : ContractTemplateObject     contract_template
+    7  : ProviderObject             provider
+    8  : TerminalObject             terminal
+    15 : InspectorObject            inspector
+    14 : SystemAccountSetObject     system_account_set
+    16 : ExternalAccountSetObject   external_account_set
+    9  : ProxyObject                proxy
+    10 : PartyPrototypeObject       party_prototype
+    11 : GlobalsObject              globals
 
-    12: DummyObject dummy
-    13: DummyLinkObject dummy_link
+    12 : DummyObject                dummy
+    13 : DummyLinkObject            dummy_link
 
 }
 
