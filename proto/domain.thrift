@@ -368,11 +368,11 @@ struct Currency {
 }
 
 union CurrencySelector {
-    1: set<CurrencyPredicate> predicates
+    1: set<CurrencyDecision> decisions
     2: set<CurrencyRef> value
 }
 
-struct CurrencyPredicate {
+struct CurrencyDecision {
     1: required Predicate if_
     2: required CurrencySelector then_
 }
@@ -380,11 +380,11 @@ struct CurrencyPredicate {
 /* Категории */
 
 union CategorySelector {
-    1: set<CategoryPredicate> predicates
+    1: set<CategoryDecision> decisions
     2: set<CategoryRef> value
 }
 
-struct CategoryPredicate {
+struct CategoryDecision {
     1: required Predicate if_
     2: required CategorySelector then_
 }
@@ -402,11 +402,11 @@ union AmountBound {
 }
 
 union AmountLimitSelector {
-    1: set<AmountLimitPredicate> predicates
+    1: set<AmountLimitDecision> decisions
     2: AmountLimit value
 }
 
-struct AmountLimitPredicate {
+struct AmountLimitDecision {
     1: required Predicate if_
     2: required AmountLimitSelector then_
 }
@@ -462,11 +462,11 @@ struct PaymentMethodDefinition {
 }
 
 union PaymentMethodSelector {
-    1: set<PaymentMethodPredicate> predicates
+    1: set<PaymentMethodDecision> decisions
     2: set<PaymentMethodRef> value
 }
 
-struct PaymentMethodPredicate {
+struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
 }
@@ -536,11 +536,11 @@ struct CashVolumeShare {
 }
 
 union CashFlowSelector {
-    1: set<CashFlowPredicate> predicates
+    1: set<CashFlowDecision> decisions
     2: CashFlow value
 }
 
-struct CashFlowPredicate {
+struct CashFlowDecision {
     1: required Predicate if_
     2: required CashFlowSelector then_
 }
@@ -557,11 +557,11 @@ struct Provider {
 }
 
 union ProviderSelector {
-    1: set<ProviderPredicate> predicates
+    1: set<ProviderDecision> decisions
     2: set<ProviderRef> value
 }
 
-struct ProviderPredicate {
+struct ProviderDecision {
     1: required Predicate if_
     2: required ProviderSelector then_
 }
@@ -604,11 +604,11 @@ struct TerminalAccountSet {
 }
 
 union TerminalSelector {
-    1: set<TerminalPredicate> predicates
+    1: set<TerminalDecision> decisions
     2: set<TerminalRef> value
 }
 
-struct TerminalPredicate {
+struct TerminalDecision {
     1: required Predicate if_
     2: required TerminalSelector then_
 }
@@ -667,11 +667,11 @@ struct SystemAccountSet {
 }
 
 union SystemAccountSetSelector {
-    1: set<SystemAccountSetPredicate> predicates
+    1: set<SystemAccountSetDecision> decisions
     2: set<SystemAccountSetRef> value
 }
 
-struct SystemAccountSetPredicate {
+struct SystemAccountSetDecision {
     1: required Predicate if_
     2: required SystemAccountSetSelector then_
 }
