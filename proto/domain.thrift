@@ -340,7 +340,7 @@ struct PaymentsServiceTerms {
     2: optional CategorySelector categories
     /* Invoice level*/
     4: optional PaymentMethodSelector payment_methods
-    5: optional AmountLimitSelector amount_limit
+    5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
     /* Undefined level */
@@ -348,7 +348,7 @@ struct PaymentsServiceTerms {
 }
 
 struct GuaranteeFundTerms {
-    1: optional AmountLimitSelector limits
+    1: optional CashLimitSelector limits
     2: optional CashFlowSelector fees
 }
 
@@ -391,24 +391,24 @@ struct CategoryDecision {
 
 /* Limits */
 
-struct AmountLimit {
-    1: required AmountBound min
-    2: required AmountBound max
+struct CashLimit {
+    1: required CashBound min
+    2: required CashBound max
 }
 
-union AmountBound {
-    1: Amount inclusive
-    2: Amount exclusive
+union CashBound {
+    1: Cash inclusive
+    2: Cash exclusive
 }
 
-union AmountLimitSelector {
-    1: set<AmountLimitDecision> decisions
-    2: AmountLimit value
+union CashLimitSelector {
+    1: set<CashLimitDecision> predicates
+    2: CashLimit value
 }
 
-struct AmountLimitDecision {
+struct CashLimitDecision {
     1: required Predicate if_
-    2: required AmountLimitSelector then_
+    2: required CashLimitSelector then_
 }
 
 /* Payment methods */
@@ -546,7 +546,7 @@ enum CashFlowConstant {
     // TODO
 }
 
-typedef map<CashFlowConstant, Amount> CashFlowContext
+typedef map<CashFlowConstant, Cash> CashFlowContext
 
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
@@ -564,10 +564,15 @@ typedef list<FinalCashFlowPosting> FinalCashFlow
 
 /** Вычисленный денежный поток между двумя участниками. */
 struct FinalCashFlowPosting {
-    1: required CashFlowAccount source
-    2: required CashFlowAccount destination
-    3: required CashVolumeFixed volume
+    1: required FinalCashFlowAccount source
+    2: required FinalCashFlowAccount destination
+    3: required Cash volume
     4: optional string details
+}
+
+struct FinalCashFlowAccount {
+    1: required CashFlowAccount account_type
+    2: required AccountID account_id
 }
 
 /** Объём финансовой проводки. */
@@ -579,7 +584,7 @@ union CashVolume {
 
 /** Объём в абсолютных денежных единицах. */
 struct CashVolumeFixed {
-    1: required Amount amount
+    1: required Cash cash
 }
 
 /** Объём в относительных единицах. */
