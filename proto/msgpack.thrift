@@ -6,8 +6,8 @@ namespace java com.rbkmoney.damsel.msgpack
  */
 union Value {
     1: Nil nl
-    2: bool bl
-    3: i64 int
+    2: bool b
+    3: i64 i
     4: double flt
     5: string str
     6: binary bin
