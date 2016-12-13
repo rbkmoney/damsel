@@ -793,9 +793,9 @@ struct Globals {
     1: required PartyPrototypeRef party_prototype
     2: required ProviderSelector providers
     3: required SystemAccountSetSelector system_account_set
-    5: required ExternalAccountSetSelector external_account_set
-    4: required InspectorRef inspector
-    5: required ContractTemplateRef default_contract_template
+    4: required ExternalAccountSetSelector external_account_set
+    5: required InspectorRef inspector
+    6: required ContractTemplateRef default_contract_template
 }
 
 /** Dummy (for integrity test purpose) */
