@@ -17,9 +17,9 @@ struct ShopOptions {
 
 service ConfigureMerchantProxy {
     ShopOptions createOptions(1: domain.ShopID shop_id, 2: String callback_url)
-    String renderOptions(ShopOptions options)
+    String renderOptions(1: ShopOptions options)
 }
 
 service MerchantProxy {
-    void confirmPayment(ShopOptions options)
+    void confirmPayment(1: ShopOptions options)
 }
