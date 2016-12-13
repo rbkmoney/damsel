@@ -8,7 +8,7 @@ union Value {
     1: Nil nl
     2: bool b
     3: i64 i
-    4: double flt
+    4: double flt   // Кроме ±Inf и NaN
     5: string str
     6: binary bin
     7: Object obj
