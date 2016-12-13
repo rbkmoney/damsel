@@ -130,13 +130,6 @@ struct InvoicePaymentRoute {
     2: required TerminalRef terminal
 }
 
-struct InvoicePaymentCashFlow {
-    /** Полностью вычисленный граф финансовых потоков с проводками всех участников. */
-    1: required FinalCashFlow final_cash_flow
-    /** Отображение счетов в графе на номера счетов в системе учёта счетов. */
-    2: required map<CashFlowAccount, AccountID> account_map
-}
-
 /* Blocking and suspension */
 
 union Blocking {
@@ -559,7 +552,7 @@ struct CashFlowPosting {
     4: optional string details
 }
 
-/** Полностью вычисленный граф финансовых потоков. */
+/** Полностью вычисленный граф финансовых потоков с проводками всех участников. */
 typedef list<FinalCashFlowPosting> FinalCashFlow
 
 /** Вычисленный денежный поток между двумя участниками. */
