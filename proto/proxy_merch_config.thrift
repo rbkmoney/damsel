@@ -14,6 +14,6 @@ struct MerchantProxyConfiguration {
 }
 
 service ConfigureMerchantProxy {
-    domain.ProxyOptions createOptions(1: MerchantProxyParams merchant_proxy_params) throws (1: base.InvalidRequest ex1)
-    MerchantProxyConfiguration renderOptions(1: domain.ProxyOptions proxy_options) throws (1: base.InvalidRequest ex1)
+    domain.ProxyOptions CreateOptions(1: MerchantProxyParams merchant_proxy_params) throws (1: base.InvalidRequest ex1)
+    MerchantProxyConfiguration RenderOptions(1: domain.ProxyOptions proxy_options) throws (1: base.InvalidRequest ex1)
 }
