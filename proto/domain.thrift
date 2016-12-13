@@ -56,16 +56,20 @@ typedef string Fingerprint
 typedef string IPAddress
 
 struct Invoice {
-    1: required InvoiceID id
-    2: required PartyID owner_id
-    3: required ShopID shop_id
-    4: required base.Timestamp created_at
-    6: required InvoiceStatus status
-    7: required base.Timestamp due
-    8: required string product
-    9: optional string description
-   10: required Cash cost
-   11: optional InvoiceContext context
+    1 : required InvoiceID id
+    2 : required PartyID owner_id
+    3 : required ShopID shop_id
+    4 : required base.Timestamp created_at
+    6 : required InvoiceStatus status
+    7 : required InvoiceInfo info
+    8 : required base.Timestamp due
+    10: required Cash cost
+    11: optional InvoiceContext context
+}
+
+struct InvoiceInfo {
+    1: required string product
+    2: optional string description
 }
 
 struct InvoiceUnpaid    {}

@@ -208,12 +208,10 @@ struct EventRange {
 struct InvoiceParams {
     1: required PartyID party_id
     2: required ShopID shop_id
-    3: required string product
-    4: optional string description
-    5: required base.Timestamp due
-    6: required domain.Amount amount
-    7: required domain.CurrencyRef currency
-    8: required domain.InvoiceContext context
+    3: required domain.InvoiceInfo info
+    4: required base.Timestamp due
+    5: required domain.Cash cost
+    6: required domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
