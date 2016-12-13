@@ -7,11 +7,7 @@ include "base.thrift"
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
 
-typedef i32 SchemaRevision
 typedef i64 DataRevision
-
-const SchemaRevision SCHEMA_REVISION = 42
-
 typedef i32 ObjectID
 
 /* Common */
