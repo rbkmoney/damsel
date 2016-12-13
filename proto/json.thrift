@@ -1,3 +1,6 @@
+namespace erlang json
+namespace java com.rbkmoney.damsel.json
+
 /**
  * Значение в JSON, согласно [RFC7159](https://tools.ietf.org/html/rfc7159).
  */
