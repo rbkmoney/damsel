@@ -5,19 +5,19 @@ namespace java com.rbkmoney.damsel.proxy_merch
 namespace erlang proxy_merch
 
 struct Secret {
-    1: required binary pub_key
-    2: required binary priv_key
+    1: required binary pubKey
+    2: required binary privKey
 }
 
 struct ShopOptions {
-    1: required domain.ShopID shop_id
-    2: required String callback_url
+    1: required domain.ShopID shopId
+    2: required string callbackUrl
     3: required Secret secret
 }
 
 service ConfigureMerchantProxy {
-    ShopOptions createOptions(1: domain.ShopID shop_id, 2: String callback_url)
-    String renderOptions(1: ShopOptions options)
+    ShopOptions createOptions(1: domain.ShopID shopId, 2: string callbackUrl)
+    string renderOptions(1: ShopOptions options)
 }
 
 service MerchantProxy {
