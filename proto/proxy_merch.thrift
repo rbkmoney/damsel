@@ -5,8 +5,8 @@ namespace java com.rbkmoney.damsel.proxy_merch
 namespace erlang proxy_merch
 
 struct Secret {
-    1: required binary pubKey
-    2: required binary privKey
+    1: required string pubKey
+    2: required string privKey
 }
 
 struct ShopOptions {
