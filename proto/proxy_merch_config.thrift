@@ -1,8 +1,8 @@
 include "base.thrift"
 include "domain.thrift"
 
-namespace java com.rbkmoney.damsel.proxy_merch
-namespace erlang proxy_merch
+namespace java com.rbkmoney.damsel.proxy_merch_config
+namespace erlang proxy_merch_config
 
 struct MerchantProxyParams {
     1: required string callback_url
