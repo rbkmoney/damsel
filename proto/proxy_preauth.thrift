@@ -76,16 +76,14 @@ struct FinishIntent {
     1: required FinishStatus status
 }
 
-typedef base.Error ThirdPartyError
-
 /**
  * Статус, c которым завершилась сессия взаимодействия с третьей стороной.
  */
 union FinishStatus {
     /** Успешное завершение взаимодействия. */
-    1: preauth.Status ok
+    1: preauth.Status success
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
-    2: ThirdPartyError failure
+    2: proxy.Failure failure
 }
 
 /**
@@ -104,10 +102,7 @@ struct CallbackResult {
 
 service PreauthProxy {
     ProxyResult AuthPayment (1: Context context)
-        throws (1: base.TryLater ex1)
-
     CallbackResult HandleAuthCallback (1: proxy.Callback callback, 2: Context context)
-        throws (1: base.TryLater ex1)
 }
 
 service PreauthProxyHost {

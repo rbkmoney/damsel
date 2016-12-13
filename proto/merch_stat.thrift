@@ -75,21 +75,23 @@ exception DatasetTooBig {
 
 service MerchantStatistics {
     /**
-    * Возвращает набор данных о платежах
-    */
+     * Возвращает набор данных о платежах
+     */
     StatResponse GetPayments(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+
     /**
-    *  Возвращает набор данных об инвойсах
-    */
+     *  Возвращает набор данных об инвойсах
+     */
     StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+
     /**
-    * Возвращает набор данных о покупателях
-    */
+     * Возвращает набор данных о покупателях
+     */
     StatResponse GetCustomers(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
     /**
-    * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
-    */
+     * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
+     */
     StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 }
 

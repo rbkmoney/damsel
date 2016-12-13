@@ -7,11 +7,7 @@ include "base.thrift"
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
 
-typedef i32 SchemaRevision
 typedef i64 DataRevision
-
-const SchemaRevision SCHEMA_REVISION = 42
-
 typedef i32 ObjectID
 
 /* Common */
@@ -22,7 +18,12 @@ struct ContactInfo {
     2: optional string email
 }
 
-typedef base.Error OperationError
+struct OperationFailure {
+    /** Уникальный признак ошибки, пригодный для обработки машиной */
+    1: required string code
+    /** Описание ошибки, пригодное для восприятия человеком */
+    2: optional string description
+}
 
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
@@ -33,7 +34,7 @@ typedef i64 AccountID
 /** Денежные средства, состоящие из суммы и валюты. */
 struct Cash {
     1: required Amount amount
-    2: required Currency currency
+    2: required CurrencyRef currency
 }
 
 /* Contractor transactions */
@@ -55,16 +56,20 @@ typedef string Fingerprint
 typedef string IPAddress
 
 struct Invoice {
-    1: required InvoiceID id
-    2: required PartyID owner_id
-    3: required ShopID shop_id
-    4: required base.Timestamp created_at
-    6: required InvoiceStatus status
-    7: required base.Timestamp due
-    8: required string product
-    9: optional string description
-   10: required Cash cost
-   11: optional InvoiceContext context
+    1 : required InvoiceID id
+    2 : required PartyID owner_id
+    3 : required ShopID shop_id
+    4 : required base.Timestamp created_at
+    6 : required InvoiceStatus status
+    7 : required InvoiceInfo info
+    8 : required base.Timestamp due
+    10: required Cash cost
+    11: optional InvoiceContext context
+}
+
+struct InvoiceInfo {
+    1: required string product
+    2: optional string description
 }
 
 struct InvoiceUnpaid    {}
@@ -94,7 +99,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
-struct InvoicePaymentFailed    { 1: required OperationError err }
+struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 /**
  * Статус платежа.
@@ -363,11 +368,11 @@ struct Currency {
 }
 
 union CurrencySelector {
-    1: set<CurrencyPredicate> predicates
+    1: set<CurrencyDecision> decisions
     2: set<CurrencyRef> value
 }
 
-struct CurrencyPredicate {
+struct CurrencyDecision {
     1: required Predicate if_
     2: required CurrencySelector then_
 }
@@ -375,11 +380,11 @@ struct CurrencyPredicate {
 /* Категории */
 
 union CategorySelector {
-    1: set<CategoryPredicate> predicates
+    1: set<CategoryDecision> decisions
     2: set<CategoryRef> value
 }
 
-struct CategoryPredicate {
+struct CategoryDecision {
     1: required Predicate if_
     2: required CategorySelector then_
 }
@@ -397,11 +402,11 @@ union AmountBound {
 }
 
 union AmountLimitSelector {
-    1: set<AmountLimitPredicate> predicates
+    1: set<AmountLimitDecision> decisions
     2: AmountLimit value
 }
 
-struct AmountLimitPredicate {
+struct AmountLimitDecision {
     1: required Predicate if_
     2: required AmountLimitSelector then_
 }
@@ -457,11 +462,11 @@ struct PaymentMethodDefinition {
 }
 
 union PaymentMethodSelector {
-    1: set<PaymentMethodPredicate> predicates
+    1: set<PaymentMethodDecision> decisions
     2: set<PaymentMethodRef> value
 }
 
-struct PaymentMethodPredicate {
+struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
 }
@@ -531,11 +536,11 @@ struct CashVolumeShare {
 }
 
 union CashFlowSelector {
-    1: set<CashFlowPredicate> predicates
+    1: set<CashFlowDecision> decisions
     2: CashFlow value
 }
 
-struct CashFlowPredicate {
+struct CashFlowDecision {
     1: required Predicate if_
     2: required CashFlowSelector then_
 }
@@ -552,11 +557,11 @@ struct Provider {
 }
 
 union ProviderSelector {
-    1: set<ProviderPredicate> predicates
+    1: set<ProviderDecision> decisions
     2: set<ProviderRef> value
 }
 
-struct ProviderPredicate {
+struct ProviderDecision {
     1: required Predicate if_
     2: required ProviderSelector then_
 }
@@ -588,7 +593,7 @@ struct Terminal {
     7: required TerminalAccountSet accounts
     // TODO
     // 8: optional TerminalDescriptor descriptor
-    9: optional ProxyOptions options = {}
+    9: optional ProxyOptions options
     10: required RiskScore risk_coverage
 }
 
@@ -599,11 +604,11 @@ struct TerminalAccountSet {
 }
 
 union TerminalSelector {
-    1: set<TerminalPredicate> predicates
+    1: set<TerminalDecision> decisions
     2: set<TerminalRef> value
 }
 
-struct TerminalPredicate {
+struct TerminalDecision {
     1: required Predicate if_
     2: required TerminalSelector then_
 }
@@ -620,12 +625,16 @@ union Predicate {
 union Condition {
     1: CategoryRef category_is
     2: CurrencyRef currency_is
-    3: PaymentMethodRef payment_method_is
-    4: PaymentToolCondition payment_tool
+    3: PaymentToolCondition payment_tool
 }
 
 union PaymentToolCondition {
-    1: BankCardBINRangeRef bank_card_bin_in
+    1: BankCardCondition bank_card
+}
+
+union BankCardCondition {
+    1: BankCardPaymentSystem payment_system_is
+    2: BankCardBINRangeRef bin_in
 }
 
 /* Proxies */
@@ -635,16 +644,15 @@ typedef base.StringMap ProxyOptions
 struct ProxyRef { 1: required ObjectID id }
 
 struct ProxyDefinition {
-    // TODO
-    // 1: required string name
-    // 2: required string description
-    1: required string url
-    2: optional ProxyOptions options = {}
+    1: required string name
+    2: required string description
+    3: required string url
+    4: required ProxyOptions options
 }
 
 struct Proxy {
     1: required ProxyRef ref
-    2: required ProxyOptions additional
+    2: optional ProxyOptions additional
 }
 
 /* System accounts */
@@ -659,11 +667,11 @@ struct SystemAccountSet {
 }
 
 union SystemAccountSetSelector {
-    1: set<SystemAccountSetPredicate> predicates
+    1: set<SystemAccountSetDecision> decisions
     2: set<SystemAccountSetRef> value
 }
 
-struct SystemAccountSetPredicate {
+struct SystemAccountSetDecision {
     1: required Predicate if_
     2: required SystemAccountSetSelector then_
 }
