@@ -131,7 +131,7 @@ struct InvoicePaymentStarted {
     /** Выбранный маршрут обработки платежа. */
     2: optional domain.InvoicePaymentRoute route
     /** Данные финансового взаимодействия. */
-    3: optional domain.InvoicePaymentCashFlow cash_flow
+    3: optional domain.FinalCashFlow cash_flow
 }
 
 /**
@@ -366,7 +366,7 @@ union ShopModification {
     1: domain.Blocking blocking
     2: domain.Suspension suspension
     3: ShopUpdate update
-    4: ShopAccountSetCreated accounts_created
+    4: ShopAccountCreated account_created
 }
 
 struct ShopUpdate {
@@ -410,7 +410,7 @@ struct ClaimResult {
     2: required ClaimStatus status
 }
 
-struct ShopAccountState {
+struct AccountState {
     1: required domain.AccountID account_id
     2: required domain.Amount own_amount
     3: required domain.Amount available_amount
@@ -430,8 +430,8 @@ struct ClaimStatusChanged {
     2: required ClaimStatus status
 }
 
-struct ShopAccountSetCreated {
-    1: required domain.ShopAccountSet accounts
+struct ShopAccountCreated {
+    1: required domain.ShopAccount account
 }
 
 // Exceptions
@@ -610,11 +610,12 @@ service PartyManagement {
 
     /* Accounts */
 
-    ShopAccountState GetShopAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
+    domain.ShopAccount GetShopAccount (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountSetNotFound ex4)
+
+    AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
 
-    domain.ShopAccountSet GetShopAccountSet (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountSetNotFound ex4)
 }
 
 /* Event sink service definitions */
