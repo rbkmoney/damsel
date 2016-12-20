@@ -65,7 +65,13 @@ union InvoiceEvent {
  * Событие об изменении статуса инвойса.
  */
 struct InvoiceStatusChanged {
-    1: required domain.InvoiceStatus status
+    1: required InvoiceStatus status
+}
+
+struct InvoicePaid {}
+
+union InvoiceStatus {
+    1: InvoicePaid paid
 }
 
 /**
