@@ -35,7 +35,9 @@ struct InvoicePayment {
 }
 
 struct Invoice {
-    1: optional domain.InvoiceContext context
+    1 : required domain.InvoiceID id
+    2 : required base.Timestamp created_at
+    3 : required base.Timestamp due
 }
 
 service InspectorProxy {
