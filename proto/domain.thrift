@@ -61,13 +61,13 @@ struct Invoice {
     3 : required ShopID shop_id
     4 : required base.Timestamp created_at
     6 : required InvoiceStatus status
-    7 : required InvoiceInfo info
+    7 : required InvoiceDetails details
     8 : required base.Timestamp due
     10: required Cash cost
     11: optional InvoiceContext context
 }
 
-struct InvoiceInfo {
+struct InvoiceDetails {
     1: required string product
     2: optional string description
 }

@@ -24,8 +24,7 @@ struct Invoice {
     1: required domain.InvoiceID id
     2: required base.Timestamp created_at
     3: required base.Timestamp due
-    4: required string product
-    5: optional string description
+    7: required domain.InvoiceDetails details
     6: required Cash cost
 }
 
