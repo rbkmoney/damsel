@@ -4,6 +4,13 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.proxy_inspector
 namespace erlang proxy_inspector
 
+/**
+ * Набор данных для взаимодействия с инспекторским прокси.
+ */
+struct Context {
+    1: required PaymentInfo payment
+    2: optional domain.ProxyOptions options = {}
+}
 
 /**
  * Данные платежа, необходимые для инспекции платежа.
@@ -11,6 +18,7 @@ namespace erlang proxy_inspector
 struct PaymentInfo {
     1: required Shop shop
     2: required InvoicePayment payment
+    3: required Invoice invoice
 }
 
 struct Shop {
@@ -26,6 +34,10 @@ struct InvoicePayment {
     4: required domain.Cash cost
 }
 
+struct Invoice {
+    1: optional domain.InvoiceContext context
+}
+
 service InspectorProxy {
-    domain.RiskScore InspectPayment (1: PaymentInfo payment_info)
+    domain.RiskScore InspectPayment (1: Context context)
 }
