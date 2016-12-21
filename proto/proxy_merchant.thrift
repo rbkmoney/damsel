@@ -101,7 +101,10 @@ struct FinishIntent {}
  * Требование прервать на определённое время сессию взаимодействия, с намерением продолжить
  * её потом.
  */
-typedef proxy.SleepIntent SleepIntent
+struct SleepIntent {
+    /** Таймер, определяющий когда следует продолжить взаимодействие. */
+    1: required base.Timer timer
+}
 
 service MerchantProxy {
 
@@ -109,5 +112,6 @@ service MerchantProxy {
      * Запрос к прокси на обработку события об изменении состояния инвойса.
      */
     ProxyResult HandleInvoiceEvent (1: Context context)
+        throws (1: base.InvalidRequest ex1)
 
 }
