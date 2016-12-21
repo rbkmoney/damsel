@@ -297,7 +297,7 @@ service Automaton {
      * Если машина с таким ID уже существует, то кинется иключение MachineAlreadyExists.
      */
     void Start (1: base.Namespace ns, 2: base.ID id, 3: Args a)
-         throws (1: NamespaceNotFound ex1, 2: MachineAlreadyExists ex2);
+         throws (1: NamespaceNotFound ex1, 2: MachineAlreadyExists ex2, 3: MachineFailed ex3);
 
     /**
      * Попытаться перевести определённый процесс автомата из ошибочного
