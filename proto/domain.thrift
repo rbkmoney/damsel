@@ -395,7 +395,7 @@ union CashBound {
 }
 
 union CashLimitSelector {
-    1: set<CashLimitDecision> predicates
+    1: set<CashLimitDecision> decisions
     2: CashLimit value
 }
 
@@ -753,11 +753,11 @@ struct ExternalAccount {
 }
 
 union ExternalAccountSetSelector {
-    1: set<ExternalAccountSetPredicate> predicates
+    1: set<ExternalAccountSetDecision> decisions
     2: ExternalAccountSetRef value
 }
 
-struct ExternalAccountSetPredicate {
+struct ExternalAccountSetDecision {
     1: required Predicate if_
     2: required ExternalAccountSetSelector then_
 }
