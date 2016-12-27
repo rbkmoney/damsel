@@ -181,6 +181,7 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: required PayoutAccountID payout_account_id
+    9: optional Proxy proxy
 }
 
 struct ShopAccount {
@@ -710,7 +711,7 @@ struct ProxyDefinition {
 
 struct Proxy {
     1: required ProxyRef ref
-    2: optional ProxyOptions additional
+    2: required ProxyOptions additional
 }
 
 /* System accounts */
