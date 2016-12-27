@@ -42,4 +42,5 @@ struct Invoice {
 
 service InspectorProxy {
     domain.RiskScore InspectPayment (1: Context context)
+        throws (1: base.InvalidRequest ex1)
 }
