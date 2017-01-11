@@ -459,7 +459,7 @@ exception InvalidShopStatus {
 
 exception AccountNotFound {}
 
-exception AccountSetNotFound {}
+exception ShopAccountNotFound {}
 
 // Service
 
@@ -611,7 +611,7 @@ service PartyManagement {
     /* Accounts */
 
     domain.ShopAccount GetShopAccount (1: UserInfo user, 2: PartyID party_id, 3: ShopID shop_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: AccountSetNotFound ex4)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ShopAccountNotFound ex4)
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
