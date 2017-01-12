@@ -15,7 +15,18 @@ typedef base.ID UserID
 
 struct UserInfo {
     1: required UserID id
+    2: required UserType type
 }
+
+/* Временная замена ролям пользователей для разграничения доступа в HG */
+union UserType {
+    1: InternalUser internal
+    2: ExternalUser external
+}
+
+struct InternalUser {}
+
+struct ExternalUser {}
 
 /* Invoices */
 
