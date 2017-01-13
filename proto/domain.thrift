@@ -790,6 +790,7 @@ struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     5: required InspectorRef inspector
     6: required ContractTemplateRef default_contract_template
+    7: required ProxyRef common_merchant_proxy
 }
 
 /** Dummy (for integrity test purpose) */
