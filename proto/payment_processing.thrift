@@ -388,7 +388,14 @@ struct ShopUpdate {
     2: optional domain.ShopDetails details
     3: optional domain.ContractID contract_id
     4: optional domain.PayoutAccountID payout_account_id
+    5: optional domain.Proxy proxy
 }
+
+struct ShopAccountCreated {
+    1: required domain.ShopAccount account
+}
+
+// Claims
 
 typedef base.ID ClaimID
 
@@ -442,10 +449,6 @@ union PartyEvent {
 struct ClaimStatusChanged {
     1: required ClaimID id
     2: required ClaimStatus status
-}
-
-struct ShopAccountCreated {
-    1: required domain.ShopAccount account
 }
 
 // Exceptions
