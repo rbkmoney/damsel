@@ -187,7 +187,10 @@ struct Shop {
 struct ShopAccount {
     1: required CurrencyRef currency
     2: required AccountID settlement
+    /* Гарантийный аккаунт */
     3: required AccountID guarantee
+    /* Аккаунт на который выводятся деньги из системы */
+    4: required AccountID payout
 }
 
 struct ShopDetails {
@@ -233,13 +236,26 @@ struct RussianLegalEntity {
     8: required string representative_document
 }
 
-/** Банковский счёт. */
-
+/** Банковский счёт */
 struct BankAccount {
+    /* Номер расчетного счета */
     1: required string account
+    /* Наименование банка */
     2: required string bank_name
+    /* Кор/счет банка */
     3: required string bank_post_account
+    /* БИК банка */
     4: required string bank_bik
+    /* Идентификатор счета принятых эквайером платажей в АБС НКО */
+    5: required string nco_acquire_account
+    /* Идентификатор транзитного счета в АБС НКО */
+    6: required string nco_transit_account
+    /* Идентификатор счета дохода НКО*/
+    7: required string nco_income_account
+    /* Идентификатор счета расходов НКО*/
+    8: required string nco_outcome_account
+    /* Идентификатор счета обязательств перед мерчантами в НКО */
+    9: required string nco_merchant_liabilities_account
 }
 
 typedef i32 PayoutAccountID
