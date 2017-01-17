@@ -85,14 +85,15 @@ union InvoiceStatus {
 }
 
 struct InvoicePayment {
-    1: required InvoicePaymentID id
-    2: required base.Timestamp created_at
-    3: required InvoicePaymentStatus status
-    4: optional TransactionInfo trx
-    5: required Payer payer
-    8: required Cash cost
-    6: optional InvoicePaymentContext context
-    9: optional RiskScore risk_score
+    1:  required InvoicePaymentID id
+    2:  required base.Timestamp created_at
+    10: required DataRevision domain_revision
+    3:  required InvoicePaymentStatus status
+    4:  optional TransactionInfo trx
+    5:  required Payer payer
+    8:  required Cash cost
+    6:  optional InvoicePaymentContext context
+    9:  optional RiskScore risk_score
 }
 
 struct InvoicePaymentPending   {}
@@ -165,7 +166,6 @@ struct Party {
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts = []
     5: required map<ShopID, Shop> shops = []
-    6: required map<PayoutAccountID, PayoutAccount> payout_accounts = []
 }
 
 struct PartyContactInfo {
@@ -230,13 +230,21 @@ union Entity {
 
 /** Юридическое лицо-резидент РФ */
 struct RussianLegalEntity {
+    /* Наименование */
     1: required string registered_name
+    /* ОГРН */
     2: required string registered_number
+    /* ИНН/КПП */
     3: required string inn
+    /* Адрес места нахождения */
     4: required string actual_address
+    /* Адрес для отправки корреспонденции (почтовый) */
     5: required string post_address
+    /* Наименование должности ЕИО/представителя */
     6: required string representative_position
+    /* ФИО ЕИО/представителя */
     7: required string representative_full_name
+    /* Наименование документа, на основании которого действует ЕИО/представитель */
     8: required string representative_document
 }
 
@@ -254,10 +262,10 @@ typedef i32 PayoutAccountID
 struct PayoutAccount {
     1: required PayoutAccountID id
     2: required CurrencyRef currency
-    3: required PayoutMethod method
+    3: required PayoutTool payout_tool
 }
 
-union PayoutMethod {
+union PayoutTool {
     1: BankAccount bank_account
 }
 
@@ -268,11 +276,18 @@ struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
     4: optional base.Timestamp concluded_at
-    5: optional base.Timestamp terminated_at
+    5: required ContractTerminationStatus termination_status
     6: required ContractTemplateRef template
     7: required list<ContractAdjustment> adjustments = []
+    8: required list<PayoutAccount> payout_accounts = []
 }
 
+struct Terminated { 1: required base.Timestamp terminated_at }
+
+union ContractTerminationStatus {
+    1: Active active
+    2: Terminated terminated
+}
 
 /* Categories */
 
@@ -297,7 +312,7 @@ struct ContractTemplate {
     1: optional ContractTemplateRef parent_template
     2: optional Lifetime valid_since
     3: optional Lifetime valid_until
-    4: required Terms terms
+    4: required TermsSet terms_set
 }
 
 union Lifetime {
@@ -318,7 +333,6 @@ struct ContractAdjustment {
     3: required ContractTemplateRef template
 }
 
-
 /** Условия **/
 // Service
 //   Payments
@@ -331,6 +345,16 @@ struct ContractAdjustment {
 
 struct Terms {
     1: optional PaymentsServiceTerms payments
+}
+
+struct TermsUnit {
+    1: required base.Timestamp start_time
+    2: optional base.Timestamp end_time
+    3: required Terms terms
+}
+
+struct TermsSet {
+    1: required list<TermsUnit> terms_units
 }
 
 /* Service terms */
@@ -780,6 +804,7 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 struct PartyPrototype {
     1: required ShopPrototype shop
     2: required ContractTemplateRef test_contract_template
+    3: required PayoutAccount test_payout_account
 }
 
 struct ShopPrototype {
