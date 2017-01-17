@@ -238,8 +238,11 @@ struct RussianLegalEntity {
 
 /**
 * Атрибуты вывода выплат
+*
+* ЭТО СЧЕТА АБС ?
 **/
 struct PayoutAttributes {
+
     /* Идентификатор счета принятых эквайером платажей в АБС НКО */
     1: required string nco_acquire_account
     /* Идентификатор транзитного счета в АБС НКО */
