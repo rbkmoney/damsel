@@ -160,11 +160,16 @@ typedef base.ID PartyID
 /** Участник. */
 struct Party {
     1: required PartyID id
+    7: required PartyContactInfo contact_info
     2: required Blocking blocking
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts = []
     5: required map<ShopID, Shop> shops = []
     6: required map<PayoutAccountID, PayoutAccount> payout_accounts = []
+}
+
+struct PartyContactInfo {
+    1: required string email
 }
 
 /* Shops */

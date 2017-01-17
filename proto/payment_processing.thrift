@@ -323,6 +323,10 @@ service Invoicing {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 
+struct PartyParams {
+    1: required domain.PartyContactInfo contact_info
+}
+
 struct PayoutAccountParams {
     1: required domain.CurrencyRef currency
     2: required domain.PayoutMethod method
@@ -482,7 +486,7 @@ exception ShopAccountNotFound {}
 
 service PartyManagement {
 
-    void Create (1: UserInfo user, 2: PartyID party_id)
+    void Create (1: UserInfo user, 2: PartyID party_id, 3: PartyParams params)
         throws (1: InvalidUser ex1, 2: PartyExists ex2)
 
     domain.Party Get (1: UserInfo user, 2: PartyID party_id)
