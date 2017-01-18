@@ -42,7 +42,7 @@ struct Cash {
 struct TransactionInfo {
     1: required string id
     2: optional base.Timestamp timestamp
-    3: required base.StringMap extra = []
+    3: required base.StringMap extra
 }
 
 /* Invoices */
@@ -164,8 +164,8 @@ struct Party {
     7: required PartyContactInfo contact_info
     2: required Blocking blocking
     3: required Suspension suspension
-    4: required map<ContractID, Contract> contracts = []
-    5: required map<ShopID, Shop> shops = []
+    4: required map<ContractID, Contract> contracts
+    5: required map<ShopID, Shop> shops
 }
 
 struct PartyContactInfo {
@@ -185,7 +185,7 @@ struct Shop {
     5: required CategoryRef category
     6: optional ShopAccount account
     7: required ContractID contract_id
-    8: required PayoutAccountID payout_account_id
+    8: optional PayoutEntryID payout_entry_id
     9: optional Proxy proxy
 }
 
@@ -257,10 +257,10 @@ struct BankAccount {
     4: required string bank_bik
 }
 
-typedef i32 PayoutAccountID
+typedef i32 PayoutEntryID
 
-struct PayoutAccount {
-    1: required PayoutAccountID id
+struct PayoutEntry {
+    1: required PayoutEntryID id
     2: required CurrencyRef currency
     3: required PayoutTool payout_tool
 }
@@ -276,18 +276,26 @@ struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
     4: optional base.Timestamp concluded_at
-    5: required ContractTerminationStatus termination_status
+    5: required ContractStatus status
     6: required ContractTemplateRef template
-    7: required list<ContractAdjustment> adjustments = []
-    8: required list<PayoutAccount> payout_accounts = []
+    7: required list<ContractAdjustment> adjustments
+    8: required list<PayoutEntry> payout_entries
+    9: optional LegalAgreement legal_agreement
 }
 
-struct Terminated { 1: required base.Timestamp terminated_at }
-
-union ContractTerminationStatus {
-    1: Active active
-    2: Terminated terminated
+/** Юридичкское соглащение */
+struct LegalAgreement {
+    1: required base.Timestamp signed_at
+    2: required string legal_agreement_id
 }
+
+union ContractStatus {
+    1: ContractActive active
+    2: ContractTerminated terminated
+}
+
+struct ContractActive {}
+struct ContractTerminated { 1: required base.Timestamp terminated_at }
 
 /* Categories */
 
@@ -312,15 +320,15 @@ struct ContractTemplate {
     1: optional ContractTemplateRef parent_template
     2: optional Lifetime valid_since
     3: optional Lifetime valid_until
-    4: required TermsSet terms_set
+    4: required list<TimedTermSet> term_sets
 }
 
 union Lifetime {
     1: base.Timestamp timestamp
-    2: LifetimePeriod period
+    2: LifetimeInterval interval
 }
 
-struct LifetimePeriod {
+struct LifetimeInterval {
     1: optional i16 years
     2: optional i16 months
     3: optional i16 days
@@ -343,18 +351,13 @@ struct ContractAdjustment {
 //   Payouts
 //   ...
 
-struct Terms {
+struct TermSet {
     1: optional PaymentsServiceTerms payments
 }
 
-struct TermsUnit {
-    1: required base.Timestamp start_time
-    2: optional base.Timestamp end_time
-    3: required Terms terms
-}
-
-struct TermsSet {
-    1: required list<TermsUnit> terms_units
+struct TimedTermSet {
+    1: required base.TimestampInterval action_time
+    2: required TermSet terms
 }
 
 /* Service terms */
@@ -393,7 +396,7 @@ struct Currency {
 }
 
 union CurrencySelector {
-    1: set<CurrencyDecision> decisions
+    1: list<CurrencyDecision> decisions
     2: set<CurrencyRef> value
 }
 
@@ -405,7 +408,7 @@ struct CurrencyDecision {
 /* Категории */
 
 union CategorySelector {
-    1: set<CategoryDecision> decisions
+    1: list<CategoryDecision> decisions
     2: set<CategoryRef> value
 }
 
@@ -427,7 +430,7 @@ union CashBound {
 }
 
 union CashLimitSelector {
-    1: set<CashLimitDecision> decisions
+    1: list<CashLimitDecision> decisions
     2: CashLimit value
 }
 
@@ -487,7 +490,7 @@ struct PaymentMethodDefinition {
 }
 
 union PaymentMethodSelector {
-    1: set<PaymentMethodDecision> decisions
+    1: list<PaymentMethodDecision> decisions
     2: set<PaymentMethodRef> value
 }
 
@@ -627,7 +630,7 @@ union CashVolumeProduct {
 }
 
 union CashFlowSelector {
-    1: set<CashFlowDecision> decisions
+    1: list<CashFlowDecision> decisions
     2: CashFlow value
 }
 
@@ -650,7 +653,7 @@ struct Provider {
 }
 
 union ProviderSelector {
-    1: set<ProviderDecision> decisions
+    1: list<ProviderDecision> decisions
     2: set<ProviderRef> value
 }
 
@@ -696,7 +699,7 @@ struct TerminalAccount {
 }
 
 union TerminalSelector {
-    1: set<TerminalDecision> decisions
+    1: list<TerminalDecision> decisions
     2: set<TerminalRef> value
 }
 
@@ -762,7 +765,7 @@ struct SystemAccount {
 }
 
 union SystemAccountSetSelector {
-    1: set<SystemAccountSetDecision> decisions
+    1: list<SystemAccountSetDecision> decisions
     2: SystemAccountSetRef value
 }
 
@@ -787,7 +790,7 @@ struct ExternalAccount {
 }
 
 union ExternalAccountSetSelector {
-    1: set<ExternalAccountSetDecision> decisions
+    1: list<ExternalAccountSetDecision> decisions
     2: ExternalAccountSetRef value
 }
 
@@ -804,7 +807,6 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 struct PartyPrototype {
     1: required ShopPrototype shop
     2: required ContractTemplateRef test_contract_template
-    3: required PayoutAccount test_payout_account
 }
 
 struct ShopPrototype {

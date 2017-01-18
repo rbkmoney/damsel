@@ -327,7 +327,7 @@ struct PartyParams {
     1: required domain.PartyContactInfo contact_info
 }
 
-struct PayoutAccountParams {
+struct PayoutEntryParams {
     1: required domain.CurrencyRef currency
     2: required domain.PayoutTool tool
 }
@@ -336,13 +336,13 @@ struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
-    4: required domain.PayoutAccountID payout_account_id
+    4: required domain.PayoutEntryID payout_entry_id
 }
 
 struct ContractParams {
     1: required domain.Contractor contractor
     2: optional domain.ContractTemplateRef template
-    3: required list<domain.PayoutAccount> payout_accounts = []
+    3: required PayoutEntryParams payout_entry_params
 }
 
 struct ContractAdjustmentParams {
@@ -366,31 +366,13 @@ struct ContractModificationUnit {
 union ContractModification {
     1: ContractTermination termination
     2: domain.ContractAdjustment adjustment_creation
-    3: domain.PayoutAccount payout_account_creation
-    4: PayoutAccountModificationUnit payout_account_modification
+    3: domain.PayoutEntry payout_entry_creation
 }
 
 struct ContractTermination {
     1: required base.Timestamp terminated_at
     2: optional string reason
 }
-
-struct PayoutAccountModificationUnit {
-    1: required domain.PayoutAccountID id
-    2: required PayoutAccountModification modification
-}
-
-union PayoutAccountModification {
-    1: PayoutAccountUpdate payout_account_update
-    2: PayoutAccountDelete payout_account_delete
-}
-
-struct PayoutAccountUpdate {
-    1: optional domain.CurrencyRef currency
-    2: optional domain.PayoutTool tool
-}
-
-struct PayoutAccountDelete {}
 
 typedef list<PartyModification> PartyChangeset
 
@@ -410,7 +392,7 @@ struct ShopUpdate {
     1: optional domain.CategoryRef category
     2: optional domain.ShopDetails details
     3: optional domain.ContractID contract_id
-    4: optional domain.PayoutAccountID payout_account_id
+    4: optional domain.PayoutEntryID payout_entry_id
     5: optional domain.Proxy proxy
 }
 
@@ -479,8 +461,8 @@ struct ClaimStatusChanged {
 exception PartyExists {}
 exception ClaimNotFound {}
 exception ContractNotFound {}
-exception ContractTerminated {}
-exception PayoutAccountNotFound {}
+exception InvalidContractStatus { 1: required domain.ContractStatus status }
+exception PayoutEntryNotFound {}
 
 
 exception InvalidClaimStatus {
@@ -534,7 +516,8 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ContractNotFound ex3,
-            4: base.InvalidRequest ex4
+            4: InvalidContractStatus ex4
+            5: base.InvalidRequest ex5
         )
 
     ClaimResult CreateContractAdjustment (
@@ -547,57 +530,24 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ContractNotFound ex3,
-            4: ContractTerminated ex4,
+            4: InvalidContractStatus ex4,
             5: InvalidPartyStatus ex5,
             6: base.InvalidRequest ex6
         )
 
-    ClaimResult CreatePayoutAccount (
+    ClaimResult CreatePayoutEntry (
         1: UserInfo user,
         2: PartyID party_id,
         3: domain.ContractID contract_id,
-        4: PayoutAccountParams params
+        4: PayoutEntryParams params
     )
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
             4: ContractNotFound ex4,
-            5: ContractTerminated ex5,
+            5: InvalidContractStatus ex5,
             6: base.InvalidRequest ex6
-        )
-
-    ClaimResult UpdatePayoutAccount (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: domain.ContractID contract_id,
-        4: domain.PayoutAccountID payout_account_id,
-        5: PayoutAccountUpdate update
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: ContractNotFound ex4,
-            5: ContractTerminated ex5,
-            6: PayoutAccountNotFound ex6,
-            7: base.InvalidRequest ex7
-        )
-
-    ClaimResult DeletePayoutAccount (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: domain.ContractID contract_id,
-        4: domain.PayoutAccountID payout_account_id
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: ContractNotFound ex4,
-            5: ContractTerminated ex5,
-            6: PayoutAccountNotFound ex6,
-            7: base.InvalidRequest ex7
         )
 
     ClaimResult CreateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopParams params)
@@ -605,65 +555,26 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
+            5: ContractNotFound ex5,
+            6: InvalidContractStatus ex6,
+            7: PayoutEntryNotFound ex7,
             4: base.InvalidRequest ex4
         )
 
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
-    ClaimResult UpdateShopDetails (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: domain.ShopDetails details)
+    ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ShopNotFound ex3,
             4: InvalidPartyStatus ex4,
             5: InvalidShopStatus ex5,
+            7: ContractNotFound ex7,
+            8: InvalidContractStatus ex8,
+            9: PayoutEntryNotFound ex9,
             6: base.InvalidRequest ex6
-        )
-
-    ClaimResult UpdateShopCategory (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: domain.CategoryRef category)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ShopNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5,
-            6: base.InvalidRequest ex6
-        )
-
-    ClaimResult UpdateShopContract (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ShopID id,
-        4: domain.ContractID contract_id
-        5: domain.PayoutAccountID payout_account_id
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ShopNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5,
-            6: ContractNotFound ex6,
-            7: ContractTerminated ex7,
-            8: PayoutAccountNotFound ex8,
-            9: base.InvalidRequest ex9
-        )
-
-    ClaimResult UpdateShopPayoutAccount (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ShopID id,
-        4: domain.PayoutAccountID payout_account_id
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ShopNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5,
-            6: PayoutAccountNotFound ex6,
-            7: base.InvalidRequest ex7
         )
 
     /* Claims */
