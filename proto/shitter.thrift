@@ -1,69 +1,75 @@
-   include "base.thrift"
-   include "domain.thrift"
+    include "base.thrift"
+    include "domain.thrift"
 
-   namespace java com.rbkmoney.damsel.shitter
-   namespace erlang shitter
+    namespace java com.rbkmoney.damsel.shitter
+    namespace erlang shitter
 
-   typedef base.ID PayoutID
+    typedef base.ID PayoutID
 
-   /**
-   * Диапазон времени
-   * from_time - начальное время.
-   * to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
-   * Если from > to  - диапазон считается некорректным.
-   */
-   struct TimeRange {
+    /**
+    * Диапазон времени
+    * from_time - начальное время.
+    * to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
+    * Если from > to  - диапазон считается некорректным.
+    */
+    struct TimeRange {
        1: required base.Timestamp from_time
        2: optional base.Timestamp to_time
-   }
+    }
 
-   /**
-   * Статус выплаты
-   * Pending - ожидается подтверждение от АБС и 1С
-   * Done - средства переведены - выплата завершена
-   **/
-   union PayoutStatus {
-       1: string pending
-       2: string send
-       3: string done
-   }
+    /**
+    * Статус выплаты
+    * Pending - ожидается подтверждение от АБС и 1С
+    * Done - средства переведены - выплата завершена
+    **/
+    enum PayoutStatus {
+       pending,
+       send,
+       done
+    }
 
-   /**
-   * Тип отчета сгенерированного по выплате
-   **/
-   union PayoutReportType {
-       /* АБС НКО */
-       1: string ABS
-       /* 1C */
-       2: string OneS
-   }
+    /**
+    * Тип отчета сгенерированного по выплате
+    **/
+    enum PayoutReportType {
+        /* АБС НКО */
+        ABS,
+        /* 1C */
+        OneS
+    }
 
-   /**
-   * Описание выплаты
-   **/
-   struct Payout {
-       1: PayoutID id
-       2: PayoutStatus status
+    /**
+    * Описание выплаты
+    **/
+    struct Payout {
+       1: required PayoutID id
+       2: required PayoutStatus status
+       3: required string absStatus
+       4: required string oneStatus
+
        //todo: more fields
-   }
-   /**
-   * Информация о платаже сохраняемая в Shiter-e
-   **/
-   struct PayoutPaymentInfo {}
+    }
+    /**
+    * Информация о платаже сохраняемая в Shiter-e
+    **/
+    struct PayoutPaymentInfo {
+        1: required string id
+        2: required string invoicId
+    }
 
-   /**
-   * Атрибуты поиска выплат
-   **/
-   struct PayoutSearchCriteria{
+    /**
+    * Атрибуты поиска выплат
+    **/
+    struct PayoutSearchCriteria{
        1: optional PayoutStatus status
        2: optional TimeRange timeRange
        3: optional list<PayoutID> payoutIDs
-   }
+    }
 
-   /**
-   * Сервис для вывода платажей из системы
-   **/
-   service Shitter {
+    /**
+    * Сервис для вывода платажей из системы
+    **/
+    service Shitter {
        /**
        * Сгенерировать и отправить по почте выгрузку за указанный промежуток времени
        * возвращает идентификатор сгенерированной выплаты.
@@ -92,5 +98,4 @@
        *  Получить список платежей попавших в Payout
        **/
        list<PayoutPaymentInfo> GetPayments(1: PayoutID payoutID)
-
-   }
+    }
