@@ -40,7 +40,8 @@
    * Описание выплаты
    **/
    struct Payout {
-       1: PayoutStatus status
+       1: PayoutID id;
+       2: PayoutStatus status
        //todo: more fields
    }
    /**
@@ -75,19 +76,19 @@
        /**
        * Подтвердить загрузку выплаты в ABS
        **/
-       bool acceptAbsPayout(1: PayoutID payoutID)
+       bool AcceptAbsPayout(1: PayoutID payoutID)
        /**
        * Подтвердить загрузку выплаты в ABS
        **/
-       bool acceptOneSPayout(1: PayoutID payoutID)
+       bool AcceptOneSPayout(1: PayoutID payoutID)
        /**
        * Возвращает список Payout-ов согласно запросу поиска.
        * Payout подтвержденный и АБС и 1С переводется в статус выплачен
        **/
-       list<Payout> getPayouts(1: PayoutSearchCriteria searchCriteria);
+       list<Payout> GetPayouts(1: PayoutSearchCriteria searchCriteria);
        /**
        *  Получить список платежей попавших в Payout
        **/
-       list<PayoutPaymentInfo> getPayments(1: PayoutID payoutID);
+       list<PayoutPaymentInfo> GetPayments(1: PayoutID payoutID);
 
    }
