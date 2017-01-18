@@ -72,7 +72,7 @@
        * Перегенерирует отчет о выплате только по бизнес атрибутам и отправляет письмо с отчетом.
        * Суммы остаются не изменными
        **/
-       PayoutID RegenerateReport(PayoutID payoutID, PayoutReportType reportType )
+       PayoutID RegenerateReport(1: PayoutID payoutID, 2: PayoutReportType reportType )
        /**
        * Подтвердить загрузку выплаты в ABS
        **/
