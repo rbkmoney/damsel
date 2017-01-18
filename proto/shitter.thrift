@@ -7,7 +7,6 @@ namespace erlang shitter
 
 typedef base.ID PayoutID
 
-
 /**
 * Диапазон времени
 * from_time - начальное время.
@@ -45,7 +44,14 @@ struct Payout {
     1: PayoutStatus status
     //todo: more fields
 }
+/**
+* Информация о платаже сохраняемая в Shiter-e
+**/
+struct PayoutPaymentInfo {}
 
+/**
+* Атрибуты поиска выплат
+**/
 struct PayoutSearchCriteria{
     1: optional PayoutStatus status;
     2: optional TimeRange timeRange;
@@ -64,7 +70,7 @@ service Shitter {
     PayoutID GeneratePayout (1: TimeRange timeRange) throws (1: base.InvalidRequest ex1)
     /**
     * Перегенерирует отчет о выплате только по бизнес атрибутам и отправляет письмо с отчетом.
-    * Суммы остаются не имзенными
+    * Суммы остаются не изменными
     **/
     PayoutID RegenerateReport(PayoutID payoutID, PayoutReportType reportType )
     /**
@@ -80,6 +86,9 @@ service Shitter {
     * Payout подтвержденный и АБС и 1С переводется в статус выплачен
     **/
     list<Payout> getPayouts(1: PayoutSearchCriteria searchCriteria);
-
+    /**
+    *  Получить список платежей попавших в Payout
+    **/
+    list<PayoutPaymentInfo> getPayments(1: PayoutID payoutID);
 
 }
