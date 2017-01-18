@@ -13,18 +13,21 @@
    * Если from > to  - диапазон считается некорректным.
    */
    struct TimeRange {
-       1: required base.Timestamp from_time;
-       2: optional base.Timestamp to_time;
+       1: required base.Timestamp from_time
+       2: optional base.Timestamp to_time
    }
+
    /**
    * Статус выплаты
    * Pending - ожидается подтверждение от АБС и 1С
    * Done - средства переведены - выплата завершена
    **/
    union PayoutStatus {
-       1: string Pending
-       2: string Done
+       1: string pending
+       2: string send
+       3: string done
    }
+
    /**
    * Тип отчета сгенерированного по выплате
    **/
@@ -35,12 +38,11 @@
        2: string OneS
    }
 
-
    /**
    * Описание выплаты
    **/
    struct Payout {
-       1: PayoutID id;
+       1: PayoutID id
        2: PayoutStatus status
        //todo: more fields
    }
@@ -53,10 +55,10 @@
    * Атрибуты поиска выплат
    **/
    struct PayoutSearchCriteria{
-       1: optional PayoutStatus status;
-       2: optional TimeRange timeRange;
+       1: optional PayoutStatus status
+       2: optional TimeRange timeRange
+       3: optional list<PayoutID> payoutIDs
    }
-
 
    /**
    * Сервис для вывода платажей из системы
@@ -78,17 +80,17 @@
        **/
        bool AcceptAbsPayout(1: PayoutID payoutID)
        /**
-       * Подтвердить загрузку выплаты в ABS
+       * Подтвердить загрузку выплаты в OneS
        **/
        bool AcceptOneSPayout(1: PayoutID payoutID)
        /**
        * Возвращает список Payout-ов согласно запросу поиска.
        * Payout подтвержденный и АБС и 1С переводется в статус выплачен
        **/
-       list<Payout> GetPayouts(1: PayoutSearchCriteria searchCriteria);
+       list<Payout> GetPayouts(1: PayoutSearchCriteria searchCriteria)
        /**
        *  Получить список платежей попавших в Payout
        **/
-       list<PayoutPaymentInfo> GetPayments(1: PayoutID payoutID);
+       list<PayoutPaymentInfo> GetPayments(1: PayoutID payoutID)
 
    }
