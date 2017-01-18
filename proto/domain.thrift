@@ -798,7 +798,29 @@ struct Globals {
     7: required ProxyRef common_merchant_proxy
 }
 
+/* ABS account mapping */
+
+struct ABSAccountMappingRef { 1: required ObjectID id }
+
+struct ABSAccountMapping {
+    // params
+    1: required AccountID account_id
+    2: required CashFlowPostingDirection posting_direction
+    // result
+    3: required ABSAccount result
+}
+
+enum CashFlowPostingDirection {
+    debit
+    credit
+}
+
+struct ABSAccount {
+    1: required string number
+}
+
 /** Dummy (for integrity test purpose) */
+
 struct Dummy {}
 
 struct DummyRef {
@@ -895,6 +917,11 @@ struct GlobalsObject {
     2: required Globals data
 }
 
+struct ABSAccountMappingObject {
+    1: required ABSAccountMappingRef ref
+    2: required ABSAccountMapping data
+}
+
 union Reference {
 
     1  : CategoryRef             category
@@ -911,6 +938,8 @@ union Reference {
     9  : ProxyRef                proxy
     10 : PartyPrototypeRef       party_prototype
     11 : GlobalsRef              globals
+
+    17 : ABSAccountMappingRef    abs_account_mapping
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -933,6 +962,8 @@ union DomainObject {
     9  : ProxyObject                proxy
     10 : PartyPrototypeObject       party_prototype
     11 : GlobalsObject              globals
+
+    17 : ABSAccountMappingObject    abs_account_mapping
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
