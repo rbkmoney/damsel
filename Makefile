@@ -21,7 +21,7 @@ BUILD_IMAGE_TAG := 80c38dc638c0879687f6661f4e16e8de9fc0d2c6
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus
+CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus java_install
 
 all: compile
 
@@ -104,3 +104,8 @@ deploy_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
 	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
+
+java_install:
+	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
+	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
+	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
