@@ -367,6 +367,7 @@ union ContractModification {
     1: ContractTermination termination
     2: domain.ContractAdjustment adjustment_creation
     3: domain.PayoutEntry payout_entry_creation
+    4: domain.LegalAgreement legal_agreement_binding
 }
 
 struct ContractTermination {
@@ -518,6 +519,21 @@ service PartyManagement {
             3: ContractNotFound ex3,
             4: InvalidContractStatus ex4
             5: base.InvalidRequest ex5
+        )
+
+    ClaimResult BindContractLegalAgreemnet (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: domain.ContractID contract_id,
+        4: domain.LegalAgreement legal_agreement
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ContractNotFound ex3,
+            4: InvalidContractStatus ex4,
+            5: InvalidPartyStatus ex5,
+            6: base.InvalidRequest ex6
         )
 
     ClaimResult CreateContractAdjustment (

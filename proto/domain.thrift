@@ -317,10 +317,9 @@ struct ContractTemplateRef { 1: required ObjectID id }
 
 /** Шаблон договора или поправки **/
 struct ContractTemplate {
-    1: optional ContractTemplateRef parent_template
-    2: optional Lifetime valid_since
-    3: optional Lifetime valid_until
-    4: required list<TimedTermSet> term_sets
+    1: optional Lifetime valid_since
+    2: optional Lifetime valid_until
+    3: required TermSetHierarchyRef terms
 }
 
 union Lifetime {
@@ -359,6 +358,13 @@ struct TimedTermSet {
     1: required base.TimestampInterval action_time
     2: required TermSet terms
 }
+
+struct TermSetHierarchy {
+    1: optional TermSetHierarchyRef parent_terms
+    2: required list<TimedTermSet> term_sets
+}
+
+struct TermSetHierarchyRef { 1: required ObjectID id }
 
 /* Service terms */
 
@@ -807,6 +813,7 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 struct PartyPrototype {
     1: required ShopPrototype shop
     2: required ContractTemplateRef test_contract_template
+    3: required TermSetHierarchyRef test_terms
 }
 
 struct ShopPrototype {
@@ -826,6 +833,7 @@ struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     5: required InspectorRef inspector
     6: required ContractTemplateRef default_contract_template
+    8: required TermSetHierarchyRef default_terms
     7: required ProxyRef common_merchant_proxy
 }
 
@@ -859,6 +867,11 @@ struct DummyLinkObject {
 struct ContractTemplateObject {
     1: required ContractTemplateRef ref
     2: required ContractTemplate data
+}
+
+struct TermSetHierarchyObject {
+    1: required TermSetHierarchyRef ref
+    2: required TermSetHierarchy data
 }
 
 struct CategoryObject {
@@ -934,6 +947,7 @@ union Reference {
     4  : ContractorRef           contractor
     5  : BankCardBINRangeRef     bank_card_bin_range
     6  : ContractTemplateRef     contract_template
+    17 : TermSetHierarchyRef     term_set_hierarchy
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
@@ -956,6 +970,7 @@ union DomainObject {
     4  : ContractorObject           contractor
     5  : BankCardBINRangeObject     bank_card_bin_range
     6  : ContractTemplateObject     contract_template
+    17 : TermSetHierarchyObject     term_set_hierarchy
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
