@@ -192,6 +192,7 @@ struct Shop {
 struct ShopAccount {
     1: required CurrencyRef currency
     2: required AccountID settlement
+    /* Гарантийный аккаунт */
     3: required AccountID guarantee
     /* Аккаунт на который выводятся деньги из системы */
     4: required AccountID payout
@@ -240,12 +241,34 @@ struct RussianLegalEntity {
     8: required string representative_document
 }
 
-/** Банковский счёт. */
+/**
+* Атрибуты вывода выплат
+*
+* ЭТО СЧЕТА АБС ?
+**/
+struct PayoutAttributes {
 
+    /* Идентификатор счета принятых эквайером платажей в АБС НКО */
+    1: required string nco_acquire_account
+    /* Идентификатор транзитного счета в АБС НКО */
+    2: required string nco_transit_account
+    /* Идентификатор счета дохода НКО*/
+    3: required string nco_income_account
+    /* Идентификатор счета расходов НКО*/
+    4: required string nco_outcome_account
+    /* Идентификатор счета обязательств перед мерчантами в НКО */
+    5: required string nco_merchant_liabilities_account
+}
+
+/** Банковский счёт */
 struct BankAccount {
+    /* Номер расчетного счета */
     1: required string account
+    /* Наименование банка */
     2: required string bank_name
+    /* Кор/счет банка */
     3: required string bank_post_account
+    /* БИК банка */
     4: required string bank_bik
 }
 
@@ -255,6 +278,7 @@ struct PayoutAccount {
     1: required PayoutAccountID id
     2: required CurrencyRef currency
     3: required PayoutMethod method
+    4: optional PayoutAttributes attributes
 }
 
 union PayoutMethod {
