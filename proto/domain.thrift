@@ -185,7 +185,7 @@ struct Shop {
     5: required CategoryRef category
     6: optional ShopAccount account
     7: required ContractID contract_id
-    8: optional PayoutEntryID payout_entry_id
+    8: optional PayoutToolID payout_tool_id
     9: optional Proxy proxy
 }
 
@@ -257,15 +257,15 @@ struct BankAccount {
     4: required string bank_bik
 }
 
-typedef i32 PayoutEntryID
+typedef i32 PayoutToolID
 
-struct PayoutEntry {
-    1: required PayoutEntryID id
+struct PayoutTool {
+    1: required PayoutToolID id
     2: required CurrencyRef currency
-    3: required PayoutTool payout_tool
+    3: required PayoutToolInfo payout_tool_info
 }
 
-union PayoutTool {
+union PayoutToolInfo {
     1: BankAccount bank_account
 }
 
@@ -275,15 +275,16 @@ typedef i32 ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
-    4: optional base.Timestamp concluded_at
-    5: required ContractStatus status
-    6: required ContractTemplateRef template
-    7: required list<ContractAdjustment> adjustments
-    8: required list<PayoutEntry> payout_entries
-    9: optional LegalAgreement legal_agreement
+    4: optional base.Timestamp valid_since
+    5: optional base.Timestamp valid_until
+    6: required ContractStatus status
+    7: required TermSetHierarchyRef terms
+    8: required list<ContractAdjustment> adjustments
+    9: required list<PayoutTool> payout_tools
+    10: optional LegalAgreement legal_agreement
 }
 
-/** Юридичкское соглащение */
+/** Юридическое соглашение */
 struct LegalAgreement {
     1: required base.Timestamp signed_at
     2: required string legal_agreement_id
@@ -336,8 +337,9 @@ struct LifetimeInterval {
 /** Поправки к договору **/
 struct ContractAdjustment {
     1: required i32 id
-    2: optional base.Timestamp concluded_at
-    3: required ContractTemplateRef template
+    2: optional base.Timestamp valid_since
+    3: optional base.Timestamp valid_until
+    4: required TermSetHierarchyRef terms
 }
 
 /** Условия **/
@@ -813,7 +815,6 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 struct PartyPrototype {
     1: required ShopPrototype shop
     2: required ContractTemplateRef test_contract_template
-    3: required TermSetHierarchyRef test_terms
 }
 
 struct ShopPrototype {
@@ -833,7 +834,6 @@ struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     5: required InspectorRef inspector
     6: required ContractTemplateRef default_contract_template
-    8: required TermSetHierarchyRef default_terms
     7: required ProxyRef common_merchant_proxy
 }
 
