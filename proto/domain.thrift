@@ -193,6 +193,8 @@ struct ShopAccount {
     1: required CurrencyRef currency
     2: required AccountID settlement
     3: required AccountID guarantee
+    /* Аккаунт на который выводятся деньги из системы */
+    4: required AccountID payout
 }
 
 struct ShopDetails {
@@ -619,6 +621,8 @@ struct Provider {
     2: required string description
     3: required Proxy proxy
     4: required TerminalSelector terminal
+    /* Счет для платажей принятых эквайеромв АБС*/
+    5: required string abs_account
 }
 
 union ProviderSelector {
