@@ -54,7 +54,7 @@
     **/
     struct PayoutPaymentInfo {
         1: required string id
-        2: required string invoicId
+        2: required string invoiceID
     }
 
     /**
