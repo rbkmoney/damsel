@@ -42,7 +42,7 @@ struct Cash {
 struct TransactionInfo {
     1: required string id
     2: optional base.Timestamp timestamp
-    3: required base.StringMap extra = []
+    3: required base.StringMap extra
 }
 
 /* Invoices */
@@ -85,14 +85,15 @@ union InvoiceStatus {
 }
 
 struct InvoicePayment {
-    1: required InvoicePaymentID id
-    2: required base.Timestamp created_at
-    3: required InvoicePaymentStatus status
-    4: optional TransactionInfo trx
-    5: required Payer payer
-    8: required Cash cost
-    6: optional InvoicePaymentContext context
-    9: optional RiskScore risk_score
+    1:  required InvoicePaymentID id
+    2:  required base.Timestamp created_at
+    10: required DataRevision domain_revision
+    3:  required InvoicePaymentStatus status
+    4:  optional TransactionInfo trx
+    5:  required Payer payer
+    8:  required Cash cost
+    6:  optional InvoicePaymentContext context
+    9:  optional RiskScore risk_score
 }
 
 struct InvoicePaymentPending   {}
@@ -163,9 +164,8 @@ struct Party {
     7: required PartyContactInfo contact_info
     2: required Blocking blocking
     3: required Suspension suspension
-    4: required map<ContractID, Contract> contracts = []
-    5: required map<ShopID, Shop> shops = []
-    6: required map<PayoutAccountID, PayoutAccount> payout_accounts = []
+    4: required map<ContractID, Contract> contracts
+    5: required map<ShopID, Shop> shops
 }
 
 struct PartyContactInfo {
@@ -185,7 +185,7 @@ struct Shop {
     5: required CategoryRef category
     6: optional ShopAccount account
     7: required ContractID contract_id
-    8: required PayoutAccountID payout_account_id
+    8: optional PayoutToolID payout_tool_id
     9: optional Proxy proxy
 }
 
@@ -230,13 +230,21 @@ union Entity {
 
 /** Юридическое лицо-резидент РФ */
 struct RussianLegalEntity {
+    /* Наименование */
     1: required string registered_name
+    /* ОГРН */
     2: required string registered_number
+    /* ИНН/КПП */
     3: required string inn
+    /* Адрес места нахождения */
     4: required string actual_address
+    /* Адрес для отправки корреспонденции (почтовый) */
     5: required string post_address
+    /* Наименование должности ЕИО/представителя */
     6: required string representative_position
+    /* ФИО ЕИО/представителя */
     7: required string representative_full_name
+    /* Наименование документа, на основании которого действует ЕИО/представитель */
     8: required string representative_document
 }
 
@@ -249,15 +257,15 @@ struct BankAccount {
     4: required string bank_bik
 }
 
-typedef i32 PayoutAccountID
+typedef i32 PayoutToolID
 
-struct PayoutAccount {
-    1: required PayoutAccountID id
+struct PayoutTool {
+    1: required PayoutToolID id
     2: required CurrencyRef currency
-    3: required PayoutMethod method
+    3: required PayoutToolInfo payout_tool_info
 }
 
-union PayoutMethod {
+union PayoutToolInfo {
     1: BankAccount bank_account
 }
 
@@ -267,12 +275,28 @@ typedef i32 ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
-    4: optional base.Timestamp concluded_at
-    5: optional base.Timestamp terminated_at
-    6: required ContractTemplateRef template
-    7: required list<ContractAdjustment> adjustments = []
+    4: optional base.Timestamp valid_since
+    5: optional base.Timestamp valid_until
+    6: required ContractStatus status
+    7: required TermSetHierarchyRef terms
+    8: required list<ContractAdjustment> adjustments
+    9: required list<PayoutTool> payout_tools
+    10: optional LegalAgreement legal_agreement
 }
 
+/** Юридическое соглашение */
+struct LegalAgreement {
+    1: required base.Timestamp signed_at
+    2: required string legal_agreement_id
+}
+
+union ContractStatus {
+    1: ContractActive active
+    2: ContractTerminated terminated
+}
+
+struct ContractActive {}
+struct ContractTerminated { 1: required base.Timestamp terminated_at }
 
 /* Categories */
 
@@ -294,18 +318,17 @@ struct ContractTemplateRef { 1: required ObjectID id }
 
 /** Шаблон договора или поправки **/
 struct ContractTemplate {
-    1: optional ContractTemplateRef parent_template
-    2: optional Lifetime valid_since
-    3: optional Lifetime valid_until
-    4: required Terms terms
+    1: optional Lifetime valid_since
+    2: optional Lifetime valid_until
+    3: required TermSetHierarchyRef terms
 }
 
 union Lifetime {
     1: base.Timestamp timestamp
-    2: LifetimePeriod period
+    2: LifetimeInterval interval
 }
 
-struct LifetimePeriod {
+struct LifetimeInterval {
     1: optional i16 years
     2: optional i16 months
     3: optional i16 days
@@ -314,10 +337,10 @@ struct LifetimePeriod {
 /** Поправки к договору **/
 struct ContractAdjustment {
     1: required i32 id
-    2: optional base.Timestamp concluded_at
-    3: required ContractTemplateRef template
+    2: optional base.Timestamp valid_since
+    3: optional base.Timestamp valid_until
+    4: required TermSetHierarchyRef terms
 }
-
 
 /** Условия **/
 // Service
@@ -329,9 +352,21 @@ struct ContractAdjustment {
 //   Payouts
 //   ...
 
-struct Terms {
+struct TermSet {
     1: optional PaymentsServiceTerms payments
 }
+
+struct TimedTermSet {
+    1: required base.TimestampInterval action_time
+    2: required TermSet terms
+}
+
+struct TermSetHierarchy {
+    1: optional TermSetHierarchyRef parent_terms
+    2: required list<TimedTermSet> term_sets
+}
+
+struct TermSetHierarchyRef { 1: required ObjectID id }
 
 /* Service terms */
 
@@ -369,7 +404,7 @@ struct Currency {
 }
 
 union CurrencySelector {
-    1: set<CurrencyDecision> decisions
+    1: list<CurrencyDecision> decisions
     2: set<CurrencyRef> value
 }
 
@@ -381,7 +416,7 @@ struct CurrencyDecision {
 /* Категории */
 
 union CategorySelector {
-    1: set<CategoryDecision> decisions
+    1: list<CategoryDecision> decisions
     2: set<CategoryRef> value
 }
 
@@ -403,7 +438,7 @@ union CashBound {
 }
 
 union CashLimitSelector {
-    1: set<CashLimitDecision> decisions
+    1: list<CashLimitDecision> decisions
     2: CashLimit value
 }
 
@@ -463,7 +498,7 @@ struct PaymentMethodDefinition {
 }
 
 union PaymentMethodSelector {
-    1: set<PaymentMethodDecision> decisions
+    1: list<PaymentMethodDecision> decisions
     2: set<PaymentMethodRef> value
 }
 
@@ -603,7 +638,7 @@ union CashVolumeProduct {
 }
 
 union CashFlowSelector {
-    1: set<CashFlowDecision> decisions
+    1: list<CashFlowDecision> decisions
     2: CashFlow value
 }
 
@@ -626,7 +661,7 @@ struct Provider {
 }
 
 union ProviderSelector {
-    1: set<ProviderDecision> decisions
+    1: list<ProviderDecision> decisions
     2: set<ProviderRef> value
 }
 
@@ -672,7 +707,7 @@ struct TerminalAccount {
 }
 
 union TerminalSelector {
-    1: set<TerminalDecision> decisions
+    1: list<TerminalDecision> decisions
     2: set<TerminalRef> value
 }
 
@@ -738,7 +773,7 @@ struct SystemAccount {
 }
 
 union SystemAccountSetSelector {
-    1: set<SystemAccountSetDecision> decisions
+    1: list<SystemAccountSetDecision> decisions
     2: SystemAccountSetRef value
 }
 
@@ -763,7 +798,7 @@ struct ExternalAccount {
 }
 
 union ExternalAccountSetSelector {
-    1: set<ExternalAccountSetDecision> decisions
+    1: list<ExternalAccountSetDecision> decisions
     2: ExternalAccountSetRef value
 }
 
@@ -832,6 +867,11 @@ struct DummyLinkObject {
 struct ContractTemplateObject {
     1: required ContractTemplateRef ref
     2: required ContractTemplate data
+}
+
+struct TermSetHierarchyObject {
+    1: required TermSetHierarchyRef ref
+    2: required TermSetHierarchy data
 }
 
 struct CategoryObject {
@@ -907,6 +947,7 @@ union Reference {
     4  : ContractorRef           contractor
     5  : BankCardBINRangeRef     bank_card_bin_range
     6  : ContractTemplateRef     contract_template
+    17 : TermSetHierarchyRef     term_set_hierarchy
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
@@ -929,6 +970,7 @@ union DomainObject {
     4  : ContractorObject           contractor
     5  : BankCardBINRangeObject     bank_card_bin_range
     6  : ContractTemplateObject     contract_template
+    17 : TermSetHierarchyObject     term_set_hierarchy
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector

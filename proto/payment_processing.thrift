@@ -327,21 +327,22 @@ struct PartyParams {
     1: required domain.PartyContactInfo contact_info
 }
 
-struct PayoutAccountParams {
+struct PayoutToolParams {
     1: required domain.CurrencyRef currency
-    2: required domain.PayoutMethod method
+    2: required domain.PayoutToolInfo tool_info
 }
 
 struct ShopParams {
     1: required domain.CategoryRef category
     2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
-    4: required domain.PayoutAccountID payout_account_id
+    4: required domain.PayoutToolID payout_tool_id
 }
 
 struct ContractParams {
     1: required domain.Contractor contractor
     2: optional domain.ContractTemplateRef template
+    3: required PayoutToolParams payout_tool_params
 }
 
 struct ContractAdjustmentParams {
@@ -355,7 +356,6 @@ union PartyModification {
     4: ContractModificationUnit contract_modification
     5: domain.Shop shop_creation
     6: ShopModificationUnit shop_modification
-    7: domain.PayoutAccount payout_account_creation
 }
 
 struct ContractModificationUnit {
@@ -366,6 +366,8 @@ struct ContractModificationUnit {
 union ContractModification {
     1: ContractTermination termination
     2: domain.ContractAdjustment adjustment_creation
+    3: domain.PayoutTool payout_tool_creation
+    4: domain.LegalAgreement legal_agreement_binding
 }
 
 struct ContractTermination {
@@ -391,7 +393,7 @@ struct ShopUpdate {
     1: optional domain.CategoryRef category
     2: optional domain.ShopDetails details
     3: optional domain.ContractID contract_id
-    4: optional domain.PayoutAccountID payout_account_id
+    4: optional domain.PayoutToolID payout_tool_id
     5: optional domain.Proxy proxy
 }
 
@@ -401,7 +403,7 @@ struct ShopAccountCreated {
 
 // Claims
 
-typedef base.ID ClaimID
+typedef i64 ClaimID
 
 struct Claim {
     1: required ClaimID id
@@ -459,7 +461,10 @@ struct ClaimStatusChanged {
 
 exception PartyExists {}
 exception ClaimNotFound {}
-exception ContractNotFound{}
+exception ContractNotFound {}
+exception InvalidContractStatus { 1: required domain.ContractStatus status }
+exception PayoutToolNotFound {}
+
 
 exception InvalidClaimStatus {
     1: required ClaimStatus status
@@ -512,7 +517,23 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ContractNotFound ex3,
-            4: base.InvalidRequest ex4
+            4: InvalidContractStatus ex4,
+            5: base.InvalidRequest ex5
+        )
+
+    ClaimResult BindContractLegalAgreemnet (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: domain.ContractID contract_id,
+        4: domain.LegalAgreement legal_agreement
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ContractNotFound ex3,
+            4: InvalidContractStatus ex4,
+            5: InvalidPartyStatus ex5,
+            6: base.InvalidRequest ex6
         )
 
     ClaimResult CreateContractAdjustment (
@@ -525,16 +546,24 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ContractNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: base.InvalidRequest ex5
+            4: InvalidContractStatus ex4,
+            5: InvalidPartyStatus ex5,
+            6: base.InvalidRequest ex6
         )
 
-    ClaimResult CreatePayoutAccount (1: UserInfo user, 2: PartyID party_id, 3: PayoutAccountParams params)
+    ClaimResult CreatePayoutTool (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: domain.ContractID contract_id,
+        4: PayoutToolParams params
+    )
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
-            4: base.InvalidRequest ex4
+            4: ContractNotFound ex4,
+            5: InvalidContractStatus ex5,
+            6: base.InvalidRequest ex6
         )
 
     ClaimResult CreateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopParams params)
@@ -542,6 +571,9 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
+            5: ContractNotFound ex5,
+            6: InvalidContractStatus ex6,
+            7: PayoutToolNotFound ex7,
             4: base.InvalidRequest ex4
         )
 
@@ -555,6 +587,9 @@ service PartyManagement {
             3: ShopNotFound ex3,
             4: InvalidPartyStatus ex4,
             5: InvalidShopStatus ex5,
+            7: ContractNotFound ex7,
+            8: InvalidContractStatus ex8,
+            9: PayoutToolNotFound ex9,
             6: base.InvalidRequest ex6
         )
 

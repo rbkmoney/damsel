@@ -31,6 +31,25 @@ struct Content {
  */
 typedef string Timestamp
 
+/**
+ * Временной интервал
+ * не заданное значение границы считается бесконечностью
+ */
+struct TimestampInterval {
+    1: optional TimestampIntervalBound lower_bound
+    2: optional TimestampIntervalBound upper_bound
+}
+
+struct TimestampIntervalBound {
+    1: required BoundType bound_type
+    2: required Timestamp bound_time
+}
+
+enum BoundType {
+    inclusive
+    exclusive
+}
+
 /** Отображение из строки в строку */
 typedef map<string, string> StringMap
 
