@@ -9,12 +9,11 @@
     /**
     * Диапазон времени
     * from_time - начальное время.
-    * to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
-    * Если from > to  - диапазон считается некорректным.
+    * to_time - конечное время.
     */
     struct TimeRange {
        1: required base.Timestamp from_time
-       2: optional base.Timestamp to_time
+       2: required base.Timestamp to_time
     }
 
     /**
