@@ -751,11 +751,17 @@ struct ProxyDefinition {
     2: required string description
     3: required string url
     4: required ProxyOptions options
+    5: optional TransportOptions transport_options
 }
 
 struct Proxy {
     1: required ProxyRef ref
     2: required ProxyOptions additional
+}
+
+struct TransportOptions {
+    1: required base.Milliseconds connect_timeout
+    2: required base.Milliseconds receive_timeout
 }
 
 /* System accounts */

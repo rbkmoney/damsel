@@ -50,6 +50,10 @@ enum BoundType {
     exclusive
 }
 
+/** Единицы времени. */
+typedef i32 Milliseconds
+typedef i32 Seconds
+
 /** Отображение из строки в строку */
 typedef map<string, string> StringMap
 
@@ -60,7 +64,7 @@ struct Rational {
 }
 
 /** Отрезок времени в секундах */
-typedef i32 Timeout
+typedef Seconds Timeout
 
 /** Значение ассоциации */
 typedef string Tag
