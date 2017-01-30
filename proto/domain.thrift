@@ -682,6 +682,16 @@ struct Inspector {
     3: required Proxy proxy
 }
 
+union InspectorSelector {
+    1: set<InspectorDecision> decisions
+    2: InspectorRef value
+}
+
+struct InspectorDecision {
+    1: required Predicate if_
+    2: required InspectorSelector then_
+}
+
 /**
  * Обобщённый терминал у провайдера.
  *
@@ -838,7 +848,7 @@ struct Globals {
     2: required ProviderSelector providers
     3: required SystemAccountSetSelector system_account_set
     4: required ExternalAccountSetSelector external_account_set
-    5: required InspectorRef inspector
+    5: required InspectorSelector inspector
     6: required ContractTemplateRef default_contract_template
     7: required ProxyRef common_merchant_proxy
 }
