@@ -427,9 +427,9 @@ struct CategoryDecision {
 
 /* Limits */
 
-struct CashLimit {
-    1: required CashBound min
-    2: required CashBound max
+struct CashRange {
+    1: required CashBound upper
+    2: required CashBound lower
 }
 
 union CashBound {
@@ -439,7 +439,7 @@ union CashBound {
 
 union CashLimitSelector {
     1: list<CashLimitDecision> decisions
-    2: CashLimit value
+    2: CashRange value
 }
 
 struct CashLimitDecision {
@@ -738,6 +738,7 @@ union Predicate {
 union Condition {
     1: CategoryRef category_is
     2: CurrencyRef currency_is
+    4: CashRange cost_in
     3: PaymentToolCondition payment_tool
 }
 
