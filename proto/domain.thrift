@@ -740,6 +740,8 @@ union Condition {
     2: CurrencyRef currency_is
     4: CashRange cost_in
     3: PaymentToolCondition payment_tool
+    5: ShopLocation shop_location_is
+    6: PartyCondition party
 }
 
 union PaymentToolCondition {
@@ -749,6 +751,15 @@ union PaymentToolCondition {
 union BankCardCondition {
     1: BankCardPaymentSystem payment_system_is
     2: BankCardBINRangeRef bin_in
+}
+
+struct PartyCondition {
+    1: required PartyID id
+    2: optional PartyConditionDefinition definition
+}
+
+union PartyConditionDefinition {
+    1: ShopID shop_is
 }
 
 /* Proxies */
