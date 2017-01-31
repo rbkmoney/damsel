@@ -729,6 +729,7 @@ struct TerminalDecision {
 /* Predicates / conditions */
 
 union Predicate {
+    5: bool constant
     1: Condition condition
     2: Predicate is_not
     3: set<Predicate> all_of
