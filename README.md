@@ -14,5 +14,11 @@ Systemwide protocol collection.
 		namespace java com.rbkmoney.damsel.<name>
 			
 	Где `<name>` - имя, уникальное для Thrift IDL файлa в Damsel.
-		
+	
+	
+# Java development
 
+Собрать дамзель и инсталировать новый jar в локальный мавен репозиторий:
+
+* make wc_compile
+* make wc_java_install LOCAL_BUILD=true SETTINGS_XML=path_to_rbk_maven_settings		

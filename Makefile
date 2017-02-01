@@ -21,7 +21,7 @@ BUILD_IMAGE_TAG := 80c38dc638c0879687f6661f4e16e8de9fc0d2c6
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus
+CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus java_install
 
 all: compile
 
@@ -93,6 +93,10 @@ DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
 DOCKER_RUN_OPTS += -e SETTINGS_XML=$(SETTINGS_XML)
 endif
 
+ifdef LOCAL_BUILD
+DOCKER_RUN_OPTS += -v $$HOME/.m2:/home/$(UNAME)/.m2:rw
+endif
+
 COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
 NUMBER_COMMITS = $(shell git rev-list --count HEAD)
 
@@ -104,3 +108,8 @@ deploy_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
 	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
+
+java_install:
+	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
+	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
+	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
