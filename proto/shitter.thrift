@@ -58,10 +58,10 @@
     **/
     struct PayoutPaymentInfo {
         1: required string id
-        2: required string invoiceID
-        3: required string paymentId
-        4: required string partyId
-        5: required string shopId
+        2: required string invoice_id
+        3: required string payment_id
+        4: required string party_id
+        5: required string shop_id
         6: required string amount
         7: required string provider_comission
         8: required string rbk_comission
