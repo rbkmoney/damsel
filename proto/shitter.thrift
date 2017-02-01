@@ -24,7 +24,7 @@
      * accepted - корректность выплаты подтверждена АБС и 1С.
      **/
     enum PayoutStatus {
-        new,
+        created,
         ready,
         accepted
     }
@@ -61,12 +61,12 @@
         2: required string invoiceID
         3: required string paymentId
         4: required string partyId
-        5: required string shopId;
-        6: required string amount;
-        7: required string provider_comission;
-        8: required string rbk_comission;
-        9: optional string payout_id;
-        10: optional string wtime;
+        5: required string shopId
+        6: required string amount
+        7: required string provider_comission
+        8: required string rbk_comission
+        9: optional string payout_id
+        10: optional string created_at
     }
 
     /**
