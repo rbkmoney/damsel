@@ -18,14 +18,15 @@
     }
 
     /**
-    * Статус выплаты
-    * Pending - ожидается подтверждение от АБС и 1С
-    * Done - средства переведены - выплата завершена
-    **/
+     * Статус выплаты
+     * created - выплата создана, но сумма платежей еще не вычисленна и остальные атрибуты не заполненны
+     * ready - выплата готова и заполненна данными
+     * accepted - корректность выплаты подтверждена АБС и 1С.
+     **/
     enum PayoutStatus {
-       pending,
-       send,
-       done
+        created,
+        ready,
+        accepted
     }
 
     /**
@@ -44,17 +45,28 @@
     struct Payout {
        1: required PayoutID id
        2: required PayoutStatus status
-       3: required string absStatus
-       4: required string oneStatus
-
-       //todo: more fields
+       3: required string from_time
+       4: required string to_time
+       5: required string abs_status
+       6: required string ones_status
+       7: optional string abs_report
+       8: optional string ones_report
+       9: optional string created_at
     }
     /**
     * Информация о платаже сохраняемая в Shiter-e
     **/
     struct PayoutPaymentInfo {
         1: required string id
-        2: required string invoiceID
+        2: required string invoice_id
+        3: required string payment_id
+        4: required string party_id
+        5: required string shop_id
+        6: required string amount
+        7: required string provider_comission
+        8: required string rbk_comission
+        9: optional string payout_id
+        10: optional string created_at
     }
 
     /**
