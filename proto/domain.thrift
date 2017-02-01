@@ -427,9 +427,9 @@ struct CategoryDecision {
 
 /* Limits */
 
-struct CashLimit {
-    1: required CashBound min
-    2: required CashBound max
+struct CashRange {
+    1: required CashBound upper
+    2: required CashBound lower
 }
 
 union CashBound {
@@ -439,7 +439,7 @@ union CashBound {
 
 union CashLimitSelector {
     1: list<CashLimitDecision> decisions
-    2: CashLimit value
+    2: CashRange value
 }
 
 struct CashLimitDecision {
@@ -682,6 +682,16 @@ struct Inspector {
     3: required Proxy proxy
 }
 
+union InspectorSelector {
+    1: set<InspectorDecision> decisions
+    2: InspectorRef value
+}
+
+struct InspectorDecision {
+    1: required Predicate if_
+    2: required InspectorSelector then_
+}
+
 /**
  * Обобщённый терминал у провайдера.
  *
@@ -719,6 +729,7 @@ struct TerminalDecision {
 /* Predicates / conditions */
 
 union Predicate {
+    5: bool constant
     1: Condition condition
     2: Predicate is_not
     3: set<Predicate> all_of
@@ -728,7 +739,10 @@ union Predicate {
 union Condition {
     1: CategoryRef category_is
     2: CurrencyRef currency_is
+    4: CashRange cost_in
     3: PaymentToolCondition payment_tool
+    5: ShopLocation shop_location_is
+    6: PartyCondition party
 }
 
 union PaymentToolCondition {
@@ -738,6 +752,15 @@ union PaymentToolCondition {
 union BankCardCondition {
     1: BankCardPaymentSystem payment_system_is
     2: BankCardBINRangeRef bin_in
+}
+
+struct PartyCondition {
+    1: required PartyID id
+    2: optional PartyConditionDefinition definition
+}
+
+union PartyConditionDefinition {
+    1: ShopID shop_is
 }
 
 /* Proxies */
@@ -832,7 +855,7 @@ struct Globals {
     2: required ProviderSelector providers
     3: required SystemAccountSetSelector system_account_set
     4: required ExternalAccountSetSelector external_account_set
-    5: required InspectorRef inspector
+    5: required InspectorSelector inspector
     6: required ContractTemplateRef default_contract_template
     7: required ProxyRef common_merchant_proxy
 }
