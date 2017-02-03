@@ -683,7 +683,7 @@ struct Inspector {
 }
 
 union InspectorSelector {
-    1: set<InspectorDecision> decisions
+    1: list<InspectorDecision> decisions
     2: InspectorRef value
 }
 
