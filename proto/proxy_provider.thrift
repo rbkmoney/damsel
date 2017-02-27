@@ -95,7 +95,7 @@ union TargetInvoicePaymentStatus {
  */
 struct Context {
     1: required Session session
-    2: required PaymentInfo payment
+    2: required PaymentInfo payment_info
     3: optional domain.ProxyOptions options = {}
 }
 
