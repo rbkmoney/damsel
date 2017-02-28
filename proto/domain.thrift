@@ -318,6 +318,8 @@ struct ContractTemplateRef { 1: required ObjectID id }
 
 /** Шаблон договора или поправки **/
 struct ContractTemplate {
+    4: required string name
+    5: optional string description
     1: optional Lifetime valid_since
     2: optional Lifetime valid_until
     3: required TermSetHierarchyRef terms
@@ -362,6 +364,8 @@ struct TimedTermSet {
 }
 
 struct TermSetHierarchy {
+    3: required string name
+    4: optional string description
     1: optional TermSetHierarchyRef parent_terms
     2: required list<TimedTermSet> term_sets
 }
