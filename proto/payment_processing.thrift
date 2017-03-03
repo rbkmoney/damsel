@@ -237,6 +237,8 @@ struct InvoicePaymentParams {
 // forward-declared
 exception PartyNotFound {}
 exception ShopNotFound {}
+exception InvalidPartyStatus { 1: required InvalidStatus status }
+exception InvalidShopStatus { 1: required InvalidStatus status }
 
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
@@ -258,7 +260,9 @@ service Invoicing {
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
             3: PartyNotFound ex3,
-            4: ShopNotFound ex4
+            4: ShopNotFound ex4,
+            5: InvalidPartyStatus ex5,
+            6: InvalidShopStatus ex6
         )
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -285,7 +289,9 @@ service Invoicing {
             2: UserInvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
             4: InvoicePaymentPending ex4,
-            5: base.InvalidRequest ex5
+            5: base.InvalidRequest ex5,
+            6: InvalidPartyStatus ex6,
+            7: InvalidShopStatus ex7
         )
 
     domain.InvoicePayment GetPayment (
@@ -303,7 +309,9 @@ service Invoicing {
         throws (
             1: InvalidUser ex1,
             2: UserInvoiceNotFound ex2,
-            3: InvalidInvoiceStatus ex3
+            3: InvalidInvoiceStatus ex3,
+            4: InvalidPartyStatus ex4,
+            5: InvalidShopStatus ex5
         )
 
     void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
@@ -311,7 +319,9 @@ service Invoicing {
             1: InvalidUser ex1,
             2: UserInvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
-            4: InvoicePaymentPending ex4
+            4: InvoicePaymentPending ex4,
+            5: InvalidPartyStatus ex5,
+            6: InvalidShopStatus ex6
         )
 
 }
@@ -474,14 +484,6 @@ exception InvalidClaimStatus {
 union InvalidStatus {
     1: domain.Blocking blocking
     2: domain.Suspension suspension
-}
-
-exception InvalidPartyStatus {
-    1: required InvalidStatus status
-}
-
-exception InvalidShopStatus {
-    1: required InvalidStatus status
 }
 
 exception AccountNotFound {}
