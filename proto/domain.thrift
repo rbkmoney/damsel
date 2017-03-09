@@ -182,6 +182,7 @@ struct Shop {
     2: required Blocking blocking
     3: required Suspension suspension
     4: required ShopDetails details
+   10: required ShopLocation location
     5: required CategoryRef category
     6: optional ShopAccount account
     7: required ContractID contract_id
@@ -200,7 +201,6 @@ struct ShopAccount {
 struct ShopDetails {
     1: required string name
     2: optional string description
-    3: optional ShopLocation location
 }
 
 union ShopLocation {
