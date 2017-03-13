@@ -56,6 +56,29 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.rbkmoney.damsel</pattern>
+                                    <shadedPattern>com.rbkmoney.damsel._${commit.hash}</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>versioned</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
