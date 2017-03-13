@@ -393,21 +393,13 @@ struct ShopModificationUnit {
 
 union ShopModification {
     5: ShopParams creation
-    3: ShopUpdate update
-    4: ShopAccountCreated account_created
-}
-
-struct ShopUpdate {
-    1: optional domain.CategoryRef category
-    2: optional domain.ShopDetails details
-    3: optional domain.ContractID contract_id
-    4: optional domain.PayoutToolID payout_tool_id
-    5: optional domain.Proxy proxy
-    6: optional domain.ShopLocation location
-}
-
-struct ShopAccountCreated {
-    1: required domain.ShopAccount account
+    6: domain.CategoryRef category
+    7: domain.ShopDetails details
+    8: domain.ContractID contract_id
+    9: domain.PayoutToolID payout_tool_id
+    10: domain.Proxy proxy
+    11: domain.ShopLocation location
+    4: domain.ShopAccount account_creation
 }
 
 // Claims
