@@ -275,6 +275,7 @@ typedef i32 ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
+    11: optional base.Timestamp created_at
     4: optional base.Timestamp valid_since
     5: optional base.Timestamp valid_until
     6: required ContractStatus status
@@ -293,10 +294,12 @@ struct LegalAgreement {
 union ContractStatus {
     1: ContractActive active
     2: ContractTerminated terminated
+    3: ContractExpiered expiered
 }
 
 struct ContractActive {}
 struct ContractTerminated { 1: required base.Timestamp terminated_at }
+struct ContractExpiered {}
 
 /* Categories */
 
