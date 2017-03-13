@@ -174,7 +174,7 @@ struct PartyContactInfo {
 
 /* Shops */
 
-typedef i32 ShopID
+typedef base.ID ShopID
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -257,7 +257,7 @@ struct BankAccount {
     4: required string bank_bik
 }
 
-typedef i32 PayoutToolID
+typedef base.ID PayoutToolID
 
 struct PayoutTool {
     1: required PayoutToolID id
@@ -269,7 +269,7 @@ union PayoutToolInfo {
     1: BankAccount bank_account
 }
 
-typedef i32 ContractID
+typedef base.ID ContractID
 
 /** Договор */
 struct Contract {
@@ -339,7 +339,7 @@ struct LifetimeInterval {
 
 /** Поправки к договору **/
 struct ContractAdjustment {
-    1: required i32 id
+    1: required base.ID id
     2: optional base.Timestamp valid_since
     3: optional base.Timestamp valid_until
     4: required TermSetHierarchyRef terms
