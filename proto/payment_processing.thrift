@@ -239,6 +239,10 @@ exception PartyNotFound {}
 exception ShopNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+union InvalidStatus {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+}
 
 exception InvalidUser {}
 exception UserInvoiceNotFound {}
@@ -470,20 +474,44 @@ struct ClaimStatusChanged {
 // Exceptions
 
 exception PartyExists {}
-exception ClaimNotFound {}
 exception ContractNotFound {}
-exception InvalidContractStatus { 1: required domain.ContractStatus status }
-exception PayoutToolNotFound {}
-exception ChangesetConflict { 1: required ClaimID conflicted_id }
-
+exception ClaimNotFound {}
 
 exception InvalidClaimStatus {
     1: required ClaimStatus status
 }
 
-union InvalidStatus {
-    1: domain.Blocking blocking
-    2: domain.Suspension suspension
+exception ChangesetConflict { 1: required ClaimID conflicted_id }
+exception InvalidChangeset { 1: required InvalidChangesetReason reason }
+
+union InvalidChangesetReason {
+    1: ContractNotExists contract_not_exists
+    2: ContractStatusInvalid invalid_contract_status
+    3: PayoutToolNotFound payout_tool_not_found
+    4: ShopNotExists shop_not_exists
+    5: ShopStatusInvalid shop_status_invalid
+}
+
+struct ContractNotExists {
+    1: required domain.ContractID contract_id
+}
+
+struct ContractStatusInvalid {
+    1: required domain.ContractID contract_id
+    2: required domain.ContractStatus status
+}
+
+struct PayoutToolNotFound {
+    1: required domain.PayoutToolID payout_tool_id
+}
+
+struct ShopNotExists {
+    1: required ShopID shop_id
+}
+
+struct ShopStatusInvalid {
+    1: required ShopID shop_id
+    2: required InvalidStatus status
 }
 
 exception AccountNotFound {}
@@ -548,13 +576,8 @@ service PartyManagement {
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
             4: ChangesetConflict ex4,
-            /* TODO make InvalidChangeset exception and hide all those inside */
-            5: ContractNotFound ex5,
-            6: InvalidContractStatus ex6,
-            7: PayoutToolNotFound ex7,
-            8: ShopNotFound ex8,
-            9: InvalidShopStatus ex9,
-            10: base.InvalidRequest ex10
+            5: InvalidChangeset ex5,
+            6: base.InvalidRequest ex6
         )
 
     Claim GetClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
@@ -575,14 +598,12 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
-            3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4
-            5: ContractNotFound ex5,
-            6: InvalidContractStatus ex6,
-            7: PayoutToolNotFound ex7,
-            8: ShopNotFound ex8,
-            9: InvalidShopStatus ex9,
-            10: base.InvalidRequest ex10
+            3: InvalidPartyStatus ex3,
+            4: ClaimNotFound ex4,
+            5: InvalidClaimStatus ex5,
+            6: ChangesetConflict ex6,
+            7: InvalidChangeset ex7,
+            8: base.InvalidRequest ex8
         )
 
     void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
