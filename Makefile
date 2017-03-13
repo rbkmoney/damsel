@@ -107,9 +107,9 @@ java_compile:
 deploy_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
+	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.hash="$(COMMIT_HASH)"
 
 java_install:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
+	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.hash="$(COMMIT_HASH)"
