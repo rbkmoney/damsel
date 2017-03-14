@@ -434,7 +434,7 @@ struct ClaimPending {}
 
 struct ClaimAccepted {
     1: required base.Timestamp accepted_at
-    2: required ClaimEffects effects
+    2: optional ClaimEffects effects
 }
 
 struct ClaimDenied {
@@ -455,19 +455,34 @@ union ClaimEffect {
     3: ShopEffect shop_effect
 }
 
-union ContractEffect {
+struct ContractEffect {
+    1: required domain.ContractID contract_id
+    2: required ContractEffectPayload payload
+}
+
+union ContractEffectPayload {
     1: domain.Contract created
-    2: domain.Contract updated
+    2: domain.ContractStatus status_changed
+    3: domain.ContractAdjustment adjustment_created
+    4: domain.PayoutTool payout_tool_created
+    5: domain.LegalAgreement legal_agreement_bound
 }
 
-union ShopEffect {
-    1: domain.Shop created
-    2: domain.Shop updated
-}
-
-struct ShopAccountCreated {
+struct ShopEffect {
     1: required ShopID shop_id
-    2: required domain.ShopAccount account
+    2: required ShopEffectPayload payload
+}
+
+union ShopEffectPayload
+{
+    1: domain.Shop created
+    2: domain.CategoryRef category_changed
+    3: domain.ShopDetails details_changed
+    4: domain.ContractID contract_changed
+    5: domain.PayoutToolID payout_tool_changed
+    6: domain.Proxy proxy_changed
+    7: domain.ShopLocation location_changed
+    8: domain.ShopAccount account_created
 }
 
 struct AccountState {
