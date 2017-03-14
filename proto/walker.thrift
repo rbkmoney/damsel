@@ -70,12 +70,12 @@
            /**
            * Поиск заявки по атрибутам
            **/
-           list<ClaimInfo> searchClaims(ClaimSearchRequest request)
+           list<ClaimInfo> searchClaims(1: ClaimSearchRequest request)
 
            /**
            * Добавить комментарий к заявке
            **/
-           void AddComment(1: ClaimID claimId,  2: UserInfo user, 2: String text)
+           void AddComment(1: ClaimID claimId,  2: UserInfo user, 3: string text)
 
            /**
            * Получить список комментариев к заявке
