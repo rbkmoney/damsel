@@ -338,8 +338,10 @@ struct LifetimeInterval {
 }
 
 /** Поправки к договору **/
+typedef base.ID ContractAdjustmentID
+
 struct ContractAdjustment {
-    1: required base.ID id
+    1: required ContractAdjustmentID id
     2: optional base.Timestamp valid_since
     3: optional base.Timestamp valid_until
     4: required TermSetHierarchyRef terms

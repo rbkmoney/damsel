@@ -239,6 +239,7 @@ exception PartyNotFound {}
 exception ShopNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+
 union InvalidStatus {
     1: domain.Blocking blocking
     2: domain.Suspension suspension
@@ -342,6 +343,7 @@ struct PartyParams {
 }
 
 struct PayoutToolParams {
+    3: required domain.PayoutToolID payout_tool_id
     1: required domain.CurrencyRef currency
     2: required domain.PayoutToolInfo tool_info
 }
@@ -355,6 +357,10 @@ struct ShopParams {
     5: optional domain.Proxy proxy
 }
 
+struct ShopAccountParams {
+    1: required domain.CurrencyRef currency
+}
+
 struct ContractParams {
     1: required domain.Contractor contractor
     2: optional domain.ContractTemplateRef template
@@ -362,6 +368,7 @@ struct ContractParams {
 }
 
 struct ContractAdjustmentParams {
+    2: required domain.ContractAdjustmentID adjustment_id
     1: required domain.ContractTemplateRef template
 }
 
@@ -378,8 +385,8 @@ struct ContractModificationUnit {
 union ContractModification {
     5: ContractParams creation
     1: ContractTermination termination
-    2: domain.ContractAdjustment adjustment_creation
-    3: domain.PayoutTool payout_tool_creation
+    2: ContractAdjustmentParams adjustment_creation
+    3: PayoutToolParams payout_tool_creation
     4: domain.LegalAgreement legal_agreement_binding
 }
 
@@ -403,7 +410,7 @@ union ShopModification {
     9: domain.PayoutToolID payout_tool_id
     10: domain.Proxy proxy
     11: domain.ShopLocation location
-    4: domain.ShopAccount account_creation
+    12: ShopAccountParams shop_account_creation
 }
 
 // Claims
@@ -427,6 +434,7 @@ struct ClaimPending {}
 
 struct ClaimAccepted {
     1: required base.Timestamp accepted_at
+    2: required ClaimEffects effects
 }
 
 struct ClaimDenied {
@@ -435,6 +443,31 @@ struct ClaimDenied {
 
 struct ClaimRevoked {
     1: required string reason
+}
+
+// Claim effects
+
+typedef list<ClaimEffect> ClaimEffects
+
+union ClaimEffect {
+    /* 1: PartyEffect Reserved for future */
+    2: ContractEffect contract_effect
+    3: ShopEffect shop_effect
+}
+
+union ContractEffect {
+    1: domain.Contract created
+    2: domain.Contract updated
+}
+
+union ShopEffect {
+    1: domain.Shop created
+    2: domain.Shop updated
+}
+
+struct ShopAccountCreated {
+    1: required ShopID shop_id
+    2: required domain.ShopAccount account
 }
 
 struct AccountState {
