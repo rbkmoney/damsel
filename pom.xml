@@ -12,7 +12,7 @@
 
     <groupId>com.rbkmoney</groupId>
     <artifactId>damsel</artifactId>
-    <version>TEST-SNAPSHOT</version>
+    <version>SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Damsel</name>
