@@ -502,9 +502,13 @@ union ShopEffect {
     3: domain.ShopDetails details_changed
     4: domain.ContractID contract_changed
     5: domain.PayoutToolID payout_tool_changed
-    6: domain.Proxy proxy_changed
+    6: ShopProxyChanged proxy_changed
     7: domain.ShopLocation location_changed
     8: domain.ShopAccount account_created
+}
+
+struct ShopProxyChanged {
+    1: optional domain.Proxy proxy
 }
 
 struct AccountState {
