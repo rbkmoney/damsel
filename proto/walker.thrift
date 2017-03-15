@@ -1,14 +1,18 @@
     include "domain.thrift"
-    include "payment_processing.thrift"
 
     namespace java com.rbkmoney.damsel.walker
     namespace erlang walker
 
     typedef i64 ClaimID
 
+
+// -- --
+
     struct ClaimInfo {
          1: required ClaimID claimID
-         2: required payment_processing.ClaimStatus status
+         2: required String status
+         // Список сериализованных в JSON PartyModification-s
+         3: required list<string> partyChangeset
     }
 
     struct ClaimSearchRequest {
@@ -16,7 +20,6 @@
         2: optional set<ClaimID> claimID
         3: optional string contains
         4: optional string assigned
-
     }
 
     struct Comment {
@@ -25,18 +28,20 @@
         3: string userId
     }
 
-   struct Modification {
-        1: string fieldName
-        2: string valueFrom
-        3: string valueTo
-    }
-
-    struct Event {
+    /**
+    * Действия связанные с клеймом - история событий
+    **/
+    struct Action {
         1: string createdAt
         2: string userId
         3: string userName
         4: list<Modification> modifications
     }
+
+     struct Modification {
+            1: string before
+            2: string after
+     }
 
     struct UserInfo{
         1: string userID
@@ -85,6 +90,6 @@
            /**
            * Получитить историю событий связанных с заявкой
            **/
-           list<Event> getEvents(1: ClaimID claimId, 2: UserInfo user)
+           list<Action> getEvents(1: ClaimID claimId, 2: UserInfo user)
 
     }
