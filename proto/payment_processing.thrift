@@ -343,18 +343,15 @@ struct PartyParams {
 }
 
 struct PayoutToolParams {
-    3: required domain.PayoutToolID payout_tool_id
     1: required domain.CurrencyRef currency
     2: required domain.PayoutToolInfo tool_info
 }
 
 struct ShopParams {
-    1: optional domain.CategoryRef category
-    2: required domain.ShopDetails details
     6: required domain.ShopLocation location
+    2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
     4: required domain.PayoutToolID payout_tool_id
-    5: optional domain.Proxy proxy
 }
 
 struct ShopAccountParams {
@@ -368,7 +365,6 @@ struct ContractParams {
 }
 
 struct ContractAdjustmentParams {
-    2: required domain.ContractAdjustmentID adjustment_id
     1: required domain.ContractTemplateRef template
 }
 
@@ -383,16 +379,34 @@ struct ContractModificationUnit {
 }
 
 union ContractModification {
-    5: ContractParams creation
-    1: ContractTermination termination
-    2: ContractAdjustmentParams adjustment_creation
-    3: PayoutToolParams payout_tool_creation
-    4: domain.LegalAgreement legal_agreement_binding
+    1: ContractParams creation
+    2: ContractTermination termination
+    3: ContractAdjustmentModificationUnit adjustment_modification
+    4: PayoutToolModificationUnit payout_tool_modification
+    5: domain.LegalAgreement legal_agreement_binding
 }
 
 struct ContractTermination {
     1: required base.Timestamp terminated_at
     2: optional string reason
+}
+
+struct ContractAdjustmentModificationUnit {
+    1: required domain.ContractAdjustmentID adjustment_id
+    2: required ContractAdjustmentModification modification
+}
+
+union ContractAdjustmentModification {
+    1: ContractAdjustmentParams creation
+}
+
+struct PayoutToolModificationUnit {
+    1: required domain.PayoutToolID payout_tool_id
+    2: required PayoutToolModification modification
+}
+
+union PayoutToolModification {
+    1: PayoutToolParams creation
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -404,13 +418,22 @@ struct ShopModificationUnit {
 
 union ShopModification {
     5: ShopParams creation
-    6: domain.CategoryRef category
-    7: domain.ShopDetails details
-    8: domain.ContractID contract_id
-    9: domain.PayoutToolID payout_tool_id
-    10: domain.Proxy proxy
-    11: domain.ShopLocation location
+    6: domain.CategoryRef category_modification
+    7: domain.ShopDetails details_modification
+    8: ShopContractModification contract_modification
+    9: domain.PayoutToolID payout_tool_modification
+    10: ProxyModification proxy_modification
+    11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
+}
+
+struct ShopContractModification {
+    1: required domain.ContractID contract_id
+    2: required domain.PayoutToolID payout_tool_id
+}
+
+struct ProxyModification {
+    1: optional domain.Proxy proxy
 }
 
 // Claims
@@ -451,16 +474,16 @@ typedef list<ClaimEffect> ClaimEffects
 
 union ClaimEffect {
     /* 1: PartyEffect Reserved for future */
-    2: ContractEffect contract_effect
-    3: ShopEffect shop_effect
+    2: ContractEffectUnit contract_effect
+    3: ShopEffectUnit shop_effect
 }
 
-struct ContractEffect {
+struct ContractEffectUnit {
     1: required domain.ContractID contract_id
-    2: required ContractEffectPayload payload
+    2: required ContractEffect effect
 }
 
-union ContractEffectPayload {
+union ContractEffect {
     1: domain.Contract created
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
@@ -468,13 +491,12 @@ union ContractEffectPayload {
     5: domain.LegalAgreement legal_agreement_bound
 }
 
-struct ShopEffect {
+struct ShopEffectUnit {
     1: required ShopID shop_id
-    2: required ShopEffectPayload payload
+    2: required ShopEffect effect
 }
 
-union ShopEffectPayload
-{
+union ShopEffect {
     1: domain.Shop created
     2: domain.CategoryRef category_changed
     3: domain.ShopDetails details_changed
@@ -534,10 +556,11 @@ exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
     1: ContractNotExists contract_not_exists
-    2: ContractStatusInvalid invalid_contract_status
-    3: PayoutToolNotFound payout_tool_not_found
+    2: ContractStatusInvalid contract_status_invalid
+    3: PayoutToolNotExists payout_tool_not_exists
     4: ShopNotExists shop_not_exists
     5: ShopStatusInvalid shop_status_invalid
+    6: ContractTermsViolated contract_terms_violated
 }
 
 struct ContractNotExists {
@@ -549,7 +572,7 @@ struct ContractStatusInvalid {
     2: required domain.ContractStatus status
 }
 
-struct PayoutToolNotFound {
+struct PayoutToolNotExists {
     1: required domain.PayoutToolID payout_tool_id
 }
 
@@ -560,6 +583,12 @@ struct ShopNotExists {
 struct ShopStatusInvalid {
     1: required ShopID shop_id
     2: required InvalidStatus status
+}
+
+struct ContractTermsViolated {
+    1: required ShopID shop_id
+    2: required domain.ContractID contract_id
+    3: required domain.TermSet terms
 }
 
 exception AccountNotFound {}

@@ -162,6 +162,7 @@ typedef base.ID PartyID
 struct Party {
     1: required PartyID id
     7: required PartyContactInfo contact_info
+    8: required base.Timestamp created_at
     2: required Blocking blocking
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts
@@ -179,6 +180,7 @@ typedef base.ID ShopID
 /** Магазин мерчанта. */
 struct Shop {
     1: required ShopID id
+   11: required base.Timestamp created_at
     2: required Blocking blocking
     3: required Suspension suspension
     4: required ShopDetails details
@@ -261,6 +263,7 @@ typedef base.ID PayoutToolID
 
 struct PayoutTool {
     1: required PayoutToolID id
+    4: required base.Timestamp created_at
     2: required CurrencyRef currency
     3: required PayoutToolInfo payout_tool_info
 }
@@ -275,7 +278,7 @@ typedef base.ID ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
-    11: optional base.Timestamp created_at
+    11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
     5: optional base.Timestamp valid_until
     6: required ContractStatus status
@@ -294,12 +297,12 @@ struct LegalAgreement {
 union ContractStatus {
     1: ContractActive active
     2: ContractTerminated terminated
-    3: ContractExpiered expiered
+    3: ContractExpired expired
 }
 
 struct ContractActive {}
 struct ContractTerminated { 1: required base.Timestamp terminated_at }
-struct ContractExpiered {}
+struct ContractExpired {}
 
 /* Categories */
 
@@ -342,6 +345,7 @@ typedef base.ID ContractAdjustmentID
 
 struct ContractAdjustment {
     1: required ContractAdjustmentID id
+    5: required base.Timestamp created_at
     2: optional base.Timestamp valid_since
     3: optional base.Timestamp valid_until
     4: required TermSetHierarchyRef terms
