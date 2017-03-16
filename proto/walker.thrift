@@ -109,7 +109,7 @@
 
     //Контейнер для хранения всех ченжсетов
     struct PartyModificationUnit {
-         1: list<PartyModification> modifications
+         1: required list<PartyModification> modifications
     }
 
     struct ClaimInfo {
@@ -126,70 +126,75 @@
     }
 
     struct Comment {
-        1: string text
-        2: string created_at
-        3: string user_id
+        1: required string text
+        2: required string created_at
+        3: required string user_id
     }
 
     /**
     * Действия связанные с клеймом - история событий
     **/
     struct Action {
-        1: string created_at
-        2: string user_id
-        3: string userName
-        4: list<Modification> modifications
+        1: required string created_at
+        2: required UserInfo user
+        4: required list<Modification> modifications
     }
 
      struct Modification {
-            1: string before
-            2: string after
+            1: required string before
+            2: required string after
      }
 
     struct UserInfo{
-        1: string userID
-        2: string userName
-        3: string email
+        1: required string userID
+        2: optional string user_name
+        3: optional string email
     }
 
 
      service Walker {
-           /**
-           * Подтвердить и применить заявку пользователя
-           **/
-           void ApproveClaim(1: ClaimID claimID)
+        /**
+        * Подтвердить и применить заявку пользователя
+        **/
+        void ApproveClaim(1: ClaimID claimID)
 
-           /**
-           * Отклонить заявку
-           **/
-           void DeclineClaim(1: ClaimID claimID, 2: UserInfo user, 3: string reason)
+        /**
+        * Отклонить заявку
+        **/
+        void DeclineClaim(1: ClaimID claimID, 2: UserInfo user, 3: string reason)
 
-           /**
-           * Передает список изменений для заявки
-           **/
-           void UpdateClaim(1: ClaimID claimID, 2: UserInfo user, 3: PartyModificationUnit changeset)
-           /**
-            * Получить информацию о заявке
-            **/
-           ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInfo user)
+        /**
+        * Получить информацию о заявке
+        **/
+        ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInfo user)
 
-           /**
-           * Поиск заявки по атрибутам
-           **/
-           list<ClaimInfo> SearchClaims(1: ClaimSearchRequest request)
+        /**
+        * Создать заявку
+        **/
+        void CreateClaim (1: UserInfo user, 2: PartyID party_id, 3: PartyModificationUnit changeset)
 
-           /**
-           * Добавить комментарий к заявке
-           **/
-           void AddComment(1: ClaimID claimId,  2: UserInfo user, 3: string text)
+        /**
+        * Передает список изменений для заявки
+        **/
+        void UpdateClaim(1: ClaimID claimID, 2: UserInfo user, 3: PartyModificationUnit changeset)
 
-           /**
-           * Получить список комментариев к заявке
-           **/
-           list<Comment> GetComments(1: ClaimID claimId, 2: UserInfo user)
+        /**
+        * Поиск заявки по атрибутам
+        **/
+        list<ClaimInfo> SearchClaims(1: ClaimSearchRequest request)
 
-           /**
-           * Получитить историю событий связанных с заявкой
-           **/
-           list<Action> GetEvents(1: ClaimID claimId, 2: UserInfo user)
+        /**
+        * Добавить комментарий к заявке
+        **/
+        void AddComment(1: ClaimID claimId,  2: UserInfo user, 3: string text)
+
+        /**
+        * Получить список комментариев к заявке
+        **/
+        list<Comment> GetComments(1: ClaimID claimId, 2: UserInfo user)
+
+        /**
+        * Получитить историю событий связанных с заявкой
+        **/
+        list<Action> GetEvents(1: ClaimID claimId, 2: UserInfo user)
     }
