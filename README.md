@@ -23,13 +23,13 @@ Systemwide protocol collection.
 * make wc_compile
 * make wc_java_install LOCAL_BUILD=true SETTINGS_XML=path_to_rbk_maven_settings		
 
-Чтобы ипользовать несколько версий дамзели в проекте используте classifier:versioned
+Чтобы ипользовать несколько версий дамзели в проекте используте classifier:v${commit.number}
 
 ```
 <dependency>
     <groupId>com.rbkmoney</groupId>
     <artifactId>damsel</artifactId>
     <version>1.136-07b0898</version>
-    <classifier>versioned</classifier>
+    <classifier>v136</classifier>
 </dependency>
 ```
