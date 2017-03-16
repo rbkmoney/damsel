@@ -80,9 +80,6 @@
        1: PayoutToolParams creation
    }
 
-   struct PartyModifications {
-       1: list<PartyModification> modifications
-   }
 
    struct ShopModificationUnit {
        1: required ShopID id
@@ -110,10 +107,15 @@
    }
     // *** end ***
 
+    //Контейнер для хранения всех ченжсетов
+    struct PartyModificationUnit {
+         1: list<PartyModification> modifications
+    }
+
     struct ClaimInfo {
          1: required ClaimID claimID
          2: required string status
-         3: required PartyModifications changeset
+         3: required PartyModificationUnit modifications
     }
 
     struct ClaimSearchRequest {
@@ -165,7 +167,7 @@
            /**
            * Передает список изменений для заявки
            **/
-
+           void UpdateClaim(1: ClaimID claimID, 2: UserInfo user, 3: PartyModificationUnit changeset)
            /**
             * Получить информацию о заявке
             **/
