@@ -5,84 +5,115 @@
 
     typedef i64 ClaimID
 
-    // -- Copy of Party Management
-    typedef list<PartyModification> PartyChangeset
-    typedef domain.PartyID PartyID
-    typedef domain.ShopID  ShopID
+    // *** Copy of Party Management ***
+   typedef domain.PartyID PartyID
+   typedef domain.ShopID  ShopID
 
-    struct PartyParams {
-        1: required domain.PartyContactInfo contact_info
-    }
+   struct PartyParams {
+       1: required domain.PartyContactInfo contact_info
+   }
 
-    struct PayoutToolParams {
-        1: required domain.CurrencyRef currency
-        2: required domain.PayoutToolInfo tool_info
-    }
+   struct PayoutToolParams {
+       1: required domain.CurrencyRef currency
+       2: required domain.PayoutToolInfo tool_info
+   }
 
-    struct ShopParams {
-        1: optional domain.CategoryRef category
-        2: required domain.ShopDetails details
-        6: required domain.ShopLocation location
-        3: required domain.ContractID contract_id
-        4: required domain.PayoutToolID payout_tool_id
-        5: optional domain.Proxy proxy
-    }
+   struct ShopParams {
+       6: required domain.ShopLocation location
+       2: required domain.ShopDetails details
+       3: required domain.ContractID contract_id
+       4: required domain.PayoutToolID payout_tool_id
+   }
 
-    struct ContractParams {
-        1: required domain.Contractor contractor
-        2: optional domain.ContractTemplateRef template
-        3: required PayoutToolParams payout_tool_params
-    }
+   struct ShopAccountParams {
+       1: required domain.CurrencyRef currency
+   }
 
-    struct ContractAdjustmentParams {
-        1: required domain.ContractTemplateRef template
-    }
+   struct ContractParams {
+       1: required domain.Contractor contractor
+       2: optional domain.ContractTemplateRef template
+       3: required PayoutToolParams payout_tool_params
+   }
 
-    union PartyModification {
-        4: ContractModificationUnit contract_modification
-        6: ShopModificationUnit shop_modification
-    }
+   struct ContractAdjustmentParams {
+       1: required domain.ContractTemplateRef template
+   }
 
-    struct ContractModificationUnit {
-        1: required domain.ContractID id
-        2: required ContractModification modification
-    }
+   union PartyModification {
+       4: ContractModificationUnit contract_modification
+       6: ShopModificationUnit shop_modification
+   }
 
-    union ContractModification {
-        5: ContractParams creation
-        1: ContractTermination termination
-        2: domain.ContractAdjustment adjustment_creation
-        3: domain.PayoutTool payout_tool_creation
-        4: domain.LegalAgreement legal_agreement_binding
-    }
+   struct ContractModificationUnit {
+       1: required domain.ContractID id
+       2: required ContractModification modification
+   }
 
-    struct ContractTermination {
-        1: required string terminated_at
-        2: optional string reason
-    }
+   union ContractModification {
+       1: ContractParams creation
+       2: ContractTermination termination
+       3: ContractAdjustmentModificationUnit adjustment_modification
+       4: PayoutToolModificationUnit payout_tool_modification
+       5: domain.LegalAgreement legal_agreement_binding
+   }
 
+   struct ContractTermination {
+       1: required string terminated_at
+       2: optional string reason
+   }
 
-    struct ShopModificationUnit {
-        1: required ShopID id
-        2: required ShopModification modification
-    }
+   struct ContractAdjustmentModificationUnit {
+       1: required domain.ContractAdjustmentID adjustment_id
+       2: required ContractAdjustmentModification modification
+   }
 
-    union ShopModification {
-        5: ShopParams creation
-        6: domain.CategoryRef category
-        7: domain.ShopDetails details
-        8: domain.ContractID contract_id
-        9: domain.PayoutToolID payout_tool_id
-        10: domain.Proxy proxy
-        11: domain.ShopLocation location
-        4: domain.ShopAccount account_creation
-    }
-    // -- end --
+   union ContractAdjustmentModification {
+       1: ContractAdjustmentParams creation
+   }
+
+   struct PayoutToolModificationUnit {
+       1: required domain.PayoutToolID payout_tool_id
+       2: required PayoutToolModification modification
+   }
+
+   union PayoutToolModification {
+       1: PayoutToolParams creation
+   }
+
+   struct PartyModifications {
+       1: list<PartyModification> modifications
+   }
+
+   struct ShopModificationUnit {
+       1: required ShopID id
+       2: required ShopModification modification
+   }
+
+   union ShopModification {
+       5: ShopParams creation
+       6: domain.CategoryRef category_modification
+       7: domain.ShopDetails details_modification
+       8: ShopContractModification contract_modification
+       9: domain.PayoutToolID payout_tool_modification
+       10: ProxyModification proxy_modification
+       11: domain.ShopLocation location_modification
+       12: ShopAccountParams shop_account_creation
+   }
+
+   struct ShopContractModification {
+       1: required domain.ContractID contract_id
+       2: required domain.PayoutToolID payout_tool_id
+   }
+
+   struct ProxyModification {
+       1: optional domain.Proxy proxy
+   }
+    // *** end ***
 
     struct ClaimInfo {
          1: required ClaimID claimID
          2: required string status
-         3: required PartyChangeset changeset
+         3: required PartyModifications changeset
     }
 
     struct ClaimSearchRequest {
@@ -121,7 +152,6 @@
 
 
      service Walker {
-
            /**
            * Подтвердить и применить заявку пользователя
            **/
@@ -135,7 +165,6 @@
            /**
            * Передает список изменений для заявки
            **/
-           void UpdateClaim(1: ClaimID claimID, 2: UserInfo user, 3: PartyChangeset changeset)
 
            /**
             * Получить информацию о заявке
