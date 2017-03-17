@@ -31,8 +31,7 @@ struct SubdivisionInfo{
 * Информация о данном GeoID
 **/
 struct GeoIDInfo{
-   1: required GeoID geoname_id;
-   2: required string country_name;
+   2: optional string country_name;
    3: optional set<SubdivisionInfo> subdivisions;
    4: optional string city_name;
 }
@@ -49,7 +48,7 @@ service GeoIpService {
     LocationInfo GetLocation (1: domain.IPAddress ip) throws (1: base.InvalidRequest ex1)
 
     /**
-    *  тоже что и GetLocation, но для списка IP адресов
+    *  то же что и GetLocation, но для списка IP адресов
     **/
     map <domain.IPAddress, LocationInfo> GetLocations (1: set <domain.IPAddress> ip) throws (1: base.InvalidRequest ex1)
 
@@ -58,18 +57,18 @@ service GeoIpService {
     * geo_ids - список geo-id по которым нужно получить информацию.
     * lang - язык ответа. Например: "RU", "ENG"
     *
-    * если нет данных по какому-то geo-id - то в мапе в качестве ключа он будет, но значение будет null
+    * если по данному geo-id нужная детализация не обнаружена, соответствующее поле в возвращаемой структуре останется не заполненным
     * если язык не поддерживается -> InvalidRequest
     **/
     map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
      /**
-     *  логика такая же как и в GetLocationInfo
      * Возвращает наименование географического объекта по указанному geoID.
      * При передаче geoID страны - название страны
      * При передаче geoID региона - название региона
      * При передаче geoID города - название города
      * и т.д.
+     * Если передан неизвестный geoID, возвращается пустая строка
      **/
      map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
