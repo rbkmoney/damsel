@@ -74,7 +74,7 @@
                                 </relocation>
                             </relocations>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>v{commit.number}</shadedClassifierName>
+                            <shadedClassifierName>v${commit.number}</shadedClassifierName>
                         </configuration>
                     </execution>
                 </executions>
