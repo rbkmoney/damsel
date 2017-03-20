@@ -692,27 +692,29 @@ service PartyManagement {
             3: InvalidPartyStatus ex3,
             4: ClaimNotFound ex4,
             5: InvalidClaimStatus ex5,
-            6: InvalidClaimRevision ex6
+            6: InvalidClaimRevision ex6,
             7: ChangesetConflict ex7,
             8: InvalidChangeset ex8,
             9: base.InvalidRequest ex9
         )
 
-    void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
+    void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: string reason)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4
+            4: InvalidClaimStatus ex4,
+            5: InvalidClaimRevision ex5
         )
 
-    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
+    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: string reason)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
             4: ClaimNotFound ex4,
-            5: InvalidClaimStatus ex5
+            5: InvalidClaimStatus ex5,
+            6: InvalidClaimRevision ex6
         )
 
     /* Event polling */
