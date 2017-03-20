@@ -439,11 +439,13 @@ struct ProxyModification {
 // Claims
 
 typedef i64 ClaimID
+typedef i32 ClaimRevision
 
 struct Claim {
     1: required ClaimID id
     2: required ClaimStatus status
     3: required PartyChangeset changeset
+    4: required ClaimRevision revision
 }
 
 union ClaimStatus {
@@ -528,6 +530,7 @@ union PartyEvent {
     7: ShopSuspension       shop_suspention
     2: Claim                claim_created
     3: ClaimStatusChanged   claim_status_changed
+    8: ClaimUpdated         claim_updated
 }
 
 struct ShopBlocking {
@@ -545,11 +548,17 @@ struct ClaimStatusChanged {
     2: required ClaimStatus status
 }
 
+struct ClaimUpdated {
+    1: required ClaimID id
+    2: required PartyChangeset changeset
+}
+
 // Exceptions
 
 exception PartyExists {}
 exception ContractNotFound {}
 exception ClaimNotFound {}
+exception InvalidClaimRevision {}
 
 exception InvalidClaimStatus {
     1: required ClaimStatus status
@@ -675,16 +684,17 @@ service PartyManagement {
             4: InvalidClaimStatus ex4
         )
 
-    void UpdateClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: PartyChangeset changeset)
+    void UpdateClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: PartyChangeset changeset)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
             4: ClaimNotFound ex4,
             5: InvalidClaimStatus ex5,
-            6: ChangesetConflict ex6,
-            7: InvalidChangeset ex7,
-            8: base.InvalidRequest ex8
+            6: InvalidClaimRevision ex6
+            7: ChangesetConflict ex7,
+            8: InvalidChangeset ex8,
+            9: base.InvalidRequest ex9
         )
 
     void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
