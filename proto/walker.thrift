@@ -115,7 +115,8 @@
     struct ClaimInfo {
          1: required ClaimID claimID
          2: required string status
-         3: required PartyModificationUnit modifications
+         3: optional string assigned
+         4: required PartyModificationUnit modifications
     }
 
     struct ClaimSearchRequest {
@@ -137,7 +138,7 @@
     struct Action {
         1: required string created_at
         2: required UserInfo user
-        4: required list<Modification> modifications
+        3: required list<Modification> modifications
     }
 
      struct Modification {
