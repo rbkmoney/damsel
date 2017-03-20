@@ -676,12 +676,13 @@ service PartyManagement {
     list<Claim> GetClaims (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    void AcceptClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
+    void AcceptClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4
+            4: InvalidClaimStatus ex4,
+            5: InvalidClaimRevision ex5
         )
 
     void UpdateClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: PartyChangeset changeset)
