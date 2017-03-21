@@ -12,7 +12,7 @@
 
     <groupId>com.rbkmoney</groupId>
     <artifactId>damsel</artifactId>
-    <version>1.144-999db90</version>
+    <version>1.145-16d8410</version>
     <packaging>jar</packaging>
 
     <name>Damsel</name>
