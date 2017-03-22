@@ -113,7 +113,7 @@
     }
 
     union  ActionModification {
-        1: StatusChanged dtatus_changed
+        1: StatusChanged status_changed
         2: Assigned assigned
         3: CommentAdded comment_added
         4: ClaimChengsest claim_chengsest
