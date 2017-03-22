@@ -1,4 +1,5 @@
     include "domain.thrift"
+    include "base.thrift"
 
     namespace java com.rbkmoney.damsel.walker
     namespace erlang walker
@@ -63,7 +64,7 @@
     }
 
     struct ContractAdjustmentModificationUnit {
-        1: required domain.ContractAdjustmentID adjustment_id
+        1: required base.ID adjustment_id
         2: required ContractAdjustmentModification modification
     }
 
