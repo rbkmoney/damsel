@@ -80,8 +80,6 @@
         1: PayoutToolParams creation
     }
 
-    typedef list<PartyModification> PartyChangeset
-
     struct ShopModificationUnit {
         1: required ShopID id
         2: required ShopModification modification
@@ -108,13 +106,37 @@
     }
     // *** end ***
 
+
     //Контейнер для хранения всех ченжсетов
     struct PartyModificationUnit {
          1: required list<PartyModification> modifications
     }
 
-    struct ActionModificationUnit{
-             1: required list<Modification> modifications
+    union  ActionModification {
+        1: StatusChanged dtatus_changed
+        2: Assigned assigned
+        3: CommentAdded comment_added
+        4: ClaimChengsest claim_chengsest
+    }
+
+    struct StatusChanged{
+        1: optional string from
+        2: required string to
+    }
+
+    struct Assigned{
+        1: optional string from
+        2: required string to
+    }
+
+    struct CommentAdded{
+        1: required string text;
+    }
+
+    struct ClaimChengsest {
+        1: optional  PartyModificationUnit from;
+        2: required PartyModificationUnit to;
+
     }
 
     struct ClaimInfo {
@@ -144,13 +166,9 @@
     struct Action {
         1: required string created_at
         2: required UserInfo user
-        3: required ActionModificationUnit modifications
+        3: required ActionModification modifications
     }
 
-     struct Modification {
-            1: required string before
-            2: required string after
-     }
 
     struct UserInfo{
         1: required string userID
@@ -203,5 +221,5 @@
         /**
         * Получитить историю событий связанных с заявкой
         **/
-        list<Action> GetEvents(1: ClaimID claimId, 2: UserInfo user)
+        list<Action> GetActions(1: ClaimID claimId, 2: UserInfo user)
     }
