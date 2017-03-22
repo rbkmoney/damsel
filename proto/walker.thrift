@@ -120,13 +120,13 @@
     }
 
     struct StatusChanged{
-        1: optional string from
-        2: required string to
+        1: optional string before
+        2: required string after
     }
 
     struct Assigned{
-        1: optional string from
-        2: required string to
+        1: optional string before
+        2: required string after
     }
 
     struct CommentAdded{
@@ -134,8 +134,8 @@
     }
 
     struct ClaimChengsest {
-        1: optional  PartyModificationUnit from;
-        2: required PartyModificationUnit to;
+        1: optional  PartyModificationUnit before;
+        2: required PartyModificationUnit after;
 
     }
 
