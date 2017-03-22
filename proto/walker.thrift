@@ -68,7 +68,7 @@
     }
 
     union ContractAdjustmentModification {
-        1: ContractAdjustmentParams creation
+        1: ContractAdjustmentParams creationContractAdjustmentID
     }
 
     struct PayoutToolModificationUnit {
