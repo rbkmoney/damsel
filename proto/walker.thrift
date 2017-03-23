@@ -113,31 +113,11 @@
          1: required list<PartyModification> modifications
     }
 
-    union  ActionModification {
-        1: StatusChanged status_changed
-        2: Assigned assigned
-        3: CommentAdded comment_added
-        4: ClaimChengsest claim_chengsest
-    }
-
-    struct StatusChanged{
-        1: optional string before
-        2: required string after
-    }
-
-    struct Assigned{
-        1: optional string before
-        2: required string after
-    }
-
-    struct CommentAdded{
-        1: required string text;
-    }
-
-    struct ClaimChengsest {
-        1: optional  PartyModificationUnit before;
-        2: required PartyModificationUnit after;
-
+    enum ActionType {
+        assigned,
+        comment,
+        status_changed,
+        claim_changed
     }
 
     struct ClaimInfo {
@@ -167,7 +147,9 @@
     struct Action {
         1: required string created_at
         2: required UserInfo user
-        3: required ActionModification modifications
+        3: ActionType type
+        4: optional string before
+        5: required string after
     }
 
 
