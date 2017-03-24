@@ -122,17 +122,22 @@
 
     struct ClaimInfo {
          1: required ClaimID claimID
+         // статус Claim-a
          2: required string status
-         3: optional string assigned
+         // id пользователя на каторого назначенная заявка
+         3: optional string assigned_userID
+         //текстовое описание заявки
          4: optional string description
-         5: required PartyModificationUnit modifications
+         // причина отмены или отзыва завяки
+         5: optional string reason
+         // полный набор изменений Claim-a
+         6: required PartyModificationUnit modifications
     }
 
     struct ClaimSearchRequest {
-        1: required UserInfo user_info
-        2: optional set<ClaimID> claimID
-        3: optional string contains
-        4: optional string assigned
+        1: optional set<ClaimID> claimID
+        2: optional string contains
+        3: optional string assigned
     }
 
     struct Comment {
@@ -146,14 +151,14 @@
     **/
     struct Action {
         1: required string created_at
-        2: required UserInfo user
+        2: required UserInformation user
         3: ActionType type
         4: optional string before
         5: required string after
     }
 
 
-    struct UserInfo{
+    struct UserInformation{
         1: required string userID
         2: optional string user_name
         3: optional string email
@@ -163,28 +168,29 @@
      service Walker {
         /**
         * Подтвердить и применить заявку пользователя
+        * 1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision)
         **/
-        void ApproveClaim(1: ClaimID claimID)
+        void AcceptClaim(1: ClaimID claimID, 2: UserInformation user 3: i32 revision)
 
         /**
         * Отклонить заявку
         **/
-        void DeclineClaim(1: ClaimID claimID, 2: UserInfo user, 3: string reason)
+        void DeclineClaim(1: ClaimID claimID, 2: UserInformation user, 3: i32 reason)
 
         /**
         * Получить информацию о заявке
         **/
-        ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInfo user)
+        ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInformation user)
 
         /**
         * Создать заявку
         **/
-        void CreateClaim (1: UserInfo user, 2: PartyID party_id, 3: PartyModificationUnit changeset)
+        void CreateClaim (1: UserInformation user, 2: PartyID party_id, 3: PartyModificationUnit changeset)
 
         /**
         * Передает список изменений для заявки
         **/
-        void UpdateClaim(1: ClaimID claimID, 2: UserInfo user, 3: PartyModificationUnit changeset)
+        void UpdateClaim(1: ClaimID claimID, 2: UserInformation user, 3: PartyModificationUnit changeset, 4: i32 revision)
 
         /**
         * Поиск заявки по атрибутам
@@ -194,15 +200,15 @@
         /**
         * Добавить комментарий к заявке
         **/
-        void AddComment(1: ClaimID claimId,  2: UserInfo user, 3: string text)
+        void AddComment(1: ClaimID claimId,  2: UserInformation user, 3: string text)
 
         /**
         * Получить список комментариев к заявке
         **/
-        list<Comment> GetComments(1: ClaimID claimId, 2: UserInfo user)
+        list<Comment> GetComments(1: ClaimID claimId, 2: UserInformation user)
 
         /**
         * Получитить историю событий связанных с заявкой
         **/
-        list<Action> GetActions(1: ClaimID claimId, 2: UserInfo user)
+        list<Action> GetActions(1: ClaimID claimId, 2: UserInformation user)
     }
