@@ -175,7 +175,7 @@
         /**
         * Отклонить заявку
         **/
-        void DeclineClaim(1: ClaimID claimID, 2: UserInformation user, 3: i32 reason)
+        void DenyClaim(1: ClaimID claimID, 2: UserInformation user, 3: string reason 4: i32 revision)
 
         /**
         * Получить информацию о заявке
