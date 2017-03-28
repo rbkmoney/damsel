@@ -348,6 +348,7 @@ struct PayoutToolParams {
 }
 
 struct ShopParams {
+    1: optional domain.CategoryRef category
     6: required domain.ShopLocation location
     2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
