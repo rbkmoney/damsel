@@ -362,7 +362,6 @@ struct ShopAccountParams {
 struct ContractParams {
     1: required domain.Contractor contractor
     2: optional domain.ContractTemplateRef template
-    3: required PayoutToolParams payout_tool_params
 }
 
 struct ContractAdjustmentParams {
@@ -574,29 +573,21 @@ exception ChangesetConflict { 1: required ClaimID conflicted_id }
 exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
-    1: ContractNotExists contract_not_exists
-    2: ContractStatusInvalid contract_status_invalid
-    3: PayoutToolNotExists payout_tool_not_exists
-    4: ShopNotExists shop_not_exists
-    5: ShopStatusInvalid shop_status_invalid
-    6: ContractTermsViolated contract_terms_violated
-}
-
-struct ContractNotExists {
-    1: required domain.ContractID contract_id
+    1: domain.ContractID contract_not_exists
+    2: domain.ContractID contract_already_exists
+    3: ContractStatusInvalid contract_status_invalid
+    4: domain.ContractAdjustmentID contract_adjustment_already_exists
+    5: domain.PayoutToolID payout_tool_not_exists
+    6: domain.PayoutToolID payout_tool_already_exists
+    7: ShopID shop_not_exists
+    8: ShopID shop_already_exists
+    9: ShopStatusInvalid shop_status_invalid
+    10: ContractTermsViolated contract_terms_violated
 }
 
 struct ContractStatusInvalid {
     1: required domain.ContractID contract_id
     2: required domain.ContractStatus status
-}
-
-struct PayoutToolNotExists {
-    1: required domain.PayoutToolID payout_tool_id
-}
-
-struct ShopNotExists {
-    1: required ShopID shop_id
 }
 
 struct ShopStatusInvalid {
@@ -688,7 +679,8 @@ service PartyManagement {
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
             4: InvalidClaimStatus ex4,
-            5: InvalidClaimRevision ex5
+            5: InvalidClaimRevision ex5,
+            6: InvalidChangeset ex6
         )
 
     void UpdateClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: PartyChangeset changeset)
