@@ -23,7 +23,7 @@
         6: required domain.ShopLocation location
         2: required domain.ShopDetails details
         3: required domain.ContractID contract_id
-        4: required domain.PayoutToolID payout_tool_id
+        4: required domain.PayoutToolID payout_tool_idd
     }
 
     struct ShopAccountParams {
@@ -132,6 +132,8 @@
          5: optional string reason
          // полный набор изменений Claim-a
          6: required PartyModificationUnit modifications
+         // ревизия Claim-a
+         7: required string revision
     }
 
     struct ClaimSearchRequest {
@@ -143,7 +145,7 @@
     struct Comment {
         1: required string text
         2: required string created_at
-        3: required string user_id
+        3: required UserInformation user
     }
 
     /**
@@ -152,7 +154,7 @@
     struct Action {
         1: required string created_at
         2: required UserInformation user
-        3: ActionType type
+        3: required ActionType type
         4: optional string before
         5: required string after
     }
@@ -164,33 +166,52 @@
         3: optional string email
     }
 
+    exception ClaimNotFound {}
+    exception InvalidClaimRevision {}
+    exception ChangesetConflict{}
+    exception InvalidClaimStatus {
+        1: required string status
+    }
 
      service Walker {
         /**
         * Подтвердить и применить заявку пользователя
-        * 1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision)
         **/
-        void AcceptClaim(1: ClaimID claimID, 2: UserInformation user 3: i32 revision)
-
+        void AcceptClaim(1: ClaimID claimID, 2: UserInformation user 3: i32 revision) throws (
+                    1: ClaimNotFound ex1,
+                    2: InvalidClaimStatus ex2,
+                    3: InvalidClaimRevision ex3
+        )
         /**
         * Отклонить заявку
         **/
-        void DenyClaim(1: ClaimID claimID, 2: UserInformation user, 3: string reason 4: i32 revision)
-
+        void DenyClaim(1: ClaimID claimID, 2: UserInformation user, 3: string reason 4: i32 revision) throws (
+                    1: ClaimNotFound ex1,
+                    2: InvalidClaimStatus ex2,
+                    3: InvalidClaimRevision ex3)
         /**
         * Получить информацию о заявке
         **/
-        ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInformation user)
+        ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInformation user) throws (
+                    1: ClaimNotFound ex1 )
 
         /**
         * Создать заявку
         **/
-        void CreateClaim (1: UserInformation user, 2: PartyID party_id, 3: PartyModificationUnit changeset)
+        void CreateClaim (1: UserInformation user, 2: PartyID party_id, 3: PartyModificationUnit changeset) throws (
+                    1: ChangesetConflict ex1,
+                    2: base.InvalidRequest ex2)
 
         /**
         * Передает список изменений для заявки
         **/
-        void UpdateClaim(1: ClaimID claimID, 2: UserInformation user, 3: PartyModificationUnit changeset, 4: i32 revision)
+        void UpdateClaim(1: ClaimID claimID, 2: UserInformation user, 3: PartyModificationUnit changeset, 4: i32 revision) throws (
+                    1: ClaimNotFound ex4,
+                    2: InvalidClaimStatus ex5,
+                    3: InvalidClaimRevision ex6,
+                    4: ChangesetConflict ex7,
+                    5: base.InvalidRequest ex9
+        )
 
         /**
         * Поиск заявки по атрибутам
