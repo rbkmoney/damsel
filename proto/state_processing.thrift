@@ -7,6 +7,7 @@
  */
 
 include "base.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.state_processing
 
@@ -16,11 +17,11 @@ exception NamespaceNotFound {}
 exception MachineAlreadyExists {}
 exception MachineFailed {}
 
-typedef binary EventBody;
+typedef msgpack.Value EventBody;
 typedef list<EventBody> EventBodies;
 
-typedef binary Args
-typedef binary AuxState
+typedef msgpack.Value Args
+typedef msgpack.Value AuxState
 
 /**
  * Произвольное событие, продукт перехода в новое состояние.
@@ -152,7 +153,7 @@ struct MachineStateChange {
 /**
  * Ответ на внешний вызов.
  */
-typedef binary CallResponse;
+typedef msgpack.Value CallResponse;
 
 /**
  * Набор данных для обработки внешнего вызова.
@@ -188,7 +189,7 @@ union Signal {
  */
 struct InitSignal {
     /** Набор данных для инициализации */
-    1: required binary   arg;
+    1: required msgpack.Value   arg;
 }
 
 /**
@@ -201,7 +202,7 @@ struct TimeoutSignal {}
  * опционально скорректировать своё состояние.
  */
 struct RepairSignal {
-    1: optional binary  arg;
+    1: optional msgpack.Value  arg;
 }
 
 /**
