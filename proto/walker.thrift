@@ -139,7 +139,7 @@
     struct ClaimSearchRequest {
         1: optional set<ClaimID> claimID
         2: optional string contains
-        3: optional string assigned
+        3: optional string assigned_userID
     }
 
     struct Comment {
@@ -192,7 +192,7 @@
         /**
         * Получить информацию о заявке
         **/
-        ClaimInfo GetClaim(1: ClaimID claimID, 2: UserInformation user) throws (
+        ClaimInfo GetClaim(1: ClaimID claimID) throws (
                     1: ClaimNotFound ex1 )
 
         /**
@@ -226,10 +226,10 @@
         /**
         * Получить список комментариев к заявке
         **/
-        list<Comment> GetComments(1: ClaimID claimId, 2: UserInformation user)
+        list<Comment> GetComments(1: ClaimID claimId)
 
         /**
         * Получитить историю событий связанных с заявкой
         **/
-        list<Action> GetActions(1: ClaimID claimId, 2: UserInformation user)
+        list<Action> GetActions(1: ClaimID claimId)
     }
