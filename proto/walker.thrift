@@ -121,11 +121,11 @@
     }
 
     struct ClaimInfo {
-         1: required ClaimID claimID
+         1: required ClaimID claim_id
          // статус Claim-a
          2: required string status
          // id пользователя на каторого назначенная заявка
-         3: optional string assigned_userID
+         3: optional string assigned_user_id
          //текстовое описание заявки
          4: optional string description
          // причина отмены или отзыва завяки
@@ -137,9 +137,10 @@
     }
 
     struct ClaimSearchRequest {
-        1: optional set<ClaimID> claimID
+        1: optional set<ClaimID> claim_id
         2: optional string contains
-        3: optional string assigned_userID
+        3: optional string assigned_user_id
+        4: optional string claim_status
     }
 
     struct Comment {
@@ -177,7 +178,7 @@
         /**
         * Подтвердить и применить заявку пользователя
         **/
-        void AcceptClaim(1: ClaimID claimID, 2: UserInformation user 3: i32 revision) throws (
+        void AcceptClaim(1: ClaimID claim_id, 2: UserInformation user 3: i32 revision) throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3
@@ -185,14 +186,14 @@
         /**
         * Отклонить заявку
         **/
-        void DenyClaim(1: ClaimID claimID, 2: UserInformation user, 3: string reason 4: i32 revision) throws (
+        void DenyClaim(1: ClaimID claim_id, 2: UserInformation user, 3: string reason 4: i32 revision) throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3)
         /**
         * Получить информацию о заявке
         **/
-        ClaimInfo GetClaim(1: ClaimID claimID) throws (
+        ClaimInfo GetClaim(1: ClaimID claim_id) throws (
                     1: ClaimNotFound ex1 )
 
         /**
@@ -205,7 +206,7 @@
         /**
         * Передает список изменений для заявки
         **/
-        void UpdateClaim(1: ClaimID claimID, 2: UserInformation user, 3: PartyModificationUnit changeset, 4: i32 revision) throws (
+        void UpdateClaim(1: ClaimID claim_id, 2: UserInformation user, 3: PartyModificationUnit changeset, 4: i32 revision) throws (
                     1: ClaimNotFound ex4,
                     2: InvalidClaimStatus ex5,
                     3: InvalidClaimRevision ex6,
@@ -221,15 +222,15 @@
         /**
         * Добавить комментарий к заявке
         **/
-        void AddComment(1: ClaimID claimId,  2: UserInformation user, 3: string text)
+        void AddComment(1: ClaimID claim_id,  2: UserInformation user, 3: string text)
 
         /**
         * Получить список комментариев к заявке
         **/
-        list<Comment> GetComments(1: ClaimID claimId)
+        list<Comment> GetComments(1: ClaimID claim_id)
 
         /**
         * Получитить историю событий связанных с заявкой
         **/
-        list<Action> GetActions(1: ClaimID claimId)
+        list<Action> GetActions(1: ClaimID claim_id)
     }
