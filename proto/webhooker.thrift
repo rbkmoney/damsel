@@ -1,12 +1,12 @@
 include "base.thrift"
 include "domain.thrift"
 
-namespace java com.rbkmoney.damsel.hooker
-namespace erlang hooker
+namespace java com.rbkmoney.damsel.webhooker
+namespace erlang webhooker
 
 typedef string Url
 
-struct WebHook {
+struct Webhook {
     1: required ConsumerEvent consumer_event
     2: required Url url
 }
@@ -44,9 +44,9 @@ enum PartyEventType {
     shop_created
 }
 
-service Hooker {
-    list<WebHook> GetShopWebHooks(1: domain.ShopID id)
-    list<WebHook> GetPartyWebHooks(1: domain.PartyID id)
-    void CreateHook(1: WebHook web_hook)
-    void DeleteHook(1: WebHook web_hook)
+service Webhooker {
+    list<Webhook> GetShopWebhooks(1: domain.ShopID id)
+    list<Webhook> GetPartyWebhooks(1: domain.PartyID id)
+    void CreateHook(1: Webhook web_hook)
+    void DeleteHook(1: Webhook web_hook)
 }
