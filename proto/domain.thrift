@@ -221,12 +221,16 @@ enum RiskScore {
 struct ContractorRef { 1: required ObjectID id }
 
 /** Лицо, выступающее стороной договора. */
-struct Contractor {
-    1: required Entity entity
-    2: required BankAccount bank_account
+union Contractor {
+    1: LegalEntity legal_entity
+    2: AnonymousEntity anonymous_entity
 }
 
-union Entity {
+struct AnonymousEntity {
+    1: required string email
+}
+
+union LegalEntity {
     1: RussianLegalEntity russian_legal_entity
 }
 
@@ -248,6 +252,8 @@ struct RussianLegalEntity {
     7: required string representative_full_name
     /* Наименование документа, на основании которого действует ЕИО/представитель */
     8: required string representative_document
+    /* Реквизиты юр.лица */
+    9: required BankAccount bank_account
 }
 
 /** Банковский счёт. */
