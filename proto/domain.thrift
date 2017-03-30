@@ -162,6 +162,7 @@ typedef base.ID PartyID
 struct Party {
     1: required PartyID id
     7: required PartyContactInfo contact_info
+    8: required base.Timestamp created_at
     2: required Blocking blocking
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts
@@ -174,14 +175,16 @@ struct PartyContactInfo {
 
 /* Shops */
 
-typedef i32 ShopID
+typedef base.ID ShopID
 
 /** Магазин мерчанта. */
 struct Shop {
     1: required ShopID id
+   11: required base.Timestamp created_at
     2: required Blocking blocking
     3: required Suspension suspension
     4: required ShopDetails details
+   10: required ShopLocation location
     5: required CategoryRef category
     6: optional ShopAccount account
     7: required ContractID contract_id
@@ -200,7 +203,6 @@ struct ShopAccount {
 struct ShopDetails {
     1: required string name
     2: optional string description
-    3: optional ShopLocation location
 }
 
 union ShopLocation {
@@ -219,12 +221,16 @@ enum RiskScore {
 struct ContractorRef { 1: required ObjectID id }
 
 /** Лицо, выступающее стороной договора. */
-struct Contractor {
-    1: required Entity entity
-    2: required BankAccount bank_account
+union Contractor {
+    1: LegalEntity legal_entity
+    2: RegisteredUser registered_user
 }
 
-union Entity {
+struct RegisteredUser {
+    1: required string email
+}
+
+union LegalEntity {
     1: RussianLegalEntity russian_legal_entity
 }
 
@@ -246,6 +252,8 @@ struct RussianLegalEntity {
     7: required string representative_full_name
     /* Наименование документа, на основании которого действует ЕИО/представитель */
     8: required string representative_document
+    /* Реквизиты юр.лица */
+    9: required BankAccount bank_account
 }
 
 /** Банковский счёт. */
@@ -257,10 +265,11 @@ struct BankAccount {
     4: required string bank_bik
 }
 
-typedef i32 PayoutToolID
+typedef base.ID PayoutToolID
 
 struct PayoutTool {
     1: required PayoutToolID id
+    4: required base.Timestamp created_at
     2: required CurrencyRef currency
     3: required PayoutToolInfo payout_tool_info
 }
@@ -269,12 +278,13 @@ union PayoutToolInfo {
     1: BankAccount bank_account
 }
 
-typedef i32 ContractID
+typedef base.ID ContractID
 
 /** Договор */
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
+    11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
     5: optional base.Timestamp valid_until
     6: required ContractStatus status
@@ -293,10 +303,12 @@ struct LegalAgreement {
 union ContractStatus {
     1: ContractActive active
     2: ContractTerminated terminated
+    3: ContractExpired expired
 }
 
 struct ContractActive {}
 struct ContractTerminated { 1: required base.Timestamp terminated_at }
+struct ContractExpired {}
 
 /* Categories */
 
@@ -335,8 +347,11 @@ struct LifetimeInterval {
 }
 
 /** Поправки к договору **/
+typedef base.ID ContractAdjustmentID
+
 struct ContractAdjustment {
-    1: required i32 id
+    1: required ContractAdjustmentID id
+    5: required base.Timestamp created_at
     2: optional base.Timestamp valid_since
     3: optional base.Timestamp valid_until
     4: required TermSetHierarchyRef terms
@@ -837,13 +852,27 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
     1: required ShopPrototype shop
-    2: required ContractTemplateRef test_contract_template
+    3: required ContractPrototype contract
 }
 
 struct ShopPrototype {
+    5: required ShopID shop_id
     1: required CategoryRef category
-    3: required ShopDetails details
     2: required CurrencyRef currency
+    3: required ShopDetails details
+    4: required ShopLocation location
+}
+
+struct ContractPrototype {
+    1: required ContractID contract_id
+    2: required ContractTemplateRef test_contract_template
+    3: required PayoutToolPrototype payout_tool
+}
+
+struct PayoutToolPrototype {
+    1: required PayoutToolID payout_tool_id
+    2: required PayoutToolInfo payout_tool_info
+    3: required CurrencyRef payout_tool_currency
 }
 
 /* Root config */
