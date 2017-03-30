@@ -866,9 +866,13 @@ struct ShopPrototype {
 struct ContractPrototype {
     1: required ContractID contract_id
     2: required ContractTemplateRef test_contract_template
-    3: required PayoutToolID payout_tool_id
-    4: required PayoutToolInfo payout_tool_info
-    5: required CurrencyRef payout_tool_currency
+    3: required PayoutToolPrototype payout_tool
+}
+
+struct PayoutToolPrototype {
+    1: required PayoutToolID payout_tool_id
+    2: required PayoutToolInfo payout_tool_info
+    3: required CurrencyRef payout_tool_currency
 }
 
 /* Root config */
