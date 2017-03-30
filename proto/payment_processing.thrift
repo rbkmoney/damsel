@@ -345,7 +345,6 @@ struct PartyParams {
 struct PayoutToolParams {
     1: required domain.CurrencyRef currency
     2: required domain.PayoutToolInfo tool_info
-    3: required domain.PayoutToolType type
 }
 
 struct ShopParams {

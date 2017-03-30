@@ -272,16 +272,10 @@ struct PayoutTool {
     4: required base.Timestamp created_at
     2: required CurrencyRef currency
     3: required PayoutToolInfo payout_tool_info
-    5: required PayoutToolType type
 }
 
 union PayoutToolInfo {
     1: BankAccount bank_account
-}
-
-enum PayoutToolType {
-    test
-    live
 }
 
 typedef base.ID ContractID
@@ -874,6 +868,7 @@ struct ContractPrototype {
     2: required ContractTemplateRef test_contract_template
     3: required PayoutToolID payout_tool_id
     4: required PayoutToolInfo payout_tool_info
+    5: required CurrencyRef payout_tool_currency
 }
 
 /* Root config */
