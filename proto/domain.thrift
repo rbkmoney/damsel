@@ -272,10 +272,16 @@ struct PayoutTool {
     4: required base.Timestamp created_at
     2: required CurrencyRef currency
     3: required PayoutToolInfo payout_tool_info
+    5: required PayoutToolType type
 }
 
 union PayoutToolInfo {
     1: BankAccount bank_account
+}
+
+enum PayoutToolType {
+    test
+    live
 }
 
 typedef base.ID ContractID
@@ -852,13 +858,22 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 /** Прототип мерчанта по умолчанию. */
 struct PartyPrototype {
     1: required ShopPrototype shop
-    2: required ContractTemplateRef test_contract_template
+    3: required ContractPrototype contract
 }
 
 struct ShopPrototype {
+    5: required ShopID shop_id
     1: required CategoryRef category
-    3: required ShopDetails details
     2: required CurrencyRef currency
+    3: required ShopDetails details
+    4: required ShopLocation location
+}
+
+struct ContractPrototype {
+    1: required ContractID contract_id
+    2: required ContractTemplateRef test_contract_template
+    3: required PayoutToolID payout_tool_id
+    4: required PayoutToolInfo payout_tool_info
 }
 
 /* Root config */
