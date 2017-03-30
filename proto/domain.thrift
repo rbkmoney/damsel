@@ -223,10 +223,10 @@ struct ContractorRef { 1: required ObjectID id }
 /** Лицо, выступающее стороной договора. */
 union Contractor {
     1: LegalEntity legal_entity
-    2: AnonymousEntity anonymous_entity
+    2: RegisteredUser registered_user
 }
 
-struct AnonymousEntity {
+struct RegisteredUser {
     1: required string email
 }
 
