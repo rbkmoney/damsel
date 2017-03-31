@@ -77,6 +77,11 @@ struct Machine {
      */
 
     5: optional AuxState aux_state;
+
+    /**
+     * Текущий активный таймер (точнее, дата и время когда таймер сработает).
+     */
+    6: optional base.Timestamp timer;
 }
 
 /**
@@ -97,8 +102,17 @@ struct MachineDescriptor {
  * полей будет интерпретировано буквально, как отсутствие желаемых действий.
  */
 struct ComplexAction {
-    1: optional SetTimerAction  set_timer;
-    2: optional TagAction       tag;
+    1: optional SetTimerAction set_timer; // deprecated
+    3: optional TimerAction    timer;
+    2: optional TagAction      tag;
+}
+
+/**
+ * Дествие с таймером: установить(переустановить)/снять
+ */
+union TimerAction {
+    1: SetTimerAction   set_timer;
+    2: UnsetTimerAction unset_timer;
 }
 
 /**
@@ -111,6 +125,13 @@ struct SetTimerAction {
     /** Критерий остановки таймера ожидания */
     1: required base.Timer      timer;
 }
+
+/**
+ * Действие отмены таймера.
+ *
+ * Если это действие явно не послать, то таймер будет активен.
+ */
+struct UnsetTimerAction {}
 
 /**
  * Действие ассоциации с процессом автомата произвольного значения
