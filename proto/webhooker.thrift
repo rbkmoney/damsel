@@ -23,21 +23,49 @@ struct WebhookParams {
 }
 
 union EventFilter {
-    1: InvoiceCreated invoice_created
-    2: InvoicePaid invoice_paid
-    3: PartyShopCreated party_shop_created
+    1: PartyEventFilter   party
+    2: InvoiceEventFilter invoice
 }
 
-struct InvoiceCreated {
-    1: required domain.ShopID shop_id
+struct PartyEventFilter {
+    1: required PartyEventType type
 }
 
-struct InvoicePaid {
-    1: required domain.ShopID shop_id
+union PartyEventType {
+    1: ClaimEventType claim
 }
 
-struct PartyShopCreated {
+union ClaimEventType {
+    1: ClaimCreated  created
+    2: ClaimDenied   denied
+    3: ClaimAccepted accepted
 }
+
+struct ClaimCreated {}
+struct ClaimDenied {}
+struct ClaimAccepted {}
+
+struct InvoiceEventFilter {
+    1: required InvoiceEventType type
+    2: optional domain.ShopID shop_id
+}
+
+union InvoiceEventType {
+    1: InvoiceCreated            created
+    2: InvoiceStatusChanged      status_changed
+    3: InvoicePaymentEventType payment
+}
+
+struct InvoiceCreated {}
+struct InvoiceStatusChanged {}
+
+union InvoicePaymentEventType {
+    1: InvoicePaymentCreated       created
+    2: InvoicePaymentStatusChanged status_changed
+}
+
+struct InvoicePaymentCreated {}
+struct InvoicePaymentStatusChanged {}
 
 service WebhookManager {
     list<Webhook> Get(1: domain.PartyID party_id)
