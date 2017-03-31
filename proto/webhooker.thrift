@@ -5,48 +5,44 @@ namespace java com.rbkmoney.damsel.webhooker
 namespace erlang webhooker
 
 typedef string Url
+typedef string Key
 
 struct Webhook {
-    1: required ConsumerEvent consumer_event
-    2: required Url url
+    1: required base.ID id
+    2: required domain.PartyID party_id
+    3: required FilterStruct filter_struct
+    4: required Url url
+    5: required Key pub_key
 }
 
-/**
-* Вебхуки могут быть отправлены магазину или участнику
-**/
-union ConsumerEvent {
-    1: ShopEvent shop_event
-    2: PartyEvent party_event
-}
-
-struct ShopEvent {
-    1: required domain.ShopID shop_id
-    2: required ShopEventType shop_event_type
-}
-
-/*
-    Типы событий для магазина
- */
-enum ShopEventType {
-    invoice_created
-    invoice_paid
-}
-
-struct PartyEvent {
+struct WebhookParams {
     1: required domain.PartyID party_id
-    2: required PartyEventType party_event_type
+    2: required FilterStruct filter_struct
+    3: required Url url
 }
 
-/**
-    Типы событий для участника
- */
-enum PartyEventType {
-    shop_created
+union FilterStruct {
+    1: InvoiceCreated invoice_created
+    2: InvoicePaid invoice_paid
+    3: PartyShopCreated party_shop_created
 }
 
-service Webhooker {
-    list<Webhook> GetShopWebhooks(1: domain.ShopID id)
-    list<Webhook> GetPartyWebhooks(1: domain.PartyID id)
-    void CreateHook(1: Webhook web_hook)
-    void DeleteHook(1: Webhook web_hook)
+struct InvoiceCreated {
+    1: required domain.ShopID shop_id
 }
+
+struct InvoicePaid {
+    1: required domain.ShopID shop_id
+}
+
+struct PartyShopCreated {
+}
+
+service WebhookManager {
+    list<Webhook> GetWebhooks(1: domain.PartyID party_id)
+    Webhook CreateHook(1: WebhookParams web_hook_params)
+    void DeleteHook(1: base.ID web_hook_id) throws (1: WebhookNotFound ex1)
+}
+
+exception WebhookNotFound {}
+
