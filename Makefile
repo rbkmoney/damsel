@@ -21,7 +21,7 @@ BUILD_IMAGE_TAG := 3ed839a79132205fd470c1f66c0b6aa37792c809
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus java_install
+CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus deploy_epic_nexus java_install
 
 all: compile
 
