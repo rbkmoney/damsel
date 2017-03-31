@@ -6,6 +6,7 @@ namespace erlang webhooker
 
 typedef string Url
 typedef string Key
+exception WebhookNotFound {}
 
 struct Webhook {
     1: required base.ID id
@@ -43,6 +44,3 @@ service WebhookManager {
     Webhook CreateHook(1: WebhookParams web_hook_params)
     void DeleteHook(1: base.ID web_hook_id) throws (1: WebhookNotFound ex1)
 }
-
-exception WebhookNotFound {}
-
