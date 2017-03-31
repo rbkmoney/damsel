@@ -21,7 +21,7 @@ build('damsel', 'docker-host') {
                 if (env.BRANCH_NAME == 'master') {
                     sh 'make wc_deploy_nexus SETTINGS_XML=$SETTINGS_XML'
                 } else if (env.BRANCH_NAME.startsWith('epic')) {
-                    sh 'make deploy_epic_nexus SETTINGS_XML=$SETTINGS_XML'
+                    sh 'make wc_deploy_epic_nexus SETTINGS_XML=$SETTINGS_XML'
                 } else {
                     sh 'make wc_java_compile SETTINGS_XML=$SETTINGS_XML'
                 }
