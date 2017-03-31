@@ -532,7 +532,7 @@ union PartyEvent {
     4: domain.Blocking      party_blocking
     5: domain.Suspension    party_suspension
     6: ShopBlocking         shop_blocking
-    7: ShopSuspension       shop_suspention
+    7: ShopSuspension       shop_suspension
     2: Claim                claim_created
     3: ClaimStatusChanged   claim_status_changed
     8: ClaimUpdated         claim_updated
