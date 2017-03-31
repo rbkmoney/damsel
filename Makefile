@@ -109,6 +109,12 @@ deploy_nexus:
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
 	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
 
+deploy_epic_nexus:
+	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
+	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)-epic" -s $(SETTINGS_XML) \
+	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)"
+
+
 java_install:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
