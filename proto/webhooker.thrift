@@ -23,7 +23,7 @@ struct WebhookParams {
 }
 
 union EventFilter {
-    1: PartyEventFilter   party
+    1: PartyEventFilter party
     2: InvoiceEventFilter invoice
 }
 
@@ -36,8 +36,8 @@ union PartyEventType {
 }
 
 union ClaimEventType {
-    1: ClaimCreated  created
-    2: ClaimDenied   denied
+    1: ClaimCreated created
+    2: ClaimDenied denied
     3: ClaimAccepted accepted
 }
 
@@ -51,8 +51,8 @@ struct InvoiceEventFilter {
 }
 
 union InvoiceEventType {
-    1: InvoiceCreated            created
-    2: InvoiceStatusChanged      status_changed
+    1: InvoiceCreated created
+    2: InvoiceStatusChanged status_changed
     3: InvoicePaymentEventType payment
 }
 
@@ -60,7 +60,7 @@ struct InvoiceCreated {}
 struct InvoiceStatusChanged {}
 
 union InvoicePaymentEventType {
-    1: InvoicePaymentCreated       created
+    1: InvoicePaymentCreated created
     2: InvoicePaymentStatusChanged status_changed
 }
 
@@ -68,7 +68,8 @@ struct InvoicePaymentCreated {}
 struct InvoicePaymentStatusChanged {}
 
 service WebhookManager {
-    list<Webhook> Get(1: domain.PartyID party_id)
+    list<Webhook> GetList(1: domain.PartyID party_id)
+    Webhook Get(1: base.ID webhook_id) throws (1: WebhookNotFound ex1)
     Webhook Create(1: WebhookParams webhook_params)
     void Delete(1: base.ID webhook_id) throws (1: WebhookNotFound ex1)
 }
