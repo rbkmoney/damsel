@@ -124,6 +124,10 @@ union TimerAction {
 struct SetTimerAction {
     /** Критерий остановки таймера ожидания */
     1: required base.Timer      timer;
+    /** История, с которой будет вызываться обработчик таймера. По умолчанию вся история. */
+    2: optional HistoryRange    range;
+    /** Таймаут, с которым будет вызываться обработчик таймера. По умолчанию 30 секунд. */
+    3: optional base.Timeout    timeout;
 }
 
 /**
