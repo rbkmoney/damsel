@@ -28,7 +28,7 @@ union EventFilter {
 }
 
 struct PartyEventFilter {
-    1: required PartyEventType type
+    1: required set<PartyEventType> types
 }
 
 union PartyEventType {
@@ -46,7 +46,7 @@ struct ClaimDenied {}
 struct ClaimAccepted {}
 
 struct InvoiceEventFilter {
-    1: required InvoiceEventType type
+    1: required set<InvoiceEventType> types
     2: optional domain.ShopID shop_id
 }
 
