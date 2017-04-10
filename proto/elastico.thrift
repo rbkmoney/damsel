@@ -1,12 +1,9 @@
     include "domain.thrift"
     include "base.thrift"
 
-    namespace java com.rbkmoney.damsel.walker
-    namespace erlang walker
+    namespace java com.rbkmoney.damsel.elastico
+    namespace erlang elastico
 
-    typedef i64 ClaimID
-
-    // *** Copy of Party Management ***
     typedef domain.PartyID PartyID
     typedef domain.ShopID  ShopID
 
@@ -20,7 +17,7 @@
         domain.Party getPartyById(1: String partyId) throws (1: PartyNotFound ex1)
 
         /**
-        * Возвращает список организаций содержащих в описнаии или любых других поля данный текст.
+        * Возвращает список организаций содержащих в описании или любых других полях данный текст.
         **/
         List<domain.Party> searchParty(1: String text)
     }
