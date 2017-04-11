@@ -14,11 +14,12 @@ struct Webhook {
     3: required EventFilter event_filter
     4: required Url url
     5: required Key pub_key
+    6: required bool enabled
 }
 
 struct WebhookParams {
     1: required domain.PartyID party_id
-    2: required EventFilter filter_struct
+    2: required EventFilter event_filter
     3: required Url url
 }
 
