@@ -20,10 +20,11 @@
     }
 
     struct ShopParams {
+        1: optional domain.CategoryRef category
         6: required domain.ShopLocation location
         2: required domain.ShopDetails details
         3: required domain.ContractID contract_id
-        4: required domain.PayoutToolID payout_tool_idd
+        4: required domain.PayoutToolID payout_tool_id
     }
 
     struct ShopAccountParams {
@@ -33,7 +34,6 @@
     struct ContractParams {
         1: required domain.Contractor contractor
         2: optional domain.ContractTemplateRef template
-        3: required PayoutToolParams payout_tool_params
     }
 
     struct ContractAdjustmentParams {
@@ -69,7 +69,7 @@
     }
 
     union ContractAdjustmentModification {
-        1: ContractAdjustmentParams creationContractAdjustmentID
+        1: ContractAdjustmentParams creation
     }
 
     struct PayoutToolModificationUnit {
