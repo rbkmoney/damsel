@@ -14,10 +14,10 @@
         /**
         * Получить информацию об организации по ее идентификатору
         **/
-        domain.Party getPartyById(1: String partyId) throws (1: PartyNotFound ex1)
+        domain.Party getPartyById(1: string partyId) throws (1: PartyNotFound ex1)
 
         /**
         * Возвращает список организаций содержащих в описании или любых других полях данный текст.
         **/
-        List<domain.Party> searchParty(1: String text)
+        list<domain.Party> searchParty(1: string text)
     }
