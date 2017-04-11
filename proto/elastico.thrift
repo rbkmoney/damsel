@@ -10,7 +10,7 @@
     /* В эластико нет Party с таким идентификатором */
     exception PartyNotFound {}
 
-     service Elastico {
+    service Elastico {
         /**
         * Получить информацию об организации по ее идентификатору
         **/
