@@ -6,10 +6,11 @@ namespace erlang webhooker
 
 typedef string Url
 typedef string Key
+typedef i64 WebhookID
 exception WebhookNotFound {}
 
 struct Webhook {
-    1: required base.EventID id
+    1: required WebhookID id
     2: required domain.PartyID party_id
     3: required EventFilter event_filter
     4: required Url url
@@ -70,7 +71,7 @@ struct InvoicePaymentStatusChanged {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
-    Webhook Get(1: base.EventID webhook_id) throws (1: WebhookNotFound ex1)
+    Webhook Get(1: WebhookID webhook_id) throws (1: WebhookNotFound ex1)
     Webhook Create(1: WebhookParams webhook_params)
-    void Delete(1: base.EventID webhook_id) throws (1: WebhookNotFound ex1)
+    void Delete(1: WebhookID webhook_id) throws (1: WebhookNotFound ex1)
 }
