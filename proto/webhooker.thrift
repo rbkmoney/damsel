@@ -59,7 +59,9 @@ union InvoiceEventType {
 }
 
 struct InvoiceCreated {}
-struct InvoiceStatusChanged {}
+struct InvoiceStatusChanged {
+    1: optional domain.InvoiceStatus value
+}
 
 union InvoicePaymentEventType {
     1: InvoicePaymentCreated created
@@ -67,7 +69,9 @@ union InvoicePaymentEventType {
 }
 
 struct InvoicePaymentCreated {}
-struct InvoicePaymentStatusChanged {}
+struct InvoicePaymentStatusChanged {
+    1: optional domain.InvoicePaymentStatus value
+}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
