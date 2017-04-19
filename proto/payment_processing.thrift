@@ -446,6 +446,7 @@ struct Claim {
     2: required ClaimStatus status
     3: required PartyChangeset changeset
     4: required ClaimRevision revision
+    5: required base.Timestamp created_at
 }
 
 union ClaimStatus {
@@ -551,11 +552,15 @@ struct ShopSuspension {
 struct ClaimStatusChanged {
     1: required ClaimID id
     2: required ClaimStatus status
+    3: required ClaimRevision revision
+    4: required base.Timestamp changed_at
 }
 
 struct ClaimUpdated {
     1: required ClaimID id
     2: required PartyChangeset changeset
+    3: required ClaimRevision revision
+    4: required base.Timestamp updated_at
 }
 
 // Exceptions
