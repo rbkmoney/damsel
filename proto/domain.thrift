@@ -140,10 +140,12 @@ union Blocking {
 
 struct Unblocked {
     1: required string reason
+    2: required base.Timestamp since
 }
 
 struct Blocked {
     1: required string reason
+    2: required base.Timestamp since
 }
 
 union Suspension {
@@ -151,8 +153,13 @@ union Suspension {
     2: Suspended suspended
 }
 
-struct Active {}
-struct Suspended {}
+struct Active {
+    1: required base.Timestamp since
+}
+
+struct Suspended {
+    1: required base.Timestamp since
+}
 
 /* Parties */
 

@@ -447,6 +447,7 @@ struct Claim {
     3: required PartyChangeset changeset
     4: required ClaimRevision revision
     5: required base.Timestamp created_at
+    6: optional base.Timestamp updated_at
 }
 
 union ClaimStatus {
