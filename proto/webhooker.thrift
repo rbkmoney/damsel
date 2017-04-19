@@ -60,8 +60,20 @@ union InvoiceEventType {
 
 struct InvoiceCreated {}
 struct InvoiceStatusChanged {
-    1: optional domain.InvoiceStatus value
+    1: optional InvoiceStatus value
 }
+
+union InvoiceStatus {
+    1: InvoiceUnpaid unpaid
+    2: InvoicePaid paid
+    3: InvoiceCancelled cancelled
+    4: InvoiceFulfilled fulfilled
+}
+
+struct InvoiceUnpaid    {}
+struct InvoicePaid      {}
+struct InvoiceCancelled {}
+struct InvoiceFulfilled {}
 
 union InvoicePaymentEventType {
     1: InvoicePaymentCreated created
@@ -70,8 +82,22 @@ union InvoicePaymentEventType {
 
 struct InvoicePaymentCreated {}
 struct InvoicePaymentStatusChanged {
-    1: optional domain.InvoicePaymentStatus value
+    1: optional InvoicePaymentStatus value
 }
+
+union InvoicePaymentStatus {
+    1: InvoicePaymentPending pending
+    4: InvoicePaymentProcessed processed
+    2: InvoicePaymentCaptured captured
+    5: InvoicePaymentCancelled cancelled
+    3: InvoicePaymentFailed failed
+}
+
+struct InvoicePaymentPending   {}
+struct InvoicePaymentProcessed {}
+struct InvoicePaymentCaptured  {}
+struct InvoicePaymentCancelled {}
+struct InvoicePaymentFailed    {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
