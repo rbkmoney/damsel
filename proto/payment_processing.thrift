@@ -239,6 +239,7 @@ exception PartyNotFound {}
 exception ShopNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+exception InvalidContractStatus { 1: required domain.ContractStatus status }
 
 union InvalidStatus {
     1: domain.Blocking blocking
@@ -267,7 +268,8 @@ service Invoicing {
             3: PartyNotFound ex3,
             4: ShopNotFound ex4,
             5: InvalidPartyStatus ex5,
-            6: InvalidShopStatus ex6
+            6: InvalidShopStatus ex6,
+            7: InvalidContractStatus ex7
         )
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -296,7 +298,8 @@ service Invoicing {
             4: InvoicePaymentPending ex4,
             5: base.InvalidRequest ex5,
             6: InvalidPartyStatus ex6,
-            7: InvalidShopStatus ex7
+            7: InvalidShopStatus ex7,
+            8: InvalidContractStatus ex8
         )
 
     domain.InvoicePayment GetPayment (
@@ -316,7 +319,8 @@ service Invoicing {
             2: UserInvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
             4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5
+            5: InvalidShopStatus ex5,
+            6: InvalidContractStatus ex6
         )
 
     void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
@@ -326,7 +330,8 @@ service Invoicing {
             3: InvalidInvoiceStatus ex3,
             4: InvoicePaymentPending ex4,
             5: InvalidPartyStatus ex5,
-            6: InvalidShopStatus ex6
+            6: InvalidShopStatus ex6,
+            7: InvalidContractStatus ex7
         )
 
 }
