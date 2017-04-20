@@ -572,7 +572,6 @@ union ClaimStatus {
 struct ClaimPending {}
 
 struct ClaimAccepted {
-    1: required base.Timestamp accepted_at
     2: optional ClaimEffects effects
 }
 
