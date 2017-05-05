@@ -4,7 +4,7 @@
     namespace java com.rbkmoney.damsel.shitter
     namespace erlang shitter
 
-    typedef base.ID PayoutID
+    typedef i64 PayoutID
 
     /**
     * Диапазон времени
@@ -101,6 +101,10 @@
        * Подтвердить загрузку выплаты в OneS
        **/
        bool AcceptOneSPayout(1: PayoutID payoutID)
+       /*
+       * Исключает включенные в выплату платежи, делает ролбэк в аккаунтере, и помечает выплату как CANCELED.
+       * */
+       void cancelPayout(1: PayoutID payoutID)
        /**
        * Возвращает список Payout-ов согласно запросу поиска.
        * Payout подтвержденный и АБС и 1С переводется в статус выплачен
