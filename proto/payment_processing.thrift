@@ -255,7 +255,7 @@ exception InvalidInvoiceStatus {
 
 service Invoicing {
 
-    domain.InvoiceID Create (1: UserInfo user, 2: InvoiceParams params)
+    InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
@@ -279,7 +279,7 @@ service Invoicing {
             4: base.InvalidRequest ex4
         )
 
-    domain.InvoicePaymentID StartPayment (
+    domain.InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
