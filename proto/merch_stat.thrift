@@ -13,16 +13,41 @@ namespace erlang merchstat
  * Информация о платеже. Состоит из id инвойса платежа, доменной модели платежа и гео-данных.
   * **/
 struct StatPayment {
-    1: required domain.InvoiceID invoice_id
-    2: required domain.InvoicePayment payment
-    3: optional geo_ip.LocationInfo location_info
+    1 : required domain.InvoicePaymentID id
+    2 : required domain.InvoiceID invoice_id
+    3 : required domain.PartyID owner_id
+    4 : required domain.ShopID shop_id
+    5 : required base.Timestamp created_at
+    6 : required domain.InvoicePaymentStatus status
+    7 : required domain.Amount amount
+    8 : required domain.Amount fee
+    9 : required domain.CurrencyRef currency
+    10: required domain.PaymentTool payment_tool
+    11: optional domain.IPAddress ip_address
+    12: optional domain.Fingerprint fingerprint
+    13: optional string phone_number
+    14: optional string email
+    15: required domain.PaymentSession session //<- what this?
+    16: required domain.DataRevision domain_revision
+    17: optional domain.InvoicePaymentContext context
+    18: optional domain.RiskScore risk_score
+    19: optional geo_ip.LocationInfo location_info
 }
 
 /**
-* Информация об инвойсе. Состоит из доменной модели инвойса.
+* Информация об инвойсе.
 */
 struct StatInvoice {
-    1: required domain.Invoice invoice;
+    1 : required domain.InvoiceID id
+    2 : required domain.PartyID owner_id
+    3 : required domain.ShopID shop_id
+    4 : required base.Timestamp created_at
+    5 : required domain.InvoiceStatus status
+    6 : required domain.InvoiceDetails details
+    7 : required base.Timestamp due
+    8 : required domain.Amount amount
+    9 : required domain.CurrencyRef currency
+    10: optional domain.InvoiceContext context
 }
 
 /**
