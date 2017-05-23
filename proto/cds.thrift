@@ -29,7 +29,7 @@ struct CardData {
 
 struct PutCardDataResult {
     1: required domain.BankCard bank_card
-    2: required domain.PaymentSession session
+    2: required domain.PaymentSessionId session_id
 }
 
 struct Unlocked {}
@@ -82,7 +82,7 @@ service Storage {
         throws (1: CardDataNotFound not_found, 2: KeyringLocked locked)
 
     /** Получить карточные данные c CVV */
-    CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSession session)
+    CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSessionId session_id)
         throws (1: CardDataNotFound not_found, 2: KeyringLocked locked)
 
     /** Сохранить карточные данные */
