@@ -37,7 +37,6 @@ struct OperationFailure {
     2: optional string description
 }
 
-
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
