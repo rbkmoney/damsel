@@ -51,7 +51,7 @@ typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
-typedef string PaymentSession
+typedef string PaymentSessionID
 typedef string Fingerprint
 typedef string IPAddress
 
@@ -116,7 +116,7 @@ union InvoicePaymentStatus {
 
 struct Payer {
     1: required PaymentTool payment_tool
-    2: required PaymentSession session
+    2: required PaymentSessionID session_id
     3: required ClientInfo client_info
     4: required ContactInfo contact_info
 }
