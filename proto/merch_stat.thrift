@@ -27,7 +27,7 @@ struct StatPayment {
     12: optional domain.Fingerprint fingerprint
     13: optional string phone_number
     14: optional string email
-    15: required domain.PaymentSessionId session_id
+    15: required domain.PaymentSessionID session_id
     16: optional domain.InvoicePaymentContext context
     17: optional geo_ip.LocationInfo location_info
 }
