@@ -10,7 +10,7 @@ namespace java com.rbkmoney.damsel.merch_stat
 namespace erlang merchstat
 
 /**
- * Информация о платеже. Состоит из id инвойса платежа, доменной модели платежа и гео-данных.
+ * Информация о платеже.
   * **/
 struct StatPayment {
     1 : required domain.InvoicePaymentID id
