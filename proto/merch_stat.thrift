@@ -18,10 +18,10 @@ struct StatPayment {
     3 : required domain.PartyID owner_id
     4 : required domain.ShopID shop_id
     5 : required base.Timestamp created_at
-    6 : required domain.InvoicePaymentStatus status
+    6 : required InvoicePaymentStatus status
     7 : required domain.Amount amount
     8 : required domain.Amount fee
-    9 : required domain.CurrencyRef currency
+    9 : required string currency_symbolic_code
     10: required PaymentTool payment_tool
     11: optional domain.IPAddress ip_address
     12: optional domain.Fingerprint fingerprint
@@ -30,6 +30,26 @@ struct StatPayment {
     15: required domain.PaymentSessionId session_id
     16: optional domain.InvoicePaymentContext context
     17: optional geo_ip.LocationInfo location_info
+}
+
+struct OperationFailure {
+    1: required string code
+    2: optional string description
+}
+
+
+struct InvoicePaymentPending   {}
+struct InvoicePaymentProcessed {}
+struct InvoicePaymentCaptured  {}
+struct InvoicePaymentCancelled {}
+struct InvoicePaymentFailed    { 1: required OperationFailure failure }
+
+union InvoicePaymentStatus {
+    1: InvoicePaymentPending pending
+    4: InvoicePaymentProcessed processed
+    2: InvoicePaymentCaptured captured
+    5: InvoicePaymentCancelled cancelled
+    3: InvoicePaymentFailed failed
 }
 
 union PaymentTool {
@@ -51,12 +71,24 @@ struct StatInvoice {
     2 : required domain.PartyID owner_id
     3 : required domain.ShopID shop_id
     4 : required base.Timestamp created_at
-    5 : required domain.InvoiceStatus status
+    5 : required InvoiceStatus status
     6 : required domain.InvoiceDetails details
     7 : required base.Timestamp due
     8 : required domain.Amount amount
-    9 : required domain.CurrencyRef currency
+    9 : required string currency_symbolic_code
     10: optional domain.InvoiceContext context
+}
+
+struct InvoiceUnpaid    {}
+struct InvoicePaid      {}
+struct InvoiceCancelled { 1: required string details }
+struct InvoiceFulfilled { 1: required string details }
+
+union InvoiceStatus {
+    1: InvoiceUnpaid unpaid
+    2: InvoicePaid paid
+    3: InvoiceCancelled cancelled
+    4: InvoiceFulfilled fulfilled
 }
 
 /**
