@@ -22,16 +22,25 @@ struct StatPayment {
     7 : required domain.Amount amount
     8 : required domain.Amount fee
     9 : required domain.CurrencyRef currency
-    10: required domain.PaymentTool payment_tool
+    10: required PaymentTool payment_tool
     11: optional domain.IPAddress ip_address
     12: optional domain.Fingerprint fingerprint
     13: optional string phone_number
     14: optional string email
-    15: required domain.PaymentSession session //<- what this?
-    16: required domain.DataRevision domain_revision
-    17: optional domain.InvoicePaymentContext context
-    18: optional domain.RiskScore risk_score
-    19: optional geo_ip.LocationInfo location_info
+    15: required domain.PaymentSession session_id
+    16: optional domain.InvoicePaymentContext context
+    17: optional geo_ip.LocationInfo location_info
+}
+
+union PaymentTool {
+    1: BankCard bank_card
+}
+
+struct BankCard {
+    1: required domain.Token token
+    2: required domain.BankCardPaymentSystem payment_system
+    3: required string bin
+    4: required string masked_pan
 }
 
 /**
