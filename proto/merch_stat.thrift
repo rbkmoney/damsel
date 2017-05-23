@@ -28,7 +28,7 @@ struct StatPayment {
     13: optional string phone_number
     14: optional string email
     15: required domain.PaymentSessionID session_id
-    16: optional domain.InvoicePaymentContext context
+    16: optional base.Content context
     17: optional geo_ip.LocationInfo location_info
 }
 
@@ -71,11 +71,12 @@ struct StatInvoice {
     3 : required domain.ShopID shop_id
     4 : required base.Timestamp created_at
     5 : required InvoiceStatus status
-    6 : required domain.InvoiceDetails details
-    7 : required base.Timestamp due
-    8 : required domain.Amount amount
-    9 : required string currency_symbolic_code
-    10: optional domain.InvoiceContext context
+    6 : required string product
+    7 : optional string description
+    8 : required base.Timestamp due
+    9 : required domain.Amount amount
+    10: required string currency_symbolic_code
+    11: optional base.Content context
 }
 
 struct InvoiceUnpaid    {}
