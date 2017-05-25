@@ -49,6 +49,7 @@ struct TransactionInfo {
 
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
+typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
 typedef string PaymentSessionID
@@ -94,6 +95,8 @@ struct InvoicePayment {
     8:  required Cash cost
     6:  optional InvoicePaymentContext context
     9:  optional RiskScore risk_score
+    11: optional InvoicePaymentRoute route
+    12: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentPending   {}
@@ -129,6 +132,24 @@ struct ClientInfo {
 struct InvoicePaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
+}
+
+struct InvoicePaymentAdjustment {
+    1: required InvoicePaymentAdjustmentID id
+    2: required InvoicePaymentAdjustmentStatus status
+    3: required base.Timestamp created_at
+    4: required DataRevision domain_revision
+    5: required FinalCashFlow cash_flow
+}
+
+struct InvoicePaymentAdjustmentPending   {}
+struct InvoicePaymentAdjustmentCaptured  { 1: required base.Timestamp at }
+struct InvoicePaymentAdjustmentCancelled { 1: required base.Timestamp at }
+
+union InvoicePaymentAdjustmentStatus {
+    1: InvoicePaymentAdjustmentPending pending
+    2: InvoicePaymentAdjustmentCaptured captured
+    3: InvoicePaymentAdjustmentCancelled cancelled
 }
 
 /* Blocking and suspension */
