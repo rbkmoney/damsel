@@ -279,6 +279,10 @@ exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
 }
 
+exception InvoicePaymentAdjustmentPending {
+    1: required domain.InvoicePaymentAdjustmentID id
+}
+
 exception InvalidInvoiceStatus {
     1: required domain.InvoiceStatus status
 }
@@ -353,7 +357,8 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
-            4: InvalidPaymentStatus ex4
+            4: InvalidPaymentStatus ex4,
+            5: InvoicePaymentAdjustmentPending ex5
         )
 
     domain.InvoicePaymentAdjustment GetPaymentAdjustment (
