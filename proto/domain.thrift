@@ -139,7 +139,8 @@ struct InvoicePaymentAdjustment {
     2: required InvoicePaymentAdjustmentStatus status
     3: required base.Timestamp created_at
     4: required DataRevision domain_revision
-    5: required FinalCashFlow cash_flow
+    5: required string reason
+    6: required FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentAdjustmentPending   {}

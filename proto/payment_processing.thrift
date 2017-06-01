@@ -259,6 +259,7 @@ struct InvoicePaymentParams {
 
 struct InvoicePaymentAdjustmentParams {
     1: optional domain.DataRevision domain_revision
+    2: required string reason
 }
 
 // Exceptions
