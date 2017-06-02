@@ -141,6 +141,7 @@ struct InvoicePaymentAdjustment {
     4: required DataRevision domain_revision
     5: required string reason
     6: required FinalCashFlow cash_flow
+    7: required FinalCashFlow cash_flow_diff
 }
 
 struct InvoicePaymentAdjustmentPending   {}
