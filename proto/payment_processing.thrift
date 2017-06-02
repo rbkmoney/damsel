@@ -257,8 +257,13 @@ struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
 
+/**
+ * Параметры создаваемой поправки к платежу.
+ */
 struct InvoicePaymentAdjustmentParams {
+    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
     1: optional domain.DataRevision domain_revision
+    /** Причина, на основании которой создаётся поправка. */
     2: required string reason
 }
 
@@ -348,6 +353,15 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3
         )
 
+    /**
+     * Создать поправку к платежу.
+     *
+     * После создания поправку необходимо либо подтвердить, если её эффекты
+     * соответствуют ожиданиям, либо отклонить в противном случае (по аналогии с
+     * заявками).
+     * Пока созданная поправка ни подтверждена, ни отклонена, другую поправку
+     * создать невозможно.
+     */
     domain.InvoicePaymentAdjustment CreatePaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
