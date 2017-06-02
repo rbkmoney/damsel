@@ -30,16 +30,6 @@
     }
 
     /**
-    * Тип отчета сгенерированного по выплате
-    **/
-    enum PayoutReportType {
-        /* АБС НКО */
-        ABS,
-        /* 1C */
-        OneS
-    }
-
-    /**
     * Описание выплаты
     **/
     struct Payout {
@@ -47,9 +37,7 @@
        2: required PayoutStatus status
        3: required string from_time
        4: required string to_time
-       5: required string abs_status
        6: required string ones_status
-       7: optional string abs_report
        8: optional string ones_report
        9: optional string created_at
     }
@@ -92,11 +80,7 @@
        * Перегенерирует отчет о выплате только по бизнес атрибутам и отправляет письмо с отчетом.
        * Суммы остаются не изменными
        **/
-       PayoutID RegenerateReport(1: PayoutID payoutID, 2: PayoutReportType reportType )
-       /**
-       * Подтвердить загрузку выплаты в ABS
-       **/
-       bool AcceptAbsPayout(1: PayoutID payoutID)
+       PayoutID RegenerateReport(1: PayoutID payoutID)
        /**
        * Подтвердить загрузку выплаты в OneS
        **/
