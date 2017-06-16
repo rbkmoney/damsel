@@ -29,6 +29,11 @@ struct BrowserPostRequest {
     2: required Form form
 }
 
+
+struct PayRecipet {
+    1: required string invoideId;
+}
+
 union UserInteraction {
     /**
      * Требование переадресовать user agent пользователя, в виде HTTP-запроса.
@@ -39,4 +44,8 @@ union UserInteraction {
      *    взаимодействия.
      */
     1: BrowserHTTPRequest redirect
+    /**
+    *
+    **/
+    2: PayRecipet pay
 }

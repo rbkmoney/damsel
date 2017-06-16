@@ -474,6 +474,7 @@ enum BankCardPaymentSystem {
 
 union PaymentTool {
     1: BankCard bank_card
+    2: PaymentReceipt payment_receipt
 }
 
 typedef string Token
@@ -484,6 +485,12 @@ struct BankCard {
     3: required string bin
     4: required string masked_pan
 }
+
+/** Платежная квитанция **/
+struct PaymentReceipt {
+
+}
+
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
 
