@@ -583,6 +583,7 @@ struct ClaimStatusChanged {
 // Exceptions
 
 exception PartyExists {}
+exception PartyNotExistYet {}
 exception ClaimNotFound {}
 exception ContractNotFound {}
 exception InvalidContractStatus { 1: required domain.ContractStatus status }
@@ -613,7 +614,7 @@ service PartyManagement {
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
     domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: base.InvalidRequest ex3)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistYet ex3)
 
     ClaimResult CreateContract (1: UserInfo user, 2: PartyID party_id, 3: ContractParams params)
         throws (
