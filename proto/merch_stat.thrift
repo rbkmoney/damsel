@@ -92,6 +92,59 @@ union InvoiceStatus {
 }
 
 /**
+* Информация о шаблоне инвойса.
+*/
+struct StatInvoiceTemplate {
+    1: required domain.InvoiceTemplateID id
+    2: required domain.PartyID owner_id
+    4: required TemplateStatus status
+    4: optional TemplateSpecs specs
+}
+
+union TemplateStatus {
+    1: TemplateValid valid
+    2: TemplateInvalid invalid
+}
+
+struct TemplateValid {}
+struct TemplateInvalid { 1: required TemplateSpecs invalid_specs }
+
+typedef set<TemplateSpec> TemplateSpecs
+
+struct TemplateSpec {
+    1: required bool configurable
+    2: required domain.InvoiceTemplateParam p
+}
+
+union InvoiceTemplateParam {
+    1: ShopID shop_id
+    2: InvoiceDetails details
+    3: InvoiceContext context
+    4: Cash cost
+    4: TemplateCostSpec cost_spec
+}
+
+struct TemplateCostSpec {
+    1: required domain.CurrencyRef currency
+    2: required CashRange range
+}
+
+struct CashRange {
+    1: required CashBound upper
+    2: required CashBound lower
+}
+
+union CashBound {
+    1: Cash inclusive
+    2: Cash exclusive
+}
+
+struct Cash {
+    1: required domain.Amount amount
+    2: required domain.CurrencyRef currency
+}
+
+/**
 * Информация о клиенте. Уникальность клиента определяется по fingerprint.
 */
 struct StatCustomer {
@@ -129,6 +182,7 @@ union StatResponseData {
     2: list<StatInvoice> invoices
     3: list<StatCustomer> customers
     4: list<StatInfo> records
+    5: list<StatInvoiceTemplate> invoice_templates
 }
 
 /**
@@ -147,6 +201,11 @@ service MerchantStatistics {
 
     /**
      *  Возвращает набор данных об инвойсах
+     */
+    StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+
+    /**
+     *  Возвращает набор данных о шаблонах инвойсов
      */
     StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
