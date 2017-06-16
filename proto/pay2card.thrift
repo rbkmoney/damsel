@@ -2,7 +2,7 @@ include "base.thrift"
 include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.pay2card
-namespace erlang prxpayout
+namespace erlang pay2card
 
 
 struct Cash {
