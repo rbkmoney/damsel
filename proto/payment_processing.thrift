@@ -504,7 +504,6 @@ union ContractModification {
 }
 
 struct ContractTermination {
-    1: required base.Timestamp terminated_at
     2: optional string reason
 }
 
