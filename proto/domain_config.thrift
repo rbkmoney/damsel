@@ -87,7 +87,28 @@ exception ObjectNotFound {}
  * Возникает в случаях, если коммит
  * несовместим с уже примененными ранее
  */
-exception OperationConflict {}
+exception OperationConflict { 1: required Conflict conflict }
+
+union Conflict {
+    1: ObjectAlreadyExistsConflict object_already_exists
+    2: ObjectNotFoundConflict object_not_found
+    3: ObjectReferenceMismatchConflict object_reference_mismatch
+    4: HeadMismatchConflict head_mismatch
+}
+
+struct ObjectAlreadyExistsConflict {
+    1: domain.DomainObject object
+}
+
+struct ObjectNotFoundConflict {
+    1: domain.Reference object_ref
+}
+
+struct ObjectReferenceMismatchConflict {
+    1: domain.Reference object_ref
+}
+
+struct HeadMismatchConflict {}
 
 /**
  * Интерфейс сервиса конфигурации предметной области.
