@@ -108,17 +108,8 @@ struct ObjectReferenceMismatchConflict {
     1: domain.Reference object_ref
 }
 
-union IntegrityCheckFailedConflict {
-    1: ReferencesNonexistent references_nonexistent
-    2: ReferencedBy referenced_by
-}
-
-struct ReferencesNonexistent {
+struct IntegrityCheckFailedConflict {
     1: list<domain.Reference> object_refs
-}
-
-struct ReferencedBy {
-    1: list<domain.DomainObject> objects
 }
 
 /**
