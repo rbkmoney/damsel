@@ -93,7 +93,7 @@ union Conflict {
     1: ObjectAlreadyExistsConflict object_already_exists
     2: ObjectNotFoundConflict object_not_found
     3: ObjectReferenceMismatchConflict object_reference_mismatch
-    4: HeadMismatchConflict head_mismatch
+    4: IntegrityCheckFailedConflict integrity_check_failed
 }
 
 struct ObjectAlreadyExistsConflict {
@@ -108,7 +108,23 @@ struct ObjectReferenceMismatchConflict {
     1: domain.Reference object_ref
 }
 
-struct HeadMismatchConflict {}
+union IntegrityCheckFailedConflict {
+    1: ReferencesNonexistent references_nonexistent
+    2: ReferencedBy referenced_by
+}
+
+struct ReferencesNonexistent {
+    1: list<domain.Reference> object_refs
+}
+
+struct ReferencedBy {
+    1: list<domain.DomainObject> objects
+}
+
+/**
+ * Несоответствие заголовка
+ */
+exception HeadMismatch {}
 
 /**
  * Интерфейс сервиса конфигурации предметной области.
@@ -130,7 +146,7 @@ service Repository {
      * Возвращает следующую версию
      */
     Version Commit (1: Version version, 2: Commit commit)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex2);
+        throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: HeadMismatch ex3);
         
     /**
      * Получить снэпшот конкретной версии
