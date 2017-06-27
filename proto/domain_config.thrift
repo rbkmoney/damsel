@@ -93,7 +93,7 @@ union Conflict {
     1: ObjectAlreadyExistsConflict object_already_exists
     2: ObjectNotFoundConflict object_not_found
     3: ObjectReferenceMismatchConflict object_reference_mismatch
-    4: IntegrityCheckFailedConflict integrity_check_failed
+    4: ReferencesNotExistConflict references_not_exist
 }
 
 struct ObjectAlreadyExistsConflict {
@@ -108,8 +108,13 @@ struct ObjectReferenceMismatchConflict {
     1: domain.Reference object_ref
 }
 
-struct IntegrityCheckFailedConflict {
-    1: list<domain.Reference> object_refs
+struct ReferencesNotExistConflict {
+    1: list<WhoWhereRef> refs
+}
+
+struct WhoWhereRef {
+    1: required domain.Reference who_ref
+    2: required domain.Reference where_ref
 }
 
 /**
