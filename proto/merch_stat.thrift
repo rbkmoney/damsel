@@ -97,51 +97,11 @@ union InvoiceStatus {
 struct StatInvoiceTemplate {
     1: required domain.InvoiceTemplateID id
     2: required domain.PartyID owner_id
-    3: required TemplateStatus status
-    4: optional TemplateSpecs specs
-}
-
-union TemplateStatus {
-    1: TemplateValid valid
-    2: TemplateInvalid invalid
-}
-
-struct TemplateValid {}
-struct TemplateInvalid { 1: required TemplateSpecs invalid_specs }
-
-typedef set<TemplateSpec> TemplateSpecs
-
-struct TemplateSpec {
-    1: required bool configurable
-    2: required domain.InvoiceTemplateParam p
-}
-
-union InvoiceTemplateParam {
-    1: ShopID shop_id
-    2: InvoiceDetails details
-    3: InvoiceContext context
-    4: Cash cost
-    5: TemplateCostSpec cost_spec
-}
-
-struct TemplateCostSpec {
-    1: required domain.CurrencyRef currency
-    2: required CashRange range
-}
-
-struct CashRange {
-    1: required CashBound upper
-    2: required CashBound lower
-}
-
-union CashBound {
-    1: Cash inclusive
-    2: Cash exclusive
-}
-
-struct Cash {
-    1: required domain.Amount amount
-    2: required domain.CurrencyRef currency
+    3: required domain.ShopID shop_id
+    4: required domain.InvoiceDetails details
+    5: required domain.LifetimeInterval invoice_lifetime
+    6: required domain.InvoiceTemplateCost cost
+    7: optional domain.InvoiceContext context
 }
 
 /**
