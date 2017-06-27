@@ -97,7 +97,7 @@ union InvoiceStatus {
 struct StatInvoiceTemplate {
     1: required domain.InvoiceTemplateID id
     2: required domain.PartyID owner_id
-    4: required TemplateStatus status
+    3: required TemplateStatus status
     4: optional TemplateSpecs specs
 }
 
@@ -121,7 +121,7 @@ union InvoiceTemplateParam {
     2: InvoiceDetails details
     3: InvoiceContext context
     4: Cash cost
-    4: TemplateCostSpec cost_spec
+    5: TemplateCostSpec cost_spec
 }
 
 struct TemplateCostSpec {
@@ -207,7 +207,7 @@ service MerchantStatistics {
     /**
      *  Возвращает набор данных о шаблонах инвойсов
      */
-    StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StatResponse GetInvoiceTemplates(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
     /**
      * Возвращает набор данных о покупателях

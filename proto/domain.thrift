@@ -123,13 +123,13 @@ struct InvoiceTemplate {
 }
 
 struct InvoiceTemplateCost {
-    1: required domain.CurrencyRef currency
+    1: required CurrencyRef currency
     2: required InvoiceTemplateCostAmount amount
 }
 
 union InvoiceTemplateCostAmount {
-    1: domain.Amount fixed_amount
-    2: domain.CashRange range_amount
+    1: Amount fixed_amount
+    2: CashRange range_amount
 }
 
 /**

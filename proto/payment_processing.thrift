@@ -502,7 +502,7 @@ service InvoiceTemplating {
             3: UserInvoiceTemplateNotFound ex3
         )
 
-    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id, 4: TemplateParams params)
+    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id, 4: InvoiceTemplateParams params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
