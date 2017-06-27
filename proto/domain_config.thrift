@@ -93,34 +93,34 @@ union Conflict {
     1: ObjectAlreadyExistsConflict object_already_exists
     2: ObjectNotFoundConflict object_not_found
     3: ObjectReferenceMismatchConflict object_reference_mismatch
-    4: ReferencesNotExistConflict references_not_exist
+    4: ObjectsNotExistConflict objects_not_exist
 }
 
 struct ObjectAlreadyExistsConflict {
-    1: domain.DomainObject object
+    1: required domain.DomainObject object
 }
 
 struct ObjectNotFoundConflict {
-    1: domain.Reference object_ref
+    1: required domain.Reference object_ref
 }
 
 struct ObjectReferenceMismatchConflict {
-    1: domain.Reference object_ref
+    1: required domain.Reference object_ref
 }
 
-struct ReferencesNotExistConflict {
-    1: list<WhoWhereRef> refs
+struct ObjectsNotExistConflict {
+    1: required list<NonexistantObject> refs
 }
 
-struct WhoWhereRef {
-    1: required domain.Reference who_ref
-    2: required domain.Reference where_ref
+struct NonexistantObject {
+    1: required Reference ref
+    2: required list<Reference> referenced_by
 }
 
 /**
- * Несоответствие заголовка
+ * Попытка совершить коммит на устаревшую версию
  */
-exception HeadMismatch {}
+exception ObsoleteCommitVersion {}
 
 /**
  * Интерфейс сервиса конфигурации предметной области.
@@ -142,7 +142,7 @@ service Repository {
      * Возвращает следующую версию
      */
     Version Commit (1: Version version, 2: Commit commit)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: HeadMismatch ex3);
+        throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: ObsoleteCommitVersion ex3);
         
     /**
      * Получить снэпшот конкретной версии
