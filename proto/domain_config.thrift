@@ -97,7 +97,7 @@ union Conflict {
 }
 
 struct ObjectAlreadyExistsConflict {
-    1: required domain.DomainObject object
+    1: required domain.Reference object_ref
 }
 
 struct ObjectNotFoundConflict {
@@ -109,12 +109,12 @@ struct ObjectReferenceMismatchConflict {
 }
 
 struct ObjectsNotExistConflict {
-    1: required list<NonexistantObject> refs
+    1: required list<NonexistantObject> object_refs
 }
 
 struct NonexistantObject {
-    1: required Reference ref
-    2: required list<Reference> referenced_by
+    1: required domain.Reference object_ref
+    2: required list<domain.Reference> referenced_by
 }
 
 /**
