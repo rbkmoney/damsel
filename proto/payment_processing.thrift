@@ -244,15 +244,6 @@ struct EventRange {
 
 /* Invoicing service definitions */
 
-union InvoiceParam {
-    1: PartyID party_id
-    2: ShopID shop_id
-    3: domain.InvoiceDetails details
-    4: base.Timestamp due
-    5: domain.Cash cost
-    6: domain.InvoiceContext context
-}
-
 struct InvoiceParams {
     1: required PartyID party_id
     2: required ShopID shop_id
@@ -262,12 +253,24 @@ struct InvoiceParams {
     6: required domain.InvoiceContext context
 }
 
+struct InvoiceWithTemplateParams {
+    1: required domain.InvoiceTemplateID template_id
+    2: optional domain.Cash cost
+    3: optional domain.InvoiceContext context
+}
+
+union InvoiceTemplateParam {
+    1: domain.Cash cost
+    2: domain.InvoiceContext context
+}
+
 struct InvoiceTemplateParams {
-    1: required base.Timestamp due
-    2: optional ShopID shop_id
-    3: optional domain.InvoiceDetails details
-    4: optional domain.Cash cost
-    5: optional domain.InvoiceContext context
+    1: required PartyID owner_id
+    2: required ShopID shop_id
+    3: required domain.InvoiceDetails details
+    4: required domain.LifetimeInterval invoice_lifetime
+    5: required domain.InvoiceTemplateCost cost
+    6: optional domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
@@ -320,12 +323,15 @@ exception InvalidPaymentAdjustmentStatus {
 
 exception UserInvoiceTemplateNotFound {}
 
-exception InvoiceParamMissing {
-    1: required InvoiceParam param
+exception InvoiceTemplateParamMissing {
+    1: required set<InvoiceTemplateParam> params
 }
-exception TemplateCostSpecViolated {
-    1: required domain.TemplateCostSpec spec
+
+exception InvoiceTemplateCostViolated {
+    1: required domain.InvoiceTemplateCost spec
 }
+
+exception InvalidCurrencyRef { 1: required domain.CurrencyRef currency }
 
 service Invoicing {
 
@@ -339,7 +345,7 @@ service Invoicing {
             6: InvalidShopStatus ex6
         )
 
-    InvoiceState CreateWithTemplate (1: UserInfo user, 2: PartyID party_id, 3. domain.InvoiceTemplateID template_id, 4: InvoiceTemplateParams params)
+    InvoiceState CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
@@ -348,7 +354,8 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: UserInvoiceTemplateNotFound ex7,
-            8: InvoiceParamMissing ex8
+            8: InvoiceTemplateCostViolated ex8,
+            9: InvoiceTemplateParamMissing ex9
         )
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -473,7 +480,46 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6
         )
+    }
 
+service InvoiceTemplating {
+
+    domain.InvoiceTemplateID Create (1: UserInfo user, 2: InvoiceTemplateParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: InvalidPartyStatus ex3,
+            4: ShopNotFound ex4,
+            5: InvalidShopStatus ex5,
+            6: InvalidCurrencyRef ex6,
+            7: base.InvalidRequest ex7
+        )
+
+    domain.InvoiceTemplate Get (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: UserInvoiceTemplateNotFound ex3
+        )
+
+    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id, 4: TemplateParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: UserInvoiceTemplateNotFound ex3,
+            4: InvalidPartyStatus ex4,
+            5: ShopNotFound ex5,
+            6: InvalidShopStatus ex6,
+            7: InvalidCurrencyRef ex7,
+            8: base.InvalidRequest ex8
+        )
+    void Delete (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: UserInvoiceTemplateNotFound ex3,
+            4: InvalidPartyStatus ex4
+        )
 }
 
 /* Party management service definitions */

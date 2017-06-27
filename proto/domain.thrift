@@ -106,25 +106,31 @@ struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 /**
- * Параметры инвойса, доступные в шаблоне инвойса.
- * Это должно быть в invoice_template.thrift, но из-за свалки в payment_processing.thrift
- * приходится делать такие костыли.
+ * Шаблон инвойса.
+ * Согласно https://github.com/rbkmoney/coredocs/blob/0a5ae1a79f977be3134c3b22028631da5225d407/docs/domain/entities/invoice.md#шаблон-инвойса
  */
+
 typedef base.ID InvoiceTemplateID
 
-union InvoiceTemplateParam {
-    1: ShopID shop_id
-    2: InvoiceDetails details
-    3: InvoiceContext context
-    4: Cash cost
-    4: TemplateCostSpec cost_spec
+struct InvoiceTemplate {
+    1: required InvoiceTemplateID id
+    2: required PartyID owner_id
+    3: required ShopID shop_id
+    4: required InvoiceDetails details
+    5: required LifetimeInterval invoice_lifetime
+    6: required InvoiceTemplateCost cost
+    7: optional InvoiceContext context
 }
 
-struct TemplateCostSpec {
-    1: required CurrencyRef currency
-    2: required CashRange range
+struct InvoiceTemplateCost {
+    1: required domain.CurrencyRef currency
+    2: required InvoiceTemplateCostAmount amount
 }
 
+union InvoiceTemplateCostAmount {
+    1: domain.Amount fixed_amount
+    2: domain.CashRange range_amount
+}
 
 /**
  * Статус платежа.
