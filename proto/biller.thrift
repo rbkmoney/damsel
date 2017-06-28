@@ -4,43 +4,47 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.biller
 namespace erlang biller
 
+    exception FileParsingError {}
+
+    enum ValidationStatus{
+        // платеж подтвержден
+        confirmed,
+        // ошибка при разобре платежа
+        error,
+        // данный платеж будет проигнорирован
+        ignored
+    }
 
     struct InvoiceValidation{
-        // Может быть незарезолвен
-        1: optional String invoiceId
-        // Порядковый номер записи
-        2: required String id
+        // Сокрашенный идетификатор платежа
+        1: optional string short_payment_id;
+        // Идентификатор инвойса
+        2: optional string invoiceId
+
+        // Порядковый номер строки записи
+        3: required string id
         // Дата транзакции
-        3: required String transaction_date
+        4: required string transaction_date
         // Наименование клиента плательщика
-        4: required String payer_name
+        5: required string payer_name
         // Оборот в рублях
-        5: required i64 amount
+        6: required i64 amount
         // Назначение платежа
-        6: required String purpose
-        // Платеж корректен
-        7: required bool valid
-        // Причина не валидности
-        8: optional String reason
+        7: required string purpose
+        // Статус проверки платежа
+        8: required ValidationStatus status
+        // Описание статуса или ошибки
+        9: required string description
+
     }
 
     /**
-    * Сервис для генерации платежных извещений(квитанций) и ввода платежей по ним в систему
+    * Сервис для подтверждения платежей заведенных в системе
+    *
+    * Загружаемый файл анализируется и платежи попавшие в него помечаются прошедшими
     **/
-    service billler {
-       /**
-       * сгенерировать и отдать pdf с извещением по указанному платежу
-       *
-       * ?? нужен номер платежа?
-       **/
-       binary generatebilldocument(1: string invoiceid);
-
-       list<InvoiceValidation> validateInvoice(1: binary report_file);
-
-       void accept(1: String invoiceId);
-
-
-
+    service Biller {
+       list<InvoiceValidation> validateInvoice(1: binary report_file) throws (1:FileParsingError ex1);
     }
 
 
