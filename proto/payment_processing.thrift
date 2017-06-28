@@ -254,12 +254,13 @@ struct InvoiceParams {
 }
 
 struct InvoiceWithTemplateParams {
-    1: required domain.InvoiceTemplateID template_id
-    2: optional domain.Cash cost
-    3: optional domain.InvoiceContext context
+    1: required PartyID owner_id
+    2: required domain.InvoiceTemplateID template_id
+    3: optional domain.Cash cost
+    4: optional domain.InvoiceContext context
 }
 
-union InvoiceTemplateParam {
+union InvoiceTemplateViolatedParam {
     1: domain.Cash cost
     2: domain.InvoiceContext context
 }
@@ -323,12 +324,12 @@ exception InvalidPaymentAdjustmentStatus {
 
 exception UserInvoiceTemplateNotFound {}
 
-exception InvoiceTemplateParamMissing {
-    1: required set<InvoiceTemplateParam> params
+exception MissingInvoiceTemplateParam {
+    1: required set<InvoiceTemplateViolatedParam> param
 }
 
-exception InvoiceTemplateCostViolated {
-    1: required domain.InvoiceTemplateCost spec
+exception InvalidInvoiceTemplateParam {
+    1: required set<InvoiceTemplateViolatedParam> params
 }
 
 exception InvalidCurrencyRef { 1: required domain.CurrencyRef currency }
@@ -354,8 +355,8 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: UserInvoiceTemplateNotFound ex7,
-            8: InvoiceTemplateCostViolated ex8,
-            9: InvoiceTemplateParamMissing ex9
+            8: InvalidInvoiceTemplateParam ex8,
+            9: MissingInvoiceTemplateParam ex9
         )
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)

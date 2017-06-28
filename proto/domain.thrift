@@ -122,14 +122,12 @@ struct InvoiceTemplate {
     7: optional InvoiceContext context
 }
 
-struct InvoiceTemplateCost {
-    1: required CurrencyRef currency
-    2: required InvoiceTemplateCostAmount amount
-}
+struct InvoiceTemplateCostUnlimited {}
 
-union InvoiceTemplateCostAmount {
-    1: Amount fixed_amount
-    2: CashRange range_amount
+union InvoiceTemplateCost {
+    1: Cash cost_fixed
+    2: CashRange cost_range
+    3: InvoiceTemplateCostUnlimited cost_unlim
 }
 
 /**
