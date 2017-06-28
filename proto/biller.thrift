@@ -4,9 +4,9 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.biller
 namespace erlang biller
 
-    exception FileParsingError {}
+typedef string PaymentsFileId
 
-    enum ValidationStatus{
+    enum RowValidationStatus{
         // платеж подтвержден
         confirmed,
         // ошибка при разобре платежа
@@ -15,14 +15,14 @@ namespace erlang biller
         ignored
     }
 
-    struct InvoiceValidation{
+    struct ParsedRow{
         // Сокрашенный идетификатор платежа
         1: optional string short_payment_id;
         // Идентификатор инвойса
-        2: optional string invoiceId
+        2: optional string invoice_id
 
         // Порядковый номер строки записи
-        3: required string id
+        3: required i32 id
         // Дата транзакции
         4: required string transaction_date
         // Наименование клиента плательщика
@@ -32,19 +32,40 @@ namespace erlang biller
         // Назначение платежа
         7: required string purpose
         // Статус проверки платежа
-        8: required ValidationStatus status
+        8: required RowValidationStatus status
         // Описание статуса или ошибки
         9: required string description
+    }
 
+    enum FileProccessingStatus{
+           in_progress,
+           ready,
+           error
+    }
+
+    struct FileProcessingResult {
+        1: required FileProccessingStatus status
+        2: optional list<ParsedRow> result;
+        3: optional string description
     }
 
     /**
     * Сервис для подтверждения платежей заведенных в системе
     *
-    * Загружаемый файл анализируется и платежи попавшие в него помечаются прошедшими
+    * Загружаемый файл анализируется и платежи попавшие в него помечаются прошедшими в HG или возвращают описание ошибки
+    *
     **/
     service Biller {
-       list<InvoiceValidation> validateInvoice(1: binary report_file) throws (1:FileParsingError ex1);
+        /**
+        * Файл загружается и возвращает идентификатор задачи на его обработку - PaymentsFileId
+         **/
+        PaymentsFileId markCaptured(1: binary payments_file);
+
+        /**
+        * Получить результат обработки файла
+        **/
+        FileProcessingResult getFileProcessingResult(1: PaymentsFileId id)
+
     }
 
 
