@@ -2,8 +2,8 @@ include "base.thrift"
 include "domain.thrift"
 
 
-namespace java com.rbkmoney.damsel.biller
-namespace erlang biller
+namespace java com.rbkmoney.damsel.pimporter
+namespace erlang pimporter
 
 typedef string ImportId
 
