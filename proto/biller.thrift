@@ -5,7 +5,7 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.biller
 namespace erlang biller
 
-typedef string PaymentsFileId
+typedef string TaskId
 
     enum PaymentTransactionStatus{
         // платеж подтвержден
@@ -38,14 +38,14 @@ typedef string PaymentsFileId
         9: required string description
     }
 
-    enum FileProccessingStatus{
+    enum TaskResultStatus{
            in_progress,
            ready,
            error
     }
 
-    struct FileProcessingResult {
-        1: required FileProccessingStatus status
+    struct TaskResult {
+        1: required TaskResultStatus status
         2: optional list<PaymentTransaction> result;
         3: optional string description
     }
@@ -60,12 +60,12 @@ typedef string PaymentsFileId
         /**
         * Файл загружается и возвращает идентификатор задачи на его обработку - PaymentsFileId
          **/
-        PaymentsFileId markCaptured(1: base.Content payments_data);
+        TaskId markCaptured(1: base.Content payments_data);
 
         /**
         * Получить результат обработки файла
         **/
-        FileProcessingResult getProcessingResult(1: PaymentsFileId id)
+        TaskResult getTaskResult(1: TaskId id)
 
     }
 
