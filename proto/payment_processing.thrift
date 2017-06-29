@@ -83,9 +83,11 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
-    1: domain.InvoiceID        invoice
+    1: domain.InvoiceID         invoice
     /** Идентификатор участника, который породил событие. */
-    2: domain.PartyID          party
+    2: domain.PartyID           party
+    /** Идентификатор шаблона инвойса, который породил событие. */
+    3: domain.InvoiceTemplateID invoice_template
 }
 
 typedef list<Event> Events
@@ -98,6 +100,8 @@ union EventPayload {
     1: InvoiceEvent            invoice_event
     /** Некоторое событие, порождённое участником. */
     2: PartyEvent              party_event
+    /** Некоторое событие, порождённое шаблоном инвойса. */
+    3: InvoiceTemplateEvent    invoice_template_event
 }
 
 /**
@@ -119,6 +123,36 @@ union InvoicePaymentEvent {
     4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
     6: InvoicePaymentAdjustmentEvent      invoice_payment_adjustment_event
 }
+
+/**
+ * Один из возможных вариантов события, порождённого инвойсом.
+ */
+union InvoiceTemplateEvent {
+    1: InvoiceTemplateCreated  invoice_created
+    2: InvoiceTemplateModified invoice_status_changed
+    3: InvoiceTemplateDeleted  invoice_payment_event
+}
+
+/**
+ * Событие о создании нового шаблона инвойса.
+ */
+struct InvoiceTemplateCreated {
+    /** Данные созданного шаблона инвойса. */
+    1: required domain.InvoiceTemplate invoice
+}
+
+/**
+ * Событие о модификации шаблона инвойса.
+ */
+struct InvoiceTemplateModified {
+    /** Данные модифицированного шаблона инвойса. */
+    1: required domain.InvoiceTemplate invoice
+}
+
+/**
+ * Событие об удалении шаблона инвойса.
+ */
+struct InvoiceTemplateDeleted {}
 
 /**
  * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
