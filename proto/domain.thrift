@@ -474,7 +474,7 @@ enum BankCardPaymentSystem {
 
 union PaymentTool {
     1: BankCard bank_card
-    2: ReceiptPayment payment_receipt
+    2: ReceiptPayment receipt_payment
 }
 
 typedef string Token
