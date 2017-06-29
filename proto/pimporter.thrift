@@ -29,7 +29,7 @@ typedef string ImportId
         // Оборот в рублях
         6: required i64 amount
         // Назначение платежа
-        7: required string purpose
+        7: required string reciept_purpose
         // Статус проверки платежа
         8: required PaymentTransactionStatus status
         // Описание статуса или ошибки

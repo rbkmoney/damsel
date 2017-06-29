@@ -37,8 +37,8 @@ struct Receipt {
     // Сумма
     2: required i64 amount
 
-    // Назначение перевода*: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
-    3: required string recieptPurpose;
+    // Назначение перевода: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
+    3: required string reciept_purpose;
 
     // Получатель: НКО “ЭПС” (ООО)
     4: required string recipient;
