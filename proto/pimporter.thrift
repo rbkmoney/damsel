@@ -8,14 +8,14 @@ typedef string ImportId
     enum PaymentTransactionStatus{
         // платеж подтвержден
         confirmed,
-        // ошибка при разобре платежа
+        // ошибка при разборе платежа
         error,
         // данный платеж будет проигнорирован
         ignored
     }
 
     struct PaymentTransaction{
-        // Сокрашенный идетификатор платежа
+        // Сокращенный идентификатор платежа
         1: optional string short_payment_id;
         // Идентификатор инвойса
         2: optional string invoice_id
@@ -37,7 +37,7 @@ typedef string ImportId
     }
 
     enum ImportStatus{
-           in_progress,
+           processing,
            ready,
            error
     }
