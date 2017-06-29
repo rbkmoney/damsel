@@ -30,7 +30,7 @@ struct BrowserPostRequest {
 }
 
 // Платежная квитанция
-struct PayRecipet {
+struct Receipt {
     // Идентификатор платежа и инвойса
     1: required string payment_identifer
 
@@ -38,28 +38,28 @@ struct PayRecipet {
     2: required i64 amount
 
     // Назначение перевода*: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
-    3: optional string recieptPurpose;
+    3: required string recieptPurpose;
 
     // Получатель: НКО “ЭПС” (ООО)
-    4: optional string recipient;
+    4: required string recipient;
 
     // ИНН: 7750005700
-    5: optional string inn;
+    5: required string inn;
 
     // КПП: 772801001
-    6: optional string kpp;
+    6: required string kpp;
 
     // Банк получателя: НКО “ЭПС” (ООО), г. Москва
-    7: optional string recipient_bank;
+    7: required string recipient_bank;
 
     // Расчетный счет Р/с: 47416810101020000000
-    8: optional string checking_account;
+    8: required string checking_account;
 
     // Корр.счет: 30103810445250000313
-    9: optional string correspondent_account;
+    9: required string correspondent_account;
 
     // БИК:	044525313 в отделении 1 Москва
-    10: optional string bik;
+    10: required string bik;
 }
 
 union UserInteraction {
@@ -75,5 +75,5 @@ union UserInteraction {
     /**
     * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
     **/
-    2: PayRecipet pay
+    2: Receipt receipt
 }
