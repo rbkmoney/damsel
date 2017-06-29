@@ -1,12 +1,13 @@
 include "base.thrift"
 include "domain.thrift"
 
+
 namespace java com.rbkmoney.damsel.biller
 namespace erlang biller
 
 typedef string PaymentsFileId
 
-    enum RowValidationStatus{
+    enum PaymentTransactionStatus{
         // платеж подтвержден
         confirmed,
         // ошибка при разобре платежа
@@ -15,7 +16,7 @@ typedef string PaymentsFileId
         ignored
     }
 
-    struct ParsedRow{
+    struct PaymentTransaction{
         // Сокрашенный идетификатор платежа
         1: optional string short_payment_id;
         // Идентификатор инвойса
@@ -32,7 +33,7 @@ typedef string PaymentsFileId
         // Назначение платежа
         7: required string purpose
         // Статус проверки платежа
-        8: required RowValidationStatus status
+        8: required PaymentTransactionStatus status
         // Описание статуса или ошибки
         9: required string description
     }
@@ -45,7 +46,7 @@ typedef string PaymentsFileId
 
     struct FileProcessingResult {
         1: required FileProccessingStatus status
-        2: optional list<ParsedRow> result;
+        2: optional list<PaymentTransaction> result;
         3: optional string description
     }
 
@@ -59,12 +60,12 @@ typedef string PaymentsFileId
         /**
         * Файл загружается и возвращает идентификатор задачи на его обработку - PaymentsFileId
          **/
-        PaymentsFileId markCaptured(1: binary payments_file);
+        PaymentsFileId markCaptured(1: base.Content payments_data);
 
         /**
         * Получить результат обработки файла
         **/
-        FileProcessingResult getFileProcessingResult(1: PaymentsFileId id)
+        FileProcessingResult getProcessingResult(1: PaymentsFileId id)
 
     }
 
