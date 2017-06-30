@@ -56,6 +56,7 @@ struct TransactionInfo {
 
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
+typedef base.ID InvoicePaymentRefundID
 typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
@@ -106,17 +107,18 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
+struct InvoicePaymentRefunded  { 1: required string reason }
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 /**
  * Статус платежа.
- * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
  */
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
     4: InvoicePaymentProcessed processed
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
+    6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
 }
 
@@ -155,6 +157,16 @@ union TargetInvoicePaymentStatus {
      */
     3: InvoicePaymentCancelled cancelled
 
+    /**
+     * Платёж возвращён.
+     *
+     * При достижении платежом этого статуса процессинг должен быть уверен в том, что провайдер
+     * возвратил денежные средства плательщику, потраченные им на ранее подтверждённого списание.
+     *
+     * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
+     */
+    4: InvoicePaymentRefunded refunded
+
 }
 
 struct Payer {
@@ -174,6 +186,8 @@ struct InvoicePaymentRoute {
     2: required TerminalRef terminal
 }
 
+/* Adjustments */
+
 struct InvoicePaymentAdjustment {
     1: required InvoicePaymentAdjustmentID id
     2: required InvoicePaymentAdjustmentStatus status
@@ -192,6 +206,34 @@ union InvoicePaymentAdjustmentStatus {
     1: InvoicePaymentAdjustmentPending pending
     2: InvoicePaymentAdjustmentCaptured captured
     3: InvoicePaymentAdjustmentCancelled cancelled
+}
+
+/* Refunds */
+
+struct InvoicePaymentRefund {
+    1: required InvoicePaymentRefundID id
+    2: required InvoicePaymentRefundStatus status
+    3: required base.Timestamp created_at
+    4: optional TransactionInfo trx
+    5: required string reason
+    6: required FinalCashFlow cash_flow
+}
+
+struct InvoicePaymentRefundPending {}
+
+struct InvoicePaymentRefundSucceeded {
+    1: required base.Timestamp at
+}
+
+struct InvoicePaymentRefundFailed {
+    1: required base.Timestamp at
+    2: required OperationFailure failure
+}
+
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
 }
 
 /* Blocking and suspension */
