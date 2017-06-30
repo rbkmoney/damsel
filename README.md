@@ -21,7 +21,7 @@ Systemwide protocol collection.
 Собрать дамзель и инсталировать новый jar в локальный мавен репозиторий:
 
 * make wc_compile
-* make wc_java_install LOCAL_BUILD=true SETTINGS_XML=path_to_rbk_maven_settings		
+* make wc_java_install LOCAL_BUILD=true SETTINGS_XML=/Users/alexeysemenkov/.m2/settings.xml		
 
 Чтобы ипользовать несколько версий дамзели в проекте используте classifier:v${commit.number}
 

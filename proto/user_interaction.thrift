@@ -30,12 +30,15 @@ struct BrowserPostRequest {
 }
 
 // Платежная квитанция
-struct Receipt {
+struct WireTransfer  {
     // Идентификатор платежа и инвойса
     1: required string payment_identifer
 
     // Сумма
     2: required i64 amount
+
+//    /** Символьный код, уникально идентифицирующий валюту. */
+//    3: required string currency_code
 
     // Назначение перевода: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
     3: required string reciept_purpose;
@@ -60,6 +63,10 @@ struct Receipt {
 
     // БИК:	044525313 в отделении 1 Москва
     10: required string bik;
+}
+
+struct RussianWireTransfer {
+
 }
 
 union UserInteraction {
