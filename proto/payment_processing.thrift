@@ -103,25 +103,6 @@ union InvoiceChange {
 }
 
 /**
- * Один из возможных вариантов события, порождённого платежом по инвойсу.
- */
-union InvoicePaymentChange {
-    1: InvoicePaymentStarted              invoice_payment_started
-    2: InvoicePaymentBound                invoice_payment_bound
-    3: InvoicePaymentStatusChanged        invoice_payment_status_changed
-    4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
-    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
-}
-
-/**
- * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
- */
-union InvoicePaymentAdjustmentChange {
-    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
-    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
-}
-
-/**
  * Событие о создании нового инвойса.
  */
 struct InvoiceCreated {
@@ -135,6 +116,25 @@ struct InvoiceCreated {
 struct InvoiceStatusChanged {
     /** Новый статус инвойса. */
     1: required domain.InvoiceStatus status
+}
+
+/**
+ * Событие, касающееся определённого платежа по инвойсу.
+ */
+struct InvoicePaymentChange {
+    1: required domain.InvoicePaymentID id
+    2: required InvoicePaymentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого платежом по инвойсу.
+ */
+union InvoicePaymentChangePayload {
+    1: InvoicePaymentStarted               invoice_payment_started
+    2: InvoicePaymentBound                 invoice_payment_bound
+    3: InvoicePaymentStatusChanged         invoice_payment_status_changed
+    4: InvoicePaymentInteractionRequested  invoice_payment_interaction_requested
+    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
 }
 
 /**
@@ -154,57 +154,54 @@ struct InvoicePaymentStarted {
  * у провайдера.
  */
 struct InvoicePaymentBound {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
     /** Данные о связанной транзакции у провайдера. */
-    2: required domain.TransactionInfo trx
+    1: required domain.TransactionInfo trx
 }
 
 /**
  * Событие об изменении статуса платежа по инвойсу.
  */
 struct InvoicePaymentStatusChanged {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
     /** Статус платежа по инвойсу. */
-    2: required domain.InvoicePaymentStatus status
+    1: required domain.InvoicePaymentStatus status
 }
 
 /**
  * Событие об запросе взаимодействия с плательщиком.
  */
 struct InvoicePaymentInteractionRequested {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
     /** Необходимое взаимодействие */
-    2: required user_interaction.UserInteraction interaction
+    1: required user_interaction.UserInteraction interaction
 }
 
 /**
- * Событие о прохождении инспекции
+ * Событие, касающееся определённой корректировки платежа.
  */
-struct InvoicePaymentInspected {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
-    /** Результат инспекции */
-    2: required domain.RiskScore risk_score
+struct InvoicePaymentAdjustmentChange {
+    1: required domain.InvoicePaymentAdjustmentID id
+    2: required InvoicePaymentAdjustmentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
+ */
+union InvoicePaymentAdjustmentEventPayload {
+    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
+    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
 }
 
 /**
  * Событие о создании корректировки платежа
  */
 struct InvoicePaymentAdjustmentCreated {
-    1: required domain.InvoicePaymentID payment_id
-    2: required domain.InvoicePaymentAdjustment adjustment
+    1: required domain.InvoicePaymentAdjustment adjustment
 }
 
 /**
  * Событие об изменении статуса корректировки платежа
  */
 struct InvoicePaymentAdjustmentStatusChanged {
-    1: required domain.InvoicePaymentID payment_id
-    2: required domain.InvoicePaymentAdjustmentID adjustment_id
-    3: required domain.InvoicePaymentAdjustmentStatus status
+    1: required domain.InvoicePaymentAdjustmentStatus status
 }
 
 /**
