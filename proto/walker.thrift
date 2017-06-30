@@ -129,7 +129,7 @@
         /**
         * Добавить комментарий к заявке
         **/
-        void AddComment(1: String party_id, 2: ClaimID claim_id,  2: UserInformation user, 3: string text)
+        void AddComment(1: String party_id, 2: ClaimID claim_id,  3: UserInformation user, 4: string text)
 
         /**
         * Получить список комментариев к заявке
