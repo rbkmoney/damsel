@@ -1,116 +1,19 @@
     include "domain.thrift"
     include "base.thrift"
+    include "payment_processing.thrift"
 
     namespace java com.rbkmoney.damsel.walker
     namespace erlang walker
 
     typedef i64 ClaimID
-
-    // *** Copy of Party Management ***
     typedef domain.PartyID PartyID
     typedef domain.ShopID  ShopID
 
-    struct PartyParams {
-        1: required domain.PartyContactInfo contact_info
-    }
-
-    struct PayoutToolParams {
-        1: required domain.CurrencyRef currency
-        2: required domain.PayoutToolInfo tool_info
-    }
-
-    struct ShopParams {
-        1: optional domain.CategoryRef category
-        6: required domain.ShopLocation location
-        2: required domain.ShopDetails details
-        3: required domain.ContractID contract_id
-        4: required domain.PayoutToolID payout_tool_id
-    }
-
-    struct ShopAccountParams {
-        1: required domain.CurrencyRef currency
-    }
-
-    struct ContractParams {
-        1: required domain.Contractor contractor
-        2: optional domain.ContractTemplateRef template
-    }
-
-    struct ContractAdjustmentParams {
-        1: required domain.ContractTemplateRef template
-    }
-
-    union PartyModification {
-        4: ContractModificationUnit contract_modification
-        6: ShopModificationUnit shop_modification
-    }
-
-    struct ContractModificationUnit {
-        1: required domain.ContractID id
-        2: required ContractModification modification
-    }
-
-    union ContractModification {
-        1: ContractParams creation
-        2: ContractTermination termination
-        3: ContractAdjustmentModificationUnit adjustment_modification
-        4: PayoutToolModificationUnit payout_tool_modification
-        5: domain.LegalAgreement legal_agreement_binding
-    }
-
-    struct ContractTermination {
-        1: required string terminated_at
-        2: optional string reason
-    }
-
-    struct ContractAdjustmentModificationUnit {
-        1: required base.ID adjustment_id
-        2: required ContractAdjustmentModification modification
-    }
-
-    union ContractAdjustmentModification {
-        1: ContractAdjustmentParams creation
-    }
-
-    struct PayoutToolModificationUnit {
-        1: required domain.PayoutToolID payout_tool_id
-        2: required PayoutToolModification modification
-    }
-
-    union PayoutToolModification {
-        1: PayoutToolParams creation
-    }
-
-    struct ShopModificationUnit {
-        1: required ShopID id
-        2: required ShopModification modification
-    }
-
-    union ShopModification {
-        5: ShopParams creation
-        6: domain.CategoryRef category_modification
-        7: domain.ShopDetails details_modification
-        8: ShopContractModification contract_modification
-        9: domain.PayoutToolID payout_tool_modification
-        10: ProxyModification proxy_modification
-        11: domain.ShopLocation location_modification
-        12: ShopAccountParams shop_account_creation
-    }
-
-    struct ShopContractModification {
-        1: required domain.ContractID contract_id
-        2: required domain.PayoutToolID payout_tool_id
-    }
-
-    struct ProxyModification {
-        1: optional domain.Proxy proxy
-    }
-    // *** end ***
 
 
     //Контейнер для хранения всех ченжсетов
     struct PartyModificationUnit {
-         1: required list<PartyModification> modifications
+         1: required list<payment_processing.PartyModification> modifications
     }
 
     enum ActionType {
@@ -121,26 +24,30 @@
     }
 
     struct ClaimInfo {
-         1: required ClaimID claim_id
+         // id мерчанта
+         1: required string party_id
+         // идентификатор заявки в рамках орги
+         2: required ClaimID claim_id
          // статус Claim-a
-         2: required string status
+         3: required string status
          // id пользователя на каторого назначенная заявка
-         3: optional string assigned_user_id
+         4: optional string assigned_user_id
          //текстовое описание заявки
-         4: optional string description
+         5: optional string description
          // причина отмены или отзыва завяки
-         5: optional string reason
+         6: optional string reason
          // полный набор изменений Claim-a
-         6: required PartyModificationUnit modifications
+         7: required PartyModificationUnit modifications
          // ревизия Claim-a
-         7: required string revision
+         8: required string revision
     }
 
     struct ClaimSearchRequest {
-        1: optional set<ClaimID> claim_id
-        2: optional string contains
-        3: optional string assigned_user_id
-        4: optional string claim_status
+        1: optional string party_id
+        2: optional set<ClaimID> claim_id
+        3: optional string contains
+        4: optional string assigned_user_id
+        5: optional string claim_status
     }
 
     struct Comment {
@@ -178,7 +85,7 @@
         /**
         * Подтвердить и применить заявку пользователя
         **/
-        void AcceptClaim(1: ClaimID claim_id, 2: UserInformation user 3: i32 revision) throws (
+        void AcceptClaim(1: String party_id, 2: ClaimID claim_id, 3: UserInformation user 4: i32 revision) throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3
@@ -186,14 +93,14 @@
         /**
         * Отклонить заявку
         **/
-        void DenyClaim(1: ClaimID claim_id, 2: UserInformation user, 3: string reason 4: i32 revision) throws (
+        void DenyClaim(1: String party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: string reason 5: i32 revision) throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3)
         /**
         * Получить информацию о заявке
         **/
-        ClaimInfo GetClaim(1: ClaimID claim_id) throws (
+        ClaimInfo GetClaim(1: String party_id, 2: ClaimID claim_id) throws (
                     1: ClaimNotFound ex1 )
 
         /**
@@ -206,7 +113,7 @@
         /**
         * Передает список изменений для заявки
         **/
-        void UpdateClaim(1: ClaimID claim_id, 2: UserInformation user, 3: PartyModificationUnit changeset, 4: i32 revision) throws (
+        void UpdateClaim(1: String party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: PartyModificationUnit changeset, 5: i32 revision) throws (
                     1: ClaimNotFound ex4,
                     2: InvalidClaimStatus ex5,
                     3: InvalidClaimRevision ex6,
@@ -222,15 +129,15 @@
         /**
         * Добавить комментарий к заявке
         **/
-        void AddComment(1: ClaimID claim_id,  2: UserInformation user, 3: string text)
+        void AddComment(1: String party_id, 2: ClaimID claim_id,  2: UserInformation user, 3: string text)
 
         /**
         * Получить список комментариев к заявке
         **/
-        list<Comment> GetComments(1: ClaimID claim_id)
+        list<Comment> GetComments(1: String party_id, 2: ClaimID claim_id)
 
         /**
         * Получитить историю событий связанных с заявкой
         **/
-        list<Action> GetActions(1: ClaimID claim_id)
+        list<Action> GetActions(1: String party_id, 2: ClaimID claim_id)
     }
