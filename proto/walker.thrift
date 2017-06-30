@@ -85,7 +85,7 @@
         /**
         * Подтвердить и применить заявку пользователя
         **/
-        void AcceptClaim(1: String party_id, 2: ClaimID claim_id, 3: UserInformation user 4: i32 revision) throws (
+        void AcceptClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user 4: i32 revision) throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3
@@ -93,14 +93,14 @@
         /**
         * Отклонить заявку
         **/
-        void DenyClaim(1: String party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: string reason 5: i32 revision) throws (
+        void DenyClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: string reason 5: i32 revision) throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3)
         /**
         * Получить информацию о заявке
         **/
-        ClaimInfo GetClaim(1: String party_id, 2: ClaimID claim_id) throws (
+        ClaimInfo GetClaim(1: string party_id, 2: ClaimID claim_id) throws (
                     1: ClaimNotFound ex1 )
 
         /**
@@ -113,7 +113,7 @@
         /**
         * Передает список изменений для заявки
         **/
-        void UpdateClaim(1: String party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: PartyModificationUnit changeset, 5: i32 revision) throws (
+        void UpdateClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: PartyModificationUnit changeset, 5: i32 revision) throws (
                     1: ClaimNotFound ex4,
                     2: InvalidClaimStatus ex5,
                     3: InvalidClaimRevision ex6,
@@ -129,15 +129,15 @@
         /**
         * Добавить комментарий к заявке
         **/
-        void AddComment(1: String party_id, 2: ClaimID claim_id,  3: UserInformation user, 4: string text)
+        void AddComment(1: string party_id, 2: ClaimID claim_id,  3: UserInformation user, 4: string text)
 
         /**
         * Получить список комментариев к заявке
         **/
-        list<Comment> GetComments(1: String party_id, 2: ClaimID claim_id)
+        list<Comment> GetComments(1: string party_id, 2: ClaimID claim_id)
 
         /**
         * Получитить историю событий связанных с заявкой
         **/
-        list<Action> GetActions(1: String party_id, 2: ClaimID claim_id)
+        list<Action> GetActions(1: string party_id, 2: ClaimID claim_id)
     }
