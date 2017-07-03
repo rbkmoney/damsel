@@ -131,9 +131,8 @@ struct InvoicePaymentChange {
  */
 union InvoicePaymentChangePayload {
     1: InvoicePaymentStarted               invoice_payment_started
-    2: InvoicePaymentBound                 invoice_payment_bound
     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
-    4: InvoicePaymentInteractionRequested  invoice_payment_interaction_requested
+    2: InvoicePaymentSessionChange         invoice_payment_session_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
 }
 
@@ -150,15 +149,6 @@ struct InvoicePaymentStarted {
 }
 
 /**
- * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
- * у провайдера.
- */
-struct InvoicePaymentBound {
-    /** Данные о связанной транзакции у провайдера. */
-    1: required domain.TransactionInfo trx
-}
-
-/**
  * Событие об изменении статуса платежа по инвойсу.
  */
 struct InvoicePaymentStatusChanged {
@@ -167,9 +157,51 @@ struct InvoicePaymentStatusChanged {
 }
 
 /**
- * Событие об запросе взаимодействия с плательщиком.
+ * Событие в рамках сессии взаимодействия с провайдером по платежу.
  */
-struct InvoicePaymentInteractionRequested {
+struct InvoicePaymentSessionChange {
+    1: required domain.TargetInvoicePaymentStatus target
+    2: required InvoicePaymentSessionChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого сессией взаимодействия.
+ */
+union InvoicePaymentSessionChangePayload {
+    1: InvoicePaymentSessionStarted              invoice_payment_session_started
+    2: InvoicePaymentSessionFinished             invoice_payment_session_finished
+    3: InvoicePaymentSessionSuspended            invoice_payment_session_suspended
+    4: InvoicePaymentSessionActivated            invoice_payment_session_activated
+    5: InvoicePaymentSessionTransactionBound     invoice_payment_session_transaction_bound
+    6: InvoicePaymentSessionProxyStateChanged    invoice_payment_session_proxy_state_changed
+    7: InvoicePaymentSessionInteractionRequested invoice_payment_session_interaction_requested
+}
+
+struct InvoicePaymentSessionStarted {}
+struct InvoicePaymentSessionFinished {}
+struct InvoicePaymentSessionSuspended {}
+struct InvoicePaymentSessionActivated {}
+
+/**
+ * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
+ * у провайдера.
+ */
+struct InvoicePaymentSessionTransactionBound {
+    /** Данные о связанной транзакции у провайдера. */
+    1: required domain.TransactionInfo trx
+}
+
+/**
+ * Событие о том, что изменилось непрозрачное состояние прокси в рамках сессии.
+ */
+struct InvoicePaymentSessionProxyStateChanged {
+    1: required base.Opaque proxy_state
+}
+
+/**
+ * Событие о запросе взаимодействия с плательщиком.
+ */
+struct InvoicePaymentSessionInteractionRequested {
     /** Необходимое взаимодействие */
     1: required user_interaction.UserInteraction interaction
 }
@@ -185,7 +217,7 @@ struct InvoicePaymentAdjustmentChange {
 /**
  * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
  */
-union InvoicePaymentAdjustmentEventPayload {
+union InvoicePaymentAdjustmentChangePayload {
     1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
     2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
 }
