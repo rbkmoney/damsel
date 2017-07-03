@@ -40,6 +40,10 @@
          7: required PartyModificationUnit modifications
          // ревизия Claim-a
          8: required string revision
+         // создан
+         9: required string created_at
+         // обновлен
+         10: required string updated_at
     }
 
     struct ClaimSearchRequest {
