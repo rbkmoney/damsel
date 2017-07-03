@@ -366,8 +366,6 @@ exception InvalidInvoiceTemplateParam {
     1: required set<InvoiceTemplateViolatedParam> params
 }
 
-exception InvalidCurrencyRef { 1: required domain.CurrencyRef currency }
-
 service Invoicing {
 
     InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
@@ -526,7 +524,7 @@ service InvoiceTemplating {
             3: InvalidPartyStatus ex3,
             4: ShopNotFound ex4,
             5: InvalidShopStatus ex5,
-            6: InvalidCurrencyRef ex6,
+            6: InvalidInvoiceTemplateParam ex6,
             7: base.InvalidRequest ex7
         )
 
@@ -545,7 +543,7 @@ service InvoiceTemplating {
             4: InvalidPartyStatus ex4,
             5: ShopNotFound ex5,
             6: InvalidShopStatus ex6,
-            7: InvalidCurrencyRef ex7,
+            7: InvalidInvoiceTemplateParam ex7,
             8: base.InvalidRequest ex8
         )
     void Delete (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id)

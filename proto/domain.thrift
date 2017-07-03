@@ -66,6 +66,7 @@ struct Invoice {
     8 : required base.Timestamp due
     10: required Cash cost
     11: optional InvoiceContext context
+    12: optional InvoiceTemplateID template_id
 }
 
 struct InvoiceDetails {
