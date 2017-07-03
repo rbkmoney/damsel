@@ -93,6 +93,7 @@ struct InvoicePayment {
     4:  optional TransactionInfo trx
     5:  required Payer payer
     8:  required Cash cost
+    13: required InvoicePaymentFlow flow
     6:  optional InvoicePaymentContext context
     9:  optional RiskScore risk_score
     11: optional InvoicePaymentRoute route
@@ -101,8 +102,12 @@ struct InvoicePayment {
 
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured  {}
-struct InvoicePaymentCancelled {}
+struct InvoicePaymentCaptured {
+    1: optional string reason
+}
+struct InvoicePaymentCancelled {
+    1: optional string reason
+}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 /**
@@ -152,6 +157,26 @@ union InvoicePaymentAdjustmentStatus {
     1: InvoicePaymentAdjustmentPending pending
     2: InvoicePaymentAdjustmentCaptured captured
     3: InvoicePaymentAdjustmentCancelled cancelled
+}
+
+/**
+ * Процесс выполнения платежа.
+ */
+union InvoicePaymentFlow {
+    1: InvoicePaymentFlowInstant instant
+    2: InvoicePaymentFlowHold hold
+}
+
+struct InvoicePaymentFlowInstant   {}
+
+struct InvoicePaymentFlowHold {
+    1: required OnHoldExpiration on_hold_expiration
+    2: required base.Timestamp held_until
+}
+
+enum OnHoldExpiration {
+    cancel
+    capture
 }
 
 /* Blocking and suspension */
@@ -406,6 +431,7 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
+    7: optional HoldLifetime hold_lifetime
     /* Undefined level */
     3: optional GuaranteeFundTerms guarantee_fund
 }
@@ -413,6 +439,10 @@ struct PaymentsServiceTerms {
 struct GuaranteeFundTerms {
     1: optional CashLimitSelector limits
     2: optional CashFlowSelector fees
+}
+
+struct HoldLifetime {
+    1: required i32 seconds
 }
 
 /* Currencies */
@@ -736,6 +766,7 @@ struct Terminal {
     // 8: optional TerminalDescriptor descriptor
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
+    11: optional TerminalPaymentFlow payment_flow
 }
 
 struct TerminalAccount {
@@ -751,6 +782,17 @@ union TerminalSelector {
 struct TerminalDecision {
     1: required Predicate if_
     2: required TerminalSelector then_
+}
+
+union TerminalPaymentFlow {
+    1: TerminalPaymentFlowInstant instant
+    2: TerminalPaymentFlowHold hold
+}
+
+struct TerminalPaymentFlowInstant {}
+
+struct TerminalPaymentFlowHold {
+    1: required HoldLifetime hold_lifetime
 }
 
 /* Predicates / conditions */
