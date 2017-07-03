@@ -17,5 +17,5 @@ exception Failure {
 }
 
 service Pay2CardService {
-    void makePay (1: domain.Token cardToken, 2: Cash cash) throws (1: Failure ex1)
+    void makePay (1: string requestId 2: domain.Token cardToken, 3: Cash cash) throws (1: Failure ex1)
 }
