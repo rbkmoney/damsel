@@ -83,9 +83,11 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
-    1: domain.InvoiceID        invoice
+    1: domain.InvoiceID         invoice
     /** Идентификатор участника, который породил событие. */
-    2: domain.PartyID          party
+    2: domain.PartyID           party
+    /** Идентификатор шаблона инвойса, который породил событие. */
+    3: domain.InvoiceTemplateID invoice_template
 }
 
 typedef list<Event> Events
@@ -98,6 +100,8 @@ union EventPayload {
     1: InvoiceEvent            invoice_event
     /** Некоторое событие, порождённое участником. */
     2: PartyEvent              party_event
+    /** Некоторое событие, порождённое шаблоном инвойса. */
+    3: InvoiceTemplateEvent    invoice_template_event
 }
 
 /**
@@ -119,6 +123,36 @@ union InvoicePaymentEvent {
     4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
     6: InvoicePaymentAdjustmentEvent      invoice_payment_adjustment_event
 }
+
+/**
+ * Один из возможных вариантов события, порождённого инвойсом.
+ */
+union InvoiceTemplateEvent {
+    1: InvoiceTemplateCreated  invoice_created
+    2: InvoiceTemplateModified invoice_status_changed
+    3: InvoiceTemplateDeleted  invoice_payment_event
+}
+
+/**
+ * Событие о создании нового шаблона инвойса.
+ */
+struct InvoiceTemplateCreated {
+    /** Данные созданного шаблона инвойса. */
+    1: required domain.InvoiceTemplate invoice
+}
+
+/**
+ * Событие о модификации шаблона инвойса.
+ */
+struct InvoiceTemplateModified {
+    /** Данные модифицированного шаблона инвойса. */
+    1: required domain.InvoiceTemplate invoice
+}
+
+/**
+ * Событие об удалении шаблона инвойса.
+ */
+struct InvoiceTemplateDeleted {}
 
 /**
  * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
@@ -253,6 +287,27 @@ struct InvoiceParams {
     6: required domain.InvoiceContext context
 }
 
+struct InvoiceWithTemplateParams {
+    1: required PartyID owner_id
+    2: required domain.InvoiceTemplateID template_id
+    3: optional domain.Cash cost
+    4: optional domain.InvoiceContext context
+}
+
+union InvoiceTemplateViolatedParam {
+    1: domain.Cash cost
+    2: domain.InvoiceContext context
+}
+
+struct InvoiceTemplateParams {
+    1: required PartyID owner_id
+    2: required ShopID shop_id
+    3: required domain.InvoiceDetails details
+    4: required domain.LifetimeInterval invoice_lifetime
+    5: required domain.InvoiceTemplateCost cost
+    6: optional domain.InvoiceContext context
+}
+
 struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
@@ -301,6 +356,16 @@ exception InvalidPaymentAdjustmentStatus {
     1: required domain.InvoicePaymentAdjustmentStatus status
 }
 
+exception UserInvoiceTemplateNotFound {}
+
+exception MissingInvoiceTemplateParam {
+    1: required set<InvoiceTemplateViolatedParam> param
+}
+
+exception InvalidInvoiceTemplateParam {
+    1: required set<InvoiceTemplateViolatedParam> params
+}
+
 service Invoicing {
 
     InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
@@ -311,6 +376,19 @@ service Invoicing {
             4: ShopNotFound ex4,
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6
+        )
+
+    InvoiceState CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: base.InvalidRequest ex2,
+            3: PartyNotFound ex3,
+            4: ShopNotFound ex4,
+            5: InvalidPartyStatus ex5,
+            6: InvalidShopStatus ex6,
+            7: UserInvoiceTemplateNotFound ex7,
+            8: InvalidInvoiceTemplateParam ex8,
+            9: MissingInvoiceTemplateParam ex9
         )
 
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -435,7 +513,44 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6
         )
+    }
 
+service InvoiceTemplating {
+
+    domain.InvoiceTemplateID Create (1: UserInfo user, 2: InvoiceTemplateParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: InvalidPartyStatus ex3,
+            4: ShopNotFound ex4,
+            5: InvalidShopStatus ex5,
+            6: InvalidInvoiceTemplateParam ex6,
+            7: base.InvalidRequest ex7
+        )
+
+    domain.InvoiceTemplate Get (1: UserInfo user, 2: domain.InvoiceTemplateID id)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceTemplateNotFound ex2
+        )
+
+    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: InvoiceTemplateParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: UserInvoiceTemplateNotFound ex3,
+            4: InvalidPartyStatus ex4,
+            5: ShopNotFound ex5,
+            6: InvalidShopStatus ex6,
+            7: InvalidInvoiceTemplateParam ex7,
+            8: base.InvalidRequest ex8
+        )
+    void Delete (1: UserInfo user, 2: domain.InvoiceTemplateID id)
+        throws (
+            1: InvalidUser ex1,
+            2: UserInvoiceTemplateNotFound ex2,
+            3: InvalidPartyStatus ex3
+        )
 }
 
 /* Party management service definitions */

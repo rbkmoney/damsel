@@ -66,6 +66,7 @@ struct Invoice {
     8 : required base.Timestamp due
     10: required Cash cost
     11: optional InvoiceContext context
+    12: optional InvoiceTemplateID template_id
 }
 
 struct InvoiceDetails {
@@ -104,6 +105,31 @@ struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
+
+/**
+ * Шаблон инвойса.
+ * Согласно https://github.com/rbkmoney/coredocs/blob/0a5ae1a79f977be3134c3b22028631da5225d407/docs/domain/entities/invoice.md#шаблон-инвойса
+ */
+
+typedef base.ID InvoiceTemplateID
+
+struct InvoiceTemplate {
+    1: required InvoiceTemplateID id
+    2: required PartyID owner_id
+    3: required ShopID shop_id
+    4: required InvoiceDetails details
+    5: required LifetimeInterval invoice_lifetime
+    6: required InvoiceTemplateCost cost
+    7: optional InvoiceContext context
+}
+
+struct InvoiceTemplateCostUnlimited {}
+
+union InvoiceTemplateCost {
+    1: Cash cost_fixed
+    2: CashRange cost_range
+    3: InvoiceTemplateCostUnlimited cost_unlim
+}
 
 /**
  * Статус платежа.
