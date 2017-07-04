@@ -23,8 +23,8 @@ exception Failure {
 
 struct TransferResult {
     1: required Provider provider
-    2: string transactionId
-    3: Cash fee
+    2: required string transactionId
+    3: optional Cash fee
 }
 
 service Pay2CardService {
