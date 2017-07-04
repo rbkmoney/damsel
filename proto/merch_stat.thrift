@@ -92,19 +92,6 @@ union InvoiceStatus {
 }
 
 /**
-* Информация о шаблоне инвойса.
-*/
-struct StatInvoiceTemplate {
-    1: required domain.InvoiceTemplateID id
-    2: required domain.PartyID owner_id
-    3: required domain.ShopID shop_id
-    4: required domain.InvoiceDetails details
-    5: required domain.LifetimeInterval invoice_lifetime
-    6: required domain.InvoiceTemplateCost cost
-    7: optional domain.InvoiceContext context
-}
-
-/**
 * Информация о клиенте. Уникальность клиента определяется по fingerprint.
 */
 struct StatCustomer {
@@ -142,7 +129,6 @@ union StatResponseData {
     2: list<StatInvoice> invoices
     3: list<StatCustomer> customers
     4: list<StatInfo> records
-    5: list<StatInvoiceTemplate> invoice_templates
 }
 
 /**
@@ -163,11 +149,6 @@ service MerchantStatistics {
      *  Возвращает набор данных об инвойсах
      */
     StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
-
-    /**
-     *  Возвращает набор данных о шаблонах инвойсов
-     */
-    StatResponse GetInvoiceTemplates(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
     /**
      * Возвращает набор данных о покупателях
