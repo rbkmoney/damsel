@@ -10,12 +10,25 @@ struct Cash {
     2: required domain.Currency currency
 }
 
- /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
+enum Provider {
+    ALFA
+    BINBANK
+}
+
 exception Failure {
-    1: required string code
-    2: optional string description
+    1: required Provider provider
+    2: required string code
+    3: optional string description
+}
+
+struct Response {
+    1: required Provider provider
+    2: string transactionId
 }
 
 service Pay2CardService {
-    void makePay (1: string requestId 2: domain.Token cardToken, 3: Cash cash) throws (1: Failure ex1)
+    Cash getFee (1: domain.Token cardToken, 2: Cash cash) throws (1: Failure ex1)
+
+    /** requestId - должен состоять только из цифр */
+    Response makeTransfer (1: string requestId 2: domain.Token cardToken, 3: Cash cash) throws (1: Failure ex1)
 }
