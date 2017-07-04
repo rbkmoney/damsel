@@ -219,6 +219,12 @@ struct InvoicePaymentRefund {
     6: required FinalCashFlow cash_flow
 }
 
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
+}
+
 struct InvoicePaymentRefundPending {}
 
 struct InvoicePaymentRefundSucceeded {
@@ -228,12 +234,6 @@ struct InvoicePaymentRefundSucceeded {
 struct InvoicePaymentRefundFailed {
     1: required base.Timestamp at
     2: required OperationFailure failure
-}
-
-union InvoicePaymentRefundStatus {
-    1: InvoicePaymentRefundPending pending
-    2: InvoicePaymentRefundSucceeded succeeded
-    3: InvoicePaymentRefundFailed failed
 }
 
 /* Blocking and suspension */
