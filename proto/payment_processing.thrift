@@ -528,14 +528,13 @@ service InvoiceTemplating {
             7: base.InvalidRequest ex7
         )
 
-    domain.InvoiceTemplate Get (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id)
+    domain.InvoiceTemplate Get (1: UserInfo user, 2: domain.InvoiceTemplateID id)
         throws (
             1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: UserInvoiceTemplateNotFound ex3
+            2: UserInvoiceTemplateNotFound ex2
         )
 
-    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id, 4: InvoiceTemplateParams params)
+    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: InvoiceTemplateParams params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
@@ -546,12 +545,11 @@ service InvoiceTemplating {
             7: InvalidInvoiceTemplateParam ex7,
             8: base.InvalidRequest ex8
         )
-    void Delete (1: UserInfo user, 2: domain.PartyID party_id, 3: domain.InvoiceTemplateID id)
+    void Delete (1: UserInfo user, 2: domain.InvoiceTemplateID id)
         throws (
             1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: UserInvoiceTemplateNotFound ex3,
-            4: InvalidPartyStatus ex4
+            2: UserInvoiceTemplateNotFound ex2,
+            3: InvalidPartyStatus ex3
         )
 }
 
