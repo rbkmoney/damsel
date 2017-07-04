@@ -238,7 +238,7 @@ union InvoicePaymentRefundChangePayload {
  * Событие о создании возврата платежа
  */
 struct InvoicePaymentRefundCreated {
-    1: required domain.InvoicePaymentRefund adjustment
+    1: required domain.InvoicePaymentRefund refund
 }
 
 /**
