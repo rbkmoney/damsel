@@ -230,8 +230,8 @@ struct InvoicePaymentRefundChange {
  */
 union InvoicePaymentRefundChangePayload {
     1: InvoicePaymentRefundCreated       invoice_payment_refund_created
-    2: InvoicePaymentRefundBound         invoice_payment_refund_bound
-    3: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
+    2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
+    3: InvoicePaymentSessionChange       invoice_payment_session_change
 }
 
 /**
