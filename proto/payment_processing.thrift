@@ -40,6 +40,8 @@ struct InvoiceState {
 
 /* Events */
 
+typedef list<Event> Events
+
 /**
  * Событие, атомарный фрагмент истории бизнес-объекта, например инвойса.
  */
@@ -76,12 +78,10 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
-    1: domain.InvoiceID invoice
+    1: domain.InvoiceID invoice_id
     /** Идентификатор участника, который породил событие. */
-    2: domain.PartyID   party
+    2: domain.PartyID   party_id
 }
-
-typedef list<Event> Events
 
 /**
  * Один из возможных вариантов содержания события.
