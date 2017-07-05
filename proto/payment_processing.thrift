@@ -50,7 +50,7 @@ struct Event {
      * Монотонно возрастающее целочисленное значение, таким образом на множестве
      * событий задаётся отношение полного порядка (total order).
      */
-    1: required base.EventID   id
+    1: required base.EventID id
 
     /**
      * Время создания события.
@@ -60,13 +60,13 @@ struct Event {
     /**
      * Идентификатор бизнес-объекта, источника события.
      */
-    3: required EventSource    source
+    3: required EventSource source
 
     /**
      * Содержание события, состоящее из списка (возможно пустого)
-     * атомарных изменений состояния бизнес-объекта, источника события.
+     * изменений состояния бизнес-объекта, источника события.
      */
-    4: required list<EventPayload> payload
+    4: required EventPayload payload
 
 }
 
@@ -76,9 +76,9 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
-    1: domain.InvoiceID        invoice
+    1: domain.InvoiceID invoice
     /** Идентификатор участника, который породил событие. */
-    2: domain.PartyID          party
+    2: domain.PartyID   party
 }
 
 typedef list<Event> Events
@@ -87,36 +87,36 @@ typedef list<Event> Events
  * Один из возможных вариантов содержания события.
  */
 union EventPayload {
-    /** Некоторое событие, порождённое инвойсом. */
-    1: InvoiceEvent            invoice_event
-    /** Некоторое событие, порождённое участником. */
-    2: PartyEvent              party_event
+    /** Набор изменений, порождённых инвойсом. */
+    1: list<InvoiceChange>  invoice_changes
+    /** Набор изменений, порождённых участником. */
+    2: list<PartyChange>    party_changes
 }
 
 /**
  * Один из возможных вариантов события, порождённого инвойсом.
  */
-union InvoiceEvent {
+union InvoiceChange {
     1: InvoiceCreated          invoice_created
     2: InvoiceStatusChanged    invoice_status_changed
-    3: InvoicePaymentEvent     invoice_payment_event
+    3: InvoicePaymentChange    invoice_payment_change
 }
 
 /**
  * Один из возможных вариантов события, порождённого платежом по инвойсу.
  */
-union InvoicePaymentEvent {
+union InvoicePaymentChange {
     1: InvoicePaymentStarted              invoice_payment_started
     2: InvoicePaymentBound                invoice_payment_bound
     3: InvoicePaymentStatusChanged        invoice_payment_status_changed
     4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
-    6: InvoicePaymentAdjustmentEvent      invoice_payment_adjustment_event
+    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
 }
 
 /**
  * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
  */
-union InvoicePaymentAdjustmentEvent {
+union InvoicePaymentAdjustmentChange {
     1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
     2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
 }
@@ -637,7 +637,7 @@ struct AccountState {
 
 // Events
 
-union PartyEvent {
+union PartyChange {
     1: domain.Party         party_created
     4: domain.Blocking      party_blocking
     5: domain.Suspension    party_suspension
