@@ -18,7 +18,14 @@ struct ContactInfo {
     2: optional string email
 }
 
-struct OperationFailure {
+union OperationFailure {
+    1: OperationTimeout operation_timeout
+    2: ExternalFailure  external_failure
+}
+
+struct OperationTimeout {}
+
+struct ExternalFailure {
     /** Уникальный признак ошибки, пригодный для обработки машиной */
     1: required string code
     /** Описание ошибки, пригодное для восприятия человеком */
