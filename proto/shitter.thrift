@@ -26,7 +26,8 @@
     enum PayoutStatus {
         created,
         ready,
-        accepted
+        accepted,
+        canceled
     }
 
     /**

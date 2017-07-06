@@ -113,11 +113,19 @@ union InvoiceEvent {
  * Один из возможных вариантов события, порождённого платежом по инвойсу.
  */
 union InvoicePaymentEvent {
-    1: InvoicePaymentStarted       invoice_payment_started
-    2: InvoicePaymentBound         invoice_payment_bound
-    3: InvoicePaymentStatusChanged invoice_payment_status_changed
+    1: InvoicePaymentStarted              invoice_payment_started
+    2: InvoicePaymentBound                invoice_payment_bound
+    3: InvoicePaymentStatusChanged        invoice_payment_status_changed
     4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
-    5: InvoicePaymentInspected invoice_payment_inspected
+    6: InvoicePaymentAdjustmentEvent      invoice_payment_adjustment_event
+}
+
+/**
+ * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
+ */
+union InvoicePaymentAdjustmentEvent {
+    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
+    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
 }
 
 /**
@@ -190,6 +198,23 @@ struct InvoicePaymentInspected {
 }
 
 /**
+ * Событие о создании корректировки платежа
+ */
+struct InvoicePaymentAdjustmentCreated {
+    1: required domain.InvoicePaymentID payment_id
+    2: required domain.InvoicePaymentAdjustment adjustment
+}
+
+/**
+ * Событие об изменении статуса корректировки платежа
+ */
+struct InvoicePaymentAdjustmentStatusChanged {
+    1: required domain.InvoicePaymentID payment_id
+    2: required domain.InvoicePaymentAdjustmentID adjustment_id
+    3: required domain.InvoicePaymentAdjustmentStatus status
+}
+
+/**
  * Диапазон для выборки событий.
  */
 struct EventRange {
@@ -232,6 +257,16 @@ struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
 
+/**
+ * Параметры создаваемой поправки к платежу.
+ */
+struct InvoicePaymentAdjustmentParams {
+    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    1: optional domain.DataRevision domain_revision
+    /** Причина, на основании которой создаётся поправка. */
+    2: required string reason
+}
+
 // Exceptions
 
 // forward-declared
@@ -241,21 +276,34 @@ exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
 
 exception InvalidUser {}
-exception UserInvoiceNotFound {}
+exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
+exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
 }
 
+exception InvoicePaymentAdjustmentPending {
+    1: required domain.InvoicePaymentAdjustmentID id
+}
+
 exception InvalidInvoiceStatus {
     1: required domain.InvoiceStatus status
 }
 
+exception InvalidPaymentStatus {
+    1: required domain.InvoicePaymentStatus status
+}
+
+exception InvalidPaymentAdjustmentStatus {
+    1: required domain.InvoicePaymentAdjustmentStatus status
+}
+
 service Invoicing {
 
-    domain.InvoiceID Create (1: UserInfo user, 2: InvoiceParams params)
+    InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
@@ -268,25 +316,25 @@ service Invoicing {
     InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceNotFound ex2
+            2: InvoiceNotFound ex2
         )
 
     Events GetEvents (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceNotFound ex2,
+            2: InvoiceNotFound ex2,
             3: EventNotFound ex3,
             4: base.InvalidRequest ex4
         )
 
-    domain.InvoicePaymentID StartPayment (
+    domain.InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
     )
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceNotFound ex2,
+            2: InvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
             4: InvoicePaymentPending ex4,
             5: base.InvalidRequest ex5,
@@ -301,14 +349,78 @@ service Invoicing {
     )
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceNotFound ex2,
+            2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3
+        )
+
+    /**
+     * Создать поправку к платежу.
+     *
+     * После создания поправку необходимо либо подтвердить, если её эффекты
+     * соответствуют ожиданиям, либо отклонить в противном случае (по аналогии с
+     * заявками).
+     * Пока созданная поправка ни подтверждена, ни отклонена, другую поправку
+     * создать невозможно.
+     */
+    domain.InvoicePaymentAdjustment CreatePaymentAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id,
+        4: InvoicePaymentAdjustmentParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: InvoicePaymentAdjustmentPending ex5
+        )
+
+    domain.InvoicePaymentAdjustment GetPaymentAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentAdjustmentID adjustment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentAdjustmentNotFound ex4
+        )
+
+    void CapturePaymentAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentAdjustmentID adjustment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentAdjustmentNotFound ex4,
+            5: InvalidPaymentAdjustmentStatus ex5
+        )
+
+    void CancelPaymentAdjustment (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentAdjustmentID adjustment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentAdjustmentNotFound ex4,
+            5: InvalidPaymentAdjustmentStatus ex5
         )
 
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceNotFound ex2,
+            2: InvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
             4: InvalidPartyStatus ex4,
             5: InvalidShopStatus ex5
@@ -317,7 +429,7 @@ service Invoicing {
     void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceNotFound ex2,
+            2: InvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
             4: InvoicePaymentPending ex4,
             5: InvalidPartyStatus ex5,
@@ -471,6 +583,7 @@ struct ClaimStatusChanged {
 // Exceptions
 
 exception PartyExists {}
+exception PartyNotExistsYet {}
 exception ClaimNotFound {}
 exception ContractNotFound {}
 exception InvalidContractStatus { 1: required domain.ContractStatus status }
@@ -499,6 +612,9 @@ service PartyManagement {
 
     domain.Party Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
+    domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: base.Timestamp timestamp)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
     ClaimResult CreateContract (1: UserInfo user, 2: PartyID party_id, 3: ContractParams params)
         throws (

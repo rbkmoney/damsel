@@ -87,7 +87,40 @@ exception ObjectNotFound {}
  * Возникает в случаях, если коммит
  * несовместим с уже примененными ранее
  */
-exception OperationConflict {}
+exception OperationConflict { 1: required Conflict conflict }
+
+union Conflict {
+    1: ObjectAlreadyExistsConflict object_already_exists
+    2: ObjectNotFoundConflict object_not_found
+    3: ObjectReferenceMismatchConflict object_reference_mismatch
+    4: ObjectsNotExistConflict objects_not_exist
+}
+
+struct ObjectAlreadyExistsConflict {
+    1: required domain.Reference object_ref
+}
+
+struct ObjectNotFoundConflict {
+    1: required domain.Reference object_ref
+}
+
+struct ObjectReferenceMismatchConflict {
+    1: required domain.Reference object_ref
+}
+
+struct ObjectsNotExistConflict {
+    1: required list<NonexistantObject> object_refs
+}
+
+struct NonexistantObject {
+    1: required domain.Reference object_ref
+    2: required list<domain.Reference> referenced_by
+}
+
+/**
+ * Попытка совершить коммит на устаревшую версию
+ */
+exception ObsoleteCommitVersion {}
 
 /**
  * Интерфейс сервиса конфигурации предметной области.
@@ -109,7 +142,7 @@ service Repository {
      * Возвращает следующую версию
      */
     Version Commit (1: Version version, 2: Commit commit)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex2);
+        throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: ObsoleteCommitVersion ex3);
         
     /**
      * Получить снэпшот конкретной версии
