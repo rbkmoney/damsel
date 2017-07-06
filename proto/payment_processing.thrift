@@ -178,9 +178,24 @@ union InvoicePaymentSessionChangePayload {
 }
 
 struct InvoicePaymentSessionStarted {}
-struct InvoicePaymentSessionFinished {}
+
+struct InvoicePaymentSessionFinished {
+    1: required SessionResult result
+}
+
 struct InvoicePaymentSessionSuspended {}
 struct InvoicePaymentSessionActivated {}
+
+union SessionResult {
+    1: SessionSucceeded succeeded
+    2: SessionFailed    failed
+}
+
+struct SessionSucceeded {}
+
+struct SessionFailed {
+    1: required domain.OperationFailure failure
+}
 
 /**
  * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
