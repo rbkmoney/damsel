@@ -135,6 +135,8 @@ union InvoicePaymentChangePayload {
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
+    /** Оценка риска платежа. */
+    4: optional domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
     2: optional domain.InvoicePaymentRoute route
     /** Данные финансового взаимодействия. */

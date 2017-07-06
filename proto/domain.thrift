@@ -97,13 +97,9 @@ struct InvoicePayment {
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
     3:  required InvoicePaymentStatus status
-    4:  optional TransactionInfo trx
     5:  required Payer payer
     8:  required Cash cost
     6:  optional InvoicePaymentContext context
-    9:  optional RiskScore risk_score
-    11: optional InvoicePaymentRoute route
-    12: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentPending   {}
