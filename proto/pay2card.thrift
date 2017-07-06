@@ -11,8 +11,8 @@ struct Cash {
 }
 
 enum Provider {
-    ALFABANK
-    BINBANK
+    alfabank
+    binbank
 }
 
 exception ProviderFailure {
