@@ -115,6 +115,9 @@ struct InvoicePayment {
     5:  required Payer payer
     8:  required Cash cost
     6:  optional InvoicePaymentContext context
+    9:  optional RiskScore risk_score
+    11: optional PaymentRoute route
+    12: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentPending   {}
@@ -209,7 +212,7 @@ struct ClientInfo {
     2: optional Fingerprint fingerprint
 }
 
-struct InvoicePaymentRoute {
+struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
 }
@@ -581,6 +584,38 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
+/* Customers */
+
+struct CustomerPaymentMeanPending   {}
+struct CustomerPaymentMeanAcquired  {}
+struct CustomerPaymentMeanFailed    { 1: required string details }
+struct CustomerPaymentMeanSuspended {}
+
+union CustomerPaymentMeanStatus {
+    1: CustomerPaymentMeanPending   pending
+    2: CustomerPaymentMeanAcquired  acquired
+    3: CustomerPaymentMeanFailed    failed
+    4: CustomerPaymentMeanSuspended suspended
+}
+
+struct PaymentMean {
+    1: required Token nondisposable_payment_token
+    2: required PaymentRoute route
+}
+
+typedef base.ID      CustomerID;
+typedef base.Content CustomerMeta;
+
+struct Customer {
+    1: required CustomerID id
+    2: required Token token
+    3: required BankCardPaymentSystem payment_system
+    4: required string bin
+    5: required string masked_pan
+    6: optional CustomerMeta customer_meta
+    7: optional PaymentMean payment_mean
+}
+
 /* Payment methods */
 
 union PaymentMethod {
@@ -606,6 +641,7 @@ enum BankCardPaymentSystem {
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
+    3: Customer customer
 }
 
 typedef string Token
