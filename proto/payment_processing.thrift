@@ -31,13 +31,6 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
-/* Invoices */
-
-struct InvoiceState {
-    1: required domain.Invoice invoice
-    2: required list<domain.InvoicePayment> payments = []
-}
-
 /* Events */
 
 typedef list<Event> Events
@@ -294,6 +287,18 @@ struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
 
+struct Invoice {
+    1: required domain.Invoice invoice
+    2: required list<InvoicePayment> payments
+}
+
+struct InvoicePayment {
+    1: required domain.InvoicePayment payment
+    2: required list<InvoicePaymentAdjustment> adjustments
+}
+
+typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
+
 /**
  * Параметры создаваемой поправки к платежу.
  */
@@ -346,7 +351,7 @@ exception InvalidPaymentAdjustmentStatus {
 
 service Invoicing {
 
-    InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
+    Invoice Create (1: UserInfo user, 2: InvoiceParams params)
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
@@ -357,7 +362,7 @@ service Invoicing {
             7: InvalidContractStatus ex7
         )
 
-    InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -371,7 +376,7 @@ service Invoicing {
             4: base.InvalidRequest ex4
         )
 
-    domain.InvoicePayment StartPayment (
+    InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
@@ -387,7 +392,7 @@ service Invoicing {
             8: InvalidContractStatus ex8
         )
 
-    domain.InvoicePayment GetPayment (
+    InvoicePayment GetPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -407,7 +412,7 @@ service Invoicing {
      * Пока созданная поправка ни подтверждена, ни отклонена, другую поправку
      * создать невозможно.
      */
-    domain.InvoicePaymentAdjustment CreatePaymentAdjustment (
+    InvoicePaymentAdjustment CreatePaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id,
@@ -421,7 +426,7 @@ service Invoicing {
             5: InvoicePaymentAdjustmentPending ex5
         )
 
-    domain.InvoicePaymentAdjustment GetPaymentAdjustment (
+    InvoicePaymentAdjustment GetPaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
