@@ -18,7 +18,14 @@ struct ContactInfo {
     2: optional string email
 }
 
-struct OperationFailure {
+union OperationFailure {
+    1: OperationTimeout operation_timeout
+    2: ExternalFailure  external_failure
+}
+
+struct OperationTimeout {}
+
+struct ExternalFailure {
     /** Уникальный признак ошибки, пригодный для обработки машиной */
     1: required string code
     /** Описание ошибки, пригодное для восприятия человеком */
@@ -90,13 +97,9 @@ struct InvoicePayment {
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
     3:  required InvoicePaymentStatus status
-    4:  optional TransactionInfo trx
     5:  required Payer payer
     8:  required Cash cost
     6:  optional InvoicePaymentContext context
-    9:  optional RiskScore risk_score
-    11: optional InvoicePaymentRoute route
-    12: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentPending   {}
@@ -115,6 +118,43 @@ union InvoicePaymentStatus {
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
     3: InvoicePaymentFailed failed
+}
+
+/**
+ * Целевое значение статуса платежа.
+ */
+union TargetInvoicePaymentStatus {
+
+    /**
+     * Платёж обработан.
+     *
+     * При достижении платежом этого статуса процессинг должен обладать:
+     *  - фактом того, что провайдер _по крайней мере_ авторизовал списание денежных средств в
+     *    пользу системы;
+     *  - данными транзакции провайдера.
+     */
+    1: InvoicePaymentProcessed processed
+
+    /**
+     * Платёж подтверждён.
+     *
+     * При достижении платежом этого статуса процессинг должен быть уверен в том, что провайдер
+     * _по крайней мере_ подтвердил финансовые обязательства перед системой.
+     */
+    2: InvoicePaymentCaptured captured
+
+    /**
+     * Платёж отменён.
+     *
+     * При достижении платежом этого статуса процессинг должен быть уверен в том, что провайдер
+     * аннулировал неподтверждённое списание денежных средств.
+     *
+     * В случае, если в рамках сессии проведения платежа провайдер авторизовал, но _ещё не
+     * подтвердил_ списание средств, эта цель является обратной цели `processed`. В ином случае
+     * эта цель недостижима, и взаимодействие в рамках сессии должно завершится с ошибкой.
+     */
+    3: InvoicePaymentCancelled cancelled
+
 }
 
 struct Payer {

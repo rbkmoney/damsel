@@ -31,13 +31,6 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
-/* Invoices */
-
-struct InvoiceState {
-    1: required domain.Invoice invoice
-    2: required list<domain.InvoicePayment> payments = []
-}
-
 /* Events */
 
 typedef list<Event> Events
@@ -103,25 +96,6 @@ union InvoiceChange {
 }
 
 /**
- * Один из возможных вариантов события, порождённого платежом по инвойсу.
- */
-union InvoicePaymentChange {
-    1: InvoicePaymentStarted              invoice_payment_started
-    2: InvoicePaymentBound                invoice_payment_bound
-    3: InvoicePaymentStatusChanged        invoice_payment_status_changed
-    4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
-    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
-}
-
-/**
- * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
- */
-union InvoicePaymentAdjustmentChange {
-    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
-    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
-}
-
-/**
  * Событие о создании нового инвойса.
  */
 struct InvoiceCreated {
@@ -138,73 +112,138 @@ struct InvoiceStatusChanged {
 }
 
 /**
+ * Событие, касающееся определённого платежа по инвойсу.
+ */
+struct InvoicePaymentChange {
+    1: required domain.InvoicePaymentID id
+    2: required InvoicePaymentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого платежом по инвойсу.
+ */
+union InvoicePaymentChangePayload {
+    1: InvoicePaymentStarted               invoice_payment_started
+    3: InvoicePaymentStatusChanged         invoice_payment_status_changed
+    2: InvoicePaymentSessionChange         invoice_payment_session_change
+    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+}
+
+/**
  * Событие об запуске платежа по инвойсу.
  */
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
+    /** Оценка риска платежа. */
+    4: required domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
-    2: optional domain.InvoicePaymentRoute route
+    2: required domain.InvoicePaymentRoute route
     /** Данные финансового взаимодействия. */
-    3: optional domain.FinalCashFlow cash_flow
-}
-
-/**
- * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
- * у провайдера.
- */
-struct InvoicePaymentBound {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
-    /** Данные о связанной транзакции у провайдера. */
-    2: required domain.TransactionInfo trx
+    3: required domain.FinalCashFlow cash_flow
 }
 
 /**
  * Событие об изменении статуса платежа по инвойсу.
  */
 struct InvoicePaymentStatusChanged {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
     /** Статус платежа по инвойсу. */
-    2: required domain.InvoicePaymentStatus status
+    1: required domain.InvoicePaymentStatus status
 }
 
 /**
- * Событие об запросе взаимодействия с плательщиком.
+ * Событие в рамках сессии взаимодействия с провайдером по платежу.
  */
-struct InvoicePaymentInteractionRequested {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
+struct InvoicePaymentSessionChange {
+    1: required domain.TargetInvoicePaymentStatus target
+    2: required InvoicePaymentSessionChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого сессией взаимодействия.
+ */
+union InvoicePaymentSessionChangePayload {
+    1: InvoicePaymentSessionStarted              invoice_payment_session_started
+    2: InvoicePaymentSessionFinished             invoice_payment_session_finished
+    3: InvoicePaymentSessionSuspended            invoice_payment_session_suspended
+    4: InvoicePaymentSessionActivated            invoice_payment_session_activated
+    5: InvoicePaymentSessionTransactionBound     invoice_payment_session_transaction_bound
+    6: InvoicePaymentSessionProxyStateChanged    invoice_payment_session_proxy_state_changed
+    7: InvoicePaymentSessionInteractionRequested invoice_payment_session_interaction_requested
+}
+
+struct InvoicePaymentSessionStarted {}
+
+struct InvoicePaymentSessionFinished {
+    1: required SessionResult result
+}
+
+struct InvoicePaymentSessionSuspended {}
+struct InvoicePaymentSessionActivated {}
+
+union SessionResult {
+    1: SessionSucceeded succeeded
+    2: SessionFailed    failed
+}
+
+struct SessionSucceeded {}
+
+struct SessionFailed {
+    1: required domain.OperationFailure failure
+}
+
+/**
+ * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
+ * у провайдера.
+ */
+struct InvoicePaymentSessionTransactionBound {
+    /** Данные о связанной транзакции у провайдера. */
+    1: required domain.TransactionInfo trx
+}
+
+/**
+ * Событие о том, что изменилось непрозрачное состояние прокси в рамках сессии.
+ */
+struct InvoicePaymentSessionProxyStateChanged {
+    1: required base.Opaque proxy_state
+}
+
+/**
+ * Событие о запросе взаимодействия с плательщиком.
+ */
+struct InvoicePaymentSessionInteractionRequested {
     /** Необходимое взаимодействие */
-    2: required user_interaction.UserInteraction interaction
+    1: required user_interaction.UserInteraction interaction
 }
 
 /**
- * Событие о прохождении инспекции
+ * Событие, касающееся определённой корректировки платежа.
  */
-struct InvoicePaymentInspected {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
-    /** Результат инспекции */
-    2: required domain.RiskScore risk_score
+struct InvoicePaymentAdjustmentChange {
+    1: required domain.InvoicePaymentAdjustmentID id
+    2: required InvoicePaymentAdjustmentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
+ */
+union InvoicePaymentAdjustmentChangePayload {
+    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
+    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
 }
 
 /**
  * Событие о создании корректировки платежа
  */
 struct InvoicePaymentAdjustmentCreated {
-    1: required domain.InvoicePaymentID payment_id
-    2: required domain.InvoicePaymentAdjustment adjustment
+    1: required domain.InvoicePaymentAdjustment adjustment
 }
 
 /**
  * Событие об изменении статуса корректировки платежа
  */
 struct InvoicePaymentAdjustmentStatusChanged {
-    1: required domain.InvoicePaymentID payment_id
-    2: required domain.InvoicePaymentAdjustmentID adjustment_id
-    3: required domain.InvoicePaymentAdjustmentStatus status
+    1: required domain.InvoicePaymentAdjustmentStatus status
 }
 
 /**
@@ -249,6 +288,18 @@ struct InvoiceParams {
 struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
+
+struct Invoice {
+    1: required domain.Invoice invoice
+    2: required list<InvoicePayment> payments
+}
+
+struct InvoicePayment {
+    1: required domain.InvoicePayment payment
+    2: required list<InvoicePaymentAdjustment> adjustments
+}
+
+typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 /**
  * Параметры создаваемой поправки к платежу.
@@ -302,7 +353,7 @@ exception InvalidPaymentAdjustmentStatus {
 
 service Invoicing {
 
-    InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
+    Invoice Create (1: UserInfo user, 2: InvoiceParams params)
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
@@ -313,7 +364,7 @@ service Invoicing {
             7: InvalidContractStatus ex7
         )
 
-    InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -327,7 +378,7 @@ service Invoicing {
             4: base.InvalidRequest ex4
         )
 
-    domain.InvoicePayment StartPayment (
+    InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
@@ -343,7 +394,7 @@ service Invoicing {
             8: InvalidContractStatus ex8
         )
 
-    domain.InvoicePayment GetPayment (
+    InvoicePayment GetPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -363,7 +414,7 @@ service Invoicing {
      * Пока созданная поправка ни подтверждена, ни отклонена, другую поправку
      * создать невозможно.
      */
-    domain.InvoicePaymentAdjustment CreatePaymentAdjustment (
+    InvoicePaymentAdjustment CreatePaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id,
@@ -377,7 +428,7 @@ service Invoicing {
             5: InvoicePaymentAdjustmentPending ex5
         )
 
-    domain.InvoicePaymentAdjustment GetPaymentAdjustment (
+    InvoicePaymentAdjustment GetPaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
