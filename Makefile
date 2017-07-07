@@ -117,5 +117,6 @@ deploy_epic_nexus:
 
 java_install:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
+	mvn clean -s $(SETTINGS_XML) && \
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
 	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.number="$(NUMBER_COMMITS)"
