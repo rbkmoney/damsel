@@ -6,6 +6,52 @@ namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
 
 /**
+ * Данные, необходимые для генерации многоразового токена
+ */
+struct TokenInfo {
+    1: required domain.Token            token
+    2: required domain.PaymentSessionID session
+}
+
+/**
+ * Данные сессии взаимодействия с провайдерским прокси в рамках генерации многоразового токена.
+ */
+struct TokenGenerationSession {
+    1: required TargetPaymentMeanStatus target
+    2: optional proxy.ProxyState        state
+}
+
+/**
+ * Целевое значение статуса многоразового токена.
+ */
+union TargetPaymentMeanStatus {
+    1: domain.CustomerPaymentMeanPending  pending
+    2: domain.CustomerPaymentMeanAcquired acquired
+    3: domain.CustomerPaymentMeanFailed   failed
+}
+
+/**
+ * Набор данных для взаимодействия с провайдерским прокси в рамках проведения генерации
+ * многоразового токена.
+ */
+struct TokenGenerationContext {
+    1: required TokenGenerationSession session
+    2: required TokenInfo              token_info
+    3: optional domain.ProxyOptions    options = {}
+}
+
+struct TokenGenerationProxyResult {
+    1: required proxy.Intent       intent
+    2: optional proxy.ProxyState   next_state
+    3: optional domain.PaymentMean payment_mean
+}
+
+struct TokenGenerationCallbackResult {
+    1: required proxy.CallbackResponse     response
+    2: required TokenGenerationProxyResult result
+}
+
+/**
  * Данные платежа, необходимые для обращения к провайдеру.
  */
 struct PaymentInfo {
@@ -43,7 +89,16 @@ struct Cash {
 }
 
 /**
- * Данные сессии взаимодействия с провайдерским прокси.
+ * Данные сессии взаимодействия с провайдерским прокси в рамках платежа.
+ */
+struct Session {
+    1: required TargetInvoicePaymentStatus target
+    2: optional proxy.ProxyState state
+}
+
+/**
+ * Целевое значение статуса платежа.
+ * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
  *
  * В момент, когда прокси успешно завершает сессию взаимодействия, процессинг считает,
  * что поставленная цель достигнута, и платёж перешёл в соответствующий статус.
@@ -54,9 +109,9 @@ struct Session {
 }
 
 /**
- * Набор данных для взаимодействия с провайдерским прокси.
+ * Набор данных для взаимодействия с провайдерским прокси в рамках платежа.
  */
-struct Context {
+struct PaymentContext {
     1: required Session session
     2: required PaymentInfo payment_info
     3: optional domain.ProxyOptions options = {}
@@ -79,7 +134,7 @@ struct Context {
  *  - идентификатор связанной транзакции _не может измениться_ при последующих обращениях в прокси
  *    по текущему платежу.
  */
-struct ProxyResult {
+struct PaymentProxyResult {
     1: required proxy.Intent intent
     2: optional proxy.ProxyState next_state
     3: optional domain.TransactionInfo trx
@@ -88,12 +143,12 @@ struct ProxyResult {
 /**
  * Результат обработки провайдерским прокси обратного вызова в рамках сессии.
  */
-struct CallbackResult {
+struct PaymentCallbackResult {
     1: required proxy.CallbackResponse response
-    2: required CallbackProxyResult result
+    2: required PaymentCallbackProxyResult result
 }
 
-struct CallbackProxyResult {
+struct PaymentCallbackProxyResult {
     // TODO temporary crutch, remove it as soon as possible
     // An `undefined` means that the suspend will be kept untouched
     1: optional proxy.Intent intent
@@ -104,14 +159,31 @@ struct CallbackProxyResult {
 service ProviderProxy {
 
     /**
-     * Запрос к прокси на проведение взаимодействия с провайдером в рамках сессии.
+     * Запрос к прокси на создание многоразового токена
      */
-    ProxyResult ProcessPayment (1: Context context)
+    TokenGenerationProxyResult GenerateToken(
+        1: domain.Token token,
+        2: domain.PaymentSessionID session_id
+    )
 
     /**
-     * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии.
+     * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии получения
+     * многоразового токена.
      */
-    CallbackResult HandlePaymentCallback (1: proxy.Callback callback, 2: Context context)
+    TokenGenerationCallbackResult HandleTokenGenerationCallback (
+        1: proxy.Callback callback,
+        2: TokenGenerationContext context
+    )
+
+    /**
+     * Запрос к прокси на проведение взаимодействия с провайдером в рамках платежной сессии.
+     */
+    PaymentProxyResult ProcessPayment (1: PaymentContext context)
+
+    /**
+     * Запрос к прокси на обработку обратного вызова от провайдера в рамках платежной сессии.
+     */
+    PaymentCallbackResult HandlePaymentCallback (1: proxy.Callback callback, 2: PaymentContext context)
 
 }
 

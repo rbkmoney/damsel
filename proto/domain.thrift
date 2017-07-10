@@ -586,20 +586,22 @@ struct CashLimitDecision {
 
 /* Customers */
 
-struct CustomerPaymentMeanPending   {}
-struct CustomerPaymentMeanAcquired  {}
-struct CustomerPaymentMeanFailed    { 1: required string details }
-struct CustomerPaymentMeanSuspended {}
+struct CustomerPaymentMeanPending  {}
+struct CustomerPaymentMeanAcquired {}
+struct CustomerPaymentMeanFailed   { 1: required string details }
+struct CustomerPaymentMeanObsolete {}
 
 union CustomerPaymentMeanStatus {
-    1: CustomerPaymentMeanPending   pending
-    2: CustomerPaymentMeanAcquired  acquired
-    3: CustomerPaymentMeanFailed    failed
-    4: CustomerPaymentMeanSuspended suspended
+    1: CustomerPaymentMeanPending  pending
+    2: CustomerPaymentMeanAcquired acquired
+    3: CustomerPaymentMeanFailed   failed
+    4: CustomerPaymentMeanObsolete obsolete
 }
 
 struct PaymentMean {
-    1: required Token nondisposable_payment_token
+    /* Многоразовый токен */
+    1: required Token token
+
     2: required PaymentRoute route
 }
 
@@ -608,12 +610,9 @@ typedef base.Content CustomerMeta;
 
 struct Customer {
     1: required CustomerID id
-    2: required Token token
-    3: required BankCardPaymentSystem payment_system
-    4: required string bin
-    5: required string masked_pan
-    6: optional CustomerMeta customer_meta
-    7: optional PaymentMean payment_mean
+    2: optional Token token
+    3: optional CustomerMeta customer_meta
+    4: optional PaymentMean payment_mean
 }
 
 /* Payment methods */
