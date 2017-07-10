@@ -18,6 +18,7 @@ struct Shop {
     1: required domain.ShopID id
     2: required domain.Category category
     3: required domain.ShopDetails details
+    4: required domain.ShopLocation location
 }
 
 struct Invoice {
