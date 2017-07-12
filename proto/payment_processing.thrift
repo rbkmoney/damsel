@@ -87,6 +87,8 @@ union EventPayload {
     2: list<PartyChange>            party_changes
     /** Набор изменений, порождённых шаблоном инвойса. */
     3: list<InvoiceTemplateChange>  invoice_template_changes
+    /** Некоторое событие, порождённое customer'ом. */
+    4: CustomerEvent        customer_event
 }
 
 /**
@@ -592,6 +594,109 @@ service InvoiceTemplating {
             3: InvoiceTemplateRemoved ex3,
             4: InvalidPartyStatus ex4,
             5: InvalidShopStatus ex5
+        )
+}
+
+/* Customer management service definitions */
+
+// Types
+
+typedef domain.CustomerID CustomerID
+typedef domain.BindingID  BindingID
+
+// Events
+
+/**
+ * События, порождаемые во время получения многоразовых токенов
+ */
+union CustomerEvent {
+    1: CustomerCreated             customer_created
+    2: CustomerDeleted             customer_deleted
+    3: CustomerToolBindingStarted  customer_tool_binding_started
+    4: CustomerToolBindingFinished customer_tool_binding_finished
+    5: CustomerToolBound           customer_tool_bound
+    6: CustomerToolUnbound         customer_tool_unbound
+}
+
+/**
+ * Событие о созданном customer'е.
+ */
+struct CustomerCreated {
+    1: required domain.Customer customer
+}
+
+/**
+ * Событие об удаленном customer'е.
+ */
+struct CustomerDeleted {}
+
+/**
+ * Событие о старте привязки инструмента к customer'у.
+ */
+struct CustomerToolBindingStarted {
+    1: required CustomerID id
+    2: required BindingID  binding_id
+}
+
+/**
+ * Событие об окончании привязки инструмента.
+ */
+struct CustomerToolBindingFinished {
+    1: required CustomerID                       id
+    2: required BindingID                        binding_id
+    3: required domain.CustomerPaymentMeanStatus payment_mean_status
+}
+
+/**
+ * Событие о факте привязки инструмента к customer'у.
+ */
+struct CustomerToolBound {
+    1: required CustomerID id
+    2: required BindingID  binding_id
+}
+
+/**
+ * Событие о факте отвязки инструмента от customer'а.
+ */
+struct CustomerToolUnbound {}
+
+
+// Exceptions
+
+exception CustomerNotFound   {}
+exception InvalidPaymentTool {}
+
+// Service
+
+service CustomerManagement {
+
+    /* Создать customer'а */
+    domain.Customer CreateCustomer (1: domain.Metadata metadata)
+
+    /* Создать многоразовый токен */
+    BindingID StartPaymentToolBinding (1: CustomerID id, 2: domain.PaymentTool payment_tool)
+        throws (
+            1: CustomerNotFound   customer_not_found,
+            2: InvalidPaymentTool invalid_payment_tool
+        )
+
+    /* Удалить многоразовый токен */
+    void DeleteToken (1: CustomerID id)
+        throws (1: CustomerNotFound not_found)
+
+    /* Получить данные customer'а */
+    domain.Customer GetCustomer (1: CustomerID id)
+        throws (1: CustomerNotFound not_found)
+
+    /* Удалить customer'а */
+    void DeleteCustomer (1: CustomerID id)
+        throws (1: CustomerNotFound not_found)
+
+    /* Event polling */
+    Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
+        throws (
+            1: CustomerNotFound customer_not_found,
+            2: EventNotFound    event_not_found
         )
 }
 

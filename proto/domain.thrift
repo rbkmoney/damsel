@@ -4,6 +4,7 @@
 
 include "base.thrift"
 include "msgpack.thrift"
+include "json.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
@@ -202,7 +203,7 @@ union TargetInvoicePaymentStatus {
 
 struct Payer {
     1: required PaymentTool payment_tool
-    2: required PaymentSessionID session_id
+    2: optional PaymentSessionID session_id
     3: required ClientInfo client_info
     4: required ContactInfo contact_info
 }
@@ -605,14 +606,19 @@ struct PaymentMean {
     2: required PaymentRoute route
 }
 
-typedef base.ID      CustomerID;
-typedef base.Content CustomerMeta;
+typedef base.ID    CustomerID
+typedef base.ID    BindingID
+typedef json.Value Metadata
 
 struct Customer {
-    1: required CustomerID id
-    2: optional Token token
-    3: optional CustomerMeta customer_meta
-    4: optional PaymentMean payment_mean
+    /* Идентификатор customer'а. */
+    1: required CustomerID      id
+    /* Метаданные customer'а. */
+    2: optional Metadata        meta
+    /* Все привязки, связанные с customer'ом. */
+    3: required list<BindingID> bindings
+    /*  */
+    4: optional PaymentMean     payment_mean
 }
 
 /* Payment methods */
@@ -640,7 +646,7 @@ enum BankCardPaymentSystem {
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
-    3: Customer customer
+    3: CustomerID customer_id
 }
 
 typedef string Token
