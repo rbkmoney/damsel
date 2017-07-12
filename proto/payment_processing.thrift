@@ -394,6 +394,7 @@ exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
+exception InvalidOperation {}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -495,6 +496,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: base.InvalidRequest ex5,
+            6: InvalidOperation ex6
         )
 
     void CapturePayment (
@@ -509,6 +511,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: base.InvalidRequest ex5,
+            6: InvalidOperation ex6
         )
     /**
      * Создать поправку к платежу.
