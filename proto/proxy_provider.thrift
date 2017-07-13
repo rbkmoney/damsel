@@ -25,9 +25,9 @@ struct TokenGenerationSession {
  * Целевое значение статуса многоразового токена.
  */
 union TargetPaymentMeanStatus {
-    1: domain.CustomerPaymentMeanPending  pending
-    2: domain.CustomerPaymentMeanAcquired acquired
-    3: domain.CustomerPaymentMeanFailed   failed
+    1: domain.PaymentMeanPending  pending
+    2: domain.PaymentMeanAcquired acquired
+    3: domain.PaymentMeanFailed   failed
 }
 
 /**
@@ -164,6 +164,7 @@ service ProviderProxy {
     TokenGenerationProxyResult GenerateToken(
         1: domain.Token token,
         2: domain.PaymentSessionID session_id
+        3: domain.BindingID binding_id
     )
 
     /**

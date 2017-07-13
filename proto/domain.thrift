@@ -587,34 +587,34 @@ struct CashLimitDecision {
 
 /* Customers */
 
-struct CustomerPaymentMeanPending  {}
-struct CustomerPaymentMeanAcquired {}
-struct CustomerPaymentMeanFailed   { 1: required string details }
-struct CustomerPaymentMeanObsolete {}
-
-union CustomerPaymentMeanStatus {
-    1: CustomerPaymentMeanPending  pending
-    2: CustomerPaymentMeanAcquired acquired
-    3: CustomerPaymentMeanFailed   failed
-    4: CustomerPaymentMeanObsolete obsolete
-}
-
-struct PaymentMean {
-    /* Многоразовый токен */
-    1: required Token token
-
-    2: required PaymentRoute route
-}
-
 typedef base.ID    CustomerID
 typedef base.ID    BindingID
+typedef base.ID    PaymentMeanID
 typedef json.Value Metadata
+
+struct PaymentMean {
+    1: required PaymentMeanID id
+    2: required Token         token
+    3: required PaymentRoute  route
+}
+
+struct PaymentMeanPending  {}
+struct PaymentMeanAcquired {}
+struct PaymentMeanFailed   { 1: required string details }
+struct PaymentMeanObsolete {}
+
+union PaymentMeanStatus {
+    1: PaymentMeanPending  pending
+    2: PaymentMeanAcquired acquired
+    3: PaymentMeanFailed   failed
+    4: PaymentMeanObsolete obsolete
+}
 
 struct Customer {
     /* Идентификатор customer'а. */
     1: required CustomerID      id
     /* Метаданные customer'а. */
-    2: optional Metadata        meta
+    2: optional Metadata        metadata
     /* Все привязки, связанные с customer'ом. */
     3: required list<BindingID> bindings
     /*  */

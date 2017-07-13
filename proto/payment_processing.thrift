@@ -601,8 +601,9 @@ service InvoiceTemplating {
 
 // Types
 
-typedef domain.CustomerID CustomerID
-typedef domain.BindingID  BindingID
+typedef domain.CustomerID    CustomerID
+typedef domain.BindingID     BindingID
+typedef domain.PaymentMeanID PaymentMeanID
 
 // Events
 
@@ -610,6 +611,7 @@ typedef domain.BindingID  BindingID
  * События, порождаемые во время получения многоразовых токенов
  */
 union CustomerEvent {
+
     1: CustomerCreated             customer_created
     2: CustomerDeleted             customer_deleted
     3: CustomerToolBindingStarted  customer_tool_binding_started
@@ -642,9 +644,9 @@ struct CustomerToolBindingStarted {
  * Событие об окончании привязки инструмента.
  */
 struct CustomerToolBindingFinished {
-    1: required CustomerID                       id
-    2: required BindingID                        binding_id
-    3: required domain.CustomerPaymentMeanStatus payment_mean_status
+    1: required CustomerID               id
+    2: required BindingID                binding_id
+    3: required domain.PaymentMeanStatus payment_mean_status
 }
 
 /**
@@ -674,14 +676,14 @@ service CustomerManagement {
     domain.Customer CreateCustomer (1: domain.Metadata metadata)
 
     /* Создать многоразовый токен */
-    BindingID StartPaymentToolBinding (1: CustomerID id, 2: domain.PaymentTool payment_tool)
+    BindingID StartPaymentMeanBinding (1: CustomerID id, 2: domain.PaymentTool payment_tool)
         throws (
             1: CustomerNotFound   customer_not_found,
             2: InvalidPaymentTool invalid_payment_tool
         )
 
-    /* Удалить многоразовый токен */
-    void DeleteToken (1: CustomerID id)
+    /* Отвязать многоразовый токен */
+    void UnbindToken (1: CustomerID id)
         throws (1: CustomerNotFound not_found)
 
     /* Получить данные customer'а */
@@ -697,6 +699,46 @@ service CustomerManagement {
         throws (
             1: CustomerNotFound customer_not_found,
             2: EventNotFound    event_not_found
+        )
+}
+
+/* Payment processing service definitions */
+
+// Exceptions
+
+exception InvalidBinding      {}
+exception PaymentMeanNotFound {}
+
+// Events
+
+union PaymentMeanEvent {
+    1: PaymentMeanCreationStarted payment_mean_creation_started
+    2: PaymentMeanStatusChanged   payment_mean_status_changed
+}
+
+struct PaymentMeanCreationStarted {
+    1: required PaymentMeanID id
+}
+
+struct PaymentMeanStatusChanged {
+    1: required PaymentMeanID     id
+    2: required domain.PaymentMeanStatus status
+}
+
+service PaymentProcessing {
+
+    /* Создать многоразовый токен */
+    domain.PaymentMean CreatePaymentMean (1: BindingID binding_id, 2: domain.PaymentTool payment_tool)
+        throws (
+            1: InvalidBinding     invalid_binding
+            2: InvalidPaymentTool invalid_payment_tool
+        )
+
+    /* Event polling */
+    Events GetEvents (1: domain.PaymentMeanID payment_id, 2: EventRange range)
+        throws (
+            1: PaymentMeanNotFound payment_mean_not_found,
+            2: EventNotFound       event_not_found
         )
 }
 
