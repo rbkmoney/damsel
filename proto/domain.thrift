@@ -126,13 +126,13 @@ struct InvoiceTemplate {
     7: optional InvoiceContext context
 }
 
-struct InvoiceTemplateCostUnlimited {}
-
 union InvoiceTemplateCost {
     1: Cash cost_fixed
     2: CashRange cost_range
     3: InvoiceTemplateCostUnlimited cost_unlim
 }
+
+struct InvoiceTemplateCostUnlimited {}
 
 /**
  * Статус платежа.

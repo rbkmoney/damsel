@@ -563,7 +563,7 @@ service Invoicing {
 
 service InvoiceTemplating {
 
-    domain.InvoiceTemplateID Create (1: UserInfo user, 2: InvoiceTemplateCreateParams params)
+    domain.InvoiceTemplate Create (1: UserInfo user, 2: InvoiceTemplateCreateParams params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
