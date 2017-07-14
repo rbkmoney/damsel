@@ -99,9 +99,9 @@ union InvoiceChange {
 }
 
 union InvoiceTemplateChange {
-    1: InvoiceTemplateCreated  invoice_template_created
-    2: InvoiceTemplateModified invoice_template_changed
-    3: InvoiceTemplateDeleted  invoice_template_deleted
+    1: InvoiceTemplateCreated invoice_template_created
+    2: InvoiceTemplateUpdated invoice_template_updated
+    3: InvoiceTemplateDeleted invoice_template_deleted
 }
 
 /**
@@ -115,9 +115,9 @@ struct InvoiceTemplateCreated {
 /**
  * Событие о модификации шаблона инвойса.
  */
-struct InvoiceTemplateModified {
+struct InvoiceTemplateUpdated {
     /** Данные модифицированного шаблона инвойса. */
-    1: required domain.InvoiceTemplate invoice_template
+    1: required InvoiceTemplateUpdateParams diff
 }
 
 /**
@@ -318,18 +318,26 @@ struct InvoiceParams {
 }
 
 struct InvoiceWithTemplateParams {
-    1: required PartyID owner_id
-    2: required domain.InvoiceTemplateID template_id
-    3: optional domain.Cash cost
-    4: optional domain.InvoiceContext context
+    1: required domain.InvoiceTemplateID template_id
+    2: optional domain.Cash cost
+    3: optional domain.InvoiceContext context
 }
 
-struct InvoiceTemplateParams {
-    1: required PartyID owner_id
+struct InvoiceTemplateCreateParams {
+    1: required PartyID party_id
     2: required ShopID shop_id
     3: required domain.InvoiceDetails details
     4: required domain.LifetimeInterval invoice_lifetime
     5: required domain.InvoiceTemplateCost cost
+    6: optional domain.InvoiceContext context
+}
+
+struct InvoiceTemplateUpdateParams {
+    1: optional PartyID party_id
+    2: optional ShopID shop_id
+    3: optional domain.InvoiceDetails details
+    4: optional domain.LifetimeInterval invoice_lifetime
+    5: optional domain.InvoiceTemplateCost cost
     6: optional domain.InvoiceContext context
 }
 
@@ -399,7 +407,8 @@ exception InvalidPaymentAdjustmentStatus {
     1: required domain.InvoicePaymentAdjustmentStatus status
 }
 
-exception UserInvoiceTemplateNotFound {}
+exception InvoiceTemplateNotFound {}
+exception InvoiceTemplateRemoved {}
 
 service Invoicing {
 
@@ -414,15 +423,15 @@ service Invoicing {
             7: InvalidContractStatus ex7
         )
 
-    InvoiceState CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
+    InvoiceState CreateWithTemplate (1: InvoiceWithTemplateParams params)
         throws (
-            1: InvalidUser ex1,
-            2: base.InvalidRequest ex2,
-            3: PartyNotFound ex3,
-            4: ShopNotFound ex4,
-            5: InvalidPartyStatus ex5,
-            6: InvalidShopStatus ex6,
-            7: UserInvoiceTemplateNotFound ex7
+            1: base.InvalidRequest ex1,
+            2: PartyNotFound ex2,
+            3: ShopNotFound ex3,
+            4: InvalidPartyStatus ex4,
+            5: InvalidShopStatus ex5,
+            6: InvoiceTemplateNotFound ex6,
+            7: InvoiceTemplateRemoved ex7
         )
 
     Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -554,7 +563,7 @@ service Invoicing {
 
 service InvoiceTemplating {
 
-    domain.InvoiceTemplateID Create (1: UserInfo user, 2: InvoiceTemplateParams params)
+    domain.InvoiceTemplateID Create (1: UserInfo user, 2: InvoiceTemplateCreateParams params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
@@ -564,27 +573,30 @@ service InvoiceTemplating {
             6: base.InvalidRequest ex6
         )
 
-    domain.InvoiceTemplate Get (1: UserInfo user, 2: domain.InvoiceTemplateID id)
+    domain.InvoiceTemplate Get (1: domain.InvoiceTemplateID id)
         throws (
-            1: InvalidUser ex1,
-            2: UserInvoiceTemplateNotFound ex2
+            1: InvoiceTemplateNotFound ex1,
+            2: InvoiceTemplateRemoved ex2
         )
 
-    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: InvoiceTemplateParams params)
+    domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: InvoiceTemplateUpdateParams params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
-            3: UserInvoiceTemplateNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: ShopNotFound ex5,
-            6: InvalidShopStatus ex6,
-            7: base.InvalidRequest ex7
+            3: InvoiceTemplateNotFound ex3,
+            4: InvoiceTemplateRemoved ex4,
+            5: InvalidPartyStatus ex5,
+            6: ShopNotFound ex6,
+            7: InvalidShopStatus ex7,
+            8: base.InvalidRequest ex8
         )
     void Delete (1: UserInfo user, 2: domain.InvoiceTemplateID id)
         throws (
             1: InvalidUser ex1,
-            2: UserInvoiceTemplateNotFound ex2,
-            3: InvalidPartyStatus ex3
+            2: InvoiceTemplateNotFound ex2,
+            3: InvoiceTemplateRemoved ex3,
+            4: InvalidPartyStatus ex4,
+            5: InvalidShopStatus ex5
         )
 }
 
