@@ -611,13 +611,12 @@ typedef domain.PaymentMeanID PaymentMeanID
  * События, порождаемые во время получения многоразовых токенов
  */
 union CustomerEvent {
-
-    1: CustomerCreated             customer_created
-    2: CustomerDeleted             customer_deleted
-    3: CustomerToolBindingStarted  customer_tool_binding_started
-    4: CustomerToolBindingFinished customer_tool_binding_finished
-    5: CustomerToolBound           customer_tool_bound
-    6: CustomerToolUnbound         customer_tool_unbound
+    1: CustomerCreated                    customer_created
+    2: CustomerDeleted                    customer_deleted
+    3: CustomerPaymentMeanBindingStarted  customer_payment_mean_binding_started
+    4: CustomerPaymentMeanBindingFinished customer_payment_mean_binding_finished
+    5: CustomerPaymentMeanBound           customer_payment_mean_bound
+    6: CustomerPaymentMeanUnbound         customer_payment_mean_unbound
 }
 
 /**
@@ -635,7 +634,7 @@ struct CustomerDeleted {}
 /**
  * Событие о старте привязки инструмента к customer'у.
  */
-struct CustomerToolBindingStarted {
+struct CustomerPaymentMeanBindingStarted {
     1: required CustomerID id
     2: required BindingID  binding_id
 }
@@ -643,7 +642,7 @@ struct CustomerToolBindingStarted {
 /**
  * Событие об окончании привязки инструмента.
  */
-struct CustomerToolBindingFinished {
+struct CustomerPaymentMeanBindingFinished {
     1: required CustomerID               id
     2: required BindingID                binding_id
     3: required domain.PaymentMeanStatus payment_mean_status
@@ -652,7 +651,7 @@ struct CustomerToolBindingFinished {
 /**
  * Событие о факте привязки инструмента к customer'у.
  */
-struct CustomerToolBound {
+struct CustomerPaymentMeanBound {
     1: required CustomerID id
     2: required BindingID  binding_id
 }
@@ -660,13 +659,13 @@ struct CustomerToolBound {
 /**
  * Событие о факте отвязки инструмента от customer'а.
  */
-struct CustomerToolUnbound {}
-
+struct CustomerPaymentMeanUnbound {}
 
 // Exceptions
 
-exception CustomerNotFound   {}
-exception InvalidPaymentTool {}
+exception CustomerNotFound    {}
+exception PaymentMeanNotFound {}
+exception InvalidPaymentTool  {}
 
 // Service
 
@@ -683,8 +682,11 @@ service CustomerManagement {
         )
 
     /* Отвязать многоразовый токен */
-    void UnbindToken (1: CustomerID id)
-        throws (1: CustomerNotFound not_found)
+    void UnbindPaymentMean(1: CustomerID id)
+        throws (
+            1: CustomerNotFound    not_found
+            2: PaymentMeanNotFound payment_mean_not_found
+        )
 
     /* Получить данные customer'а */
     domain.Customer GetCustomer (1: CustomerID id)
@@ -706,8 +708,8 @@ service CustomerManagement {
 
 // Exceptions
 
-exception InvalidBinding      {}
-exception PaymentMeanNotFound {}
+exception InvalidBinding  {}
+exception BindingNotFound {}
 
 // Events
 
@@ -735,10 +737,10 @@ service PaymentProcessing {
         )
 
     /* Event polling */
-    Events GetEvents (1: domain.PaymentMeanID payment_id, 2: EventRange range)
+    Events GetEvents (1: BindingID binding_id, 2: EventRange range)
         throws (
-            1: PaymentMeanNotFound payment_mean_not_found,
-            2: EventNotFound       event_not_found
+            1: BindingNotFound binding_not_found,
+            2: EventNotFound   event_not_found
         )
 }
 
