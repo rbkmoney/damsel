@@ -95,7 +95,7 @@ typedef list<Event> Events
  */
 union EventPayload {
     /** Некоторое событие, порождённое инвойсом. */
-    1: InvoiceEvent            invoice_event
+    1: InvoceEventWrapper            invoice_event_wrapper
     /** Некоторое событие, порождённое участником. */
     2: PartyEvent              party_event
 }
@@ -103,6 +103,11 @@ union EventPayload {
 /**
  * Один из возможных вариантов события, порождённого инвойсом.
  */
+struct InvoceEventWrapper {
+    1: required domain.Invoice invoice
+    2: required InvoiceEvent invoice_event
+}
+
 union InvoiceEvent {
     1: InvoiceCreated          invoice_created
     2: InvoiceStatusChanged    invoice_status_changed
@@ -132,8 +137,6 @@ union InvoicePaymentAdjustmentEvent {
  * Событие о создании нового инвойса.
  */
 struct InvoiceCreated {
-    /** Данные созданного инвойса. */
-    1: required domain.Invoice invoice
 }
 
 /**
