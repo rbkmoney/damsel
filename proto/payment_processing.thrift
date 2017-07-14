@@ -430,7 +430,9 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: base.InvalidRequest ex5,
-            6: InvalidOperation ex6
+            6: InvalidOperation ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8
         )
 
     void CapturePayment (
@@ -445,7 +447,9 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: base.InvalidRequest ex5,
-            6: InvalidOperation ex6
+            6: InvalidOperation ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8
         )
     /**
      * Создать поправку к платежу.
