@@ -16,12 +16,12 @@ SERVICE_IMAGE_TAG ?= $(shell git rev-parse HEAD)
 SERVICE_IMAGE_PUSH_TAG ?= $(SERVICE_IMAGE_TAG)
 
 
-BUILD_IMAGE_TAG := 3ed839a79132205fd470c1f66c0b6aa37792c809
+BUILD_IMAGE_TAG := efd28e5e732513f09224931fa183478750f3ca16
 
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 
-CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus java_install
+CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus deploy_epic_nexus java_install
 
 all: compile
 
@@ -108,6 +108,12 @@ deploy_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
 	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.number="$(NUMBER_COMMITS)"
+
+deploy_epic_nexus:
+	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
+	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)-epic" -s $(SETTINGS_XML) \
+	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.number="$(NUMBER_COMMITS)"
+
 
 java_install:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)

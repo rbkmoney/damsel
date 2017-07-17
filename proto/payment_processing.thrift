@@ -31,14 +31,9 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
-/* Invoices */
-
-struct InvoiceState {
-    1: required domain.Invoice invoice
-    2: required list<domain.InvoicePayment> payments = []
-}
-
 /* Events */
+
+typedef list<Event> Events
 
 /**
  * Событие, атомарный фрагмент истории бизнес-объекта, например инвойса.
@@ -50,7 +45,7 @@ struct Event {
      * Монотонно возрастающее целочисленное значение, таким образом на множестве
      * событий задаётся отношение полного порядка (total order).
      */
-    1: required base.EventID   id
+    1: required base.EventID id
 
     /**
      * Время создания события.
@@ -60,20 +55,13 @@ struct Event {
     /**
      * Идентификатор бизнес-объекта, источника события.
      */
-    3: required EventSource    source
+    3: required EventSource source
 
     /**
-     * Номер события в последовательности событий от указанного источника.
-     *
-     * Номер первого события от источника всегда равен `1`, то есть `sequence`
-     * принимает значения из диапазона `[1; 2^31)`
+     * Содержание события, состоящее из списка (возможно пустого)
+     * изменений состояния бизнес-объекта, источника события.
      */
-    4: required i32            sequence
-
-    /**
-     * Содержание события.
-     */
-    5: required EventPayload   payload
+    4: required EventPayload payload
 
 }
 
@@ -83,49 +71,28 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
-    1: domain.InvoiceID        invoice
+    1: domain.InvoiceID invoice_id
     /** Идентификатор участника, который породил событие. */
-    2: domain.PartyID          party
+    2: domain.PartyID   party_id
 }
-
-typedef list<Event> Events
 
 /**
  * Один из возможных вариантов содержания события.
  */
 union EventPayload {
-    /** Некоторое событие, порождённое инвойсом. */
-    1: InvoiceEvent            invoice_event
-    /** Некоторое событие, порождённое участником. */
-    2: PartyEvent              party_event
+    /** Набор изменений, порождённых инвойсом. */
+    1: list<InvoiceChange>  invoice_changes
+    /** Набор изменений, порождённых участником. */
+    2: list<PartyChange>    party_changes
 }
 
 /**
  * Один из возможных вариантов события, порождённого инвойсом.
  */
-union InvoiceEvent {
+union InvoiceChange {
     1: InvoiceCreated          invoice_created
     2: InvoiceStatusChanged    invoice_status_changed
-    3: InvoicePaymentEvent     invoice_payment_event
-}
-
-/**
- * Один из возможных вариантов события, порождённого платежом по инвойсу.
- */
-union InvoicePaymentEvent {
-    1: InvoicePaymentStarted              invoice_payment_started
-    2: InvoicePaymentBound                invoice_payment_bound
-    3: InvoicePaymentStatusChanged        invoice_payment_status_changed
-    4: InvoicePaymentInteractionRequested invoice_payment_interaction_requested
-    6: InvoicePaymentAdjustmentEvent      invoice_payment_adjustment_event
-}
-
-/**
- * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
- */
-union InvoicePaymentAdjustmentEvent {
-    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
-    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
+    3: InvoicePaymentChange    invoice_payment_change
 }
 
 /**
@@ -145,73 +112,138 @@ struct InvoiceStatusChanged {
 }
 
 /**
+ * Событие, касающееся определённого платежа по инвойсу.
+ */
+struct InvoicePaymentChange {
+    1: required domain.InvoicePaymentID id
+    2: required InvoicePaymentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого платежом по инвойсу.
+ */
+union InvoicePaymentChangePayload {
+    1: InvoicePaymentStarted               invoice_payment_started
+    3: InvoicePaymentStatusChanged         invoice_payment_status_changed
+    2: InvoicePaymentSessionChange         invoice_payment_session_change
+    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+}
+
+/**
  * Событие об запуске платежа по инвойсу.
  */
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
+    /** Оценка риска платежа. */
+    4: required domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
-    2: optional domain.InvoicePaymentRoute route
+    2: required domain.InvoicePaymentRoute route
     /** Данные финансового взаимодействия. */
-    3: optional domain.FinalCashFlow cash_flow
-}
-
-/**
- * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
- * у провайдера.
- */
-struct InvoicePaymentBound {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
-    /** Данные о связанной транзакции у провайдера. */
-    2: required domain.TransactionInfo trx
+    3: required domain.FinalCashFlow cash_flow
 }
 
 /**
  * Событие об изменении статуса платежа по инвойсу.
  */
 struct InvoicePaymentStatusChanged {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
     /** Статус платежа по инвойсу. */
-    2: required domain.InvoicePaymentStatus status
+    1: required domain.InvoicePaymentStatus status
 }
 
 /**
- * Событие об запросе взаимодействия с плательщиком.
+ * Событие в рамках сессии взаимодействия с провайдером по платежу.
  */
-struct InvoicePaymentInteractionRequested {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
+struct InvoicePaymentSessionChange {
+    1: required domain.TargetInvoicePaymentStatus target
+    2: required InvoicePaymentSessionChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого сессией взаимодействия.
+ */
+union InvoicePaymentSessionChangePayload {
+    1: InvoicePaymentSessionStarted              invoice_payment_session_started
+    2: InvoicePaymentSessionFinished             invoice_payment_session_finished
+    3: InvoicePaymentSessionSuspended            invoice_payment_session_suspended
+    4: InvoicePaymentSessionActivated            invoice_payment_session_activated
+    5: InvoicePaymentSessionTransactionBound     invoice_payment_session_transaction_bound
+    6: InvoicePaymentSessionProxyStateChanged    invoice_payment_session_proxy_state_changed
+    7: InvoicePaymentSessionInteractionRequested invoice_payment_session_interaction_requested
+}
+
+struct InvoicePaymentSessionStarted {}
+
+struct InvoicePaymentSessionFinished {
+    1: required SessionResult result
+}
+
+struct InvoicePaymentSessionSuspended {}
+struct InvoicePaymentSessionActivated {}
+
+union SessionResult {
+    1: SessionSucceeded succeeded
+    2: SessionFailed    failed
+}
+
+struct SessionSucceeded {}
+
+struct SessionFailed {
+    1: required domain.OperationFailure failure
+}
+
+/**
+ * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
+ * у провайдера.
+ */
+struct InvoicePaymentSessionTransactionBound {
+    /** Данные о связанной транзакции у провайдера. */
+    1: required domain.TransactionInfo trx
+}
+
+/**
+ * Событие о том, что изменилось непрозрачное состояние прокси в рамках сессии.
+ */
+struct InvoicePaymentSessionProxyStateChanged {
+    1: required base.Opaque proxy_state
+}
+
+/**
+ * Событие о запросе взаимодействия с плательщиком.
+ */
+struct InvoicePaymentSessionInteractionRequested {
     /** Необходимое взаимодействие */
-    2: required user_interaction.UserInteraction interaction
+    1: required user_interaction.UserInteraction interaction
 }
 
 /**
- * Событие о прохождении инспекции
+ * Событие, касающееся определённой корректировки платежа.
  */
-struct InvoicePaymentInspected {
-    /** Идентификатор платежа по инвойсу. */
-    1: required domain.InvoicePaymentID payment_id
-    /** Результат инспекции */
-    2: required domain.RiskScore risk_score
+struct InvoicePaymentAdjustmentChange {
+    1: required domain.InvoicePaymentAdjustmentID id
+    2: required InvoicePaymentAdjustmentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого корректировкой платежа по инвойсу.
+ */
+union InvoicePaymentAdjustmentChangePayload {
+    1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
+    2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
 }
 
 /**
  * Событие о создании корректировки платежа
  */
 struct InvoicePaymentAdjustmentCreated {
-    1: required domain.InvoicePaymentID payment_id
-    2: required domain.InvoicePaymentAdjustment adjustment
+    1: required domain.InvoicePaymentAdjustment adjustment
 }
 
 /**
  * Событие об изменении статуса корректировки платежа
  */
 struct InvoicePaymentAdjustmentStatusChanged {
-    1: required domain.InvoicePaymentID payment_id
-    2: required domain.InvoicePaymentAdjustmentID adjustment_id
-    3: required domain.InvoicePaymentAdjustmentStatus status
+    1: required domain.InvoicePaymentAdjustmentStatus status
 }
 
 /**
@@ -257,6 +289,18 @@ struct InvoicePaymentParams {
     1: required domain.Payer payer
 }
 
+struct Invoice {
+    1: required domain.Invoice invoice
+    2: required list<InvoicePayment> payments
+}
+
+struct InvoicePayment {
+    1: required domain.InvoicePayment payment
+    2: required list<InvoicePaymentAdjustment> adjustments
+}
+
+typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
+
 /**
  * Параметры создаваемой поправки к платежу.
  */
@@ -274,6 +318,12 @@ exception PartyNotFound {}
 exception ShopNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+exception InvalidContractStatus { 1: required domain.ContractStatus status }
+
+union InvalidStatus {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+}
 
 exception InvalidUser {}
 exception InvoiceNotFound {}
@@ -303,17 +353,18 @@ exception InvalidPaymentAdjustmentStatus {
 
 service Invoicing {
 
-    InvoiceState Create (1: UserInfo user, 2: InvoiceParams params)
+    Invoice Create (1: UserInfo user, 2: InvoiceParams params)
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
             3: PartyNotFound ex3,
             4: ShopNotFound ex4,
             5: InvalidPartyStatus ex5,
-            6: InvalidShopStatus ex6
+            6: InvalidShopStatus ex6,
+            7: InvalidContractStatus ex7
         )
 
-    InvoiceState Get (1: UserInfo user, 2: domain.InvoiceID id)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -327,7 +378,7 @@ service Invoicing {
             4: base.InvalidRequest ex4
         )
 
-    domain.InvoicePayment StartPayment (
+    InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: InvoicePaymentParams params
@@ -339,10 +390,11 @@ service Invoicing {
             4: InvoicePaymentPending ex4,
             5: base.InvalidRequest ex5,
             6: InvalidPartyStatus ex6,
-            7: InvalidShopStatus ex7
+            7: InvalidShopStatus ex7,
+            8: InvalidContractStatus ex8
         )
 
-    domain.InvoicePayment GetPayment (
+    InvoicePayment GetPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -362,7 +414,7 @@ service Invoicing {
      * Пока созданная поправка ни подтверждена, ни отклонена, другую поправку
      * создать невозможно.
      */
-    domain.InvoicePaymentAdjustment CreatePaymentAdjustment (
+    InvoicePaymentAdjustment CreatePaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id,
@@ -376,7 +428,7 @@ service Invoicing {
             5: InvoicePaymentAdjustmentPending ex5
         )
 
-    domain.InvoicePaymentAdjustment GetPaymentAdjustment (
+    InvoicePaymentAdjustment GetPaymentAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -423,7 +475,8 @@ service Invoicing {
             2: InvoiceNotFound ex2,
             3: InvalidInvoiceStatus ex3,
             4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5
+            5: InvalidShopStatus ex5,
+            6: InvalidContractStatus ex6
         )
 
     void Rescind (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
@@ -433,7 +486,8 @@ service Invoicing {
             3: InvalidInvoiceStatus ex3,
             4: InvoicePaymentPending ex4,
             5: InvalidPartyStatus ex5,
-            6: InvalidShopStatus ex6
+            6: InvalidShopStatus ex6,
+            7: InvalidContractStatus ex7
         )
 
 }
@@ -456,16 +510,19 @@ struct PayoutToolParams {
 
 struct ShopParams {
     1: optional domain.CategoryRef category
+    6: required domain.ShopLocation location
     2: required domain.ShopDetails details
     3: required domain.ContractID contract_id
     4: required domain.PayoutToolID payout_tool_id
-    5: optional domain.Proxy proxy
+}
+
+struct ShopAccountParams {
+    1: required domain.CurrencyRef currency
 }
 
 struct ContractParams {
     1: required domain.Contractor contractor
     2: optional domain.ContractTemplateRef template
-    3: required PayoutToolParams payout_tool_params
 }
 
 struct ContractAdjustmentParams {
@@ -473,11 +530,7 @@ struct ContractAdjustmentParams {
 }
 
 union PartyModification {
-    1: domain.Blocking blocking
-    2: domain.Suspension suspension
-    3: domain.Contract contract_creation
     4: ContractModificationUnit contract_modification
-    5: domain.Shop shop_creation
     6: ShopModificationUnit shop_modification
 }
 
@@ -487,15 +540,33 @@ struct ContractModificationUnit {
 }
 
 union ContractModification {
-    1: ContractTermination termination
-    2: domain.ContractAdjustment adjustment_creation
-    3: domain.PayoutTool payout_tool_creation
-    4: domain.LegalAgreement legal_agreement_binding
+    1: ContractParams creation
+    2: ContractTermination termination
+    3: ContractAdjustmentModificationUnit adjustment_modification
+    4: PayoutToolModificationUnit payout_tool_modification
+    5: domain.LegalAgreement legal_agreement_binding
 }
 
 struct ContractTermination {
-    1: required base.Timestamp terminated_at
     2: optional string reason
+}
+
+struct ContractAdjustmentModificationUnit {
+    1: required domain.ContractAdjustmentID adjustment_id
+    2: required ContractAdjustmentModification modification
+}
+
+union ContractAdjustmentModification {
+    1: ContractAdjustmentParams creation
+}
+
+struct PayoutToolModificationUnit {
+    1: required domain.PayoutToolID payout_tool_id
+    2: required PayoutToolModification modification
+}
+
+union PayoutToolModification {
+    1: PayoutToolParams creation
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -506,32 +577,37 @@ struct ShopModificationUnit {
 }
 
 union ShopModification {
-    1: domain.Blocking blocking
-    2: domain.Suspension suspension
-    3: ShopUpdate update
-    4: ShopAccountCreated account_created
+    5: ShopParams creation
+    6: domain.CategoryRef category_modification
+    7: domain.ShopDetails details_modification
+    8: ShopContractModification contract_modification
+    9: domain.PayoutToolID payout_tool_modification
+    10: ProxyModification proxy_modification
+    11: domain.ShopLocation location_modification
+    12: ShopAccountParams shop_account_creation
 }
 
-struct ShopUpdate {
-    1: optional domain.CategoryRef category
-    2: optional domain.ShopDetails details
-    3: optional domain.ContractID contract_id
-    4: optional domain.PayoutToolID payout_tool_id
-    5: optional domain.Proxy proxy
+struct ShopContractModification {
+    1: required domain.ContractID contract_id
+    2: required domain.PayoutToolID payout_tool_id
 }
 
-struct ShopAccountCreated {
-    1: required domain.ShopAccount account
+struct ProxyModification {
+    1: optional domain.Proxy proxy
 }
 
 // Claims
 
 typedef i64 ClaimID
+typedef i32 ClaimRevision
 
 struct Claim {
     1: required ClaimID id
     2: required ClaimStatus status
     3: required PartyChangeset changeset
+    4: required ClaimRevision revision
+    5: required base.Timestamp created_at
+    6: optional base.Timestamp updated_at
 }
 
 union ClaimStatus {
@@ -544,7 +620,7 @@ union ClaimStatus {
 struct ClaimPending {}
 
 struct ClaimAccepted {
-    1: required base.Timestamp accepted_at
+    2: optional ClaimEffects effects
 }
 
 struct ClaimDenied {
@@ -555,9 +631,52 @@ struct ClaimRevoked {
     1: required string reason
 }
 
-struct ClaimResult {
-    1: required ClaimID id
-    2: required ClaimStatus status
+// Claim effects
+
+typedef list<ClaimEffect> ClaimEffects
+
+union ClaimEffect {
+    /* 1: PartyEffect Reserved for future */
+    2: ContractEffectUnit contract_effect
+    3: ShopEffectUnit shop_effect
+}
+
+struct ContractEffectUnit {
+    1: required domain.ContractID contract_id
+    2: required ContractEffect effect
+}
+
+union ContractEffect {
+    1: domain.Contract created
+    2: domain.ContractStatus status_changed
+    3: domain.ContractAdjustment adjustment_created
+    4: domain.PayoutTool payout_tool_created
+    5: domain.LegalAgreement legal_agreement_bound
+}
+
+struct ShopEffectUnit {
+    1: required ShopID shop_id
+    2: required ShopEffect effect
+}
+
+union ShopEffect {
+    1: domain.Shop created
+    2: domain.CategoryRef category_changed
+    3: domain.ShopDetails details_changed
+    4: ShopContractChanged contract_changed
+    5: domain.PayoutToolID payout_tool_changed
+    6: ShopProxyChanged proxy_changed
+    7: domain.ShopLocation location_changed
+    8: domain.ShopAccount account_created
+}
+
+struct ShopContractChanged {
+    1: required domain.ContractID contract_id
+    2: required domain.PayoutToolID payout_tool_id
+}
+
+struct ShopProxyChanged {
+    1: optional domain.Proxy proxy
 }
 
 struct AccountState {
@@ -569,34 +688,83 @@ struct AccountState {
 
 // Events
 
-union PartyEvent {
-    1: domain.Party party_created
-    2: Claim claim_created
-    3: ClaimStatusChanged claim_status_changed
+union PartyChange {
+    1: domain.Party         party_created
+    4: domain.Blocking      party_blocking
+    5: domain.Suspension    party_suspension
+    6: ShopBlocking         shop_blocking
+    7: ShopSuspension       shop_suspension
+    2: Claim                claim_created
+    3: ClaimStatusChanged   claim_status_changed
+    8: ClaimUpdated         claim_updated
+}
+
+struct ShopBlocking {
+    1: required ShopID shop_id
+    2: required domain.Blocking blocking
+}
+
+struct ShopSuspension {
+    1: required ShopID shop_id
+    2: required domain.Suspension suspension
 }
 
 struct ClaimStatusChanged {
     1: required ClaimID id
     2: required ClaimStatus status
+    3: required ClaimRevision revision
+    4: required base.Timestamp changed_at
+}
+
+struct ClaimUpdated {
+    1: required ClaimID id
+    2: required PartyChangeset changeset
+    3: required ClaimRevision revision
+    4: required base.Timestamp updated_at
 }
 
 // Exceptions
 
 exception PartyExists {}
 exception PartyNotExistsYet {}
-exception ClaimNotFound {}
 exception ContractNotFound {}
-exception InvalidContractStatus { 1: required domain.ContractStatus status }
-exception PayoutToolNotFound {}
-
+exception ClaimNotFound {}
+exception InvalidClaimRevision {}
 
 exception InvalidClaimStatus {
     1: required ClaimStatus status
 }
 
-union InvalidStatus {
-    1: domain.Blocking blocking
-    2: domain.Suspension suspension
+exception ChangesetConflict { 1: required ClaimID conflicted_id }
+exception InvalidChangeset { 1: required InvalidChangesetReason reason }
+
+union InvalidChangesetReason {
+    1: domain.ContractID contract_not_exists
+    2: domain.ContractID contract_already_exists
+    3: ContractStatusInvalid contract_status_invalid
+    4: domain.ContractAdjustmentID contract_adjustment_already_exists
+    5: domain.PayoutToolID payout_tool_not_exists
+    6: domain.PayoutToolID payout_tool_already_exists
+    7: ShopID shop_not_exists
+    8: ShopID shop_already_exists
+    9: ShopStatusInvalid shop_status_invalid
+    10: ContractTermsViolated contract_terms_violated
+}
+
+struct ContractStatusInvalid {
+    1: required domain.ContractID contract_id
+    2: required domain.ContractStatus status
+}
+
+struct ShopStatusInvalid {
+    1: required ShopID shop_id
+    2: required InvalidStatus status
+}
+
+struct ContractTermsViolated {
+    1: required ShopID shop_id
+    2: required domain.ContractID contract_id
+    3: required domain.TermSet terms
 }
 
 exception AccountNotFound {}
@@ -607,6 +775,8 @@ exception ShopAccountNotFound {}
 
 service PartyManagement {
 
+    /* Party */
+
     void Create (1: UserInfo user, 2: PartyID party_id, 3: PartyParams params)
         throws (1: InvalidUser ex1, 2: PartyExists ex2)
 
@@ -616,13 +786,19 @@ service PartyManagement {
     domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: base.Timestamp timestamp)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
-    ClaimResult CreateContract (1: UserInfo user, 2: PartyID party_id, 3: ContractParams params)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: base.InvalidRequest ex4
-        )
+    void Suspend (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    void Activate (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    void Block (1: UserInfo user, 2: PartyID party_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    void Unblock (1: UserInfo user, 2: PartyID party_id, 3: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    /* Contract */
 
     domain.Contract GetContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id)
         throws (
@@ -631,151 +807,86 @@ service PartyManagement {
             3: ContractNotFound ex3
         )
 
-    ClaimResult TerminateContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id, 4: string reason)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ContractNotFound ex3,
-            4: InvalidContractStatus ex4,
-            5: base.InvalidRequest ex5
-        )
-
-    ClaimResult BindContractLegalAgreemnet (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: domain.ContractID contract_id,
-        4: domain.LegalAgreement legal_agreement
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ContractNotFound ex3,
-            4: InvalidContractStatus ex4,
-            5: InvalidPartyStatus ex5,
-            6: base.InvalidRequest ex6
-        )
-
-    ClaimResult CreateContractAdjustment (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: domain.ContractID contract_id,
-        4: ContractAdjustmentParams params
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ContractNotFound ex3,
-            4: InvalidContractStatus ex4,
-            5: InvalidPartyStatus ex5,
-            6: base.InvalidRequest ex6
-        )
-
-    ClaimResult CreatePayoutTool (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: domain.ContractID contract_id,
-        4: PayoutToolParams params
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: ContractNotFound ex4,
-            5: InvalidContractStatus ex5,
-            6: base.InvalidRequest ex6
-        )
-
-    ClaimResult CreateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopParams params)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            5: ContractNotFound ex5,
-            6: InvalidContractStatus ex6,
-            7: PayoutToolNotFound ex7,
-            4: base.InvalidRequest ex4
-        )
+    /* Shop */
 
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
-    ClaimResult UpdateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: ShopUpdate update)
+     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    void ActivateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    void BlockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    void UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    /* Claim */
+
+    Claim CreateClaim (1: UserInfo user, 2: PartyID party_id, 3: PartyChangeset changeset)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
-            3: ShopNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5,
-            7: ContractNotFound ex7,
-            8: InvalidContractStatus ex8,
-            9: PayoutToolNotFound ex9,
+            3: InvalidPartyStatus ex3,
+            4: ChangesetConflict ex4,
+            5: InvalidChangeset ex5,
             6: base.InvalidRequest ex6
         )
-
-    /* Claims */
 
     Claim GetClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ClaimNotFound ex3)
 
-    Claim GetPendingClaim (1: UserInfo user, 2: PartyID party_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ClaimNotFound ex3)
+    list<Claim> GetClaims (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    void AcceptClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
+    void AcceptClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4
+            4: InvalidClaimStatus ex4,
+            5: InvalidClaimRevision ex5,
+            6: InvalidChangeset ex6
         )
 
-    void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4
-        )
-
-    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: string reason)
+    void UpdateClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: PartyChangeset changeset)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: InvalidPartyStatus ex3,
             4: ClaimNotFound ex4,
-            5: InvalidClaimStatus ex5
+            5: InvalidClaimStatus ex5,
+            6: InvalidClaimRevision ex6,
+            7: ChangesetConflict ex7,
+            8: InvalidChangeset ex8,
+            9: base.InvalidRequest ex9
         )
 
-    /* Party blocking / suspension */
+    void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: string reason)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: ClaimNotFound ex3,
+            4: InvalidClaimStatus ex4,
+            5: InvalidClaimRevision ex5
+        )
 
-    ClaimResult Suspend (1: UserInfo user, 2: PartyID party_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
-
-    ClaimResult Activate (1: UserInfo user, 2: PartyID party_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
-
-    ClaimResult Block (1: UserInfo user, 2: PartyID party_id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
-
-    ClaimResult Unblock (1: UserInfo user, 2: PartyID party_id, 3: string reason)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
-
-    /* Shop blocking / suspension */
-
-    ClaimResult SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
-
-    ClaimResult ActivateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
-
-    ClaimResult BlockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
-
-    ClaimResult UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: string reason)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: InvalidPartyStatus ex3,
+            4: ClaimNotFound ex4,
+            5: InvalidClaimStatus ex5,
+            6: InvalidClaimRevision ex6
+        )
 
     /* Event polling */
 
-    Events GetEvents (1: UserInfo user, 2: domain.PartyID party_id, 3: EventRange range)
+    Events GetEvents (1: UserInfo user, 2: PartyID party_id, 3: EventRange range)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,

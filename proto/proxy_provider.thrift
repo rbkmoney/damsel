@@ -18,6 +18,7 @@ struct Shop {
     1: required domain.ShopID id
     2: required domain.Category category
     3: required domain.ShopDetails details
+    4: required domain.ShopLocation location
 }
 
 struct Invoice {
@@ -43,51 +44,13 @@ struct Cash {
 
 /**
  * Данные сессии взаимодействия с провайдерским прокси.
- */
-struct Session {
-    1: required TargetInvoicePaymentStatus target
-    2: optional proxy.ProxyState state
-}
-
-/**
- * Целевое значение статуса платежа.
- * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
  *
  * В момент, когда прокси успешно завершает сессию взаимодействия, процессинг считает,
  * что поставленная цель достигнута, и платёж перешёл в соответствующий статус.
  */
-union TargetInvoicePaymentStatus {
-
-    /**
-     * Платёж обработан.
-     *
-     * При достижении платежом этого статуса процессинг должен обладать:
-     *  - фактом того, что провайдер _по крайней мере_ авторизовал списание денежных средств в
-     *    пользу системы;
-     *  - данными транзакции провайдера.
-     */
-    1: domain.InvoicePaymentProcessed processed
-
-    /**
-     * Платёж подтверждён.
-     *
-     * При достижении платежом этого статуса процессинг должен быть уверен в том, что провайдер
-     * _по крайней мере_ подтвердил финансовые обязательства перед системой.
-     */
-    2: domain.InvoicePaymentCaptured captured
-
-    /**
-     * Платёж отменён.
-     *
-     * При достижении платежом этого статуса процессинг должен быть уверен в том, что провайдер
-     * аннулировал неподтверждённое списание денежных средств.
-     *
-     * В случае, если в рамках сессии проведения платежа провайдер авторизовал, но _ещё не
-     * подтвердил_ списание средств, эта цель является обратной цели `processed`. В ином случае
-     * эта цель недостижима, и взаимодействие в рамках сессии должно завершится с ошибкой.
-     */
-    3: domain.InvoicePaymentCancelled cancelled
-
+struct Session {
+    1: required domain.TargetInvoicePaymentStatus target
+    2: optional proxy.ProxyState state
 }
 
 /**
