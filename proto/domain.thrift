@@ -588,7 +588,7 @@ struct CashLimitDecision {
 /* Customers */
 
 typedef base.ID    CustomerID
-typedef base.ID    BindingID
+typedef base.ID    PaymentMeanBindingID
 typedef base.ID    PaymentMeanID
 typedef json.Value Metadata
 
@@ -596,12 +596,17 @@ struct PaymentMean {
     1: required PaymentMeanID id
     2: required Token         token
     3: required PaymentRoute  route
+    4: required PaymentTool   payment_tool
 }
 
 struct PaymentMeanPending  {}
 struct PaymentMeanAcquired {}
-struct PaymentMeanFailed   { 1: required string details }
+struct PaymentMeanFailed   { 1: required PaymentMeanFailure failure }
 struct PaymentMeanObsolete {}
+
+struct PaymentMeanFailure {
+    1: required string details
+}
 
 union PaymentMeanStatus {
     1: PaymentMeanPending  pending
@@ -610,15 +615,29 @@ union PaymentMeanStatus {
     4: PaymentMeanObsolete obsolete
 }
 
+struct PaymentMeanBinding {
+    /* Идентификатор привязки */
+    1: PaymentMeanBindingID id
+
+    /* Идентификатор customer'а */
+    2: CustomerID customer_id
+
+    /* Платежный инструмент */
+    3: PaymentTool payment_tool
+}
+
 struct Customer {
     /* Идентификатор customer'а. */
-    1: required CustomerID      id
+    1: required CustomerID id
+
     /* Метаданные customer'а. */
-    2: optional Metadata        metadata
+    2: optional Metadata metadata
+
     /* Все привязки, связанные с customer'ом. */
-    3: required list<BindingID> bindings
-    /*  */
-    4: optional PaymentMean     payment_mean
+    3: required list<PaymentMeanBinding> bindings
+
+    /* Платежное средство */
+    4: optional PaymentMean payment_mean
 }
 
 /* Payment methods */

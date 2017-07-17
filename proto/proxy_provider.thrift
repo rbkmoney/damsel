@@ -161,10 +161,10 @@ service ProviderProxy {
     /**
      * Запрос к прокси на создание многоразового токена
      */
-    TokenGenerationProxyResult GenerateToken(
-        1: domain.Token token,
-        2: domain.PaymentSessionID session_id
-        3: domain.BindingID binding_id
+    TokenGenerationProxyResult GenerateToken (
+        1: domain.Token              token
+        2: domain.PaymentSessionID   session_id
+        3: domain.PaymentMeanBinding binding
     )
 
     /**
