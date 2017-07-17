@@ -40,8 +40,9 @@ struct Report {
     1: required ReportID report_id;
     2: required Timestamp from_time;
     3: required Timestamp to_time;
-    4: required FileMeta report_file_meta;
-    5: optional FileMeta sign_file_meta;
+    4: required string report_type;
+    5: required FileMeta report_file_meta;
+    6: optional FileMeta sign_file_meta;
 }
 
 struct FileMeta {
@@ -54,6 +55,6 @@ service Reports {
 
   list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
-  Report GenerateReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
+  Report GenerateReport(1: ReportRequest request, 2: string report_type) throws (1: InvalidRequest ex1)
 
 }
