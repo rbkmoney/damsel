@@ -52,6 +52,8 @@ struct FileMeta {
 
 service Reports {
 
-  list<Report> getReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+  list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+
+  Report GenerateReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
 
 }
