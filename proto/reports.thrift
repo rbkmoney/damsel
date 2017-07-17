@@ -55,6 +55,6 @@ service Reports {
 
   list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
-  Report GenerateReport(1: ReportRequest request, 2: string report_type) throws (1: InvalidRequest ex1)
+  void RegenerateReport(1: ReportID report_id) throws (1: InvalidRequest ex1)
 
 }
