@@ -110,7 +110,7 @@
         /**
         * Создать заявку
         **/
-        void CreateClaim (1: UserInformation user, 2: PartyID party_id, 3: PartyModificationUnit changeset) throws (
+        payment_processing.Claim CreateClaim (1: UserInformation user, 2: PartyID party_id, 3: PartyModificationUnit changeset) throws (
                     1: ChangesetConflict ex1,
                     2: base.InvalidRequest ex2)
 
