@@ -86,8 +86,8 @@ service Reports {
   /**
   * Сгенерировать ссылку на файл
   * file_id - идентификатор файла
-  * expiration - время до которого ссылка будет считаться действительной
+  * expired_at - время до которого ссылка будет считаться действительной
   */
-  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expiration) throws (1: InvalidRequest ex1)
+  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: InvalidRequest ex1)
 
 }
