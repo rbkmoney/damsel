@@ -38,6 +38,7 @@ struct ReportRequest {
 }
 
 /**
+* Данные по отчету
 * report_id - уникальный идентификатор отчета
 * from_time, to_time - за какой период данный отчет
 * report_type - тип отчета TODO стоит ли вывести типы отчетов в протокол?
@@ -56,37 +57,32 @@ struct Report {
 /**
 * Данные по файлу
 * file_id - уникальный идентификатор файла
-* bucket_name - id корзины в ceph TODO нужно ли?
-* md5 - md5 содержимого файла TODO нужно ли тоже?
+* md5 - md5 содержимого файла TODO нужно ли?
 */
 struct FileMeta {
     1: required FileID file_id;
-    2: required string bucket_name;
-    3: optional string md5;
+    2: optional string md5;
 }
 
 service Reports {
 
   /**
   * Получить список отчетов по магазину за указанный промежуток времени
+  * Возвращает список отчетов
   */
   list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
   /**
   * Сгенерировать акт об оказании услуг по магазину за указанный промежуток времени TODO act of acceptance of services?
+  * Возвращает идентификатор отчета
   */
-  void GenerateProvisionOfServiceReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
-
-  /**
-  * Перегенерировать ранее созданный отчет
-  * report_id - идентификатор отчета
-  */
-  void RegenerateReport(1: ReportID report_id) throws (1: InvalidRequest ex1)
+  ReportID GenerateProvisionOfServiceReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
 
   /**
   * Сгенерировать ссылку на файл
   * file_id - идентификатор файла
   * expired_at - время до которого ссылка будет считаться действительной
+  * Возвращает URL
   */
   URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: InvalidRequest ex1)
 
