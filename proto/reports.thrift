@@ -47,11 +47,10 @@ struct ReportRequest {
 */
 struct Report {
     1: required ReportID report_id;
-    2: required Timestamp from_time;
-    3: required Timestamp to_time;
-    4: required string report_type;
-    5: required FileMeta report_file_meta;
-    6: optional FileMeta sign_file_meta;
+    2: required ReportTimeRange time_range;
+    3: required string report_type;
+    4: required FileMeta report_file_meta;
+    5: optional FileMeta sign_file_meta;
 }
 
 /**
@@ -64,7 +63,7 @@ struct FileMeta {
     2: optional string md5;
 }
 
-service Reports {
+service Reporting {
 
   /**
   * Получить список отчетов по магазину за указанный промежуток времени
@@ -82,7 +81,7 @@ service Reports {
   * Сгенерировать ссылку на файл
   * file_id - идентификатор файла
   * expired_at - время до которого ссылка будет считаться действительной
-  * Возвращает URL
+  * Возвращает presigned url
   */
   URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: InvalidRequest ex1)
 
