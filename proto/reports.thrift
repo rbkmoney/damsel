@@ -37,6 +37,20 @@ struct ReportRequest {
     3: required ReportTimeRange time_range;
 }
 
+struct ReportResponse {
+    1: required ReportProcessingStatus status;
+}
+
+union ReportProcessingStatus {
+    1: ReportProcessingSuccess success;
+    2: ReportProcessingPending pending;
+    3: ReportProcessingFailed failed;
+}
+
+struct ReportProcessingSuccess { 1: required Report report; }
+struct ReportProcessingPending {}
+struct ReportProcessingFailed {}
+
 /**
 * Данные по отчету
 * report_id - уникальный идентификатор отчета
@@ -76,6 +90,12 @@ service Reporting {
   * Возвращает идентификатор отчета
   */
   ReportID GenerateProvisionOfServiceReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
+
+  /**
+  * Запрос на получение статуса обработки отчета по его идентификатору
+  * В случае статуса Success приходит и сам отчет
+  */
+  ReportProcessingStatus getReportProcessingStatusById(1: ReportID report_id) throws (1: InvalidRequest ex1)
 
   /**
   * Сгенерировать ссылку на файл
