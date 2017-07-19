@@ -62,9 +62,10 @@ struct ReportProcessingFailed {}
 struct Report {
     1: required ReportID report_id;
     2: required ReportTimeRange time_range;
-    3: required string report_type;
-    4: required FileMeta report_file_meta;
-    5: optional FileMeta sign_file_meta;
+    3: required Timestamp created_at;
+    4: required string report_type;
+    5: required FileMeta report_file_meta;
+    6: optional FileMeta sign_file_meta;
 }
 
 /**
