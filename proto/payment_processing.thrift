@@ -595,8 +595,10 @@ service InvoiceTemplating {
             1: InvalidUser ex1,
             2: InvoiceTemplateNotFound ex2,
             3: InvoiceTemplateRemoved ex3,
-            4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5
+            4: PartyNotFound ex4,
+            5: InvalidPartyStatus ex5,
+            6: ShopNotFound ex6,
+            7: InvalidShopStatus ex7
         )
 }
 
