@@ -421,15 +421,17 @@ service Invoicing {
             7: InvalidContractStatus ex7
         )
 
-    Invoice CreateWithTemplate (1: InvoiceWithTemplateParams params)
+    Invoice CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
         throws (
-            1: base.InvalidRequest ex1,
-            2: PartyNotFound ex2,
-            3: ShopNotFound ex3,
-            4: InvalidPartyStatus ex4,
-            5: InvalidShopStatus ex5,
-            6: InvoiceTemplateNotFound ex6,
-            7: InvoiceTemplateRemoved ex7
+            1: InvalidUser ex1,
+            2: base.InvalidRequest ex2,
+            3: PartyNotFound ex3,
+            4: ShopNotFound ex4,
+            5: InvalidPartyStatus ex5,
+            6: InvalidShopStatus ex6,
+            7: InvalidContractStatus ex7
+            8: InvoiceTemplateNotFound ex8,
+            9: InvoiceTemplateRemoved ex9
         )
 
     Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -571,10 +573,11 @@ service InvoiceTemplating {
             6: base.InvalidRequest ex6
         )
 
-    domain.InvoiceTemplate Get (1: domain.InvoiceTemplateID id)
+    domain.InvoiceTemplate Get (1: UserInfo user, 2: domain.InvoiceTemplateID id)
         throws (
-            1: InvoiceTemplateNotFound ex1,
-            2: InvoiceTemplateRemoved ex2
+            1: InvalidUser ex1,
+            2: InvoiceTemplateNotFound ex2,
+            3: InvoiceTemplateRemoved ex3
         )
 
     domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: InvoiceTemplateUpdateParams params)
