@@ -70,11 +70,11 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
-    1: domain.InvoiceID         invoice
+    1: domain.InvoiceID         invoice_id
     /** Идентификатор участника, который породил событие. */
-    2: domain.PartyID           party
+    2: domain.PartyID           party_id
     /** Идентификатор шаблона инвойса, который породил событие. */
-    3: domain.InvoiceTemplateID invoice_template
+    3: domain.InvoiceTemplateID invoice_template_id
 }
 
 /**
@@ -102,29 +102,6 @@ union InvoiceTemplateChange {
     1: InvoiceTemplateCreated invoice_template_created
     2: InvoiceTemplateUpdated invoice_template_updated
     3: InvoiceTemplateDeleted invoice_template_deleted
-}
-
-/**
- * Событие о создании нового шаблона инвойса.
- */
-struct InvoiceTemplateCreated {
-    /** Данные созданного шаблона инвойса. */
-    1: required domain.InvoiceTemplate invoice_template
-}
-
-/**
- * Событие о модификации шаблона инвойса.
- */
-struct InvoiceTemplateUpdated {
-    /** Данные модифицированного шаблона инвойса. */
-    1: required InvoiceTemplateUpdateParams diff
-}
-
-/**
- * Событие об удалении шаблона инвойса.
- */
-struct InvoiceTemplateDeleted {}
-
 }
 
 /**
@@ -223,6 +200,27 @@ struct SessionSucceeded {}
 struct SessionFailed {
     1: required domain.OperationFailure failure
 }
+
+/**
+ * Событие о создании нового шаблона инвойса.
+ */
+struct InvoiceTemplateCreated {
+    /** Данные созданного шаблона инвойса. */
+    1: required domain.InvoiceTemplate invoice_template
+}
+
+/**
+ * Событие о модификации шаблона инвойса.
+ */
+struct InvoiceTemplateUpdated {
+    /** Данные модифицированного шаблона инвойса. */
+    1: required InvoiceTemplateUpdateParams diff
+}
+
+/**
+ * Событие об удалении шаблона инвойса.
+ */
+struct InvoiceTemplateDeleted {}
 
 /**
  * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
@@ -423,7 +421,7 @@ service Invoicing {
             7: InvalidContractStatus ex7
         )
 
-    InvoiceState CreateWithTemplate (1: InvoiceWithTemplateParams params)
+    Invoice CreateWithTemplate (1: InvoiceWithTemplateParams params)
         throws (
             1: base.InvalidRequest ex1,
             2: PartyNotFound ex2,
