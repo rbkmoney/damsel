@@ -93,9 +93,9 @@ service Reporting {
 
   /**
   * Запрос на получение статуса обработки отчета по его идентификатору
-  * В случае статуса Success приходит и сам отчет
+  * В случае статуса Success приходит сам отчет
   */
-  ReportProcessingStatus getReportProcessingStatusById(1: ReportID report_id) throws (1: InvalidRequest ex1)
+  ReportProcessingStatus GetReportProcessingStatusById(1: ReportID report_id) throws (1: InvalidRequest ex1)
 
   /**
   * Сгенерировать ссылку на файл
