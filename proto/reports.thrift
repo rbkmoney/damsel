@@ -37,10 +37,6 @@ struct ReportRequest {
     3: required ReportTimeRange time_range;
 }
 
-struct ReportResponse {
-    1: required ReportProcessingStatus status;
-}
-
 union ReportProcessingStatus {
     1: ReportProcessingSuccess success;
     2: ReportProcessingPending pending;
@@ -55,7 +51,7 @@ struct ReportProcessingFailed {}
 * Данные по отчету
 * report_id - уникальный идентификатор отчета
 * from_time, to_time - за какой период данный отчет
-* report_type - тип отчета TODO стоит ли вывести типы отчетов в протокол?
+* report_type - тип отчета
 * report_file_meta - данные по файлу отчета
 * sign_file_meta - данные по файлу подписи
 */
@@ -71,7 +67,7 @@ struct Report {
 /**
 * Данные по файлу
 * file_id - уникальный идентификатор файла
-* md5 - md5 содержимого файла TODO нужно ли?
+* md5 - md5 содержимого файла
 */
 struct FileMeta {
     1: required FileID file_id;
@@ -87,7 +83,7 @@ service Reporting {
   list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
   /**
-  * Сгенерировать акт об оказании услуг по магазину за указанный промежуток времени TODO act of acceptance of services?
+  * Сгенерировать акт об оказании услуг по магазину за указанный промежуток времени
   * Возвращает идентификатор отчета
   */
   ReportID GenerateProvisionOfServiceReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
