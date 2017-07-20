@@ -50,7 +50,7 @@ struct ReportProcessingFailed {}
 /**
 * Данные по отчету
 * report_id - уникальный идентификатор отчета
-* from_time, to_time - за какой период данный отчет
+* time_range - за какой период данный отчет
 * report_type - тип отчета
 * report_file_meta - данные по файлу отчета
 * sign_file_meta - данные по файлу подписи
@@ -78,19 +78,26 @@ service Reporting {
 
   /**
   * Получить список отчетов по магазину за указанный промежуток времени
-  * Возвращает список отчетов
+  * Возвращает список отчетов или пустой список, если отчеты по магазину не найдены
+  *
+  * InvalidRequest, если промежуток времени некорректен
+  * DatasetTooBig, если размер списка превышает допустимый лимит
   */
   list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
   /**
   * Сгенерировать акт об оказании услуг по магазину за указанный промежуток времени
   * Возвращает идентификатор отчета
+  *
+  * InvalidRequest, если промежуток времени некорректен
   */
   ReportID GenerateProvisionOfServiceReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
 
   /**
   * Запрос на получение статуса обработки отчета по его идентификатору
   * В случае статуса Success приходит сам отчет
+  *
+  * InvalidRequest, если отчет не найден
   */
   ReportProcessingStatus GetReportProcessingStatus(1: ReportID report_id) throws (1: InvalidRequest ex1)
 
@@ -99,6 +106,8 @@ service Reporting {
   * file_id - идентификатор файла
   * expired_at - время до которого ссылка будет считаться действительной
   * Возвращает presigned url
+  *
+  * InvalidRequest, если файл не найден
   */
   URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: InvalidRequest ex1)
 
