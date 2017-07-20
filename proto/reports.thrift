@@ -20,6 +20,10 @@ exception DatasetTooBig {
     1: i32 limit;
 }
 
+exception ReportNotFound {}
+
+exception FileNotFound {}
+
 /**
 * Диапазон времени отчетов.
 * from_time (inclusive) - начальное время.
@@ -27,25 +31,25 @@ exception DatasetTooBig {
 * Если from > to  - диапазон считается некорректным.
 */
 struct ReportTimeRange {
-    1: required Timestamp from_time;
-    2: required Timestamp to_time;
+    1: required Timestamp from_time
+    2: required Timestamp to_time
 }
 
 struct ReportRequest {
-    1: required PartyID party_id;
-    2: required ShopID shop_id;
-    3: required ReportTimeRange time_range;
+    1: required PartyID party_id
+    2: required ShopID shop_id
+    3: required ReportTimeRange time_range
 }
 
-union ReportProcessingStatus {
-    1: ReportProcessingSuccess success;
-    2: ReportProcessingPending pending;
-    3: ReportProcessingFailed failed;
+/**
+* Статусы отчета
+*/
+enum ReportStatus {
+    // в обработке
+    pending,
+    // создан
+    created
 }
-
-struct ReportProcessingSuccess { 1: required Report report; }
-struct ReportProcessingPending {}
-struct ReportProcessingFailed {}
 
 /**
 * Данные по отчету
@@ -56,12 +60,13 @@ struct ReportProcessingFailed {}
 * sign_file_meta - данные по файлу подписи
 */
 struct Report {
-    1: required ReportID report_id;
-    2: required ReportTimeRange time_range;
-    3: required Timestamp created_at;
-    4: required ReportType report_type;
-    5: required FileMeta report_file_meta;
-    6: optional FileMeta sign_file_meta;
+    1: required ReportID report_id
+    2: required ReportTimeRange time_range
+    3: required Timestamp created_at
+    4: required ReportType report_type
+    5: required ReportStatus status
+    6: optional FileMeta report_file_meta
+    7: optional FileMeta sign_file_meta
 }
 
 /**
@@ -70,8 +75,9 @@ struct Report {
 * md5 - md5 содержимого файла
 */
 struct FileMeta {
-    1: required FileID file_id;
-    2: optional string md5;
+    1: required FileID file_id
+    2: required string filename
+    3: optional string md5
 }
 
 /**
@@ -101,15 +107,14 @@ service Reporting {
   *
   * InvalidRequest, если промежуток времени некорректен
   */
-  ReportID GenerateReport(1: ReportRequest request, ReportType report_type) throws (1: InvalidRequest ex1)
+  ReportID GenerateReport(1: ReportRequest request, 2: ReportType report_type) throws (1: InvalidRequest ex1)
 
   /**
-  * Запрос на получение статуса обработки отчета по его идентификатору
-  * В случае статуса Success приходит сам отчет
+  * Запрос на получение отчета по его идентификатору
   *
-  * InvalidRequest, если отчет не найден
+  * ReportNotFound, если отчет не найден
   */
-  ReportProcessingStatus GetReportProcessingStatus(1: ReportID report_id) throws (1: InvalidRequest ex1)
+  Report GetReport(1: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
   * Сгенерировать ссылку на файл
@@ -117,8 +122,8 @@ service Reporting {
   * expired_at - время до которого ссылка будет считаться действительной
   * Возвращает presigned url
   *
-  * InvalidRequest, если файл не найден
+  * FileNotFound, если файл не найден
   */
-  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: InvalidRequest ex1)
+  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: FileNotFound ex1)
 
 }
