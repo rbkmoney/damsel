@@ -74,6 +74,16 @@ struct FileMeta {
     2: optional string md5;
 }
 
+/**
+* Типы отчетов
+*/
+enum ReportType {
+    // Акт об оказании услуг
+    provision_of_service,
+    // Реестр платежей
+    payment_registry
+}
+
 service Reporting {
 
   /**
@@ -86,12 +96,12 @@ service Reporting {
   list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
   /**
-  * Сгенерировать акт об оказании услуг по магазину за указанный промежуток времени
+  * Сгенерировать отчет с указанным типом по магазину за указанный промежуток времени
   * Возвращает идентификатор отчета
   *
   * InvalidRequest, если промежуток времени некорректен
   */
-  ReportID GenerateProvisionOfServiceReport(1: ReportRequest request) throws (1: InvalidRequest ex1)
+  ReportID GenerateReport(1: ReportRequest request, ReportType type) throws (1: InvalidRequest ex1)
 
   /**
   * Запрос на получение статуса обработки отчета по его идентификатору
