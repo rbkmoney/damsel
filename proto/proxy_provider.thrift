@@ -25,7 +25,7 @@ struct TokenGenerationSession {
  * Целевое значение статуса многоразового токена.
  */
 union TargetPaymentMeanStatus {
-    1: domain.PaymentMeanPending  pending
+    1: domain.PaymentMeanCreated  created
     2: domain.PaymentMeanAcquired acquired
     3: domain.PaymentMeanFailed   failed
 }
@@ -41,9 +41,10 @@ struct TokenGenerationContext {
 }
 
 struct TokenGenerationProxyResult {
-    1: required proxy.Intent       intent
-    2: optional proxy.ProxyState   next_state
-    3: optional domain.PaymentMean payment_mean
+    1: required proxy.Intent        intent
+    2: optional proxy.ProxyState    next_state
+    3: optional domain.Token        token
+    4: optional domain.PaymentRoute route
 }
 
 struct TokenGenerationCallbackResult {
@@ -89,16 +90,7 @@ struct Cash {
 }
 
 /**
- * Данные сессии взаимодействия с провайдерским прокси в рамках платежа.
- */
-struct Session {
-    1: required TargetInvoicePaymentStatus target
-    2: optional proxy.ProxyState state
-}
-
-/**
- * Целевое значение статуса платежа.
- * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
+ * Данные сессии взаимодействия с провайдерским прокси.
  *
  * В момент, когда прокси успешно завершает сессию взаимодействия, процессинг считает,
  * что поставленная цель достигнута, и платёж перешёл в соответствующий статус.
@@ -162,9 +154,8 @@ service ProviderProxy {
      * Запрос к прокси на создание многоразового токена
      */
     TokenGenerationProxyResult GenerateToken (
-        1: domain.Token              token
-        2: domain.PaymentSessionID   session_id
-        3: domain.PaymentMeanBinding binding
+        1: domain.Token            token
+        2: domain.PaymentSessionID session_id
     )
 
     /**

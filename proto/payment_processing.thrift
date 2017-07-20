@@ -70,11 +70,14 @@ struct Event {
  */
 union EventSource {
     /** Идентификатор инвойса, который породил событие. */
+<<<<<<< HEAD
     1: domain.InvoiceID         invoice_id
     /** Идентификатор участника, который породил событие. */
     2: domain.PartyID           party_id
     /** Идентификатор шаблона инвойса, который породил событие. */
     3: domain.InvoiceTemplateID invoice_template_id
+    /** Идентификатор customer'а, который породил событие. */
+    4: domain.CustomerID customer_id
 }
 
 /**
@@ -149,7 +152,7 @@ struct InvoicePaymentStarted {
     /** Оценка риска платежа. */
     4: required domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
-    2: required domain.InvoicePaymentRoute route
+    2: required domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: required domain.FinalCashFlow cash_flow
 }
@@ -601,23 +604,45 @@ service InvoiceTemplating {
 
 // Types
 
-typedef domain.CustomerID           CustomerID
-typedef domain.PaymentMeanBindingID PaymentMeanBindingID
-typedef domain.PaymentMeanID        PaymentMeanID
+typedef domain.CustomerID    CustomerID
+typedef domain.PaymentMeanID PaymentMeanID
+typedef domain.Binding       Binding
+typedef domain.BindingID     BindingID
 
-typedef domain.PaymentMeanBinding   PaymentMeanBinding
 // Events
 
 /**
  * События, порождаемые во время получения многоразовых токенов
  */
+union BindingEvent {
+    1: BindingCreated   binding_created
+    2: BindingStarted   binding_started
+    3: BindingSucceeded binding_succeeded
+    4: BindingFailed    binding_failed
+}
+
+struct BindingCreated {
+    1: required domain.Binding binding
+}
+
+struct BindingStarted {
+    1: required domain.PaymentMean payment_mean
+}
+
+struct BindingSucceeded {
+    1: optional domain.Token        token
+    2: optional domain.PaymentRoute route
+}
+
+struct BindingFailed {
+    1: required domain.PaymentMeanFailure failure
+}
+
 union CustomerEvent {
-    1: CustomerCreated                    customer_created
-    2: CustomerDeleted                    customer_deleted
-    3: CustomerPaymentMeanBindingStarted  customer_payment_mean_binding_started
-    4: CustomerPaymentMeanBindingFinished customer_payment_mean_binding_finished
-    5: CustomerPaymentMeanBound           customer_payment_mean_bound
-    6: CustomerPaymentMeanUnbound         customer_payment_mean_unbound
+    1: CustomerCreated            customer_created
+    2: CustomerDeleted            customer_deleted
+    3: CustomerPaymentMeanBound   customer_payment_mean_bound
+    4: CustomerPaymentMeanUnbound customer_payment_mean_unbound
 }
 
 /**
@@ -635,17 +660,17 @@ struct CustomerDeleted {}
 /**
  * Событие о старте привязки инструмента к customer'у.
  */
-struct CustomerPaymentMeanBindingStarted {
-    1: required CustomerID            id
-    2: required PaymentMeanBindingID  binding_id
+struct CustomerBindingStarted {
+    1: required CustomerID id
+    2: required BindingID  binding_id
 }
 
 /**
  * Событие об окончании привязки инструмента.
  */
-struct CustomerPaymentMeanBindingFinished {
+struct CustomerBindingFinished {
     1: required CustomerID               id
-    2: required PaymentMeanBindingID     binding_id
+    2: required BindingID                binding_id
     3: required domain.PaymentMeanStatus payment_mean_status
 }
 
@@ -653,8 +678,8 @@ struct CustomerPaymentMeanBindingFinished {
  * Событие о факте привязки инструмента к customer'у.
  */
 struct CustomerPaymentMeanBound {
-    1: required CustomerID           id
-    2: required PaymentMeanBindingID binding_id
+    1: required CustomerID id
+    2: required BindingID  binding_id
 }
 
 /**
@@ -665,6 +690,7 @@ struct CustomerPaymentMeanUnbound {}
 // Exceptions
 
 exception CustomerNotFound    {}
+exception PaymentMeanNotFound {}
 exception PaymentMeanNotBound {}
 exception InvalidPaymentTool  {}
 
@@ -675,20 +701,6 @@ service CustomerManagement {
     /* Создать customer'а */
     domain.Customer CreateCustomer (1: domain.Metadata metadata)
 
-    /* Создать многоразовый токен */
-    PaymentMeanBinding StartPaymentMeanBinding (1: CustomerID customer_id, 2: domain.PaymentTool payment_tool)
-        throws (
-            1: CustomerNotFound   customer_not_found,
-            2: InvalidPaymentTool invalid_payment_tool
-        )
-
-    /* Отвязать многоразовый токен */
-    void UnbindPaymentMean(1: CustomerID id)
-        throws (
-            1: CustomerNotFound    not_found
-            2: PaymentMeanNotBound payment_mean_not_bound
-        )
-
     /* Получить данные customer'а */
     domain.Customer GetCustomer (1: CustomerID id)
         throws (1: CustomerNotFound not_found)
@@ -696,6 +708,20 @@ service CustomerManagement {
     /* Удалить customer'а */
     void DeleteCustomer (1: CustomerID id)
         throws (1: CustomerNotFound not_found)
+
+    /* Создать многоразовый токен */
+    Binding StartBinding (1: CustomerID customer_id, 2: domain.PaymentTool payment_tool)
+        throws (
+            1: CustomerNotFound   customer_not_found,
+            2: InvalidPaymentTool invalid_payment_tool
+        )
+
+    /* Отвязать многоразовый токен */
+    void UnbindPaymentMean (1: CustomerID id)
+        throws (
+            1: CustomerNotFound    not_found
+            2: PaymentMeanNotBound payment_mean_not_bound
+        )
 
     /* Event polling */
     Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
@@ -724,24 +750,30 @@ struct PaymentMeanCreationStarted {
 }
 
 struct PaymentMeanStatusChanged {
-    1: required PaymentMeanID     id
+    1: required PaymentMeanID            id
     2: required domain.PaymentMeanStatus status
 }
 
 service PaymentProcessing {
+    domain.PaymentMean CreatePaymentMean (1: domain.PaymentTool payment_tool)
+        throws (1: InvalidPaymentTool invalid_payment_tool)
 
-    /* Создать многоразовый токен */
-    domain.PaymentMean CreatePaymentMean (1: PaymentMeanBinding binding)
+    domain.PaymentMean AbandonPaymentMean (1: PaymentMeanID id)
         throws (
-            1: InvalidBinding     invalid_binding
-            2: InvalidPaymentTool invalid_payment_tool
+            1: PaymentMeanNotFound payment_mean_not_found
+            2: PaymentMeanNotBound payment_mean_not_bound
+        )
+
+    domain.PaymentMean GetPaymentMean (1: PaymentMeanID id)
+        throws (
+            1: PaymentMeanNotFound payment_mean_not_found
         )
 
     /* Event polling */
-    Events GetEvents (1: PaymentMeanBindingID binding_id, 2: EventRange range)
+    Events GetEvents (1: PaymentMeanID id, 2: EventRange range)
         throws (
-            1: BindingNotFound binding_not_found,
-            2: EventNotFound   event_not_found
+            1: PaymentMeanNotFound payment_mean_not_found
+            2: EventNotFound    event_not_found
         )
 }
 

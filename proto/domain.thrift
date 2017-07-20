@@ -588,56 +588,62 @@ struct CashLimitDecision {
 /* Customers */
 
 typedef base.ID    CustomerID
-typedef base.ID    PaymentMeanBindingID
+typedef base.ID    BindingID
 typedef base.ID    PaymentMeanID
 typedef json.Value Metadata
 
 struct PaymentMean {
-    1: required PaymentMeanID id
-    2: required Token         token
-    3: required PaymentRoute  route
-    4: required PaymentTool   payment_tool
+    1: required PaymentMeanID     id
+    2: required PaymentMeanStatus status
+    3: required PaymentTool       payment_tool
+    4: optional Token             token
+    5: optional PaymentRoute      route
+    6: optional base.Timestamp    updated_at
+    7: optional base.Timestamp    expires_at
 }
 
-struct PaymentMeanPending  {}
+struct PaymentMeanCreated  {}
 struct PaymentMeanAcquired {}
+struct PaymentMeanExpired  {}
 struct PaymentMeanFailed   { 1: required PaymentMeanFailure failure }
-struct PaymentMeanObsolete {}
 
 struct PaymentMeanFailure {
     1: required string details
 }
 
 union PaymentMeanStatus {
-    1: PaymentMeanPending  pending
+    1: PaymentMeanCreated  created
     2: PaymentMeanAcquired acquired
-    3: PaymentMeanFailed   failed
-    4: PaymentMeanObsolete obsolete
+    3: PaymentMeanExpired  expired
+    4: PaymentMeanFailed   failed
 }
 
-struct PaymentMeanBinding {
-    /* Идентификатор привязки */
-    1: PaymentMeanBindingID id
+struct Binding {
+    1: required BindingID     id
+    2: required PaymentMeanID payment_mean_id
+    3: required PaymentTool   source_payment_tool
+    4: required BindingStatus status
+}
 
-    /* Идентификатор customer'а */
-    2: CustomerID customer_id
+struct BindingCreated   {}
+struct BindingSucceeded {}
+struct BindingFailed    { 1: BindingFailure failure }
 
-    /* Платежный инструмент */
-    3: PaymentTool payment_tool
+struct BindingFailure {
+    1: required string details
+}
+
+union BindingStatus {
+    1: BindingCreated   created
+    2: BindingSucceeded succeeded
+    3: BindingFailed    failed
 }
 
 struct Customer {
-    /* Идентификатор customer'а. */
-    1: required CustomerID id
-
-    /* Метаданные customer'а. */
-    2: optional Metadata metadata
-
-    /* Все привязки, связанные с customer'ом. */
-    3: required list<PaymentMeanBinding> bindings
-
-    /* Платежное средство */
-    4: optional PaymentMean payment_mean
+    1: required CustomerID     id
+    2: required list<Binding>  bindings
+    3: optional BindingID      active_binding
+    4: optional base.Timestamp updated_at
 }
 
 /* Payment methods */
