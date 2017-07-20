@@ -32,7 +32,14 @@ struct StatPayment {
     17: optional geo_ip.LocationInfo location_info
 }
 
-struct OperationFailure {
+union OperationFailure {
+    1: OperationTimeout operation_timeout
+    2: ExternalFailure  external_failure
+}
+
+struct OperationTimeout {}
+
+struct ExternalFailure {
     1: required string code
     2: optional string description
 }
@@ -77,6 +84,7 @@ struct StatInvoice {
     9 : required domain.Amount amount
     10: required string currency_symbolic_code
     11: optional base.Content context
+    12: optional domain.InvoiceTemplateID template_id
 }
 
 struct InvoiceUnpaid    {}
