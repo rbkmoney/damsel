@@ -59,7 +59,7 @@ struct Report {
     1: required ReportID report_id;
     2: required ReportTimeRange time_range;
     3: required Timestamp created_at;
-    4: required string report_type;
+    4: required ReportType report_type;
     5: required FileMeta report_file_meta;
     6: optional FileMeta sign_file_meta;
 }
@@ -101,7 +101,7 @@ service Reporting {
   *
   * InvalidRequest, если промежуток времени некорректен
   */
-  ReportID GenerateReport(1: ReportRequest request, ReportType type) throws (1: InvalidRequest ex1)
+  ReportID GenerateReport(1: ReportRequest request, ReportType report_type) throws (1: InvalidRequest ex1)
 
   /**
   * Запрос на получение статуса обработки отчета по его идентификатору
