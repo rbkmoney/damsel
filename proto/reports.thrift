@@ -17,7 +17,7 @@ typedef string URL
 * limit - текущий максимальный размер блока.
 */
 exception DatasetTooBig {
-    1: i32 limit;
+    1: i32 limit
 }
 
 exception ReportNotFound {}
