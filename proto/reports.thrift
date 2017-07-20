@@ -6,7 +6,7 @@ namespace erlang reports
 
 typedef base.Timestamp Timestamp
 typedef base.InvalidRequest InvalidRequest
-typedef base.ID ReportID
+typedef i64 ReportID
 typedef base.ID FileID
 typedef domain.PartyID PartyID
 typedef domain.ShopID ShopID
@@ -92,7 +92,7 @@ service Reporting {
   * Запрос на получение статуса обработки отчета по его идентификатору
   * В случае статуса Success приходит сам отчет
   */
-  ReportProcessingStatus GetReportProcessingStatusById(1: ReportID report_id) throws (1: InvalidRequest ex1)
+  ReportProcessingStatus GetReportProcessingStatus(1: ReportID report_id) throws (1: InvalidRequest ex1)
 
   /**
   * Сгенерировать ссылку на файл
