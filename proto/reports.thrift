@@ -100,7 +100,7 @@ service Reporting {
   * InvalidRequest, если промежуток времени некорректен
   * DatasetTooBig, если размер списка превышает допустимый лимит
   */
-  list<Report> GetReports(1: ReportRequest request, 2: list<ReportType> report_types) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+  list<Report> GetReports(1: ReportRequest request, 2: list<ReportType> report_types) throws (1: DatasetTooBig ex1, 2: InvalidRequest ex2)
 
   /**
   * Сгенерировать отчет с указанным типом по магазину за указанный промежуток времени
@@ -124,7 +124,8 @@ service Reporting {
   * Возвращает presigned url
   *
   * FileNotFound, если файл не найден
+  * InvalidRequest, если expired_at некорректен
   */
-  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: FileNotFound ex1)
+  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: FileNotFound ex1, 2: InvalidRequest ex2)
 
 }
