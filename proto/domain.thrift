@@ -127,9 +127,9 @@ struct InvoiceTemplate {
 }
 
 union InvoiceTemplateCost {
-    1: Cash cost_fixed
-    2: CashRange cost_range
-    3: InvoiceTemplateCostUnlimited cost_unlim
+    1: Cash fixed
+    2: CashRange range
+    3: InvoiceTemplateCostUnlimited unlim
 }
 
 struct InvoiceTemplateCostUnlimited {}

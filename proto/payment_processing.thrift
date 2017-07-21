@@ -327,16 +327,14 @@ struct InvoiceTemplateCreateParams {
     3: required domain.InvoiceDetails details
     4: required domain.LifetimeInterval invoice_lifetime
     5: required domain.InvoiceTemplateCost cost
-    6: optional domain.InvoiceContext context
+    6: required domain.InvoiceContext context
 }
 
 struct InvoiceTemplateUpdateParams {
-    1: optional PartyID party_id
-    2: optional ShopID shop_id
-    3: optional domain.InvoiceDetails details
-    4: optional domain.LifetimeInterval invoice_lifetime
-    5: optional domain.InvoiceTemplateCost cost
-    6: optional domain.InvoiceContext context
+    1: optional domain.InvoiceDetails details
+    2: optional domain.LifetimeInterval invoice_lifetime
+    3: optional domain.InvoiceTemplateCost cost
+    4: optional domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
@@ -425,13 +423,11 @@ service Invoicing {
         throws (
             1: InvalidUser ex1,
             2: base.InvalidRequest ex2,
-            3: PartyNotFound ex3,
-            4: ShopNotFound ex4,
-            5: InvalidPartyStatus ex5,
-            6: InvalidShopStatus ex6,
-            7: InvalidContractStatus ex7
-            8: InvoiceTemplateNotFound ex8,
-            9: InvoiceTemplateRemoved ex9
+            3: InvalidPartyStatus ex3,
+            4: InvalidShopStatus ex4,
+            5: InvalidContractStatus ex5
+            6: InvoiceTemplateNotFound ex6,
+            7: InvoiceTemplateRemoved ex7
         )
 
     Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
@@ -583,23 +579,19 @@ service InvoiceTemplating {
     domain.InvoiceTemplate Update (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: InvoiceTemplateUpdateParams params)
         throws (
             1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvoiceTemplateNotFound ex3,
-            4: InvoiceTemplateRemoved ex4,
-            5: InvalidPartyStatus ex5,
-            6: ShopNotFound ex6,
-            7: InvalidShopStatus ex7,
-            8: base.InvalidRequest ex8
+            2: InvoiceTemplateNotFound ex2,
+            3: InvoiceTemplateRemoved ex3,
+            4: InvalidPartyStatus ex4,
+            5: InvalidShopStatus ex5,
+            6: base.InvalidRequest ex6
         )
     void Delete (1: UserInfo user, 2: domain.InvoiceTemplateID id)
         throws (
             1: InvalidUser ex1,
             2: InvoiceTemplateNotFound ex2,
             3: InvoiceTemplateRemoved ex3,
-            4: PartyNotFound ex4,
-            5: InvalidPartyStatus ex5,
-            6: ShopNotFound ex6,
-            7: InvalidShopStatus ex7
+            4: InvalidPartyStatus ex4,
+            5: InvalidShopStatus ex5
         )
 }
 
