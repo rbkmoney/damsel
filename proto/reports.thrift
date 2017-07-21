@@ -120,12 +120,12 @@ service Reporting {
   /**
   * Сгенерировать ссылку на файл
   * file_id - идентификатор файла
-  * expired_at - время до которого ссылка будет считаться действительной
+  * expires_at - время до которого ссылка будет считаться действительной
   * Возвращает presigned url
   *
   * FileNotFound, если файл не найден
-  * InvalidRequest, если expired_at некорректен
+  * InvalidRequest, если expires_at некорректен
   */
-  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expired_at) throws (1: FileNotFound ex1, 2: InvalidRequest ex2)
+  URL GeneratePresignedUrl(1: FileID file_id, 2: Timestamp expires_at) throws (1: FileNotFound ex1, 2: InvalidRequest ex2)
 
 }
