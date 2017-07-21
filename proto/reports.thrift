@@ -93,13 +93,14 @@ enum ReportType {
 service Reporting {
 
   /**
-  * Получить список отчетов по магазину за указанный промежуток времени
+  * Получить список отчетов по магазину за указанный промежуток времени с фильтрацией по типу
+  * В случае если список report_types пустой, фильтрации по типу не будет
   * Возвращает список отчетов или пустой список, если отчеты по магазину не найдены
   *
   * InvalidRequest, если промежуток времени некорректен
   * DatasetTooBig, если размер списка превышает допустимый лимит
   */
-  list<Report> GetReports(1: ReportRequest request) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+  list<Report> GetReports(1: ReportRequest request, 2: list<ReportType> report_types) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
   /**
   * Сгенерировать отчет с указанным типом по магазину за указанный промежуток времени
