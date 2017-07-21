@@ -1,6 +1,7 @@
 include "base.thrift"
 include "proxy.thrift"
 include "domain.thrift"
+include "payment_processing.thrift"
 
 namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
@@ -25,9 +26,9 @@ struct TokenGenerationSession {
  * Целевое значение статуса многоразового токена.
  */
 union TargetPaymentMeanStatus {
-    1: domain.PaymentMeanCreated  created
-    2: domain.PaymentMeanAcquired acquired
-    3: domain.PaymentMeanFailed   failed
+    1: payment_processing.PaymentMeanCreated  created
+    2: payment_processing.PaymentMeanAcquired acquired
+    3: payment_processing.PaymentMeanFailed   failed
 }
 
 /**

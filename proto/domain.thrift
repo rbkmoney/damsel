@@ -9,8 +9,9 @@ include "json.thrift"
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
 
-typedef i64 DataRevision
-typedef i32 ObjectID
+typedef i64        DataRevision
+typedef i32        ObjectID
+typedef json.Value Metadata
 
 /* Common */
 
@@ -585,67 +586,6 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
-/* Customers */
-
-typedef base.ID    CustomerID
-typedef base.ID    BindingID
-typedef base.ID    PaymentMeanID
-typedef json.Value Metadata
-
-struct PaymentMean {
-    1: required PaymentMeanID     id
-    2: required PaymentMeanStatus status
-    3: required PaymentTool       payment_tool
-    4: optional Token             token
-    5: optional PaymentRoute      route
-    6: optional base.Timestamp    updated_at
-    7: optional base.Timestamp    expires_at
-}
-
-struct PaymentMeanCreated  {}
-struct PaymentMeanAcquired {}
-struct PaymentMeanExpired  {}
-struct PaymentMeanFailed   { 1: required PaymentMeanFailure failure }
-
-struct PaymentMeanFailure {
-    1: required string details
-}
-
-union PaymentMeanStatus {
-    1: PaymentMeanCreated  created
-    2: PaymentMeanAcquired acquired
-    3: PaymentMeanExpired  expired
-    4: PaymentMeanFailed   failed
-}
-
-struct Binding {
-    1: required BindingID     id
-    2: required PaymentMeanID payment_mean_id
-    3: required PaymentTool   source_payment_tool
-    4: required BindingStatus status
-}
-
-struct BindingCreated   {}
-struct BindingSucceeded {}
-struct BindingFailed    { 1: BindingFailure failure }
-
-struct BindingFailure {
-    1: required string details
-}
-
-union BindingStatus {
-    1: BindingCreated   created
-    2: BindingSucceeded succeeded
-    3: BindingFailed    failed
-}
-
-struct Customer {
-    1: required CustomerID     id
-    2: required list<Binding>  bindings
-    3: optional BindingID      active_binding
-    4: optional base.Timestamp updated_at
-}
-
 /* Payment methods */
 
 union PaymentMethod {
@@ -667,6 +607,8 @@ enum BankCardPaymentSystem {
     jcb
     nspkmir
 }
+
+typedef base.ID CustomerID
 
 union PaymentTool {
     1: BankCard bank_card
