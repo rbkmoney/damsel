@@ -9,7 +9,8 @@ release: generate lint xref dialyze publish
 
 generate: $(FILES)
 	$(patsubst %, $(call gen,%), $(FILES))
-	@mv -v src/*.hrl include/
+	@mkdir -p include
+	@mv -v src/*.hrl include
 
 lint:
 	elvis rock
@@ -22,7 +23,7 @@ dialyze:
 
 distclean:
 	@rm -rf _build
-	@rm -vf src/*_thrift.?rl include/*_thrift.?rl
+	@rm -rvf src/*_thrift.erl include
 
 DESTDIR ?= release
 ARTIFACTS := \

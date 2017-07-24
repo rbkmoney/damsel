@@ -22,7 +22,10 @@ FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
 RELDIR = _release
 
-CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus deploy_epic_nexus java_install
+CALL_W_CONTAINER := \
+	all compile doc clean \
+	java_compile deploy_nexus deploy_epic_nexus java_install \
+	release-erlang
 
 all: compile
 
@@ -38,7 +41,7 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: $(CALL_W_CONTAINER) create
+.PHONY: all compile doc clean java_compile deploy_nexus deploy_epic_nexus java_install
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
@@ -63,11 +66,12 @@ clean::
 include git.mk
 
 REPODIR = $(abspath $(RELDIR)/$*)
+DOCKER_RUN_OPTS := -e BRANCH_NAME
 
 release-%: $(RELDIR)
 	@echo "Making '$*' release ..."
 	@echo $(CUTLINE)
-	rm -rf $(REPODIR)
+	@rm -rf $(REPODIR)
 	$(call clone-repo)
 	$(call checkout-or-create-release-branch)
 	$(MAKE) LANGUAGE=$* DESTDIR=$(REPODIR) build-release
