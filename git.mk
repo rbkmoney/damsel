@@ -1,11 +1,15 @@
+define get-ssh-remote-url
+$(shell echo "$(1)" | sed -Ee 's|^https?://([a-z0-9.-]+)/(.+)/(.+)|git@\1:\2/\3|')
+endef
+
 GIT_REMOTE_NAME ?= origin
-GIT_REPO_URL := $(shell git remote get-url $(GIT_REMOTE_NAME))
+GIT_REPO_URL := $(call get-ssh-remote-url,$(shell git remote get-url $(GIT_REMOTE_NAME)))
 
 GIT_HEAD_REF_NAME := $(shell git rev-parse --abbrev-ref HEAD)
 
 ifneq ($(BRANCH_NAME),)
 GIT_BRANCH := $(BRANCH_NAME)
-elif ($(GIT_HEAD_REF_NAME),HEAD)
+else ifeq ($(GIT_HEAD_REF_NAME),HEAD)
 GIT_BRANCH := $(shell git name-rev --name-only HEAD)
 else
 GIT_BRANCH := $(GIT_HEAD_REF_NAME)
@@ -24,7 +28,6 @@ endef
 GIT_COMMIT_HASH            := $(or $(COMMIT_ID),$(shell $(call get-commit-attr,"%h")))
 GIT_COMMIT_AUTHOR_NAME     := $(or $(COMMIT_AUTHOR),$(shell $(call get-commit-attr,"%an")))
 GIT_COMMIT_AUTHOR_EMAIL    := $(or $(COMMIT_AUTHOR_EMAIL),$(shell $(call get-commit-attr,"%ae")))
-GIT_COMMIT_AUTHOR_IDENTITY := $(GIT_COMMIT_AUTHOR_NAME) <$(GIT_COMMIT_AUTHOR_EMAIL)>
 
 define clone-repo
 ( \
@@ -44,10 +47,11 @@ endef
 define commit-release
 cd $(REPODIR) && ( \
 	git add -A . && \
+	git config user.name  "$(or $(1),$(GIT_COMMIT_AUTHOR_NAME))" && \
+	git config user.email "$(or $(2),$(GIT_COMMIT_AUTHOR_EMAIL))" && \
 	git commit \
 		--allow-empty \
-		--author  "$(or $(1),$(GIT_COMMIT_AUTHOR_IDENTITY))" \
-		--message "$(or $(2),Release $(GIT_BRANCH) at $(GIT_COMMIT_HASH))" \
+		--message "$(or $(3),Release $(GIT_BRANCH) at $(GIT_COMMIT_HASH))" \
 )
 endef
 

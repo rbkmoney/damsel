@@ -16,6 +16,14 @@ build('damsel', 'docker-host') {
             sh "make wc_compile"
         }
 
+        if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith('epic/')) {
+            runStage('Publish Erlang release') {
+                withGithubSshCredentials() {
+                    sh "make wc_release-erlang"
+                }
+            }
+        }
+
         runStage('Execute build container') {
             withCredentials([[$class: 'FileBinding', credentialsId: 'java-maven-settings.xml', variable: 'SETTINGS_XML']]) {
                 if (env.BRANCH_NAME == 'master') {
@@ -27,5 +35,6 @@ build('damsel', 'docker-host') {
                 }
             }
         }
+
     }
 }
