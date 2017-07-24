@@ -32,7 +32,14 @@ struct StatPayment {
     17: optional geo_ip.LocationInfo location_info
 }
 
-struct OperationFailure {
+union OperationFailure {
+    1: OperationTimeout operation_timeout
+    2: ExternalFailure  external_failure
+}
+
+struct OperationTimeout {}
+
+struct ExternalFailure {
     1: required string code
     2: optional string description
 }
