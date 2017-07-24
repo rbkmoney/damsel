@@ -47,10 +47,11 @@ struct CustomerParams {
 }
 
 struct Customer {
-    1: required CustomerID     id
-    2: required list<Binding>  bindings
-    3: optional BindingID      active_binding
-    4: optional base.Timestamp updated_at
+    1: required CustomerID      id
+    2: required list<Binding>   bindings
+    3: optional BindingID       active_binding
+    4: optional base.Timestamp  updated_at
+    5: optional domain.Metadata metadata
 }
 
 // Events
