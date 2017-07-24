@@ -39,7 +39,12 @@ struct EventRange {
 
 /* Customers */
 
-typedef domain.CustomerID CustomerID
+typedef domain.CustomerID           CustomerID
+typedef payment_processing.UserInfo UserInfo
+
+struct CustomerParams {
+    1: required domain.Metadata metadata
+}
 
 struct Customer {
     1: required CustomerID     id
@@ -83,6 +88,7 @@ struct CustomerPaymentMeanUnbound {}
 
 // Exceptions
 
+exception InvalidUser        {}
 exception CustomerNotFound   {}
 exception BindingNotFound    {}
 exception InvalidPaymentTool {}
@@ -92,27 +98,31 @@ exception EventNotFound      {}
 
 service CustomerManagement {
 
-    Customer Create (1: domain.Metadata metadata)
+    Customer Create (1: UserInfo user, 2: CustomerParams params)
+        throws (
+            1: InvalidUser         invalid_user,
+            2: base.InvalidRequest invalid_request
+        )
 
-    Customer Get (1: CustomerID id)
+    Customer Get (1: UserInfo user, 2: CustomerID id)
         throws (1: CustomerNotFound not_found)
 
-    void Delete (1: CustomerID id)
+    void Delete (1: UserInfo user, 2: CustomerID id)
         throws (1: CustomerNotFound not_found)
 
-    Binding StartBinding (1: CustomerID customer_id, 2: domain.PaymentTool payment_tool)
+    Binding StartBinding (1: UserInfo user, 2: CustomerID customer_id, 3: domain.PaymentTool payment_tool)
         throws (
             1: CustomerNotFound   customer_not_found,
             2: InvalidPaymentTool invalid_payment_tool
         )
 
-    void Unbind (1: CustomerID customer_id, 2: BindingID binding_id)
+    void Unbind (1: UserInfo user, 2: CustomerID customer_id, 3: BindingID binding_id)
         throws (
             1: CustomerNotFound not_found
             2: BindingNotFound  binding_not_found
         )
 
-    Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
+    Events GetEvents (1: UserInfo user, 2: CustomerID customer_id, 3: EventRange range)
         throws (
             1: CustomerNotFound customer_not_found,
             2: EventNotFound    event_not_found
