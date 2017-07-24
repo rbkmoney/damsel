@@ -1,4 +1,4 @@
-THRIFT_EXEC = $(or $(shell which thrift), $(error "`thrift' executable missing"))
+THRIFT = $(or $(shell which thrift), $(error "`thrift' executable missing"))
 THRIFT_LANGUAGES = erlang java
 THRIFT_OPTIONS_erlang = scoped_typenames
 THRIFT_OPTIONS_java = fullcamel
@@ -16,10 +16,11 @@ SERVICE_IMAGE_TAG ?= $(shell git rev-parse HEAD)
 SERVICE_IMAGE_PUSH_TAG ?= $(SERVICE_IMAGE_TAG)
 
 
-BUILD_IMAGE_TAG := efd28e5e732513f09224931fa183478750f3ca16
+BUILD_IMAGE_TAG := fbef66759ab9c7b620fc73785ba1840d2f48bd68
 
 FILES = $(wildcard proto/*.thrift)
 DESTDIR = _gen
+RELDIR = _release
 
 CALL_W_CONTAINER := clean all create java_compile compile doc deploy_nexus deploy_epic_nexus java_install
 
@@ -28,7 +29,7 @@ all: compile
 -include $(UTILS_PATH)/make_lib/utils_container.mk
 
 define generate
-	$(THRIFT_EXEC) -r -strict --gen $(1):$(THRIFT_OPTIONS_$(1)) -out $(2) $(3)
+	$(THRIFT) -r -strict --gen $(1):$(THRIFT_OPTIONS_$(1)) -out $(2) $(3)
 endef
 
 define targets
@@ -41,7 +42,6 @@ CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
-
 compile: $(LANGUAGE_TARGETS)
 	@echo "Ok"
 
@@ -51,17 +51,35 @@ verify-%: $(DESTDIR)
 	@$(MAKE) LANGUAGE=$* $(call targets,$*)
 	@echo
 
-$(DESTDIR):
-	@mkdir -p $@
-
-clean::
-	rm -rf $(DESTDIR)
-
 TARGETS = $(call targets,$(LANGUAGE))
 
 $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 	mkdir -p $@
 	$(call generate,$(LANGUAGE),$@,$<)
+
+clean::
+	rm -rf $(DESTDIR)
+
+include git.mk
+
+REPODIR = $(abspath $(RELDIR)/$*)
+
+release-%: $(RELDIR)
+	@echo "Making '$*' release ..."
+	@echo $(CUTLINE)
+	rm -rf $(REPODIR)
+	$(call clone-repo)
+	$(call checkout-or-create-release-branch)
+	$(MAKE) LANGUAGE=$* DESTDIR=$(REPODIR) build-release
+	$(call commit-release)
+	$(call push-release)
+
+clean::
+	rm -rf $(RELDIR)
+
+$(DESTDIR):
+$(RELDIR):
+	@mkdir -p $@
 
 # Docs
 
@@ -74,7 +92,6 @@ $(DOCTARGETS): $(DOCDIR)/%.html: %.thrift
 	mkdir -p $(dir $@)
 	$(call generate,html,$(dir $@),$<)
 
-
 # Erlang
 
 ERLC ?= erlc
@@ -85,8 +102,12 @@ ifneq ($(shell which $(ERLC)),)
 $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 	$(ERLC) -v -I$@ -o$@ $(shell find $@ -name "*.erl")
 
+build-release:
+	@make THRIFT="$(THRIFT)" FILES="$(abspath $(FILES))" -C build/erlang release
+
 endif
 endif
+
 
 ifdef SETTINGS_XML
 DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
@@ -107,16 +128,16 @@ java_compile:
 deploy_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.number="$(NUMBER_COMMITS)"
+	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
 
 deploy_epic_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)-epic" -s $(SETTINGS_XML) \
-	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.number="$(NUMBER_COMMITS)"
+	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
 
 
 java_install:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
 	mvn clean -s $(SETTINGS_XML) && \
 	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT_EXEC)" -Dcommit.number="$(NUMBER_COMMITS)"
+	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
