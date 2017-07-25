@@ -226,14 +226,10 @@ union InvoicePaymentRefundStatus {
 }
 
 struct InvoicePaymentRefundPending {}
-
-struct InvoicePaymentRefundSucceeded {
-    1: required base.Timestamp at
-}
+struct InvoicePaymentRefundSucceeded {}
 
 struct InvoicePaymentRefundFailed {
-    1: required base.Timestamp at
-    2: required OperationFailure failure
+    1: required OperationFailure failure
 }
 
 /* Blocking and suspension */
