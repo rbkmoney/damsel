@@ -242,15 +242,6 @@ struct InvoicePaymentRefundCreated {
 }
 
 /**
- * Событие о том, что появилась связь между возвратом платежа и транзакцией у
- * провайдера.
- */
-struct InvoicePaymentRefundBound {
-    /** Данные о связанной транзакции у провайдера. */
-    1: required domain.TransactionInfo trx
-}
-
-/**
  * Событие об изменении статуса возврата платежа
  */
 struct InvoicePaymentRefundStatusChanged {
