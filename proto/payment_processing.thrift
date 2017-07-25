@@ -328,9 +328,11 @@ struct Invoice {
 
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
+    3: required list<InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
 }
 
+typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 /**
