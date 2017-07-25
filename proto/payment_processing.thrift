@@ -126,6 +126,7 @@ union InvoicePaymentChangePayload {
     1: InvoicePaymentStarted               invoice_payment_started
     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
     2: InvoicePaymentSessionChange         invoice_payment_session_change
+    7: InvoicePaymentRefundChange          invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
 }
 
@@ -217,6 +218,37 @@ struct InvoicePaymentSessionInteractionRequested {
 }
 
 /**
+ * Событие, касающееся определённого возврата платежа.
+ */
+struct InvoicePaymentRefundChange {
+    1: required domain.InvoicePaymentRefundID id
+    2: required InvoicePaymentRefundChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого возратом платежа по инвойсу.
+ */
+union InvoicePaymentRefundChangePayload {
+    1: InvoicePaymentRefundCreated       invoice_payment_refund_created
+    2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
+    3: InvoicePaymentSessionChange       invoice_payment_session_change
+}
+
+/**
+ * Событие о создании возврата платежа
+ */
+struct InvoicePaymentRefundCreated {
+    1: required domain.InvoicePaymentRefund refund
+}
+
+/**
+ * Событие об изменении статуса возврата платежа
+ */
+struct InvoicePaymentRefundStatusChanged {
+    1: required domain.InvoicePaymentRefundStatus status
+}
+
+/**
  * Событие, касающееся определённой корректировки платежа.
  */
 struct InvoicePaymentAdjustmentChange {
@@ -296,9 +328,11 @@ struct Invoice {
 
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
+    3: required list<InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
 }
 
+typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 /**
@@ -328,11 +362,16 @@ union InvalidStatus {
 exception InvalidUser {}
 exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
+exception InvoicePaymentRefundNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
+}
+
+exception InvoicePaymentRefundPending {
+    1: required domain.InvoicePaymentRefundID id
 }
 
 exception InvoicePaymentAdjustmentPending {
@@ -467,6 +506,35 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvoicePaymentAdjustmentNotFound ex4,
             5: InvalidPaymentAdjustmentStatus ex5
+        )
+
+    /**
+     * Сделать возврат платежа.
+     */
+    domain.InvoicePaymentRefund RefundPayment (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: InvoicePaymentRefundPending ex5
+        )
+
+    domain.InvoicePaymentRefund GetPaymentRefund (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentRefundID refund_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentRefundNotFound ex4
         )
 
     void Fulfill (1: UserInfo user, 2: domain.InvoiceID id, 3: string reason)
