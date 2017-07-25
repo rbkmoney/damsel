@@ -610,10 +610,10 @@ typedef base.ID PaymentMeanID
 struct PaymentMean {
     1: required PaymentMeanID       id
     2: required PaymentMeanStatus   status
-    3: required domain.PaymentTool  payment_tool
-    4: optional domain.Token        token
-    5: optional domain.PaymentRoute route
-    6: optional base.Timestamp      updated_at
+    3: required base.Timestamp      created_at
+    4: required domain.PaymentTool  payment_tool
+    5: optional domain.Token        token
+    6: optional domain.PaymentRoute route
     7: optional base.Timestamp      expires_at
 }
 

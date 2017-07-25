@@ -47,20 +47,19 @@ struct CustomerParams {
 }
 
 struct Customer {
-    1: required CustomerID      id
-    2: required list<Binding>   bindings
-    3: optional BindingID       active_binding
-    4: optional base.Timestamp  updated_at
-    5: optional domain.Metadata metadata
+    1: required Customer      customer
+    2: required list<Binding> bindings
+    3: optional BindingID     active_binding
 }
 
 // Events
 
 union CustomerChange {
-    1: CustomerCreated            customer_created
-    2: CustomerDeleted            customer_deleted
-    3: CustomerPaymentMeanBound   customer_payment_mean_bound
-    4: CustomerPaymentMeanUnbound customer_payment_mean_unbound
+    1: CustomerCreated         customer_created
+    2: CustomerDeleted         customer_deleted
+    3: CustomerBindingStarted  customer_binding_started
+    4: CustomerBindingFinished customer_binding_finished
+    5: CustomerStatusChanged   customer_status_changed
 }
 
 struct CustomerCreated {
@@ -70,22 +69,17 @@ struct CustomerCreated {
 struct CustomerDeleted {}
 
 struct CustomerBindingStarted {
-    1: required CustomerID id
-    2: required BindingID  binding_id
+    1: required Binding binding
 }
 
 struct CustomerBindingFinished {
-    1: required CustomerID id
-    2: required BindingID  binding_id
-    3: required payment_processing.PaymentMeanStatus payment_mean_status
+    1: required BindingID     binding_id
+    2: required BindingStatus status
 }
 
-struct CustomerPaymentMeanBound {
-    1: required CustomerID id
-    2: required BindingID  binding_id
+struct CustomerStatusChanged {
+    1: required domain.CustomerStatus status
 }
-
-struct CustomerPaymentMeanUnbound {}
 
 // Exceptions
 
@@ -147,32 +141,32 @@ struct Binding {
 
 union BindingStatus {
     1: BindingCreated   created
-    2: BindingSucceeded succeeded
-    3: BindingFailed    failed
+    2: BindingPending   pending
+    3: BindingSucceeded succeeded
+    4: BindingFailed    failed
 }
 
-struct BindingCreated   {}
-struct BindingSucceeded {}
-struct BindingFailed    { 1: BindingFailure failure }
-
-struct BindingFailure {
-    1: required string details
-}
+struct BindingCreated  {}
+struct BindingPending  {}
+struct BindingFinished {}
 
 // Events
 
 union BindingChange {
     1: BindingStarted   binding_started
-    3: BindingSucceeded binding_succeeded
-    4: BindingFailed    binding_failed
+    2: BindingSucceeded binding_succeeded
+    3: BindingFailed    binding_failed
 }
 
-struct BindingStarted {
-    1: required payment_processing.PaymentMean payment_mean
+struct BindingStarted {}
+
+struct BindingSucceeded {
+    1: required domain.Token token
+    2: required domain.PaymentRoute route
 }
 
-struct BindingFinished {
-    1: required BindingStatus       status
-    2: optional domain.Token        token
-    3: optional domain.PaymentRoute route
+struct BindingFailed {
+    1: required Failure failure
 }
+
+struct Failure { 1: required string reason}
