@@ -29,6 +29,10 @@ struct BrowserPostRequest {
     2: required Form form
 }
 
+struct TerminalPayment{
+    1: required string terminal_id;
+}
+
 union UserInteraction {
     /**
      * Требование переадресовать user agent пользователя, в виде HTTP-запроса.
@@ -39,4 +43,10 @@ union UserInteraction {
      *    взаимодействия.
      */
     1: BrowserHTTPRequest redirect
+
+
+    /**
+     * Запрос на оплату через терминал
+     */
+    2: TerminalPayment terminal
 }
