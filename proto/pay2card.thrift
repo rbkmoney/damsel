@@ -39,5 +39,5 @@ struct TransferResult {
 
 service Pay2Card {
     Cash getFee (1: domain.Token card_token, 2: Cash cash) throws (1: ProviderFailure ex1)
-    TransferResult makeTransfer (TransferRequest request) throws (1: ProviderFailure ex1, 2:  base.InvalidRequest ex2)
+    TransferResult makeTransfer (1: TransferRequest request) throws (1: ProviderFailure ex1, 2:  base.InvalidRequest ex2)
 }
