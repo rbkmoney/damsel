@@ -489,6 +489,16 @@ struct BankCard {
 /** Платеж через терминал **/
 struct TerminalPayment {
     1: required string short_invoice_id
+    2: required TerminalType terminal_type
+}
+
+/**
+*  Вид платежного терминала
+*
+*  например Евросеть
+**/
+enum TerminalType {
+    euroset
 }
 
 
