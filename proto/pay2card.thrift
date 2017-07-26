@@ -32,5 +32,6 @@ service Pay2Card {
     Cash getFee (1: domain.Token card_token, 2: Cash cash) throws (1: ProviderFailure ex1)
 
     /** requestId - должен состоять только из цифр */
-    TransferResult makeTransfer (1: string request_id, 2: domain.Token card_token, 3: Cash cash) throws (1: ProviderFailure ex1, 2:  base.InvalidRequest ex2)
+    /** actor_id - идентификатор инициатора перевода, например MerchantId.ShopId */
+    TransferResult makeTransfer (1: string request_id, 2: string actor_id 3: domain.Token card_token, 4: Cash cash) throws (1: ProviderFailure ex1, 2:  base.InvalidRequest ex2)
 }
