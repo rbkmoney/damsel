@@ -269,6 +269,7 @@ union InvoicePaymentRefundChangePayload {
  */
 struct InvoicePaymentRefundCreated {
     1: required domain.InvoicePaymentRefund refund
+    2: required domain.FinalCashFlow cash_flow
 }
 
 /**

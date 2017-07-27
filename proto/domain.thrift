@@ -240,9 +240,7 @@ struct InvoicePaymentRefund {
     1: required InvoicePaymentRefundID id
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
-    4: optional TransactionInfo trx
     5: required string reason
-    6: required FinalCashFlow cash_flow
 }
 
 union InvoicePaymentRefundStatus {
