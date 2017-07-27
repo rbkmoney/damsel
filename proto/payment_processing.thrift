@@ -91,7 +91,7 @@ union EventPayload {
     /** Набор изменений, порождённых шаблоном инвойса. */
     3: list<InvoiceTemplateChange>  invoice_template_changes
     /** Некоторое событие, порождённое customer'ом. */
-    4: list<PaymentMeanChange> payment_mean_changes
+    4: list<CustomerChange>         customer_changes
 }
 
 /**
@@ -604,8 +604,8 @@ service InvoiceTemplating {
 
 // Types
 
-typedef domain.CustomerID    CustomerID
-typedef base.ID PaymentMeanID
+typedef domain.CustomerID CustomerID
+typedef base.ID           PaymentMeanID
 
 struct PaymentMean {
     1: required PaymentMeanID       id
@@ -617,57 +617,79 @@ struct PaymentMean {
     7: optional base.Timestamp      expires_at
 }
 
-struct PaymentMeanCreated  {}
-struct PaymentMeanAcquired {}
-struct PaymentMeanExpired  {}
-struct PaymentMeanFailed   { 1: required PaymentMeanFailure failure }
-
-struct PaymentMeanFailure {
-    1: required string details
-}
+struct PaymentMeanGenerated {}
+struct PaymentMeanAcquired  {}
+struct PaymentMeanExpired   {}
+struct PaymentMeanFailed    { 1: required domain.OperationFailure failure }
 
 union PaymentMeanStatus {
-    1: PaymentMeanCreated  created
-    2: PaymentMeanAcquired acquired
-    3: PaymentMeanExpired  expired
-    4: PaymentMeanFailed   failed
+    1: PaymentMeanGenerated generated
+    2: PaymentMeanAcquired  acquired
+    3: PaymentMeanExpired   expired
+    4: PaymentMeanFailed    failed
 }
 
 /* Payment processing service definitions */
 
+/* Events */
+
+typedef list<PaymentMeanEvent> PaymentMeanEvents
+
+struct PaymentMeanEvent {
+    1: required base.EventID            id
+    2: required base.Timestamp          created_at
+    3: required PaymentMeanEventSource  source
+    4: required PaymentMeanEventPayload payload
+}
+
+union PaymentMeanEventSource {
+    1: PaymentMeanID  payment_mean_id
+}
+
+union PaymentMeanEventPayload {
+    1: list<PaymentMeanChange> payment_mean_changes
+}
+
 // Exceptions
 
-exception InvalidBinding      {}
-exception InvalidPaymentTool  {}
-exception BindingNotFound     {}
-exception PaymentMeanNotFound {}
+exception InvalidBinding       {}
+exception InvalidPaymentTool   {}
+exception BindingNotFound      {}
+exception PaymentMeanNotFound  {}
+exception PaymentMeanWasFailed {}
 
 // Events
+
 union PaymentMeanChange {
-    1: PaymentMeanCreationStarted payment_mean_creation_started
-    2: PaymentMeanStatusChanged   payment_mean_status_changed
+    1: PaymentMeanCreated payment_mean_created
+    2: PaymentMeanChanged payment_mean_changed
 }
 
-struct PaymentMeanCreationStarted {
-    1: required PaymentMeanID id
+struct PaymentMeanCreated {
+    1: required PaymentMean payment_mean
 }
 
-struct PaymentMeanStatusChanged {
-    1: required PaymentMeanID     id
-    2: required PaymentMeanStatus status
+struct PaymentMeanChanged {
+    1: required PaymentMeanID       id
+    2: required PaymentMeanStatus   status
+    3: optional domain.Token        token
+    4: optional domain.PaymentRoute route
+    5: optional base.Timestamp      expires_at
 }
 
 service PaymentProcessing {
-    PaymentMean CreatePaymentMean (1: domain.PaymentTool payment_tool)
+    PaymentMean Create (1: domain.PaymentTool payment_tool)
         throws (1: InvalidPaymentTool invalid_payment_tool)
 
-    PaymentMean AbandonPaymentMean (1: PaymentMeanID id)
+    PaymentMean Abandon (1: PaymentMeanID id)
+        throws (
+            1: PaymentMeanNotFound  payment_mean_not_found
+            2: PaymentMeanWasFailed payment_mean_was_failed
+        )
+
+    PaymentMean Get (1: PaymentMeanID id)
         throws (1: PaymentMeanNotFound payment_mean_not_found)
 
-    PaymentMean GetPaymentMean (1: PaymentMeanID id)
-        throws (1: PaymentMeanNotFound payment_mean_not_found)
-
-    /* Event polling */
     Events GetEvents (1: PaymentMeanID id, 2: EventRange range)
         throws (
             1: PaymentMeanNotFound payment_mean_not_found
@@ -1136,4 +1158,179 @@ service EventSink {
     base.EventID GetLastEventID ()
         throws (1: NoLastEvent ex1)
 
+}
+
+/* Customers */
+
+typedef domain.Metadata Metadata
+
+struct CustomerParams {
+    1: required PartyID  party_id
+    2: required Metadata metadata
+}
+
+struct Customer {
+    1: required CustomerID     id
+    2: required PartyID        owner_id
+    3: required CustomerStatus status
+    4: required base.Timestamp created_at
+    5: required list<Binding>  bindings
+    6: optional BindingID      active_binding
+    7: optional Metadata       metadata
+}
+
+union CustomerStatus {
+    1: CustomerUnready unready
+    2: CustomerReady   ready
+}
+
+struct CustomerUnready {}
+struct CustomerReady   {}
+
+// Events
+
+union CustomerChange {
+    1: CustomerCreated        customer_created
+    2: CustomerDeleted        customer_deleted
+    3: CustomerStatusChanged  customer_status_changed
+    4: CustomerBindingChanged customer_binding_changed
+}
+
+struct CustomerCreated {
+    1: required Customer customer
+}
+
+struct CustomerDeleted {}
+
+struct CustomerStatusChanged {
+    1: required CustomerStatus status
+}
+
+struct CustomerBindingChanged {
+    1: required BindingID                    id
+    2: required CustomerBindingChangePayload payload
+}
+
+union CustomerBindingChangePayload {
+    1: CustomerBindingStarted        customer_binding_started
+    2: CustomerBindingStatusChanged  customer_binding_status_changed
+    3: CustomerBindingSessionChanged customer_binding_session_changed
+}
+
+struct CustomerBindingStarted {
+    1: required Binding binding
+}
+
+struct CustomerBindingStatusChanged {
+    1: required BindingStatus status
+}
+
+struct CustomerBindingSessionChanged {
+    1: required CustomerStatus                      target
+    2: required CustomerBindingSessionChangePayload payload
+}
+
+union CustomerBindingSessionChangePayload {
+    1: CustomerBindingSessionStarted              customer_binding_session_started
+    2: CustomerBindingSessionFinished             customer_binding_session_finished
+    3: CustomerBindingSessionProxyStateChanged    customer_binding_session_proxy_state_changed
+    4: CustomerBindingSessionInteractionRequested customer_binding_session_interaction_requested
+}
+
+struct CustomerBindingSessionStarted {}
+
+struct CustomerBindingSessionFinished {
+    1: required CustomerSessionResult result
+}
+
+union CustomerSessionResult {
+    1: CustomerSessionSucceeded succeeded
+    2: CustomerSessionFailed    failed
+}
+
+struct CustomerSessionSucceeded {}
+
+struct CustomerSessionFailed {
+    1: required domain.OperationFailure failure
+}
+
+struct CustomerBindingSessionProxyStateChanged {
+    1: required base.Opaque proxy_state
+}
+
+struct CustomerBindingSessionInteractionRequested {
+    1: required user_interaction.UserInteraction interaction
+}
+
+// Exceptions
+
+exception CustomerNotFound   {}
+
+// Service
+
+service CustomerManagement {
+
+    Customer Create (1: CustomerParams params)
+        throws (
+            1: InvalidUser         invalid_user,
+            2: base.InvalidRequest invalid_request
+        )
+
+    Customer Get (1: CustomerID id)
+        throws (
+            1: InvalidUser      invalid_user
+            2: CustomerNotFound not_found
+        )
+
+    void Delete (1: CustomerID id)
+        throws (
+            1: InvalidUser      invalid_user
+            2: CustomerNotFound not_found
+        )
+
+    Binding StartBinding (1: CustomerID customer_id, 2: domain.PaymentTool payment_tool)
+        throws (
+            1: InvalidUser        invalid_user
+            2: CustomerNotFound   customer_not_found,
+            3: InvalidPaymentTool invalid_payment_tool
+        )
+
+    Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
+        throws (
+            1: CustomerNotFound customer_not_found,
+            2: EventNotFound    event_not_found
+        )
+}
+
+/* Bindings */
+
+typedef base.ID BindingID
+
+struct Binding {
+    1: required BindingID          id
+    2: required PaymentMeanID      payment_mean_id
+    3: required domain.PaymentTool source_payment_tool
+    4: required BindingStatus      status
+}
+
+// Statuses
+
+union BindingStatus {
+    1: BindingCreated   created
+    2: BindingPending   pending
+    3: BindingSucceeded succeeded
+    4: BindingFailed    failed
+}
+
+struct BindingCreated   {}
+struct BindingPending   {}
+struct BindingSucceeded {}
+struct BindingFailed    { 1: required domain.OperationFailure failure }
+
+service PaymentMeanEventSink {
+    PaymentMeanEvents GetEvents (1: EventRange range)
+        throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2)
+
+    base.EventID GetLastEventID ()
+        throws (1: NoLastEvent ex1)
 }

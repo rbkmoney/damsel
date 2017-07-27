@@ -610,21 +610,6 @@ enum BankCardPaymentSystem {
 
 typedef base.ID CustomerID
 
-struct Customer {
-    1: required CustomerID     id
-    2: required CustomerStatus status
-    3: required base.Timestamp created_at
-    4: optional Metadata       metadata
-}
-
-union CustomerStatus {
-    1: CustomerUnready unready
-    2: CustomerReady   ready
-}
-
-struct CustomerUnready {}
-struct CustomerReady   {}
-
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
