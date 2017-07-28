@@ -29,20 +29,13 @@ struct BrowserPostRequest {
     2: required Form form
 }
 
-// Платежная квитанция
-struct TerminalPayment  {
-    // Идентификатор платежа и инвойса
-    1: required string payment_identifer
-
-    // Сумма
-    2: required i64 amount
-
-    /** Символьный код, уникально идентифицирующий валюту. */
-    3: required string currency_code
+// Платеж через терминал
+struct PaymentOverTerminal  {
+    // Сокращенный идентификатор платежа и инвойса
+    1: required string short_payment_id;
 
     // Назначение перевода: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
-    4: required string reciept_purpose;
-
+    2: required string payment_purpose;
    }
 
 struct RussianWireTransfer {
@@ -59,8 +52,9 @@ union UserInteraction {
      *    взаимодействия.
      */
     1: BrowserHTTPRequest redirect
+
     /**
     * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
     **/
-    2: TerminalPayment terminalPayment
+    2: PaymentOverTerminal terminal_payment
 }
