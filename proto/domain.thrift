@@ -599,8 +599,7 @@ struct BankCard {
 
 /** Платеж через терминал **/
 struct PaymentTerminalReceipt {
-    1: required string short_invoice_id
-    2: required TerminalType terminal_type
+    1: required TerminalType terminal_type
 }
 
 /**
