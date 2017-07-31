@@ -31,16 +31,13 @@ struct BrowserPostRequest {
 
 // Платеж через терминал
 struct PaymentOverTerminal  {
-    // Сокращенный идентификатор платежа и инвойса
+    // Сокращенный идентификатор платежа и инвойса (spid)
     1: required string short_payment_id;
 
     // Назначение перевода: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
     2: required string payment_purpose;
    }
 
-struct RussianWireTransfer {
-
-}
 
 union UserInteraction {
     /**
