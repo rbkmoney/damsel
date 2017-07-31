@@ -117,9 +117,6 @@ struct InvoicePayment {
     5:  required Payer payer
     8:  required Cash cost
     6:  optional InvoicePaymentContext context
-    9:  optional RiskScore risk_score
-    11: optional PaymentRoute route
-    12: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentPending   {}
