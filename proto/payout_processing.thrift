@@ -125,8 +125,7 @@ struct PayoutUnpaid {}
 
 /* Помечается статусом paid, когда удалось отправить в банк */
 struct PayoutPaid {
-    1: required base.Timestamp time
-    2: required PaidDetails details
+    1: required PaidDetails details
 }
 
 /* Детали выплаты, которые появляются после того, как выплата успешно отправлена */
