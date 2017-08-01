@@ -60,7 +60,7 @@ struct Event {
  * процессе выполнения определённого бизнес-процесса
  */
 union EventSource {
-    /** Идентификатор выплаты, которая породила событие */
+    /* Идентификатор выплаты, которая породила событие */
     1: PayoutID payout_id
 }
 
@@ -68,7 +68,7 @@ union EventSource {
  * Один из возможных вариантов содержания события
  */
 union EventPayload {
-    /** Набор изменений, порождённых выплатой */
+    /* Набор изменений, порождённых выплатой */
     1: list<PayoutChange> payout_changes
 }
 
@@ -84,23 +84,34 @@ union PayoutChange {
  * Событие о создании новой выплаты
  */
 struct PayoutCreated {
-    /** Данные созданной выплаты */
+    /* Данные созданной выплаты */
     1: required Payout payout
+    /* Кто инициировал выплату */
+    2: required UserInfo initiator
 }
 
 struct Payout {
     1: required PayoutID id
     2: required domain.PartyID party_id
     3: required domain.ShopID shop_id
+    /* Время формирования платежного поручения, либо выплаты на карту  */
     4: required base.Timestamp created_at
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
     7: required PayoutType payout_type
-    8: required UserInfo initiator
 }
 
 /**
- * Статусы выплаты
+ * Выплата создается в статусе "unpaid", затем может перейти либо в "paid", если
+ * банк подтвердил, что принял ее в обработку (считаем, что она выплачена,
+ * а она и будет выплачена в 99% случаев), либо в "cancelled", если не получилось
+ * доставить выплату до банка.
+ *
+ * Из статуса "paid" выплата может перейти либо в "confirmed", если есть подтверждение
+ * оплаты, либо в "cancelled", если была получена информация о неуспешном переводе.
+ *
+ * Может случиться так, что уже подтвержденную выплату нужно отменять, и тогда выплата
+ * может перейти из статуса "confirmed" в "cancelled".
  */
 union PayoutStatus {
     1: PayoutUnpaid unpaid
@@ -109,16 +120,16 @@ union PayoutStatus {
     4: PayoutConfirmed confirmed
 }
 
-/** Создается в статусе unpaid */
+/* Создается в статусе unpaid */
 struct PayoutUnpaid {}
 
-/** Помечается статусом paid, когда удалось отправить в банк */
+/* Помечается статусом paid, когда удалось отправить в банк */
 struct PayoutPaid {
     1: required base.Timestamp time
     2: required PaidDetails details
 }
 
-/** Детали выплаты, которые появляются после того, как выплата успешно отправлена */
+/* Детали выплаты, которые появляются после того, как выплата успешно отправлена */
 union PaidDetails {
     1: CardPaidDetails card_details
     2: AccountPaidDetails account_details
@@ -136,47 +147,49 @@ struct ProviderDetails {
 
 struct AccountPaidDetails {}
 
-/** Помечается статусом cancelled, когда не удалось отправить в банк,
- *  либо когда полностью откатывается из статуса confirmed с изменением
- *  балансов на счетах
- **/
+/**
+ * Помечается статусом cancelled, когда не удалось отправить в банк,
+ * либо когда полностью откатывается из статуса confirmed с изменением
+ * балансов на счетах
+ */
 struct PayoutCancelled {
     1: required UserInfo user_info
     2: required string details
 }
 
-/** Помечается статусом confirmed, когда можно менять балансы на счетах */
+/**
+ * Помечается статусом confirmed, когда можно менять балансы на счетах,
+ * то есть если выплата confirmed, то балансы уже изменены
+ */
 struct PayoutConfirmed {
     1: required UserInfo user_info
 }
 
-/**
- * Типы выплаты
- */
+/* Типы выплаты */
 union PayoutType {
     1: CardPayout card_payout
     2: AccountPayout account_payout
 }
 
-/** Выплата на карту */
+/* Выплата на карту */
 struct CardPayout {
-    /** Идентификатор запроса на выплату */
-    1: string request_id
-    /** Токен карты для cds */
-    2: domain.Token card_token
+    /* Идентификатор запроса на выплату */
+    1: required string request_id
+    /* Токен карты для cds */
+    2: optional domain.Token card_token
 }
 
-/** Вывод на расчетный счет */
+/* Вывод на расчетный счет */
 struct AccountPayout {
-    /** Расчетный счет */
+    /* Расчетный счет */
     1: required string account
-    /** Корреспондентский счет */
+    /* Корреспондентский счет */
     2: required string bank_corr_account
-    /** БИК */
+    /* БИК */
     3: required string bank_bik
-    /** ИНН организации */
+    /* ИНН организации */
     4: required string inn
-    /** Назначение платежа */
+    /* Назначение платежа */
     5: required string purpose
 }
 
@@ -184,7 +197,7 @@ struct AccountPayout {
  * Событие об изменении статуса выплаты
  */
 struct PayoutStatusChanged {
-    /** Новый статус выплаты */
+    /* Новый статус выплаты */
     1: required PayoutStatus status
 }
 
