@@ -728,6 +728,13 @@ service CustomerManagement {
             4: InvalidPaymentTool    invalid_payment_tool
         )
 
+    CustomerBinding GetActiveBinding (1: CustomerID customer_id)
+        throws (
+            1: InvalidUser           invalid_user
+            2: CustomerNotFound      customer_not_found
+            3: InvalidCustomerStatus invalid_customer_status
+        )
+
     Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
         throws (
             1: InvalidUser      invalid_user
