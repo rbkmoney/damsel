@@ -1,5 +1,6 @@
 include "base.thrift"
 include "payment_processing.thrift"
+include "payout_processing.thrift"
 
 namespace java com.rbkmoney.damsel.event_stock
 namespace erlang event_stock
@@ -14,6 +15,7 @@ typedef base.InvalidRequest InvalidRequest
 */
 union SourceEvent {
     1: payment_processing.Event processing_event
+    2: payout_processing.Event payout_event
 }
 
 /**
