@@ -120,6 +120,7 @@ struct StatPayout {
     6: required domain.Amount amount
     7: required domain.Amount fee
     8: required PayoutType payout_type
+    9: optional PaidDetails paidDetails
 }
 
 union PayoutStatus {
@@ -128,6 +129,14 @@ union PayoutStatus {
     3: PayoutCancelled cancelled
     4: PayoutConfirmed confirmed
 }
+
+union PaidDetails {
+    1: CardPaidDetails card_details
+    2: AccountPaidDetails account_details
+}
+
+struct CardPaidDetails { 1: required string mask_pan }
+struct AccountPaidDetails {}
 
 struct PayoutUnpaid {}
 struct PayoutPaid {}
@@ -140,7 +149,13 @@ union PayoutType {
 }
 
 struct CardPayout {}
-struct AccountPayout {}
+struct AccountPayout {
+    1: required string account
+    2: required string bank_corr_account
+    3: required string bank_bik
+    4: required string inn
+    5: required string purpose
+}
 
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
