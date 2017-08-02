@@ -79,16 +79,19 @@ struct Invoice {
 struct InvoiceDetails {
     1: required string product
     2: optional string description
-    3: optional list<InvoiceLine> lines
+    3: optional InvoiceCart cart
+}
+
+struct InvoiceCart {
+    1: required list<InvoiceLine> lines
 }
 
 struct InvoiceLine {
     1: required string product
     2: required i32 quantity
     3: required Cash price
-    4: required Cash cost
     /* Taxes and other stuff goes here */
-    5: required map<string, base.Opaque> metadata
+    4: required map<string, base.Opaque> metadata
 }
 
 struct InvoiceUnpaid    {}
@@ -264,9 +267,9 @@ struct Suspended {
 
 typedef base.ID PartyID
 
-typedef string PartyMetaKey
+typedef string PartyMetaNamespace
 typedef base.Opaque PartyMetaData
-typedef map<PartyMetaKey, PartyMetaData> PartyMeta
+typedef map<PartyMetaNamespace, PartyMetaData> PartyMeta
 
 /** Участник. */
 struct Party {

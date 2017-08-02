@@ -801,7 +801,7 @@ union PartyChange {
     3: ClaimStatusChanged   claim_status_changed
     8: ClaimUpdated         claim_updated
     9: PartyMetaSet         party_meta_set
-    10: domain.PartyMetaKey party_meta_removed
+    10: domain.PartyMetaNamespace party_meta_removed
 }
 
 struct ShopBlocking {
@@ -829,7 +829,7 @@ struct ClaimUpdated {
 }
 
 struct PartyMetaSet {
-    1: required domain.PartyMetaKey key
+    1: required domain.PartyMetaNamespace namespace
     2: required domain.PartyMetaData data
 }
 
@@ -881,7 +881,7 @@ exception AccountNotFound {}
 
 exception ShopAccountNotFound {}
 
-exception PartyMetaKeyNotFound {}
+exception PartyMetaNamespaceNotFound {}
 
 // Service
 
@@ -915,14 +915,14 @@ service PartyManagement {
     domain.PartyMeta GetMeta (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    domain.PartyMetaData GetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaKey key)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaKeyNotFound ex3)
+    domain.PartyMetaData GetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace namespace)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaNamespaceNotFound ex3)
 
-    void SetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaKey key, 4: domain.PartyMetaData data)
+    void SetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace namespace, 4: domain.PartyMetaData data)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    void RemoveMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaKey key)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaKeyNotFound ex3)
+    void RemoveMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace namespace)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaNamespaceNotFound ex3)
 
     /* Contract */
 
