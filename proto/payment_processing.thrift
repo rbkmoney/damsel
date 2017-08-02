@@ -829,7 +829,7 @@ struct ClaimUpdated {
 }
 
 struct PartyMetaSet {
-    1: required domain.PartyMetaNamespace namespace
+    1: required domain.PartyMetaNamespace meta_namespace
     2: required domain.PartyMetaData data
 }
 
@@ -915,13 +915,13 @@ service PartyManagement {
     domain.PartyMeta GetMeta (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    domain.PartyMetaData GetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace namespace)
+    domain.PartyMetaData GetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace meta_namespace)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaNamespaceNotFound ex3)
 
-    void SetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace namespace, 4: domain.PartyMetaData data)
+    void SetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace meta_namespace, 4: domain.PartyMetaData data)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    void RemoveMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace namespace)
+    void RemoveMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace meta_namespace)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaNamespaceNotFound ex3)
 
     /* Contract */
