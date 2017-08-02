@@ -655,10 +655,10 @@ struct CustomerStatusChanged {
 typedef base.ID CustomerBindingID
 
 struct CustomerBinding {
-    1: required CustomerBindingID     id
-    2: required PaymentMeanID         payment_mean_id
-    3: required domain.PaymentTool    source_payment_tool
-    4: required CustomerBindingStatus status
+    1: required CustomerBindingID      id
+    2: required RecurrentPaymentToolID rec_payment_tool_id
+    3: required domain.PaymentTool     source_payment_tool
+    4: required CustomerBindingStatus  status
 }
 
 // Statuses
@@ -743,105 +743,105 @@ service CustomerManagement {
         )
 }
 
-/* Payment mean */
+/* Recurrent Payment Tool */
 
 // Types
-typedef base.ID PaymentMeanID
+typedef base.ID RecurrentPaymentToolID
 
 // Model
-struct PaymentMean {
-    1: required PaymentMeanID       id
-    2: required PaymentMeanStatus   status
-    3: required base.Timestamp      created_at
-    4: required domain.PaymentTool  payment_tool
-    5: optional domain.Token        token
-    6: optional domain.PaymentRoute route
-    7: optional base.Timestamp      expires_at
+struct RecurrentPaymentTool {
+    1: required RecurrentPaymentToolID     id
+    2: required RecurrentPaymentToolStatus status
+    3: required base.Timestamp             created_at
+    4: required domain.PaymentTool         payment_tool
+    5: optional domain.Token               token
+    6: optional domain.PaymentRoute        route
+    7: optional base.Timestamp             expires_at
 }
 
 // Statuses
-struct PaymentMeanCreated {}
-struct PaymentMeanAcquired  {}
-struct PaymentMeanExpired   {}
-struct PaymentMeanAbandoned {}
-struct PaymentMeanFailed    { 1: required domain.OperationFailure failure }
+struct RecurrentPaymentToolCreated   {}
+struct RecurrentPaymentToolAcquired  {}
+struct RecurrentPaymentToolExpired   {}
+struct RecurrentPaymentToolAbandoned {}
+struct RecurrentPaymentToolFailed    { 1: required domain.OperationFailure failure }
 
-union PaymentMeanStatus {
-    1: PaymentMeanCreated   created
-    2: PaymentMeanAcquired  acquired
-    3: PaymentMeanAbandoned abandoned
-    4: PaymentMeanExpired   expired
-    5: PaymentMeanFailed    failed
+union RecurrentPaymentToolStatus {
+    1: RecurrentPaymentToolCreated   created
+    2: RecurrentPaymentToolAcquired  acquired
+    3: RecurrentPaymentToolAbandoned abandoned
+    4: RecurrentPaymentToolExpired   expired
+    5: RecurrentPaymentToolFailed    failed
 }
 
 // Events
-typedef list<PaymentMeanEvent> PaymentMeanEvents
+typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
 
-struct PaymentMeanEvent {
-    1: required base.EventID            id
-    2: required base.Timestamp          created_at
-    3: required PaymentMeanID           source
-    4: required list<PaymentMeanChange> payload
+struct RecurrentPaymentToolEvent {
+    1: required base.EventID                     id
+    2: required base.Timestamp                   created_at
+    3: required RecurrentPaymentToolID           source
+    4: required list<RecurrentPaymentToolChange> payload
 }
 
-union PaymentMeanChange {
-    1: PaymentMeanCreatedEvent   payment_mean_created
-    2: PaymentMeanAcquiredEvent  payment_mean_acquired
-    3: PaymentMeanAbandonedEvent payment_mean_abandoned
-    4: PaymentMeanExpiredEvent   payment_mean_expired
-    5: SessionChange             payment_mean_session_changed
+union RecurrentPaymentToolChange {
+    1: RecurrentPaymentToolCreatedEvent   rec_payment_tool_created
+    2: RecurrentPaymentToolAcquiredEvent  rec_payment_tool_acquired
+    3: RecurrentPaymentToolAbandonedEvent rec_payment_tool_abandoned
+    4: RecurrentPaymentToolExpiredEvent   rec_payment_tool_expired
+    5: SessionChange                      rec_payment_tool_session_changed
 }
 
-struct PaymentMeanCreatedEvent {
-    1: required PaymentMean payment_mean
+struct RecurrentPaymentToolCreatedEvent {
+    1: required RecurrentPaymentTool rec_payment_tool
 }
 
-struct PaymentMeanAcquiredEvent {
-    1: required domain.Token Token
+struct RecurrentPaymentToolAcquiredEvent {
+    1: required domain.Token token
 }
 
-struct PaymentMeanAbandonedEvent {}
-struct PaymentMeanExpiredEvent   {}
+struct RecurrentPaymentToolAbandonedEvent {}
+struct RecurrentPaymentToolExpiredEvent   {}
 
 
 // Exceptions
 exception InvalidBinding           {}
 exception BindingNotFound          {}
-exception PaymentMeanNotFound      {}
-exception InvalidPaymentMeanStatus {}
+exception RecurrentPaymentToolNotFound      {}
+exception InvalidRecurrentPaymentToolStatus {}
 
 service PaymentProcessing {
-    PaymentMean CreatePaymentMean (1: domain.PaymentTool payment_tool)
+    RecurrentPaymentTool CreateRecurrentPaymentTool (1: domain.PaymentTool payment_tool)
         throws (
             1: InvalidUser        invalid_user
             2: InvalidPaymentTool invalid_payment_tool
         )
 
-    PaymentMean AbandonPaymentMean (1: PaymentMeanID id)
+    RecurrentPaymentTool AbandonRecurrentPaymentTool (1: RecurrentPaymentToolID id)
         throws (
-            1: InvalidUser              invalid_user
-            2: PaymentMeanNotFound      payment_mean_not_found
-            3: InvalidPaymentMeanStatus payment_mean_already_abandoned
+            1: InvalidUser                       invalid_user
+            2: RecurrentPaymentToolNotFound      rec_payment_tool_not_found
+            3: InvalidRecurrentPaymentToolStatus rec_payment_tool_already_abandoned
         )
 
-    PaymentMean GetPaymentMean (1: PaymentMeanID id)
+    RecurrentPaymentTool GetRecurrentPaymentTool (1: RecurrentPaymentToolID id)
         throws (
-            1: InvalidUser         invalid_user
-            2: PaymentMeanNotFound payment_mean_not_found
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    Events GetEvents (1: PaymentMeanID id, 2: EventRange range)
+    Events GetEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
         throws (
-            1: InvalidUser         invalid_user
-            2: PaymentMeanNotFound payment_mean_not_found
-            3: EventNotFound       event_not_found
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+            3: EventNotFound                event_not_found
         )
 }
 
 exception NoLastEvent {}
 
-service PaymentMeanEventSink {
-    PaymentMeanEvents GetEvents (1: EventRange range)
+service RecurrentPaymentToolEventSink {
+    RecurrentPaymentToolEvents GetEvents (1: EventRange range)
         throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2)
 
     base.EventID GetLastEventID ()

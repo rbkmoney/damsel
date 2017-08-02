@@ -18,17 +18,17 @@ struct TokenInfo {
  * Данные сессии взаимодействия с провайдерским прокси в рамках генерации многоразового токена.
  */
 struct TokenGenerationSession {
-    1: required TargetPaymentMeanStatus target
+    1: required TargetRecurrentPaymentToolStatus target
     2: optional proxy.ProxyState        state
 }
 
 /**
  * Целевое значение статуса многоразового токена.
  */
-union TargetPaymentMeanStatus {
-    1: payment_processing.PaymentMeanCreated  created
-    2: payment_processing.PaymentMeanAcquired acquired
-    3: payment_processing.PaymentMeanFailed   failed
+union TargetRecurrentPaymentToolStatus {
+    1: payment_processing.RecurrentPaymentToolCreated  created
+    2: payment_processing.RecurrentPaymentToolAcquired acquired
+    3: payment_processing.RecurrentPaymentToolFailed   failed
 }
 
 /**
