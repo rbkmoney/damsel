@@ -607,6 +607,10 @@ service InvoiceTemplating {
 typedef domain.CustomerID CustomerID
 typedef domain.Metadata   Metadata
 
+struct BindingParams {
+    1: required domain.Payer payer
+}
+
 struct CustomerParams {
     1: required PartyID  party_id
     2: required Metadata metadata
@@ -720,12 +724,13 @@ service CustomerManagement {
             3: InvalidCustomerStatus invalid_customer_status
         )
 
-    CustomerBinding StartBinding (1: CustomerID customer_id, 2: domain.PaymentTool payment_tool)
+    CustomerBinding StartBinding (1: CustomerID customer_id, 2: BindingParams params)
         throws (
             1: InvalidUser           invalid_user
             2: CustomerNotFound      customer_not_found
             3: InvalidCustomerStatus invalid_customer_status
             4: InvalidPaymentTool    invalid_payment_tool
+            5: base.InvalidRequest   invalid_request
         )
 
     CustomerBinding GetActiveBinding (1: CustomerID customer_id)
