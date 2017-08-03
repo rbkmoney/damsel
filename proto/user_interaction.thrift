@@ -1,4 +1,5 @@
 namespace java com.rbkmoney.damsel.user_interaction
+include "base.thrift"
 
 /**
  * Строковый шаблон согласно [RFC6570](https://tools.ietf.org/html/rfc6570) Level 4.
@@ -34,8 +35,9 @@ struct PaymentOverTerminal  {
     // Сокращенный идентификатор платежа и инвойса (spid)
     1: required string short_payment_id;
 
-    // Назначение перевода: Пополнение Интернет-счета RBK Money, л/с 1132815383, без НДС
-    2: required string payment_purpose;
+    // Дата истечения срока платежа
+    // после этой даты платеж будет отклонен
+    2: required base.Timestamp due
    }
 
 
