@@ -800,6 +800,8 @@ union PartyChange {
     2: Claim                claim_created
     3: ClaimStatusChanged   claim_status_changed
     8: ClaimUpdated         claim_updated
+    9: PartyMetaSet         party_meta_set
+    10: domain.PartyMetaNamespace party_meta_removed
 }
 
 struct ShopBlocking {
@@ -824,6 +826,11 @@ struct ClaimUpdated {
     2: required PartyChangeset changeset
     3: required ClaimRevision revision
     4: required base.Timestamp updated_at
+}
+
+struct PartyMetaSet {
+    1: required domain.PartyMetaNamespace ns
+    2: required domain.PartyMetaData data
 }
 
 // Exceptions
@@ -874,6 +881,8 @@ exception AccountNotFound {}
 
 exception ShopAccountNotFound {}
 
+exception PartyMetaNamespaceNotFound {}
+
 // Service
 
 service PartyManagement {
@@ -900,6 +909,20 @@ service PartyManagement {
 
     void Unblock (1: UserInfo user, 2: PartyID party_id, 3: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    /* Party Meta */
+
+    domain.PartyMeta GetMeta (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
+    domain.PartyMetaData GetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace ns)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaNamespaceNotFound ex3)
+
+    void SetMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace ns, 4: domain.PartyMetaData data)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
+    void RemoveMetaData (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyMetaNamespace ns)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyMetaNamespaceNotFound ex3)
 
     /* Contract */
 

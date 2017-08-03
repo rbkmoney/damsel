@@ -112,15 +112,16 @@ typedef base.ID PayoutID
 * Информация о выплате
 */
 struct StatPayout {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    4: required base.Timestamp created_at
-    5: required PayoutStatus status
-    6: required domain.Amount amount
-    7: required domain.Amount fee
-    8: required PayoutType payout_type
-    9: optional PaidDetails paidDetails
+    1 : required PayoutID id
+    2 : required domain.PartyID party_id
+    3 : required domain.ShopID shop_id
+    4 : required base.Timestamp created_at
+    5 : required PayoutStatus status
+    6 : required domain.Amount amount
+    7 : required domain.Amount fee
+    8 : required string currency_symbolic_code
+    9 : required PayoutType payout_type
+    10: optional PaidDetails paid_details
 }
 
 union PayoutStatus {
