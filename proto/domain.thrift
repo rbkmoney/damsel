@@ -610,7 +610,21 @@ typedef base.ID CustomerID
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
-    3: CustomerID customer_id
+}
+
+union PaymentMean {
+    1: DisposablePaymentMean    disposable_payment_mean
+    2: NondisposablePaymentMean nondisposable_payment_mean
+}
+
+struct DisposablePaymentMean {
+    1: required PaymentTool      payment_tool
+    2: optional PaymentSessionID payment_session_id
+}
+
+struct NondisposablePaymentMean {
+    1: required CustomerID customer_id
+>>>>>>> HG-231: Fix review comments №X
 }
 
 typedef string Token

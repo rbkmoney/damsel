@@ -9,48 +9,48 @@ namespace erlang prxprv
 /**
  * Данные, необходимые для генерации многоразового токена
  */
-struct TokenInfo {
-    1: required domain.Token            token
-    2: required domain.PaymentSessionID session
+struct RecurrentTokenInfo {
+    1: required Shop shop
+    2: required Invoice invoice
+    3: required InvoicePayment payment
 }
 
 /**
  * Данные сессии взаимодействия с провайдерским прокси в рамках генерации многоразового токена.
  */
-struct TokenGenerationSession {
-    1: required TargetRecurrentPaymentToolStatus target
+struct RecurrentTokenGenerationSession {
+    1: required TargetRecurrentTokenStatus target
     2: optional proxy.ProxyState        state
 }
 
 /**
  * Целевое значение статуса многоразового токена.
  */
-union TargetRecurrentPaymentToolStatus {
-    1: payment_processing.RecurrentPaymentToolCreated  created
-    2: payment_processing.RecurrentPaymentToolAcquired acquired
-    3: payment_processing.RecurrentPaymentToolFailed   failed
+union TargetRecurrentTokenStatus {
+    1: payment_processing.RecurrentPaymentToolAcquired acquired
+    2: payment_processing.RecurrentPaymentToolFailed   failed
 }
 
 /**
  * Набор данных для взаимодействия с провайдерским прокси в рамках проведения генерации
  * многоразового токена.
  */
-struct TokenGenerationContext {
-    1: required TokenGenerationSession session
-    2: required TokenInfo              token_info
-    3: optional domain.ProxyOptions    options = {}
+struct RecurrentTokenGenerationContext {
+    1: required RecurrentTokenGenerationSession session
+    2: required RecurrentTokenInfo              token_info
+    3: optional domain.ProxyOptions             options = {}
 }
 
-struct TokenGenerationProxyResult {
-    1: required proxy.Intent        intent
-    2: optional proxy.ProxyState    next_state
-    3: optional domain.Token        token
-    4: optional domain.PaymentRoute route
+struct RecurrentTokenGenerationProxyResult {
+    1: required proxy.Intent           intent
+    2: optional proxy.ProxyState       next_state
+    3: optional domain.Token           token
+    4: optional domain.TransactionInfo trx
 }
 
-struct TokenGenerationCallbackResult {
-    1: required proxy.CallbackResponse     response
-    2: required TokenGenerationProxyResult result
+struct RecurrentTokenGenerationCallbackResult {
+    1: required proxy.CallbackResponse                    response
+    2: required RecurrentTokenGenerationProxyResult result
 }
 
 /**
@@ -154,18 +154,17 @@ service ProviderProxy {
     /**
      * Запрос к прокси на создание многоразового токена
      */
-    TokenGenerationProxyResult GenerateToken (
-        1: domain.Token            token
-        2: domain.PaymentSessionID session_id
+    RecurrentTokenGenerationProxyResult GenerateToken (
+        1: domain.DisposablePaymentMean payment_mean
     )
 
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии получения
      * многоразового токена.
      */
-    TokenGenerationCallbackResult HandleTokenGenerationCallback (
-        1: proxy.Callback callback,
-        2: TokenGenerationContext context
+    RecurrentTokenGenerationCallbackResult HandleRecurrentTokenGenerationCallback (
+        1: proxy.Callback                  callback
+        2: RecurrentTokenGenerationContext context
     )
 
     /**
