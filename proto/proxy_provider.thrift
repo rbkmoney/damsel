@@ -146,7 +146,7 @@ service ProviderProxy {
      * Запрос к прокси на создание многоразового токена
      */
     RecurrentTokenGenerationProxyResult GenerateToken (
-        1: domain.DisposablePaymentMean payment_mean
+        1: RecurrentTokenGenerationContext context
     )
 
     /**

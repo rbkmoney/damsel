@@ -620,11 +620,12 @@ struct CustomerParams {
 struct Customer {
     1: required CustomerID            id
     2: required PartyID               owner_id
-    3: required CustomerStatus        status
-    4: required base.Timestamp        created_at
-    5: required list<CustomerBinding> bindings
-    6: required Metadata              metadata
-    7: optional CustomerBindingID     active_binding
+    3: required ShopID                shop_id
+    4: required CustomerStatus        status
+    5: required base.Timestamp        created_at
+    6: required list<CustomerBinding> bindings
+    7: required Metadata              metadata
+    8: optional CustomerBindingID     active_binding
 }
 
 // Statuses
