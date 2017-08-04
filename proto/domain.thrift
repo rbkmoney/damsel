@@ -200,8 +200,11 @@ union TargetInvoicePaymentStatus {
 }
 
 struct Payer {
-    1: required PaymentTool payment_tool
+    // ???
+    1: optional PaymentTool payment_tool
     2: optional PaymentSessionID session_id
+    5: optional PaymentMean payment_mean
+    // ???
     3: required ClientInfo client_info
     4: required ContactInfo contact_info
 }
