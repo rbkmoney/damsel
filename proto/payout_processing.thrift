@@ -258,20 +258,28 @@ service EventSink {
  * Выплаты на карту
  */
 struct Pay2CardParams {
-    1: required domain.Token card_token
+    1: required domain.BankCard bank_card
     2: required domain.PartyID party_id
     3: required domain.ShopID shop_id
     4: required domain.Cash sum
 }
 
+/* Когда на счете для вывода недостаточно средств */
 exception InsufficientFunds {}
+/* Когда превышен лимит */
 exception LimitExceeded {}
 
 service PayoutManagement {
 
+    /**
+     * Получить сумму комиссии за вывод запрашиваемой суммы
+     */
     domain.Cash getFee(1: Pay2CardParams params)
                     throws (1: base.InvalidRequest ex1)
 
+    /**
+     * Перевести сумму на карту
+     */
     PayoutID pay2card(1: required string request_id, 2: Pay2CardParams params)
                     throws (1: base.InvalidRequest ex1,
                             2: InsufficientFunds ex2,
