@@ -10,8 +10,8 @@ namespace erlang prxprv
  * Данные, необходимые для генерации многоразового токена
  */
 struct RecurrentTokenInfo {
-    1: required Shop shop
-    2: required Invoice invoice
+    1: required Shop           shop
+    2: required Invoice        invoice
     3: required InvoicePayment payment
 }
 
@@ -19,16 +19,7 @@ struct RecurrentTokenInfo {
  * Данные сессии взаимодействия с провайдерским прокси в рамках генерации многоразового токена.
  */
 struct RecurrentTokenGenerationSession {
-    1: required TargetRecurrentTokenStatus target
-    2: optional proxy.ProxyState        state
-}
-
-/**
- * Целевое значение статуса многоразового токена.
- */
-union TargetRecurrentTokenStatus {
-    1: payment_processing.RecurrentPaymentToolAcquired acquired
-    2: payment_processing.RecurrentPaymentToolFailed   failed
+    1: optional proxy.ProxyState state
 }
 
 /**
@@ -49,7 +40,7 @@ struct RecurrentTokenGenerationProxyResult {
 }
 
 struct RecurrentTokenGenerationCallbackResult {
-    1: required proxy.CallbackResponse                    response
+    1: required proxy.CallbackResponse              response
     2: required RecurrentTokenGenerationProxyResult result
 }
 
