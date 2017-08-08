@@ -76,7 +76,15 @@ struct Report {
 struct FileMeta {
     1: required FileID file_id
     2: required string filename
-    3: optional map<string, string> signatures
+    3: optional Signature signature
+}
+
+/**
+* Cигнатуры файла
+*/
+struct Signature {
+    1: required string md5
+    2: required string sha256
 }
 
 /**
