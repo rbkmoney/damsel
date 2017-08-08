@@ -91,6 +91,8 @@ struct ProxyResult {
 struct CallbackResult {
     1: required proxy.CallbackResponse response
     2: required ProxyResult result
+    // TODO temporary crutch, remove it as soon as possible
+    3: optional bool resuspend = false
 }
 
 service ProviderProxy {
