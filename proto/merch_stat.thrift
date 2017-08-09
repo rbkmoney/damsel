@@ -106,56 +106,6 @@ struct StatCustomer {
     2: required base.Timestamp created_at
 }
 
-typedef base.ID PayoutID
-
-/**
-* Информация о выплате
-*/
-struct StatPayout {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    4: required base.Timestamp created_at
-    5: required PayoutStatus status
-    6: required domain.Amount amount
-    7: required domain.Amount fee
-    8: required PayoutType payout_type
-    9: optional PaidDetails paidDetails
-}
-
-union PayoutStatus {
-    1: PayoutUnpaid unpaid
-    2: PayoutPaid paid
-    3: PayoutCancelled cancelled
-    4: PayoutConfirmed confirmed
-}
-
-union PaidDetails {
-    1: CardPaidDetails card_details
-    2: AccountPaidDetails account_details
-}
-
-struct CardPaidDetails { 1: required string mask_pan }
-struct AccountPaidDetails {}
-
-struct PayoutUnpaid {}
-struct PayoutPaid {}
-struct PayoutCancelled { 1: required string details }
-struct PayoutConfirmed {}
-
-union PayoutType {
-    1: CardPayout card_payout
-    2: AccountPayout account_payout
-}
-
-struct CardPayout {}
-struct AccountPayout {
-    1: required string account
-    2: required string bank_corr_account
-    3: required string bank_bik
-    4: required string inn
-    5: required string purpose
-}
 
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
@@ -185,8 +135,7 @@ union StatResponseData {
     1: list<StatPayment> payments
     2: list<StatInvoice> invoices
     3: list<StatCustomer> customers
-    4: list<StatPayout> payouts
-    5: list<StatInfo> records
+    4: list<StatInfo> records
 }
 
 /**
@@ -212,11 +161,6 @@ service MerchantStatistics {
      * Возвращает набор данных о покупателях
      */
     StatResponse GetCustomers(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
-
-    /**
-     * Возвращает набор данных о выплатах
-     */
-     StatResponse GetPayouts(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
     /**
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.

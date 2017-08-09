@@ -3,6 +3,7 @@
  */
 
 include "base.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
@@ -79,6 +80,19 @@ struct Invoice {
 struct InvoiceDetails {
     1: required string product
     2: optional string description
+    3: optional InvoiceCart cart
+}
+
+struct InvoiceCart {
+    1: required list<InvoiceLine> lines
+}
+
+struct InvoiceLine {
+    1: required string product
+    2: required i32 quantity
+    3: required Cash price
+    /* Taxes and other stuff goes here */
+    4: required map<string, msgpack.Value> metadata
 }
 
 struct InvoiceUnpaid    {}
@@ -253,6 +267,10 @@ struct Suspended {
 /* Parties */
 
 typedef base.ID PartyID
+
+typedef string PartyMetaNamespace
+typedef msgpack.Value PartyMetaData
+typedef map<PartyMetaNamespace, PartyMetaData> PartyMeta
 
 /** Участник. */
 struct Party {
