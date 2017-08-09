@@ -607,14 +607,11 @@ service InvoiceTemplating {
 typedef domain.CustomerID CustomerID
 typedef domain.Metadata   Metadata
 
-struct CustomerBindingParams {
-    1: required domain.Payer payer
-}
-
 struct CustomerParams {
-    1: required PartyID  party_id
-    2: required ShopID   shop_id
-    3: required Metadata metadata
+    1: required PartyID            party_id
+    2: required ShopID             shop_id
+    3: required domain.ContactInfo contact_info
+    4: required Metadata           metadata
 }
 
 struct Customer {
@@ -624,8 +621,9 @@ struct Customer {
     4: required CustomerStatus        status
     5: required base.Timestamp        created_at
     6: required list<CustomerBinding> bindings
-    7: required Metadata              metadata
-    8: optional CustomerBindingID     active_binding
+    7: required domain.ContactInfo    contact_info
+    8: required Metadata              metadata
+    9: optional CustomerBindingID     active_binding
 }
 
 // Statuses
@@ -660,11 +658,15 @@ struct CustomerStatusChanged {
 
 typedef base.ID CustomerBindingID
 
+struct CustomerBindingParams {
+    1: required domain.DisposablePaymentResource dpr
+}
+
 struct CustomerBinding {
-    1: required CustomerBindingID            id
-    2: required RecurrentPaymentToolID       rec_payment_tool_id
-    3: required domain.DisposablePaymentMean source_payment_tool
-    4: required CustomerBindingStatus        status
+    1: required CustomerBindingID                id
+    2: required RecurrentPaymentToolID           rec_payment_tool_id
+    3: required domain.DisposablePaymentResource source_payment_tool
+    4: required CustomerBindingStatus            status
 }
 
 // Statuses
@@ -760,11 +762,12 @@ typedef base.ID RecurrentPaymentToolID
 
 // Model
 struct RecurrentPaymentTool {
-    1: required RecurrentPaymentToolID       id
-    2: required RecurrentPaymentToolStatus   status
-    3: required base.Timestamp               created_at
-    4: required domain.DisposablePaymentMean payment_mean
-    5: optional domain.PaymentRoute          route
+    1: required RecurrentPaymentToolID           id
+    2: required RecurrentPaymentToolStatus       status
+    3: required base.Timestamp                   created_at
+    4: required domain.DisposablePaymentResource payment_resource
+    5: optional domain.Token                     rec_token
+    6: optional domain.PaymentRoute              route
 }
 
 // Statuses
@@ -791,21 +794,21 @@ struct RecurrentPaymentToolEvent {
 }
 
 union RecurrentPaymentToolChange {
-    1: RecurrentPaymentToolCreatedEvent   rec_payment_tool_created
-    2: RecurrentPaymentToolAcquiredEvent  rec_payment_tool_acquired
-    3: RecurrentPaymentToolAbandonedEvent rec_payment_tool_abandoned
-    4: SessionChange                      rec_payment_tool_session_changed
+    1: RecurrentPaymentToolHasCreated   rec_payment_tool_created
+    2: RecurrentPaymentToolHasAcquired  rec_payment_tool_acquired
+    3: RecurrentPaymentToolHasAbandoned rec_payment_tool_abandoned
+    4: SessionChange                    rec_payment_tool_session_changed
 }
 
-struct RecurrentPaymentToolCreatedEvent {
+struct RecurrentPaymentToolHasCreated {
     1: required RecurrentPaymentTool rec_payment_tool
 }
 
-struct RecurrentPaymentToolAcquiredEvent {
-    1: required domain.NondisposablePaymentMean payment_mean
+struct RecurrentPaymentToolHasAcquired {
+    1: required domain.Token token
 }
 
-struct RecurrentPaymentToolAbandonedEvent {}
+struct RecurrentPaymentToolHasAbandoned {}
 
 
 // Exceptions
@@ -815,7 +818,7 @@ exception RecurrentPaymentToolNotFound      {}
 exception InvalidRecurrentPaymentToolStatus {}
 
 service PaymentProcessing {
-    RecurrentPaymentTool CreateRecurrentPaymentTool (1: domain.DisposablePaymentMean disposable_payment_mean)
+    RecurrentPaymentTool CreateRecurrentPaymentTool (1: domain.DisposablePaymentResource disposable_payment_resource)
         throws (
             1: InvalidUser invalid_user
         )

@@ -10,9 +10,9 @@ namespace erlang prxprv
  * Данные, необходимые для генерации многоразового токена
  */
 struct RecurrentTokenInfo {
-    1: required Shop           shop
-    2: required Invoice        invoice
-    3: required InvoicePayment payment
+    1: required Shop                                    shop
+    2: required payment_processing.RecurrentPaymentTool rpt
+    3: optional domain.TransactionInfo                  trx
 }
 
 /**

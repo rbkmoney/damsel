@@ -200,13 +200,8 @@ union TargetInvoicePaymentStatus {
 }
 
 struct Payer {
-    // ???
-    1: optional PaymentTool payment_tool
-    2: optional PaymentSessionID session_id
-    5: optional PaymentMean payment_mean
-    // ???
-    3: required ClientInfo client_info
-    4: required ContactInfo contact_info
+    5: required PaymentResource payment_resource
+    4: required ContactInfo     contact_info
 }
 
 struct ClientInfo {
@@ -615,17 +610,18 @@ union PaymentTool {
     2: PaymentTerminal payment_terminal
 }
 
-union PaymentMean {
-    1: DisposablePaymentMean    disposable_payment_mean
-    2: NondisposablePaymentMean nondisposable_payment_mean
+union PaymentResource {
+    1: DisposablePaymentResource    disposable_payment_resource
+    2: NondisposablePaymentResource nondisposable_payment_resource
 }
 
-struct DisposablePaymentMean {
+struct DisposablePaymentResource {
     1: required PaymentTool      payment_tool
     2: optional PaymentSessionID payment_session_id
+    3: required ClientInfo       client_info
 }
 
-struct NondisposablePaymentMean {
+struct NondisposablePaymentResource {
     1: required CustomerID customer_id
 >>>>>>> HG-231: Fix review comments №X
 }
