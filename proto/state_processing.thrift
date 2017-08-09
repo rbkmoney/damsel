@@ -105,6 +105,7 @@ struct ComplexAction {
     1: optional SetTimerAction set_timer; // deprecated
     3: optional TimerAction    timer;
     2: optional TagAction      tag;
+    4: optional RemoveAction   remove;
 }
 
 /**
@@ -157,6 +158,12 @@ struct TagAction {
     /** Значение для ассоциации */
     1: required base.Tag        tag;
 }
+
+/**
+ * Действие для удалении машины.
+ * Исполняется последним. Если были эвенты, то они сохранятся.
+ */
+struct RemoveAction {}
 
 /**
  * Ссылка, уникально определяющая процесс автомата.
