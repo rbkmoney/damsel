@@ -76,7 +76,7 @@ struct Report {
 struct FileMeta {
     1: required FileID file_id
     2: required string filename
-    3: optional Signature signature
+    3: required Signature signature
 }
 
 /**
