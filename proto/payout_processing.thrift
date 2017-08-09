@@ -253,3 +253,69 @@ service EventSink {
         throws (1: NoLastEvent ex1)
 
 }
+
+/**
+ * Выплаты на карту
+ */
+struct Pay2CardParams {
+    1: required domain.BankCard bank_card
+    2: required domain.PartyID party_id
+    3: required domain.ShopID shop_id
+    4: required domain.Cash sum
+}
+
+/* Когда на счете для вывода недостаточно средств */
+exception InsufficientFunds {}
+/* Когда превышен лимит */
+exception LimitExceeded {}
+
+/**
+* Диапазон времени
+* from_time - начальное время.
+* to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
+* Если from > to  - диапазон считается некорректным.
+*/
+struct TimeRange {
+    1: required base.Timestamp from_time
+    2: optional base.Timestamp to_time
+}
+
+struct GeneratePayoutParams {
+    1: required TimeRange time_range
+    2: required domain.PartyID party_id
+    3: required domain.ShopID shop_id
+}
+
+service PayoutManagement {
+
+    /********************* Выплаты на карту *********************/
+    /**
+     * Получить сумму комиссии за вывод запрашиваемой суммы
+     */
+    domain.Cash GetFee(1: Pay2CardParams params)
+                    throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Перевести сумму на карту
+     */
+    PayoutID Pay2Card(1: required string request_id, 2: Pay2CardParams params)
+                    throws (1: base.InvalidRequest ex1,
+                            2: InsufficientFunds ex2,
+                            3: LimitExceeded ex3)
+
+    /********************* Вывод на счет ************************/
+    /**
+     * Сгенерировать и отправить по почте выводы за указанный промежуток времени
+     */
+    PayoutID GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Подтвердить выплаты. Вернуть список подтвержденных выплат
+     */
+    list<PayoutID> ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Отменить движения по выплатам. Вернуть список отмененных выплат
+     */
+    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+}
