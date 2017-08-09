@@ -269,8 +269,20 @@ exception InsufficientFunds {}
 /* Когда превышен лимит */
 exception LimitExceeded {}
 
+/**
+* Диапазон времени
+* from_time - начальное время.
+* to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
+* Если from > to  - диапазон считается некорректным.
+*/
+struct TimeRange {
+   1: required base.Timestamp from_time
+   2: optional base.Timestamp to_time
+}
+
 service PayoutManagement {
 
+    /********************* Выплаты на карту *********************/
     /**
      * Получить сумму комиссии за вывод запрашиваемой суммы
      */
@@ -285,4 +297,19 @@ service PayoutManagement {
                             2: InsufficientFunds ex2,
                             3: LimitExceeded ex3)
 
+    /********************* Вывод на счет ************************/
+    /**
+     * Сгенерировать и отправить по почте выводы за указанный промежуток времени
+     */
+    void GeneratePayouts (1: TimeRange timeRange) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Подтвердить выплаты
+     */
+    void ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Отменить движения по выплатам
+     */
+    void CancelPayout (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 }
