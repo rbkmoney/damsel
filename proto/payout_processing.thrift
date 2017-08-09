@@ -286,13 +286,13 @@ service PayoutManagement {
     /**
      * Получить сумму комиссии за вывод запрашиваемой суммы
      */
-    domain.Cash getFee(1: Pay2CardParams params)
+    domain.Cash GetFee(1: Pay2CardParams params)
                     throws (1: base.InvalidRequest ex1)
 
     /**
      * Перевести сумму на карту
      */
-    PayoutID pay2card(1: required string request_id, 2: Pay2CardParams params)
+    PayoutID Pay2Card(1: required string request_id, 2: Pay2CardParams params)
                     throws (1: base.InvalidRequest ex1,
                             2: InsufficientFunds ex2,
                             3: LimitExceeded ex3)
@@ -301,7 +301,7 @@ service PayoutManagement {
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
      */
-    void GeneratePayouts (1: TimeRange timeRange) throws (1: base.InvalidRequest ex1)
+    void GeneratePayouts (1: TimeRange time_range) throws (1: base.InvalidRequest ex1)
 
     /**
      * Подтвердить выплаты
@@ -311,5 +311,5 @@ service PayoutManagement {
     /**
      * Отменить движения по выплатам
      */
-    void CancelPayout (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    void CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 }
