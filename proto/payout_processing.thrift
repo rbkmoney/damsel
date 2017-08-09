@@ -276,8 +276,14 @@ exception LimitExceeded {}
 * Если from > to  - диапазон считается некорректным.
 */
 struct TimeRange {
-   1: required base.Timestamp from_time
-   2: optional base.Timestamp to_time
+    1: required base.Timestamp from_time
+    2: optional base.Timestamp to_time
+}
+
+struct GeneratePayoutParams {
+    1: required TimeRange time_range
+    2: required domain.PartyID party_id
+    3: required domain.ShopID shop_id
 }
 
 service PayoutManagement {
@@ -301,15 +307,15 @@ service PayoutManagement {
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
      */
-    void GeneratePayouts (1: TimeRange time_range) throws (1: base.InvalidRequest ex1)
+    PayoutID GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Подтвердить выплаты
+     * Подтвердить выплаты. Вернуть список подтвержденных выплат
      */
-    void ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Отменить движения по выплатам
+     * Отменить движения по выплатам. Вернуть список отмененных выплат
      */
-    void CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 }
