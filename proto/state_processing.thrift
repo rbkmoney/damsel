@@ -102,7 +102,6 @@ struct MachineDescriptor {
  * полей будет интерпретировано буквально, как отсутствие желаемых действий.
  */
 struct ComplexAction {
-    1: optional SetTimerAction set_timer; // deprecated
     3: optional TimerAction    timer;
     2: optional TagAction      tag;
     4: optional RemoveAction   remove;
@@ -160,7 +159,7 @@ struct TagAction {
 }
 
 /**
- * Действие для удалении машины.
+ * Действие для удаления машины.
  * Исполняется последним. Если были эвенты, то они сохранятся.
  */
 struct RemoveAction {}
