@@ -603,7 +603,7 @@ enum BankCardPaymentSystem {
 
 union PaymentTool {
     1: BankCard bank_card
-    2: PaymentTerminalReceipt payment_terminal_receipt
+    2: PaymentTerminal payment_terminal
 }
 
 typedef string Token
@@ -616,7 +616,7 @@ struct BankCard {
 }
 
 /** Платеж через терминал **/
-struct PaymentTerminalReceipt {
+struct PaymentTerminal {
     1: required TerminalType terminal_type
 }
 

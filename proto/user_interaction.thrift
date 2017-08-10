@@ -31,7 +31,7 @@ struct BrowserPostRequest {
 }
 
 // Платеж через терминал
-struct PaymentOverTerminal  {
+struct PaymentTerminalReceipt  {
     // Сокращенный идентификатор платежа и инвойса (spid)
     1: required string short_payment_id;
 
@@ -55,5 +55,5 @@ union UserInteraction {
     /**
     * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
     **/
-    2: PaymentOverTerminal terminal_payment
+    2: PaymentTerminalReceipt payment_terminal_reciept
 }
