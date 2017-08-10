@@ -16,6 +16,7 @@ exception MachineNotFound {}
 exception NamespaceNotFound {}
 exception MachineAlreadyExists {}
 exception MachineFailed {}
+exception MachineAlreadyWorking {}
 
 typedef msgpack.Value EventBody;
 typedef list<EventBody> EventBodies;
@@ -336,7 +337,7 @@ service Automaton {
      * состояния в штатное и продолжить его исполнение.
      */
     void Repair (1: MachineDescriptor desc, 2: Args a)
-         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3);
+         throws (1: NamespaceNotFound ex1, 2: MachineNotFound ex2, 3: MachineFailed ex3, 4: MachineAlreadyWorking ex4);
 
     /**
      * Совершить вызов и дождаться на него ответа.
