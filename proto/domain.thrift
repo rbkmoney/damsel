@@ -617,7 +617,7 @@ struct BankCard {
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
-    1: required TerminalType terminal_type
+    1: required TerminalPaymentProvider terminal_type
 }
 
 /**
@@ -625,7 +625,7 @@ struct PaymentTerminal {
 *
 *  например Евросеть
 **/
-enum TerminalType {
+enum TerminalPaymentProvider {
     euroset
 }
 
