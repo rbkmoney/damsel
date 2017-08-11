@@ -3,6 +3,7 @@
 .idea
 
 /_gen/
+/_release/
 /_build/
 *.sublime-workspace
 
