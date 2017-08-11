@@ -201,7 +201,6 @@ union TargetInvoicePaymentStatus {
 
 struct Payer {
     5: required PaymentResource payment_resource
-    4: required ContactInfo     contact_info
 }
 
 struct ClientInfo {
@@ -611,17 +610,22 @@ union PaymentTool {
 }
 
 union PaymentResource {
-    1: DisposablePaymentResource    disposable_payment_resource
-    2: NondisposablePaymentResource nondisposable_payment_resource
+    1: DisposablePaymentResource disposable_payment_resource
+    2: CustomerPaymentResource   customer_payment_resource
 }
 
 struct DisposablePaymentResource {
+    1: required DisposablePaymentResourceData dprd
+    2: required ContactInfo                   contact_info
+}
+
+struct DisposablePaymentResourceData {
     1: required PaymentTool      payment_tool
     2: optional PaymentSessionID payment_session_id
     3: required ClientInfo       client_info
 }
 
-struct NondisposablePaymentResource {
+struct CustomerPaymentResource {
     1: required CustomerID customer_id
 >>>>>>> HG-231: Fix review comments №X
 }

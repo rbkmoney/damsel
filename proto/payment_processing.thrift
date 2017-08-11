@@ -663,10 +663,10 @@ struct CustomerBindingParams {
 }
 
 struct CustomerBinding {
-    1: required CustomerBindingID                id
-    2: required RecurrentPaymentToolID           rec_payment_tool_id
-    3: required domain.DisposablePaymentResource source_payment_tool
-    4: required CustomerBindingStatus            status
+    1: required CustomerBindingID                    id
+    2: required RecurrentPaymentToolID               rec_payment_tool_id
+    3: required domain.DisposablePaymentResourceData dprd
+    4: required CustomerBindingStatus                status
 }
 
 // Statuses
@@ -836,7 +836,7 @@ service PaymentProcessing {
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    Events GetRecurrentPaymentToolEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
+    RecurrentPaymentToolEvents GetRecurrentPaymentToolEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
         throws (
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
