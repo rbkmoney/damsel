@@ -328,6 +328,7 @@ union ShopLocation {
 enum RiskScore {
     low = 1
     high = 100
+    fatal = 9999
 }
 
 /* Contracts */
