@@ -269,6 +269,7 @@ union InvoicePaymentRefundChangePayload {
  */
 struct InvoicePaymentRefundCreated {
     1: required domain.InvoicePaymentRefund refund
+    2: required domain.FinalCashFlow cash_flow
 }
 
 /**
@@ -386,6 +387,14 @@ struct InvoicePayment {
 
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
+
+/**
+ * Параметры создаваемого возврата платежа.
+ */
+struct InvoicePaymentRefundParams {
+    /** Причина, на основании которой производится возврат. */
+    1: optional string reason
+}
 
 /**
  * Параметры создаваемой поправки к платежу.
@@ -581,6 +590,7 @@ service Invoicing {
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
+        4: InvoicePaymentRefundParams params
     )
         throws (
             1: InvalidUser ex1,
