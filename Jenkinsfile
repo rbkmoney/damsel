@@ -6,9 +6,11 @@ build('damsel', 'docker-host') {
     loadBuildUtils()
 
     def pipeDefault
+    def gitUtils
     runStage('load pipeline') {
         env.JENKINS_LIB = "build_utils/jenkins_lib"
         pipeDefault = load("${env.JENKINS_LIB}/pipeDefault.groovy")
+        gitUtils = load("${env.JENKINS_LIB}/gitUtils.groovy")
     }
 
     pipeDefault() {
@@ -17,14 +19,20 @@ build('damsel', 'docker-host') {
             sh "make wc_compile"
         }
 
+        // Erlang
         if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith('epic/')) {
-            runStage('Publish Erlang release') {
-                withGithubSshCredentials() {
-                    sh "make wc_release-erlang"
-                }
+          runStage('Generate Erlang lib') {
+            sh "make wc_release-erlang"
+          }
+          runStage('Publish Erlang lib') {
+            dir("_release/erlang") {
+              gitUtils.push(commitMsg: "Generate from $COMMIT_ID",
+                            files: "*", branch: "release/$BRANCH_NAME", orphan: true)
             }
+          }
         }
 
+        // Java
         runStage('Execute build container') {
             withCredentials([[$class: 'FileBinding', credentialsId: 'java-maven-settings.xml', variable: 'SETTINGS_XML']]) {
                 if (env.BRANCH_NAME == 'master') {

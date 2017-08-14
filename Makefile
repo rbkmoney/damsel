@@ -63,8 +63,6 @@ $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 clean::
 	rm -rf $(DESTDIR)
 
-include git.mk
-
 REPODIR = $(abspath $(RELDIR)/$*)
 DOCKER_RUN_OPTS := -e BRANCH_NAME
 
@@ -72,11 +70,7 @@ release-%: $(RELDIR)
 	@echo "Making '$*' release ..."
 	@echo $(CUTLINE)
 	@rm -rf $(REPODIR)
-	$(call clone-repo)
-	$(call checkout-or-create-release-branch)
 	$(MAKE) LANGUAGE=$* DESTDIR=$(REPODIR) build-release
-	$(call commit-release)
-	$(call push-release)
 
 clean::
 	rm -rf $(RELDIR)
@@ -112,6 +106,7 @@ build-release:
 endif
 endif
 
+# Java
 
 ifdef SETTINGS_XML
 DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
