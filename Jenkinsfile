@@ -26,7 +26,7 @@ build('damsel', 'docker-host') {
           }
           runStage('Publish Erlang lib') {
             dir("_release/erlang") {
-              gitUtils.push(commitMsg: "Generated from $COMMIT_ID",
+              gitUtils.push(commitMsg: "Generated from commit: $COMMIT_ID \n\non $BRANCH_NAME in $RBK_REPO_URL\n\nChanges:\n$COMMIT_MSG",
                             files: "*", branch: "release/erlang/$BRANCH_NAME", orphan: true)
             }
           }
