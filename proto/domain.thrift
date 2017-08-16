@@ -522,6 +522,20 @@ struct GuaranteeFundTerms {
     2: optional CashFlowSelector fees
 }
 
+/* Counterparties */
+
+typedef base.ID CounterpartyID
+
+/**  Контрагент */
+struct Counterparty {
+    1: required CounterpartyID id
+    2: required base.Timestamp created_at
+    3: required Blocking blocking
+    4: required Suspension suspension
+    5: required Contract contract
+}
+
+
 /* Currencies */
 
 /** Символьный код, уникально идентифицирующий валюту. */
