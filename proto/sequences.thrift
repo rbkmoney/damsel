@@ -21,6 +21,6 @@ service Sequences {
     /**
      * Получить следующее значение счетчика
      */
-    Value GetNext (1: SequenceId sequence_id, 2: Value current_value, 3: Value max_value)
+    Value GetNext (1: SequenceId sequence_id)
 
 }
