@@ -1,0 +1,3 @@
+/_build/
+/include/*.hrl
+/src/*.erl

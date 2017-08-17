@@ -328,6 +328,7 @@ union ShopLocation {
 enum RiskScore {
     low = 1
     high = 100
+    fatal = 9999
 }
 
 /* Contracts */
@@ -584,6 +585,7 @@ struct CashLimitDecision {
 
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
+    2: TerminalPaymentProvider payment_terminal
 }
 
 enum BankCardPaymentSystem {
@@ -603,6 +605,7 @@ enum BankCardPaymentSystem {
 
 union PaymentTool {
     1: BankCard bank_card
+    2: PaymentTerminal payment_terminal
 }
 
 typedef string Token
@@ -613,6 +616,21 @@ struct BankCard {
     3: required string bin
     4: required string masked_pan
 }
+
+/** Платеж через терминал **/
+struct PaymentTerminal {
+    1: required TerminalPaymentProvider terminal_type
+}
+
+/**
+*  Вид платежного терминала
+*
+*  например Евросеть
+**/
+enum TerminalPaymentProvider {
+    euroset
+}
+
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
 

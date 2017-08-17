@@ -1,4 +1,5 @@
 namespace java com.rbkmoney.damsel.user_interaction
+include "base.thrift"
 
 /**
  * Строковый шаблон согласно [RFC6570](https://tools.ietf.org/html/rfc6570) Level 4.
@@ -29,6 +30,17 @@ struct BrowserPostRequest {
     2: required Form form
 }
 
+// Платеж через терминал
+struct PaymentTerminalReceipt  {
+    // Сокращенный идентификатор платежа и инвойса (spid)
+    1: required string short_payment_id;
+
+    // Дата истечения срока платежа
+    // после этой даты платеж будет отклонен
+    2: required base.Timestamp due
+   }
+
+
 union UserInteraction {
     /**
      * Требование переадресовать user agent пользователя, в виде HTTP-запроса.
@@ -39,4 +51,9 @@ union UserInteraction {
      *    взаимодействия.
      */
     1: BrowserHTTPRequest redirect
+
+    /**
+    * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
+    **/
+    2: PaymentTerminalReceipt payment_terminal_reciept
 }
