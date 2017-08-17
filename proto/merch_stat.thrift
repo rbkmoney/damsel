@@ -186,8 +186,8 @@ union StatResponseData {
     1: list<StatPayment> payments
     2: list<StatInvoice> invoices
     3: list<StatCustomer> customers
-    4: list<StatPayout> payouts
-    5: list<StatInfo> records
+    4: list<StatInfo> records
+    5: list<StatPayout> payouts
 }
 
 /**
