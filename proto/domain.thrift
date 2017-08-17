@@ -585,6 +585,7 @@ struct CashLimitDecision {
 
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
+    2: TerminalPaymentProvider payment_terminal
 }
 
 enum BankCardPaymentSystem {
