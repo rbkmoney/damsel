@@ -6,13 +6,20 @@ include "payment_processing.thrift"
 namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
 
+struct RecurrentPaymentTool {
+    1: required payment_processing.RecurrentPaymentToolID id
+    2: required base.Timestamp                            created_at
+    3: required domain.DisposablePaymentResource          payment_resource
+    4: optional domain.Token                              rec_token
+}
+
 /**
  * Данные, необходимые для генерации многоразового токена
  */
 struct RecurrentTokenInfo {
-    1: required Shop                                    shop
-    2: required payment_processing.RecurrentPaymentTool rpt
-    3: optional domain.TransactionInfo                  trx
+    1: required Shop                   shop
+    2: required RecurrentPaymentTool   payment_tool
+    3: optional domain.TransactionInfo trx
 }
 
 /**

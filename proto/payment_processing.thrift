@@ -636,6 +636,15 @@ struct CustomerUnready {}
 struct CustomerReady   {}
 
 // Events
+typedef list<CustomerEvent> CustomerEvents
+
+struct CustomerEvent {
+    1: required base.EventID         id
+    2: required base.Timestamp       created_at
+    3: required CustomerID           source
+    4: required list<CustomerChange> payload
+}
+
 union CustomerChange {
     1: CustomerCreated        customer_created
     2: CustomerDeleted        customer_deleted
@@ -659,24 +668,24 @@ struct CustomerStatusChanged {
 typedef base.ID CustomerBindingID
 
 struct CustomerBindingParams {
-    1: required domain.DisposablePaymentResource dpr
+    1: required domain.DisposablePaymentResource payment_resource
 }
 
 struct CustomerBinding {
-    1: required CustomerBindingID                    id
-    2: required RecurrentPaymentToolID               rec_payment_tool_id
-    3: required domain.DisposablePaymentResourceData dprd
-    4: required CustomerBindingStatus                status
+    1: required CustomerBindingID                id
+    2: required RecurrentPaymentToolID           rec_payment_tool_id
+    3: required domain.DisposablePaymentResource payment_resource
+    4: required CustomerBindingStatus            status
 }
 
 // Statuses
 union CustomerBindingStatus {
-    1: CustomerBindingCreated   created
+    1: CustomerBindingPending   pending
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
 
-struct CustomerBindingCreated   {}
+struct CustomerBindingPending   {}
 struct CustomerBindingSucceeded {}
 struct CustomerBindingFailed    { 1: required domain.OperationFailure failure }
 
@@ -735,9 +744,8 @@ service CustomerManagement {
         throws (
             1: InvalidUser           invalid_user
             2: CustomerNotFound      customer_not_found
-            3: InvalidCustomerStatus invalid_customer_status
-            4: InvalidPaymentTool    invalid_payment_tool
-            5: base.InvalidRequest   invalid_request
+            3: InvalidPaymentTool    invalid_payment_tool
+            4: base.InvalidRequest   invalid_request
         )
 
     CustomerBinding GetActiveBinding (1: CustomerID customer_id)
@@ -747,7 +755,7 @@ service CustomerManagement {
             3: InvalidCustomerStatus invalid_customer_status
         )
 
-    Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
+    CustomerEvents GetEvents (1: CustomerID customer_id, 2: EventRange range)
         throws (
             1: InvalidUser      invalid_user
             2: CustomerNotFound customer_not_found
@@ -766,8 +774,8 @@ struct RecurrentPaymentTool {
     2: required RecurrentPaymentToolStatus       status
     3: required base.Timestamp                   created_at
     4: required domain.DisposablePaymentResource payment_resource
-    5: optional domain.Token                     rec_token
-    6: optional domain.PaymentRoute              route
+    5: required domain.PaymentRoute              route
+    6: optional domain.Token                     rec_token
 }
 
 // Statuses
@@ -815,7 +823,9 @@ struct RecurrentPaymentToolHasAbandoned {}
 exception InvalidBinding           {}
 exception BindingNotFound          {}
 exception RecurrentPaymentToolNotFound      {}
-exception InvalidRecurrentPaymentToolStatus {}
+exception InvalidRecurrentPaymentToolStatus {
+    1: required RecurrentPaymentToolStatus status
+}
 
 service PaymentProcessing {
     RecurrentPaymentTool CreateRecurrentPaymentTool (1: domain.DisposablePaymentResource disposable_payment_resource)
@@ -827,7 +837,7 @@ service PaymentProcessing {
         throws (
             1: InvalidUser                       invalid_user
             2: RecurrentPaymentToolNotFound      rec_payment_tool_not_found
-            3: InvalidRecurrentPaymentToolStatus rec_payment_tool_already_abandoned
+            3: InvalidRecurrentPaymentToolStatus invalid_rec_payment_tool_status
         )
 
     RecurrentPaymentTool GetRecurrentPaymentTool (1: RecurrentPaymentToolID id)

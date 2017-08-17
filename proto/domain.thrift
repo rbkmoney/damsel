@@ -199,8 +199,18 @@ union TargetInvoicePaymentStatus {
 
 }
 
-struct Payer {
-    5: required PaymentResource payment_resource
+union Payer {
+    1: PaymentResourcePayer payment_resource
+    2: CustomerPayer        customer
+}
+
+struct PaymentResourcePayer {
+    1: required DisposablePaymentResource resource
+    2: required ContactInfo               contact_info
+}
+
+struct CustomerPayer {
+    1: required CustomerID customer_id
 }
 
 struct ClientInfo {
@@ -609,11 +619,6 @@ union PaymentTool {
     2: PaymentTerminal payment_terminal
 }
 
-union PaymentResource {
-    1: DisposablePaymentResource disposable_payment_resource
-    2: CustomerPaymentResource   customer_payment_resource
-}
-
 struct DisposablePaymentResource {
     1: required DisposablePaymentResourceData dprd
     2: required ContactInfo                   contact_info
@@ -627,7 +632,6 @@ struct DisposablePaymentResourceData {
 
 struct CustomerPaymentResource {
     1: required CustomerID customer_id
->>>>>>> HG-231: Fix review comments №X
 }
 
 typedef string Token
