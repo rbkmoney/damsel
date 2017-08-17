@@ -261,8 +261,8 @@
     {'payments', ['StatPayment'()]} |
     {'invoices', ['StatInvoice'()]} |
     {'customers', ['StatCustomer'()]} |
-    {'payouts', ['StatPayout'()]} |
-    {'records', ['StatInfo'()]}.
+    {'records', ['StatInfo'()]} |
+    {'payouts', ['StatPayout'()]}.
 
 %% exception 'DatasetTooBig'
 -type 'DatasetTooBig'() :: #'merchstat_DatasetTooBig'{}.
@@ -601,8 +601,8 @@ struct_info('StatResponseData') ->
     {1, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayment'}}}, 'payments', undefined},
     {2, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}}, 'invoices', undefined},
     {3, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatCustomer'}}}, 'customers', undefined},
-    {4, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
-    {5, optional, {list, {map, string, string}}, 'records', undefined}
+    {4, optional, {list, {map, string, string}}, 'records', undefined},
+    {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined}
 ]};
 
 struct_info('DatasetTooBig') ->
