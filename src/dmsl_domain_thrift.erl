@@ -836,7 +836,8 @@
 
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
-    {'bank_card', 'BankCardPaymentSystem'()}.
+    {'bank_card', 'BankCardPaymentSystem'()} |
+    {'payment_terminal', 'TerminalPaymentProvider'()}.
 
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
@@ -2120,7 +2121,8 @@ struct_info('CashLimitDecision') ->
 
 struct_info('PaymentMethod') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined}
+    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined}
 ]};
 
 struct_info('PaymentTool') ->
