@@ -620,7 +620,7 @@ union PaymentTool {
 }
 
 struct DisposablePaymentResource {
-    1: required DisposablePaymentResourceData dprd
+    1: required DisposablePaymentResourceData payment_resource_data
     2: required ContactInfo                   contact_info
 }
 
