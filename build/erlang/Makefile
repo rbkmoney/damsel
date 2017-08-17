@@ -35,6 +35,7 @@ ARTIFACTS := \
 
 publish: $(DESTDIR) $(ARTIFACTS)
 	@cp -r $(ARTIFACTS) $(DESTDIR)
+	@cp -r $(PROTO) $(DESTDIR)/
 
 $(DESTDIR):
 	@mkdir -p $@

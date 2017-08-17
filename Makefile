@@ -18,7 +18,8 @@ SERVICE_IMAGE_PUSH_TAG ?= $(SERVICE_IMAGE_TAG)
 
 BUILD_IMAGE_TAG := fbef66759ab9c7b620fc73785ba1840d2f48bd68
 
-FILES = $(wildcard proto/*.thrift)
+PROTODIR = proto
+FILES = $(wildcard $(PROTODIR)/*.thrift)
 DESTDIR = _gen
 RELDIR = _release
 
@@ -101,7 +102,7 @@ $(TARGETS):: $(DESTDIR)/$(LANGUAGE)/%: %
 	$(ERLC) -v -I$@ -o$@ $(shell find $@ -name "*.erl")
 
 build-release:
-	@make THRIFT="$(THRIFT)" FILES="$(abspath $(FILES))" -C build/erlang release
+	@make THRIFT="$(THRIFT)" FILES="$(abspath $(FILES))" PROTO="$(abspath $(PROTODIR))" -C build/erlang release
 
 endif
 endif
