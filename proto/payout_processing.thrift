@@ -135,8 +135,7 @@ union PaidDetails {
 }
 
 struct CardPaidDetails {
-    1: required string mask_pan
-    2: required ProviderDetails provider_details
+    1: required ProviderDetails provider_details
 }
 
 struct ProviderDetails {
@@ -166,20 +165,20 @@ struct PayoutConfirmed {
 
 /* Типы выплаты */
 union PayoutType {
-    1: CardPayout card_payout
-    2: AccountPayout account_payout
+    1: PayoutCard payout_card
+    2: PayoutAccount payout_account
 }
 
 /* Выплата на карту */
-struct CardPayout {
+struct PayoutCard {
     /* Идентификатор запроса на выплату */
     1: required string request_id
-    /* Токен карты для cds */
-    2: optional domain.Token card_token
+    /* Данные по карте */
+    2: required domain.BankCard bank_card
 }
 
 /* Вывод на расчетный счет */
-struct AccountPayout {
+struct PayoutAccount {
     /* Расчетный счет */
     1: required string account
     /* Корреспондентский счет */
