@@ -549,13 +549,11 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
-    /* Undefined level */
-    3: optional GuaranteeFundTerms guarantee_fund
+    7: optional PaymentRefundsServiceTerms refunds
 }
 
-struct GuaranteeFundTerms {
-    1: optional CashLimitSelector limits
-    2: optional CashFlowSelector fees
+struct PaymentRefundsServiceTerms {
+    1: optional CashFlowSelector fees
 }
 
 /* Currencies */
