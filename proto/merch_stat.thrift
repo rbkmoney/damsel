@@ -121,7 +121,6 @@ struct StatPayout {
     7 : required domain.Amount fee
     8 : required string currency_symbolic_code
     9 : required PayoutType payout_type
-    10: optional PaidDetails paid_details
 }
 
 union PayoutStatus {
@@ -130,14 +129,6 @@ union PayoutStatus {
     3: PayoutCancelled cancelled
     4: PayoutConfirmed confirmed
 }
-
-union PaidDetails {
-    1: CardPaidDetails card_details
-    2: AccountPaidDetails account_details
-}
-
-struct CardPaidDetails { 1: required string mask_pan }
-struct AccountPaidDetails {}
 
 struct PayoutUnpaid {}
 struct PayoutPaid {}
@@ -149,7 +140,10 @@ union PayoutType {
     2: PayoutAccount payout_account
 }
 
-struct PayoutCard {}
+struct PayoutCard {
+    1: required string mask_pan
+}
+
 struct PayoutAccount {
     1: required string account
     2: required string bank_corr_account
