@@ -58,8 +58,8 @@
     'PayoutCancelled'/0,
     'PayoutConfirmed'/0,
     'PayoutType'/0,
-    'CardPayout'/0,
-    'AccountPayout'/0,
+    'PayoutCard'/0,
+    'PayoutAccount'/0,
     'PayoutStatusChanged'/0,
     'EventRange'/0,
     'Pay2CardParams'/0,
@@ -117,8 +117,8 @@
     'PayoutCancelled' |
     'PayoutConfirmed' |
     'PayoutType' |
-    'CardPayout' |
-    'AccountPayout' |
+    'PayoutCard' |
+    'PayoutAccount' |
     'PayoutStatusChanged' |
     'EventRange' |
     'Pay2CardParams' |
@@ -206,14 +206,14 @@
 
 %% union 'PayoutType'
 -type 'PayoutType'() ::
-    {'card_payout', 'CardPayout'()} |
-    {'account_payout', 'AccountPayout'()}.
+    {'payout_card', 'PayoutCard'()} |
+    {'payout_account', 'PayoutAccount'()}.
 
-%% struct 'CardPayout'
--type 'CardPayout'() :: #'payout_processing_CardPayout'{}.
+%% struct 'PayoutCard'
+-type 'PayoutCard'() :: #'payout_processing_PayoutCard'{}.
 
-%% struct 'AccountPayout'
--type 'AccountPayout'() :: #'payout_processing_AccountPayout'{}.
+%% struct 'PayoutAccount'
+-type 'PayoutAccount'() :: #'payout_processing_PayoutAccount'{}.
 
 %% struct 'PayoutStatusChanged'
 -type 'PayoutStatusChanged'() :: #'payout_processing_PayoutStatusChanged'{}.
@@ -334,8 +334,8 @@ structs() ->
         'PayoutCancelled',
         'PayoutConfirmed',
         'PayoutType',
-        'CardPayout',
-        'AccountPayout',
+        'PayoutCard',
+        'PayoutAccount',
         'PayoutStatusChanged',
         'EventRange',
         'Pay2CardParams',
@@ -462,8 +462,7 @@ struct_info('PaidDetails') ->
 
 struct_info('CardPaidDetails') ->
     {struct, struct, [
-    {1, required, string, 'mask_pan', undefined},
-    {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ProviderDetails'}}, 'provider_details', undefined}
+    {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'ProviderDetails'}}, 'provider_details', undefined}
 ]};
 
 struct_info('ProviderDetails') ->
@@ -488,17 +487,17 @@ struct_info('PayoutConfirmed') ->
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'CardPayout'}}, 'card_payout', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'AccountPayout'}}, 'account_payout', undefined}
+    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'payout_card', undefined},
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'payout_account', undefined}
 ]};
 
-struct_info('CardPayout') ->
+struct_info('PayoutCard') ->
     {struct, struct, [
     {1, required, string, 'request_id', undefined},
-    {2, optional, string, 'card_token', undefined}
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined}
 ]};
 
-struct_info('AccountPayout') ->
+struct_info('PayoutAccount') ->
     {struct, struct, [
     {1, required, string, 'account', undefined},
     {2, required, string, 'bank_corr_account', undefined},
@@ -597,11 +596,11 @@ record_name('InternalUser') ->
     record_name('PayoutConfirmed') ->
     'payout_processing_PayoutConfirmed';
 
-    record_name('CardPayout') ->
-    'payout_processing_CardPayout';
+    record_name('PayoutCard') ->
+    'payout_processing_PayoutCard';
 
-    record_name('AccountPayout') ->
-    'payout_processing_AccountPayout';
+    record_name('PayoutAccount') ->
+    'payout_processing_PayoutAccount';
 
     record_name('PayoutStatusChanged') ->
     'payout_processing_PayoutStatusChanged';

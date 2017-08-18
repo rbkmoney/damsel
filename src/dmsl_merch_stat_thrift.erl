@@ -58,9 +58,6 @@
     'StatCustomer'/0,
     'StatPayout'/0,
     'PayoutStatus'/0,
-    'PaidDetails'/0,
-    'CardPaidDetails'/0,
-    'AccountPaidDetails'/0,
     'PayoutUnpaid'/0,
     'PayoutPaid'/0,
     'PayoutCancelled'/0,
@@ -120,9 +117,6 @@
     'StatCustomer' |
     'StatPayout' |
     'PayoutStatus' |
-    'PaidDetails' |
-    'CardPaidDetails' |
-    'AccountPaidDetails' |
     'PayoutUnpaid' |
     'PayoutPaid' |
     'PayoutCancelled' |
@@ -215,17 +209,6 @@
     {'paid', 'PayoutPaid'()} |
     {'cancelled', 'PayoutCancelled'()} |
     {'confirmed', 'PayoutConfirmed'()}.
-
-%% union 'PaidDetails'
--type 'PaidDetails'() ::
-    {'card_details', 'CardPaidDetails'()} |
-    {'account_details', 'AccountPaidDetails'()}.
-
-%% struct 'CardPaidDetails'
--type 'CardPaidDetails'() :: #'merchstat_CardPaidDetails'{}.
-
-%% struct 'AccountPaidDetails'
--type 'AccountPaidDetails'() :: #'merchstat_AccountPaidDetails'{}.
 
 %% struct 'PayoutUnpaid'
 -type 'PayoutUnpaid'() :: #'merchstat_PayoutUnpaid'{}.
@@ -351,9 +334,6 @@ structs() ->
         'StatCustomer',
         'StatPayout',
         'PayoutStatus',
-        'PaidDetails',
-        'CardPaidDetails',
-        'AccountPaidDetails',
         'PayoutUnpaid',
         'PayoutPaid',
         'PayoutCancelled',
@@ -527,8 +507,7 @@ struct_info('StatPayout') ->
     {6, required, i64, 'amount', undefined},
     {7, required, i64, 'fee', undefined},
     {8, required, string, 'currency_symbolic_code', undefined},
-    {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'payout_type', undefined},
-    {10, optional, {struct, union, {dmsl_merch_stat_thrift, 'PaidDetails'}}, 'paid_details', undefined}
+    {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'payout_type', undefined}
 ]};
 
 struct_info('PayoutStatus') ->
@@ -538,20 +517,6 @@ struct_info('PayoutStatus') ->
     {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCancelled'}}, 'cancelled', undefined},
     {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutConfirmed'}}, 'confirmed', undefined}
 ]};
-
-struct_info('PaidDetails') ->
-    {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CardPaidDetails'}}, 'card_details', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'AccountPaidDetails'}}, 'account_details', undefined}
-]};
-
-struct_info('CardPaidDetails') ->
-    {struct, struct, [
-    {1, required, string, 'mask_pan', undefined}
-]};
-
-struct_info('AccountPaidDetails') ->
-    {struct, struct, []};
 
 struct_info('PayoutUnpaid') ->
     {struct, struct, []};
@@ -574,7 +539,9 @@ struct_info('PayoutType') ->
 ]};
 
 struct_info('PayoutCard') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, required, string, 'mask_pan', undefined}
+]};
 
 struct_info('PayoutAccount') ->
     {struct, struct, [
@@ -661,12 +628,6 @@ record_name('OperationTimeout') ->
 
     record_name('StatPayout') ->
     'merchstat_StatPayout';
-
-    record_name('CardPaidDetails') ->
-    'merchstat_CardPaidDetails';
-
-    record_name('AccountPaidDetails') ->
-    'merchstat_AccountPaidDetails';
 
     record_name('PayoutUnpaid') ->
     'merchstat_PayoutUnpaid';

@@ -109,17 +109,8 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'payout_type' :: dmsl_merch_stat_thrift:'PayoutType'(),
-    'paid_details' :: dmsl_merch_stat_thrift:'PaidDetails'() | undefined
+    'payout_type' :: dmsl_merch_stat_thrift:'PayoutType'()
 }).
-
-%% struct 'CardPaidDetails'
--record('merchstat_CardPaidDetails', {
-    'mask_pan' :: binary()
-}).
-
-%% struct 'AccountPaidDetails'
--record('merchstat_AccountPaidDetails', {}).
 
 %% struct 'PayoutUnpaid'
 -record('merchstat_PayoutUnpaid', {}).
@@ -136,7 +127,9 @@
 -record('merchstat_PayoutConfirmed', {}).
 
 %% struct 'PayoutCard'
--record('merchstat_PayoutCard', {}).
+-record('merchstat_PayoutCard', {
+    'mask_pan' :: binary()
+}).
 
 %% struct 'PayoutAccount'
 -record('merchstat_PayoutAccount', {

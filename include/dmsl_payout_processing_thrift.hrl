@@ -56,7 +56,6 @@
 
 %% struct 'CardPaidDetails'
 -record('payout_processing_CardPaidDetails', {
-    'mask_pan' :: binary(),
     'provider_details' :: dmsl_payout_processing_thrift:'ProviderDetails'()
 }).
 
@@ -80,14 +79,14 @@
     'user_info' :: dmsl_payout_processing_thrift:'UserInfo'()
 }).
 
-%% struct 'CardPayout'
--record('payout_processing_CardPayout', {
+%% struct 'PayoutCard'
+-record('payout_processing_PayoutCard', {
     'request_id' :: binary(),
-    'card_token' :: dmsl_domain_thrift:'Token'() | undefined
+    'bank_card' :: dmsl_domain_thrift:'BankCard'()
 }).
 
-%% struct 'AccountPayout'
--record('payout_processing_AccountPayout', {
+%% struct 'PayoutAccount'
+-record('payout_processing_PayoutAccount', {
     'account' :: binary(),
     'bank_corr_account' :: binary(),
     'bank_bik' :: binary(),
