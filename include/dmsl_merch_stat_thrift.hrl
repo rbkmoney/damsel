@@ -135,11 +135,11 @@
 %% struct 'PayoutConfirmed'
 -record('merchstat_PayoutConfirmed', {}).
 
-%% struct 'CardPayout'
--record('merchstat_CardPayout', {}).
+%% struct 'PayoutCard'
+-record('merchstat_PayoutCard', {}).
 
-%% struct 'AccountPayout'
--record('merchstat_AccountPayout', {
+%% struct 'PayoutAccount'
+-record('merchstat_PayoutAccount', {
     'account' :: binary(),
     'bank_corr_account' :: binary(),
     'bank_bik' :: binary(),

@@ -66,8 +66,8 @@
     'PayoutCancelled'/0,
     'PayoutConfirmed'/0,
     'PayoutType'/0,
-    'CardPayout'/0,
-    'AccountPayout'/0,
+    'PayoutCard'/0,
+    'PayoutAccount'/0,
     'StatRequest'/0,
     'StatResponse'/0,
     'StatResponseData'/0
@@ -128,8 +128,8 @@
     'PayoutCancelled' |
     'PayoutConfirmed' |
     'PayoutType' |
-    'CardPayout' |
-    'AccountPayout' |
+    'PayoutCard' |
+    'PayoutAccount' |
     'StatRequest' |
     'StatResponse' |
     'StatResponseData'.
@@ -241,14 +241,14 @@
 
 %% union 'PayoutType'
 -type 'PayoutType'() ::
-    {'card_payout', 'CardPayout'()} |
-    {'account_payout', 'AccountPayout'()}.
+    {'payout_card', 'PayoutCard'()} |
+    {'payout_account', 'PayoutAccount'()}.
 
-%% struct 'CardPayout'
--type 'CardPayout'() :: #'merchstat_CardPayout'{}.
+%% struct 'PayoutCard'
+-type 'PayoutCard'() :: #'merchstat_PayoutCard'{}.
 
-%% struct 'AccountPayout'
--type 'AccountPayout'() :: #'merchstat_AccountPayout'{}.
+%% struct 'PayoutAccount'
+-type 'PayoutAccount'() :: #'merchstat_PayoutAccount'{}.
 
 %% struct 'StatRequest'
 -type 'StatRequest'() :: #'merchstat_StatRequest'{}.
@@ -359,8 +359,8 @@ structs() ->
         'PayoutCancelled',
         'PayoutConfirmed',
         'PayoutType',
-        'CardPayout',
-        'AccountPayout',
+        'PayoutCard',
+        'PayoutAccount',
         'StatRequest',
         'StatResponse',
         'StatResponseData'
@@ -569,14 +569,14 @@ struct_info('PayoutConfirmed') ->
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CardPayout'}}, 'card_payout', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'AccountPayout'}}, 'account_payout', undefined}
+    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCard'}}, 'payout_card', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'payout_account', undefined}
 ]};
 
-struct_info('CardPayout') ->
+struct_info('PayoutCard') ->
     {struct, struct, []};
 
-struct_info('AccountPayout') ->
+struct_info('PayoutAccount') ->
     {struct, struct, [
     {1, required, string, 'account', undefined},
     {2, required, string, 'bank_corr_account', undefined},
@@ -680,11 +680,11 @@ record_name('OperationTimeout') ->
     record_name('PayoutConfirmed') ->
     'merchstat_PayoutConfirmed';
 
-    record_name('CardPayout') ->
-    'merchstat_CardPayout';
+    record_name('PayoutCard') ->
+    'merchstat_PayoutCard';
 
-    record_name('AccountPayout') ->
-    'merchstat_AccountPayout';
+    record_name('PayoutAccount') ->
+    'merchstat_PayoutAccount';
 
     record_name('StatRequest') ->
     'merchstat_StatRequest';

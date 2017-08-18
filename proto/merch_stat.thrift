@@ -145,12 +145,12 @@ struct PayoutCancelled { 1: required string details }
 struct PayoutConfirmed {}
 
 union PayoutType {
-    1: CardPayout card_payout
-    2: AccountPayout account_payout
+    1: PayoutCard payout_card
+    2: PayoutAccount payout_account
 }
 
-struct CardPayout {}
-struct AccountPayout {
+struct PayoutCard {}
+struct PayoutAccount {
     1: required string account
     2: required string bank_corr_account
     3: required string bank_bik
