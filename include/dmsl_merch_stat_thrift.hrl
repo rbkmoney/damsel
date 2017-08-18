@@ -128,7 +128,9 @@
 
 %% struct 'PayoutCard'
 -record('merchstat_PayoutCard', {
-    'mask_pan' :: binary()
+    'mask_pan' :: binary(),
+    'payment_system' :: atom(),
+    'bin' :: binary()
 }).
 
 %% struct 'PayoutAccount'

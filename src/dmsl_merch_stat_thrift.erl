@@ -540,7 +540,9 @@ struct_info('PayoutType') ->
 
 struct_info('PayoutCard') ->
     {struct, struct, [
-    {1, required, string, 'mask_pan', undefined}
+    {1, required, string, 'mask_pan', undefined},
+    {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+    {3, required, string, 'bin', undefined}
 ]};
 
 struct_info('PayoutAccount') ->
