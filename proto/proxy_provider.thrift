@@ -75,12 +75,22 @@ struct Invoice {
     6: required Cash cost
 }
 
+union PaymentResource {
+    1: domain.DisposablePaymentResource disposable_payment_resource
+    2: RecurrentPaymentResource         recurrent_payment_resource
+}
+
+struct RecurrentPaymentResource {
+    1: required domain.Token       rec_token
+}
+
 struct InvoicePayment {
     1: required domain.InvoicePaymentID id
     2: required base.Timestamp created_at
     3: optional domain.TransactionInfo trx
-    4: required domain.Payer payer
+    6: required PaymentResource payment_resource
     5: required Cash cost
+    7: required domain.ContactInfo contact_info
 }
 
 struct Cash {
