@@ -161,6 +161,8 @@ union PayoutType {
 
 struct PayoutCard {
     1: required string mask_pan
+    2: required domain.BankCardPaymentSystem payment_system
+    3: required string bin
 }
 
 struct PayoutAccount {
