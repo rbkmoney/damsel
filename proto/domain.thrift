@@ -532,9 +532,27 @@ struct Counterparty {
     2: required base.Timestamp created_at
     3: required Blocking blocking
     4: required Suspension suspension
-    5: required Contract contract
+    5: required CounterpartyContract contract
 }
 
+/**  Договор с контрагентом */
+struct CounterpartyContract {
+    1: required ContractID id
+    2: required base.Timestamp created_at
+    3: optional base.Timestamp valid_since
+    4: optional base.Timestamp valid_until
+    5: required ContractStatus status
+    6: required list<CounterpartyTermSet> terms
+    7: optional LegalAgreement legal_agreement
+}
+
+struct CounterpartyTermSet {
+    1: optional CounterpartyPayoutsServiceTerms payouts
+}
+
+struct CounterpartyPayoutsServiceTerms {
+    1: optional CashFlowSelector fees
+}
 
 /* Currencies */
 
