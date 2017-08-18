@@ -84,7 +84,6 @@ union EventSource {
  */
 union EventPayload {
     /** Набор изменений, порождённых инвойсом. */
-<<<<<<< HEAD
     1: list<InvoiceChange>          invoice_changes
     /** Набор изменений, порождённых участником. */
     2: list<PartyChange>            party_changes
