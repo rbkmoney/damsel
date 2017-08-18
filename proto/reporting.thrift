@@ -20,8 +20,9 @@ exception DatasetTooBig {
     1: i32 limit
 }
 
+exception PartyNotFound {}
+exception ShopNotFound {}
 exception ReportNotFound {}
-
 exception FileNotFound {}
 
 /**
@@ -56,8 +57,7 @@ enum ReportStatus {
 * report_id - уникальный идентификатор отчета
 * time_range - за какой период данный отчет
 * report_type - тип отчета
-* report_file_meta - данные по файлу отчета
-* sign_file_meta - данные по файлу подписи
+* files - файлы данного отчета (к примеру сам отчет и его подпись)
 */
 struct Report {
     1: required ReportID report_id
@@ -65,19 +65,26 @@ struct Report {
     3: required Timestamp created_at
     4: required ReportType report_type
     5: required ReportStatus status
-    6: optional FileMeta report_file_meta
-    7: optional FileMeta sign_file_meta
+    6: optional list<FileMeta> files
 }
 
 /**
 * Данные по файлу
 * file_id - уникальный идентификатор файла
-* md5 - md5 содержимого файла
+* signatures - сигнатуры файла (md5, sha256)
 */
 struct FileMeta {
     1: required FileID file_id
     2: required string filename
-    3: optional string md5
+    3: required Signature signature
+}
+
+/**
+* Cигнатуры файла
+*/
+struct Signature {
+    1: required string md5
+    2: required string sha256
 }
 
 /**
@@ -106,16 +113,18 @@ service Reporting {
   * Сгенерировать отчет с указанным типом по магазину за указанный промежуток времени
   * Возвращает идентификатор отчета
   *
+  * PartyNotFound, если party не найден
+  * ShopNotFound, если shop не найден
   * InvalidRequest, если промежуток времени некорректен
   */
-  ReportID GenerateReport(1: ReportRequest request, 2: ReportType report_type) throws (1: InvalidRequest ex1)
+  ReportID GenerateReport(1: ReportRequest request, 2: ReportType report_type) throws (1: PartyNotFound ex1, 2: ShopNotFound ex2, 3: InvalidRequest ex3)
 
   /**
-  * Запрос на получение отчета по его идентификатору
+  * Запрос на получение отчета
   *
   * ReportNotFound, если отчет не найден
   */
-  Report GetReport(1: ReportID report_id) throws (1: ReportNotFound ex1)
+  Report GetReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
   * Сгенерировать ссылку на файл

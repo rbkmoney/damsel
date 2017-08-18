@@ -97,7 +97,15 @@ struct ProxyResult {
  */
 struct CallbackResult {
     1: required proxy.CallbackResponse response
-    2: required ProxyResult result
+    2: required CallbackProxyResult result
+}
+
+struct CallbackProxyResult {
+    // TODO temporary crutch, remove it as soon as possible
+    // An `undefined` means that the suspend will be kept untouched
+    1: optional proxy.Intent intent
+    2: optional proxy.ProxyState next_state
+    3: optional domain.TransactionInfo trx
 }
 
 service ProviderProxy {

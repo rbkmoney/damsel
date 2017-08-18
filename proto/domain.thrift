@@ -3,6 +3,7 @@
  */
 
 include "base.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
@@ -80,6 +81,19 @@ struct Invoice {
 struct InvoiceDetails {
     1: required string product
     2: optional string description
+    3: optional InvoiceCart cart
+}
+
+struct InvoiceCart {
+    1: required list<InvoiceLine> lines
+}
+
+struct InvoiceLine {
+    1: required string product
+    2: required i32 quantity
+    3: required Cash price
+    /* Taxes and other stuff goes here */
+    4: required map<string, msgpack.Value> metadata
 }
 
 struct InvoiceUnpaid    {}
@@ -290,6 +304,10 @@ struct Suspended {
 
 typedef base.ID PartyID
 
+typedef string PartyMetaNamespace
+typedef msgpack.Value PartyMetaData
+typedef map<PartyMetaNamespace, PartyMetaData> PartyMeta
+
 /** Участник. */
 struct Party {
     1: required PartyID id
@@ -346,6 +364,7 @@ union ShopLocation {
 enum RiskScore {
     low = 1
     high = 100
+    fatal = 9999
 }
 
 /* Contracts */
@@ -602,6 +621,7 @@ struct CashLimitDecision {
 
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
+    2: TerminalPaymentProvider payment_terminal
 }
 
 enum BankCardPaymentSystem {
@@ -621,6 +641,7 @@ enum BankCardPaymentSystem {
 
 union PaymentTool {
     1: BankCard bank_card
+    2: PaymentTerminal payment_terminal
 }
 
 typedef string Token
@@ -631,6 +652,21 @@ struct BankCard {
     3: required string bin
     4: required string masked_pan
 }
+
+/** Платеж через терминал **/
+struct PaymentTerminal {
+    1: required TerminalPaymentProvider terminal_type
+}
+
+/**
+*  Вид платежного терминала
+*
+*  например Евросеть
+**/
+enum TerminalPaymentProvider {
+    euroset
+}
+
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
 
