@@ -74,7 +74,8 @@
     'due' :: dmsl_base_thrift:'Timestamp'(),
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'context' :: dmsl_base_thrift:'Content'() | undefined
+    'context' :: dmsl_base_thrift:'Content'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoiceUnpaid'
