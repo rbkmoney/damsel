@@ -1,21 +1,9 @@
 include "base.thrift"
-include "kkt.thrift"
+include "cash_register.thrift"
 include "domain.thrift"
 
-namespace java com.rbkmoney.damsel.proxy_kkt
-namespace erlang prxkkt
-
-/**
- * Данные о компании
- */
-struct Company {
-    1: required string name
-    2: required string url
-    3: required string inn
-    4: required string address
-    5: required string tax
-    6: required Shop shop
-}
+namespace java com.rbkmoney.damsel.cash_register
+namespace erlang proxy_cash_register
 
 struct Shop {
     1: required domain.ShopID id
@@ -34,24 +22,12 @@ struct ShopLocation {
 
 
 /**
- * Данные для проксика для взаимодействия с ККТ
- */
-struct CashBox {
-    1: required string url
-    2: required string group
-    3: optional string clientId
-    4: optional domain.ProxyOptions options = {}
-}
-
-
-/**
  * Данные платежа, необходимые для обращения к прокси
  */
 struct PaymentInfo {
-    1: required Company company
-    2: required CashBox cashbox
-    3: required Invoice invoice
-    4: required InvoicePayment invoicePayment
+    1: required domain.RussianLegalEntity russian_legal_entity
+    2: required Invoice invoice
+    3: required InvoicePayment invoice_payment
 }
 
 struct Invoice {
@@ -70,7 +46,8 @@ struct InvoicePayment {
 }
 
 struct Payer {
-    1: required domain.ContactInfo contact_info
+    1: required domain.PaymentTool payment_tool
+    2: required domain.ContactInfo contact_info
 }
 
 struct Cash {
@@ -101,7 +78,7 @@ union TargetInvoicePaymentStatus {
     /**
      * Возврат расхода
      */
-    2: RefundDebit refundDebit
+    2: RefundDebit refund_debit
 
 }
 
@@ -119,8 +96,7 @@ struct Context {
  * Результат обращения к провайдерскому прокси в рамках сессии.
  */
 struct CashBoxProxyResult {
-    1: required kkt.Intent intent
-    2: optional string originalResponse
+    1: required cash_register.Intent intent
 }
 
 service CashBoxProxy {
@@ -128,7 +104,7 @@ service CashBoxProxy {
     /**
      * Запрос к прокси на проведение взаимодействия с провайдером в рамках сессии.
      */
-    CashBoxProxyResult Processed (1: Context context)
+    CashBoxProxyResult RegisterInvoice (1: Context context)
 
 }
 

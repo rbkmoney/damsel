@@ -1,6 +1,6 @@
 include "base.thrift"
 
-namespace java com.rbkmoney.damsel.kkt
+namespace java com.rbkmoney.damsel.cash_register
 
 /**
  * Требование прокси к процессингу, отражающее дальнейший прогресс сессии взаимодействия
