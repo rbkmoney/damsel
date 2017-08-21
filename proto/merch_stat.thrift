@@ -80,11 +80,11 @@ struct StatInvoice {
     5 : required InvoiceStatus status
     6 : required string product
     7 : optional string description
-    8 : optional domain.InvoiceCart cart
-    9 : required base.Timestamp due
-    10: required domain.Amount amount
-    11: required string currency_symbolic_code
-    12: optional base.Content context
+    8 : required base.Timestamp due
+    9 : required domain.Amount amount
+    10: required string currency_symbolic_code
+    11: optional base.Content context
+    12: optional domain.InvoiceCart cart
 }
 
 struct InvoiceUnpaid    {}
