@@ -392,11 +392,11 @@ struct_info('StatInvoice') ->
     {5, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoiceStatus'}}, 'status', undefined},
     {6, required, string, 'product', undefined},
     {7, optional, string, 'description', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-    {9, required, string, 'due', undefined},
-    {10, required, i64, 'amount', undefined},
-    {11, required, string, 'currency_symbolic_code', undefined},
-    {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    {8, required, string, 'due', undefined},
+    {9, required, i64, 'amount', undefined},
+    {10, required, string, 'currency_symbolic_code', undefined},
+    {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoiceUnpaid') ->
