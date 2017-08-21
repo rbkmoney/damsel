@@ -84,6 +84,7 @@ struct StatInvoice {
     9 : required domain.Amount amount
     10: required string currency_symbolic_code
     11: optional base.Content context
+    12: optional domain.InvoiceCart cart
 }
 
 struct InvoiceUnpaid    {}
