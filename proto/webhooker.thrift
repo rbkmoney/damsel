@@ -98,8 +98,8 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
-struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    {}
+struct InvoicePaymentRefunded  {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
