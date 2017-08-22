@@ -87,11 +87,11 @@ struct InvoicePaymentStatusChanged {
 
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
-    2: InvoicePaymentProcessed processed
-    3: InvoicePaymentCaptured captured
-    4: InvoicePaymentCancelled cancelled
-    5: InvoicePaymentRefunded refunded
-    6: InvoicePaymentFailed failed
+    4: InvoicePaymentProcessed processed
+    2: InvoicePaymentCaptured captured
+    5: InvoicePaymentCancelled cancelled
+    3: InvoicePaymentFailed failed
+    6: InvoicePaymentRefunded refunded
 }
 
 struct InvoicePaymentPending   {}
