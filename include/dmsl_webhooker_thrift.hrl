@@ -83,11 +83,11 @@
 %% struct 'InvoicePaymentCancelled'
 -record('webhooker_InvoicePaymentCancelled', {}).
 
-%% struct 'InvoicePaymentRefunded'
--record('webhooker_InvoicePaymentRefunded', {}).
-
 %% struct 'InvoicePaymentFailed'
 -record('webhooker_InvoicePaymentFailed', {}).
+
+%% struct 'InvoicePaymentRefunded'
+-record('webhooker_InvoicePaymentRefunded', {}).
 
 %% exception 'WebhookNotFound'
 -record('webhooker_WebhookNotFound', {}).

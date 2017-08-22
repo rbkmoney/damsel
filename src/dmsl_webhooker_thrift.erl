@@ -63,8 +63,8 @@
     'InvoicePaymentProcessed'/0,
     'InvoicePaymentCaptured'/0,
     'InvoicePaymentCancelled'/0,
-    'InvoicePaymentRefunded'/0,
-    'InvoicePaymentFailed'/0
+    'InvoicePaymentFailed'/0,
+    'InvoicePaymentRefunded'/0
 ]).
 -export_type([
     'WebhookNotFound'/0
@@ -119,8 +119,8 @@
     'InvoicePaymentProcessed' |
     'InvoicePaymentCaptured' |
     'InvoicePaymentCancelled' |
-    'InvoicePaymentRefunded' |
-    'InvoicePaymentFailed'.
+    'InvoicePaymentFailed' |
+    'InvoicePaymentRefunded'.
 
 -type exception_name() ::
     'WebhookNotFound'.
@@ -224,11 +224,11 @@
 %% struct 'InvoicePaymentCancelled'
 -type 'InvoicePaymentCancelled'() :: #'webhooker_InvoicePaymentCancelled'{}.
 
-%% struct 'InvoicePaymentRefunded'
--type 'InvoicePaymentRefunded'() :: #'webhooker_InvoicePaymentRefunded'{}.
-
 %% struct 'InvoicePaymentFailed'
 -type 'InvoicePaymentFailed'() :: #'webhooker_InvoicePaymentFailed'{}.
+
+%% struct 'InvoicePaymentRefunded'
+-type 'InvoicePaymentRefunded'() :: #'webhooker_InvoicePaymentRefunded'{}.
 
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
@@ -321,8 +321,8 @@ structs() ->
         'InvoicePaymentProcessed',
         'InvoicePaymentCaptured',
         'InvoicePaymentCancelled',
-        'InvoicePaymentRefunded',
-        'InvoicePaymentFailed'
+        'InvoicePaymentFailed',
+        'InvoicePaymentRefunded'
     ].
 
 -spec services() -> [service_name()].
@@ -482,10 +482,10 @@ struct_info('InvoicePaymentCaptured') ->
 struct_info('InvoicePaymentCancelled') ->
     {struct, struct, []};
 
-struct_info('InvoicePaymentRefunded') ->
+struct_info('InvoicePaymentFailed') ->
     {struct, struct, []};
 
-struct_info('InvoicePaymentFailed') ->
+struct_info('InvoicePaymentRefunded') ->
     {struct, struct, []};
 
 struct_info('WebhookNotFound') ->
@@ -552,11 +552,11 @@ record_name('WebhookParams') ->
     record_name('InvoicePaymentCancelled') ->
     'webhooker_InvoicePaymentCancelled';
 
-    record_name('InvoicePaymentRefunded') ->
-    'webhooker_InvoicePaymentRefunded';
-
     record_name('InvoicePaymentFailed') ->
     'webhooker_InvoicePaymentFailed';
+
+    record_name('InvoicePaymentRefunded') ->
+    'webhooker_InvoicePaymentRefunded';
 
     record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';
