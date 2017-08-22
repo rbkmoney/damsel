@@ -209,8 +209,8 @@
     {'processed', 'InvoicePaymentProcessed'()} |
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
-    {'refunded', 'InvoicePaymentRefunded'()} |
-    {'failed', 'InvoicePaymentFailed'()}.
+    {'failed', 'InvoicePaymentFailed'()} |
+    {'refunded', 'InvoicePaymentRefunded'()}.
 
 %% struct 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'webhooker_InvoicePaymentPending'{}.
@@ -463,11 +463,11 @@ struct_info('InvoicePaymentStatusChanged') ->
 struct_info('InvoicePaymentStatus') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
-    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {5, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
-    {6, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
+    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
+    {5, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
+    {6, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
 ]};
 
 struct_info('InvoicePaymentPending') ->
