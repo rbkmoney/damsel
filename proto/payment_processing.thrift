@@ -75,6 +75,8 @@ union EventSource {
     2: domain.PartyID           party_id
     /** Идентификатор шаблона инвойса, который породил событие. */
     3: domain.InvoiceTemplateID invoice_template_id
+    /** Идентификатор плательщика, который породил событие. */
+    4: domain.CustomerID customer_id
 }
 
 /**
@@ -87,6 +89,8 @@ union EventPayload {
     2: list<PartyChange>            party_changes
     /** Набор изменений, порождённых шаблоном инвойса. */
     3: list<InvoiceTemplateChange>  invoice_template_changes
+    /** Некоторое событие, порождённое плательщиком. */
+    4: list<CustomerChange>         customer_changes
 }
 
 /**
@@ -134,7 +138,7 @@ struct InvoicePaymentChange {
 union InvoicePaymentChangePayload {
     1: InvoicePaymentStarted               invoice_payment_started
     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
-    2: InvoicePaymentSessionChange         invoice_payment_session_change
+    2: SessionChange                       invoice_payment_session_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
 }
 
@@ -147,7 +151,7 @@ struct InvoicePaymentStarted {
     /** Оценка риска платежа. */
     4: required domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
-    2: required domain.InvoicePaymentRoute route
+    2: required domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: required domain.FinalCashFlow cash_flow
 }
@@ -161,34 +165,34 @@ struct InvoicePaymentStatusChanged {
 }
 
 /**
- * Событие в рамках сессии взаимодействия с провайдером по платежу.
+ * Событие в рамках сессии взаимодействия с провайдером.
  */
-struct InvoicePaymentSessionChange {
+struct SessionChange {
     1: required domain.TargetInvoicePaymentStatus target
-    2: required InvoicePaymentSessionChangePayload payload
+    2: required SessionChangePayload payload
 }
 
 /**
  * Один из возможных вариантов события, порождённого сессией взаимодействия.
  */
-union InvoicePaymentSessionChangePayload {
-    1: InvoicePaymentSessionStarted              invoice_payment_session_started
-    2: InvoicePaymentSessionFinished             invoice_payment_session_finished
-    3: InvoicePaymentSessionSuspended            invoice_payment_session_suspended
-    4: InvoicePaymentSessionActivated            invoice_payment_session_activated
-    5: InvoicePaymentSessionTransactionBound     invoice_payment_session_transaction_bound
-    6: InvoicePaymentSessionProxyStateChanged    invoice_payment_session_proxy_state_changed
-    7: InvoicePaymentSessionInteractionRequested invoice_payment_session_interaction_requested
+union SessionChangePayload {
+    1: SessionStarted              session_started
+    2: SessionFinished             session_finished
+    3: SessionSuspended            session_suspended
+    4: SessionActivated            session_activated
+    5: SessionTransactionBound     session_transaction_bound
+    6: SessionProxyStateChanged    session_proxy_state_changed
+    7: SessionInteractionRequested session_interaction_requested
 }
 
-struct InvoicePaymentSessionStarted {}
+struct SessionStarted {}
 
-struct InvoicePaymentSessionFinished {
+struct SessionFinished {
     1: required SessionResult result
 }
 
-struct InvoicePaymentSessionSuspended {}
-struct InvoicePaymentSessionActivated {}
+struct SessionSuspended {}
+struct SessionActivated {}
 
 union SessionResult {
     1: SessionSucceeded succeeded
@@ -226,7 +230,7 @@ struct InvoiceTemplateDeleted {}
  * Событие о том, что появилась связь между платежом по инвойсу и транзакцией
  * у провайдера.
  */
-struct InvoicePaymentSessionTransactionBound {
+struct SessionTransactionBound {
     /** Данные о связанной транзакции у провайдера. */
     1: required domain.TransactionInfo trx
 }
@@ -234,14 +238,14 @@ struct InvoicePaymentSessionTransactionBound {
 /**
  * Событие о том, что изменилось непрозрачное состояние прокси в рамках сессии.
  */
-struct InvoicePaymentSessionProxyStateChanged {
+struct SessionProxyStateChanged {
     1: required base.Opaque proxy_state
 }
 
 /**
  * Событие о запросе взаимодействия с плательщиком.
  */
-struct InvoicePaymentSessionInteractionRequested {
+struct SessionInteractionRequested {
     /** Необходимое взаимодействие */
     1: required user_interaction.UserInteraction interaction
 }
@@ -639,6 +643,320 @@ service InvoiceTemplating {
             4: InvalidPartyStatus ex4,
             5: InvalidShopStatus ex5
         )
+}
+
+/* Customer management service definitions */
+
+/* Customers */
+
+typedef domain.CustomerID CustomerID
+typedef domain.Metadata   Metadata
+
+struct CustomerParams {
+    1: required PartyID            party_id
+    2: required ShopID             shop_id
+    3: required domain.ContactInfo contact_info
+    4: required Metadata           metadata
+}
+
+struct Customer {
+    1: required CustomerID            id
+    2: required PartyID               owner_id
+    3: required ShopID                shop_id
+    4: required CustomerStatus        status
+    5: required base.Timestamp        created_at
+    /* Список всех привязок */
+    6: required list<CustomerBinding> bindings
+    7: required domain.ContactInfo    contact_info
+    8: required Metadata              metadata
+    /*
+     * Активная привязка
+     * (привязка, которая связана с рекуррентным платежным средство, по которому будет проходить оплата)
+     */
+    9: optional CustomerBindingID     active_binding
+}
+
+/**
+ * Статусы плательщика
+ *
+ * Статус отражает возможость проводить платежи с помощью данного плательщика,
+ * то есть существует ли (и она сейчас активна) у него привязка, завершившаяся успешно
+ */
+union CustomerStatus {
+    1: CustomerUnready unready
+    2: CustomerReady   ready
+}
+
+struct CustomerUnready {}
+struct CustomerReady   {}
+
+// Events
+typedef list<CustomerEvent> CustomerEvents
+
+struct CustomerEvent {
+    1: required base.EventID         id
+    2: required base.Timestamp       created_at
+    3: required CustomerID           source
+    4: required list<CustomerChange> payload
+}
+
+union CustomerChange {
+    1: CustomerCreated        customer_created
+    2: CustomerDeleted        customer_deleted
+    3: CustomerStatusChanged  customer_status_changed
+    4: CustomerBindingChanged customer_binding_changed
+}
+
+/**
+ * Событие о создании нового плательщика.
+ */
+struct CustomerCreated {
+    1: required Customer customer
+}
+
+/**
+ * Событие об удалении плательщика.
+ */
+struct CustomerDeleted {}
+
+/**
+ * Событие об изменении статуса плательщика.
+ */
+struct CustomerStatusChanged {
+    1: required CustomerStatus status
+}
+
+/**
+ * Событие, касающееся определённой привязки плательщика.
+ */
+struct CustomerBindingChanged {
+    1: required CustomerBindingID            id
+    2: required CustomerBindingChangePayload payload
+}
+
+
+/* Bindings */
+
+typedef base.ID CustomerBindingID
+
+struct CustomerBindingParams {
+    1: required domain.DisposablePaymentResource payment_resource
+}
+
+struct CustomerBinding {
+    1: required CustomerBindingID                id
+    2: required RecurrentPaymentToolID           rec_payment_tool_id
+    3: required domain.DisposablePaymentResource payment_resource
+    4: required CustomerBindingStatus            status
+}
+
+// Statuses
+union CustomerBindingStatus {
+    1: CustomerBindingPending   pending
+    2: CustomerBindingSucceeded succeeded
+    3: CustomerBindingFailed    failed
+}
+
+/**
+ * Привязка находится в процессе обработки
+ */
+struct CustomerBindingPending   {}
+
+/**
+ * Привязка завершилась успешно
+ */
+struct CustomerBindingSucceeded {}
+
+/**
+ * Привязка завершилась неудачно
+ */
+struct CustomerBindingFailed    { 1: required domain.OperationFailure failure }
+
+// Events
+union CustomerBindingChangePayload {
+    1: CustomerBindingStarted        customer_binding_started
+    2: CustomerBindingStatusChanged  customer_binding_status_changed
+}
+
+/**
+ * Событие о старте процесса привязки
+ */
+struct CustomerBindingStarted {
+    1: required CustomerBinding binding
+}
+
+/**
+ * Событие об изменении статуса привязки
+ */
+struct CustomerBindingStatusChanged {
+    1: required CustomerBindingStatus status
+}
+
+// Exceptions
+exception InvalidCustomerStatus {
+    1: required CustomerStatus status
+}
+exception CustomerNotFound   {}
+exception InvalidPaymentTool {}
+
+// Service
+
+service CustomerManagement {
+
+    Customer Create (1: CustomerParams params)
+        throws (
+            1: InvalidUser         invalid_user
+            2: ShopNotFound        shop_not_found
+            3: PartyNotFound       party_not_found
+            4: base.InvalidRequest invalid_request
+        )
+
+    Customer Get (1: CustomerID id)
+        throws (
+            1: InvalidUser      invalid_user
+            2: CustomerNotFound not_found
+        )
+
+    void Delete (1: CustomerID id)
+        throws (
+            1: InvalidUser      invalid_user
+            2: CustomerNotFound not_found
+        )
+
+    CustomerBinding StartBinding (1: CustomerID customer_id, 2: CustomerBindingParams params)
+        throws (
+            1: InvalidUser           invalid_user
+            2: CustomerNotFound      customer_not_found
+            3: InvalidPaymentTool    invalid_payment_tool
+            4: base.InvalidRequest   invalid_request
+        )
+
+    CustomerBinding GetActiveBinding (1: CustomerID customer_id)
+        throws (
+            1: InvalidUser           invalid_user
+            2: CustomerNotFound      customer_not_found
+            3: InvalidCustomerStatus invalid_customer_status
+        )
+
+    CustomerEvents GetEvents (1: CustomerID customer_id, 2: EventRange range)
+        throws (
+            1: InvalidUser      invalid_user
+            2: CustomerNotFound customer_not_found
+            3: EventNotFound    event_not_found
+        )
+}
+
+/* Recurrent Payment Tool */
+
+// Types
+typedef base.ID RecurrentPaymentToolID
+
+// Model
+struct RecurrentPaymentTool {
+    1: required RecurrentPaymentToolID           id
+    2: required RecurrentPaymentToolStatus       status
+    3: required base.Timestamp                   created_at
+    4: required domain.DisposablePaymentResource payment_resource
+    5: required domain.PaymentRoute              route
+    6: optional domain.Token                     rec_token
+}
+
+// Statuses
+struct RecurrentPaymentToolCreated   {}
+struct RecurrentPaymentToolAcquired  {}
+struct RecurrentPaymentToolAbandoned {}
+struct RecurrentPaymentToolFailed    { 1: required domain.OperationFailure failure }
+
+union RecurrentPaymentToolStatus {
+    1: RecurrentPaymentToolCreated   created
+    2: RecurrentPaymentToolAcquired  acquired
+    3: RecurrentPaymentToolAbandoned abandoned
+    4: RecurrentPaymentToolFailed    failed
+}
+
+// Events
+typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
+
+/*
+ * События, связанные непосредственно с получением рекуррентных токенов
+ */
+struct RecurrentPaymentToolEvent {
+    1: required base.EventID                     id
+    2: required base.Timestamp                   created_at
+    3: required RecurrentPaymentToolID           source
+    4: required list<RecurrentPaymentToolChange> payload
+}
+
+union RecurrentPaymentToolChange {
+    1: RecurrentPaymentToolHasCreated   rec_payment_tool_created
+    2: RecurrentPaymentToolHasAcquired  rec_payment_tool_acquired
+    3: RecurrentPaymentToolHasAbandoned rec_payment_tool_abandoned
+    4: SessionChange                    rec_payment_tool_session_changed
+}
+
+/*
+ * Создано рекуррентное платежное средство
+ */
+struct RecurrentPaymentToolHasCreated {
+    1: required RecurrentPaymentTool rec_payment_tool
+}
+
+/*
+ * Получен рекуррентный токен => теперь этим платежным средством можно платить
+ */
+struct RecurrentPaymentToolHasAcquired {
+    1: required domain.Token token
+}
+
+/*
+ * Рекуррентное платежное средство отозвано
+ */
+struct RecurrentPaymentToolHasAbandoned {}
+
+
+// Exceptions
+exception InvalidBinding                    {}
+exception BindingNotFound                   {}
+exception RecurrentPaymentToolNotFound      {}
+exception InvalidRecurrentPaymentToolStatus {
+    1: required RecurrentPaymentToolStatus status
+}
+
+service PaymentProcessing {
+    RecurrentPaymentTool CreateRecurrentPaymentTool (1: domain.DisposablePaymentResource disposable_payment_resource)
+        throws (
+            1: InvalidUser invalid_user
+        )
+
+    RecurrentPaymentTool AbandonRecurrentPaymentTool (1: RecurrentPaymentToolID id)
+        throws (
+            1: InvalidUser                       invalid_user
+            2: RecurrentPaymentToolNotFound      rec_payment_tool_not_found
+            3: InvalidRecurrentPaymentToolStatus invalid_rec_payment_tool_status
+        )
+
+    RecurrentPaymentTool GetRecurrentPaymentTool (1: RecurrentPaymentToolID id)
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
+
+    RecurrentPaymentToolEvents GetRecurrentPaymentToolEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+            3: EventNotFound                event_not_found
+        )
+}
+
+exception NoLastEvent {}
+
+service RecurrentPaymentToolEventSink {
+    RecurrentPaymentToolEvents GetEvents (1: EventRange range)
+        throws (1: EventNotFound ex1, 2: base.InvalidRequest ex2)
+
+    base.EventID GetLastEventID ()
+        throws (1: NoLastEvent ex1)
 }
 
 /* Party management service definitions */
@@ -1077,9 +1395,6 @@ service PartyManagement {
 }
 
 /* Event sink service definitions */
-
-/** Исключение, сигнализирующее о том, что последнего события не существует. */
-exception NoLastEvent {}
 
 service EventSink {
 
