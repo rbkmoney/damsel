@@ -3,6 +3,7 @@
 
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_msgpack_thrift.hrl").
+-include("dmsl_json_thrift.hrl").
 
 
 
@@ -126,12 +127,15 @@
 %% struct 'InvoiceTemplateCostUnlimited'
 -record('domain_InvoiceTemplateCostUnlimited', {}).
 
-%% struct 'Payer'
--record('domain_Payer', {
-    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
-    'session_id' :: dmsl_domain_thrift:'PaymentSessionID'(),
-    'client_info' :: dmsl_domain_thrift:'ClientInfo'(),
+%% struct 'PaymentResourcePayer'
+-record('domain_PaymentResourcePayer', {
+    'resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
+%% struct 'CustomerPayer'
+-record('domain_CustomerPayer', {
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
 }).
 
 %% struct 'ClientInfo'
@@ -140,8 +144,8 @@
     'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined
 }).
 
-%% struct 'InvoicePaymentRoute'
--record('domain_InvoicePaymentRoute', {
+%% struct 'PaymentRoute'
+-record('domain_PaymentRoute', {
     'provider' :: dmsl_domain_thrift:'ProviderRef'(),
     'terminal' :: dmsl_domain_thrift:'TerminalRef'()
 }).
@@ -424,6 +428,18 @@
 -record('domain_CashLimitDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
+}).
+
+%% struct 'DisposablePaymentResource'
+-record('domain_DisposablePaymentResource', {
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
+    'payment_session_id' :: dmsl_domain_thrift:'PaymentSessionID'() | undefined,
+    'client_info' :: dmsl_domain_thrift:'ClientInfo'()
+}).
+
+%% struct 'CustomerPaymentResource'
+-record('domain_CustomerPaymentResource', {
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
 }).
 
 %% struct 'BankCard'

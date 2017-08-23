@@ -4,8 +4,50 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_proxy_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
+-include("dmsl_payment_processing_thrift.hrl").
 
 
+
+%% struct 'RecurrentPaymentTool'
+-record('prxprv_RecurrentPaymentTool', {
+    'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
+    'rec_token' :: dmsl_domain_thrift:'Token'() | undefined
+}).
+
+%% struct 'RecurrentTokenInfo'
+-record('prxprv_RecurrentTokenInfo', {
+    'shop' :: dmsl_proxy_provider_thrift:'Shop'(),
+    'payment_tool' :: dmsl_proxy_provider_thrift:'RecurrentPaymentTool'(),
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'RecurrentTokenGenerationSession'
+-record('prxprv_RecurrentTokenGenerationSession', {
+    'state' :: dmsl_proxy_thrift:'ProxyState'() | undefined
+}).
+
+%% struct 'RecurrentTokenGenerationContext'
+-record('prxprv_RecurrentTokenGenerationContext', {
+    'session' :: dmsl_proxy_provider_thrift:'RecurrentTokenGenerationSession'(),
+    'token_info' :: dmsl_proxy_provider_thrift:'RecurrentTokenInfo'(),
+    'options' = #{} :: dmsl_domain_thrift:'ProxyOptions'() | undefined
+}).
+
+%% struct 'RecurrentTokenGenerationProxyResult'
+-record('prxprv_RecurrentTokenGenerationProxyResult', {
+    'intent' :: dmsl_proxy_thrift:'Intent'(),
+    'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
+    'token' :: dmsl_domain_thrift:'Token'() | undefined,
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'RecurrentTokenGenerationCallbackResult'
+-record('prxprv_RecurrentTokenGenerationCallbackResult', {
+    'response' :: dmsl_proxy_thrift:'CallbackResponse'(),
+    'result' :: dmsl_proxy_provider_thrift:'RecurrentTokenGenerationProxyResult'()
+}).
 
 %% struct 'PaymentInfo'
 -record('prxprv_PaymentInfo', {
@@ -31,13 +73,19 @@
     'cost' :: dmsl_proxy_provider_thrift:'Cash'()
 }).
 
+%% struct 'RecurrentPaymentResource'
+-record('prxprv_RecurrentPaymentResource', {
+    'rec_token' :: dmsl_domain_thrift:'Token'()
+}).
+
 %% struct 'InvoicePayment'
 -record('prxprv_InvoicePayment', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'payer' :: dmsl_domain_thrift:'Payer'(),
-    'cost' :: dmsl_proxy_provider_thrift:'Cash'()
+    'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
+    'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
 }).
 
 %% struct 'Cash'
@@ -52,28 +100,28 @@
     'state' :: dmsl_proxy_thrift:'ProxyState'() | undefined
 }).
 
-%% struct 'Context'
--record('prxprv_Context', {
+%% struct 'PaymentContext'
+-record('prxprv_PaymentContext', {
     'session' :: dmsl_proxy_provider_thrift:'Session'(),
     'payment_info' :: dmsl_proxy_provider_thrift:'PaymentInfo'(),
     'options' = #{} :: dmsl_domain_thrift:'ProxyOptions'() | undefined
 }).
 
-%% struct 'ProxyResult'
--record('prxprv_ProxyResult', {
+%% struct 'PaymentProxyResult'
+-record('prxprv_PaymentProxyResult', {
     'intent' :: dmsl_proxy_thrift:'Intent'(),
     'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
-%% struct 'CallbackResult'
--record('prxprv_CallbackResult', {
+%% struct 'PaymentCallbackResult'
+-record('prxprv_PaymentCallbackResult', {
     'response' :: dmsl_proxy_thrift:'CallbackResponse'(),
-    'result' :: dmsl_proxy_provider_thrift:'CallbackProxyResult'()
+    'result' :: dmsl_proxy_provider_thrift:'PaymentCallbackProxyResult'()
 }).
 
-%% struct 'CallbackProxyResult'
--record('prxprv_CallbackProxyResult', {
+%% struct 'PaymentCallbackProxyResult'
+-record('prxprv_PaymentCallbackProxyResult', {
     'intent' :: dmsl_proxy_thrift:'Intent'() | undefined,
     'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
