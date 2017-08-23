@@ -75,7 +75,7 @@ union EventSource {
     2: domain.PartyID           party_id
     /** Идентификатор шаблона инвойса, который породил событие. */
     3: domain.InvoiceTemplateID invoice_template_id
-    /** Идентификатор customer'а, который породил событие. */
+    /** Идентификатор плательщика, который породил событие. */
     4: domain.CustomerID customer_id
 }
 
@@ -89,7 +89,7 @@ union EventPayload {
     2: list<PartyChange>            party_changes
     /** Набор изменений, порождённых шаблоном инвойса. */
     3: list<InvoiceTemplateChange>  invoice_template_changes
-    /** Некоторое событие, порождённое customer'ом. */
+    /** Некоторое событие, порождённое плательщиком. */
     4: list<CustomerChange>         customer_changes
 }
 
@@ -619,13 +619,23 @@ struct Customer {
     3: required ShopID                shop_id
     4: required CustomerStatus        status
     5: required base.Timestamp        created_at
+    /* Список всех привязок */
     6: required list<CustomerBinding> bindings
     7: required domain.ContactInfo    contact_info
     8: required Metadata              metadata
+    /*
+     * Активная привязка
+     * (привязка, которая связана с рекуррентным платежным средство, по которому будет проходить оплата)
+     */
     9: optional CustomerBindingID     active_binding
 }
 
-// Statuses
+/**
+ * Статусы плательщика
+ *
+ * Статус отражает возможость проводить платежи с помощью данного плательщика,
+ * то есть существует ли (и она сейчас активна) у него привязка, завершившаяся успешно
+ */
 union CustomerStatus {
     1: CustomerUnready unready
     2: CustomerReady   ready
@@ -651,14 +661,31 @@ union CustomerChange {
     4: CustomerBindingChanged customer_binding_changed
 }
 
+/**
+ * Событие о создании нового плательщика.
+ */
 struct CustomerCreated {
     1: required Customer customer
 }
 
+/**
+ * Событие об удалении плательщика.
+ */
 struct CustomerDeleted {}
 
+/**
+ * Событие об изменении статуса плательщика.
+ */
 struct CustomerStatusChanged {
     1: required CustomerStatus status
+}
+
+/**
+ * Событие, касающееся определённой привязки плательщика.
+ */
+struct CustomerBindingChanged {
+    1: required CustomerBindingID            id
+    2: required CustomerBindingChangePayload payload
 }
 
 
@@ -684,31 +711,42 @@ union CustomerBindingStatus {
     3: CustomerBindingFailed    failed
 }
 
+/**
+ * Привязка находится в процессе обработки
+ */
 struct CustomerBindingPending   {}
+
+/**
+ * Привязка завершилась успешно
+ */
 struct CustomerBindingSucceeded {}
+
+/**
+ * Привязка завершилась неудачно
+ */
 struct CustomerBindingFailed    { 1: required domain.OperationFailure failure }
 
 // Events
-struct CustomerBindingChanged {
-    1: required CustomerBindingID            id
-    2: required CustomerBindingChangePayload payload
-}
-
 union CustomerBindingChangePayload {
     1: CustomerBindingStarted        customer_binding_started
     2: CustomerBindingStatusChanged  customer_binding_status_changed
 }
 
+/**
+ * Событие о старте процесса привязки
+ */
 struct CustomerBindingStarted {
     1: required CustomerBinding binding
 }
 
+/**
+ * Событие об изменении статуса привязки
+ */
 struct CustomerBindingStatusChanged {
     1: required CustomerBindingStatus status
 }
 
 // Exceptions
-
 exception InvalidCustomerStatus {
     1: required CustomerStatus status
 }
@@ -793,6 +831,9 @@ union RecurrentPaymentToolStatus {
 // Events
 typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
 
+/*
+ * События, связанные непосредственно с получением рекуррентных токенов
+ */
 struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
@@ -807,20 +848,29 @@ union RecurrentPaymentToolChange {
     4: SessionChange                    rec_payment_tool_session_changed
 }
 
+/*
+ * Создано рекуррентное платежное средство
+ */
 struct RecurrentPaymentToolHasCreated {
     1: required RecurrentPaymentTool rec_payment_tool
 }
 
+/*
+ * Получен рекуррентный токен => теперь этим платежным средством можно платить
+ */
 struct RecurrentPaymentToolHasAcquired {
     1: required domain.Token token
 }
 
+/*
+ * Рекуррентное платежное средство отозвано
+ */
 struct RecurrentPaymentToolHasAbandoned {}
 
 
 // Exceptions
-exception InvalidBinding           {}
-exception BindingNotFound          {}
+exception InvalidBinding                    {}
+exception BindingNotFound                   {}
 exception RecurrentPaymentToolNotFound      {}
 exception InvalidRecurrentPaymentToolStatus {
     1: required RecurrentPaymentToolStatus status
