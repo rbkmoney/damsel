@@ -44,6 +44,7 @@
     'InvoicePaymentProcessed'/0,
     'InvoicePaymentCaptured'/0,
     'InvoicePaymentCancelled'/0,
+    'InvoicePaymentRefunded'/0,
     'InvoicePaymentFailed'/0,
     'InvoicePaymentStatus'/0,
     'PaymentTool'/0,
@@ -92,6 +93,7 @@
     'InvoicePaymentProcessed' |
     'InvoicePaymentCaptured' |
     'InvoicePaymentCancelled' |
+    'InvoicePaymentRefunded' |
     'InvoicePaymentFailed' |
     'InvoicePaymentStatus' |
     'PaymentTool' |
@@ -136,6 +138,9 @@
 %% struct 'InvoicePaymentCancelled'
 -type 'InvoicePaymentCancelled'() :: #'merchstat_InvoicePaymentCancelled'{}.
 
+%% struct 'InvoicePaymentRefunded'
+-type 'InvoicePaymentRefunded'() :: #'merchstat_InvoicePaymentRefunded'{}.
+
 %% struct 'InvoicePaymentFailed'
 -type 'InvoicePaymentFailed'() :: #'merchstat_InvoicePaymentFailed'{}.
 
@@ -145,6 +150,7 @@
     {'processed', 'InvoicePaymentProcessed'()} |
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
+    {'refunded', 'InvoicePaymentRefunded'()} |
     {'failed', 'InvoicePaymentFailed'()}.
 
 %% union 'PaymentTool'
@@ -264,6 +270,7 @@ structs() ->
         'InvoicePaymentProcessed',
         'InvoicePaymentCaptured',
         'InvoicePaymentCancelled',
+        'InvoicePaymentRefunded',
         'InvoicePaymentFailed',
         'InvoicePaymentStatus',
         'PaymentTool',
@@ -356,6 +363,9 @@ struct_info('InvoicePaymentCaptured') ->
 struct_info('InvoicePaymentCancelled') ->
     {struct, struct, []};
 
+struct_info('InvoicePaymentRefunded') ->
+    {struct, struct, []};
+
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined}
@@ -367,6 +377,7 @@ struct_info('InvoicePaymentStatus') ->
     {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
     {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
     {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
+    {6, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
     {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
 ]};
 
@@ -476,6 +487,9 @@ record_name('OperationTimeout') ->
 
     record_name('InvoicePaymentCancelled') ->
     'merchstat_InvoicePaymentCancelled';
+
+    record_name('InvoicePaymentRefunded') ->
+    'merchstat_InvoicePaymentRefunded';
 
     record_name('InvoicePaymentFailed') ->
     'merchstat_InvoicePaymentFailed';
