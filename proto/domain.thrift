@@ -4,12 +4,14 @@
 
 include "base.thrift"
 include "msgpack.thrift"
+include "json.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
 
-typedef i64 DataRevision
-typedef i32 ObjectID
+typedef i64        DataRevision
+typedef i32        ObjectID
+typedef json.Value Metadata
 
 /* Common */
 
@@ -210,11 +212,18 @@ union TargetInvoicePaymentStatus {
 
 }
 
-struct Payer {
-    1: required PaymentTool payment_tool
-    2: required PaymentSessionID session_id
-    3: required ClientInfo client_info
-    4: required ContactInfo contact_info
+union Payer {
+    1: PaymentResourcePayer payment_resource
+    2: CustomerPayer        customer
+}
+
+struct PaymentResourcePayer {
+    1: required DisposablePaymentResource resource
+    2: required ContactInfo               contact_info
+}
+
+struct CustomerPayer {
+    1: required CustomerID customer_id
 }
 
 struct ClientInfo {
@@ -222,7 +231,7 @@ struct ClientInfo {
     2: optional Fingerprint fingerprint
 }
 
-struct InvoicePaymentRoute {
+struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
 }
@@ -666,9 +675,21 @@ enum BankCardPaymentSystem {
     nspkmir
 }
 
+typedef base.ID CustomerID
+
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
+}
+
+struct DisposablePaymentResource {
+    1: required PaymentTool      payment_tool
+    2: optional PaymentSessionID payment_session_id
+    3: required ClientInfo       client_info
+}
+
+struct CustomerPaymentResource {
+    1: required CustomerID customer_id
 }
 
 typedef string Token
