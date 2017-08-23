@@ -104,7 +104,7 @@ service CashBoxProxy {
     /**
      * Запрос к прокси на проведение взаимодействия с провайдером в рамках сессии.
      */
-    CashBoxProxyResult RegisterInvoice (1: Context context, 2: Session session)
+    CashBoxProxyResult RegisterInvoiceReceipt (1: Context context, 2: Session session)
 
 }
 
