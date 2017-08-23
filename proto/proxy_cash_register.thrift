@@ -60,7 +60,7 @@ struct Cash {
  * Данные сессии взаимодействия с прокси.
  */
 struct Session {
-    1: required RegisterInvoiceReceipt register
+    1: required InvoiceReceiptType type
 }
 
 struct Debit {}
@@ -69,7 +69,7 @@ struct RefundDebit {}
 /**
  * Целевое значение статуса платежа.
  */
-union RegisterInvoiceReceipt {
+union InvoiceReceiptType {
 
     /**
      * Расход
