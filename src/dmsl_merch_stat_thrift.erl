@@ -406,7 +406,8 @@ struct_info('StatInvoice') ->
     {8, required, string, 'due', undefined},
     {9, required, i64, 'amount', undefined},
     {10, required, string, 'currency_symbolic_code', undefined},
-    {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoiceUnpaid') ->
