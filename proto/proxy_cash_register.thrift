@@ -25,9 +25,10 @@ struct ShopLocation {
  * Данные платежа, необходимые для обращения к прокси
  */
 struct PaymentInfo {
-    1: required domain.RussianLegalEntity russian_legal_entity
-    2: required Invoice invoice
-    3: required InvoicePayment invoice_payment
+    1: required Shop shop
+    2: required domain.RussianLegalEntity russian_legal_entity
+    3: required Invoice invoice
+    4: required InvoicePayment invoice_payment
 }
 
 struct Invoice {
@@ -59,7 +60,7 @@ struct Cash {
  * Данные сессии взаимодействия с прокси.
  */
 struct Session {
-    1: required TargetInvoicePaymentStatus target
+    1: required RegisterInvoiceReceipt register
 }
 
 struct Debit {}
@@ -68,7 +69,7 @@ struct RefundDebit {}
 /**
  * Целевое значение статуса платежа.
  */
-union TargetInvoicePaymentStatus {
+union RegisterInvoiceReceipt {
 
     /**
      * Расход
@@ -86,9 +87,8 @@ union TargetInvoicePaymentStatus {
  * Набор данных для взаимодействия с прокси.
  */
 struct Context {
-    1: required Session session
-    2: required PaymentInfo payment_info
-    3: optional domain.ProxyOptions options = {}
+    1: required PaymentInfo payment_info
+    2: optional domain.ProxyOptions options = {}
 }
 
 
@@ -104,7 +104,7 @@ service CashBoxProxy {
     /**
      * Запрос к прокси на проведение взаимодействия с провайдером в рамках сессии.
      */
-    CashBoxProxyResult RegisterInvoice (1: Context context)
+    CashBoxProxyResult RegisterInvoice (1: Context context, 2: Session session)
 
 }
 
