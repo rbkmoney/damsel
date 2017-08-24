@@ -254,6 +254,7 @@ struct InvoicePaymentRefund {
     1: required InvoicePaymentRefundID id
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
+    4: required DataRevision domain_revision
     5: optional string reason
 }
 
