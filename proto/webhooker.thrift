@@ -91,6 +91,7 @@ union InvoicePaymentStatus {
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
     3: InvoicePaymentFailed failed
+    6: InvoicePaymentRefunded refunded
 }
 
 struct InvoicePaymentPending   {}
@@ -98,6 +99,7 @@ struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    {}
+struct InvoicePaymentRefunded  {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
