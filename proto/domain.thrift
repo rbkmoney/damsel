@@ -554,7 +554,8 @@ struct PaymentsServiceTerms {
 }
 
 struct PaymentRefundsServiceTerms {
-    1: optional CashFlowSelector fees
+    1: optional PaymentMethodSelector payment_methods
+    2: optional CashFlowSelector fees
 }
 
 /* Currencies */
