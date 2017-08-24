@@ -852,6 +852,7 @@ struct PaymentsProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
     3: optional PaymentMethodSelector payment_methods
+    6: optional CashLimitSelector cash_limit
     4: optional CashFlowSelector cash_flow
     5: optional PaymentRefundsProvisionTerms refunds
 }
