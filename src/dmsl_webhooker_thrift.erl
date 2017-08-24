@@ -63,7 +63,8 @@
     'InvoicePaymentProcessed'/0,
     'InvoicePaymentCaptured'/0,
     'InvoicePaymentCancelled'/0,
-    'InvoicePaymentFailed'/0
+    'InvoicePaymentFailed'/0,
+    'InvoicePaymentRefunded'/0
 ]).
 -export_type([
     'WebhookNotFound'/0
@@ -118,7 +119,8 @@
     'InvoicePaymentProcessed' |
     'InvoicePaymentCaptured' |
     'InvoicePaymentCancelled' |
-    'InvoicePaymentFailed'.
+    'InvoicePaymentFailed' |
+    'InvoicePaymentRefunded'.
 
 -type exception_name() ::
     'WebhookNotFound'.
@@ -207,7 +209,8 @@
     {'processed', 'InvoicePaymentProcessed'()} |
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
-    {'failed', 'InvoicePaymentFailed'()}.
+    {'failed', 'InvoicePaymentFailed'()} |
+    {'refunded', 'InvoicePaymentRefunded'()}.
 
 %% struct 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'webhooker_InvoicePaymentPending'{}.
@@ -223,6 +226,9 @@
 
 %% struct 'InvoicePaymentFailed'
 -type 'InvoicePaymentFailed'() :: #'webhooker_InvoicePaymentFailed'{}.
+
+%% struct 'InvoicePaymentRefunded'
+-type 'InvoicePaymentRefunded'() :: #'webhooker_InvoicePaymentRefunded'{}.
 
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
@@ -315,7 +321,8 @@ structs() ->
         'InvoicePaymentProcessed',
         'InvoicePaymentCaptured',
         'InvoicePaymentCancelled',
-        'InvoicePaymentFailed'
+        'InvoicePaymentFailed',
+        'InvoicePaymentRefunded'
     ].
 
 -spec services() -> [service_name()].
@@ -459,7 +466,8 @@ struct_info('InvoicePaymentStatus') ->
     {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
     {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
     {5, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
+    {6, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
 ]};
 
 struct_info('InvoicePaymentPending') ->
@@ -475,6 +483,9 @@ struct_info('InvoicePaymentCancelled') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentFailed') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefunded') ->
     {struct, struct, []};
 
 struct_info('WebhookNotFound') ->
@@ -543,6 +554,9 @@ record_name('WebhookParams') ->
 
     record_name('InvoicePaymentFailed') ->
     'webhooker_InvoicePaymentFailed';
+
+    record_name('InvoicePaymentRefunded') ->
+    'webhooker_InvoicePaymentRefunded';
 
     record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';
