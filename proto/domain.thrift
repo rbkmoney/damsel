@@ -538,7 +538,7 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
-    7: optional HoldLifetime hold_lifetime
+    7: optional HoldLifetimeSelector hold_lifetime
     /* Undefined level */
     3: optional GuaranteeFundTerms guarantee_fund
 }
@@ -686,6 +686,18 @@ union PaymentMethodSelector {
 struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
+}
+
+/* Holds */
+
+union HoldLifetimeSelector {
+    1: list<HoldLifetimeDecision> decisions
+    2: HoldLifetime value
+}
+
+struct HoldLifetimeDecision {
+    1: required Predicate if_
+    2: required HoldLifetimeSelector then_
 }
 
 /* Flows */
