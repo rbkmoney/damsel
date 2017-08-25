@@ -171,6 +171,8 @@
     'PaymentMethodDefinition'/0,
     'PaymentMethodSelector'/0,
     'PaymentMethodDecision'/0,
+    'HoldLifetimeSelector'/0,
+    'HoldLifetimeDecision'/0,
     'CashFlowAccount'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
@@ -486,6 +488,8 @@
     'PaymentMethodDefinition' |
     'PaymentMethodSelector' |
     'PaymentMethodDecision' |
+    'HoldLifetimeSelector' |
+    'HoldLifetimeDecision' |
     'CashFlowAccount' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
@@ -904,6 +908,14 @@
 
 %% struct 'PaymentMethodDecision'
 -type 'PaymentMethodDecision'() :: #'domain_PaymentMethodDecision'{}.
+
+%% union 'HoldLifetimeSelector'
+-type 'HoldLifetimeSelector'() ::
+    {'decisions', ['HoldLifetimeDecision'()]} |
+    {'value', 'HoldLifetime'()}.
+
+%% struct 'HoldLifetimeDecision'
+-type 'HoldLifetimeDecision'() :: #'domain_HoldLifetimeDecision'{}.
 
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
@@ -1397,6 +1409,8 @@ structs() ->
         'PaymentMethodDefinition',
         'PaymentMethodSelector',
         'PaymentMethodDecision',
+        'HoldLifetimeSelector',
+        'HoldLifetimeDecision',
         'CashFlowAccount',
         'CashFlowPosting',
         'FinalCashFlowPosting',
@@ -2130,7 +2144,7 @@ struct_info('PaymentsServiceTerms') ->
     {4, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'hold_lifetime', undefined},
+    {7, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'hold_lifetime', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'GuaranteeFundTerms'}}, 'guarantee_fund', undefined}
 ]};
 
@@ -2264,6 +2278,18 @@ struct_info('PaymentMethodDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'then_', undefined}
+]};
+
+struct_info('HoldLifetimeSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'HoldLifetimeDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'value', undefined}
+]};
+
+struct_info('HoldLifetimeDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CashFlowAccount') ->
@@ -2989,6 +3015,9 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentMethodDecision') ->
     'domain_PaymentMethodDecision';
+
+    record_name('HoldLifetimeDecision') ->
+    'domain_HoldLifetimeDecision';
 
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';

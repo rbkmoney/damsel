@@ -394,7 +394,7 @@
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'hold_lifetime' :: dmsl_domain_thrift:'HoldLifetime'() | undefined,
+    'hold_lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'() | undefined,
     'guarantee_fund' :: dmsl_domain_thrift:'GuaranteeFundTerms'() | undefined
 }).
 
@@ -486,6 +486,12 @@
 -record('domain_PaymentMethodDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'PaymentMethodSelector'()
+}).
+
+%% struct 'HoldLifetimeDecision'
+-record('domain_HoldLifetimeDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'HoldLifetimeSelector'()
 }).
 
 %% struct 'CashFlowPosting'
