@@ -421,12 +421,12 @@ union InvalidStatus {
 }
 
 exception InvalidUser {}
-exception InvalidOperation {}
 exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
+exception OperationNotPermitted {}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -599,7 +599,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: InvoicePaymentRefundPending ex5,
-            6: InvalidOperation ex6
+            6: OperationNotPermitted ex6
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
