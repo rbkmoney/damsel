@@ -254,6 +254,7 @@ struct InvoicePaymentRefund {
     1: required InvoicePaymentRefundID id
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
+    4: required DataRevision domain_revision
     5: optional string reason
 }
 
@@ -549,12 +550,11 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
-    /* Undefined level */
-    3: optional GuaranteeFundTerms guarantee_fund
+    7: optional PaymentRefundsServiceTerms refunds
 }
 
-struct GuaranteeFundTerms {
-    1: optional CashLimitSelector limits
+struct PaymentRefundsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
 }
 
@@ -845,6 +845,20 @@ struct Provider {
     4: required TerminalSelector terminal
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
+    6: optional PaymentsProvisionTerms terms
+}
+
+struct PaymentsProvisionTerms {
+    1: optional CurrencySelector currencies
+    2: optional CategorySelector categories
+    3: optional PaymentMethodSelector payment_methods
+    6: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
+    5: optional PaymentRefundsProvisionTerms refunds
+}
+
+struct PaymentRefundsProvisionTerms {
+    1: optional CashFlowSelector cash_flow
 }
 
 union ProviderSelector {
@@ -888,14 +902,10 @@ struct InspectorDecision {
 struct Terminal {
     1: required string name
     2: required string description
-    3: required PaymentMethodRef payment_method
-    4: required CategoryRef category
-    6: required CashFlow cash_flow
     7: required TerminalAccount account
-    // TODO
-    // 8: optional TerminalDescriptor descriptor
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
+    11: optional PaymentsProvisionTerms terms
 }
 
 struct TerminalAccount {
