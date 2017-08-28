@@ -43,7 +43,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'payout_type' :: dmsl_payout_processing_thrift:'PayoutType'()
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'()
 }).
 
 %% struct 'PayoutUnpaid'
@@ -81,15 +81,12 @@
 
 %% struct 'PayoutCard'
 -record('payout_processing_PayoutCard', {
-    'request_id' :: binary(),
-    'bank_card' :: dmsl_domain_thrift:'BankCard'()
+    'card' :: dmsl_domain_thrift:'BankCard'()
 }).
 
 %% struct 'PayoutAccount'
 -record('payout_processing_PayoutAccount', {
-    'account' :: binary(),
-    'bank_corr_account' :: binary(),
-    'bank_bik' :: binary(),
+    'account' :: dmsl_domain_thrift:'BankAccount'(),
     'inn' :: binary(),
     'purpose' :: binary()
 }).

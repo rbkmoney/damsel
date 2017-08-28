@@ -62,6 +62,14 @@
     'masked_pan' :: binary()
 }).
 
+%% struct 'BankAccount'
+-record('merchstat_BankAccount', {
+    'account' :: binary(),
+    'bank_name' :: binary(),
+    'bank_post_account' :: binary(),
+    'bank_bik' :: binary()
+}).
+
 %% struct 'StatInvoice'
 -record('merchstat_StatInvoice', {
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
@@ -109,7 +117,19 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'payout_type' :: dmsl_merch_stat_thrift:'PayoutType'()
+    'type' :: dmsl_merch_stat_thrift:'PayoutType'()
+}).
+
+%% struct 'PayoutCard'
+-record('merchstat_PayoutCard', {
+    'card' :: dmsl_merch_stat_thrift:'BankCard'()
+}).
+
+%% struct 'PayoutAccount'
+-record('merchstat_PayoutAccount', {
+    'account' :: dmsl_merch_stat_thrift:'BankAccount'(),
+    'inn' :: binary(),
+    'purpose' :: binary()
 }).
 
 %% struct 'PayoutUnpaid'
@@ -125,22 +145,6 @@
 
 %% struct 'PayoutConfirmed'
 -record('merchstat_PayoutConfirmed', {}).
-
-%% struct 'PayoutCard'
--record('merchstat_PayoutCard', {
-    'mask_pan' :: binary(),
-    'payment_system' :: atom(),
-    'bin' :: binary()
-}).
-
-%% struct 'PayoutAccount'
--record('merchstat_PayoutAccount', {
-    'account' :: binary(),
-    'bank_corr_account' :: binary(),
-    'bank_bik' :: binary(),
-    'inn' :: binary(),
-    'purpose' :: binary()
-}).
 
 %% struct 'StatRequest'
 -record('merchstat_StatRequest', {

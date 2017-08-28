@@ -206,8 +206,8 @@
 
 %% union 'PayoutType'
 -type 'PayoutType'() ::
-    {'payout_card', 'PayoutCard'()} |
-    {'payout_account', 'PayoutAccount'()}.
+    {'card', 'PayoutCard'()} |
+    {'account', 'PayoutAccount'()}.
 
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'payout_processing_PayoutCard'{}.
@@ -435,7 +435,7 @@ struct_info('Payout') ->
     {4, required, string, 'created_at', undefined},
     {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
     {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'payout_flow', undefined},
-    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'payout_type', undefined}
+    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined}
 ]};
 
 struct_info('PayoutStatus') ->
@@ -487,23 +487,20 @@ struct_info('PayoutConfirmed') ->
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'payout_card', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'payout_account', undefined}
+    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'card', undefined},
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'account', undefined}
 ]};
 
 struct_info('PayoutCard') ->
     {struct, struct, [
-    {1, required, string, 'request_id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'card', undefined}
 ]};
 
 struct_info('PayoutAccount') ->
     {struct, struct, [
-    {1, required, string, 'account', undefined},
-    {2, required, string, 'bank_corr_account', undefined},
-    {3, required, string, 'bank_bik', undefined},
-    {4, required, string, 'inn', undefined},
-    {5, required, string, 'purpose', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankAccount'}}, 'account', undefined},
+    {2, required, string, 'inn', undefined},
+    {3, required, string, 'purpose', undefined}
 ]};
 
 struct_info('PayoutStatusChanged') ->
