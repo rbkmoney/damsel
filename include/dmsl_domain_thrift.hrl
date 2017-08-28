@@ -726,7 +726,7 @@
     'external_account_set' :: dmsl_domain_thrift:'ExternalAccountSetSelector'(),
     'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
     'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'(),
-    'common_merchant_proxy' :: dmsl_domain_thrift:'ProxyRef'()
+    'common_merchant_proxy' :: dmsl_domain_thrift:'ProxyRef'() | undefined
 }).
 
 %% struct 'Dummy'
