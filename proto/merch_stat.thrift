@@ -69,6 +69,13 @@ struct BankCard {
     4: required string masked_pan
 }
 
+struct BankAccount {
+    1: required string account
+    2: required string bank_name
+    3: required string bank_post_account
+    4: required string bank_bik
+}
+
 /**
 * Информация об инвойсе.
 */
@@ -120,7 +127,22 @@ struct StatPayout {
     6 : required domain.Amount amount
     7 : required domain.Amount fee
     8 : required string currency_symbolic_code
-    9 : required PayoutType payout_type
+    9 : required PayoutType type
+}
+
+union PayoutType {
+    1: PayoutCard card
+    2: PayoutAccount account
+}
+
+struct PayoutCard {
+    1: required BankCard card
+}
+
+struct PayoutAccount {
+    1: required BankAccount account
+    4: required string inn
+    5: required string purpose
 }
 
 union PayoutStatus {
@@ -134,25 +156,6 @@ struct PayoutUnpaid {}
 struct PayoutPaid {}
 struct PayoutCancelled { 1: required string details }
 struct PayoutConfirmed {}
-
-union PayoutType {
-    1: PayoutCard payout_card
-    2: PayoutAccount payout_account
-}
-
-struct PayoutCard {
-    1: required string mask_pan
-    2: required domain.BankCardPaymentSystem payment_system
-    3: required string bin
-}
-
-struct PayoutAccount {
-    1: required string account
-    2: required string bank_corr_account
-    3: required string bank_bik
-    4: required string inn
-    5: required string purpose
-}
 
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest

@@ -98,7 +98,7 @@ struct Payout {
     4: required base.Timestamp created_at
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
-    7: required PayoutType payout_type
+    7: required PayoutType type
 }
 
 /**
@@ -165,30 +165,20 @@ struct PayoutConfirmed {
 
 /* Типы выплаты */
 union PayoutType {
-    1: PayoutCard payout_card
-    2: PayoutAccount payout_account
+    1: PayoutCard card
+    2: PayoutAccount account
 }
 
 /* Выплата на карту */
 struct PayoutCard {
-    /* Идентификатор запроса на выплату */
-    1: required string request_id
-    /* Данные по карте */
-    2: required domain.BankCard bank_card
+    1: required domain.BankCard card
 }
 
 /* Вывод на расчетный счет */
 struct PayoutAccount {
-    /* Расчетный счет */
-    1: required string account
-    /* Корреспондентский счет */
-    2: required string bank_corr_account
-    /* БИК */
-    3: required string bank_bik
-    /* ИНН организации */
-    4: required string inn
-    /* Назначение платежа */
-    5: required string purpose
+    1: required domain.BankAccount account
+    2: required string inn
+    3: required string purpose
 }
 
 /**
