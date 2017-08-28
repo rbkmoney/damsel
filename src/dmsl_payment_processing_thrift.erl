@@ -149,6 +149,7 @@
     'InvoicePaymentRefundNotFound'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
+    'OperationNotPermitted'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentRefundPending'/0,
     'InvoicePaymentAdjustmentPending'/0,
@@ -313,6 +314,7 @@
     'InvoicePaymentRefundNotFound' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
+    'OperationNotPermitted' |
     'InvoicePaymentPending' |
     'InvoicePaymentRefundPending' |
     'InvoicePaymentAdjustmentPending' |
@@ -734,6 +736,9 @@
 
 %% exception 'EventNotFound'
 -type 'EventNotFound'() :: #'payproc_EventNotFound'{}.
+
+%% exception 'OperationNotPermitted'
+-type 'OperationNotPermitted'() :: #'payproc_OperationNotPermitted'{}.
 
 %% exception 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'payproc_InvoicePaymentPending'{}.
@@ -1692,6 +1697,9 @@ struct_info('InvoicePaymentAdjustmentNotFound') ->
 struct_info('EventNotFound') ->
     {struct, exception, []};
 
+struct_info('OperationNotPermitted') ->
+    {struct, exception, []};
+
 struct_info('InvoicePaymentPending') ->
     {struct, exception, [
     {1, required, string, 'id', undefined}
@@ -2017,6 +2025,9 @@ record_name('InternalUser') ->
     record_name('EventNotFound') ->
     'payproc_EventNotFound';
 
+    record_name('OperationNotPermitted') ->
+    'payproc_OperationNotPermitted';
+
     record_name('InvoicePaymentPending') ->
     'payproc_InvoicePaymentPending';
 
@@ -2325,7 +2336,8 @@ function_info('Invoicing', 'RefundPayment', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundPending'}}, 'ex5', undefined}
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundPending'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [

@@ -178,6 +178,7 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
     'status' :: dmsl_domain_thrift:'InvoicePaymentRefundStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'reason' :: binary() | undefined
 }).
 
@@ -402,12 +403,12 @@
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'guarantee_fund' :: dmsl_domain_thrift:'GuaranteeFundTerms'() | undefined
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined
 }).
 
-%% struct 'GuaranteeFundTerms'
--record('domain_GuaranteeFundTerms', {
-    'limits' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+%% struct 'PaymentRefundsServiceTerms'
+-record('domain_PaymentRefundsServiceTerms', {
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
@@ -540,7 +541,23 @@
     'description' :: binary(),
     'proxy' :: dmsl_domain_thrift:'Proxy'(),
     'terminal' :: dmsl_domain_thrift:'TerminalSelector'(),
-    'abs_account' :: binary()
+    'abs_account' :: binary(),
+    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
+}).
+
+%% struct 'PaymentsProvisionTerms'
+-record('domain_PaymentsProvisionTerms', {
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'categories' :: dmsl_domain_thrift:'CategorySelector'() | undefined,
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
+}).
+
+%% struct 'PaymentRefundsProvisionTerms'
+-record('domain_PaymentRefundsProvisionTerms', {
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'ProviderDecision'
@@ -576,12 +593,10 @@
 -record('domain_Terminal', {
     'name' :: binary(),
     'description' :: binary(),
-    'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'(),
-    'category' :: dmsl_domain_thrift:'CategoryRef'(),
-    'cash_flow' :: dmsl_domain_thrift:'CashFlow'(),
     'account' :: dmsl_domain_thrift:'TerminalAccount'(),
     'options' :: dmsl_domain_thrift:'ProxyOptions'() | undefined,
-    'risk_coverage' :: atom()
+    'risk_coverage' :: atom(),
+    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
 }).
 
 %% struct 'TerminalAccount'

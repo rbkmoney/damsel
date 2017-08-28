@@ -152,7 +152,7 @@
     'TermSetHierarchy'/0,
     'TermSetHierarchyRef'/0,
     'PaymentsServiceTerms'/0,
-    'GuaranteeFundTerms'/0,
+    'PaymentRefundsServiceTerms'/0,
     'CurrencyRef'/0,
     'Currency'/0,
     'CurrencySelector'/0,
@@ -185,6 +185,8 @@
     'CashFlowDecision'/0,
     'ProviderRef'/0,
     'Provider'/0,
+    'PaymentsProvisionTerms'/0,
+    'PaymentRefundsProvisionTerms'/0,
     'ProviderSelector'/0,
     'ProviderDecision'/0,
     'TerminalRef'/0,
@@ -462,7 +464,7 @@
     'TermSetHierarchy' |
     'TermSetHierarchyRef' |
     'PaymentsServiceTerms' |
-    'GuaranteeFundTerms' |
+    'PaymentRefundsServiceTerms' |
     'CurrencyRef' |
     'Currency' |
     'CurrencySelector' |
@@ -495,6 +497,8 @@
     'CashFlowDecision' |
     'ProviderRef' |
     'Provider' |
+    'PaymentsProvisionTerms' |
+    'PaymentRefundsProvisionTerms' |
     'ProviderSelector' |
     'ProviderDecision' |
     'TerminalRef' |
@@ -831,8 +835,8 @@
 %% struct 'PaymentsServiceTerms'
 -type 'PaymentsServiceTerms'() :: #'domain_PaymentsServiceTerms'{}.
 
-%% struct 'GuaranteeFundTerms'
--type 'GuaranteeFundTerms'() :: #'domain_GuaranteeFundTerms'{}.
+%% struct 'PaymentRefundsServiceTerms'
+-type 'PaymentRefundsServiceTerms'() :: #'domain_PaymentRefundsServiceTerms'{}.
 
 %% struct 'CurrencyRef'
 -type 'CurrencyRef'() :: #'domain_CurrencyRef'{}.
@@ -954,6 +958,12 @@
 
 %% struct 'Provider'
 -type 'Provider'() :: #'domain_Provider'{}.
+
+%% struct 'PaymentsProvisionTerms'
+-type 'PaymentsProvisionTerms'() :: #'domain_PaymentsProvisionTerms'{}.
+
+%% struct 'PaymentRefundsProvisionTerms'
+-type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
 
 %% union 'ProviderSelector'
 -type 'ProviderSelector'() ::
@@ -1369,7 +1379,7 @@ structs() ->
         'TermSetHierarchy',
         'TermSetHierarchyRef',
         'PaymentsServiceTerms',
-        'GuaranteeFundTerms',
+        'PaymentRefundsServiceTerms',
         'CurrencyRef',
         'Currency',
         'CurrencySelector',
@@ -1402,6 +1412,8 @@ structs() ->
         'CashFlowDecision',
         'ProviderRef',
         'Provider',
+        'PaymentsProvisionTerms',
+        'PaymentRefundsProvisionTerms',
         'ProviderSelector',
         'ProviderDecision',
         'TerminalRef',
@@ -1851,6 +1863,7 @@ struct_info('InvoicePaymentRefund') ->
     {1, required, string, 'id', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
+    {4, required, i64, 'domain_revision', undefined},
     {5, optional, string, 'reason', undefined}
 ]};
 
@@ -2128,12 +2141,12 @@ struct_info('PaymentsServiceTerms') ->
     {4, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'GuaranteeFundTerms'}}, 'guarantee_fund', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined}
 ]};
 
-struct_info('GuaranteeFundTerms') ->
+struct_info('PaymentRefundsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'limits', undefined},
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
 ]};
 
@@ -2335,7 +2348,23 @@ struct_info('Provider') ->
     {2, required, string, 'description', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
     {4, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined},
-    {5, required, string, 'abs_account', undefined}
+    {5, required, string, 'abs_account', undefined},
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
+]};
+
+struct_info('PaymentsProvisionTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+    {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
+]};
+
+struct_info('PaymentRefundsProvisionTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
 ]};
 
 struct_info('ProviderSelector') ->
@@ -2383,12 +2412,10 @@ struct_info('Terminal') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, required, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}}, 'cash_flow', undefined},
     {7, required, {struct, struct, {dmsl_domain_thrift, 'TerminalAccount'}}, 'account', undefined},
     {9, optional, {map, string, string}, 'options', undefined},
-    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined}
+    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
+    {11, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
 ]};
 
 struct_info('TerminalAccount') ->
@@ -2931,8 +2958,8 @@ record_name('OperationTimeout') ->
     record_name('PaymentsServiceTerms') ->
     'domain_PaymentsServiceTerms';
 
-    record_name('GuaranteeFundTerms') ->
-    'domain_GuaranteeFundTerms';
+    record_name('PaymentRefundsServiceTerms') ->
+    'domain_PaymentRefundsServiceTerms';
 
     record_name('CurrencyRef') ->
     'domain_CurrencyRef';
@@ -2996,6 +3023,12 @@ record_name('OperationTimeout') ->
 
     record_name('Provider') ->
     'domain_Provider';
+
+    record_name('PaymentsProvisionTerms') ->
+    'domain_PaymentsProvisionTerms';
+
+    record_name('PaymentRefundsProvisionTerms') ->
+    'domain_PaymentRefundsProvisionTerms';
 
     record_name('ProviderDecision') ->
     'domain_ProviderDecision';

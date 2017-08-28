@@ -445,6 +445,9 @@
 %% exception 'EventNotFound'
 -record('payproc_EventNotFound', {}).
 
+%% exception 'OperationNotPermitted'
+-record('payproc_OperationNotPermitted', {}).
+
 %% exception 'InvoicePaymentPending'
 -record('payproc_InvoicePaymentPending', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'()
