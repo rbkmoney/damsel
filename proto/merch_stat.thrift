@@ -30,6 +30,24 @@ struct StatPayment {
     15: required domain.PaymentSessionID session_id
     16: optional base.Content context
     17: optional geo_ip.LocationInfo location_info
+    18: required InvoicePaymentFlow flow
+}
+
+union InvoicePaymentFlow {
+    1: InvoicePaymentFlowInstant instant
+    2: InvoicePaymentFlowHold hold
+}
+
+struct InvoicePaymentFlowInstant   {}
+
+struct InvoicePaymentFlowHold {
+    1: required OnHoldExpiration on_hold_expiration
+    2: required base.Timestamp held_until
+}
+
+enum OnHoldExpiration {
+    cancel
+    capture
 }
 
 union OperationFailure {
