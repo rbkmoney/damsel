@@ -892,21 +892,21 @@ struct Provider {
 }
 
 struct PaymentsProvisionTerms {
-    1: optional CurrencySelector currencies
-    2: optional CategorySelector categories
-    3: optional PaymentMethodSelector payment_methods
-    6: optional CashLimitSelector cash_limit
-    4: optional CashFlowSelector cash_flow
+    1: required CurrencySelector currencies
+    2: required CategorySelector categories
+    3: required PaymentMethodSelector payment_methods
+    6: required CashLimitSelector cash_limit
+    4: required CashFlowSelector cash_flow
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
 }
 
 struct PaymentHoldsProvisionTerms {
-    1: optional HoldLifetimeSelector lifetime
+    1: required HoldLifetimeSelector lifetime
 }
 
 struct PaymentRefundsProvisionTerms {
-    1: optional CashFlowSelector cash_flow
+    1: required CashFlowSelector cash_flow
 }
 
 union ProviderSelector {
