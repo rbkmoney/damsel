@@ -25,7 +25,17 @@
     'email' :: binary() | undefined,
     'session_id' :: dmsl_domain_thrift:'PaymentSessionID'(),
     'context' :: dmsl_base_thrift:'Content'() | undefined,
-    'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined
+    'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
+    'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'()
+}).
+
+%% struct 'InvoicePaymentFlowInstant'
+-record('merchstat_InvoicePaymentFlowInstant', {}).
+
+%% struct 'InvoicePaymentFlowHold'
+-record('merchstat_InvoicePaymentFlowHold', {
+    'on_hold_expiration' :: dmsl_merch_stat_thrift:'OnHoldExpiration'(),
+    'held_until' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% struct 'OperationTimeout'
