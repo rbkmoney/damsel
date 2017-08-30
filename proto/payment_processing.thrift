@@ -324,19 +324,19 @@ struct InvoiceWithTemplateParams {
 struct InvoiceTemplateCreateParams {
     1: required PartyID party_id
     2: required ShopID shop_id
-    3: required domain.LifetimeInterval invoice_lifetime
-    4: required string product # for backward compatibility
-    5: optional string description
-    6: required domain.InvoiceTemplateDetails details
-    7: required domain.InvoiceContext context
+    4: required domain.LifetimeInterval invoice_lifetime
+    7: required string product # for backward compatibility
+    8: optional string description
+    9: required domain.InvoiceTemplateDetails details
+    6: required domain.InvoiceContext context
 }
 
 struct InvoiceTemplateUpdateParams {
-    1: optional domain.LifetimeInterval invoice_lifetime
-    2: optional string product # for backward compatibility
-    3: optional string description
-    4: optional domain.InvoiceTemplateDetails details
-    5: optional domain.InvoiceContext context
+    2: optional domain.LifetimeInterval invoice_lifetime
+    5: optional string product # for backward compatibility
+    6: optional string description
+    7: optional domain.InvoiceTemplateDetails details
+    4: optional domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
