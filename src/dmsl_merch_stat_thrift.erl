@@ -36,13 +36,7 @@
     'InvalidRequest'/0
 ]).
 -export_type([
-    'OnHoldExpiration'/0
-]).
--export_type([
     'StatPayment'/0,
-    'InvoicePaymentFlow'/0,
-    'InvoicePaymentFlowInstant'/0,
-    'InvoicePaymentFlowHold'/0,
     'OperationFailure'/0,
     'OperationTimeout'/0,
     'ExternalFailure'/0,
@@ -85,22 +79,13 @@
 %%
 %% enums
 %%
--type enum_name() ::
-    'OnHoldExpiration'.
-
-%% enum 'OnHoldExpiration'
--type 'OnHoldExpiration'() ::
-    cancel |
-    capture.
+-type enum_name() :: none().
 
 %%
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
     'StatPayment' |
-    'InvoicePaymentFlow' |
-    'InvoicePaymentFlowInstant' |
-    'InvoicePaymentFlowHold' |
     'OperationFailure' |
     'OperationTimeout' |
     'ExternalFailure' |
@@ -129,17 +114,6 @@
 
 %% struct 'StatPayment'
 -type 'StatPayment'() :: #'merchstat_StatPayment'{}.
-
-%% union 'InvoicePaymentFlow'
--type 'InvoicePaymentFlow'() ::
-    {'instant', 'InvoicePaymentFlowInstant'()} |
-    {'hold', 'InvoicePaymentFlowHold'()}.
-
-%% struct 'InvoicePaymentFlowInstant'
--type 'InvoicePaymentFlowInstant'() :: #'merchstat_InvoicePaymentFlowInstant'{}.
-
-%% struct 'InvoicePaymentFlowHold'
--type 'InvoicePaymentFlowHold'() :: #'merchstat_InvoicePaymentFlowHold'{}.
 
 %% union 'OperationFailure'
 -type 'OperationFailure'() ::
@@ -264,8 +238,7 @@
 -type struct_info() ::
     {struct, struct_flavour(), [struct_field_info()]}.
 
--type enum_choice() ::
-    'OnHoldExpiration'().
+-type enum_choice() :: none().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -280,21 +253,16 @@ typedefs() ->
         'InvalidRequest'
     ].
 
--spec enums() -> [enum_name()].
+-spec enums() -> [].
 
 enums() ->
-    [
-        'OnHoldExpiration'
-    ].
+    [].
 
 -spec structs() -> [struct_name()].
 
 structs() ->
     [
         'StatPayment',
-        'InvoicePaymentFlow',
-        'InvoicePaymentFlowInstant',
-        'InvoicePaymentFlowHold',
         'OperationFailure',
         'OperationTimeout',
         'ExternalFailure',
@@ -341,13 +309,7 @@ typedef_info('InvalidRequest') ->
 
 typedef_info(_) -> erlang:error(badarg).
 
--spec enum_info(enum_name()) -> enum_info() | no_return().
-
-enum_info('OnHoldExpiration') ->
-    {enum, [
-        {cancel, 0},
-        {capture, 1}
-    ]};
+-spec enum_info(_) -> no_return().
 
 enum_info(_) -> erlang:error(badarg).
 
@@ -371,23 +333,7 @@ struct_info('StatPayment') ->
     {14, optional, string, 'email', undefined},
     {15, required, string, 'session_id', undefined},
     {16, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {17, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
-    {18, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined}
-]};
-
-struct_info('InvoicePaymentFlow') ->
-    {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
-]};
-
-struct_info('InvoicePaymentFlowInstant') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentFlowHold') ->
-    {struct, struct, [
-    {1, required, {enum, {dmsl_merch_stat_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
-    {2, required, string, 'held_until', undefined}
+    {17, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined}
 ]};
 
 struct_info('OperationFailure') ->
@@ -525,13 +471,7 @@ struct_info(_) -> erlang:error(badarg).
 record_name('StatPayment') ->
     'merchstat_StatPayment';
 
-record_name('InvoicePaymentFlowInstant') ->
-    'merchstat_InvoicePaymentFlowInstant';
-
-    record_name('InvoicePaymentFlowHold') ->
-    'merchstat_InvoicePaymentFlowHold';
-
-    record_name('OperationTimeout') ->
+record_name('OperationTimeout') ->
     'merchstat_OperationTimeout';
 
     record_name('ExternalFailure') ->

@@ -191,16 +191,7 @@
 
 %% struct 'InvoicePaymentParams'
 -record('payproc_InvoicePaymentParams', {
-    'payer' :: dmsl_domain_thrift:'Payer'(),
-    'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'()
-}).
-
-%% struct 'InvoicePaymentParamsFlowInstant'
--record('payproc_InvoicePaymentParamsFlowInstant', {}).
-
-%% struct 'InvoicePaymentParamsFlowHold'
--record('payproc_InvoicePaymentParamsFlowHold', {
-    'on_hold_expiration' :: atom()
+    'payer' :: dmsl_domain_thrift:'Payer'()
 }).
 
 %% struct 'Invoice'
