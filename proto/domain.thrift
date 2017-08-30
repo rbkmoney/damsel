@@ -115,13 +115,14 @@ struct InvoicePayment {
     3:  required InvoicePaymentStatus status
     5:  required Payer payer
     8:  required Cash cost
+    13: required InvoicePaymentFlow flow
     6:  optional InvoicePaymentContext context
 }
 
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured  {}
-struct InvoicePaymentCancelled {}
+struct InvoicePaymentCaptured  { 1: optional string reason }
+struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
@@ -246,6 +247,26 @@ union InvoicePaymentAdjustmentStatus {
     1: InvoicePaymentAdjustmentPending pending
     2: InvoicePaymentAdjustmentCaptured captured
     3: InvoicePaymentAdjustmentCancelled cancelled
+}
+
+/**
+ * Процесс выполнения платежа.
+ */
+union InvoicePaymentFlow {
+    1: InvoicePaymentFlowInstant instant
+    2: InvoicePaymentFlowHold hold
+}
+
+struct InvoicePaymentFlowInstant   {}
+
+struct InvoicePaymentFlowHold {
+    1: required OnHoldExpiration on_hold_expiration
+    2: required base.Timestamp held_until
+}
+
+enum OnHoldExpiration {
+    cancel
+    capture
 }
 
 /* Refunds */
@@ -550,7 +571,13 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
-    7: optional PaymentRefundsServiceTerms refunds
+    7: optional PaymentHoldsServiceTerms holds
+    8: optional PaymentRefundsServiceTerms refunds
+}
+
+struct PaymentHoldsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+    2: optional HoldLifetimeSelector lifetime
 }
 
 struct PaymentRefundsServiceTerms {
@@ -692,6 +719,22 @@ union PaymentMethodSelector {
 struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
+}
+
+/* Holds */
+
+struct HoldLifetime {
+    1: required i32 seconds
+}
+
+union HoldLifetimeSelector {
+    1: list<HoldLifetimeDecision> decisions
+    2: HoldLifetime value
+}
+
+struct HoldLifetimeDecision {
+    1: required Predicate if_
+    2: required HoldLifetimeSelector then_
 }
 
 /* Flows */
@@ -854,7 +897,12 @@ struct PaymentsProvisionTerms {
     3: optional PaymentMethodSelector payment_methods
     6: optional CashLimitSelector cash_limit
     4: optional CashFlowSelector cash_flow
-    5: optional PaymentRefundsProvisionTerms refunds
+    5: optional PaymentHoldsProvisionTerms holds
+    7: optional PaymentRefundsProvisionTerms refunds
+}
+
+struct PaymentHoldsProvisionTerms {
+    1: optional HoldLifetimeSelector lifetime
 }
 
 struct PaymentRefundsProvisionTerms {
@@ -1068,7 +1116,7 @@ struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     5: required InspectorSelector inspector
     6: required ContractTemplateRef default_contract_template
-    7: required ProxyRef common_merchant_proxy
+    7: optional ProxyRef common_merchant_proxy
 }
 
 /** Dummy (for integrity test purpose) */
