@@ -63,6 +63,7 @@
     'Domain'/0
 ]).
 -export_type([
+    'OnHoldExpiration'/0,
     'RiskScore'/0,
     'CategoryType'/0,
     'BankCardPaymentSystem'/0,
@@ -109,6 +110,9 @@
     'InvoicePaymentAdjustmentCaptured'/0,
     'InvoicePaymentAdjustmentCancelled'/0,
     'InvoicePaymentAdjustmentStatus'/0,
+    'InvoicePaymentFlow'/0,
+    'InvoicePaymentFlowInstant'/0,
+    'InvoicePaymentFlowHold'/0,
     'InvoicePaymentRefund'/0,
     'InvoicePaymentRefundStatus'/0,
     'InvoicePaymentRefundPending'/0,
@@ -152,6 +156,7 @@
     'TermSetHierarchy'/0,
     'TermSetHierarchyRef'/0,
     'PaymentsServiceTerms'/0,
+    'PaymentHoldsServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
     'CurrencyRef'/0,
     'Currency'/0,
@@ -173,6 +178,9 @@
     'PaymentMethodDefinition'/0,
     'PaymentMethodSelector'/0,
     'PaymentMethodDecision'/0,
+    'HoldLifetime'/0,
+    'HoldLifetimeSelector'/0,
+    'HoldLifetimeDecision'/0,
     'CashFlowAccount'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
@@ -186,6 +194,7 @@
     'ProviderRef'/0,
     'Provider'/0,
     'PaymentsProvisionTerms'/0,
+    'PaymentHoldsProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
     'ProviderSelector'/0,
     'ProviderDecision'/0,
@@ -319,6 +328,7 @@
 %% enums
 %%
 -type enum_name() ::
+    'OnHoldExpiration' |
     'RiskScore' |
     'CategoryType' |
     'BankCardPaymentSystem' |
@@ -328,6 +338,11 @@
     'SystemCashFlowAccount' |
     'ExternalCashFlowAccount' |
     'CashFlowConstant'.
+
+%% enum 'OnHoldExpiration'
+-type 'OnHoldExpiration'() ::
+    cancel |
+    capture.
 
 %% enum 'RiskScore'
 -type 'RiskScore'() ::
@@ -421,6 +436,9 @@
     'InvoicePaymentAdjustmentCaptured' |
     'InvoicePaymentAdjustmentCancelled' |
     'InvoicePaymentAdjustmentStatus' |
+    'InvoicePaymentFlow' |
+    'InvoicePaymentFlowInstant' |
+    'InvoicePaymentFlowHold' |
     'InvoicePaymentRefund' |
     'InvoicePaymentRefundStatus' |
     'InvoicePaymentRefundPending' |
@@ -464,6 +482,7 @@
     'TermSetHierarchy' |
     'TermSetHierarchyRef' |
     'PaymentsServiceTerms' |
+    'PaymentHoldsServiceTerms' |
     'PaymentRefundsServiceTerms' |
     'CurrencyRef' |
     'Currency' |
@@ -485,6 +504,9 @@
     'PaymentMethodDefinition' |
     'PaymentMethodSelector' |
     'PaymentMethodDecision' |
+    'HoldLifetime' |
+    'HoldLifetimeSelector' |
+    'HoldLifetimeDecision' |
     'CashFlowAccount' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
@@ -498,6 +520,7 @@
     'ProviderRef' |
     'Provider' |
     'PaymentsProvisionTerms' |
+    'PaymentHoldsProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
     'ProviderSelector' |
     'ProviderDecision' |
@@ -689,6 +712,17 @@
     {'captured', 'InvoicePaymentAdjustmentCaptured'()} |
     {'cancelled', 'InvoicePaymentAdjustmentCancelled'()}.
 
+%% union 'InvoicePaymentFlow'
+-type 'InvoicePaymentFlow'() ::
+    {'instant', 'InvoicePaymentFlowInstant'()} |
+    {'hold', 'InvoicePaymentFlowHold'()}.
+
+%% struct 'InvoicePaymentFlowInstant'
+-type 'InvoicePaymentFlowInstant'() :: #'domain_InvoicePaymentFlowInstant'{}.
+
+%% struct 'InvoicePaymentFlowHold'
+-type 'InvoicePaymentFlowHold'() :: #'domain_InvoicePaymentFlowHold'{}.
+
 %% struct 'InvoicePaymentRefund'
 -type 'InvoicePaymentRefund'() :: #'domain_InvoicePaymentRefund'{}.
 
@@ -835,6 +869,9 @@
 %% struct 'PaymentsServiceTerms'
 -type 'PaymentsServiceTerms'() :: #'domain_PaymentsServiceTerms'{}.
 
+%% struct 'PaymentHoldsServiceTerms'
+-type 'PaymentHoldsServiceTerms'() :: #'domain_PaymentHoldsServiceTerms'{}.
+
 %% struct 'PaymentRefundsServiceTerms'
 -type 'PaymentRefundsServiceTerms'() :: #'domain_PaymentRefundsServiceTerms'{}.
 
@@ -912,6 +949,17 @@
 %% struct 'PaymentMethodDecision'
 -type 'PaymentMethodDecision'() :: #'domain_PaymentMethodDecision'{}.
 
+%% struct 'HoldLifetime'
+-type 'HoldLifetime'() :: #'domain_HoldLifetime'{}.
+
+%% union 'HoldLifetimeSelector'
+-type 'HoldLifetimeSelector'() ::
+    {'decisions', ['HoldLifetimeDecision'()]} |
+    {'value', 'HoldLifetime'()}.
+
+%% struct 'HoldLifetimeDecision'
+-type 'HoldLifetimeDecision'() :: #'domain_HoldLifetimeDecision'{}.
+
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
     {'merchant', 'MerchantCashFlowAccount'()} |
@@ -961,6 +1009,9 @@
 
 %% struct 'PaymentsProvisionTerms'
 -type 'PaymentsProvisionTerms'() :: #'domain_PaymentsProvisionTerms'{}.
+
+%% struct 'PaymentHoldsProvisionTerms'
+-type 'PaymentHoldsProvisionTerms'() :: #'domain_PaymentHoldsProvisionTerms'{}.
 
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
@@ -1232,6 +1283,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
+    'OnHoldExpiration'() |
     'RiskScore'() |
     'CategoryType'() |
     'BankCardPaymentSystem'() |
@@ -1286,6 +1338,7 @@ typedefs() ->
 
 enums() ->
     [
+        'OnHoldExpiration',
         'RiskScore',
         'CategoryType',
         'BankCardPaymentSystem',
@@ -1336,6 +1389,9 @@ structs() ->
         'InvoicePaymentAdjustmentCaptured',
         'InvoicePaymentAdjustmentCancelled',
         'InvoicePaymentAdjustmentStatus',
+        'InvoicePaymentFlow',
+        'InvoicePaymentFlowInstant',
+        'InvoicePaymentFlowHold',
         'InvoicePaymentRefund',
         'InvoicePaymentRefundStatus',
         'InvoicePaymentRefundPending',
@@ -1379,6 +1435,7 @@ structs() ->
         'TermSetHierarchy',
         'TermSetHierarchyRef',
         'PaymentsServiceTerms',
+        'PaymentHoldsServiceTerms',
         'PaymentRefundsServiceTerms',
         'CurrencyRef',
         'Currency',
@@ -1400,6 +1457,9 @@ structs() ->
         'PaymentMethodDefinition',
         'PaymentMethodSelector',
         'PaymentMethodDecision',
+        'HoldLifetime',
+        'HoldLifetimeSelector',
+        'HoldLifetimeDecision',
         'CashFlowAccount',
         'CashFlowPosting',
         'FinalCashFlowPosting',
@@ -1413,6 +1473,7 @@ structs() ->
         'ProviderRef',
         'Provider',
         'PaymentsProvisionTerms',
+        'PaymentHoldsProvisionTerms',
         'PaymentRefundsProvisionTerms',
         'ProviderSelector',
         'ProviderDecision',
@@ -1578,6 +1639,12 @@ typedef_info('Domain') ->
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('OnHoldExpiration') ->
+    {enum, [
+        {cancel, 0},
+        {capture, 1}
+    ]};
 
 enum_info('RiskScore') ->
     {enum, [
@@ -1745,6 +1812,7 @@ struct_info('InvoicePayment') ->
     {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
     {5, required, {struct, struct, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+    {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 
@@ -1755,10 +1823,14 @@ struct_info('InvoicePaymentProcessed') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentCaptured') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'reason', undefined}
+]};
 
 struct_info('InvoicePaymentCancelled') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'reason', undefined}
+]};
 
 struct_info('InvoicePaymentRefunded') ->
     {struct, struct, []};
@@ -1856,6 +1928,21 @@ struct_info('InvoicePaymentAdjustmentStatus') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCaptured'}}, 'captured', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined}
+]};
+
+struct_info('InvoicePaymentFlow') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
+]};
+
+struct_info('InvoicePaymentFlowInstant') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentFlowHold') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
+    {2, required, string, 'held_until', undefined}
 ]};
 
 struct_info('InvoicePaymentRefund') ->
@@ -2141,7 +2228,14 @@ struct_info('PaymentsServiceTerms') ->
     {4, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined}
+]};
+
+struct_info('PaymentHoldsServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined}
 ]};
 
 struct_info('PaymentRefundsServiceTerms') ->
@@ -2271,6 +2365,23 @@ struct_info('PaymentMethodDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'then_', undefined}
 ]};
 
+struct_info('HoldLifetime') ->
+    {struct, struct, [
+    {1, required, i32, 'seconds', undefined}
+]};
+
+struct_info('HoldLifetimeSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'HoldLifetimeDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'value', undefined}
+]};
+
+struct_info('HoldLifetimeDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
+]};
+
 struct_info('CashFlowAccount') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'merchant', undefined},
@@ -2359,7 +2470,13 @@ struct_info('PaymentsProvisionTerms') ->
     {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
+]};
+
+struct_info('PaymentHoldsProvisionTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined}
 ]};
 
 struct_info('PaymentRefundsProvisionTerms') ->
@@ -2600,7 +2717,7 @@ struct_info('Globals') ->
     {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
     {5, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
     {6, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'default_contract_template', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
 ]};
 
 struct_info('Dummy') ->
@@ -2856,6 +2973,12 @@ record_name('OperationTimeout') ->
     record_name('InvoicePaymentAdjustmentCancelled') ->
     'domain_InvoicePaymentAdjustmentCancelled';
 
+    record_name('InvoicePaymentFlowInstant') ->
+    'domain_InvoicePaymentFlowInstant';
+
+    record_name('InvoicePaymentFlowHold') ->
+    'domain_InvoicePaymentFlowHold';
+
     record_name('InvoicePaymentRefund') ->
     'domain_InvoicePaymentRefund';
 
@@ -2958,6 +3081,9 @@ record_name('OperationTimeout') ->
     record_name('PaymentsServiceTerms') ->
     'domain_PaymentsServiceTerms';
 
+    record_name('PaymentHoldsServiceTerms') ->
+    'domain_PaymentHoldsServiceTerms';
+
     record_name('PaymentRefundsServiceTerms') ->
     'domain_PaymentRefundsServiceTerms';
 
@@ -3000,6 +3126,12 @@ record_name('OperationTimeout') ->
     record_name('PaymentMethodDecision') ->
     'domain_PaymentMethodDecision';
 
+    record_name('HoldLifetime') ->
+    'domain_HoldLifetime';
+
+    record_name('HoldLifetimeDecision') ->
+    'domain_HoldLifetimeDecision';
+
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
 
@@ -3026,6 +3158,9 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentsProvisionTerms') ->
     'domain_PaymentsProvisionTerms';
+
+    record_name('PaymentHoldsProvisionTerms') ->
+    'domain_PaymentHoldsProvisionTerms';
 
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
