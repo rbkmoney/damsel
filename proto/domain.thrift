@@ -889,24 +889,31 @@ struct Provider {
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
     6: optional PaymentsProvisionTerms terms
+    7: optional ProviderAccountSet accounts = {}
 }
 
 struct PaymentsProvisionTerms {
-    1: optional CurrencySelector currencies
-    2: optional CategorySelector categories
-    3: optional PaymentMethodSelector payment_methods
-    6: optional CashLimitSelector cash_limit
-    4: optional CashFlowSelector cash_flow
+    1: required CurrencySelector currencies
+    2: required CategorySelector categories
+    3: required PaymentMethodSelector payment_methods
+    6: required CashLimitSelector cash_limit
+    4: required CashFlowSelector cash_flow
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
 }
 
 struct PaymentHoldsProvisionTerms {
-    1: optional HoldLifetimeSelector lifetime
+    1: required HoldLifetimeSelector lifetime
 }
 
 struct PaymentRefundsProvisionTerms {
-    1: optional CashFlowSelector cash_flow
+    1: required CashFlowSelector cash_flow
+}
+
+typedef map<CurrencyRef, ProviderAccount> ProviderAccountSet
+
+struct ProviderAccount {
+    1: required AccountID settlement
 }
 
 union ProviderSelector {
@@ -950,15 +957,9 @@ struct InspectorDecision {
 struct Terminal {
     1: required string name
     2: required string description
-    7: required TerminalAccount account
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
     11: optional PaymentsProvisionTerms terms
-}
-
-struct TerminalAccount {
-    1: required CurrencyRef currency
-    2: required AccountID settlement
 }
 
 union TerminalSelector {
