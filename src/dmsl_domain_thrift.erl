@@ -62,6 +62,7 @@
     'Domain'/0
 ]).
 -export_type([
+    'OnHoldExpiration'/0,
     'RiskScore'/0,
     'CategoryType'/0,
     'BankCardPaymentSystem'/0,
@@ -107,6 +108,9 @@
     'InvoicePaymentAdjustmentCaptured'/0,
     'InvoicePaymentAdjustmentCancelled'/0,
     'InvoicePaymentAdjustmentStatus'/0,
+    'InvoicePaymentFlow'/0,
+    'InvoicePaymentFlowInstant'/0,
+    'InvoicePaymentFlowHold'/0,
     'Blocking'/0,
     'Unblocked'/0,
     'Blocked'/0,
@@ -146,6 +150,7 @@
     'TermSetHierarchyRef'/0,
     'PaymentsServiceTerms'/0,
     'GuaranteeFundTerms'/0,
+    'HoldLifetime'/0,
     'CurrencyRef'/0,
     'Currency'/0,
     'CurrencySelector'/0,
@@ -166,6 +171,8 @@
     'PaymentMethodDefinition'/0,
     'PaymentMethodSelector'/0,
     'PaymentMethodDecision'/0,
+    'HoldLifetimeSelector'/0,
+    'HoldLifetimeDecision'/0,
     'CashFlowAccount'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
@@ -189,6 +196,9 @@
     'TerminalAccount'/0,
     'TerminalSelector'/0,
     'TerminalDecision'/0,
+    'TerminalPaymentFlow'/0,
+    'TerminalPaymentFlowInstant'/0,
+    'TerminalPaymentFlowHold'/0,
     'Predicate'/0,
     'Condition'/0,
     'PaymentToolCondition'/0,
@@ -308,6 +318,7 @@
 %% enums
 %%
 -type enum_name() ::
+    'OnHoldExpiration' |
     'RiskScore' |
     'CategoryType' |
     'BankCardPaymentSystem' |
@@ -317,6 +328,11 @@
     'SystemCashFlowAccount' |
     'ExternalCashFlowAccount' |
     'CashFlowConstant'.
+
+%% enum 'OnHoldExpiration'
+-type 'OnHoldExpiration'() ::
+    cancel |
+    capture.
 
 %% enum 'RiskScore'
 -type 'RiskScore'() ::
@@ -409,6 +425,9 @@
     'InvoicePaymentAdjustmentCaptured' |
     'InvoicePaymentAdjustmentCancelled' |
     'InvoicePaymentAdjustmentStatus' |
+    'InvoicePaymentFlow' |
+    'InvoicePaymentFlowInstant' |
+    'InvoicePaymentFlowHold' |
     'Blocking' |
     'Unblocked' |
     'Blocked' |
@@ -448,6 +467,7 @@
     'TermSetHierarchyRef' |
     'PaymentsServiceTerms' |
     'GuaranteeFundTerms' |
+    'HoldLifetime' |
     'CurrencyRef' |
     'Currency' |
     'CurrencySelector' |
@@ -468,6 +488,8 @@
     'PaymentMethodDefinition' |
     'PaymentMethodSelector' |
     'PaymentMethodDecision' |
+    'HoldLifetimeSelector' |
+    'HoldLifetimeDecision' |
     'CashFlowAccount' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
@@ -491,6 +513,9 @@
     'TerminalAccount' |
     'TerminalSelector' |
     'TerminalDecision' |
+    'TerminalPaymentFlow' |
+    'TerminalPaymentFlowInstant' |
+    'TerminalPaymentFlowHold' |
     'Predicate' |
     'Condition' |
     'PaymentToolCondition' |
@@ -665,6 +690,17 @@
     {'captured', 'InvoicePaymentAdjustmentCaptured'()} |
     {'cancelled', 'InvoicePaymentAdjustmentCancelled'()}.
 
+%% union 'InvoicePaymentFlow'
+-type 'InvoicePaymentFlow'() ::
+    {'instant', 'InvoicePaymentFlowInstant'()} |
+    {'hold', 'InvoicePaymentFlowHold'()}.
+
+%% struct 'InvoicePaymentFlowInstant'
+-type 'InvoicePaymentFlowInstant'() :: #'domain_InvoicePaymentFlowInstant'{}.
+
+%% struct 'InvoicePaymentFlowHold'
+-type 'InvoicePaymentFlowHold'() :: #'domain_InvoicePaymentFlowHold'{}.
+
 %% union 'Blocking'
 -type 'Blocking'() ::
     {'unblocked', 'Unblocked'()} |
@@ -796,6 +832,9 @@
 %% struct 'GuaranteeFundTerms'
 -type 'GuaranteeFundTerms'() :: #'domain_GuaranteeFundTerms'{}.
 
+%% struct 'HoldLifetime'
+-type 'HoldLifetime'() :: #'domain_HoldLifetime'{}.
+
 %% struct 'CurrencyRef'
 -type 'CurrencyRef'() :: #'domain_CurrencyRef'{}.
 
@@ -869,6 +908,14 @@
 
 %% struct 'PaymentMethodDecision'
 -type 'PaymentMethodDecision'() :: #'domain_PaymentMethodDecision'{}.
+
+%% union 'HoldLifetimeSelector'
+-type 'HoldLifetimeSelector'() ::
+    {'decisions', ['HoldLifetimeDecision'()]} |
+    {'value', 'HoldLifetime'()}.
+
+%% struct 'HoldLifetimeDecision'
+-type 'HoldLifetimeDecision'() :: #'domain_HoldLifetimeDecision'{}.
 
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
@@ -955,6 +1002,17 @@
 
 %% struct 'TerminalDecision'
 -type 'TerminalDecision'() :: #'domain_TerminalDecision'{}.
+
+%% union 'TerminalPaymentFlow'
+-type 'TerminalPaymentFlow'() ::
+    {'instant', 'TerminalPaymentFlowInstant'()} |
+    {'hold', 'TerminalPaymentFlowHold'()}.
+
+%% struct 'TerminalPaymentFlowInstant'
+-type 'TerminalPaymentFlowInstant'() :: #'domain_TerminalPaymentFlowInstant'{}.
+
+%% struct 'TerminalPaymentFlowHold'
+-type 'TerminalPaymentFlowHold'() :: #'domain_TerminalPaymentFlowHold'{}.
 
 %% union 'Predicate'
 -type 'Predicate'() ::
@@ -1184,6 +1242,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
+    'OnHoldExpiration'() |
     'RiskScore'() |
     'CategoryType'() |
     'BankCardPaymentSystem'() |
@@ -1237,6 +1296,7 @@ typedefs() ->
 
 enums() ->
     [
+        'OnHoldExpiration',
         'RiskScore',
         'CategoryType',
         'BankCardPaymentSystem',
@@ -1286,6 +1346,9 @@ structs() ->
         'InvoicePaymentAdjustmentCaptured',
         'InvoicePaymentAdjustmentCancelled',
         'InvoicePaymentAdjustmentStatus',
+        'InvoicePaymentFlow',
+        'InvoicePaymentFlowInstant',
+        'InvoicePaymentFlowHold',
         'Blocking',
         'Unblocked',
         'Blocked',
@@ -1325,6 +1388,7 @@ structs() ->
         'TermSetHierarchyRef',
         'PaymentsServiceTerms',
         'GuaranteeFundTerms',
+        'HoldLifetime',
         'CurrencyRef',
         'Currency',
         'CurrencySelector',
@@ -1345,6 +1409,8 @@ structs() ->
         'PaymentMethodDefinition',
         'PaymentMethodSelector',
         'PaymentMethodDecision',
+        'HoldLifetimeSelector',
+        'HoldLifetimeDecision',
         'CashFlowAccount',
         'CashFlowPosting',
         'FinalCashFlowPosting',
@@ -1368,6 +1434,9 @@ structs() ->
         'TerminalAccount',
         'TerminalSelector',
         'TerminalDecision',
+        'TerminalPaymentFlow',
+        'TerminalPaymentFlowInstant',
+        'TerminalPaymentFlowHold',
         'Predicate',
         'Condition',
         'PaymentToolCondition',
@@ -1518,6 +1587,12 @@ typedef_info('Domain') ->
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('OnHoldExpiration') ->
+    {enum, [
+        {cancel, 0},
+        {capture, 1}
+    ]};
 
 enum_info('RiskScore') ->
     {enum, [
@@ -1685,6 +1760,7 @@ struct_info('InvoicePayment') ->
     {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
     {5, required, {struct, struct, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+    {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 
@@ -1695,10 +1771,14 @@ struct_info('InvoicePaymentProcessed') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentCaptured') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'reason', undefined}
+]};
 
 struct_info('InvoicePaymentCancelled') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'reason', undefined}
+]};
 
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
@@ -1791,6 +1871,21 @@ struct_info('InvoicePaymentAdjustmentStatus') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCaptured'}}, 'captured', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined}
+]};
+
+struct_info('InvoicePaymentFlow') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
+]};
+
+struct_info('InvoicePaymentFlowInstant') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentFlowHold') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
+    {2, required, string, 'held_until', undefined}
 ]};
 
 struct_info('Blocking') ->
@@ -2049,6 +2144,7 @@ struct_info('PaymentsServiceTerms') ->
     {4, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
+    {7, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'hold_lifetime', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'GuaranteeFundTerms'}}, 'guarantee_fund', undefined}
 ]};
 
@@ -2056,6 +2152,11 @@ struct_info('GuaranteeFundTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'limits', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
+]};
+
+struct_info('HoldLifetime') ->
+    {struct, struct, [
+    {1, required, i32, 'seconds', undefined}
 ]};
 
 struct_info('CurrencyRef') ->
@@ -2177,6 +2278,18 @@ struct_info('PaymentMethodDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'then_', undefined}
+]};
+
+struct_info('HoldLifetimeSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'HoldLifetimeDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'value', undefined}
+]};
+
+struct_info('HoldLifetimeDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CashFlowAccount') ->
@@ -2309,7 +2422,8 @@ struct_info('Terminal') ->
     {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}}, 'cash_flow', undefined},
     {7, required, {struct, struct, {dmsl_domain_thrift, 'TerminalAccount'}}, 'account', undefined},
     {9, optional, {map, string, string}, 'options', undefined},
-    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined}
+    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
+    {11, optional, {struct, union, {dmsl_domain_thrift, 'TerminalPaymentFlow'}}, 'payment_flow', undefined}
 ]};
 
 struct_info('TerminalAccount') ->
@@ -2328,6 +2442,20 @@ struct_info('TerminalDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'then_', undefined}
+]};
+
+struct_info('TerminalPaymentFlow') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalPaymentFlowInstant'}}, 'instant', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalPaymentFlowHold'}}, 'hold', undefined}
+]};
+
+struct_info('TerminalPaymentFlowInstant') ->
+    {struct, struct, []};
+
+struct_info('TerminalPaymentFlowHold') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'hold_lifetime', undefined}
 ]};
 
 struct_info('Predicate') ->
@@ -2494,7 +2622,7 @@ struct_info('Globals') ->
     {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
     {5, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
     {6, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'default_contract_template', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
 ]};
 
 struct_info('Dummy') ->
@@ -2747,6 +2875,12 @@ record_name('OperationTimeout') ->
     record_name('InvoicePaymentAdjustmentCancelled') ->
     'domain_InvoicePaymentAdjustmentCancelled';
 
+    record_name('InvoicePaymentFlowInstant') ->
+    'domain_InvoicePaymentFlowInstant';
+
+    record_name('InvoicePaymentFlowHold') ->
+    'domain_InvoicePaymentFlowHold';
+
     record_name('Unblocked') ->
     'domain_Unblocked';
 
@@ -2840,6 +2974,9 @@ record_name('OperationTimeout') ->
     record_name('GuaranteeFundTerms') ->
     'domain_GuaranteeFundTerms';
 
+    record_name('HoldLifetime') ->
+    'domain_HoldLifetime';
+
     record_name('CurrencyRef') ->
     'domain_CurrencyRef';
 
@@ -2878,6 +3015,9 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentMethodDecision') ->
     'domain_PaymentMethodDecision';
+
+    record_name('HoldLifetimeDecision') ->
+    'domain_HoldLifetimeDecision';
 
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
@@ -2926,6 +3066,12 @@ record_name('OperationTimeout') ->
 
     record_name('TerminalDecision') ->
     'domain_TerminalDecision';
+
+    record_name('TerminalPaymentFlowInstant') ->
+    'domain_TerminalPaymentFlowInstant';
+
+    record_name('TerminalPaymentFlowHold') ->
+    'domain_TerminalPaymentFlowHold';
 
     record_name('PartyCondition') ->
     'domain_PartyCondition';

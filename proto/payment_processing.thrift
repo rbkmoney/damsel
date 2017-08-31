@@ -339,6 +339,18 @@ struct InvoiceTemplateUpdateParams {
 
 struct InvoicePaymentParams {
     1: required domain.Payer payer
+    2: required InvoicePaymentParamsFlow flow
+}
+
+union InvoicePaymentParamsFlow {
+    1: InvoicePaymentParamsFlowInstant instant
+    2: InvoicePaymentParamsFlowHold hold
+}
+
+struct InvoicePaymentParamsFlowInstant   {}
+
+struct InvoicePaymentParamsFlowHold {
+    1: required domain.OnHoldExpiration on_hold_expiration
 }
 
 struct Invoice {
@@ -382,6 +394,7 @@ exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
+exception InvalidOperation {}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -471,6 +484,39 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3
         )
 
+    void CancelPayment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: string reason
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: base.InvalidRequest ex5,
+            6: InvalidOperation ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8
+        )
+
+    void CapturePayment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: string reason
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: base.InvalidRequest ex5,
+            6: InvalidOperation ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8
+        )
     /**
      * Создать поправку к платежу.
      *
