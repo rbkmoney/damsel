@@ -59,6 +59,7 @@
     'CashFlowContext'/0,
     'CashFlow'/0,
     'FinalCashFlow'/0,
+    'ProviderAccountSet'/0,
     'ProxyOptions'/0,
     'Domain'/0
 ]).
@@ -196,6 +197,7 @@
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
+    'ProviderAccount'/0,
     'ProviderSelector'/0,
     'ProviderDecision'/0,
     'TerminalRef'/0,
@@ -204,7 +206,6 @@
     'InspectorSelector'/0,
     'InspectorDecision'/0,
     'Terminal'/0,
-    'TerminalAccount'/0,
     'TerminalSelector'/0,
     'TerminalDecision'/0,
     'Predicate'/0,
@@ -291,6 +292,7 @@
     'CashFlowContext' |
     'CashFlow' |
     'FinalCashFlow' |
+    'ProviderAccountSet' |
     'ProxyOptions' |
     'Domain'.
 
@@ -321,6 +323,7 @@
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
+-type 'ProviderAccountSet'() :: #{'CurrencyRef'() => 'ProviderAccount'()}.
 -type 'ProxyOptions'() :: dmsl_base_thrift:'StringMap'().
 -type 'Domain'() :: #{'Reference'() => 'DomainObject'()}.
 
@@ -522,6 +525,7 @@
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
+    'ProviderAccount' |
     'ProviderSelector' |
     'ProviderDecision' |
     'TerminalRef' |
@@ -530,7 +534,6 @@
     'InspectorSelector' |
     'InspectorDecision' |
     'Terminal' |
-    'TerminalAccount' |
     'TerminalSelector' |
     'TerminalDecision' |
     'Predicate' |
@@ -1016,6 +1019,9 @@
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
 
+%% struct 'ProviderAccount'
+-type 'ProviderAccount'() :: #'domain_ProviderAccount'{}.
+
 %% union 'ProviderSelector'
 -type 'ProviderSelector'() ::
     {'decisions', ['ProviderDecision'()]} |
@@ -1043,9 +1049,6 @@
 
 %% struct 'Terminal'
 -type 'Terminal'() :: #'domain_Terminal'{}.
-
-%% struct 'TerminalAccount'
--type 'TerminalAccount'() :: #'domain_TerminalAccount'{}.
 
 %% union 'TerminalSelector'
 -type 'TerminalSelector'() ::
@@ -1330,6 +1333,7 @@ typedefs() ->
         'CashFlowContext',
         'CashFlow',
         'FinalCashFlow',
+        'ProviderAccountSet',
         'ProxyOptions',
         'Domain'
     ].
@@ -1475,6 +1479,7 @@ structs() ->
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PaymentRefundsProvisionTerms',
+        'ProviderAccount',
         'ProviderSelector',
         'ProviderDecision',
         'TerminalRef',
@@ -1483,7 +1488,6 @@ structs() ->
         'InspectorSelector',
         'InspectorDecision',
         'Terminal',
-        'TerminalAccount',
         'TerminalSelector',
         'TerminalDecision',
         'Predicate',
@@ -1629,6 +1633,9 @@ typedef_info('CashFlow') ->
 
 typedef_info('FinalCashFlow') ->
     {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
+
+typedef_info('ProviderAccountSet') ->
+    {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}};
 
 typedef_info('ProxyOptions') ->
     {map, string, string};
@@ -2460,28 +2467,34 @@ struct_info('Provider') ->
     {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
     {4, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined},
     {5, required, string, 'abs_account', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined},
+    {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
 ]};
 
 struct_info('PaymentsProvisionTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+    {6, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {4, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
 ]};
 
 struct_info('PaymentHoldsProvisionTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined}
 ]};
 
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+]};
+
+struct_info('ProviderAccount') ->
+    {struct, struct, [
+    {1, required, i64, 'settlement', undefined}
 ]};
 
 struct_info('ProviderSelector') ->
@@ -2529,16 +2542,9 @@ struct_info('Terminal') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, required, string, 'description', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'TerminalAccount'}}, 'account', undefined},
     {9, optional, {map, string, string}, 'options', undefined},
     {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
-]};
-
-struct_info('TerminalAccount') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {2, required, i64, 'settlement', undefined}
 ]};
 
 struct_info('TerminalSelector') ->
@@ -3165,6 +3171,9 @@ record_name('OperationTimeout') ->
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
 
+    record_name('ProviderAccount') ->
+    'domain_ProviderAccount';
+
     record_name('ProviderDecision') ->
     'domain_ProviderDecision';
 
@@ -3182,9 +3191,6 @@ record_name('OperationTimeout') ->
 
     record_name('Terminal') ->
     'domain_Terminal';
-
-    record_name('TerminalAccount') ->
-    'domain_TerminalAccount';
 
     record_name('TerminalDecision') ->
     'domain_TerminalDecision';

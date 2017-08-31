@@ -574,28 +574,34 @@
     'proxy' :: dmsl_domain_thrift:'Proxy'(),
     'terminal' :: dmsl_domain_thrift:'TerminalSelector'(),
     'abs_account' :: binary(),
-    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
+    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined,
+    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
 }).
 
 %% struct 'PaymentsProvisionTerms'
 -record('domain_PaymentsProvisionTerms', {
-    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
-    'categories' :: dmsl_domain_thrift:'CategorySelector'() | undefined,
-    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'(),
+    'categories' :: dmsl_domain_thrift:'CategorySelector'(),
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'(),
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'(),
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsProvisionTerms'
 -record('domain_PaymentHoldsProvisionTerms', {
-    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'() | undefined
+    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'()
 }).
 
 %% struct 'PaymentRefundsProvisionTerms'
 -record('domain_PaymentRefundsProvisionTerms', {
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
+}).
+
+%% struct 'ProviderAccount'
+-record('domain_ProviderAccount', {
+    'settlement' :: dmsl_domain_thrift:'AccountID'()
 }).
 
 %% struct 'ProviderDecision'
@@ -631,16 +637,9 @@
 -record('domain_Terminal', {
     'name' :: binary(),
     'description' :: binary(),
-    'account' :: dmsl_domain_thrift:'TerminalAccount'(),
     'options' :: dmsl_domain_thrift:'ProxyOptions'() | undefined,
     'risk_coverage' :: atom(),
     'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
-}).
-
-%% struct 'TerminalAccount'
--record('domain_TerminalAccount', {
-    'currency' :: dmsl_domain_thrift:'CurrencyRef'(),
-    'settlement' :: dmsl_domain_thrift:'AccountID'()
 }).
 
 %% struct 'TerminalDecision'
