@@ -123,6 +123,25 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'()
 }).
 
+%% struct 'PayoutSearchCriteria'
+-record('payout_processing_PayoutSearchCriteria', {
+    'status' :: dmsl_payout_processing_thrift:'PayoutSearchStatus'() | undefined,
+    'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
+    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
+}).
+
+%% struct 'PayoutInfo'
+-record('payout_processing_PayoutInfo', {
+    'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
+    'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
 %% exception 'NoLastEvent'
 -record('payout_processing_NoLastEvent', {}).
 

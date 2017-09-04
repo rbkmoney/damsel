@@ -275,23 +275,38 @@ struct GeneratePayoutParams {
     3: required domain.ShopID shop_id
 }
 
+/**
+* Атрибуты поиска выплат
+**/
+struct PayoutSearchCriteria {
+   1: optional PayoutSearchStatus status
+   /* Диапазон времени создания выплат */
+   2: optional TimeRange time_range
+   3: optional list<PayoutID> payout_ids
+}
+
+enum PayoutSearchStatus {
+    unpaid,
+    paid,
+    cancelled,
+    confirmed
+}
+
+/**
+* Info по выплате для отображения в админке
+**/
+struct PayoutInfo {
+    1: required PayoutID id
+    2: required domain.PartyID party_id
+    3: required domain.ShopID shop_id
+    4: required PayoutType type
+    5: required PayoutStatus status
+    6: required base.Timestamp from_time
+    7: required base.Timestamp to_time
+    8: required base.Timestamp created_at
+}
+
 service PayoutManagement {
-
-    /********************* Выплаты на карту *********************/
-    /**
-     * Получить сумму комиссии за вывод запрашиваемой суммы
-     */
-    domain.Cash GetFee(1: Pay2CardParams params)
-                    throws (1: base.InvalidRequest ex1)
-
-    /**
-     * Перевести сумму на карту
-     */
-    PayoutID Pay2Card(1: required string request_id, 2: Pay2CardParams params)
-                    throws (1: base.InvalidRequest ex1,
-                            2: InsufficientFunds ex2,
-                            3: LimitExceeded ex3)
-
     /********************* Вывод на счет ************************/
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
@@ -307,4 +322,9 @@ service PayoutManagement {
      * Отменить движения по выплатам. Вернуть список отмененных выплат
      */
     list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+
+    /**
+    * Возвращает список Payout-ов согласно запросу поиска
+    **/
+    list<PayoutInfo> GetPayoutsInfo (1: PayoutSearchCriteria search_criteria) throws (1: base.InvalidRequest ex1)
 }
