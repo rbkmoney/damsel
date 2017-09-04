@@ -764,7 +764,7 @@ function_info('PayoutManagement', 'CancelPayouts', reply_type) ->
     ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'searchCriteria', undefined}
+    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'search_criteria', undefined}
 ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', reply_type) ->
         {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutInfo'}}};

@@ -335,5 +335,5 @@ service PayoutManagement {
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
-    list<PayoutInfo> GetPayoutsInfo(1: PayoutSearchCriteria searchCriteria) throws (1: base.InvalidRequest ex1)
+    list<PayoutInfo> GetPayoutsInfo (1: PayoutSearchCriteria search_criteria) throws (1: base.InvalidRequest ex1)
 }
