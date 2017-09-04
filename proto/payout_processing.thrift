@@ -275,6 +275,29 @@ struct GeneratePayoutParams {
     3: required domain.ShopID shop_id
 }
 
+/**
+* Атрибуты поиска выплат
+**/
+struct PayoutSearchCriteria {
+   1: optional PayoutStatus status
+   2: optional TimeRange timeRange
+   3: optional list<PayoutID> payoutIDs
+}
+
+/**
+* Info по выплате для отображения в админке
+**/
+struct PayoutInfo {
+    1: required PayoutID id
+    2: required domain.PartyID party_id
+    3: required domain.ShopID shop_id
+    4: required PayoutType type
+    5: required PayoutStatus status
+    6: required string from_time
+    7: required string to_time
+    8: required base.Timestamp created_at
+}
+
 service PayoutManagement {
 
     /********************* Выплаты на карту *********************/
@@ -307,4 +330,10 @@ service PayoutManagement {
      * Отменить движения по выплатам. Вернуть список отмененных выплат
      */
     list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+
+    /********************* Для PAPI *****************************/
+    /**
+    * Возвращает список Payout-ов согласно запросу поиска
+    **/
+    list<PayoutInfo> GetPayoutsInfo(1: PayoutSearchCriteria searchCriteria) throws (1: base.InvalidRequest ex1)
 }
