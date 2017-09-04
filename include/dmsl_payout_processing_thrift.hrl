@@ -126,8 +126,8 @@
 %% struct 'PayoutSearchCriteria'
 -record('payout_processing_PayoutSearchCriteria', {
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'() | undefined,
-    'timeRange' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
-    'payoutIDs' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
+    'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
+    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
 }).
 
 %% struct 'PayoutInfo'
@@ -137,8 +137,8 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
     'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
-    'from_time' :: binary(),
-    'to_time' :: binary(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'()
 }).
 

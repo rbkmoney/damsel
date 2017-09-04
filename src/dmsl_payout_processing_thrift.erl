@@ -551,8 +551,8 @@ struct_info('GeneratePayoutParams') ->
 struct_info('PayoutSearchCriteria') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'timeRange', undefined},
-    {3, optional, {list, string}, 'payoutIDs', undefined}
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
+    {3, optional, {list, string}, 'payout_ids', undefined}
 ]};
 
 struct_info('PayoutInfo') ->

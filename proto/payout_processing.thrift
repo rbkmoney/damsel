@@ -280,8 +280,8 @@ struct GeneratePayoutParams {
 **/
 struct PayoutSearchCriteria {
    1: optional PayoutStatus status
-   2: optional TimeRange timeRange
-   3: optional list<PayoutID> payoutIDs
+   2: optional TimeRange time_range
+   3: optional list<PayoutID> payout_ids
 }
 
 /**
@@ -293,8 +293,8 @@ struct PayoutInfo {
     3: required domain.ShopID shop_id
     4: required PayoutType type
     5: required PayoutStatus status
-    6: required string from_time
-    7: required string to_time
+    6: required base.Timestamp from_time
+    7: required base.Timestamp to_time
     8: required base.Timestamp created_at
 }
 
