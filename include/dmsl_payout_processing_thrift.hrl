@@ -125,7 +125,7 @@
 
 %% struct 'PayoutSearchCriteria'
 -record('payout_processing_PayoutSearchCriteria', {
-    'status' :: dmsl_payout_processing_thrift:'PayoutStatus'() | undefined,
+    'status' :: dmsl_payout_processing_thrift:'PayoutSearchStatus'() | undefined,
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
     'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
 }).

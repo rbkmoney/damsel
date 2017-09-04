@@ -37,6 +37,9 @@
     'UserID'/0
 ]).
 -export_type([
+    'PayoutSearchStatus'/0
+]).
+-export_type([
     'UserInfo'/0,
     'UserType'/0,
     'InternalUser'/0,
@@ -92,7 +95,15 @@
 %%
 %% enums
 %%
--type enum_name() :: none().
+-type enum_name() ::
+    'PayoutSearchStatus'.
+
+%% enum 'PayoutSearchStatus'
+-type 'PayoutSearchStatus'() ::
+    unpaid |
+    paid |
+    cancelled |
+    confirmed.
 
 %%
 %% structs, unions and exceptions
@@ -299,7 +310,8 @@
 -type struct_info() ::
     {struct, struct_flavour(), [struct_field_info()]}.
 
--type enum_choice() :: none().
+-type enum_choice() ::
+    'PayoutSearchStatus'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -315,10 +327,12 @@ typedefs() ->
         'UserID'
     ].
 
--spec enums() -> [].
+-spec enums() -> [enum_name()].
 
 enums() ->
-    [].
+    [
+        'PayoutSearchStatus'
+    ].
 
 -spec structs() -> [struct_name()].
 
@@ -382,7 +396,15 @@ typedef_info('UserID') ->
 
 typedef_info(_) -> erlang:error(badarg).
 
--spec enum_info(_) -> no_return().
+-spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('PayoutSearchStatus') ->
+    {enum, [
+        {unpaid, 0},
+        {paid, 1},
+        {cancelled, 2},
+        {confirmed, 3}
+    ]};
 
 enum_info(_) -> erlang:error(badarg).
 
@@ -550,7 +572,7 @@ struct_info('GeneratePayoutParams') ->
 
 struct_info('PayoutSearchCriteria') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
+    {1, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchStatus'}}, 'status', undefined},
     {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
     {3, optional, {list, string}, 'payout_ids', undefined}
 ]};
