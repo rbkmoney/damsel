@@ -281,8 +281,6 @@
 -export_type(['EventSink_service_functions'/0]).
 
 -type 'PayoutManagement_service_functions'() ::
-    'GetFee' |
-    'Pay2Card' |
     'GeneratePayout' |
     'ConfirmPayouts' |
     'CancelPayouts' |
@@ -698,8 +696,6 @@ functions('EventSink') ->
 
 functions('PayoutManagement') ->
     [
-        'GetFee',
-        'Pay2Card',
         'GeneratePayout',
         'ConfirmPayouts',
         'CancelPayouts',
@@ -731,29 +727,6 @@ function_info('EventSink', 'GetLastEventID', reply_type) ->
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 
-function_info('PayoutManagement', 'GetFee', params_type) ->
-    {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'Pay2CardParams'}}, 'params', undefined}
-]};
-function_info('PayoutManagement', 'GetFee', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'Cash'}};
-    function_info('PayoutManagement', 'GetFee', exceptions) ->
-        {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
-    ]};
-function_info('PayoutManagement', 'Pay2Card', params_type) ->
-    {struct, struct, [
-    {1, required, string, 'request_id', undefined},
-    {2, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'Pay2CardParams'}}, 'params', undefined}
-]};
-function_info('PayoutManagement', 'Pay2Card', reply_type) ->
-        string;
-    function_info('PayoutManagement', 'Pay2Card', exceptions) ->
-        {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'InsufficientFunds'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'LimitExceeded'}}, 'ex3', undefined}
-    ]};
 function_info('PayoutManagement', 'GeneratePayout', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'GeneratePayoutParams'}}, 'params', undefined}

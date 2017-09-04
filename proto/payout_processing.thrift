@@ -307,22 +307,6 @@ struct PayoutInfo {
 }
 
 service PayoutManagement {
-
-    /********************* Выплаты на карту *********************/
-    /**
-     * Получить сумму комиссии за вывод запрашиваемой суммы
-     */
-    domain.Cash GetFee(1: Pay2CardParams params)
-                    throws (1: base.InvalidRequest ex1)
-
-    /**
-     * Перевести сумму на карту
-     */
-    PayoutID Pay2Card(1: required string request_id, 2: Pay2CardParams params)
-                    throws (1: base.InvalidRequest ex1,
-                            2: InsufficientFunds ex2,
-                            3: LimitExceeded ex3)
-
     /********************* Вывод на счет ************************/
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
@@ -339,7 +323,6 @@ service PayoutManagement {
      */
     list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 
-    /********************* Для PAPI *****************************/
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
