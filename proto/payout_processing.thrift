@@ -279,9 +279,17 @@ struct GeneratePayoutParams {
 * Атрибуты поиска выплат
 **/
 struct PayoutSearchCriteria {
-   1: optional PayoutStatus status
+   1: optional PayoutSearchStatus status
+   /* Диапазон времени создания выплат */
    2: optional TimeRange time_range
    3: optional list<PayoutID> payout_ids
+}
+
+enum PayoutSearchStatus {
+    unpaid,
+    paid,
+    cancelled,
+    confirmed
 }
 
 /**
