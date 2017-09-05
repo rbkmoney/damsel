@@ -90,6 +90,9 @@
     'InvoiceTemplateCreateParams'/0,
     'InvoiceTemplateUpdateParams'/0,
     'InvoicePaymentParams'/0,
+    'InvoicePaymentParamsFlow'/0,
+    'InvoicePaymentParamsFlowInstant'/0,
+    'InvoicePaymentParamsFlowHold'/0,
     'Invoice'/0,
     'InvoicePayment'/0,
     'InvoicePaymentAdjustmentParams'/0,
@@ -179,6 +182,7 @@
     'InvoicePaymentNotFound'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
+    'InvalidOperation'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentAdjustmentPending'/0,
     'InvalidInvoiceStatus'/0,
@@ -295,6 +299,9 @@
     'InvoiceTemplateCreateParams' |
     'InvoiceTemplateUpdateParams' |
     'InvoicePaymentParams' |
+    'InvoicePaymentParamsFlow' |
+    'InvoicePaymentParamsFlowInstant' |
+    'InvoicePaymentParamsFlowHold' |
     'Invoice' |
     'InvoicePayment' |
     'InvoicePaymentAdjustmentParams' |
@@ -384,6 +391,7 @@
     'InvoicePaymentNotFound' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
+    'InvalidOperation' |
     'InvoicePaymentPending' |
     'InvoicePaymentAdjustmentPending' |
     'InvalidInvoiceStatus' |
@@ -565,6 +573,17 @@
 
 %% struct 'InvoicePaymentParams'
 -type 'InvoicePaymentParams'() :: #'payproc_InvoicePaymentParams'{}.
+
+%% union 'InvoicePaymentParamsFlow'
+-type 'InvoicePaymentParamsFlow'() ::
+    {'instant', 'InvoicePaymentParamsFlowInstant'()} |
+    {'hold', 'InvoicePaymentParamsFlowHold'()}.
+
+%% struct 'InvoicePaymentParamsFlowInstant'
+-type 'InvoicePaymentParamsFlowInstant'() :: #'payproc_InvoicePaymentParamsFlowInstant'{}.
+
+%% struct 'InvoicePaymentParamsFlowHold'
+-type 'InvoicePaymentParamsFlowHold'() :: #'payproc_InvoicePaymentParamsFlowHold'{}.
 
 %% struct 'Invoice'
 -type 'Invoice'() :: #'payproc_Invoice'{}.
@@ -904,6 +923,9 @@
 %% exception 'EventNotFound'
 -type 'EventNotFound'() :: #'payproc_EventNotFound'{}.
 
+%% exception 'InvalidOperation'
+-type 'InvalidOperation'() :: #'payproc_InvalidOperation'{}.
+
 %% exception 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'payproc_InvoicePaymentPending'{}.
 
@@ -1010,6 +1032,8 @@
     'GetEvents' |
     'StartPayment' |
     'GetPayment' |
+    'CancelPayment' |
+    'CapturePayment' |
     'CreatePaymentAdjustment' |
     'GetPaymentAdjustment' |
     'CapturePaymentAdjustment' |
@@ -1186,6 +1210,9 @@ structs() ->
         'InvoiceTemplateCreateParams',
         'InvoiceTemplateUpdateParams',
         'InvoicePaymentParams',
+        'InvoicePaymentParamsFlow',
+        'InvoicePaymentParamsFlowInstant',
+        'InvoicePaymentParamsFlowHold',
         'Invoice',
         'InvoicePayment',
         'InvoicePaymentAdjustmentParams',
@@ -1573,7 +1600,22 @@ struct_info('InvoiceTemplateUpdateParams') ->
 
 struct_info('InvoicePaymentParams') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined}
+]};
+
+struct_info('InvoicePaymentParamsFlow') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlowInstant'}}, 'instant', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlowHold'}}, 'hold', undefined}
+]};
+
+struct_info('InvoicePaymentParamsFlowInstant') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentParamsFlowHold') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined}
 ]};
 
 struct_info('Invoice') ->
@@ -2100,6 +2142,9 @@ struct_info('InvoicePaymentAdjustmentNotFound') ->
 struct_info('EventNotFound') ->
     {struct, exception, []};
 
+struct_info('InvalidOperation') ->
+    {struct, exception, []};
+
 struct_info('InvoicePaymentPending') ->
     {struct, exception, [
     {1, required, string, 'id', undefined}
@@ -2297,6 +2342,12 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentParams') ->
     'payproc_InvoicePaymentParams';
+
+    record_name('InvoicePaymentParamsFlowInstant') ->
+    'payproc_InvoicePaymentParamsFlowInstant';
+
+    record_name('InvoicePaymentParamsFlowHold') ->
+    'payproc_InvoicePaymentParamsFlowHold';
 
     record_name('Invoice') ->
     'payproc_Invoice';
@@ -2505,6 +2556,9 @@ record_name('InternalUser') ->
     record_name('EventNotFound') ->
     'payproc_EventNotFound';
 
+    record_name('InvalidOperation') ->
+    'payproc_InvalidOperation';
+
     record_name('InvoicePaymentPending') ->
     'payproc_InvoicePaymentPending';
 
@@ -2595,6 +2649,8 @@ functions('Invoicing') ->
         'GetEvents',
         'StartPayment',
         'GetPayment',
+        'CancelPayment',
+        'CapturePayment',
         'CreatePaymentAdjustment',
         'GetPaymentAdjustment',
         'CapturePaymentAdjustment',
@@ -2770,6 +2826,46 @@ function_info('Invoicing', 'GetPayment', reply_type) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('Invoicing', 'CancelPayment', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'payment_id', undefined},
+    {4, undefined, string, 'reason', undefined}
+]};
+function_info('Invoicing', 'CancelPayment', reply_type) ->
+        {struct, struct, []};
+    function_info('Invoicing', 'CancelPayment', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidOperation'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined}
+    ]};
+function_info('Invoicing', 'CapturePayment', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'payment_id', undefined},
+    {4, undefined, string, 'reason', undefined}
+]};
+function_info('Invoicing', 'CapturePayment', reply_type) ->
+        {struct, struct, []};
+    function_info('Invoicing', 'CapturePayment', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidOperation'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined}
     ]};
 function_info('Invoicing', 'CreatePaymentAdjustment', params_type) ->
     {struct, struct, [

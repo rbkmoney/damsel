@@ -25,7 +25,17 @@
     'email' :: binary() | undefined,
     'session_id' :: dmsl_domain_thrift:'PaymentSessionID'(),
     'context' :: dmsl_base_thrift:'Content'() | undefined,
-    'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined
+    'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
+    'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'()
+}).
+
+%% struct 'InvoicePaymentFlowInstant'
+-record('merchstat_InvoicePaymentFlowInstant', {}).
+
+%% struct 'InvoicePaymentFlowHold'
+-record('merchstat_InvoicePaymentFlowHold', {
+    'on_hold_expiration' :: dmsl_merch_stat_thrift:'OnHoldExpiration'(),
+    'held_until' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% struct 'OperationTimeout'
@@ -62,6 +72,14 @@
     'masked_pan' :: binary()
 }).
 
+%% struct 'BankAccount'
+-record('merchstat_BankAccount', {
+    'account' :: binary(),
+    'bank_name' :: binary(),
+    'bank_post_account' :: binary(),
+    'bank_bik' :: binary()
+}).
+
 %% struct 'StatInvoice'
 -record('merchstat_StatInvoice', {
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
@@ -74,7 +92,8 @@
     'due' :: dmsl_base_thrift:'Timestamp'(),
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'context' :: dmsl_base_thrift:'Content'() | undefined
+    'context' :: dmsl_base_thrift:'Content'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoiceUnpaid'
@@ -98,6 +117,45 @@
     'id' :: dmsl_domain_thrift:'Fingerprint'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'()
 }).
+
+%% struct 'StatPayout'
+-record('merchstat_StatPayout', {
+    'id' :: dmsl_merch_stat_thrift:'PayoutID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'status' :: dmsl_merch_stat_thrift:'PayoutStatus'(),
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency_symbolic_code' :: binary(),
+    'type' :: dmsl_merch_stat_thrift:'PayoutType'()
+}).
+
+%% struct 'PayoutCard'
+-record('merchstat_PayoutCard', {
+    'card' :: dmsl_merch_stat_thrift:'BankCard'()
+}).
+
+%% struct 'PayoutAccount'
+-record('merchstat_PayoutAccount', {
+    'account' :: dmsl_merch_stat_thrift:'BankAccount'(),
+    'inn' :: binary(),
+    'purpose' :: binary()
+}).
+
+%% struct 'PayoutUnpaid'
+-record('merchstat_PayoutUnpaid', {}).
+
+%% struct 'PayoutPaid'
+-record('merchstat_PayoutPaid', {}).
+
+%% struct 'PayoutCancelled'
+-record('merchstat_PayoutCancelled', {
+    'details' :: binary()
+}).
+
+%% struct 'PayoutConfirmed'
+-record('merchstat_PayoutConfirmed', {}).
 
 %% struct 'StatRequest'
 -record('merchstat_StatRequest', {

@@ -43,7 +43,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'payout_type' :: dmsl_payout_processing_thrift:'PayoutType'()
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'()
 }).
 
 %% struct 'PayoutUnpaid'
@@ -56,7 +56,6 @@
 
 %% struct 'CardPaidDetails'
 -record('payout_processing_CardPaidDetails', {
-    'mask_pan' :: binary(),
     'provider_details' :: dmsl_payout_processing_thrift:'ProviderDetails'()
 }).
 
@@ -80,17 +79,14 @@
     'user_info' :: dmsl_payout_processing_thrift:'UserInfo'()
 }).
 
-%% struct 'CardPayout'
--record('payout_processing_CardPayout', {
-    'request_id' :: binary(),
-    'card_token' :: dmsl_domain_thrift:'Token'() | undefined
+%% struct 'PayoutCard'
+-record('payout_processing_PayoutCard', {
+    'card' :: dmsl_domain_thrift:'BankCard'()
 }).
 
-%% struct 'AccountPayout'
--record('payout_processing_AccountPayout', {
-    'account' :: binary(),
-    'bank_corr_account' :: binary(),
-    'bank_bik' :: binary(),
+%% struct 'PayoutAccount'
+-record('payout_processing_PayoutAccount', {
+    'account' :: dmsl_domain_thrift:'BankAccount'(),
     'inn' :: binary(),
     'purpose' :: binary()
 }).
@@ -125,6 +121,25 @@
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'shop_id' :: dmsl_domain_thrift:'ShopID'()
+}).
+
+%% struct 'PayoutSearchCriteria'
+-record('payout_processing_PayoutSearchCriteria', {
+    'status' :: dmsl_payout_processing_thrift:'PayoutSearchStatus'() | undefined,
+    'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
+    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
+}).
+
+%% struct 'PayoutInfo'
+-record('payout_processing_PayoutInfo', {
+    'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
+    'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% exception 'NoLastEvent'
