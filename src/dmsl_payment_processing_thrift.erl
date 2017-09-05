@@ -65,7 +65,7 @@
     'InvoicePaymentChangePayload'/0,
     'InvoicePaymentStarted'/0,
     'InvoicePaymentStatusChanged'/0,
-    'SessionChange'/0,
+    'InvoicePaymentSessionChange'/0,
     'SessionChangePayload'/0,
     'SessionStarted'/0,
     'SessionFinished'/0,
@@ -124,6 +124,7 @@
     'RecurrentPaymentToolFailed'/0,
     'RecurrentPaymentToolStatus'/0,
     'RecurrentPaymentToolEvent'/0,
+    'RecurrentPaymentToolSessionChange'/0,
     'RecurrentPaymentToolChange'/0,
     'RecurrentPaymentToolHasCreated'/0,
     'RecurrentPaymentToolHasAcquired'/0,
@@ -274,7 +275,7 @@
     'InvoicePaymentChangePayload' |
     'InvoicePaymentStarted' |
     'InvoicePaymentStatusChanged' |
-    'SessionChange' |
+    'InvoicePaymentSessionChange' |
     'SessionChangePayload' |
     'SessionStarted' |
     'SessionFinished' |
@@ -333,6 +334,7 @@
     'RecurrentPaymentToolFailed' |
     'RecurrentPaymentToolStatus' |
     'RecurrentPaymentToolEvent' |
+    'RecurrentPaymentToolSessionChange' |
     'RecurrentPaymentToolChange' |
     'RecurrentPaymentToolHasCreated' |
     'RecurrentPaymentToolHasAcquired' |
@@ -479,7 +481,7 @@
 -type 'InvoicePaymentChangePayload'() ::
     {'invoice_payment_started', 'InvoicePaymentStarted'()} |
     {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
-    {'invoice_payment_session_change', 'SessionChange'()} |
+    {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
     {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()}.
 
 %% struct 'InvoicePaymentStarted'
@@ -488,8 +490,8 @@
 %% struct 'InvoicePaymentStatusChanged'
 -type 'InvoicePaymentStatusChanged'() :: #'payproc_InvoicePaymentStatusChanged'{}.
 
-%% struct 'SessionChange'
--type 'SessionChange'() :: #'payproc_SessionChange'{}.
+%% struct 'InvoicePaymentSessionChange'
+-type 'InvoicePaymentSessionChange'() :: #'payproc_InvoicePaymentSessionChange'{}.
 
 %% union 'SessionChangePayload'
 -type 'SessionChangePayload'() ::
@@ -695,12 +697,15 @@
 %% struct 'RecurrentPaymentToolEvent'
 -type 'RecurrentPaymentToolEvent'() :: #'payproc_RecurrentPaymentToolEvent'{}.
 
+%% struct 'RecurrentPaymentToolSessionChange'
+-type 'RecurrentPaymentToolSessionChange'() :: #'payproc_RecurrentPaymentToolSessionChange'{}.
+
 %% union 'RecurrentPaymentToolChange'
 -type 'RecurrentPaymentToolChange'() ::
     {'rec_payment_tool_created', 'RecurrentPaymentToolHasCreated'()} |
     {'rec_payment_tool_acquired', 'RecurrentPaymentToolHasAcquired'()} |
     {'rec_payment_tool_abandoned', 'RecurrentPaymentToolHasAbandoned'()} |
-    {'rec_payment_tool_session_changed', 'SessionChange'()}.
+    {'rec_payment_tool_session_changed', 'RecurrentPaymentToolSessionChange'()}.
 
 %% struct 'RecurrentPaymentToolHasCreated'
 -type 'RecurrentPaymentToolHasCreated'() :: #'payproc_RecurrentPaymentToolHasCreated'{}.
@@ -1185,7 +1190,7 @@ structs() ->
         'InvoicePaymentChangePayload',
         'InvoicePaymentStarted',
         'InvoicePaymentStatusChanged',
-        'SessionChange',
+        'InvoicePaymentSessionChange',
         'SessionChangePayload',
         'SessionStarted',
         'SessionFinished',
@@ -1244,6 +1249,7 @@ structs() ->
         'RecurrentPaymentToolFailed',
         'RecurrentPaymentToolStatus',
         'RecurrentPaymentToolEvent',
+        'RecurrentPaymentToolSessionChange',
         'RecurrentPaymentToolChange',
         'RecurrentPaymentToolHasCreated',
         'RecurrentPaymentToolHasAcquired',
@@ -1445,7 +1451,7 @@ struct_info('InvoicePaymentChangePayload') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStarted'}}, 'invoice_payment_started', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionChange'}}, 'invoice_payment_session_change', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined}
 ]};
 
@@ -1462,7 +1468,7 @@ struct_info('InvoicePaymentStatusChanged') ->
     {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
 ]};
 
-struct_info('SessionChange') ->
+struct_info('InvoicePaymentSessionChange') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target', undefined},
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
@@ -1797,12 +1803,17 @@ struct_info('RecurrentPaymentToolEvent') ->
     {4, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'payload', undefined}
 ]};
 
+struct_info('RecurrentPaymentToolSessionChange') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
+]};
+
 struct_info('RecurrentPaymentToolChange') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionChange'}}, 'rec_payment_tool_session_changed', undefined}
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolSessionChange'}}, 'rec_payment_tool_session_changed', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolHasCreated') ->
@@ -2277,8 +2288,8 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentStatusChanged') ->
     'payproc_InvoicePaymentStatusChanged';
 
-    record_name('SessionChange') ->
-    'payproc_SessionChange';
+    record_name('InvoicePaymentSessionChange') ->
+    'payproc_InvoicePaymentSessionChange';
 
     record_name('SessionStarted') ->
     'payproc_SessionStarted';
@@ -2423,6 +2434,9 @@ record_name('InternalUser') ->
 
     record_name('RecurrentPaymentToolEvent') ->
     'payproc_RecurrentPaymentToolEvent';
+
+    record_name('RecurrentPaymentToolSessionChange') ->
+    'payproc_RecurrentPaymentToolSessionChange';
 
     record_name('RecurrentPaymentToolHasCreated') ->
     'payproc_RecurrentPaymentToolHasCreated';

@@ -59,8 +59,8 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'()
 }).
 
-%% struct 'SessionChange'
--record('payproc_SessionChange', {
+%% struct 'InvoicePaymentSessionChange'
+-record('payproc_InvoicePaymentSessionChange', {
     'target' :: dmsl_domain_thrift:'TargetInvoicePaymentStatus'(),
     'payload' :: dmsl_payment_processing_thrift:'SessionChangePayload'()
 }).
@@ -322,6 +322,11 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'source' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'payload' :: [dmsl_payment_processing_thrift:'RecurrentPaymentToolChange'()]
+}).
+
+%% struct 'RecurrentPaymentToolSessionChange'
+-record('payproc_RecurrentPaymentToolSessionChange', {
+    'payload' :: dmsl_payment_processing_thrift:'SessionChangePayload'()
 }).
 
 %% struct 'RecurrentPaymentToolHasCreated'
