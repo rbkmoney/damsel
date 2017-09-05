@@ -138,7 +138,7 @@ struct InvoicePaymentChange {
 union InvoicePaymentChangePayload {
     1: InvoicePaymentStarted               invoice_payment_started
     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
-    2: InvoiceSessionChange                invoice_payment_session_change
+    2: InvoicePaymentSessionChange         invoice_payment_session_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
 }
 
@@ -167,7 +167,7 @@ struct InvoicePaymentStatusChanged {
 /**
  * Событие в рамках сессии взаимодействия с провайдером.
  */
-struct InvoiceSessionChange {
+struct InvoicePaymentSessionChange {
     1: required domain.TargetInvoicePaymentStatus target
     2: required SessionChangePayload payload
 }
