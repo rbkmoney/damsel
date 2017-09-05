@@ -168,7 +168,7 @@ struct InvoicePaymentStatusChanged {
 /**
  * Событие в рамках сессии взаимодействия с провайдером.
  */
-struct SessionChange {
+struct InvoicePaymentSessionChange {
     1: required domain.TargetInvoicePaymentStatus target
     2: required SessionChangePayload payload
 }
@@ -969,11 +969,15 @@ struct RecurrentPaymentToolEvent {
     4: required list<RecurrentPaymentToolChange> payload
 }
 
+struct RecurrentPaymentToolSessionChange {
+    1: required SessionChangePayload payload
+}
+
 union RecurrentPaymentToolChange {
-    1: RecurrentPaymentToolHasCreated   rec_payment_tool_created
-    2: RecurrentPaymentToolHasAcquired  rec_payment_tool_acquired
-    3: RecurrentPaymentToolHasAbandoned rec_payment_tool_abandoned
-    4: SessionChange                    rec_payment_tool_session_changed
+    1: RecurrentPaymentToolHasCreated    rec_payment_tool_created
+    2: RecurrentPaymentToolHasAcquired   rec_payment_tool_acquired
+    3: RecurrentPaymentToolHasAbandoned  rec_payment_tool_abandoned
+    4: RecurrentPaymentToolSessionChange rec_payment_tool_session_changed
 }
 
 /*
