@@ -580,11 +580,12 @@ struct_info('PayoutInfo') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'party_id', undefined},
     {3, required, string, 'shop_id', undefined},
-    {4, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
-    {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
-    {6, required, string, 'from_time', undefined},
-    {7, required, string, 'to_time', undefined},
-    {8, required, string, 'created_at', undefined}
+    {4, required, i64, 'amount', undefined},
+    {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
+    {6, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
+    {7, required, string, 'from_time', undefined},
+    {8, required, string, 'to_time', undefined},
+    {9, required, string, 'created_at', undefined}
 ]};
 
 struct_info('NoLastEvent') ->
