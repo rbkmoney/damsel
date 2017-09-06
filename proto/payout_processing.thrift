@@ -299,11 +299,12 @@ struct PayoutInfo {
     1: required PayoutID id
     2: required domain.PartyID party_id
     3: required domain.ShopID shop_id
-    4: required PayoutType type
-    5: required PayoutStatus status
-    6: required base.Timestamp from_time
-    7: required base.Timestamp to_time
-    8: required base.Timestamp created_at
+    4: required domain.Amount amount
+    5: required PayoutType type
+    6: required PayoutStatus status
+    7: required base.Timestamp from_time
+    8: required base.Timestamp to_time
+    9: required base.Timestamp created_at
 }
 
 service PayoutManagement {
