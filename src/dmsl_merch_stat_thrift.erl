@@ -37,7 +37,8 @@
     'InvalidRequest'/0
 ]).
 -export_type([
-    'OnHoldExpiration'/0
+    'OnHoldExpiration'/0,
+    'TerminalPaymentProvider'/0
 ]).
 -export_type([
     'StatPayment'/0,
@@ -55,6 +56,7 @@
     'InvoicePaymentStatus'/0,
     'PaymentTool'/0,
     'BankCard'/0,
+    'PaymentTerminal'/0,
     'BankAccount'/0,
     'StatInvoice'/0,
     'InvoiceUnpaid'/0,
@@ -98,12 +100,17 @@
 %% enums
 %%
 -type enum_name() ::
-    'OnHoldExpiration'.
+    'OnHoldExpiration' |
+    'TerminalPaymentProvider'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
     cancel |
     capture.
+
+%% enum 'TerminalPaymentProvider'
+-type 'TerminalPaymentProvider'() ::
+    euroset.
 
 %%
 %% structs, unions and exceptions
@@ -124,6 +131,7 @@
     'InvoicePaymentStatus' |
     'PaymentTool' |
     'BankCard' |
+    'PaymentTerminal' |
     'BankAccount' |
     'StatInvoice' |
     'InvoiceUnpaid' |
@@ -198,10 +206,14 @@
 
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
-    {'bank_card', 'BankCard'()}.
+    {'bank_card', 'BankCard'()} |
+    {'payment_terminal', 'PaymentTerminal'()}.
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'merchstat_BankCard'{}.
+
+%% struct 'PaymentTerminal'
+-type 'PaymentTerminal'() :: #'merchstat_PaymentTerminal'{}.
 
 %% struct 'BankAccount'
 -type 'BankAccount'() :: #'merchstat_BankAccount'{}.
@@ -320,7 +332,8 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
-    'OnHoldExpiration'().
+    'OnHoldExpiration'() |
+    'TerminalPaymentProvider'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -340,7 +353,8 @@ typedefs() ->
 
 enums() ->
     [
-        'OnHoldExpiration'
+        'OnHoldExpiration',
+        'TerminalPaymentProvider'
     ].
 
 -spec structs() -> [struct_name()].
@@ -362,6 +376,7 @@ structs() ->
         'InvoicePaymentStatus',
         'PaymentTool',
         'BankCard',
+        'PaymentTerminal',
         'BankAccount',
         'StatInvoice',
         'InvoiceUnpaid',
@@ -415,6 +430,11 @@ enum_info('OnHoldExpiration') ->
     {enum, [
         {cancel, 0},
         {capture, 1}
+    ]};
+
+enum_info('TerminalPaymentProvider') ->
+    {enum, [
+        {euroset, 0}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -501,7 +521,8 @@ struct_info('InvoicePaymentStatus') ->
 
 struct_info('PaymentTool') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined}
+    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined}
 ]};
 
 struct_info('BankCard') ->
@@ -510,6 +531,11 @@ struct_info('BankCard') ->
     {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
     {3, required, string, 'bin', undefined},
     {4, required, string, 'masked_pan', undefined}
+]};
+
+struct_info('PaymentTerminal') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_merch_stat_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
 ]};
 
 struct_info('BankAccount') ->
@@ -680,6 +706,9 @@ record_name('InvoicePaymentFlowInstant') ->
 
     record_name('BankCard') ->
     'merchstat_BankCard';
+
+    record_name('PaymentTerminal') ->
+    'merchstat_PaymentTerminal';
 
     record_name('BankAccount') ->
     'merchstat_BankAccount';

@@ -72,6 +72,11 @@
     'masked_pan' :: binary()
 }).
 
+%% struct 'PaymentTerminal'
+-record('merchstat_PaymentTerminal', {
+    'terminal_type' :: dmsl_merch_stat_thrift:'TerminalPaymentProvider'()
+}).
+
 %% struct 'BankAccount'
 -record('merchstat_BankAccount', {
     'account' :: binary(),
