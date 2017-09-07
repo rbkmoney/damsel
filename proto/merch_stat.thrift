@@ -80,6 +80,7 @@ union InvoicePaymentStatus {
 
 union PaymentTool {
     1: BankCard bank_card
+    2: PaymentTerminal payment_terminal
 }
 
 struct BankCard {
@@ -87,6 +88,14 @@ struct BankCard {
     2: required domain.BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+}
+
+struct PaymentTerminal {
+    1: required TerminalPaymentProvider terminal_type
+}
+
+enum TerminalPaymentProvider {
+    euroset
 }
 
 struct BankAccount {
