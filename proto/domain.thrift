@@ -571,7 +571,7 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
-    7: optional PaymentHoldsServiceTerms holds
+    9: optional PaymentHoldsServiceTerms holds
     8: optional PaymentRefundsServiceTerms refunds
 }
 
