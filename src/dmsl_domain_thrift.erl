@@ -2544,7 +2544,7 @@ struct_info('Terminal') ->
     {2, required, string, 'description', undefined},
     {9, optional, {map, string, string}, 'options', undefined},
     {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
-    {11, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
 ]};
 
 struct_info('TerminalSelector') ->
