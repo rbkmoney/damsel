@@ -66,6 +66,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
+struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 union InvoicePaymentStatus {
@@ -73,6 +74,7 @@ union InvoicePaymentStatus {
     4: InvoicePaymentProcessed processed
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
+    6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
 }
 
