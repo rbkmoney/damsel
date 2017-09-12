@@ -59,6 +59,9 @@
 %% struct 'InvoicePaymentCancelled'
 -record('merchstat_InvoicePaymentCancelled', {}).
 
+%% struct 'InvoicePaymentRefunded'
+-record('merchstat_InvoicePaymentRefunded', {}).
+
 %% struct 'InvoicePaymentFailed'
 -record('merchstat_InvoicePaymentFailed', {
     'failure' :: dmsl_merch_stat_thrift:'OperationFailure'()

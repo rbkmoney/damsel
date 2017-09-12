@@ -34,6 +34,7 @@
 -export_type([
     'UserID'/0,
     'Events'/0,
+    'InvoicePaymentRefund'/0,
     'InvoicePaymentAdjustment'/0,
     'PartyID'/0,
     'ShopID'/0,
@@ -74,6 +75,10 @@
     'InvoicePaymentSessionTransactionBound'/0,
     'InvoicePaymentSessionProxyStateChanged'/0,
     'InvoicePaymentSessionInteractionRequested'/0,
+    'InvoicePaymentRefundChange'/0,
+    'InvoicePaymentRefundChangePayload'/0,
+    'InvoicePaymentRefundCreated'/0,
+    'InvoicePaymentRefundStatusChanged'/0,
     'InvoicePaymentAdjustmentChange'/0,
     'InvoicePaymentAdjustmentChangePayload'/0,
     'InvoicePaymentAdjustmentCreated'/0,
@@ -89,6 +94,7 @@
     'InvoicePaymentParamsFlowHold'/0,
     'Invoice'/0,
     'InvoicePayment'/0,
+    'InvoicePaymentRefundParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
     'InvalidStatus'/0,
     'PartyParams'/0,
@@ -143,10 +149,12 @@
     'InvalidUser'/0,
     'InvoiceNotFound'/0,
     'InvoicePaymentNotFound'/0,
+    'InvoicePaymentRefundNotFound'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
-    'InvalidOperation'/0,
+    'OperationNotPermitted'/0,
     'InvoicePaymentPending'/0,
+    'InvoicePaymentRefundPending'/0,
     'InvoicePaymentAdjustmentPending'/0,
     'InvalidInvoiceStatus'/0,
     'InvalidPaymentStatus'/0,
@@ -175,6 +183,7 @@
 -type typedef_name() ::
     'UserID' |
     'Events' |
+    'InvoicePaymentRefund' |
     'InvoicePaymentAdjustment' |
     'PartyID' |
     'ShopID' |
@@ -185,6 +194,7 @@
 
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
+-type 'InvoicePaymentRefund'() :: dmsl_domain_thrift:'InvoicePaymentRefund'().
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
@@ -233,6 +243,10 @@
     'InvoicePaymentSessionTransactionBound' |
     'InvoicePaymentSessionProxyStateChanged' |
     'InvoicePaymentSessionInteractionRequested' |
+    'InvoicePaymentRefundChange' |
+    'InvoicePaymentRefundChangePayload' |
+    'InvoicePaymentRefundCreated' |
+    'InvoicePaymentRefundStatusChanged' |
     'InvoicePaymentAdjustmentChange' |
     'InvoicePaymentAdjustmentChangePayload' |
     'InvoicePaymentAdjustmentCreated' |
@@ -248,6 +262,7 @@
     'InvoicePaymentParamsFlowHold' |
     'Invoice' |
     'InvoicePayment' |
+    'InvoicePaymentRefundParams' |
     'InvoicePaymentAdjustmentParams' |
     'InvalidStatus' |
     'PartyParams' |
@@ -302,10 +317,12 @@
     'InvalidUser' |
     'InvoiceNotFound' |
     'InvoicePaymentNotFound' |
+    'InvoicePaymentRefundNotFound' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
-    'InvalidOperation' |
+    'OperationNotPermitted' |
     'InvoicePaymentPending' |
+    'InvoicePaymentRefundPending' |
     'InvoicePaymentAdjustmentPending' |
     'InvalidInvoiceStatus' |
     'InvalidPaymentStatus' |
@@ -384,6 +401,7 @@
     {'invoice_payment_started', 'InvoicePaymentStarted'()} |
     {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
+    {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
     {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()}.
 
 %% struct 'InvoicePaymentStarted'
@@ -446,6 +464,21 @@
 %% struct 'InvoicePaymentSessionInteractionRequested'
 -type 'InvoicePaymentSessionInteractionRequested'() :: #'payproc_InvoicePaymentSessionInteractionRequested'{}.
 
+%% struct 'InvoicePaymentRefundChange'
+-type 'InvoicePaymentRefundChange'() :: #'payproc_InvoicePaymentRefundChange'{}.
+
+%% union 'InvoicePaymentRefundChangePayload'
+-type 'InvoicePaymentRefundChangePayload'() ::
+    {'invoice_payment_refund_created', 'InvoicePaymentRefundCreated'()} |
+    {'invoice_payment_refund_status_changed', 'InvoicePaymentRefundStatusChanged'()} |
+    {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()}.
+
+%% struct 'InvoicePaymentRefundCreated'
+-type 'InvoicePaymentRefundCreated'() :: #'payproc_InvoicePaymentRefundCreated'{}.
+
+%% struct 'InvoicePaymentRefundStatusChanged'
+-type 'InvoicePaymentRefundStatusChanged'() :: #'payproc_InvoicePaymentRefundStatusChanged'{}.
+
 %% struct 'InvoicePaymentAdjustmentChange'
 -type 'InvoicePaymentAdjustmentChange'() :: #'payproc_InvoicePaymentAdjustmentChange'{}.
 
@@ -494,6 +527,9 @@
 
 %% struct 'InvoicePayment'
 -type 'InvoicePayment'() :: #'payproc_InvoicePayment'{}.
+
+%% struct 'InvoicePaymentRefundParams'
+-type 'InvoicePaymentRefundParams'() :: #'payproc_InvoicePaymentRefundParams'{}.
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -type 'InvoicePaymentAdjustmentParams'() :: #'payproc_InvoicePaymentAdjustmentParams'{}.
@@ -709,17 +745,23 @@
 %% exception 'InvoicePaymentNotFound'
 -type 'InvoicePaymentNotFound'() :: #'payproc_InvoicePaymentNotFound'{}.
 
+%% exception 'InvoicePaymentRefundNotFound'
+-type 'InvoicePaymentRefundNotFound'() :: #'payproc_InvoicePaymentRefundNotFound'{}.
+
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -type 'InvoicePaymentAdjustmentNotFound'() :: #'payproc_InvoicePaymentAdjustmentNotFound'{}.
 
 %% exception 'EventNotFound'
 -type 'EventNotFound'() :: #'payproc_EventNotFound'{}.
 
-%% exception 'InvalidOperation'
--type 'InvalidOperation'() :: #'payproc_InvalidOperation'{}.
+%% exception 'OperationNotPermitted'
+-type 'OperationNotPermitted'() :: #'payproc_OperationNotPermitted'{}.
 
 %% exception 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'payproc_InvoicePaymentPending'{}.
+
+%% exception 'InvoicePaymentRefundPending'
+-type 'InvoicePaymentRefundPending'() :: #'payproc_InvoicePaymentRefundPending'{}.
 
 %% exception 'InvoicePaymentAdjustmentPending'
 -type 'InvoicePaymentAdjustmentPending'() :: #'payproc_InvoicePaymentAdjustmentPending'{}.
@@ -803,6 +845,8 @@
     'GetPaymentAdjustment' |
     'CapturePaymentAdjustment' |
     'CancelPaymentAdjustment' |
+    'RefundPayment' |
+    'GetPaymentRefund' |
     'Fulfill' |
     'Rescind'.
 
@@ -886,6 +930,7 @@ typedefs() ->
     [
         'UserID',
         'Events',
+        'InvoicePaymentRefund',
         'InvoicePaymentAdjustment',
         'PartyID',
         'ShopID',
@@ -935,6 +980,10 @@ structs() ->
         'InvoicePaymentSessionTransactionBound',
         'InvoicePaymentSessionProxyStateChanged',
         'InvoicePaymentSessionInteractionRequested',
+        'InvoicePaymentRefundChange',
+        'InvoicePaymentRefundChangePayload',
+        'InvoicePaymentRefundCreated',
+        'InvoicePaymentRefundStatusChanged',
         'InvoicePaymentAdjustmentChange',
         'InvoicePaymentAdjustmentChangePayload',
         'InvoicePaymentAdjustmentCreated',
@@ -950,6 +999,7 @@ structs() ->
         'InvoicePaymentParamsFlowHold',
         'Invoice',
         'InvoicePayment',
+        'InvoicePaymentRefundParams',
         'InvoicePaymentAdjustmentParams',
         'InvalidStatus',
         'PartyParams',
@@ -1018,6 +1068,9 @@ typedef_info('UserID') ->
 
 typedef_info('Events') ->
     {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
+
+typedef_info('InvoicePaymentRefund') ->
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
 
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
@@ -1127,6 +1180,7 @@ struct_info('InvoicePaymentChangePayload') ->
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStarted'}}, 'invoice_payment_started', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined}
 ]};
 
@@ -1214,6 +1268,30 @@ struct_info('InvoicePaymentSessionProxyStateChanged') ->
 struct_info('InvoicePaymentSessionInteractionRequested') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
+]};
+
+struct_info('InvoicePaymentRefundChange') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChangePayload'}}, 'payload', undefined}
+]};
+
+struct_info('InvoicePaymentRefundChangePayload') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
+]};
+
+struct_info('InvoicePaymentRefundCreated') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+]};
+
+struct_info('InvoicePaymentRefundStatusChanged') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined}
 ]};
 
 struct_info('InvoicePaymentAdjustmentChange') ->
@@ -1308,7 +1386,13 @@ struct_info('Invoice') ->
 struct_info('InvoicePayment') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
+    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
     {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined}
+]};
+
+struct_info('InvoicePaymentRefundParams') ->
+    {struct, struct, [
+    {1, optional, string, 'reason', undefined}
 ]};
 
 struct_info('InvoicePaymentAdjustmentParams') ->
@@ -1641,16 +1725,24 @@ struct_info('InvoiceNotFound') ->
 struct_info('InvoicePaymentNotFound') ->
     {struct, exception, []};
 
+struct_info('InvoicePaymentRefundNotFound') ->
+    {struct, exception, []};
+
 struct_info('InvoicePaymentAdjustmentNotFound') ->
     {struct, exception, []};
 
 struct_info('EventNotFound') ->
     {struct, exception, []};
 
-struct_info('InvalidOperation') ->
+struct_info('OperationNotPermitted') ->
     {struct, exception, []};
 
 struct_info('InvoicePaymentPending') ->
+    {struct, exception, [
+    {1, required, string, 'id', undefined}
+]};
+
+struct_info('InvoicePaymentRefundPending') ->
     {struct, exception, [
     {1, required, string, 'id', undefined}
 ]};
@@ -1796,6 +1888,15 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentSessionInteractionRequested') ->
     'payproc_InvoicePaymentSessionInteractionRequested';
 
+    record_name('InvoicePaymentRefundChange') ->
+    'payproc_InvoicePaymentRefundChange';
+
+    record_name('InvoicePaymentRefundCreated') ->
+    'payproc_InvoicePaymentRefundCreated';
+
+    record_name('InvoicePaymentRefundStatusChanged') ->
+    'payproc_InvoicePaymentRefundStatusChanged';
+
     record_name('InvoicePaymentAdjustmentChange') ->
     'payproc_InvoicePaymentAdjustmentChange';
 
@@ -1834,6 +1935,9 @@ record_name('InternalUser') ->
 
     record_name('InvoicePayment') ->
     'payproc_InvoicePayment';
+
+    record_name('InvoicePaymentRefundParams') ->
+    'payproc_InvoicePaymentRefundParams';
 
     record_name('InvoicePaymentAdjustmentParams') ->
     'payproc_InvoicePaymentAdjustmentParams';
@@ -1955,17 +2059,23 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentNotFound') ->
     'payproc_InvoicePaymentNotFound';
 
+    record_name('InvoicePaymentRefundNotFound') ->
+    'payproc_InvoicePaymentRefundNotFound';
+
     record_name('InvoicePaymentAdjustmentNotFound') ->
     'payproc_InvoicePaymentAdjustmentNotFound';
 
     record_name('EventNotFound') ->
     'payproc_EventNotFound';
 
-    record_name('InvalidOperation') ->
-    'payproc_InvalidOperation';
+    record_name('OperationNotPermitted') ->
+    'payproc_OperationNotPermitted';
 
     record_name('InvoicePaymentPending') ->
     'payproc_InvoicePaymentPending';
+
+    record_name('InvoicePaymentRefundPending') ->
+    'payproc_InvoicePaymentRefundPending';
 
     record_name('InvoicePaymentAdjustmentPending') ->
     'payproc_InvoicePaymentAdjustmentPending';
@@ -2039,6 +2149,8 @@ functions('Invoicing') ->
         'GetPaymentAdjustment',
         'CapturePaymentAdjustment',
         'CancelPaymentAdjustment',
+        'RefundPayment',
+        'GetPaymentRefund',
         'Fulfill',
         'Rescind'
     ];
@@ -2203,7 +2315,7 @@ function_info('Invoicing', 'CancelPayment', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
-        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidOperation'}}, 'ex6', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined}
     ]};
@@ -2223,7 +2335,7 @@ function_info('Invoicing', 'CapturePayment', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
-        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidOperation'}}, 'ex6', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined}
     ]};
@@ -2293,6 +2405,40 @@ function_info('Invoicing', 'CancelPaymentAdjustment', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentNotFound'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentAdjustmentStatus'}}, 'ex5', undefined}
+    ]};
+function_info('Invoicing', 'RefundPayment', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'payment_id', undefined},
+    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundParams'}}, 'params', undefined}
+]};
+function_info('Invoicing', 'RefundPayment', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
+    function_info('Invoicing', 'RefundPayment', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundPending'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined}
+    ]};
+function_info('Invoicing', 'GetPaymentRefund', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'payment_id', undefined},
+    {4, undefined, string, 'refund_id', undefined}
+]};
+function_info('Invoicing', 'GetPaymentRefund', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
+    function_info('Invoicing', 'GetPaymentRefund', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundNotFound'}}, 'ex4', undefined}
     ]};
 function_info('Invoicing', 'Fulfill', params_type) ->
     {struct, struct, [

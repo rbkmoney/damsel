@@ -115,6 +115,23 @@
     'interaction' :: dmsl_user_interaction_thrift:'UserInteraction'()
 }).
 
+%% struct 'InvoicePaymentRefundChange'
+-record('payproc_InvoicePaymentRefundChange', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
+    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentRefundChangePayload'()
+}).
+
+%% struct 'InvoicePaymentRefundCreated'
+-record('payproc_InvoicePaymentRefundCreated', {
+    'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
+}).
+
+%% struct 'InvoicePaymentRefundStatusChanged'
+-record('payproc_InvoicePaymentRefundStatusChanged', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentRefundStatus'()
+}).
+
 %% struct 'InvoicePaymentAdjustmentChange'
 -record('payproc_InvoicePaymentAdjustmentChange', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentID'(),
@@ -195,7 +212,13 @@
 %% struct 'InvoicePayment'
 -record('payproc_InvoicePayment', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
+    'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()]
+}).
+
+%% struct 'InvoicePaymentRefundParams'
+-record('payproc_InvoicePaymentRefundParams', {
+    'reason' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentParams'
@@ -422,18 +445,26 @@
 %% exception 'InvoicePaymentNotFound'
 -record('payproc_InvoicePaymentNotFound', {}).
 
+%% exception 'InvoicePaymentRefundNotFound'
+-record('payproc_InvoicePaymentRefundNotFound', {}).
+
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -record('payproc_InvoicePaymentAdjustmentNotFound', {}).
 
 %% exception 'EventNotFound'
 -record('payproc_EventNotFound', {}).
 
-%% exception 'InvalidOperation'
--record('payproc_InvalidOperation', {}).
+%% exception 'OperationNotPermitted'
+-record('payproc_OperationNotPermitted', {}).
 
 %% exception 'InvoicePaymentPending'
 -record('payproc_InvoicePaymentPending', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'()
+}).
+
+%% exception 'InvoicePaymentRefundPending'
+-record('payproc_InvoicePaymentRefundPending', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'()
 }).
 
 %% exception 'InvoicePaymentAdjustmentPending'

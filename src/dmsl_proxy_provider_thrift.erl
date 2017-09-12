@@ -36,6 +36,7 @@
     'Shop'/0,
     'Invoice'/0,
     'InvoicePayment'/0,
+    'InvoicePaymentRefund'/0,
     'Cash'/0,
     'Session'/0,
     'Context'/0,
@@ -65,6 +66,7 @@
     'Shop' |
     'Invoice' |
     'InvoicePayment' |
+    'InvoicePaymentRefund' |
     'Cash' |
     'Session' |
     'Context' |
@@ -85,6 +87,9 @@
 
 %% struct 'InvoicePayment'
 -type 'InvoicePayment'() :: #'prxprv_InvoicePayment'{}.
+
+%% struct 'InvoicePaymentRefund'
+-type 'InvoicePaymentRefund'() :: #'prxprv_InvoicePaymentRefund'{}.
 
 %% struct 'Cash'
 -type 'Cash'() :: #'prxprv_Cash'{}.
@@ -171,6 +176,7 @@ structs() ->
         'Shop',
         'Invoice',
         'InvoicePayment',
+        'InvoicePaymentRefund',
         'Cash',
         'Session',
         'Context',
@@ -206,7 +212,8 @@ struct_info('PaymentInfo') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Shop'}}, 'shop', undefined},
     {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Invoice'}}, 'invoice', undefined},
-    {3, required, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePayment'}}, 'payment', undefined}
+    {3, required, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePayment'}}, 'payment', undefined},
+    {4, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined}
 ]};
 
 struct_info('Shop') ->
@@ -233,6 +240,13 @@ struct_info('InvoicePayment') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
     {5, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined}
+]};
+
+struct_info('InvoicePaymentRefund') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'created_at', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
 struct_info('Cash') ->
@@ -289,6 +303,9 @@ record_name('Shop') ->
 
     record_name('InvoicePayment') ->
     'prxprv_InvoicePayment';
+
+    record_name('InvoicePaymentRefund') ->
+    'prxprv_InvoicePaymentRefund';
 
     record_name('Cash') ->
     'prxprv_Cash';
