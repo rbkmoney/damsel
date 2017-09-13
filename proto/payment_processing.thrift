@@ -188,7 +188,10 @@ struct InvoicePaymentSessionFinished {
     1: required SessionResult result
 }
 
-struct InvoicePaymentSessionSuspended {}
+struct InvoicePaymentSessionSuspended {
+    1: optional base.Tag tag
+}
+
 struct InvoicePaymentSessionActivated {}
 
 union SessionResult {
