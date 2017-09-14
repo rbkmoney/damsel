@@ -122,12 +122,20 @@ service ProviderProxy {
 
 }
 
+exception PaymentNotFound {}
+
 service ProviderProxyHost {
 
     /**
      * Запрос к процессингу на обработку обратного вызова от провайдера.
      */
-    proxy.CallbackResponse ProcessCallback (1: base.Tag tag, 2: proxy.Callback callback)
+    proxy.CallbackResponse ProcessCallback (1: proxy.CallbackTag tag, 2: proxy.Callback callback)
         throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Запрос-костыль к процессингу для получения актуального состояния платежа.
+     */
+    PaymentInfo GetPayment (1: proxy.CallbackTag tag)
+        throws (1: PaymentNotFound ex1)
 
 }

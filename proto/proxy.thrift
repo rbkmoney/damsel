@@ -9,10 +9,9 @@ namespace java com.rbkmoney.damsel.proxy
  */
 typedef base.Opaque ProxyState
 
-
 /**
-* Запрос/ответ прокси при обработке обратного вызова в рамках сессии.
-*/
+ * Запрос/ответ прокси при обработке обратного вызова в рамках сессии.
+ */
 typedef base.Opaque Callback
 typedef base.Opaque CallbackResponse
 
@@ -59,6 +58,8 @@ struct SleepIntent {
     1: required base.Timer timer
 }
 
+typedef base.Tag CallbackTag
+
 /**
  * Требование приостановить сессию взаимодействия, с продолжением по факту прихода обратного
  * запроса (callback), либо с неуспешным завершением по факту истечения заданного времени
@@ -69,7 +70,7 @@ struct SuspendIntent {
      * Ассоциация, по которой обработчик обратного запроса сможет идентифицировать сессию
      * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
      */
-    1: required base.Tag tag
+    1: required CallbackTag tag
 
     /**
      * Таймер, определяющий время, в течение которого процессинг ожидает обратный запрос.
