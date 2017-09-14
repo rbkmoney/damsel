@@ -1548,12 +1548,12 @@ struct_info('ClaimAccepted') ->
 
 struct_info('ClaimDenied') ->
     {struct, struct, [
-    {1, required, string, 'reason', undefined}
+    {1, optional, string, 'reason', undefined}
 ]};
 
 struct_info('ClaimRevoked') ->
     {struct, struct, [
-    {1, required, string, 'reason', undefined}
+    {1, optional, string, 'reason', undefined}
 ]};
 
 struct_info('ClaimEffect') ->

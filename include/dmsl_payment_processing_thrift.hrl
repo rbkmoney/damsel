@@ -323,12 +323,12 @@
 
 %% struct 'ClaimDenied'
 -record('payproc_ClaimDenied', {
-    'reason' :: binary()
+    'reason' :: binary() | undefined
 }).
 
 %% struct 'ClaimRevoked'
 -record('payproc_ClaimRevoked', {
-    'reason' :: binary()
+    'reason' :: binary() | undefined
 }).
 
 %% struct 'ContractEffectUnit'
