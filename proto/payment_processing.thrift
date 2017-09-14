@@ -852,11 +852,11 @@ struct ClaimAccepted {
 }
 
 struct ClaimDenied {
-    1: required string reason
+    1: optional string reason
 }
 
 struct ClaimRevoked {
-    1: required string reason
+    1: optional string reason
 }
 
 // Claim effects
