@@ -533,7 +533,8 @@ struct_info('PayoutAccount') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BankAccount'}}, 'account', undefined},
     {2, required, string, 'inn', undefined},
-    {3, required, string, 'purpose', undefined}
+    {3, required, string, 'purpose', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
 ]};
 
 struct_info('PayoutStatusChanged') ->
