@@ -505,6 +505,13 @@ service Invoicing {
             4: base.InvalidRequest ex4
         )
 
+    /* Terms */
+
+    domain.TermSet GetComputedTerms (1: UserInfo user, 2: domain.InvoiceID id)
+        throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
+
+    /* Payments */
+
     InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
@@ -914,6 +921,16 @@ struct AccountState {
     4: required domain.Currency currency
 }
 
+struct ComputedTermsParams {
+    1: required ComputedTermsObject target
+    2: optional base.Timestamp timestamp
+}
+
+union ComputedTermsObject {
+    1: domain.ContractID contract_id
+    2: domain.ShopID shop_id
+}
+
 // Events
 
 union PartyChange {
@@ -1075,6 +1092,11 @@ service PartyManagement {
     void UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
+    /* Terms */
+
+    domain.TermSet GetComputedTerms (1: UserInfo user, 2: PartyID party_id, 3: ComputedTermsParams params)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ContractNotFound ex4)
+
     /* Claim */
 
     Claim CreateClaim (1: UserInfo user, 2: PartyID party_id, 3: PartyChangeset changeset)
@@ -1152,7 +1174,6 @@ service PartyManagement {
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
-
 }
 
 /* Event sink service definitions */
