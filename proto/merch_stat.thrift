@@ -66,6 +66,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
+struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 union InvoicePaymentStatus {
@@ -73,11 +74,13 @@ union InvoicePaymentStatus {
     4: InvoicePaymentProcessed processed
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
+    6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
 }
 
 union PaymentTool {
     1: BankCard bank_card
+    2: PaymentTerminal payment_terminal
 }
 
 struct BankCard {
@@ -85,6 +88,21 @@ struct BankCard {
     2: required domain.BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+}
+
+struct PaymentTerminal {
+    1: required TerminalPaymentProvider terminal_type
+}
+
+enum TerminalPaymentProvider {
+    euroset
+}
+
+struct BankAccount {
+    1: required string account
+    2: required string bank_name
+    3: required string bank_post_account
+    4: required string bank_bik
 }
 
 /**
@@ -125,6 +143,49 @@ struct StatCustomer {
     2: required base.Timestamp created_at
 }
 
+typedef base.ID PayoutID
+
+/**
+* Информация о выплате
+*/
+struct StatPayout {
+    1 : required PayoutID id
+    2 : required domain.PartyID party_id
+    3 : required domain.ShopID shop_id
+    4 : required base.Timestamp created_at
+    5 : required PayoutStatus status
+    6 : required domain.Amount amount
+    7 : required domain.Amount fee
+    8 : required string currency_symbolic_code
+    9 : required PayoutType type
+}
+
+union PayoutType {
+    1: PayoutCard bank_card
+    2: PayoutAccount bank_account
+}
+
+struct PayoutCard {
+    1: required BankCard card
+}
+
+struct PayoutAccount {
+    1: required BankAccount account
+    4: required string inn
+    5: required string purpose
+}
+
+union PayoutStatus {
+    1: PayoutUnpaid unpaid
+    2: PayoutPaid paid
+    3: PayoutCancelled cancelled
+    4: PayoutConfirmed confirmed
+}
+
+struct PayoutUnpaid {}
+struct PayoutPaid {}
+struct PayoutCancelled { 1: required string details }
+struct PayoutConfirmed {}
 
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
@@ -155,6 +216,7 @@ union StatResponseData {
     2: list<StatInvoice> invoices
     3: list<StatCustomer> customers
     4: list<StatInfo> records
+    5: list<StatPayout> payouts
 }
 
 /**
@@ -180,6 +242,11 @@ service MerchantStatistics {
      * Возвращает набор данных о покупателях
      */
     StatResponse GetCustomers(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+
+    /**
+     * Возвращает набор данных о выплатах
+     */
+     StatResponse GetPayouts(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
 
     /**
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.

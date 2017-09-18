@@ -57,6 +57,7 @@ struct TransactionInfo {
 
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
+typedef base.ID InvoicePaymentRefundID
 typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
@@ -120,12 +121,9 @@ struct InvoicePayment {
 
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured {
-    1: optional string reason
-}
-struct InvoicePaymentCancelled {
-    1: optional string reason
-}
+struct InvoicePaymentCaptured  { 1: optional string reason }
+struct InvoicePaymentCancelled { 1: optional string reason }
+struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 /**
@@ -167,13 +165,13 @@ struct InvoiceTemplateCostUnlimited {}
 
 /**
  * Статус платежа.
- * Согласно https://github.com/rbkmoney/coredocs/blob/589799f/docs/domain/entities/payment.md
  */
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
     4: InvoicePaymentProcessed processed
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
+    6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
 }
 
@@ -212,6 +210,16 @@ union TargetInvoicePaymentStatus {
      */
     3: InvoicePaymentCancelled cancelled
 
+    /**
+     * Платёж возвращён.
+     *
+     * При достижении платежом этого статуса процессинг должен быть уверен в том, что провайдер
+     * возвратил денежные средства плательщику, потраченные им в ходе подтверждённого списания.
+     *
+     * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
+     */
+    4: InvoicePaymentRefunded refunded
+
 }
 
 struct Payer {
@@ -230,6 +238,8 @@ struct InvoicePaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
 }
+
+/* Adjustments */
 
 struct InvoicePaymentAdjustment {
     1: required InvoicePaymentAdjustmentID id
@@ -269,6 +279,29 @@ struct InvoicePaymentFlowHold {
 enum OnHoldExpiration {
     cancel
     capture
+}
+
+/* Refunds */
+
+struct InvoicePaymentRefund {
+    1: required InvoicePaymentRefundID id
+    2: required InvoicePaymentRefundStatus status
+    3: required base.Timestamp created_at
+    4: required DataRevision domain_revision
+    5: optional string reason
+}
+
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
+}
+
+struct InvoicePaymentRefundPending {}
+struct InvoicePaymentRefundSucceeded {}
+
+struct InvoicePaymentRefundFailed {
+    1: required OperationFailure failure
 }
 
 /* Blocking and suspension */
@@ -550,18 +583,18 @@ struct PaymentsServiceTerms {
     5: optional CashLimitSelector cash_limit
     /* Payment level */
     6: optional CashFlowSelector fees
-    7: optional HoldLifetimeSelector hold_lifetime
-    /* Undefined level */
-    3: optional GuaranteeFundTerms guarantee_fund
+    9: optional PaymentHoldsServiceTerms holds
+    8: optional PaymentRefundsServiceTerms refunds
 }
 
-struct GuaranteeFundTerms {
-    1: optional CashLimitSelector limits
+struct PaymentHoldsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+    2: optional HoldLifetimeSelector lifetime
+}
+
+struct PaymentRefundsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
-}
-
-struct HoldLifetime {
-    1: required i32 seconds
 }
 
 /* Currencies */
@@ -701,6 +734,10 @@ struct PaymentMethodDecision {
 }
 
 /* Holds */
+
+struct HoldLifetime {
+    1: required i32 seconds
+}
 
 union HoldLifetimeSelector {
     1: list<HoldLifetimeDecision> decisions
@@ -863,6 +900,32 @@ struct Provider {
     4: required TerminalSelector terminal
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
+    6: optional PaymentsProvisionTerms terms
+    7: optional ProviderAccountSet accounts = {}
+}
+
+struct PaymentsProvisionTerms {
+    1: required CurrencySelector currencies
+    2: required CategorySelector categories
+    3: required PaymentMethodSelector payment_methods
+    6: required CashLimitSelector cash_limit
+    4: required CashFlowSelector cash_flow
+    5: optional PaymentHoldsProvisionTerms holds
+    7: optional PaymentRefundsProvisionTerms refunds
+}
+
+struct PaymentHoldsProvisionTerms {
+    1: required HoldLifetimeSelector lifetime
+}
+
+struct PaymentRefundsProvisionTerms {
+    1: required CashFlowSelector cash_flow
+}
+
+typedef map<CurrencyRef, ProviderAccount> ProviderAccountSet
+
+struct ProviderAccount {
+    1: required AccountID settlement
 }
 
 union ProviderSelector {
@@ -906,20 +969,9 @@ struct InspectorDecision {
 struct Terminal {
     1: required string name
     2: required string description
-    3: required PaymentMethodRef payment_method
-    4: required CategoryRef category
-    6: required CashFlow cash_flow
-    7: required TerminalAccount account
-    // TODO
-    // 8: optional TerminalDescriptor descriptor
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
-    11: optional TerminalPaymentFlow payment_flow
-}
-
-struct TerminalAccount {
-    1: required CurrencyRef currency
-    2: required AccountID settlement
+    12: optional PaymentsProvisionTerms terms
 }
 
 union TerminalSelector {
@@ -930,17 +982,6 @@ union TerminalSelector {
 struct TerminalDecision {
     1: required Predicate if_
     2: required TerminalSelector then_
-}
-
-union TerminalPaymentFlow {
-    1: TerminalPaymentFlowInstant instant
-    2: TerminalPaymentFlowHold hold
-}
-
-struct TerminalPaymentFlowInstant {}
-
-struct TerminalPaymentFlowHold {
-    1: required HoldLifetime hold_lifetime
 }
 
 /* Predicates / conditions */
