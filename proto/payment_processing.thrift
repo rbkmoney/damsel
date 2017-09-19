@@ -507,7 +507,7 @@ service Invoicing {
 
     /* Terms */
 
-    domain.TermSet GetComputedTerms (1: UserInfo user, 2: domain.InvoiceID id)
+    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
 
     /* Payments */
@@ -733,6 +733,7 @@ service InvoiceTemplating {
 
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
+typedef domain.ContractID  ContractID
 
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
@@ -1075,6 +1076,9 @@ service PartyManagement {
             3: ContractNotFound ex3
         )
 
+    domain.TermSet ComputeContractTerms (1: UserInfo user, 2: PartyID party_id, 3: ContractID id, 4: base.Timestamp timestamp)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ContractNotFound ex4)
+
     /* Shop */
 
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
@@ -1092,10 +1096,8 @@ service PartyManagement {
     void UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
-    /* Terms */
-
-    domain.TermSet GetComputedTerms (1: UserInfo user, 2: PartyID party_id, 3: ComputedTermsParams params)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ContractNotFound ex4)
+    domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
 
     /* Claim */
 
