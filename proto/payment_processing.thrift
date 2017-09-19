@@ -922,16 +922,6 @@ struct AccountState {
     4: required domain.Currency currency
 }
 
-struct ComputedTermsParams {
-    1: required ComputedTermsObject target
-    2: optional base.Timestamp timestamp
-}
-
-union ComputedTermsObject {
-    1: ContractID contract_id
-    2: ShopID shop_id
-}
-
 // Events
 
 union PartyChange {
