@@ -748,7 +748,7 @@ struct ShopParams {
     1: optional domain.CategoryRef category
     6: required domain.ShopLocation location
     2: required domain.ShopDetails details
-    3: required domain.ContractID contract_id
+    3: required ContractID contract_id
     4: required domain.PayoutToolID payout_tool_id
 }
 
@@ -771,7 +771,7 @@ union PartyModification {
 }
 
 struct ContractModificationUnit {
-    1: required domain.ContractID id
+    1: required ContractID id
     2: required ContractModification modification
 }
 
@@ -824,7 +824,7 @@ union ShopModification {
 }
 
 struct ShopContractModification {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required domain.PayoutToolID payout_tool_id
 }
 
@@ -878,7 +878,7 @@ union ClaimEffect {
 }
 
 struct ContractEffectUnit {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required ContractEffect effect
 }
 
@@ -907,7 +907,7 @@ union ShopEffect {
 }
 
 struct ShopContractChanged {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required domain.PayoutToolID payout_tool_id
 }
 
@@ -928,8 +928,8 @@ struct ComputedTermsParams {
 }
 
 union ComputedTermsObject {
-    1: domain.ContractID contract_id
-    2: domain.ShopID shop_id
+    1: ContractID contract_id
+    2: ShopID shop_id
 }
 
 // Events
@@ -992,8 +992,8 @@ exception ChangesetConflict { 1: required ClaimID conflicted_id }
 exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
-    1: domain.ContractID contract_not_exists
-    2: domain.ContractID contract_already_exists
+    1: ContractID contract_not_exists
+    2: ContractID contract_already_exists
     3: ContractStatusInvalid contract_status_invalid
     4: domain.ContractAdjustmentID contract_adjustment_already_exists
     5: domain.PayoutToolID payout_tool_not_exists
@@ -1005,7 +1005,7 @@ union InvalidChangesetReason {
 }
 
 struct ContractStatusInvalid {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required domain.ContractStatus status
 }
 
@@ -1016,7 +1016,7 @@ struct ShopStatusInvalid {
 
 struct ContractTermsViolated {
     1: required ShopID shop_id
-    2: required domain.ContractID contract_id
+    2: required ContractID contract_id
     3: required domain.TermSet terms
 }
 
@@ -1069,7 +1069,7 @@ service PartyManagement {
 
     /* Contract */
 
-    domain.Contract GetContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id)
+    domain.Contract GetContract (1: UserInfo user, 2: PartyID party_id, 3: ContractID contract_id)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
