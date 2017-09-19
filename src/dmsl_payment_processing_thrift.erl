@@ -38,6 +38,7 @@
     'InvoicePaymentAdjustment'/0,
     'PartyID'/0,
     'ShopID'/0,
+    'ContractID'/0,
     'PartyChangeset'/0,
     'ClaimID'/0,
     'ClaimRevision'/0,
@@ -187,6 +188,7 @@
     'InvoicePaymentAdjustment' |
     'PartyID' |
     'ShopID' |
+    'ContractID' |
     'PartyChangeset' |
     'ClaimID' |
     'ClaimRevision' |
@@ -198,6 +200,7 @@
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
+-type 'ContractID'() :: dmsl_domain_thrift:'ContractID'().
 -type 'PartyChangeset'() :: ['PartyModification'()].
 -type 'ClaimID'() :: integer().
 -type 'ClaimRevision'() :: integer().
@@ -701,8 +704,8 @@
 
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
-    {'contract_not_exists', dmsl_domain_thrift:'ContractID'()} |
-    {'contract_already_exists', dmsl_domain_thrift:'ContractID'()} |
+    {'contract_not_exists', 'ContractID'()} |
+    {'contract_already_exists', 'ContractID'()} |
     {'contract_status_invalid', 'ContractStatusInvalid'()} |
     {'contract_adjustment_already_exists', dmsl_domain_thrift:'ContractAdjustmentID'()} |
     {'payout_tool_not_exists', dmsl_domain_thrift:'PayoutToolID'()} |
@@ -837,6 +840,7 @@
     'CreateWithTemplate' |
     'Get' |
     'GetEvents' |
+    'ComputeTerms' |
     'StartPayment' |
     'GetPayment' |
     'CancelPayment' |
@@ -873,11 +877,13 @@
     'SetMetaData' |
     'RemoveMetaData' |
     'GetContract' |
+    'ComputeContractTerms' |
     'GetShop' |
     'SuspendShop' |
     'ActivateShop' |
     'BlockShop' |
     'UnblockShop' |
+    'ComputeShopTerms' |
     'CreateClaim' |
     'GetClaim' |
     'GetClaims' |
@@ -934,6 +940,7 @@ typedefs() ->
         'InvoicePaymentAdjustment',
         'PartyID',
         'ShopID',
+        'ContractID',
         'PartyChangeset',
         'ClaimID',
         'ClaimRevision',
@@ -1079,6 +1086,9 @@ typedef_info('PartyID') ->
     string;
 
 typedef_info('ShopID') ->
+    string;
+
+typedef_info('ContractID') ->
     string;
 
 typedef_info('PartyChangeset') ->
@@ -2141,6 +2151,7 @@ functions('Invoicing') ->
         'CreateWithTemplate',
         'Get',
         'GetEvents',
+        'ComputeTerms',
         'StartPayment',
         'GetPayment',
         'CancelPayment',
@@ -2177,11 +2188,13 @@ functions('PartyManagement') ->
         'SetMetaData',
         'RemoveMetaData',
         'GetContract',
+        'ComputeContractTerms',
         'GetShop',
         'SuspendShop',
         'ActivateShop',
         'BlockShop',
         'UnblockShop',
+        'ComputeShopTerms',
         'CreateClaim',
         'GetClaim',
         'GetClaims',
@@ -2265,6 +2278,18 @@ function_info('Invoicing', 'GetEvents', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex4', undefined}
+    ]};
+function_info('Invoicing', 'ComputeTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined}
+]};
+function_info('Invoicing', 'ComputeTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('Invoicing', 'ComputeTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined}
     ]};
 function_info('Invoicing', 'StartPayment', params_type) ->
     {struct, struct, [
@@ -2699,6 +2724,22 @@ function_info('PartyManagement', 'GetContract', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex3', undefined}
     ]};
+function_info('PartyManagement', 'ComputeContractTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined},
+    {4, undefined, string, 'timestamp', undefined}
+]};
+function_info('PartyManagement', 'ComputeContractTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('PartyManagement', 'ComputeContractTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex4', undefined}
+    ]};
 function_info('PartyManagement', 'GetShop', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
@@ -2774,6 +2815,22 @@ function_info('PartyManagement', 'UnblockShop', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeShopTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined},
+    {4, undefined, string, 'timestamp', undefined}
+]};
+function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('PartyManagement', 'ComputeShopTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'CreateClaim', params_type) ->
     {struct, struct, [
