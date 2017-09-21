@@ -457,6 +457,9 @@
 %% exception 'OperationNotPermitted'
 -record('payproc_OperationNotPermitted', {}).
 
+%% exception 'InsufficientAccountBalance'
+-record('payproc_InsufficientAccountBalance', {}).
+
 %% exception 'InvoicePaymentPending'
 -record('payproc_InvoicePaymentPending', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'()
