@@ -439,6 +439,7 @@ exception InvoicePaymentRefundNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
+exception InsufficientAccountBalance {}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -644,7 +645,9 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: InvoicePaymentRefundPending ex5,
-            6: OperationNotPermitted ex6
+            6: OperationNotPermitted ex6,
+            7: InsufficientAccountBalance ex7,
+            8: base.InvalidRequest ex8
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
