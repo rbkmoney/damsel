@@ -165,8 +165,8 @@ struct PayoutConfirmed {
 
 /* Типы выплаты */
 union PayoutType {
-    1: PayoutCard card
-    2: PayoutAccount account
+    1: PayoutCard bank_card
+    2: PayoutAccount bank_account
 }
 
 /* Выплата на карту */
