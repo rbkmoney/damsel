@@ -59,6 +59,9 @@
 %% struct 'InvoicePaymentCancelled'
 -record('merchstat_InvoicePaymentCancelled', {}).
 
+%% struct 'InvoicePaymentRefunded'
+-record('merchstat_InvoicePaymentRefunded', {}).
+
 %% struct 'InvoicePaymentFailed'
 -record('merchstat_InvoicePaymentFailed', {
     'failure' :: dmsl_merch_stat_thrift:'OperationFailure'()
@@ -70,6 +73,11 @@
     'payment_system' :: atom(),
     'bin' :: binary(),
     'masked_pan' :: binary()
+}).
+
+%% struct 'PaymentTerminal'
+-record('merchstat_PaymentTerminal', {
+    'terminal_type' :: dmsl_merch_stat_thrift:'TerminalPaymentProvider'()
 }).
 
 %% struct 'BankAccount'

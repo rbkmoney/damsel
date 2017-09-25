@@ -221,8 +221,8 @@
 
 %% union 'PayoutType'
 -type 'PayoutType'() ::
-    {'card', 'PayoutCard'()} |
-    {'account', 'PayoutAccount'()}.
+    {'bank_card', 'PayoutCard'()} |
+    {'bank_account', 'PayoutAccount'()}.
 
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'payout_processing_PayoutCard'{}.
@@ -520,8 +520,8 @@ struct_info('PayoutConfirmed') ->
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'card', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'account', undefined}
+    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'bank_card', undefined},
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
 ]};
 
 struct_info('PayoutCard') ->
@@ -533,7 +533,8 @@ struct_info('PayoutAccount') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BankAccount'}}, 'account', undefined},
     {2, required, string, 'inn', undefined},
-    {3, required, string, 'purpose', undefined}
+    {3, required, string, 'purpose', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
 ]};
 
 struct_info('PayoutStatusChanged') ->
@@ -580,11 +581,12 @@ struct_info('PayoutInfo') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'party_id', undefined},
     {3, required, string, 'shop_id', undefined},
-    {4, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
-    {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
-    {6, required, string, 'from_time', undefined},
-    {7, required, string, 'to_time', undefined},
-    {8, required, string, 'created_at', undefined}
+    {4, required, i64, 'amount', undefined},
+    {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
+    {6, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
+    {7, required, string, 'from_time', undefined},
+    {8, required, string, 'to_time', undefined},
+    {9, required, string, 'created_at', undefined}
 ]};
 
 struct_info('NoLastEvent') ->

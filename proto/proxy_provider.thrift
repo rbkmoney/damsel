@@ -58,6 +58,7 @@ struct PaymentInfo {
     1: required Shop shop
     2: required Invoice invoice
     3: required InvoicePayment payment
+    4: optional InvoicePaymentRefund refund
 }
 
 struct Shop {
@@ -91,6 +92,12 @@ struct InvoicePayment {
     6: required PaymentResource payment_resource
     5: required Cash cost
     7: required domain.ContactInfo contact_info
+}
+
+struct InvoicePaymentRefund {
+    1: required domain.InvoicePaymentRefundID id
+    2: required base.Timestamp created_at
+    3: optional domain.TransactionInfo trx
 }
 
 struct Cash {

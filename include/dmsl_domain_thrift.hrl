@@ -113,6 +113,9 @@
     'reason' :: binary() | undefined
 }).
 
+%% struct 'InvoicePaymentRefunded'
+-record('domain_InvoicePaymentRefunded', {}).
+
 %% struct 'InvoicePaymentFailed'
 -record('domain_InvoicePaymentFailed', {
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
@@ -186,6 +189,26 @@
 -record('domain_InvoicePaymentFlowHold', {
     'on_hold_expiration' :: dmsl_domain_thrift:'OnHoldExpiration'(),
     'held_until' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'InvoicePaymentRefund'
+-record('domain_InvoicePaymentRefund', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
+    'status' :: dmsl_domain_thrift:'InvoicePaymentRefundStatus'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'reason' :: binary() | undefined
+}).
+
+%% struct 'InvoicePaymentRefundPending'
+-record('domain_InvoicePaymentRefundPending', {}).
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-record('domain_InvoicePaymentRefundSucceeded', {}).
+
+%% struct 'InvoicePaymentRefundFailed'
+-record('domain_InvoicePaymentRefundFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
 %% struct 'Unblocked'
@@ -398,19 +421,20 @@
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'hold_lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'() | undefined,
-    'guarantee_fund' :: dmsl_domain_thrift:'GuaranteeFundTerms'() | undefined
+    'holds' :: dmsl_domain_thrift:'PaymentHoldsServiceTerms'() | undefined,
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined
 }).
 
-%% struct 'GuaranteeFundTerms'
--record('domain_GuaranteeFundTerms', {
-    'limits' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+%% struct 'PaymentHoldsServiceTerms'
+-record('domain_PaymentHoldsServiceTerms', {
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
+    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'() | undefined
+}).
+
+%% struct 'PaymentRefundsServiceTerms'
+-record('domain_PaymentRefundsServiceTerms', {
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
-}).
-
-%% struct 'HoldLifetime'
--record('domain_HoldLifetime', {
-    'seconds' :: integer()
 }).
 
 %% struct 'CurrencyRef'
@@ -504,6 +528,11 @@
     'then_' :: dmsl_domain_thrift:'PaymentMethodSelector'()
 }).
 
+%% struct 'HoldLifetime'
+-record('domain_HoldLifetime', {
+    'seconds' :: integer()
+}).
+
 %% struct 'HoldLifetimeDecision'
 -record('domain_HoldLifetimeDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
@@ -560,7 +589,35 @@
     'description' :: binary(),
     'proxy' :: dmsl_domain_thrift:'Proxy'(),
     'terminal' :: dmsl_domain_thrift:'TerminalSelector'(),
-    'abs_account' :: binary()
+    'abs_account' :: binary(),
+    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined,
+    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
+}).
+
+%% struct 'PaymentsProvisionTerms'
+-record('domain_PaymentsProvisionTerms', {
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'(),
+    'categories' :: dmsl_domain_thrift:'CategorySelector'(),
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'(),
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'(),
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
+    'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
+}).
+
+%% struct 'PaymentHoldsProvisionTerms'
+-record('domain_PaymentHoldsProvisionTerms', {
+    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'()
+}).
+
+%% struct 'PaymentRefundsProvisionTerms'
+-record('domain_PaymentRefundsProvisionTerms', {
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
+}).
+
+%% struct 'ProviderAccount'
+-record('domain_ProviderAccount', {
+    'settlement' :: dmsl_domain_thrift:'AccountID'()
 }).
 
 %% struct 'ProviderDecision'
@@ -596,33 +653,15 @@
 -record('domain_Terminal', {
     'name' :: binary(),
     'description' :: binary(),
-    'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'(),
-    'category' :: dmsl_domain_thrift:'CategoryRef'(),
-    'cash_flow' :: dmsl_domain_thrift:'CashFlow'(),
-    'account' :: dmsl_domain_thrift:'TerminalAccount'(),
     'options' :: dmsl_domain_thrift:'ProxyOptions'() | undefined,
     'risk_coverage' :: atom(),
-    'payment_flow' :: dmsl_domain_thrift:'TerminalPaymentFlow'() | undefined
-}).
-
-%% struct 'TerminalAccount'
--record('domain_TerminalAccount', {
-    'currency' :: dmsl_domain_thrift:'CurrencyRef'(),
-    'settlement' :: dmsl_domain_thrift:'AccountID'()
+    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
 }).
 
 %% struct 'TerminalDecision'
 -record('domain_TerminalDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'TerminalSelector'()
-}).
-
-%% struct 'TerminalPaymentFlowInstant'
--record('domain_TerminalPaymentFlowInstant', {}).
-
-%% struct 'TerminalPaymentFlowHold'
--record('domain_TerminalPaymentFlowHold', {
-    'hold_lifetime' :: dmsl_domain_thrift:'HoldLifetime'()
 }).
 
 %% struct 'PartyCondition'

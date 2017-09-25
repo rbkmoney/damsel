@@ -88,7 +88,8 @@
 -record('payout_processing_PayoutAccount', {
     'account' :: dmsl_domain_thrift:'BankAccount'(),
     'inn' :: binary(),
-    'purpose' :: binary()
+    'purpose' :: binary(),
+    'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
 }).
 
 %% struct 'PayoutStatusChanged'
@@ -135,6 +136,7 @@
     'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'amount' :: dmsl_domain_thrift:'Amount'(),
     'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'from_time' :: dmsl_base_thrift:'Timestamp'(),

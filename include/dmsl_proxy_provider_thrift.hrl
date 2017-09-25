@@ -53,7 +53,8 @@
 -record('prxprv_PaymentInfo', {
     'shop' :: dmsl_proxy_provider_thrift:'Shop'(),
     'invoice' :: dmsl_proxy_provider_thrift:'Invoice'(),
-    'payment' :: dmsl_proxy_provider_thrift:'InvoicePayment'()
+    'payment' :: dmsl_proxy_provider_thrift:'InvoicePayment'(),
+    'refund' :: dmsl_proxy_provider_thrift:'InvoicePaymentRefund'() | undefined
 }).
 
 %% struct 'Shop'
@@ -86,6 +87,13 @@
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
+%% struct 'InvoicePaymentRefund'
+-record('prxprv_InvoicePaymentRefund', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'Cash'

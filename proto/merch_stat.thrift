@@ -66,6 +66,7 @@ struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
+struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
 union InvoicePaymentStatus {
@@ -73,11 +74,13 @@ union InvoicePaymentStatus {
     4: InvoicePaymentProcessed processed
     2: InvoicePaymentCaptured captured
     5: InvoicePaymentCancelled cancelled
+    6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
 }
 
 union PaymentTool {
     1: BankCard bank_card
+    2: PaymentTerminal payment_terminal
 }
 
 struct BankCard {
@@ -85,6 +88,14 @@ struct BankCard {
     2: required domain.BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+}
+
+struct PaymentTerminal {
+    1: required TerminalPaymentProvider terminal_type
+}
+
+enum TerminalPaymentProvider {
+    euroset
 }
 
 struct BankAccount {
