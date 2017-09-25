@@ -943,6 +943,12 @@ struct RecurrentPaymentTool {
     6: optional domain.Token                     rec_token
 }
 
+struct RecurrentPaymentToolParams {
+    1: domain.DisposablePaymentResource disposable_payment_resource
+    2: PartyID                          party_id
+    3: ShopID                           shop_id
+}
+
 // Statuses
 struct RecurrentPaymentToolCreated   {}
 struct RecurrentPaymentToolAcquired  {}
@@ -1009,7 +1015,7 @@ exception InvalidRecurrentPaymentToolStatus {
 }
 
 service PaymentProcessing {
-    RecurrentPaymentTool CreateRecurrentPaymentTool (1: domain.DisposablePaymentResource disposable_payment_resource)
+    RecurrentPaymentTool CreateRecurrentPaymentTool (1: RecurrentPaymentToolParams params)
         throws (
             1: InvalidUser invalid_user
         )
