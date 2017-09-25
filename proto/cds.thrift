@@ -22,7 +22,7 @@ struct CardData {
     1: required string pan
     2: required ExpDate exp_date
     /** Имя держателя */
-    3: required string cardholder_name
+    3: optional string cardholder_name
     /** Код верификации [0-9]{3,4} */
     4: required string cvv
 }
