@@ -17,9 +17,8 @@ struct RecurrentPaymentTool {
  * Данные, необходимые для генерации многоразового токена
  */
 struct RecurrentTokenInfo {
-    1: required Shop                   shop
-    2: required RecurrentPaymentTool   payment_tool
-    3: optional domain.TransactionInfo trx
+    1: required RecurrentPaymentTool   payment_tool
+    2: optional domain.TransactionInfo trx
 }
 
 /**
@@ -55,17 +54,9 @@ struct RecurrentTokenGenerationCallbackResult {
  * Данные платежа, необходимые для обращения к провайдеру.
  */
 struct PaymentInfo {
-    1: required Shop shop
     2: required Invoice invoice
     3: required InvoicePayment payment
     4: optional InvoicePaymentRefund refund
-}
-
-struct Shop {
-    1: required domain.ShopID id
-    2: required domain.Category category
-    3: required domain.ShopDetails details
-    4: required domain.ShopLocation location
 }
 
 struct Invoice {
