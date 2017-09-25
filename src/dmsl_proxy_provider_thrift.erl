@@ -270,9 +270,8 @@ struct_info('RecurrentPaymentTool') ->
 
 struct_info('RecurrentTokenInfo') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Shop'}}, 'shop', undefined},
-    {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentPaymentTool'}}, 'payment_tool', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+    {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentPaymentTool'}}, 'payment_tool', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
 struct_info('RecurrentTokenGenerationSession') ->

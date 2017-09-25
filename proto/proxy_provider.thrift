@@ -17,9 +17,8 @@ struct RecurrentPaymentTool {
  * Данные, необходимые для генерации многоразового токена
  */
 struct RecurrentTokenInfo {
-    1: required Shop                   shop
-    2: required RecurrentPaymentTool   payment_tool
-    3: optional domain.TransactionInfo trx
+    1: required RecurrentPaymentTool   payment_tool
+    2: optional domain.TransactionInfo trx
 }
 
 /**
