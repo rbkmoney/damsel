@@ -283,14 +283,14 @@
 
 %% struct 'CustomerBindingParams'
 -record('payproc_CustomerBindingParams', {
-    'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'()
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
 
 %% struct 'CustomerBinding'
 -record('payproc_CustomerBinding', {
     'id' :: dmsl_payment_processing_thrift:'CustomerBindingID'(),
     'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
-    'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
     'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
 }).
 
@@ -320,9 +320,16 @@
     'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
     'route' :: dmsl_domain_thrift:'PaymentRoute'(),
     'rec_token' :: dmsl_domain_thrift:'Token'() | undefined
+}).
+
+%% struct 'RecurrentPaymentToolParams'
+-record('payproc_RecurrentPaymentToolParams', {
+    'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'disposable_payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
 
 %% struct 'RecurrentPaymentToolCreated'

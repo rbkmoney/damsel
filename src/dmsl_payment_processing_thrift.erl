@@ -40,6 +40,7 @@
     'Metadata'/0,
     'CustomerEvents'/0,
     'CustomerBindingID'/0,
+    'DisposablePaymentResource'/0,
     'RecurrentPaymentToolID'/0,
     'RecurrentPaymentToolEvents'/0,
     'PartyID'/0,
@@ -124,6 +125,7 @@
     'CustomerBindingStarted'/0,
     'CustomerBindingStatusChanged'/0,
     'RecurrentPaymentTool'/0,
+    'RecurrentPaymentToolParams'/0,
     'RecurrentPaymentToolCreated'/0,
     'RecurrentPaymentToolAcquired'/0,
     'RecurrentPaymentToolAbandoned'/0,
@@ -235,6 +237,7 @@
     'Metadata' |
     'CustomerEvents' |
     'CustomerBindingID' |
+    'DisposablePaymentResource' |
     'RecurrentPaymentToolID' |
     'RecurrentPaymentToolEvents' |
     'PartyID' |
@@ -252,6 +255,7 @@
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
 -type 'CustomerEvents'() :: ['CustomerEvent'()].
 -type 'CustomerBindingID'() :: dmsl_base_thrift:'ID'().
+-type 'DisposablePaymentResource'() :: dmsl_domain_thrift:'DisposablePaymentResource'().
 -type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
 -type 'RecurrentPaymentToolEvents'() :: ['RecurrentPaymentToolEvent'()].
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
@@ -344,6 +348,7 @@
     'CustomerBindingStarted' |
     'CustomerBindingStatusChanged' |
     'RecurrentPaymentTool' |
+    'RecurrentPaymentToolParams' |
     'RecurrentPaymentToolCreated' |
     'RecurrentPaymentToolAcquired' |
     'RecurrentPaymentToolAbandoned' |
@@ -712,6 +717,9 @@
 
 %% struct 'RecurrentPaymentTool'
 -type 'RecurrentPaymentTool'() :: #'payproc_RecurrentPaymentTool'{}.
+
+%% struct 'RecurrentPaymentToolParams'
+-type 'RecurrentPaymentToolParams'() :: #'payproc_RecurrentPaymentToolParams'{}.
 
 %% struct 'RecurrentPaymentToolCreated'
 -type 'RecurrentPaymentToolCreated'() :: #'payproc_RecurrentPaymentToolCreated'{}.
@@ -1205,6 +1213,7 @@ typedefs() ->
         'Metadata',
         'CustomerEvents',
         'CustomerBindingID',
+        'DisposablePaymentResource',
         'RecurrentPaymentToolID',
         'RecurrentPaymentToolEvents',
         'PartyID',
@@ -1298,6 +1307,7 @@ structs() ->
         'CustomerBindingStarted',
         'CustomerBindingStatusChanged',
         'RecurrentPaymentTool',
+        'RecurrentPaymentToolParams',
         'RecurrentPaymentToolCreated',
         'RecurrentPaymentToolAcquired',
         'RecurrentPaymentToolAbandoned',
@@ -1396,6 +1406,9 @@ typedef_info('CustomerEvents') ->
 
 typedef_info('CustomerBindingID') ->
     string;
+
+typedef_info('DisposablePaymentResource') ->
+    {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}};
 
 typedef_info('RecurrentPaymentToolID') ->
     string;
@@ -1860,6 +1873,13 @@ struct_info('RecurrentPaymentTool') ->
     {4, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
     {5, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
     {6, optional, string, 'rec_token', undefined}
+]};
+
+struct_info('RecurrentPaymentToolParams') ->
+    {struct, struct, [
+    {1, required, string, 'party_id', undefined},
+    {2, required, string, 'shop_id', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'disposable_payment_resource', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolCreated') ->
@@ -2531,6 +2551,9 @@ record_name('InternalUser') ->
 
     record_name('RecurrentPaymentTool') ->
     'payproc_RecurrentPaymentTool';
+
+    record_name('RecurrentPaymentToolParams') ->
+    'payproc_RecurrentPaymentToolParams';
 
     record_name('RecurrentPaymentToolCreated') ->
     'payproc_RecurrentPaymentToolCreated';
@@ -3282,7 +3305,7 @@ function_info('CustomerManagement', 'GetEvents', reply_type) ->
 
 function_info('PaymentProcessing', 'CreateRecurrentPaymentTool', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'disposable_payment_resource', undefined}
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolParams'}}, 'params', undefined}
 ]};
 function_info('PaymentProcessing', 'CreateRecurrentPaymentTool', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
