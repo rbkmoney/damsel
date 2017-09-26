@@ -751,11 +751,6 @@ struct Customer {
     6: required list<CustomerBinding> bindings
     7: required domain.ContactInfo    contact_info
     8: required Metadata              metadata
-    /*
-     * Активная привязка
-     * (привязка, которая связана с рекуррентным платежным средство, по которому будет проходить оплата)
-     */
-    9: optional CustomerBindingID     active_binding
 }
 
 /**
