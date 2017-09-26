@@ -820,16 +820,17 @@ struct CustomerBindingChanged {
 /* Bindings */
 
 typedef base.ID CustomerBindingID
+typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
-    1: required domain.DisposablePaymentResource payment_resource
+    1: required DisposablePaymentResource payment_resource
 }
 
 struct CustomerBinding {
-    1: required CustomerBindingID                id
-    2: required RecurrentPaymentToolID           rec_payment_tool_id
-    3: required domain.DisposablePaymentResource payment_resource
-    4: required CustomerBindingStatus            status
+    1: required CustomerBindingID         id
+    2: required RecurrentPaymentToolID    rec_payment_tool_id
+    3: required DisposablePaymentResource payment_resource
+    4: required CustomerBindingStatus     status
 }
 
 // Statuses
@@ -935,18 +936,18 @@ typedef base.ID RecurrentPaymentToolID
 
 // Model
 struct RecurrentPaymentTool {
-    1: required RecurrentPaymentToolID           id
-    2: required RecurrentPaymentToolStatus       status
-    3: required base.Timestamp                   created_at
-    4: required domain.DisposablePaymentResource payment_resource
-    5: required domain.PaymentRoute              route
-    6: optional domain.Token                     rec_token
+    1: required RecurrentPaymentToolID     id
+    2: required RecurrentPaymentToolStatus status
+    3: required base.Timestamp             created_at
+    4: required DisposablePaymentResource  payment_resource
+    5: required domain.PaymentRoute        route
+    6: optional domain.Token               rec_token
 }
 
 struct RecurrentPaymentToolParams {
-    1: domain.DisposablePaymentResource disposable_payment_resource
-    2: PartyID                          party_id
-    3: ShopID                           shop_id
+    1: required PartyID                   party_id
+    2: required ShopID                    shop_id
+    3: required DisposablePaymentResource disposable_payment_resource
 }
 
 // Statuses
