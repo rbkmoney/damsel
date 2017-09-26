@@ -88,7 +88,8 @@
 -record('payout_processing_PayoutAccount', {
     'account' :: dmsl_domain_thrift:'BankAccount'(),
     'inn' :: binary(),
-    'purpose' :: binary()
+    'purpose' :: binary(),
+    'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
 }).
 
 %% struct 'PayoutStatusChanged'

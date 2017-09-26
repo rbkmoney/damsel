@@ -232,7 +232,7 @@ struct_info('CardData') ->
     {struct, struct, [
     {1, required, string, 'pan', undefined},
     {2, required, {struct, struct, {dmsl_cds_thrift, 'ExpDate'}}, 'exp_date', undefined},
-    {3, required, string, 'cardholder_name', undefined},
+    {3, optional, string, 'cardholder_name', undefined},
     {4, required, string, 'cvv', undefined}
 ]};
 

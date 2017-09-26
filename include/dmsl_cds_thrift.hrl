@@ -16,7 +16,7 @@
 -record('CardData', {
     'pan' :: binary(),
     'exp_date' :: dmsl_cds_thrift:'ExpDate'(),
-    'cardholder_name' :: binary(),
+    'cardholder_name' :: binary() | undefined,
     'cvv' :: binary()
 }).
 

@@ -221,8 +221,8 @@
 
 %% union 'PayoutType'
 -type 'PayoutType'() ::
-    {'card', 'PayoutCard'()} |
-    {'account', 'PayoutAccount'()}.
+    {'bank_card', 'PayoutCard'()} |
+    {'bank_account', 'PayoutAccount'()}.
 
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'payout_processing_PayoutCard'{}.
@@ -520,8 +520,8 @@ struct_info('PayoutConfirmed') ->
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'card', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'account', undefined}
+    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'bank_card', undefined},
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
 ]};
 
 struct_info('PayoutCard') ->
@@ -533,7 +533,8 @@ struct_info('PayoutAccount') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BankAccount'}}, 'account', undefined},
     {2, required, string, 'inn', undefined},
-    {3, required, string, 'purpose', undefined}
+    {3, required, string, 'purpose', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
 ]};
 
 struct_info('PayoutStatusChanged') ->
