@@ -1767,8 +1767,7 @@ struct_info('Customer') ->
     {5, required, string, 'created_at', undefined},
     {6, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}}, 'bindings', undefined},
     {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
-    {8, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined},
-    {9, optional, string, 'active_binding', undefined}
+    {8, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined}
 ]};
 
 struct_info('CustomerStatus') ->

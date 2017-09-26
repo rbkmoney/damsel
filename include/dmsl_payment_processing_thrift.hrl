@@ -244,8 +244,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'bindings' :: [dmsl_payment_processing_thrift:'CustomerBinding'()],
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
-    'metadata' :: dmsl_payment_processing_thrift:'Metadata'(),
-    'active_binding' :: dmsl_payment_processing_thrift:'CustomerBindingID'() | undefined
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'()
 }).
 
 %% struct 'CustomerUnready'
