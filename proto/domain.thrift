@@ -115,7 +115,8 @@ struct InvoicePayment {
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
     3:  required InvoicePaymentStatus status
-    5:  required Payer payer
+    5:  required LegacyPayerDetails payer_details
+    14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
     6:  optional InvoicePaymentContext context
@@ -210,6 +211,13 @@ union TargetInvoicePaymentStatus {
      */
     4: InvoicePaymentRefunded refunded
 
+}
+
+struct LegacyPayerDetails {
+    1: required PaymentTool payment_tool
+    2: required PaymentSessionID session_id
+    3: required ClientInfo client_info
+    4: required ContactInfo contact_info
 }
 
 union Payer {
