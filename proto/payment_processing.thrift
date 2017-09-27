@@ -506,6 +506,13 @@ service Invoicing {
             4: base.InvalidRequest ex4
         )
 
+    /* Terms */
+
+    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
+        throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
+
+    /* Payments */
+
     InvoicePayment StartPayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
@@ -729,6 +736,7 @@ service InvoiceTemplating {
 
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
+typedef domain.ContractID  ContractID
 
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
@@ -743,7 +751,7 @@ struct ShopParams {
     1: optional domain.CategoryRef category
     6: required domain.ShopLocation location
     2: required domain.ShopDetails details
-    3: required domain.ContractID contract_id
+    3: required ContractID contract_id
     4: required domain.PayoutToolID payout_tool_id
 }
 
@@ -766,7 +774,7 @@ union PartyModification {
 }
 
 struct ContractModificationUnit {
-    1: required domain.ContractID id
+    1: required ContractID id
     2: required ContractModification modification
 }
 
@@ -819,7 +827,7 @@ union ShopModification {
 }
 
 struct ShopContractModification {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required domain.PayoutToolID payout_tool_id
 }
 
@@ -873,7 +881,7 @@ union ClaimEffect {
 }
 
 struct ContractEffectUnit {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required ContractEffect effect
 }
 
@@ -902,7 +910,7 @@ union ShopEffect {
 }
 
 struct ShopContractChanged {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required domain.PayoutToolID payout_tool_id
 }
 
@@ -977,8 +985,8 @@ exception ChangesetConflict { 1: required ClaimID conflicted_id }
 exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
-    1: domain.ContractID contract_not_exists
-    2: domain.ContractID contract_already_exists
+    1: ContractID contract_not_exists
+    2: ContractID contract_already_exists
     3: ContractStatusInvalid contract_status_invalid
     4: domain.ContractAdjustmentID contract_adjustment_already_exists
     5: domain.PayoutToolID payout_tool_not_exists
@@ -990,7 +998,7 @@ union InvalidChangesetReason {
 }
 
 struct ContractStatusInvalid {
-    1: required domain.ContractID contract_id
+    1: required ContractID contract_id
     2: required domain.ContractStatus status
 }
 
@@ -1001,7 +1009,7 @@ struct ShopStatusInvalid {
 
 struct ContractTermsViolated {
     1: required ShopID shop_id
-    2: required domain.ContractID contract_id
+    2: required ContractID contract_id
     3: required domain.TermSet terms
 }
 
@@ -1054,12 +1062,15 @@ service PartyManagement {
 
     /* Contract */
 
-    domain.Contract GetContract (1: UserInfo user, 2: PartyID party_id, 3: domain.ContractID contract_id)
+    domain.Contract GetContract (1: UserInfo user, 2: PartyID party_id, 3: ContractID contract_id)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ContractNotFound ex3
         )
+
+    domain.TermSet ComputeContractTerms (1: UserInfo user, 2: PartyID party_id, 3: ContractID id, 4: base.Timestamp timestamp)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ContractNotFound ex4)
 
     /* Shop */
 
@@ -1077,6 +1088,9 @@ service PartyManagement {
 
     void UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
+
+    domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
 
     /* Claim */
 
@@ -1155,7 +1169,6 @@ service PartyManagement {
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
-
 }
 
 /* Event sink service definitions */
