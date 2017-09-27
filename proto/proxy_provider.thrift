@@ -80,7 +80,8 @@ union PaymentResource {
 }
 
 struct RecurrentPaymentResource {
-    1: required domain.Token       rec_token
+    1: required domain.PaymentTool      payment_tool
+    2: required domain.Token            rec_token
 }
 
 struct InvoicePayment {
