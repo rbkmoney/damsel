@@ -3252,9 +3252,11 @@ function_info('CustomerManagement', 'Create', reply_type) ->
     function_info('CustomerManagement', 'Create', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined},
-        {4, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'invalid_request', undefined}
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined},
+        {6, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'invalid_request', undefined}
     ]};
 function_info('CustomerManagement', 'Get', params_type) ->
     {struct, struct, [
@@ -3276,7 +3278,9 @@ function_info('CustomerManagement', 'Delete', reply_type) ->
     function_info('CustomerManagement', 'Delete', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'not_found', undefined}
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined}
     ]};
 function_info('CustomerManagement', 'StartBinding', params_type) ->
     {struct, struct, [
@@ -3289,8 +3293,10 @@ function_info('CustomerManagement', 'StartBinding', reply_type) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentTool'}}, 'invalid_payment_tool', undefined},
-        {4, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'invalid_request', undefined}
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentTool'}}, 'invalid_payment_tool', undefined},
+        {6, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'invalid_request', undefined}
     ]};
 function_info('CustomerManagement', 'GetActiveBinding', params_type) ->
     {struct, struct, [
