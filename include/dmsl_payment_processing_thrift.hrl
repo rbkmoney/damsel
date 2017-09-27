@@ -371,6 +371,11 @@
 %% struct 'RecurrentPaymentToolHasAbandoned'
 -record('payproc_RecurrentPaymentToolHasAbandoned', {}).
 
+%% struct 'RecurrentPaymentToolHasFailed'
+-record('payproc_RecurrentPaymentToolHasFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
+}).
+
 %% struct 'PartyParams'
 -record('payproc_PartyParams', {
     'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'()

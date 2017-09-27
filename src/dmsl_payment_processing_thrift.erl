@@ -137,6 +137,7 @@
     'RecurrentPaymentToolHasCreated'/0,
     'RecurrentPaymentToolHasAcquired'/0,
     'RecurrentPaymentToolHasAbandoned'/0,
+    'RecurrentPaymentToolHasFailed'/0,
     'PartyParams'/0,
     'PayoutToolParams'/0,
     'ShopParams'/0,
@@ -360,6 +361,7 @@
     'RecurrentPaymentToolHasCreated' |
     'RecurrentPaymentToolHasAcquired' |
     'RecurrentPaymentToolHasAbandoned' |
+    'RecurrentPaymentToolHasFailed' |
     'PartyParams' |
     'PayoutToolParams' |
     'ShopParams' |
@@ -751,6 +753,7 @@
     {'rec_payment_tool_created', 'RecurrentPaymentToolHasCreated'()} |
     {'rec_payment_tool_acquired', 'RecurrentPaymentToolHasAcquired'()} |
     {'rec_payment_tool_abandoned', 'RecurrentPaymentToolHasAbandoned'()} |
+    {'rec_payment_tool_failed', 'RecurrentPaymentToolHasFailed'()} |
     {'rec_payment_tool_session_changed', 'RecurrentPaymentToolSessionChange'()}.
 
 %% struct 'RecurrentPaymentToolHasCreated'
@@ -761,6 +764,9 @@
 
 %% struct 'RecurrentPaymentToolHasAbandoned'
 -type 'RecurrentPaymentToolHasAbandoned'() :: #'payproc_RecurrentPaymentToolHasAbandoned'{}.
+
+%% struct 'RecurrentPaymentToolHasFailed'
+-type 'RecurrentPaymentToolHasFailed'() :: #'payproc_RecurrentPaymentToolHasFailed'{}.
 
 %% struct 'PartyParams'
 -type 'PartyParams'() :: #'payproc_PartyParams'{}.
@@ -1319,6 +1325,7 @@ structs() ->
         'RecurrentPaymentToolHasCreated',
         'RecurrentPaymentToolHasAcquired',
         'RecurrentPaymentToolHasAbandoned',
+        'RecurrentPaymentToolHasFailed',
         'PartyParams',
         'PayoutToolParams',
         'ShopParams',
@@ -1921,7 +1928,8 @@ struct_info('RecurrentPaymentToolChange') ->
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolSessionChange'}}, 'rec_payment_tool_session_changed', undefined}
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasFailed'}}, 'rec_payment_tool_failed', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolSessionChange'}}, 'rec_payment_tool_session_changed', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolHasCreated') ->
@@ -1936,6 +1944,11 @@ struct_info('RecurrentPaymentToolHasAcquired') ->
 
 struct_info('RecurrentPaymentToolHasAbandoned') ->
     {struct, struct, []};
+
+struct_info('RecurrentPaymentToolHasFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+]};
 
 struct_info('PartyParams') ->
     {struct, struct, [
@@ -2580,6 +2593,9 @@ record_name('InternalUser') ->
 
     record_name('RecurrentPaymentToolHasAbandoned') ->
     'payproc_RecurrentPaymentToolHasAbandoned';
+
+    record_name('RecurrentPaymentToolHasFailed') ->
+    'payproc_RecurrentPaymentToolHasFailed';
 
     record_name('PartyParams') ->
     'payproc_PartyParams';

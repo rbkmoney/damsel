@@ -979,7 +979,8 @@ union RecurrentPaymentToolChange {
     1: RecurrentPaymentToolHasCreated    rec_payment_tool_created
     2: RecurrentPaymentToolHasAcquired   rec_payment_tool_acquired
     3: RecurrentPaymentToolHasAbandoned  rec_payment_tool_abandoned
-    4: RecurrentPaymentToolSessionChange rec_payment_tool_session_changed
+    4: RecurrentPaymentToolHasFailed     rec_payment_tool_failed
+    5: RecurrentPaymentToolSessionChange rec_payment_tool_session_changed
 }
 
 /*
@@ -1000,6 +1001,13 @@ struct RecurrentPaymentToolHasAcquired {
  * Рекуррентное платежное средство отозвано
  */
 struct RecurrentPaymentToolHasAbandoned {}
+
+/*
+ * В процессе получения рекуррентного платежного средства произошла ошибка
+ */
+struct RecurrentPaymentToolHasFailed {
+    1: required domain.OperationFailure failure
+}
 
 
 // Exceptions
