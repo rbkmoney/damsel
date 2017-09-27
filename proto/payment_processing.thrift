@@ -883,10 +883,12 @@ service CustomerManagement {
 
     Customer Create (1: CustomerParams params)
         throws (
-            1: InvalidUser         invalid_user
-            2: ShopNotFound        shop_not_found
-            3: PartyNotFound       party_not_found
-            4: base.InvalidRequest invalid_request
+            1: InvalidUser           invalid_user
+            2: InvalidPartyStatus    invalid_party_status
+            3: InvalidShopStatus     invalid_shop_status
+            4: ShopNotFound          shop_not_found
+            5: PartyNotFound         party_not_found
+            6: base.InvalidRequest   invalid_request
         )
 
     Customer Get (1: CustomerID id)
@@ -897,16 +899,20 @@ service CustomerManagement {
 
     void Delete (1: CustomerID id)
         throws (
-            1: InvalidUser      invalid_user
-            2: CustomerNotFound not_found
+            1: InvalidUser           invalid_user
+            2: CustomerNotFound      not_found
+            3: InvalidPartyStatus    invalid_party_status
+            4: InvalidShopStatus     invalid_shop_status
         )
 
     CustomerBinding StartBinding (1: CustomerID customer_id, 2: CustomerBindingParams params)
         throws (
             1: InvalidUser           invalid_user
             2: CustomerNotFound      customer_not_found
-            3: InvalidPaymentTool    invalid_payment_tool
-            4: base.InvalidRequest   invalid_request
+            3: InvalidPartyStatus    invalid_party_status
+            4: InvalidShopStatus     invalid_shop_status
+            5: InvalidPaymentTool    invalid_payment_tool
+            6: base.InvalidRequest   invalid_request
         )
 
     CustomerBinding GetActiveBinding (1: CustomerID customer_id)
