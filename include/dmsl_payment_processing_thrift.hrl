@@ -403,7 +403,7 @@
     'category' :: dmsl_domain_thrift:'CategoryRef'() | undefined,
     'location' :: dmsl_domain_thrift:'ShopLocation'(),
     'details' :: dmsl_domain_thrift:'ShopDetails'(),
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
@@ -425,7 +425,7 @@
 
 %% struct 'ContractModificationUnit'
 -record('payproc_ContractModificationUnit', {
-    'id' :: dmsl_domain_thrift:'ContractID'(),
+    'id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'modification' :: dmsl_payment_processing_thrift:'ContractModification'()
 }).
 
@@ -454,7 +454,7 @@
 
 %% struct 'ShopContractModification'
 -record('payproc_ShopContractModification', {
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
@@ -493,7 +493,7 @@
 
 %% struct 'ContractEffectUnit'
 -record('payproc_ContractEffectUnit', {
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'effect' :: dmsl_payment_processing_thrift:'ContractEffect'()
 }).
 
@@ -505,7 +505,7 @@
 
 %% struct 'ShopContractChanged'
 -record('payproc_ShopContractChanged', {
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
@@ -558,7 +558,7 @@
 
 %% struct 'ContractStatusInvalid'
 -record('payproc_ContractStatusInvalid', {
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'status' :: dmsl_domain_thrift:'ContractStatus'()
 }).
 
@@ -571,7 +571,7 @@
 %% struct 'ContractTermsViolated'
 -record('payproc_ContractTermsViolated', {
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'terms' :: dmsl_domain_thrift:'TermSet'()
 }).
 
