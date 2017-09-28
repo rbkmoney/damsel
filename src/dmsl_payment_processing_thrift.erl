@@ -1238,7 +1238,9 @@ struct_info('InvoicePaymentSessionFinished') ->
 ]};
 
 struct_info('InvoicePaymentSessionSuspended') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'tag', undefined}
+]};
 
 struct_info('InvoicePaymentSessionActivated') ->
     {struct, struct, []};

@@ -74,7 +74,9 @@
 }).
 
 %% struct 'InvoicePaymentSessionSuspended'
--record('payproc_InvoicePaymentSessionSuspended', {}).
+-record('payproc_InvoicePaymentSessionSuspended', {
+    'tag' :: dmsl_base_thrift:'Tag'() | undefined
+}).
 
 %% struct 'InvoicePaymentSessionActivated'
 -record('payproc_InvoicePaymentSessionActivated', {}).

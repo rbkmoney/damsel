@@ -44,6 +44,9 @@
     'CallbackResult'/0,
     'CallbackProxyResult'/0
 ]).
+-export_type([
+    'PaymentNotFound'/0
+]).
 
 -type namespace() :: 'prxprv'.
 
@@ -74,7 +77,8 @@
     'CallbackResult' |
     'CallbackProxyResult'.
 
--type exception_name() :: none().
+-type exception_name() ::
+    'PaymentNotFound'.
 
 %% struct 'PaymentInfo'
 -type 'PaymentInfo'() :: #'prxprv_PaymentInfo'{}.
@@ -109,6 +113,9 @@
 %% struct 'CallbackProxyResult'
 -type 'CallbackProxyResult'() :: #'prxprv_CallbackProxyResult'{}.
 
+%% exception 'PaymentNotFound'
+-type 'PaymentNotFound'() :: #'prxprv_PaymentNotFound'{}.
+
 %%
 %% services and functions
 %%
@@ -127,7 +134,8 @@
 -export_type(['ProviderProxy_service_functions'/0]).
 
 -type 'ProviderProxyHost_service_functions'() ::
-    'ProcessCallback'.
+    'ProcessCallback' |
+    'GetPayment'.
 
 -export_type(['ProviderProxyHost_service_functions'/0]).
 
@@ -288,6 +296,9 @@ struct_info('CallbackProxyResult') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
+struct_info('PaymentNotFound') ->
+    {struct, exception, []};
+
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -325,6 +336,9 @@ record_name('Shop') ->
     record_name('CallbackProxyResult') ->
     'prxprv_CallbackProxyResult';
 
+    record_name('PaymentNotFound') ->
+    'prxprv_PaymentNotFound';
+
     record_name(_) -> error(badarg).
     
     -spec functions(service_name()) -> [function_name()] | no_return().
@@ -337,7 +351,8 @@ functions('ProviderProxy') ->
 
 functions('ProviderProxyHost') ->
     [
-        'ProcessCallback'
+        'ProcessCallback',
+        'GetPayment'
     ];
 
 functions(_) -> error(badarg).
@@ -373,6 +388,16 @@ function_info('ProviderProxyHost', 'ProcessCallback', reply_type) ->
     function_info('ProviderProxyHost', 'ProcessCallback', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
+    ]};
+function_info('ProviderProxyHost', 'GetPayment', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'tag', undefined}
+]};
+function_info('ProviderProxyHost', 'GetPayment', reply_type) ->
+        {struct, struct, {dmsl_proxy_provider_thrift, 'PaymentInfo'}};
+    function_info('ProviderProxyHost', 'GetPayment', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_proxy_provider_thrift, 'PaymentNotFound'}}, 'ex1', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

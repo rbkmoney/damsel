@@ -87,4 +87,7 @@
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
+%% exception 'PaymentNotFound'
+-record('prxprv_PaymentNotFound', {}).
+
 -endif.

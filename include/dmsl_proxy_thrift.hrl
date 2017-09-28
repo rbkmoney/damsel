@@ -27,7 +27,7 @@
 
 %% struct 'SuspendIntent'
 -record('SuspendIntent', {
-    'tag' :: dmsl_base_thrift:'Tag'(),
+    'tag' :: dmsl_proxy_thrift:'CallbackTag'(),
     'timeout' :: dmsl_base_thrift:'Timer'(),
     'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined
 }).
