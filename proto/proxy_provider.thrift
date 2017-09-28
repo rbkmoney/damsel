@@ -207,6 +207,6 @@ service ProviderProxyHost {
      * Запрос к процессингу на обработку обратного вызова от провайдера
      * в рамках взаимодействия по получению многоразового токена.
      */
-    proxy.CallbackResponse ProcessTokenCallback (1: base.Tag tag, 2: proxy.Callback callback)
+    proxy.CallbackResponse ProcessRecurrentTokenCallback (1: base.Tag tag, 2: proxy.Callback callback)
         throws (1: base.InvalidRequest ex1)
 }
