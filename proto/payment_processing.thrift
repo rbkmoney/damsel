@@ -959,11 +959,13 @@ typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
 // Model
 struct RecurrentPaymentTool {
     1: required RecurrentPaymentToolID     id
-    2: required RecurrentPaymentToolStatus status
-    3: required base.Timestamp             created_at
-    4: required DisposablePaymentResource  payment_resource
-    5: required domain.PaymentRoute        route
-    6: optional domain.Token               rec_token
+    2: required ShopID                     shop_id
+    3: required PartyID                    party_id
+    4: required domain.DataRevision        domain_revision
+    5: required RecurrentPaymentToolStatus status
+    6: required base.Timestamp             created_at
+    7: required DisposablePaymentResource  payment_resource
+    8: optional domain.Token               rec_token
 }
 
 struct RecurrentPaymentToolParams {
@@ -1015,6 +1017,8 @@ union RecurrentPaymentToolChange {
  */
 struct RecurrentPaymentToolHasCreated {
     1: required RecurrentPaymentTool rec_payment_tool
+    2: required domain.RiskScore     risk_score
+    3: required domain.PaymentRoute  route
 }
 
 /*
@@ -1045,26 +1049,31 @@ exception InvalidRecurrentPaymentToolStatus {
     1: required RecurrentPaymentToolStatus status
 }
 
-service PaymentProcessing {
-    RecurrentPaymentTool CreateRecurrentPaymentTool (1: RecurrentPaymentToolParams params)
+service RecurrentPaymentTools {
+    RecurrentPaymentTool Create (1: RecurrentPaymentToolParams params)
         throws (
-            1: InvalidUser invalid_user
+            1: InvalidUser           invalid_user
+            2: InvalidPartyStatus    invalid_party_status
+            3: InvalidShopStatus     invalid_shop_status
+            4: ShopNotFound          shop_not_found
+            5: PartyNotFound         party_not_found
+            6: InvalidContractStatus invalid_contract_status
         )
 
-    RecurrentPaymentTool AbandonRecurrentPaymentTool (1: RecurrentPaymentToolID id)
+    RecurrentPaymentTool Abandon (1: RecurrentPaymentToolID id)
         throws (
             1: InvalidUser                       invalid_user
             2: RecurrentPaymentToolNotFound      rec_payment_tool_not_found
             3: InvalidRecurrentPaymentToolStatus invalid_rec_payment_tool_status
         )
 
-    RecurrentPaymentTool GetRecurrentPaymentTool (1: RecurrentPaymentToolID id)
+    RecurrentPaymentTool Get (1: RecurrentPaymentToolID id)
         throws (
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    RecurrentPaymentToolEvents GetRecurrentPaymentToolEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
+    RecurrentPaymentToolEvents GetEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
         throws (
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
