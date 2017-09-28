@@ -57,6 +57,8 @@
     'ContractAdjustmentID'/0,
     'CurrencySymbolicCode'/0,
     'CustomerID'/0,
+    'CustomerBindingID'/0,
+    'RecurrentPaymentToolID'/0,
     'Token'/0,
     'CashFlowContext'/0,
     'CashFlow'/0,
@@ -105,6 +107,7 @@
     'InvoiceTemplateCostUnlimited'/0,
     'InvoicePaymentStatus'/0,
     'TargetInvoicePaymentStatus'/0,
+    'LegacyPayerDetails'/0,
     'Payer'/0,
     'PaymentResourcePayer'/0,
     'CustomerPayer'/0,
@@ -176,7 +179,6 @@
     'PaymentMethod'/0,
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
-    'CustomerPaymentResource'/0,
     'BankCard'/0,
     'PaymentTerminal'/0,
     'BankCardBINRangeRef'/0,
@@ -296,6 +298,8 @@
     'ContractAdjustmentID' |
     'CurrencySymbolicCode' |
     'CustomerID' |
+    'CustomerBindingID' |
+    'RecurrentPaymentToolID' |
     'Token' |
     'CashFlowContext' |
     'CashFlow' |
@@ -329,6 +333,8 @@
 -type 'ContractAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'CurrencySymbolicCode'() :: binary().
 -type 'CustomerID'() :: dmsl_base_thrift:'ID'().
+-type 'CustomerBindingID'() :: dmsl_base_thrift:'ID'().
+-type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
 -type 'Token'() :: binary().
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
 -type 'CashFlow'() :: ['CashFlowPosting'()].
@@ -441,6 +447,7 @@
     'InvoiceTemplateCostUnlimited' |
     'InvoicePaymentStatus' |
     'TargetInvoicePaymentStatus' |
+    'LegacyPayerDetails' |
     'Payer' |
     'PaymentResourcePayer' |
     'CustomerPayer' |
@@ -512,7 +519,6 @@
     'PaymentMethod' |
     'PaymentTool' |
     'DisposablePaymentResource' |
-    'CustomerPaymentResource' |
     'BankCard' |
     'PaymentTerminal' |
     'BankCardBINRangeRef' |
@@ -701,6 +707,9 @@
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
     {'refunded', 'InvoicePaymentRefunded'()}.
+
+%% struct 'LegacyPayerDetails'
+-type 'LegacyPayerDetails'() :: #'domain_LegacyPayerDetails'{}.
 
 %% union 'Payer'
 -type 'Payer'() ::
@@ -950,9 +959,6 @@
 
 %% struct 'DisposablePaymentResource'
 -type 'DisposablePaymentResource'() :: #'domain_DisposablePaymentResource'{}.
-
-%% struct 'CustomerPaymentResource'
--type 'CustomerPaymentResource'() :: #'domain_CustomerPaymentResource'{}.
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'domain_BankCard'{}.
@@ -1359,6 +1365,8 @@ typedefs() ->
         'ContractAdjustmentID',
         'CurrencySymbolicCode',
         'CustomerID',
+        'CustomerBindingID',
+        'RecurrentPaymentToolID',
         'Token',
         'CashFlowContext',
         'CashFlow',
@@ -1415,6 +1423,7 @@ structs() ->
         'InvoiceTemplateCostUnlimited',
         'InvoicePaymentStatus',
         'TargetInvoicePaymentStatus',
+        'LegacyPayerDetails',
         'Payer',
         'PaymentResourcePayer',
         'CustomerPayer',
@@ -1486,7 +1495,6 @@ structs() ->
         'PaymentMethod',
         'PaymentTool',
         'DisposablePaymentResource',
-        'CustomerPaymentResource',
         'BankCard',
         'PaymentTerminal',
         'BankCardBINRangeRef',
@@ -1660,6 +1668,12 @@ typedef_info('CurrencySymbolicCode') ->
     string;
 
 typedef_info('CustomerID') ->
+    string;
+
+typedef_info('CustomerBindingID') ->
+    string;
+
+typedef_info('RecurrentPaymentToolID') ->
     string;
 
 typedef_info('Token') ->
@@ -1857,7 +1871,8 @@ struct_info('InvoicePayment') ->
     {2, required, string, 'created_at', undefined},
     {10, required, i64, 'domain_revision', undefined},
     {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
-    {5, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+    {5, required, {struct, struct, {dmsl_domain_thrift, 'LegacyPayerDetails'}}, 'payer_details', undefined},
+    {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
@@ -1926,6 +1941,14 @@ struct_info('TargetInvoicePaymentStatus') ->
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
 ]};
 
+struct_info('LegacyPayerDetails') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {2, required, string, 'session_id', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+]};
+
 struct_info('Payer') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
@@ -1940,7 +1963,10 @@ struct_info('PaymentResourcePayer') ->
 
 struct_info('CustomerPayer') ->
     {struct, struct, [
-    {1, required, string, 'customer_id', undefined}
+    {1, required, string, 'customer_id', undefined},
+    {2, required, string, 'customer_binding_id', undefined},
+    {3, required, string, 'rec_payment_tool_id', undefined},
+    {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined}
 ]};
 
 struct_info('ClientInfo') ->
@@ -2378,11 +2404,6 @@ struct_info('DisposablePaymentResource') ->
     {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
     {2, optional, string, 'payment_session_id', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined}
-]};
-
-struct_info('CustomerPaymentResource') ->
-    {struct, struct, [
-    {1, required, string, 'customer_id', undefined}
 ]};
 
 struct_info('BankCard') ->
@@ -3019,6 +3040,9 @@ record_name('OperationTimeout') ->
     record_name('InvoiceTemplateCostUnlimited') ->
     'domain_InvoiceTemplateCostUnlimited';
 
+    record_name('LegacyPayerDetails') ->
+    'domain_LegacyPayerDetails';
+
     record_name('PaymentResourcePayer') ->
     'domain_PaymentResourcePayer';
 
@@ -3177,9 +3201,6 @@ record_name('OperationTimeout') ->
 
     record_name('DisposablePaymentResource') ->
     'domain_DisposablePaymentResource';
-
-    record_name('CustomerPaymentResource') ->
-    'domain_CustomerPaymentResource';
 
     record_name('BankCard') ->
     'domain_BankCard';

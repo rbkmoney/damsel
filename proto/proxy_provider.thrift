@@ -1,13 +1,12 @@
 include "base.thrift"
 include "proxy.thrift"
 include "domain.thrift"
-include "payment_processing.thrift"
 
 namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
 
 struct RecurrentPaymentTool {
-    1: required payment_processing.RecurrentPaymentToolID id
+    1: required base.ID                                   id
     2: required base.Timestamp                            created_at
     3: required domain.DisposablePaymentResource          payment_resource
     4: optional domain.Token                              rec_token
@@ -81,13 +80,15 @@ union PaymentResource {
 }
 
 struct RecurrentPaymentResource {
-    1: required domain.Token       rec_token
+    1: required domain.PaymentTool      payment_tool
+    2: required domain.Token            rec_token
 }
 
 struct InvoicePayment {
     1: required domain.InvoicePaymentID id
     2: required base.Timestamp created_at
     3: optional domain.TransactionInfo trx
+    4: required domain.LegacyPayerDetails payer_details
     6: required PaymentResource payment_resource
     5: required Cash cost
     7: required domain.ContactInfo contact_info

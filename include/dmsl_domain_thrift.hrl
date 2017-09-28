@@ -91,6 +91,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'(),
+    'payer_details' :: dmsl_domain_thrift:'LegacyPayerDetails'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
@@ -135,6 +136,14 @@
 %% struct 'InvoiceTemplateCostUnlimited'
 -record('domain_InvoiceTemplateCostUnlimited', {}).
 
+%% struct 'LegacyPayerDetails'
+-record('domain_LegacyPayerDetails', {
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
+    'session_id' :: dmsl_domain_thrift:'PaymentSessionID'(),
+    'client_info' :: dmsl_domain_thrift:'ClientInfo'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
 %% struct 'PaymentResourcePayer'
 -record('domain_PaymentResourcePayer', {
     'resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
@@ -143,7 +152,10 @@
 
 %% struct 'CustomerPayer'
 -record('domain_CustomerPayer', {
-    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'(),
+    'customer_binding_id' :: dmsl_domain_thrift:'CustomerBindingID'(),
+    'rec_payment_tool_id' :: dmsl_domain_thrift:'RecurrentPaymentToolID'(),
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'()
 }).
 
 %% struct 'ClientInfo'
@@ -479,11 +491,6 @@
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
     'payment_session_id' :: dmsl_domain_thrift:'PaymentSessionID'() | undefined,
     'client_info' :: dmsl_domain_thrift:'ClientInfo'()
-}).
-
-%% struct 'CustomerPaymentResource'
--record('domain_CustomerPaymentResource', {
-    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
 }).
 
 %% struct 'BankCard'

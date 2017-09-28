@@ -115,7 +115,8 @@ struct InvoicePayment {
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
     3:  required InvoicePaymentStatus status
-    5:  required Payer payer
+    5:  required LegacyPayerDetails payer_details
+    14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
     6:  optional InvoicePaymentContext context
@@ -212,6 +213,13 @@ union TargetInvoicePaymentStatus {
 
 }
 
+struct LegacyPayerDetails {
+    1: required PaymentTool payment_tool
+    2: required PaymentSessionID session_id
+    3: required ClientInfo client_info
+    4: required ContactInfo contact_info
+}
+
 union Payer {
     1: PaymentResourcePayer payment_resource
     2: CustomerPayer        customer
@@ -223,7 +231,10 @@ struct PaymentResourcePayer {
 }
 
 struct CustomerPayer {
-    1: required CustomerID customer_id
+    1: required CustomerID             customer_id
+    2: required CustomerBindingID      customer_binding_id
+    3: required RecurrentPaymentToolID rec_payment_tool_id
+    4: required PaymentTool            payment_tool
 }
 
 struct ClientInfo {
@@ -676,6 +687,8 @@ enum BankCardPaymentSystem {
 }
 
 typedef base.ID CustomerID
+typedef base.ID CustomerBindingID
+typedef base.ID RecurrentPaymentToolID
 
 union PaymentTool {
     1: BankCard bank_card
@@ -686,10 +699,6 @@ struct DisposablePaymentResource {
     1: required PaymentTool      payment_tool
     2: optional PaymentSessionID payment_session_id
     3: required ClientInfo       client_info
-}
-
-struct CustomerPaymentResource {
-    1: required CustomerID customer_id
 }
 
 typedef string Token

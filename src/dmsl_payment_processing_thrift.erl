@@ -96,6 +96,9 @@
     'InvoiceTemplateCreateParams'/0,
     'InvoiceTemplateUpdateParams'/0,
     'InvoicePaymentParams'/0,
+    'PayerParams'/0,
+    'PaymentResourcePayerParams'/0,
+    'CustomerPayerParams'/0,
     'InvoicePaymentParamsFlow'/0,
     'InvoicePaymentParamsFlowInstant'/0,
     'InvoicePaymentParamsFlowHold'/0,
@@ -255,9 +258,9 @@
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
 -type 'CustomerEvents'() :: ['CustomerEvent'()].
--type 'CustomerBindingID'() :: dmsl_base_thrift:'ID'().
+-type 'CustomerBindingID'() :: dmsl_domain_thrift:'CustomerBindingID'().
 -type 'DisposablePaymentResource'() :: dmsl_domain_thrift:'DisposablePaymentResource'().
--type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
+-type 'RecurrentPaymentToolID'() :: dmsl_domain_thrift:'RecurrentPaymentToolID'().
 -type 'RecurrentPaymentToolEvents'() :: ['RecurrentPaymentToolEvent'()].
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
@@ -320,6 +323,9 @@
     'InvoiceTemplateCreateParams' |
     'InvoiceTemplateUpdateParams' |
     'InvoicePaymentParams' |
+    'PayerParams' |
+    'PaymentResourcePayerParams' |
+    'CustomerPayerParams' |
     'InvoicePaymentParamsFlow' |
     'InvoicePaymentParamsFlowInstant' |
     'InvoicePaymentParamsFlowHold' |
@@ -617,6 +623,17 @@
 
 %% struct 'InvoicePaymentParams'
 -type 'InvoicePaymentParams'() :: #'payproc_InvoicePaymentParams'{}.
+
+%% union 'PayerParams'
+-type 'PayerParams'() ::
+    {'payment_resource', 'PaymentResourcePayerParams'()} |
+    {'customer', 'CustomerPayerParams'()}.
+
+%% struct 'PaymentResourcePayerParams'
+-type 'PaymentResourcePayerParams'() :: #'payproc_PaymentResourcePayerParams'{}.
+
+%% struct 'CustomerPayerParams'
+-type 'CustomerPayerParams'() :: #'payproc_CustomerPayerParams'{}.
 
 %% union 'InvoicePaymentParamsFlow'
 -type 'InvoicePaymentParamsFlow'() ::
@@ -1284,6 +1301,9 @@ structs() ->
         'InvoiceTemplateCreateParams',
         'InvoiceTemplateUpdateParams',
         'InvoicePaymentParams',
+        'PayerParams',
+        'PaymentResourcePayerParams',
+        'CustomerPayerParams',
         'InvoicePaymentParamsFlow',
         'InvoicePaymentParamsFlowInstant',
         'InvoicePaymentParamsFlowHold',
@@ -1709,8 +1729,25 @@ struct_info('InvoiceTemplateUpdateParams') ->
 
 struct_info('InvoicePaymentParams') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined}
+]};
+
+struct_info('PayerParams') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PaymentResourcePayerParams'}}, 'payment_resource', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerPayerParams'}}, 'customer', undefined}
+]};
+
+struct_info('PaymentResourcePayerParams') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'resource', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+]};
+
+struct_info('CustomerPayerParams') ->
+    {struct, struct, [
+    {1, required, string, 'customer_id', undefined}
 ]};
 
 struct_info('InvoicePaymentParamsFlow') ->
@@ -2494,6 +2531,12 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentParams') ->
     'payproc_InvoicePaymentParams';
+
+    record_name('PaymentResourcePayerParams') ->
+    'payproc_PaymentResourcePayerParams';
+
+    record_name('CustomerPayerParams') ->
+    'payproc_CustomerPayerParams';
 
     record_name('InvoicePaymentParamsFlowInstant') ->
     'payproc_InvoicePaymentParamsFlowInstant';

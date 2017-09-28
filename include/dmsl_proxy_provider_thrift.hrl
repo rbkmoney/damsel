@@ -4,13 +4,12 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_proxy_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
--include("dmsl_payment_processing_thrift.hrl").
 
 
 
 %% struct 'RecurrentPaymentTool'
 -record('prxprv_RecurrentPaymentTool', {
-    'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'id' :: dmsl_base_thrift:'ID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
     'rec_token' :: dmsl_domain_thrift:'Token'() | undefined
@@ -75,6 +74,7 @@
 
 %% struct 'RecurrentPaymentResource'
 -record('prxprv_RecurrentPaymentResource', {
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
     'rec_token' :: dmsl_domain_thrift:'Token'()
 }).
 
@@ -83,6 +83,7 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'payer_details' :: dmsl_domain_thrift:'LegacyPayerDetails'(),
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'()

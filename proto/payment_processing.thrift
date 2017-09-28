@@ -375,8 +375,22 @@ struct InvoiceTemplateUpdateParams {
 }
 
 struct InvoicePaymentParams {
-    1: required domain.Payer payer
+    1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
+}
+
+union PayerParams {
+    1: PaymentResourcePayerParams payment_resource
+    2: CustomerPayerParams        customer
+}
+
+struct PaymentResourcePayerParams {
+    1: required domain.DisposablePaymentResource resource
+    2: required domain.ContactInfo               contact_info
+}
+
+struct CustomerPayerParams {
+    1: required domain.CustomerID customer_id
 }
 
 union InvoicePaymentParamsFlow {
@@ -814,7 +828,7 @@ struct CustomerBindingChanged {
 
 /* Bindings */
 
-typedef base.ID CustomerBindingID
+typedef domain.CustomerBindingID CustomerBindingID
 typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
@@ -933,7 +947,7 @@ service CustomerManagement {
 /* Recurrent Payment Tool */
 
 // Types
-typedef base.ID RecurrentPaymentToolID
+typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
 
 // Model
 struct RecurrentPaymentTool {

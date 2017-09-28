@@ -191,8 +191,19 @@
 
 %% struct 'InvoicePaymentParams'
 -record('payproc_InvoicePaymentParams', {
-    'payer' :: dmsl_domain_thrift:'Payer'(),
+    'payer' :: dmsl_payment_processing_thrift:'PayerParams'(),
     'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'()
+}).
+
+%% struct 'PaymentResourcePayerParams'
+-record('payproc_PaymentResourcePayerParams', {
+    'resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
+%% struct 'CustomerPayerParams'
+-record('payproc_CustomerPayerParams', {
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
 }).
 
 %% struct 'InvoicePaymentParamsFlowInstant'
