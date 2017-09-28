@@ -171,7 +171,8 @@
 -export_type(['ProviderProxy_service_functions'/0]).
 
 -type 'ProviderProxyHost_service_functions'() ::
-    'ProcessCallback'.
+    'ProcessPaymentCallback' |
+    'ProcessRecurrentTokenGenerationCallback'.
 
 -export_type(['ProviderProxyHost_service_functions'/0]).
 
@@ -466,7 +467,8 @@ functions('ProviderProxy') ->
 
 functions('ProviderProxyHost') ->
     [
-        'ProcessCallback'
+        'ProcessPaymentCallback',
+        'ProcessRecurrentTokenGenerationCallback'
     ];
 
 functions(_) -> error(badarg).
@@ -509,14 +511,25 @@ function_info('ProviderProxy', 'HandlePaymentCallback', reply_type) ->
     function_info('ProviderProxy', 'HandlePaymentCallback', exceptions) ->
         {struct, struct, []};
 
-function_info('ProviderProxyHost', 'ProcessCallback', params_type) ->
+function_info('ProviderProxyHost', 'ProcessPaymentCallback', params_type) ->
     {struct, struct, [
     {1, undefined, string, 'tag', undefined},
     {2, undefined, string, 'callback', undefined}
 ]};
-function_info('ProviderProxyHost', 'ProcessCallback', reply_type) ->
+function_info('ProviderProxyHost', 'ProcessPaymentCallback', reply_type) ->
         string;
-    function_info('ProviderProxyHost', 'ProcessCallback', exceptions) ->
+    function_info('ProviderProxyHost', 'ProcessPaymentCallback', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
+    ]};
+function_info('ProviderProxyHost', 'ProcessRecurrentTokenGenerationCallback', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'tag', undefined},
+    {2, undefined, string, 'callback', undefined}
+]};
+function_info('ProviderProxyHost', 'ProcessRecurrentTokenGenerationCallback', reply_type) ->
+        string;
+    function_info('ProviderProxyHost', 'ProcessRecurrentTokenGenerationCallback', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};

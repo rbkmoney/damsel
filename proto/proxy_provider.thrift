@@ -197,9 +197,16 @@ service ProviderProxy {
 service ProviderProxyHost {
 
     /**
-     * Запрос к процессингу на обработку обратного вызова от провайдера.
+     * Запрос к процессингу на обработку обратного вызова от провайдера
+     * в рамках взаимодействия по платежу.
      */
-    proxy.CallbackResponse ProcessCallback (1: base.Tag tag, 2: proxy.Callback callback)
+    proxy.CallbackResponse ProcessPaymentCallback (1: base.Tag tag, 2: proxy.Callback callback)
         throws (1: base.InvalidRequest ex1)
 
+    /**
+     * Запрос к процессингу на обработку обратного вызова от провайдера
+     * в рамках взаимодействия по получению многоразового токена.
+     */
+    proxy.CallbackResponse ProcessRecurrentTokenGenerationCallback (1: base.Tag tag, 2: proxy.Callback callback)
+        throws (1: base.InvalidRequest ex1)
 }
