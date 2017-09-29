@@ -328,10 +328,13 @@
 %% struct 'RecurrentPaymentTool'
 -record('payproc_RecurrentPaymentTool', {
     'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'(),
     'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
-    'route' :: dmsl_domain_thrift:'PaymentRoute'(),
     'rec_token' :: dmsl_domain_thrift:'Token'() | undefined
 }).
 
@@ -371,7 +374,9 @@
 
 %% struct 'RecurrentPaymentToolHasCreated'
 -record('payproc_RecurrentPaymentToolHasCreated', {
-    'rec_payment_tool' :: dmsl_payment_processing_thrift:'RecurrentPaymentTool'()
+    'rec_payment_tool' :: dmsl_payment_processing_thrift:'RecurrentPaymentTool'(),
+    'risk_score' :: atom(),
+    'route' :: dmsl_domain_thrift:'PaymentRoute'()
 }).
 
 %% struct 'RecurrentPaymentToolHasAcquired'
@@ -675,6 +680,9 @@
 
 %% exception 'RecurrentPaymentToolNotFound'
 -record('payproc_RecurrentPaymentToolNotFound', {}).
+
+%% exception 'InvalidPaymentMethod'
+-record('payproc_InvalidPaymentMethod', {}).
 
 %% exception 'InvalidRecurrentPaymentToolStatus'
 -record('payproc_InvalidRecurrentPaymentToolStatus', {

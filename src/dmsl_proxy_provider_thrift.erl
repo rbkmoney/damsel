@@ -34,10 +34,14 @@
 -export_type([
     'RecurrentPaymentTool'/0,
     'RecurrentTokenInfo'/0,
-    'RecurrentTokenGenerationSession'/0,
-    'RecurrentTokenGenerationContext'/0,
-    'RecurrentTokenGenerationProxyResult'/0,
-    'RecurrentTokenGenerationCallbackResult'/0,
+    'RecurrentTokenSession'/0,
+    'RecurrentTokenContext'/0,
+    'RecurrentTokenProxyResult'/0,
+    'RecurrentTokenIntent'/0,
+    'RecurrentTokenFinishIntent'/0,
+    'RecurrentTokenFinishStatus'/0,
+    'RecurrentTokenSuccess'/0,
+    'RecurrentTokenCallbackResult'/0,
     'PaymentInfo'/0,
     'Shop'/0,
     'Invoice'/0,
@@ -72,10 +76,14 @@
 -type struct_name() ::
     'RecurrentPaymentTool' |
     'RecurrentTokenInfo' |
-    'RecurrentTokenGenerationSession' |
-    'RecurrentTokenGenerationContext' |
-    'RecurrentTokenGenerationProxyResult' |
-    'RecurrentTokenGenerationCallbackResult' |
+    'RecurrentTokenSession' |
+    'RecurrentTokenContext' |
+    'RecurrentTokenProxyResult' |
+    'RecurrentTokenIntent' |
+    'RecurrentTokenFinishIntent' |
+    'RecurrentTokenFinishStatus' |
+    'RecurrentTokenSuccess' |
+    'RecurrentTokenCallbackResult' |
     'PaymentInfo' |
     'Shop' |
     'Invoice' |
@@ -98,17 +106,34 @@
 %% struct 'RecurrentTokenInfo'
 -type 'RecurrentTokenInfo'() :: #'prxprv_RecurrentTokenInfo'{}.
 
-%% struct 'RecurrentTokenGenerationSession'
--type 'RecurrentTokenGenerationSession'() :: #'prxprv_RecurrentTokenGenerationSession'{}.
+%% struct 'RecurrentTokenSession'
+-type 'RecurrentTokenSession'() :: #'prxprv_RecurrentTokenSession'{}.
 
-%% struct 'RecurrentTokenGenerationContext'
--type 'RecurrentTokenGenerationContext'() :: #'prxprv_RecurrentTokenGenerationContext'{}.
+%% struct 'RecurrentTokenContext'
+-type 'RecurrentTokenContext'() :: #'prxprv_RecurrentTokenContext'{}.
 
-%% struct 'RecurrentTokenGenerationProxyResult'
--type 'RecurrentTokenGenerationProxyResult'() :: #'prxprv_RecurrentTokenGenerationProxyResult'{}.
+%% struct 'RecurrentTokenProxyResult'
+-type 'RecurrentTokenProxyResult'() :: #'prxprv_RecurrentTokenProxyResult'{}.
 
-%% struct 'RecurrentTokenGenerationCallbackResult'
--type 'RecurrentTokenGenerationCallbackResult'() :: #'prxprv_RecurrentTokenGenerationCallbackResult'{}.
+%% union 'RecurrentTokenIntent'
+-type 'RecurrentTokenIntent'() ::
+    {'finish', 'RecurrentTokenFinishIntent'()} |
+    {'sleep', dmsl_proxy_thrift:'SleepIntent'()} |
+    {'suspend', dmsl_proxy_thrift:'SuspendIntent'()}.
+
+%% struct 'RecurrentTokenFinishIntent'
+-type 'RecurrentTokenFinishIntent'() :: #'prxprv_RecurrentTokenFinishIntent'{}.
+
+%% union 'RecurrentTokenFinishStatus'
+-type 'RecurrentTokenFinishStatus'() ::
+    {'success', 'RecurrentTokenSuccess'()} |
+    {'failure', dmsl_proxy_thrift:'Failure'()}.
+
+%% struct 'RecurrentTokenSuccess'
+-type 'RecurrentTokenSuccess'() :: #'prxprv_RecurrentTokenSuccess'{}.
+
+%% struct 'RecurrentTokenCallbackResult'
+-type 'RecurrentTokenCallbackResult'() :: #'prxprv_RecurrentTokenCallbackResult'{}.
 
 %% struct 'PaymentInfo'
 -type 'PaymentInfo'() :: #'prxprv_PaymentInfo'{}.
@@ -164,7 +189,7 @@
 
 -type 'ProviderProxy_service_functions'() ::
     'GenerateToken' |
-    'HandleRecurrentTokenGenerationCallback' |
+    'HandleRecurrentTokenCallback' |
     'ProcessPayment' |
     'HandlePaymentCallback'.
 
@@ -172,7 +197,7 @@
 
 -type 'ProviderProxyHost_service_functions'() ::
     'ProcessPaymentCallback' |
-    'ProcessRecurrentTokenGenerationCallback'.
+    'ProcessRecurrentTokenCallback'.
 
 -export_type(['ProviderProxyHost_service_functions'/0]).
 
@@ -219,10 +244,14 @@ structs() ->
     [
         'RecurrentPaymentTool',
         'RecurrentTokenInfo',
-        'RecurrentTokenGenerationSession',
-        'RecurrentTokenGenerationContext',
-        'RecurrentTokenGenerationProxyResult',
-        'RecurrentTokenGenerationCallbackResult',
+        'RecurrentTokenSession',
+        'RecurrentTokenContext',
+        'RecurrentTokenProxyResult',
+        'RecurrentTokenIntent',
+        'RecurrentTokenFinishIntent',
+        'RecurrentTokenFinishStatus',
+        'RecurrentTokenSuccess',
+        'RecurrentTokenCallbackResult',
         'PaymentInfo',
         'Shop',
         'Invoice',
@@ -266,7 +295,7 @@ struct_info('RecurrentPaymentTool') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {4, optional, string, 'rec_token', undefined}
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined}
 ]};
 
 struct_info('RecurrentTokenInfo') ->
@@ -275,30 +304,53 @@ struct_info('RecurrentTokenInfo') ->
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
-struct_info('RecurrentTokenGenerationSession') ->
+struct_info('RecurrentTokenSession') ->
     {struct, struct, [
     {1, optional, string, 'state', undefined}
 ]};
 
-struct_info('RecurrentTokenGenerationContext') ->
+struct_info('RecurrentTokenContext') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenGenerationSession'}}, 'session', undefined},
+    {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenSession'}}, 'session', undefined},
     {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenInfo'}}, 'token_info', undefined},
     {3, optional, {map, string, string}, 'options', #{}}
 ]};
 
-struct_info('RecurrentTokenGenerationProxyResult') ->
+struct_info('RecurrentTokenProxyResult') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_proxy_thrift, 'Intent'}}, 'intent', undefined},
+    {1, required, {struct, union, {dmsl_proxy_provider_thrift, 'RecurrentTokenIntent'}}, 'intent', undefined},
     {2, optional, string, 'next_state', undefined},
     {3, optional, string, 'token', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
-struct_info('RecurrentTokenGenerationCallbackResult') ->
+struct_info('RecurrentTokenIntent') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenFinishIntent'}}, 'finish', undefined},
+    {2, optional, {struct, struct, {dmsl_proxy_thrift, 'SleepIntent'}}, 'sleep', undefined},
+    {3, optional, {struct, struct, {dmsl_proxy_thrift, 'SuspendIntent'}}, 'suspend', undefined}
+]};
+
+struct_info('RecurrentTokenFinishIntent') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_proxy_provider_thrift, 'RecurrentTokenFinishStatus'}}, 'status', undefined}
+]};
+
+struct_info('RecurrentTokenFinishStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenSuccess'}}, 'success', undefined},
+    {2, optional, {struct, struct, {dmsl_proxy_thrift, 'Failure'}}, 'failure', undefined}
+]};
+
+struct_info('RecurrentTokenSuccess') ->
+    {struct, struct, [
+    {1, required, string, 'token', undefined}
+]};
+
+struct_info('RecurrentTokenCallbackResult') ->
     {struct, struct, [
     {1, required, string, 'response', undefined},
-    {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenGenerationProxyResult'}}, 'result', undefined}
+    {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenProxyResult'}}, 'result', undefined}
 ]};
 
 struct_info('PaymentInfo') ->
@@ -405,17 +457,23 @@ record_name('RecurrentPaymentTool') ->
 record_name('RecurrentTokenInfo') ->
     'prxprv_RecurrentTokenInfo';
 
-    record_name('RecurrentTokenGenerationSession') ->
-    'prxprv_RecurrentTokenGenerationSession';
+    record_name('RecurrentTokenSession') ->
+    'prxprv_RecurrentTokenSession';
 
-    record_name('RecurrentTokenGenerationContext') ->
-    'prxprv_RecurrentTokenGenerationContext';
+    record_name('RecurrentTokenContext') ->
+    'prxprv_RecurrentTokenContext';
 
-    record_name('RecurrentTokenGenerationProxyResult') ->
-    'prxprv_RecurrentTokenGenerationProxyResult';
+    record_name('RecurrentTokenProxyResult') ->
+    'prxprv_RecurrentTokenProxyResult';
 
-    record_name('RecurrentTokenGenerationCallbackResult') ->
-    'prxprv_RecurrentTokenGenerationCallbackResult';
+    record_name('RecurrentTokenFinishIntent') ->
+    'prxprv_RecurrentTokenFinishIntent';
+
+    record_name('RecurrentTokenSuccess') ->
+    'prxprv_RecurrentTokenSuccess';
+
+    record_name('RecurrentTokenCallbackResult') ->
+    'prxprv_RecurrentTokenCallbackResult';
 
     record_name('PaymentInfo') ->
     'prxprv_PaymentInfo';
@@ -460,7 +518,7 @@ record_name('RecurrentTokenInfo') ->
 functions('ProviderProxy') ->
     [
         'GenerateToken',
-        'HandleRecurrentTokenGenerationCallback',
+        'HandleRecurrentTokenCallback',
         'ProcessPayment',
         'HandlePaymentCallback'
     ];
@@ -468,7 +526,7 @@ functions('ProviderProxy') ->
 functions('ProviderProxyHost') ->
     [
         'ProcessPaymentCallback',
-        'ProcessRecurrentTokenGenerationCallback'
+        'ProcessRecurrentTokenCallback'
     ];
 
 functions(_) -> error(badarg).
@@ -478,20 +536,20 @@ functions(_) -> error(badarg).
 
 function_info('ProviderProxy', 'GenerateToken', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenGenerationContext'}}, 'context', undefined}
+    {1, undefined, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenContext'}}, 'context', undefined}
 ]};
 function_info('ProviderProxy', 'GenerateToken', reply_type) ->
-        {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenGenerationProxyResult'}};
+        {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenProxyResult'}};
     function_info('ProviderProxy', 'GenerateToken', exceptions) ->
         {struct, struct, []};
-function_info('ProviderProxy', 'HandleRecurrentTokenGenerationCallback', params_type) ->
+function_info('ProviderProxy', 'HandleRecurrentTokenCallback', params_type) ->
     {struct, struct, [
     {1, undefined, string, 'callback', undefined},
-    {2, undefined, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenGenerationContext'}}, 'context', undefined}
+    {2, undefined, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenContext'}}, 'context', undefined}
 ]};
-function_info('ProviderProxy', 'HandleRecurrentTokenGenerationCallback', reply_type) ->
-        {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenGenerationCallbackResult'}};
-    function_info('ProviderProxy', 'HandleRecurrentTokenGenerationCallback', exceptions) ->
+function_info('ProviderProxy', 'HandleRecurrentTokenCallback', reply_type) ->
+        {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenCallbackResult'}};
+    function_info('ProviderProxy', 'HandleRecurrentTokenCallback', exceptions) ->
         {struct, struct, []};
 function_info('ProviderProxy', 'ProcessPayment', params_type) ->
     {struct, struct, [
@@ -522,14 +580,14 @@ function_info('ProviderProxyHost', 'ProcessPaymentCallback', reply_type) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
-function_info('ProviderProxyHost', 'ProcessRecurrentTokenGenerationCallback', params_type) ->
+function_info('ProviderProxyHost', 'ProcessRecurrentTokenCallback', params_type) ->
     {struct, struct, [
     {1, undefined, string, 'tag', undefined},
     {2, undefined, string, 'callback', undefined}
 ]};
-function_info('ProviderProxyHost', 'ProcessRecurrentTokenGenerationCallback', reply_type) ->
+function_info('ProviderProxyHost', 'ProcessRecurrentTokenCallback', reply_type) ->
         string;
-    function_info('ProviderProxyHost', 'ProcessRecurrentTokenGenerationCallback', exceptions) ->
+    function_info('ProviderProxyHost', 'ProcessRecurrentTokenCallback', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};

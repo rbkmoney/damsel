@@ -213,6 +213,7 @@
     'InvalidBinding'/0,
     'BindingNotFound'/0,
     'RecurrentPaymentToolNotFound'/0,
+    'InvalidPaymentMethod'/0,
     'InvalidRecurrentPaymentToolStatus'/0,
     'NoLastEvent'/0,
     'PartyExists'/0,
@@ -442,6 +443,7 @@
     'InvalidBinding' |
     'BindingNotFound' |
     'RecurrentPaymentToolNotFound' |
+    'InvalidPaymentMethod' |
     'InvalidRecurrentPaymentToolStatus' |
     'NoLastEvent' |
     'PartyExists' |
@@ -1051,6 +1053,9 @@
 %% exception 'RecurrentPaymentToolNotFound'
 -type 'RecurrentPaymentToolNotFound'() :: #'payproc_RecurrentPaymentToolNotFound'{}.
 
+%% exception 'InvalidPaymentMethod'
+-type 'InvalidPaymentMethod'() :: #'payproc_InvalidPaymentMethod'{}.
+
 %% exception 'InvalidRecurrentPaymentToolStatus'
 -type 'InvalidRecurrentPaymentToolStatus'() :: #'payproc_InvalidRecurrentPaymentToolStatus'{}.
 
@@ -1097,7 +1102,7 @@
     'Invoicing' |
     'InvoiceTemplating' |
     'CustomerManagement' |
-    'PaymentProcessing' |
+    'RecurrentPaymentTools' |
     'RecurrentPaymentToolEventSink' |
     'PartyManagement' |
     'EventSink'.
@@ -1106,7 +1111,7 @@
     'Invoicing_service_functions'() |
     'InvoiceTemplating_service_functions'() |
     'CustomerManagement_service_functions'() |
-    'PaymentProcessing_service_functions'() |
+    'RecurrentPaymentTools_service_functions'() |
     'RecurrentPaymentToolEventSink_service_functions'() |
     'PartyManagement_service_functions'() |
     'EventSink_service_functions'().
@@ -1150,13 +1155,13 @@
 
 -export_type(['CustomerManagement_service_functions'/0]).
 
--type 'PaymentProcessing_service_functions'() ::
-    'CreateRecurrentPaymentTool' |
-    'AbandonRecurrentPaymentTool' |
-    'GetRecurrentPaymentTool' |
-    'GetRecurrentPaymentToolEvents'.
+-type 'RecurrentPaymentTools_service_functions'() ::
+    'Create' |
+    'Abandon' |
+    'Get' |
+    'GetEvents'.
 
--export_type(['PaymentProcessing_service_functions'/0]).
+-export_type(['RecurrentPaymentTools_service_functions'/0]).
 
 -type 'RecurrentPaymentToolEventSink_service_functions'() ::
     'GetEvents' |
@@ -1404,7 +1409,7 @@ services() ->
         'Invoicing',
         'InvoiceTemplating',
         'CustomerManagement',
-        'PaymentProcessing',
+        'RecurrentPaymentTools',
         'RecurrentPaymentToolEventSink',
         'PartyManagement',
         'EventSink'
@@ -1921,11 +1926,14 @@ struct_info('CustomerBindingStatusChanged') ->
 struct_info('RecurrentPaymentTool') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {5, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-    {6, optional, string, 'rec_token', undefined}
+    {2, required, string, 'shop_id', undefined},
+    {3, required, string, 'party_id', undefined},
+    {4, required, i64, 'domain_revision', undefined},
+    {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined},
+    {6, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
+    {7, required, string, 'created_at', undefined},
+    {8, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
+    {9, optional, string, 'rec_token', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolParams') ->
@@ -1981,7 +1989,9 @@ struct_info('RecurrentPaymentToolChange') ->
 
 struct_info('RecurrentPaymentToolHasCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined}
+    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined},
+    {2, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolHasAcquired') ->
@@ -2384,6 +2394,9 @@ struct_info('BindingNotFound') ->
     {struct, exception, []};
 
 struct_info('RecurrentPaymentToolNotFound') ->
+    {struct, exception, []};
+
+struct_info('InvalidPaymentMethod') ->
     {struct, exception, []};
 
 struct_info('InvalidRecurrentPaymentToolStatus') ->
@@ -2824,6 +2837,9 @@ record_name('InternalUser') ->
     record_name('RecurrentPaymentToolNotFound') ->
     'payproc_RecurrentPaymentToolNotFound';
 
+    record_name('InvalidPaymentMethod') ->
+    'payproc_InvalidPaymentMethod';
+
     record_name('InvalidRecurrentPaymentToolStatus') ->
     'payproc_InvalidRecurrentPaymentToolStatus';
 
@@ -2906,12 +2922,12 @@ functions('CustomerManagement') ->
         'GetEvents'
     ];
 
-functions('PaymentProcessing') ->
+functions('RecurrentPaymentTools') ->
     [
-        'CreateRecurrentPaymentTool',
-        'AbandonRecurrentPaymentTool',
-        'GetRecurrentPaymentTool',
-        'GetRecurrentPaymentToolEvents'
+        'Create',
+        'Abandon',
+        'Get',
+        'GetEvents'
     ];
 
 functions('RecurrentPaymentToolEventSink') ->
@@ -3392,47 +3408,54 @@ function_info('CustomerManagement', 'GetEvents', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
     ]};
 
-function_info('PaymentProcessing', 'CreateRecurrentPaymentTool', params_type) ->
+function_info('RecurrentPaymentTools', 'Create', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolParams'}}, 'params', undefined}
 ]};
-function_info('PaymentProcessing', 'CreateRecurrentPaymentTool', reply_type) ->
+function_info('RecurrentPaymentTools', 'Create', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
-    function_info('PaymentProcessing', 'CreateRecurrentPaymentTool', exceptions) ->
+    function_info('RecurrentPaymentTools', 'Create', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined}
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'invalid_contract_status', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentMethod'}}, 'invalid_payment_method', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'operation_not_permitted', undefined}
     ]};
-function_info('PaymentProcessing', 'AbandonRecurrentPaymentTool', params_type) ->
+function_info('RecurrentPaymentTools', 'Abandon', params_type) ->
     {struct, struct, [
     {1, undefined, string, 'id', undefined}
 ]};
-function_info('PaymentProcessing', 'AbandonRecurrentPaymentTool', reply_type) ->
+function_info('RecurrentPaymentTools', 'Abandon', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
-    function_info('PaymentProcessing', 'AbandonRecurrentPaymentTool', exceptions) ->
+    function_info('RecurrentPaymentTools', 'Abandon', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidRecurrentPaymentToolStatus'}}, 'invalid_rec_payment_tool_status', undefined}
     ]};
-function_info('PaymentProcessing', 'GetRecurrentPaymentTool', params_type) ->
+function_info('RecurrentPaymentTools', 'Get', params_type) ->
     {struct, struct, [
     {1, undefined, string, 'id', undefined}
 ]};
-function_info('PaymentProcessing', 'GetRecurrentPaymentTool', reply_type) ->
+function_info('RecurrentPaymentTools', 'Get', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
-    function_info('PaymentProcessing', 'GetRecurrentPaymentTool', exceptions) ->
+    function_info('RecurrentPaymentTools', 'Get', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined}
     ]};
-function_info('PaymentProcessing', 'GetRecurrentPaymentToolEvents', params_type) ->
+function_info('RecurrentPaymentTools', 'GetEvents', params_type) ->
     {struct, struct, [
     {1, undefined, string, 'id', undefined},
     {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
 ]};
-function_info('PaymentProcessing', 'GetRecurrentPaymentToolEvents', reply_type) ->
+function_info('RecurrentPaymentTools', 'GetEvents', reply_type) ->
         {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
-    function_info('PaymentProcessing', 'GetRecurrentPaymentToolEvents', exceptions) ->
+    function_info('RecurrentPaymentTools', 'GetEvents', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined},

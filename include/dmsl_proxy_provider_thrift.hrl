@@ -12,7 +12,7 @@
     'id' :: dmsl_base_thrift:'ID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
-    'rec_token' :: dmsl_domain_thrift:'Token'() | undefined
+    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'RecurrentTokenInfo'
@@ -21,30 +21,40 @@
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
-%% struct 'RecurrentTokenGenerationSession'
--record('prxprv_RecurrentTokenGenerationSession', {
+%% struct 'RecurrentTokenSession'
+-record('prxprv_RecurrentTokenSession', {
     'state' :: dmsl_proxy_thrift:'ProxyState'() | undefined
 }).
 
-%% struct 'RecurrentTokenGenerationContext'
--record('prxprv_RecurrentTokenGenerationContext', {
-    'session' :: dmsl_proxy_provider_thrift:'RecurrentTokenGenerationSession'(),
+%% struct 'RecurrentTokenContext'
+-record('prxprv_RecurrentTokenContext', {
+    'session' :: dmsl_proxy_provider_thrift:'RecurrentTokenSession'(),
     'token_info' :: dmsl_proxy_provider_thrift:'RecurrentTokenInfo'(),
     'options' = #{} :: dmsl_domain_thrift:'ProxyOptions'() | undefined
 }).
 
-%% struct 'RecurrentTokenGenerationProxyResult'
--record('prxprv_RecurrentTokenGenerationProxyResult', {
-    'intent' :: dmsl_proxy_thrift:'Intent'(),
+%% struct 'RecurrentTokenProxyResult'
+-record('prxprv_RecurrentTokenProxyResult', {
+    'intent' :: dmsl_proxy_provider_thrift:'RecurrentTokenIntent'(),
     'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
     'token' :: dmsl_domain_thrift:'Token'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
-%% struct 'RecurrentTokenGenerationCallbackResult'
--record('prxprv_RecurrentTokenGenerationCallbackResult', {
+%% struct 'RecurrentTokenFinishIntent'
+-record('prxprv_RecurrentTokenFinishIntent', {
+    'status' :: dmsl_proxy_provider_thrift:'RecurrentTokenFinishStatus'()
+}).
+
+%% struct 'RecurrentTokenSuccess'
+-record('prxprv_RecurrentTokenSuccess', {
+    'token' :: dmsl_domain_thrift:'Token'()
+}).
+
+%% struct 'RecurrentTokenCallbackResult'
+-record('prxprv_RecurrentTokenCallbackResult', {
     'response' :: dmsl_proxy_thrift:'CallbackResponse'(),
-    'result' :: dmsl_proxy_provider_thrift:'RecurrentTokenGenerationProxyResult'()
+    'result' :: dmsl_proxy_provider_thrift:'RecurrentTokenProxyResult'()
 }).
 
 %% struct 'PaymentInfo'
