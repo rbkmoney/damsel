@@ -6,10 +6,10 @@ namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
 
 struct RecurrentPaymentTool {
-    1: required base.ID                                   id
-    2: required base.Timestamp                            created_at
-    3: required domain.DisposablePaymentResource          payment_resource
-    4: optional domain.Token                              rec_token
+    1: required base.ID                          id
+    2: required base.Timestamp                   created_at
+    3: required domain.DisposablePaymentResource payment_resource
+    4: required domain.Cash                      minimal_payment_cost
 }
 
 /**
@@ -23,7 +23,7 @@ struct RecurrentTokenInfo {
 /**
  * Данные сессии взаимодействия с провайдерским прокси в рамках генерации многоразового токена.
  */
-struct RecurrentTokenGenerationSession {
+struct RecurrentTokenSession {
     1: optional proxy.ProxyState state
 }
 
@@ -31,22 +31,41 @@ struct RecurrentTokenGenerationSession {
  * Набор данных для взаимодействия с провайдерским прокси в рамках проведения генерации
  * многоразового токена.
  */
-struct RecurrentTokenGenerationContext {
-    1: required RecurrentTokenGenerationSession session
-    2: required RecurrentTokenInfo              token_info
-    3: optional domain.ProxyOptions             options = {}
+struct RecurrentTokenContext {
+    1: required RecurrentTokenSession session
+    2: required RecurrentTokenInfo    token_info
+    3: optional domain.ProxyOptions   options = {}
 }
 
-struct RecurrentTokenGenerationProxyResult {
-    1: required proxy.Intent           intent
+struct RecurrentTokenProxyResult {
+    1: required RecurrentTokenIntent   intent
     2: optional proxy.ProxyState       next_state
     3: optional domain.Token           token
     4: optional domain.TransactionInfo trx
 }
 
-struct RecurrentTokenGenerationCallbackResult {
-    1: required proxy.CallbackResponse              response
-    2: required RecurrentTokenGenerationProxyResult result
+union RecurrentTokenIntent {
+    1: RecurrentTokenFinishIntent finish
+    2: proxy.SleepIntent          sleep
+    3: proxy.SuspendIntent        suspend
+}
+
+struct RecurrentTokenFinishIntent {
+    1: required RecurrentTokenFinishStatus status
+}
+
+union RecurrentTokenFinishStatus {
+    1: RecurrentTokenSuccess success
+    2: proxy.Failure         failure
+}
+
+struct RecurrentTokenSuccess {
+    1: required domain.Token token
+}
+
+struct RecurrentTokenCallbackResult {
+    1: required proxy.CallbackResponse    response
+    2: required RecurrentTokenProxyResult result
 }
 
 /**
@@ -169,17 +188,17 @@ service ProviderProxy {
     /**
      * Запрос к прокси на создание многоразового токена
      */
-    RecurrentTokenGenerationProxyResult GenerateToken (
-        1: RecurrentTokenGenerationContext context
+    RecurrentTokenProxyResult GenerateToken (
+        1: RecurrentTokenContext context
     )
 
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках сессии получения
      * многоразового токена.
      */
-    RecurrentTokenGenerationCallbackResult HandleRecurrentTokenGenerationCallback (
-        1: proxy.Callback                  callback
-        2: RecurrentTokenGenerationContext context
+    RecurrentTokenCallbackResult HandleRecurrentTokenCallback (
+        1: proxy.Callback        callback
+        2: RecurrentTokenContext context
     )
 
     /**
@@ -207,6 +226,6 @@ service ProviderProxyHost {
      * Запрос к процессингу на обработку обратного вызова от провайдера
      * в рамках взаимодействия по получению многоразового токена.
      */
-    proxy.CallbackResponse ProcessRecurrentTokenGenerationCallback (1: base.Tag tag, 2: proxy.Callback callback)
+    proxy.CallbackResponse ProcessRecurrentTokenCallback (1: base.Tag tag, 2: proxy.Callback callback)
         throws (1: base.InvalidRequest ex1)
 }
