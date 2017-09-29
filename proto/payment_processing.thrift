@@ -962,10 +962,11 @@ struct RecurrentPaymentTool {
     2: required ShopID                     shop_id
     3: required PartyID                    party_id
     4: required domain.DataRevision        domain_revision
-    5: required RecurrentPaymentToolStatus status
-    6: required base.Timestamp             created_at
-    7: required DisposablePaymentResource  payment_resource
-    8: optional domain.Token               rec_token
+    5: required domain.Cash                minimal_payment_cost
+    6: required RecurrentPaymentToolStatus status
+    7: required base.Timestamp             created_at
+    8: required DisposablePaymentResource  payment_resource
+    9: optional domain.Token               rec_token
 }
 
 struct RecurrentPaymentToolParams {
@@ -1045,6 +1046,7 @@ struct RecurrentPaymentToolHasFailed {
 exception InvalidBinding                    {}
 exception BindingNotFound                   {}
 exception RecurrentPaymentToolNotFound      {}
+exception InvalidPaymentMethod              {}
 exception InvalidRecurrentPaymentToolStatus {
     1: required RecurrentPaymentToolStatus status
 }
@@ -1058,6 +1060,8 @@ service RecurrentPaymentTools {
             4: ShopNotFound          shop_not_found
             5: PartyNotFound         party_not_found
             6: InvalidContractStatus invalid_contract_status
+            7: InvalidPaymentMethod  invalid_payment_method
+            8: OperationNotPermitted operation_not_permitted
         )
 
     RecurrentPaymentTool Abandon (1: RecurrentPaymentToolID id)
