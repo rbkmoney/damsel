@@ -51,8 +51,16 @@ union RecurrentTokenIntent {
 }
 
 struct RecurrentTokenFinishIntent {
-    1: required proxy.FinishStatus status
-    2: required domain.Token       rec_token
+    1: required RecurrentTokenFinishStatus status
+}
+
+union RecurrentTokenFinishStatus {
+    1: RecurrentTokenSuccess success
+    2: proxy.Failure         failure
+}
+
+struct RecurrentTokenSuccess {
+    1: required domain.Token token
 }
 
 struct RecurrentTokenCallbackResult {
