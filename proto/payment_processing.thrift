@@ -972,7 +972,7 @@ struct RecurrentPaymentTool {
 struct RecurrentPaymentToolParams {
     1: required PartyID                   party_id
     2: required ShopID                    shop_id
-    3: required DisposablePaymentResource disposable_payment_resource
+    3: required DisposablePaymentResource payment_resource
 }
 
 // Statuses

@@ -1940,7 +1940,7 @@ struct_info('RecurrentPaymentToolParams') ->
     {struct, struct, [
     {1, required, string, 'party_id', undefined},
     {2, required, string, 'shop_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'disposable_payment_resource', undefined}
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolCreated') ->

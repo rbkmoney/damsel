@@ -342,7 +342,7 @@
 -record('payproc_RecurrentPaymentToolParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'disposable_payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
 
 %% struct 'RecurrentPaymentToolCreated'
