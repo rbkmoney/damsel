@@ -6,9 +6,10 @@ namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
 
 struct RecurrentPaymentTool {
-    1: required base.ID                                   id
-    2: required base.Timestamp                            created_at
-    3: required domain.DisposablePaymentResource          payment_resource
+    1: required base.ID                          id
+    2: required base.Timestamp                   created_at
+    3: required domain.DisposablePaymentResource payment_resource
+    4: required domain.Cash                      minimal_payment_cost
 }
 
 /**
