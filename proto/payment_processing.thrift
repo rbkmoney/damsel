@@ -909,7 +909,6 @@ service CustomerManagement {
             3: InvalidShopStatus     invalid_shop_status
             4: ShopNotFound          shop_not_found
             5: PartyNotFound         party_not_found
-            6: base.InvalidRequest   invalid_request
         )
 
     Customer Get (1: CustomerID id)
@@ -932,8 +931,8 @@ service CustomerManagement {
             2: CustomerNotFound      customer_not_found
             3: InvalidPartyStatus    invalid_party_status
             4: InvalidShopStatus     invalid_shop_status
-            5: InvalidPaymentTool    invalid_payment_tool
-            6: base.InvalidRequest   invalid_request
+            5: InvalidContractStatus invalid_contract_status
+            6: OperationNotPermitted operation_not_permitted
         )
 
     CustomerBinding GetActiveBinding (1: CustomerID customer_id)
@@ -1060,8 +1059,7 @@ service RecurrentPaymentTools {
             4: ShopNotFound          shop_not_found
             5: PartyNotFound         party_not_found
             6: InvalidContractStatus invalid_contract_status
-            7: InvalidPaymentMethod  invalid_payment_method
-            8: OperationNotPermitted operation_not_permitted
+            7: OperationNotPermitted operation_not_permitted
         )
 
     RecurrentPaymentTool Abandon (1: RecurrentPaymentToolID id)
