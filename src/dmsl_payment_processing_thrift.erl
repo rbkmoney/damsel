@@ -3339,8 +3339,7 @@ function_info('CustomerManagement', 'Create', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined},
-        {6, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'invalid_request', undefined}
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined}
     ]};
 function_info('CustomerManagement', 'Get', params_type) ->
     {struct, struct, [
@@ -3379,8 +3378,8 @@ function_info('CustomerManagement', 'StartBinding', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentTool'}}, 'invalid_payment_tool', undefined},
-        {6, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'invalid_request', undefined}
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'invalid_contract_status', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'operation_not_permitted', undefined}
     ]};
 function_info('CustomerManagement', 'GetActiveBinding', params_type) ->
     {struct, struct, [
@@ -3422,8 +3421,7 @@ function_info('RecurrentPaymentTools', 'Create', reply_type) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'invalid_contract_status', undefined},
-        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentMethod'}}, 'invalid_payment_method', undefined},
-        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'operation_not_permitted', undefined}
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'operation_not_permitted', undefined}
     ]};
 function_info('RecurrentPaymentTools', 'Abandon', params_type) ->
     {struct, struct, [
