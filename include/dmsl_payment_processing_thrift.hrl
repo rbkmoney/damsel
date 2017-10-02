@@ -420,6 +420,9 @@
 %% exception 'PartyNotFound'
 -record('payproc_PartyNotFound', {}).
 
+%% exception 'PartyNotExistsYet'
+-record('payproc_PartyNotExistsYet', {}).
+
 %% exception 'ShopNotFound'
 -record('payproc_ShopNotFound', {}).
 
@@ -500,9 +503,6 @@
 
 %% exception 'PartyExists'
 -record('payproc_PartyExists', {}).
-
-%% exception 'PartyNotExistsYet'
--record('payproc_PartyNotExistsYet', {}).
 
 %% exception 'ContractNotFound'
 -record('payproc_ContractNotFound', {}).

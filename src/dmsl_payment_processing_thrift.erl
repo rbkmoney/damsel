@@ -143,6 +143,7 @@
 ]).
 -export_type([
     'PartyNotFound'/0,
+    'PartyNotExistsYet'/0,
     'ShopNotFound'/0,
     'InvalidPartyStatus'/0,
     'InvalidShopStatus'/0,
@@ -164,7 +165,6 @@
     'InvoiceTemplateNotFound'/0,
     'InvoiceTemplateRemoved'/0,
     'PartyExists'/0,
-    'PartyNotExistsYet'/0,
     'ContractNotFound'/0,
     'ClaimNotFound'/0,
     'InvalidClaimRevision'/0,
@@ -314,6 +314,7 @@
 
 -type exception_name() ::
     'PartyNotFound' |
+    'PartyNotExistsYet' |
     'ShopNotFound' |
     'InvalidPartyStatus' |
     'InvalidShopStatus' |
@@ -335,7 +336,6 @@
     'InvoiceTemplateNotFound' |
     'InvoiceTemplateRemoved' |
     'PartyExists' |
-    'PartyNotExistsYet' |
     'ContractNotFound' |
     'ClaimNotFound' |
     'InvalidClaimRevision' |
@@ -729,6 +729,9 @@
 %% exception 'PartyNotFound'
 -type 'PartyNotFound'() :: #'payproc_PartyNotFound'{}.
 
+%% exception 'PartyNotExistsYet'
+-type 'PartyNotExistsYet'() :: #'payproc_PartyNotExistsYet'{}.
+
 %% exception 'ShopNotFound'
 -type 'ShopNotFound'() :: #'payproc_ShopNotFound'{}.
 
@@ -791,9 +794,6 @@
 
 %% exception 'PartyExists'
 -type 'PartyExists'() :: #'payproc_PartyExists'{}.
-
-%% exception 'PartyNotExistsYet'
--type 'PartyNotExistsYet'() :: #'payproc_PartyNotExistsYet'{}.
 
 %% exception 'ContractNotFound'
 -type 'ContractNotFound'() :: #'payproc_ContractNotFound'{}.
@@ -865,7 +865,8 @@
     'Create' |
     'Get' |
     'Update' |
-    'Delete'.
+    'Delete' |
+    'ComputeTerms'.
 
 -export_type(['InvoiceTemplating_service_functions'/0]).
 
@@ -1715,6 +1716,9 @@ struct_info('ContractTermsViolated') ->
 struct_info('PartyNotFound') ->
     {struct, exception, []};
 
+struct_info('PartyNotExistsYet') ->
+    {struct, exception, []};
+
 struct_info('ShopNotFound') ->
     {struct, exception, []};
 
@@ -1794,9 +1798,6 @@ struct_info('InvoiceTemplateRemoved') ->
     {struct, exception, []};
 
 struct_info('PartyExists') ->
-    {struct, exception, []};
-
-struct_info('PartyNotExistsYet') ->
     {struct, exception, []};
 
 struct_info('ContractNotFound') ->
@@ -2058,6 +2059,9 @@ record_name('InternalUser') ->
     record_name('PartyNotFound') ->
     'payproc_PartyNotFound';
 
+    record_name('PartyNotExistsYet') ->
+    'payproc_PartyNotExistsYet';
+
     record_name('ShopNotFound') ->
     'payproc_ShopNotFound';
 
@@ -2121,9 +2125,6 @@ record_name('InternalUser') ->
     record_name('PartyExists') ->
     'payproc_PartyExists';
 
-    record_name('PartyNotExistsYet') ->
-    'payproc_PartyNotExistsYet';
-
     record_name('ContractNotFound') ->
     'payproc_ContractNotFound';
 
@@ -2184,7 +2185,8 @@ functions('InvoiceTemplating') ->
         'Create',
         'Get',
         'Update',
-        'Delete'
+        'Delete',
+        'ComputeTerms'
     ];
 
 functions('PartyManagement') ->
@@ -2576,6 +2578,21 @@ function_info('InvoiceTemplating', 'Delete', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex5', undefined}
+    ]};
+function_info('InvoiceTemplating', 'ComputeTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'timestamp', undefined}
+]};
+function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('InvoiceTemplating', 'ComputeTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex4', undefined}
     ]};
 
 function_info('PartyManagement', 'Create', params_type) ->
