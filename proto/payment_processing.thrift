@@ -425,6 +425,7 @@ struct InvoicePaymentAdjustmentParams {
 
 // forward-declared
 exception PartyNotFound {}
+exception PartyNotExistsYet {}
 exception ShopNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
@@ -723,6 +724,7 @@ service InvoiceTemplating {
             5: InvalidShopStatus ex5,
             6: base.InvalidRequest ex6
         )
+
     void Delete (1: UserInfo user, 2: domain.InvoiceTemplateID id)
         throws (
             1: InvalidUser ex1,
@@ -730,6 +732,16 @@ service InvoiceTemplating {
             3: InvoiceTemplateRemoved ex3,
             4: InvalidPartyStatus ex4,
             5: InvalidShopStatus ex5
+        )
+
+    /* Terms */
+
+    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: base.Timestamp timestamp)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceTemplateNotFound ex2,
+            3: InvoiceTemplateRemoved ex3,
+            4: PartyNotExistsYet ex4
         )
 }
 
@@ -975,7 +987,6 @@ struct PartyMetaSet {
 // Exceptions
 
 exception PartyExists {}
-exception PartyNotExistsYet {}
 exception ContractNotFound {}
 exception ClaimNotFound {}
 exception InvalidClaimRevision {}
