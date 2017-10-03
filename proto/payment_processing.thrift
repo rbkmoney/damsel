@@ -789,15 +789,6 @@ struct CustomerUnready {}
 struct CustomerReady   {}
 
 // Events
-typedef list<CustomerEvent> CustomerEvents
-
-struct CustomerEvent {
-    1: required base.EventID         id
-    2: required base.Timestamp       created_at
-    3: required CustomerID           source
-    4: required list<CustomerChange> payload
-}
-
 union CustomerChange {
     1: CustomerCreated        customer_created
     2: CustomerDeleted        customer_deleted
@@ -942,7 +933,7 @@ service CustomerManagement {
             3: InvalidCustomerStatus invalid_customer_status
         )
 
-    CustomerEvents GetEvents (1: CustomerID customer_id, 2: EventRange range)
+    Events GetEvents (1: CustomerID customer_id, 2: EventRange range)
         throws (
             1: InvalidUser      invalid_user
             2: CustomerNotFound customer_not_found
