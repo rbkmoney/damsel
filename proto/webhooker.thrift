@@ -104,6 +104,7 @@ struct InvoicePaymentRefunded  {}
 
 struct CustomerEventFilter {
     1: required set<CustomerEventType> types
+    2: optional domain.ShopID shop_id
 }
 
 union CustomerEventType {
@@ -118,12 +119,12 @@ struct CustomerDeleted {}
 struct CustomerStatusReady {}
 
 union CustomerBindingEvent {
-    1: CustomerBindingCreated created
+    1: CustomerBindingStarted started
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed failed
 }
 
-struct CustomerBindingCreated {}
+struct CustomerBindingStarted {}
 struct CustomerBindingSucceeded {}
 struct CustomerBindingFailed {}
 
