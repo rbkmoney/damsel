@@ -12,7 +12,7 @@
     'id' :: dmsl_base_thrift:'ID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
-    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'()
+    'minimal_payment_cost' :: dmsl_proxy_provider_thrift:'Cash'()
 }).
 
 %% struct 'RecurrentTokenInfo'

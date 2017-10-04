@@ -295,7 +295,7 @@ struct_info('RecurrentPaymentTool') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined}
+    {4, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'minimal_payment_cost', undefined}
 ]};
 
 struct_info('RecurrentTokenInfo') ->
