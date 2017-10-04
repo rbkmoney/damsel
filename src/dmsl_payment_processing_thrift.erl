@@ -1912,7 +1912,8 @@ struct_info('RecurrentPaymentTool') ->
     {6, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
     {7, required, string, 'created_at', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {9, optional, string, 'rec_token', undefined}
+    {9, optional, string, 'rec_token', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolParams') ->
