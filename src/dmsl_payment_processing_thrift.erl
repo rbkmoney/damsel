@@ -38,7 +38,6 @@
     'InvoicePaymentAdjustment'/0,
     'CustomerID'/0,
     'Metadata'/0,
-    'CustomerEvents'/0,
     'CustomerBindingID'/0,
     'DisposablePaymentResource'/0,
     'RecurrentPaymentToolID'/0,
@@ -113,7 +112,6 @@
     'CustomerStatus'/0,
     'CustomerUnready'/0,
     'CustomerReady'/0,
-    'CustomerEvent'/0,
     'CustomerChange'/0,
     'CustomerCreated'/0,
     'CustomerDeleted'/0,
@@ -241,7 +239,6 @@
     'InvoicePaymentAdjustment' |
     'CustomerID' |
     'Metadata' |
-    'CustomerEvents' |
     'CustomerBindingID' |
     'DisposablePaymentResource' |
     'RecurrentPaymentToolID' |
@@ -260,7 +257,6 @@
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
--type 'CustomerEvents'() :: ['CustomerEvent'()].
 -type 'CustomerBindingID'() :: dmsl_domain_thrift:'CustomerBindingID'().
 -type 'DisposablePaymentResource'() :: dmsl_domain_thrift:'DisposablePaymentResource'().
 -type 'RecurrentPaymentToolID'() :: dmsl_domain_thrift:'RecurrentPaymentToolID'().
@@ -343,7 +339,6 @@
     'CustomerStatus' |
     'CustomerUnready' |
     'CustomerReady' |
-    'CustomerEvent' |
     'CustomerChange' |
     'CustomerCreated' |
     'CustomerDeleted' |
@@ -684,9 +679,6 @@
 
 %% struct 'CustomerReady'
 -type 'CustomerReady'() :: #'payproc_CustomerReady'{}.
-
-%% struct 'CustomerEvent'
--type 'CustomerEvent'() :: #'payproc_CustomerEvent'{}.
 
 %% union 'CustomerChange'
 -type 'CustomerChange'() ::
@@ -1245,7 +1237,6 @@ typedefs() ->
         'InvoicePaymentAdjustment',
         'CustomerID',
         'Metadata',
-        'CustomerEvents',
         'CustomerBindingID',
         'DisposablePaymentResource',
         'RecurrentPaymentToolID',
@@ -1329,7 +1320,6 @@ structs() ->
         'CustomerStatus',
         'CustomerUnready',
         'CustomerReady',
-        'CustomerEvent',
         'CustomerChange',
         'CustomerCreated',
         'CustomerDeleted',
@@ -1439,9 +1429,6 @@ typedef_info('CustomerID') ->
 
 typedef_info('Metadata') ->
     {struct, union, {dmsl_json_thrift, 'Value'}};
-
-typedef_info('CustomerEvents') ->
-    {list, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerEvent'}}};
 
 typedef_info('CustomerBindingID') ->
     string;
@@ -1840,14 +1827,6 @@ struct_info('CustomerUnready') ->
 
 struct_info('CustomerReady') ->
     {struct, struct, []};
-
-struct_info('CustomerEvent') ->
-    {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, string, 'source', undefined},
-    {4, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'CustomerChange'}}}, 'payload', undefined}
-]};
 
 struct_info('CustomerChange') ->
     {struct, union, [
@@ -2590,9 +2569,6 @@ record_name('InternalUser') ->
 
     record_name('CustomerReady') ->
     'payproc_CustomerReady';
-
-    record_name('CustomerEvent') ->
-    'payproc_CustomerEvent';
 
     record_name('CustomerCreated') ->
     'payproc_CustomerCreated';
@@ -3399,7 +3375,7 @@ function_info('CustomerManagement', 'GetEvents', params_type) ->
     {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
 ]};
 function_info('CustomerManagement', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerEvent'}}};
+        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
     function_info('CustomerManagement', 'GetEvents', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},

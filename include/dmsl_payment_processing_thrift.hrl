@@ -264,14 +264,6 @@
 %% struct 'CustomerReady'
 -record('payproc_CustomerReady', {}).
 
-%% struct 'CustomerEvent'
--record('payproc_CustomerEvent', {
-    'id' :: dmsl_base_thrift:'EventID'(),
-    'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'source' :: dmsl_payment_processing_thrift:'CustomerID'(),
-    'payload' :: [dmsl_payment_processing_thrift:'CustomerChange'()]
-}).
-
 %% struct 'CustomerCreated'
 -record('payproc_CustomerCreated', {
     'customer' :: dmsl_payment_processing_thrift:'Customer'()
