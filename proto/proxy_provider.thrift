@@ -9,7 +9,7 @@ struct RecurrentPaymentTool {
     1: required base.ID                          id
     2: required base.Timestamp                   created_at
     3: required domain.DisposablePaymentResource payment_resource
-    4: required domain.Cash                      minimal_payment_cost
+    4: required Cash                             minimal_payment_cost
 }
 
 /**
