@@ -64,7 +64,16 @@
     'InvoicePaymentCaptured'/0,
     'InvoicePaymentCancelled'/0,
     'InvoicePaymentFailed'/0,
-    'InvoicePaymentRefunded'/0
+    'InvoicePaymentRefunded'/0,
+    'CustomerEventFilter'/0,
+    'CustomerEventType'/0,
+    'CustomerCreated'/0,
+    'CustomerDeleted'/0,
+    'CustomerStatusReady'/0,
+    'CustomerBindingEvent'/0,
+    'CustomerBindingStarted'/0,
+    'CustomerBindingSucceeded'/0,
+    'CustomerBindingFailed'/0
 ]).
 -export_type([
     'WebhookNotFound'/0
@@ -120,7 +129,16 @@
     'InvoicePaymentCaptured' |
     'InvoicePaymentCancelled' |
     'InvoicePaymentFailed' |
-    'InvoicePaymentRefunded'.
+    'InvoicePaymentRefunded' |
+    'CustomerEventFilter' |
+    'CustomerEventType' |
+    'CustomerCreated' |
+    'CustomerDeleted' |
+    'CustomerStatusReady' |
+    'CustomerBindingEvent' |
+    'CustomerBindingStarted' |
+    'CustomerBindingSucceeded' |
+    'CustomerBindingFailed'.
 
 -type exception_name() ::
     'WebhookNotFound'.
@@ -134,7 +152,8 @@
 %% union 'EventFilter'
 -type 'EventFilter'() ::
     {'party', 'PartyEventFilter'()} |
-    {'invoice', 'InvoiceEventFilter'()}.
+    {'invoice', 'InvoiceEventFilter'()} |
+    {'customer', 'CustomerEventFilter'()}.
 
 %% struct 'PartyEventFilter'
 -type 'PartyEventFilter'() :: #'webhooker_PartyEventFilter'{}.
@@ -230,6 +249,40 @@
 %% struct 'InvoicePaymentRefunded'
 -type 'InvoicePaymentRefunded'() :: #'webhooker_InvoicePaymentRefunded'{}.
 
+%% struct 'CustomerEventFilter'
+-type 'CustomerEventFilter'() :: #'webhooker_CustomerEventFilter'{}.
+
+%% union 'CustomerEventType'
+-type 'CustomerEventType'() ::
+    {'created', 'CustomerCreated'()} |
+    {'deleted', 'CustomerDeleted'()} |
+    {'ready', 'CustomerStatusReady'()} |
+    {'binding', 'CustomerBindingEvent'()}.
+
+%% struct 'CustomerCreated'
+-type 'CustomerCreated'() :: #'webhooker_CustomerCreated'{}.
+
+%% struct 'CustomerDeleted'
+-type 'CustomerDeleted'() :: #'webhooker_CustomerDeleted'{}.
+
+%% struct 'CustomerStatusReady'
+-type 'CustomerStatusReady'() :: #'webhooker_CustomerStatusReady'{}.
+
+%% union 'CustomerBindingEvent'
+-type 'CustomerBindingEvent'() ::
+    {'started', 'CustomerBindingStarted'()} |
+    {'succeeded', 'CustomerBindingSucceeded'()} |
+    {'failed', 'CustomerBindingFailed'()}.
+
+%% struct 'CustomerBindingStarted'
+-type 'CustomerBindingStarted'() :: #'webhooker_CustomerBindingStarted'{}.
+
+%% struct 'CustomerBindingSucceeded'
+-type 'CustomerBindingSucceeded'() :: #'webhooker_CustomerBindingSucceeded'{}.
+
+%% struct 'CustomerBindingFailed'
+-type 'CustomerBindingFailed'() :: #'webhooker_CustomerBindingFailed'{}.
+
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
 
@@ -322,7 +375,16 @@ structs() ->
         'InvoicePaymentCaptured',
         'InvoicePaymentCancelled',
         'InvoicePaymentFailed',
-        'InvoicePaymentRefunded'
+        'InvoicePaymentRefunded',
+        'CustomerEventFilter',
+        'CustomerEventType',
+        'CustomerCreated',
+        'CustomerDeleted',
+        'CustomerStatusReady',
+        'CustomerBindingEvent',
+        'CustomerBindingStarted',
+        'CustomerBindingSucceeded',
+        'CustomerBindingFailed'
     ].
 
 -spec services() -> [service_name()].
@@ -376,7 +438,8 @@ struct_info('WebhookParams') ->
 struct_info('EventFilter') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'PartyEventFilter'}}, 'party', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceEventFilter'}}, 'invoice', undefined}
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceEventFilter'}}, 'invoice', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined}
 ]};
 
 struct_info('PartyEventFilter') ->
@@ -488,6 +551,45 @@ struct_info('InvoicePaymentFailed') ->
 struct_info('InvoicePaymentRefunded') ->
     {struct, struct, []};
 
+struct_info('CustomerEventFilter') ->
+    {struct, struct, [
+    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'CustomerEventType'}}}, 'types', undefined},
+    {2, optional, string, 'shop_id', undefined}
+]};
+
+struct_info('CustomerEventType') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerCreated'}}, 'created', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerDeleted'}}, 'deleted', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerStatusReady'}}, 'ready', undefined},
+    {4, optional, {struct, union, {dmsl_webhooker_thrift, 'CustomerBindingEvent'}}, 'binding', undefined}
+]};
+
+struct_info('CustomerCreated') ->
+    {struct, struct, []};
+
+struct_info('CustomerDeleted') ->
+    {struct, struct, []};
+
+struct_info('CustomerStatusReady') ->
+    {struct, struct, []};
+
+struct_info('CustomerBindingEvent') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
+]};
+
+struct_info('CustomerBindingStarted') ->
+    {struct, struct, []};
+
+struct_info('CustomerBindingSucceeded') ->
+    {struct, struct, []};
+
+struct_info('CustomerBindingFailed') ->
+    {struct, struct, []};
+
 struct_info('WebhookNotFound') ->
     {struct, exception, []};
 
@@ -557,6 +659,27 @@ record_name('WebhookParams') ->
 
     record_name('InvoicePaymentRefunded') ->
     'webhooker_InvoicePaymentRefunded';
+
+    record_name('CustomerEventFilter') ->
+    'webhooker_CustomerEventFilter';
+
+    record_name('CustomerCreated') ->
+    'webhooker_CustomerCreated';
+
+    record_name('CustomerDeleted') ->
+    'webhooker_CustomerDeleted';
+
+    record_name('CustomerStatusReady') ->
+    'webhooker_CustomerStatusReady';
+
+    record_name('CustomerBindingStarted') ->
+    'webhooker_CustomerBindingStarted';
+
+    record_name('CustomerBindingSucceeded') ->
+    'webhooker_CustomerBindingSucceeded';
+
+    record_name('CustomerBindingFailed') ->
+    'webhooker_CustomerBindingFailed';
 
     record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';
