@@ -948,15 +948,16 @@ typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
 
 // Model
 struct RecurrentPaymentTool {
-    1: required RecurrentPaymentToolID     id
-    2: required ShopID                     shop_id
-    3: required PartyID                    party_id
-    4: required domain.DataRevision        domain_revision
-    5: required domain.Cash                minimal_payment_cost
-    6: required RecurrentPaymentToolStatus status
-    7: required base.Timestamp             created_at
-    8: required DisposablePaymentResource  payment_resource
-    9: optional domain.Token               rec_token
+    1:  required RecurrentPaymentToolID     id
+    2:  required ShopID                     shop_id
+    3:  required PartyID                    party_id
+    4:  required domain.DataRevision        domain_revision
+    5:  required domain.Cash                minimal_payment_cost
+    6:  required RecurrentPaymentToolStatus status
+    7:  required base.Timestamp             created_at
+    8:  required DisposablePaymentResource  payment_resource
+    9:  optional domain.Token               rec_token
+    10: optional domain.PaymentRoute        route
 }
 
 struct RecurrentPaymentToolParams {
