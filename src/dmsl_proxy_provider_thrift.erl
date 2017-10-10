@@ -56,6 +56,9 @@
     'PaymentCallbackResult'/0,
     'PaymentCallbackProxyResult'/0
 ]).
+-export_type([
+    'PaymentNotFound'/0
+]).
 
 -type namespace() :: 'prxprv'.
 
@@ -98,7 +101,8 @@
     'PaymentCallbackResult' |
     'PaymentCallbackProxyResult'.
 
--type exception_name() :: none().
+-type exception_name() ::
+    'PaymentNotFound'.
 
 %% struct 'RecurrentPaymentTool'
 -type 'RecurrentPaymentTool'() :: #'prxprv_RecurrentPaymentTool'{}.
@@ -176,6 +180,9 @@
 %% struct 'PaymentCallbackProxyResult'
 -type 'PaymentCallbackProxyResult'() :: #'prxprv_PaymentCallbackProxyResult'{}.
 
+%% exception 'PaymentNotFound'
+-type 'PaymentNotFound'() :: #'prxprv_PaymentNotFound'{}.
+
 %%
 %% services and functions
 %%
@@ -197,7 +204,8 @@
 
 -type 'ProviderProxyHost_service_functions'() ::
     'ProcessPaymentCallback' |
-    'ProcessRecurrentTokenCallback'.
+    'ProcessRecurrentTokenCallback' |
+    'GetPayment'.
 
 -export_type(['ProviderProxyHost_service_functions'/0]).
 
@@ -447,6 +455,9 @@ struct_info('PaymentCallbackProxyResult') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
+struct_info('PaymentNotFound') ->
+    {struct, exception, []};
+
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -511,6 +522,9 @@ record_name('RecurrentTokenInfo') ->
     record_name('PaymentCallbackProxyResult') ->
     'prxprv_PaymentCallbackProxyResult';
 
+    record_name('PaymentNotFound') ->
+    'prxprv_PaymentNotFound';
+
     record_name(_) -> error(badarg).
     
     -spec functions(service_name()) -> [function_name()] | no_return().
@@ -526,7 +540,8 @@ functions('ProviderProxy') ->
 functions('ProviderProxyHost') ->
     [
         'ProcessPaymentCallback',
-        'ProcessRecurrentTokenCallback'
+        'ProcessRecurrentTokenCallback',
+        'GetPayment'
     ];
 
 functions(_) -> error(badarg).
@@ -590,6 +605,16 @@ function_info('ProviderProxyHost', 'ProcessRecurrentTokenCallback', reply_type) 
     function_info('ProviderProxyHost', 'ProcessRecurrentTokenCallback', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
+    ]};
+function_info('ProviderProxyHost', 'GetPayment', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'tag', undefined}
+]};
+function_info('ProviderProxyHost', 'GetPayment', reply_type) ->
+        {struct, struct, {dmsl_proxy_provider_thrift, 'PaymentInfo'}};
+    function_info('ProviderProxyHost', 'GetPayment', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_proxy_provider_thrift, 'PaymentNotFound'}}, 'ex1', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

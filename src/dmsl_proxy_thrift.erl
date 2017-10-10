@@ -34,7 +34,8 @@
 -export_type([
     'ProxyState'/0,
     'Callback'/0,
-    'CallbackResponse'/0
+    'CallbackResponse'/0,
+    'CallbackTag'/0
 ]).
 -export_type([
     'Intent'/0,
@@ -54,11 +55,13 @@
 -type typedef_name() ::
     'ProxyState' |
     'Callback' |
-    'CallbackResponse'.
+    'CallbackResponse' |
+    'CallbackTag'.
 
 -type 'ProxyState'() :: dmsl_base_thrift:'Opaque'().
 -type 'Callback'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackResponse'() :: dmsl_base_thrift:'Opaque'().
+-type 'CallbackTag'() :: dmsl_base_thrift:'Tag'().
 
 %%
 %% enums
@@ -145,7 +148,8 @@ typedefs() ->
     [
         'ProxyState',
         'Callback',
-        'CallbackResponse'
+        'CallbackResponse',
+        'CallbackTag'
     ].
 
 -spec enums() -> [].
@@ -185,6 +189,9 @@ typedef_info('Callback') ->
     string;
 
 typedef_info('CallbackResponse') ->
+    string;
+
+typedef_info('CallbackTag') ->
     string;
 
 typedef_info(_) -> erlang:error(badarg).

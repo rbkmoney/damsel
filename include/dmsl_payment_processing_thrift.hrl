@@ -74,7 +74,9 @@
 }).
 
 %% struct 'SessionSuspended'
--record('payproc_SessionSuspended', {}).
+-record('payproc_SessionSuspended', {
+    'tag' :: dmsl_base_thrift:'Tag'() | undefined
+}).
 
 %% struct 'SessionActivated'
 -record('payproc_SessionActivated', {}).
@@ -315,6 +317,11 @@
 %% struct 'CustomerBindingStatusChanged'
 -record('payproc_CustomerBindingStatusChanged', {
     'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
+}).
+
+%% struct 'CustomerBindingInteractionRequested'
+-record('payproc_CustomerBindingInteractionRequested', {
+    'interaction' :: dmsl_user_interaction_thrift:'UserInteraction'()
 }).
 
 %% struct 'RecurrentPaymentTool'
@@ -576,6 +583,9 @@
 %% exception 'PartyNotFound'
 -record('payproc_PartyNotFound', {}).
 
+%% exception 'PartyNotExistsYet'
+-record('payproc_PartyNotExistsYet', {}).
+
 %% exception 'ShopNotFound'
 -record('payproc_ShopNotFound', {}).
 
@@ -687,9 +697,6 @@
 
 %% exception 'PartyExists'
 -record('payproc_PartyExists', {}).
-
-%% exception 'PartyNotExistsYet'
--record('payproc_PartyNotExistsYet', {}).
 
 %% exception 'ContractNotFound'
 -record('payproc_ContractNotFound', {}).

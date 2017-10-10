@@ -126,6 +126,7 @@
     'CustomerBindingChangePayload'/0,
     'CustomerBindingStarted'/0,
     'CustomerBindingStatusChanged'/0,
+    'CustomerBindingInteractionRequested'/0,
     'RecurrentPaymentTool'/0,
     'RecurrentPaymentToolParams'/0,
     'RecurrentPaymentToolCreated'/0,
@@ -185,6 +186,7 @@
 ]).
 -export_type([
     'PartyNotFound'/0,
+    'PartyNotExistsYet'/0,
     'ShopNotFound'/0,
     'InvalidPartyStatus'/0,
     'InvalidShopStatus'/0,
@@ -215,7 +217,6 @@
     'InvalidRecurrentPaymentToolStatus'/0,
     'NoLastEvent'/0,
     'PartyExists'/0,
-    'PartyNotExistsYet'/0,
     'ContractNotFound'/0,
     'ClaimNotFound'/0,
     'InvalidClaimRevision'/0,
@@ -353,6 +354,7 @@
     'CustomerBindingChangePayload' |
     'CustomerBindingStarted' |
     'CustomerBindingStatusChanged' |
+    'CustomerBindingInteractionRequested' |
     'RecurrentPaymentTool' |
     'RecurrentPaymentToolParams' |
     'RecurrentPaymentToolCreated' |
@@ -412,6 +414,7 @@
 
 -type exception_name() ::
     'PartyNotFound' |
+    'PartyNotExistsYet' |
     'ShopNotFound' |
     'InvalidPartyStatus' |
     'InvalidShopStatus' |
@@ -442,7 +445,6 @@
     'InvalidRecurrentPaymentToolStatus' |
     'NoLastEvent' |
     'PartyExists' |
-    'PartyNotExistsYet' |
     'ContractNotFound' |
     'ClaimNotFound' |
     'InvalidClaimRevision' |
@@ -722,14 +724,18 @@
 
 %% union 'CustomerBindingChangePayload'
 -type 'CustomerBindingChangePayload'() ::
-    {'customer_binding_started', 'CustomerBindingStarted'()} |
-    {'customer_binding_status_changed', 'CustomerBindingStatusChanged'()}.
+    {'started', 'CustomerBindingStarted'()} |
+    {'status_changed', 'CustomerBindingStatusChanged'()} |
+    {'interaction_requested', 'CustomerBindingInteractionRequested'()}.
 
 %% struct 'CustomerBindingStarted'
 -type 'CustomerBindingStarted'() :: #'payproc_CustomerBindingStarted'{}.
 
 %% struct 'CustomerBindingStatusChanged'
 -type 'CustomerBindingStatusChanged'() :: #'payproc_CustomerBindingStatusChanged'{}.
+
+%% struct 'CustomerBindingInteractionRequested'
+-type 'CustomerBindingInteractionRequested'() :: #'payproc_CustomerBindingInteractionRequested'{}.
 
 %% struct 'RecurrentPaymentTool'
 -type 'RecurrentPaymentTool'() :: #'payproc_RecurrentPaymentTool'{}.
@@ -967,6 +973,9 @@
 %% exception 'PartyNotFound'
 -type 'PartyNotFound'() :: #'payproc_PartyNotFound'{}.
 
+%% exception 'PartyNotExistsYet'
+-type 'PartyNotExistsYet'() :: #'payproc_PartyNotExistsYet'{}.
+
 %% exception 'ShopNotFound'
 -type 'ShopNotFound'() :: #'payproc_ShopNotFound'{}.
 
@@ -1057,9 +1066,6 @@
 %% exception 'PartyExists'
 -type 'PartyExists'() :: #'payproc_PartyExists'{}.
 
-%% exception 'PartyNotExistsYet'
--type 'PartyNotExistsYet'() :: #'payproc_PartyNotExistsYet'{}.
-
 %% exception 'ContractNotFound'
 -type 'ContractNotFound'() :: #'payproc_ContractNotFound'{}.
 
@@ -1133,7 +1139,8 @@
     'Create' |
     'Get' |
     'Update' |
-    'Delete'.
+    'Delete' |
+    'ComputeTerms'.
 
 -export_type(['InvoiceTemplating_service_functions'/0]).
 
@@ -1334,6 +1341,7 @@ structs() ->
         'CustomerBindingChangePayload',
         'CustomerBindingStarted',
         'CustomerBindingStatusChanged',
+        'CustomerBindingInteractionRequested',
         'RecurrentPaymentTool',
         'RecurrentPaymentToolParams',
         'RecurrentPaymentToolCreated',
@@ -1595,7 +1603,9 @@ struct_info('SessionFinished') ->
 ]};
 
 struct_info('SessionSuspended') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'tag', undefined}
+]};
 
 struct_info('SessionActivated') ->
     {struct, struct, []};
@@ -1888,8 +1898,9 @@ struct_info('CustomerBindingFailed') ->
 
 struct_info('CustomerBindingChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStarted'}}, 'customer_binding_started', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStatusChanged'}}, 'customer_binding_status_changed', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStatusChanged'}}, 'status_changed', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingInteractionRequested'}}, 'interaction_requested', undefined}
 ]};
 
 struct_info('CustomerBindingStarted') ->
@@ -1900,6 +1911,11 @@ struct_info('CustomerBindingStarted') ->
 struct_info('CustomerBindingStatusChanged') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined}
+]};
+
+struct_info('CustomerBindingInteractionRequested') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
 ]};
 
 struct_info('RecurrentPaymentTool') ->
@@ -2278,6 +2294,9 @@ struct_info('ContractTermsViolated') ->
 struct_info('PartyNotFound') ->
     {struct, exception, []};
 
+struct_info('PartyNotExistsYet') ->
+    {struct, exception, []};
+
 struct_info('ShopNotFound') ->
     {struct, exception, []};
 
@@ -2388,9 +2407,6 @@ struct_info('NoLastEvent') ->
     {struct, exception, []};
 
 struct_info('PartyExists') ->
-    {struct, exception, []};
-
-struct_info('PartyNotExistsYet') ->
     {struct, exception, []};
 
 struct_info('ContractNotFound') ->
@@ -2604,6 +2620,9 @@ record_name('InternalUser') ->
     record_name('CustomerBindingStatusChanged') ->
     'payproc_CustomerBindingStatusChanged';
 
+    record_name('CustomerBindingInteractionRequested') ->
+    'payproc_CustomerBindingInteractionRequested';
+
     record_name('RecurrentPaymentTool') ->
     'payproc_RecurrentPaymentTool';
 
@@ -2736,6 +2755,9 @@ record_name('InternalUser') ->
     record_name('PartyNotFound') ->
     'payproc_PartyNotFound';
 
+    record_name('PartyNotExistsYet') ->
+    'payproc_PartyNotExistsYet';
+
     record_name('ShopNotFound') ->
     'payproc_ShopNotFound';
 
@@ -2826,9 +2848,6 @@ record_name('InternalUser') ->
     record_name('PartyExists') ->
     'payproc_PartyExists';
 
-    record_name('PartyNotExistsYet') ->
-    'payproc_PartyNotExistsYet';
-
     record_name('ContractNotFound') ->
     'payproc_ContractNotFound';
 
@@ -2886,7 +2905,8 @@ functions('InvoiceTemplating') ->
         'Create',
         'Get',
         'Update',
-        'Delete'
+        'Delete',
+        'ComputeTerms'
     ];
 
 functions('CustomerManagement') ->
@@ -3302,6 +3322,21 @@ function_info('InvoiceTemplating', 'Delete', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex5', undefined}
+    ]};
+function_info('InvoiceTemplating', 'ComputeTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'timestamp', undefined}
+]};
+function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('InvoiceTemplating', 'ComputeTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex4', undefined}
     ]};
 
 function_info('CustomerManagement', 'Create', params_type) ->
