@@ -864,8 +864,9 @@ struct CustomerBindingFailed    { 1: required domain.OperationFailure failure }
 
 // Events
 union CustomerBindingChangePayload {
-    1: CustomerBindingStarted        customer_binding_started
-    2: CustomerBindingStatusChanged  customer_binding_status_changed
+    1: CustomerBindingStarted started
+    2: CustomerBindingStatusChanged status_changed
+    3: CustomerBindingInteractionRequested interaction_requested
 }
 
 /**
@@ -880,6 +881,10 @@ struct CustomerBindingStarted {
  */
 struct CustomerBindingStatusChanged {
     1: required CustomerBindingStatus status
+}
+
+struct CustomerBindingInteractionRequested {
+    1: required user_interaction.UserInteraction interaction
 }
 
 // Exceptions
