@@ -564,7 +564,7 @@ struct ContractAdjustment {
 
 struct TermSet {
     1: optional PaymentsServiceTerms payments
-    2: optional CustomerServiceTerms customers
+    2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
 }
 
 struct TimedTermSet {
@@ -580,10 +580,6 @@ struct TermSetHierarchy {
 }
 
 struct TermSetHierarchyRef { 1: required ObjectID id }
-
-struct CustomerServiceTerms {
-    1: optional RecPaytoolsServiceTerms rec_paytools
-}
 
 struct RecPaytoolsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
@@ -928,7 +924,7 @@ struct Provider {
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
     6: optional PaymentsProvisionTerms payment_terms
-    8: optional RecPaytoolsProvisionTerms rec_paytool_terms
+    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
     7: optional ProviderAccountSet accounts = {}
 }
 
@@ -950,8 +946,10 @@ struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
 }
 
-struct RecPaytoolsProvisionTerms {
-    1: optional CashValueSelector cash_value
+struct RecurrentPaytoolsProvisionTerms {
+    1: required CashValueSelector     cash_value
+    2: required CategorySelector      categories
+    3: required PaymentMethodSelector payment_methods
 }
 
 union CashValueSelector {
