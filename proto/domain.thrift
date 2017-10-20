@@ -581,7 +581,7 @@ struct TermSetHierarchy {
 
 struct TermSetHierarchyRef { 1: required ObjectID id }
 
-struct RecPaytoolsServiceTerms {
+struct RecurrentPaytoolsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
 }
 
