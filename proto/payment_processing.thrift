@@ -920,6 +920,7 @@ service CustomerManagement {
             3: InvalidShopStatus     invalid_shop_status
             4: ShopNotFound          shop_not_found
             5: PartyNotFound         party_not_found
+            6: OperationNotPermitted operation_not_permitted
         )
 
     Customer Get (1: CustomerID id)
