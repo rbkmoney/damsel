@@ -927,7 +927,6 @@ service CustomerManagement {
         throws (
             1: InvalidUser      invalid_user
             2: CustomerNotFound not_found
-            3: OperationNotPermitted operation_not_permitted
         )
 
     void Delete (1: CustomerID id)
@@ -936,7 +935,6 @@ service CustomerManagement {
             2: CustomerNotFound      not_found
             3: InvalidPartyStatus    invalid_party_status
             4: InvalidShopStatus     invalid_shop_status
-            5: OperationNotPermitted operation_not_permitted
         )
 
     CustomerBinding StartBinding (1: CustomerID customer_id, 2: CustomerBindingParams params)
@@ -1082,14 +1080,12 @@ service RecurrentPaymentTools {
             1: InvalidUser                       invalid_user
             2: RecurrentPaymentToolNotFound      rec_payment_tool_not_found
             3: InvalidRecurrentPaymentToolStatus invalid_rec_payment_tool_status
-            4: OperationNotPermitted             operation_not_permitted
         )
 
     RecurrentPaymentTool Get (1: RecurrentPaymentToolID id)
         throws (
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
-            3: OperationNotPermitted operation_not_permitted
         )
 
     RecurrentPaymentToolEvents GetEvents (1: RecurrentPaymentToolID id, 2: EventRange range)
