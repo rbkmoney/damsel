@@ -89,6 +89,30 @@
 %% struct 'InvoicePaymentRefunded'
 -record('webhooker_InvoicePaymentRefunded', {}).
 
+%% struct 'CustomerEventFilter'
+-record('webhooker_CustomerEventFilter', {
+    'types' :: ordsets:ordset(dmsl_webhooker_thrift:'CustomerEventType'()),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined
+}).
+
+%% struct 'CustomerCreated'
+-record('webhooker_CustomerCreated', {}).
+
+%% struct 'CustomerDeleted'
+-record('webhooker_CustomerDeleted', {}).
+
+%% struct 'CustomerStatusReady'
+-record('webhooker_CustomerStatusReady', {}).
+
+%% struct 'CustomerBindingStarted'
+-record('webhooker_CustomerBindingStarted', {}).
+
+%% struct 'CustomerBindingSucceeded'
+-record('webhooker_CustomerBindingSucceeded', {}).
+
+%% struct 'CustomerBindingFailed'
+-record('webhooker_CustomerBindingFailed', {}).
+
 %% exception 'WebhookNotFound'
 -record('webhooker_WebhookNotFound', {}).
 

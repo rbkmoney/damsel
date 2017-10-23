@@ -50,7 +50,7 @@
 -record('payproc_InvoicePaymentStarted', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
     'risk_score' :: atom(),
-    'route' :: dmsl_domain_thrift:'InvoicePaymentRoute'(),
+    'route' :: dmsl_domain_thrift:'PaymentRoute'(),
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
@@ -62,24 +62,24 @@
 %% struct 'InvoicePaymentSessionChange'
 -record('payproc_InvoicePaymentSessionChange', {
     'target' :: dmsl_domain_thrift:'TargetInvoicePaymentStatus'(),
-    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentSessionChangePayload'()
+    'payload' :: dmsl_payment_processing_thrift:'SessionChangePayload'()
 }).
 
-%% struct 'InvoicePaymentSessionStarted'
--record('payproc_InvoicePaymentSessionStarted', {}).
+%% struct 'SessionStarted'
+-record('payproc_SessionStarted', {}).
 
-%% struct 'InvoicePaymentSessionFinished'
--record('payproc_InvoicePaymentSessionFinished', {
+%% struct 'SessionFinished'
+-record('payproc_SessionFinished', {
     'result' :: dmsl_payment_processing_thrift:'SessionResult'()
 }).
 
-%% struct 'InvoicePaymentSessionSuspended'
--record('payproc_InvoicePaymentSessionSuspended', {
+%% struct 'SessionSuspended'
+-record('payproc_SessionSuspended', {
     'tag' :: dmsl_base_thrift:'Tag'() | undefined
 }).
 
-%% struct 'InvoicePaymentSessionActivated'
--record('payproc_InvoicePaymentSessionActivated', {}).
+%% struct 'SessionActivated'
+-record('payproc_SessionActivated', {}).
 
 %% struct 'SessionSucceeded'
 -record('payproc_SessionSucceeded', {}).
@@ -102,18 +102,18 @@
 %% struct 'InvoiceTemplateDeleted'
 -record('payproc_InvoiceTemplateDeleted', {}).
 
-%% struct 'InvoicePaymentSessionTransactionBound'
--record('payproc_InvoicePaymentSessionTransactionBound', {
+%% struct 'SessionTransactionBound'
+-record('payproc_SessionTransactionBound', {
     'trx' :: dmsl_domain_thrift:'TransactionInfo'()
 }).
 
-%% struct 'InvoicePaymentSessionProxyStateChanged'
--record('payproc_InvoicePaymentSessionProxyStateChanged', {
+%% struct 'SessionProxyStateChanged'
+-record('payproc_SessionProxyStateChanged', {
     'proxy_state' :: dmsl_base_thrift:'Opaque'()
 }).
 
-%% struct 'InvoicePaymentSessionInteractionRequested'
--record('payproc_InvoicePaymentSessionInteractionRequested', {
+%% struct 'SessionInteractionRequested'
+-record('payproc_SessionInteractionRequested', {
     'interaction' :: dmsl_user_interaction_thrift:'UserInteraction'()
 }).
 
@@ -193,8 +193,19 @@
 
 %% struct 'InvoicePaymentParams'
 -record('payproc_InvoicePaymentParams', {
-    'payer' :: dmsl_domain_thrift:'Payer'(),
+    'payer' :: dmsl_payment_processing_thrift:'PayerParams'(),
     'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'()
+}).
+
+%% struct 'PaymentResourcePayerParams'
+-record('payproc_PaymentResourcePayerParams', {
+    'resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
+%% struct 'CustomerPayerParams'
+-record('payproc_CustomerPayerParams', {
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
 }).
 
 %% struct 'InvoicePaymentParamsFlowInstant'
@@ -227,6 +238,158 @@
 -record('payproc_InvoicePaymentAdjustmentParams', {
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
     'reason' :: binary()
+}).
+
+%% struct 'CustomerParams'
+-record('payproc_CustomerParams', {
+    'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'()
+}).
+
+%% struct 'Customer'
+-record('payproc_Customer', {
+    'id' :: dmsl_payment_processing_thrift:'CustomerID'(),
+    'owner_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'status' :: dmsl_payment_processing_thrift:'CustomerStatus'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'bindings' :: [dmsl_payment_processing_thrift:'CustomerBinding'()],
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'()
+}).
+
+%% struct 'CustomerUnready'
+-record('payproc_CustomerUnready', {}).
+
+%% struct 'CustomerReady'
+-record('payproc_CustomerReady', {}).
+
+%% struct 'CustomerCreated'
+-record('payproc_CustomerCreated', {
+    'customer' :: dmsl_payment_processing_thrift:'Customer'()
+}).
+
+%% struct 'CustomerDeleted'
+-record('payproc_CustomerDeleted', {}).
+
+%% struct 'CustomerStatusChanged'
+-record('payproc_CustomerStatusChanged', {
+    'status' :: dmsl_payment_processing_thrift:'CustomerStatus'()
+}).
+
+%% struct 'CustomerBindingChanged'
+-record('payproc_CustomerBindingChanged', {
+    'id' :: dmsl_payment_processing_thrift:'CustomerBindingID'(),
+    'payload' :: dmsl_payment_processing_thrift:'CustomerBindingChangePayload'()
+}).
+
+%% struct 'CustomerBindingParams'
+-record('payproc_CustomerBindingParams', {
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
+}).
+
+%% struct 'CustomerBinding'
+-record('payproc_CustomerBinding', {
+    'id' :: dmsl_payment_processing_thrift:'CustomerBindingID'(),
+    'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
+    'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
+}).
+
+%% struct 'CustomerBindingPending'
+-record('payproc_CustomerBindingPending', {}).
+
+%% struct 'CustomerBindingSucceeded'
+-record('payproc_CustomerBindingSucceeded', {}).
+
+%% struct 'CustomerBindingFailed'
+-record('payproc_CustomerBindingFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
+}).
+
+%% struct 'CustomerBindingStarted'
+-record('payproc_CustomerBindingStarted', {
+    'binding' :: dmsl_payment_processing_thrift:'CustomerBinding'()
+}).
+
+%% struct 'CustomerBindingStatusChanged'
+-record('payproc_CustomerBindingStatusChanged', {
+    'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
+}).
+
+%% struct 'CustomerBindingInteractionRequested'
+-record('payproc_CustomerBindingInteractionRequested', {
+    'interaction' :: dmsl_user_interaction_thrift:'UserInteraction'()
+}).
+
+%% struct 'RecurrentPaymentTool'
+-record('payproc_RecurrentPaymentTool', {
+    'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'(),
+    'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
+    'rec_token' :: dmsl_domain_thrift:'Token'() | undefined,
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
+}).
+
+%% struct 'RecurrentPaymentToolParams'
+-record('payproc_RecurrentPaymentToolParams', {
+    'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
+}).
+
+%% struct 'RecurrentPaymentToolCreated'
+-record('payproc_RecurrentPaymentToolCreated', {}).
+
+%% struct 'RecurrentPaymentToolAcquired'
+-record('payproc_RecurrentPaymentToolAcquired', {}).
+
+%% struct 'RecurrentPaymentToolAbandoned'
+-record('payproc_RecurrentPaymentToolAbandoned', {}).
+
+%% struct 'RecurrentPaymentToolFailed'
+-record('payproc_RecurrentPaymentToolFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
+}).
+
+%% struct 'RecurrentPaymentToolEvent'
+-record('payproc_RecurrentPaymentToolEvent', {
+    'id' :: dmsl_base_thrift:'EventID'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'source' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'payload' :: [dmsl_payment_processing_thrift:'RecurrentPaymentToolChange'()]
+}).
+
+%% struct 'RecurrentPaymentToolSessionChange'
+-record('payproc_RecurrentPaymentToolSessionChange', {
+    'payload' :: dmsl_payment_processing_thrift:'SessionChangePayload'()
+}).
+
+%% struct 'RecurrentPaymentToolHasCreated'
+-record('payproc_RecurrentPaymentToolHasCreated', {
+    'rec_payment_tool' :: dmsl_payment_processing_thrift:'RecurrentPaymentTool'(),
+    'risk_score' :: atom(),
+    'route' :: dmsl_domain_thrift:'PaymentRoute'()
+}).
+
+%% struct 'RecurrentPaymentToolHasAcquired'
+-record('payproc_RecurrentPaymentToolHasAcquired', {
+    'token' :: dmsl_domain_thrift:'Token'()
+}).
+
+%% struct 'RecurrentPaymentToolHasAbandoned'
+-record('payproc_RecurrentPaymentToolHasAbandoned', {}).
+
+%% struct 'RecurrentPaymentToolHasFailed'
+-record('payproc_RecurrentPaymentToolHasFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
 %% struct 'PartyParams'
@@ -501,6 +664,37 @@
 %% exception 'InvoiceTemplateRemoved'
 -record('payproc_InvoiceTemplateRemoved', {}).
 
+%% exception 'InvalidCustomerStatus'
+-record('payproc_InvalidCustomerStatus', {
+    'status' :: dmsl_payment_processing_thrift:'CustomerStatus'()
+}).
+
+%% exception 'CustomerNotFound'
+-record('payproc_CustomerNotFound', {}).
+
+%% exception 'InvalidPaymentTool'
+-record('payproc_InvalidPaymentTool', {}).
+
+%% exception 'InvalidBinding'
+-record('payproc_InvalidBinding', {}).
+
+%% exception 'BindingNotFound'
+-record('payproc_BindingNotFound', {}).
+
+%% exception 'RecurrentPaymentToolNotFound'
+-record('payproc_RecurrentPaymentToolNotFound', {}).
+
+%% exception 'InvalidPaymentMethod'
+-record('payproc_InvalidPaymentMethod', {}).
+
+%% exception 'InvalidRecurrentPaymentToolStatus'
+-record('payproc_InvalidRecurrentPaymentToolStatus', {
+    'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'()
+}).
+
+%% exception 'NoLastEvent'
+-record('payproc_NoLastEvent', {}).
+
 %% exception 'PartyExists'
 -record('payproc_PartyExists', {}).
 
@@ -536,8 +730,5 @@
 
 %% exception 'PartyMetaNamespaceNotFound'
 -record('payproc_PartyMetaNamespaceNotFound', {}).
-
-%% exception 'NoLastEvent'
--record('payproc_NoLastEvent', {}).
 
 -endif.

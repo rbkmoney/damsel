@@ -27,6 +27,7 @@ struct WebhookParams {
 union EventFilter {
     1: PartyEventFilter party
     2: InvoiceEventFilter invoice
+    3: CustomerEventFilter customer
 }
 
 struct PartyEventFilter {
@@ -100,6 +101,32 @@ struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    {}
 struct InvoicePaymentRefunded  {}
+
+struct CustomerEventFilter {
+    1: required set<CustomerEventType> types
+    2: optional domain.ShopID shop_id
+}
+
+union CustomerEventType {
+    1: CustomerCreated created
+    2: CustomerDeleted deleted
+    3: CustomerStatusReady ready
+    4: CustomerBindingEvent binding
+}
+
+struct CustomerCreated {}
+struct CustomerDeleted {}
+struct CustomerStatusReady {}
+
+union CustomerBindingEvent {
+    1: CustomerBindingStarted started
+    2: CustomerBindingSucceeded succeeded
+    3: CustomerBindingFailed failed
+}
+
+struct CustomerBindingStarted {}
+struct CustomerBindingSucceeded {}
+struct CustomerBindingFailed {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)

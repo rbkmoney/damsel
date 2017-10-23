@@ -42,6 +42,9 @@
 ]).
 -export_type([
     'StatPayment'/0,
+    'Payer'/0,
+    'PaymentResourcePayer'/0,
+    'CustomerPayer'/0,
     'InvoicePaymentFlow'/0,
     'InvoicePaymentFlowInstant'/0,
     'InvoicePaymentFlowHold'/0,
@@ -118,6 +121,9 @@
 %%
 -type struct_name() ::
     'StatPayment' |
+    'Payer' |
+    'PaymentResourcePayer' |
+    'CustomerPayer' |
     'InvoicePaymentFlow' |
     'InvoicePaymentFlowInstant' |
     'InvoicePaymentFlowHold' |
@@ -160,6 +166,17 @@
 
 %% struct 'StatPayment'
 -type 'StatPayment'() :: #'merchstat_StatPayment'{}.
+
+%% union 'Payer'
+-type 'Payer'() ::
+    {'payment_resource', 'PaymentResourcePayer'()} |
+    {'customer', 'CustomerPayer'()}.
+
+%% struct 'PaymentResourcePayer'
+-type 'PaymentResourcePayer'() :: #'merchstat_PaymentResourcePayer'{}.
+
+%% struct 'CustomerPayer'
+-type 'CustomerPayer'() :: #'merchstat_CustomerPayer'{}.
 
 %% union 'InvoicePaymentFlow'
 -type 'InvoicePaymentFlow'() ::
@@ -368,6 +385,9 @@ enums() ->
 structs() ->
     [
         'StatPayment',
+        'Payer',
+        'PaymentResourcePayer',
+        'CustomerPayer',
         'InvoicePaymentFlow',
         'InvoicePaymentFlowInstant',
         'InvoicePaymentFlowHold',
@@ -459,15 +479,31 @@ struct_info('StatPayment') ->
     {7, required, i64, 'amount', undefined},
     {8, required, i64, 'fee', undefined},
     {9, required, string, 'currency_symbolic_code', undefined},
-    {10, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {11, optional, string, 'ip_address', undefined},
-    {12, optional, string, 'fingerprint', undefined},
-    {13, optional, string, 'phone_number', undefined},
-    {14, optional, string, 'email', undefined},
-    {15, required, string, 'session_id', undefined},
-    {16, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {17, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
-    {18, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined}
+    {10, required, {struct, union, {dmsl_merch_stat_thrift, 'Payer'}}, 'payer', undefined},
+    {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
+    {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined}
+]};
+
+struct_info('Payer') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined}
+]};
+
+struct_info('PaymentResourcePayer') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {2, optional, string, 'ip_address', undefined},
+    {3, optional, string, 'fingerprint', undefined},
+    {4, optional, string, 'phone_number', undefined},
+    {5, optional, string, 'email', undefined},
+    {6, required, string, 'session_id', undefined}
+]};
+
+struct_info('CustomerPayer') ->
+    {struct, struct, [
+    {1, required, string, 'customer_id', undefined}
 ]};
 
 struct_info('InvoicePaymentFlow') ->
@@ -688,7 +724,13 @@ struct_info(_) -> erlang:error(badarg).
 record_name('StatPayment') ->
     'merchstat_StatPayment';
 
-record_name('InvoicePaymentFlowInstant') ->
+record_name('PaymentResourcePayer') ->
+    'merchstat_PaymentResourcePayer';
+
+    record_name('CustomerPayer') ->
+    'merchstat_CustomerPayer';
+
+    record_name('InvoicePaymentFlowInstant') ->
     'merchstat_InvoicePaymentFlowInstant';
 
     record_name('InvoicePaymentFlowHold') ->

@@ -18,15 +18,25 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
+    'payer' :: dmsl_merch_stat_thrift:'Payer'(),
+    'context' :: dmsl_base_thrift:'Content'() | undefined,
+    'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
+    'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'()
+}).
+
+%% struct 'PaymentResourcePayer'
+-record('merchstat_PaymentResourcePayer', {
     'payment_tool' :: dmsl_merch_stat_thrift:'PaymentTool'(),
     'ip_address' :: dmsl_domain_thrift:'IPAddress'() | undefined,
     'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined,
     'phone_number' :: binary() | undefined,
     'email' :: binary() | undefined,
-    'session_id' :: dmsl_domain_thrift:'PaymentSessionID'(),
-    'context' :: dmsl_base_thrift:'Content'() | undefined,
-    'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
-    'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'()
+    'session_id' :: dmsl_domain_thrift:'PaymentSessionID'()
+}).
+
+%% struct 'CustomerPayer'
+-record('merchstat_CustomerPayer', {
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
 }).
 
 %% struct 'InvoicePaymentFlowInstant'

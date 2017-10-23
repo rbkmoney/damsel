@@ -36,6 +36,12 @@
     'Events'/0,
     'InvoicePaymentRefund'/0,
     'InvoicePaymentAdjustment'/0,
+    'CustomerID'/0,
+    'Metadata'/0,
+    'CustomerBindingID'/0,
+    'DisposablePaymentResource'/0,
+    'RecurrentPaymentToolID'/0,
+    'RecurrentPaymentToolEvents'/0,
     'PartyID'/0,
     'ShopID'/0,
     'ContractID'/0,
@@ -62,20 +68,20 @@
     'InvoicePaymentStarted'/0,
     'InvoicePaymentStatusChanged'/0,
     'InvoicePaymentSessionChange'/0,
-    'InvoicePaymentSessionChangePayload'/0,
-    'InvoicePaymentSessionStarted'/0,
-    'InvoicePaymentSessionFinished'/0,
-    'InvoicePaymentSessionSuspended'/0,
-    'InvoicePaymentSessionActivated'/0,
+    'SessionChangePayload'/0,
+    'SessionStarted'/0,
+    'SessionFinished'/0,
+    'SessionSuspended'/0,
+    'SessionActivated'/0,
     'SessionResult'/0,
     'SessionSucceeded'/0,
     'SessionFailed'/0,
     'InvoiceTemplateCreated'/0,
     'InvoiceTemplateUpdated'/0,
     'InvoiceTemplateDeleted'/0,
-    'InvoicePaymentSessionTransactionBound'/0,
-    'InvoicePaymentSessionProxyStateChanged'/0,
-    'InvoicePaymentSessionInteractionRequested'/0,
+    'SessionTransactionBound'/0,
+    'SessionProxyStateChanged'/0,
+    'SessionInteractionRequested'/0,
     'InvoicePaymentRefundChange'/0,
     'InvoicePaymentRefundChangePayload'/0,
     'InvoicePaymentRefundCreated'/0,
@@ -90,6 +96,9 @@
     'InvoiceTemplateCreateParams'/0,
     'InvoiceTemplateUpdateParams'/0,
     'InvoicePaymentParams'/0,
+    'PayerParams'/0,
+    'PaymentResourcePayerParams'/0,
+    'CustomerPayerParams'/0,
     'InvoicePaymentParamsFlow'/0,
     'InvoicePaymentParamsFlowInstant'/0,
     'InvoicePaymentParamsFlowHold'/0,
@@ -98,6 +107,40 @@
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
     'InvalidStatus'/0,
+    'CustomerParams'/0,
+    'Customer'/0,
+    'CustomerStatus'/0,
+    'CustomerUnready'/0,
+    'CustomerReady'/0,
+    'CustomerChange'/0,
+    'CustomerCreated'/0,
+    'CustomerDeleted'/0,
+    'CustomerStatusChanged'/0,
+    'CustomerBindingChanged'/0,
+    'CustomerBindingParams'/0,
+    'CustomerBinding'/0,
+    'CustomerBindingStatus'/0,
+    'CustomerBindingPending'/0,
+    'CustomerBindingSucceeded'/0,
+    'CustomerBindingFailed'/0,
+    'CustomerBindingChangePayload'/0,
+    'CustomerBindingStarted'/0,
+    'CustomerBindingStatusChanged'/0,
+    'CustomerBindingInteractionRequested'/0,
+    'RecurrentPaymentTool'/0,
+    'RecurrentPaymentToolParams'/0,
+    'RecurrentPaymentToolCreated'/0,
+    'RecurrentPaymentToolAcquired'/0,
+    'RecurrentPaymentToolAbandoned'/0,
+    'RecurrentPaymentToolFailed'/0,
+    'RecurrentPaymentToolStatus'/0,
+    'RecurrentPaymentToolEvent'/0,
+    'RecurrentPaymentToolSessionChange'/0,
+    'RecurrentPaymentToolChange'/0,
+    'RecurrentPaymentToolHasCreated'/0,
+    'RecurrentPaymentToolHasAcquired'/0,
+    'RecurrentPaymentToolHasAbandoned'/0,
+    'RecurrentPaymentToolHasFailed'/0,
     'PartyParams'/0,
     'PayoutToolParams'/0,
     'ShopParams'/0,
@@ -164,6 +207,15 @@
     'InvalidPaymentAdjustmentStatus'/0,
     'InvoiceTemplateNotFound'/0,
     'InvoiceTemplateRemoved'/0,
+    'InvalidCustomerStatus'/0,
+    'CustomerNotFound'/0,
+    'InvalidPaymentTool'/0,
+    'InvalidBinding'/0,
+    'BindingNotFound'/0,
+    'RecurrentPaymentToolNotFound'/0,
+    'InvalidPaymentMethod'/0,
+    'InvalidRecurrentPaymentToolStatus'/0,
+    'NoLastEvent'/0,
     'PartyExists'/0,
     'ContractNotFound'/0,
     'ClaimNotFound'/0,
@@ -173,8 +225,7 @@
     'InvalidChangeset'/0,
     'AccountNotFound'/0,
     'ShopAccountNotFound'/0,
-    'PartyMetaNamespaceNotFound'/0,
-    'NoLastEvent'/0
+    'PartyMetaNamespaceNotFound'/0
 ]).
 
 -type namespace() :: 'payproc'.
@@ -187,6 +238,12 @@
     'Events' |
     'InvoicePaymentRefund' |
     'InvoicePaymentAdjustment' |
+    'CustomerID' |
+    'Metadata' |
+    'CustomerBindingID' |
+    'DisposablePaymentResource' |
+    'RecurrentPaymentToolID' |
+    'RecurrentPaymentToolEvents' |
     'PartyID' |
     'ShopID' |
     'ContractID' |
@@ -199,6 +256,12 @@
 -type 'Events'() :: ['Event'()].
 -type 'InvoicePaymentRefund'() :: dmsl_domain_thrift:'InvoicePaymentRefund'().
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
+-type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
+-type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
+-type 'CustomerBindingID'() :: dmsl_domain_thrift:'CustomerBindingID'().
+-type 'DisposablePaymentResource'() :: dmsl_domain_thrift:'DisposablePaymentResource'().
+-type 'RecurrentPaymentToolID'() :: dmsl_domain_thrift:'RecurrentPaymentToolID'().
+-type 'RecurrentPaymentToolEvents'() :: ['RecurrentPaymentToolEvent'()].
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
 -type 'ContractID'() :: dmsl_domain_thrift:'ContractID'().
@@ -233,20 +296,20 @@
     'InvoicePaymentStarted' |
     'InvoicePaymentStatusChanged' |
     'InvoicePaymentSessionChange' |
-    'InvoicePaymentSessionChangePayload' |
-    'InvoicePaymentSessionStarted' |
-    'InvoicePaymentSessionFinished' |
-    'InvoicePaymentSessionSuspended' |
-    'InvoicePaymentSessionActivated' |
+    'SessionChangePayload' |
+    'SessionStarted' |
+    'SessionFinished' |
+    'SessionSuspended' |
+    'SessionActivated' |
     'SessionResult' |
     'SessionSucceeded' |
     'SessionFailed' |
     'InvoiceTemplateCreated' |
     'InvoiceTemplateUpdated' |
     'InvoiceTemplateDeleted' |
-    'InvoicePaymentSessionTransactionBound' |
-    'InvoicePaymentSessionProxyStateChanged' |
-    'InvoicePaymentSessionInteractionRequested' |
+    'SessionTransactionBound' |
+    'SessionProxyStateChanged' |
+    'SessionInteractionRequested' |
     'InvoicePaymentRefundChange' |
     'InvoicePaymentRefundChangePayload' |
     'InvoicePaymentRefundCreated' |
@@ -261,6 +324,9 @@
     'InvoiceTemplateCreateParams' |
     'InvoiceTemplateUpdateParams' |
     'InvoicePaymentParams' |
+    'PayerParams' |
+    'PaymentResourcePayerParams' |
+    'CustomerPayerParams' |
     'InvoicePaymentParamsFlow' |
     'InvoicePaymentParamsFlowInstant' |
     'InvoicePaymentParamsFlowHold' |
@@ -269,6 +335,40 @@
     'InvoicePaymentRefundParams' |
     'InvoicePaymentAdjustmentParams' |
     'InvalidStatus' |
+    'CustomerParams' |
+    'Customer' |
+    'CustomerStatus' |
+    'CustomerUnready' |
+    'CustomerReady' |
+    'CustomerChange' |
+    'CustomerCreated' |
+    'CustomerDeleted' |
+    'CustomerStatusChanged' |
+    'CustomerBindingChanged' |
+    'CustomerBindingParams' |
+    'CustomerBinding' |
+    'CustomerBindingStatus' |
+    'CustomerBindingPending' |
+    'CustomerBindingSucceeded' |
+    'CustomerBindingFailed' |
+    'CustomerBindingChangePayload' |
+    'CustomerBindingStarted' |
+    'CustomerBindingStatusChanged' |
+    'CustomerBindingInteractionRequested' |
+    'RecurrentPaymentTool' |
+    'RecurrentPaymentToolParams' |
+    'RecurrentPaymentToolCreated' |
+    'RecurrentPaymentToolAcquired' |
+    'RecurrentPaymentToolAbandoned' |
+    'RecurrentPaymentToolFailed' |
+    'RecurrentPaymentToolStatus' |
+    'RecurrentPaymentToolEvent' |
+    'RecurrentPaymentToolSessionChange' |
+    'RecurrentPaymentToolChange' |
+    'RecurrentPaymentToolHasCreated' |
+    'RecurrentPaymentToolHasAcquired' |
+    'RecurrentPaymentToolHasAbandoned' |
+    'RecurrentPaymentToolHasFailed' |
     'PartyParams' |
     'PayoutToolParams' |
     'ShopParams' |
@@ -335,6 +435,15 @@
     'InvalidPaymentAdjustmentStatus' |
     'InvoiceTemplateNotFound' |
     'InvoiceTemplateRemoved' |
+    'InvalidCustomerStatus' |
+    'CustomerNotFound' |
+    'InvalidPaymentTool' |
+    'InvalidBinding' |
+    'BindingNotFound' |
+    'RecurrentPaymentToolNotFound' |
+    'InvalidPaymentMethod' |
+    'InvalidRecurrentPaymentToolStatus' |
+    'NoLastEvent' |
     'PartyExists' |
     'ContractNotFound' |
     'ClaimNotFound' |
@@ -344,8 +453,7 @@
     'InvalidChangeset' |
     'AccountNotFound' |
     'ShopAccountNotFound' |
-    'PartyMetaNamespaceNotFound' |
-    'NoLastEvent'.
+    'PartyMetaNamespaceNotFound'.
 
 %% struct 'UserInfo'
 -type 'UserInfo'() :: #'payproc_UserInfo'{}.
@@ -372,13 +480,15 @@
 -type 'EventSource'() ::
     {'invoice_id', dmsl_domain_thrift:'InvoiceID'()} |
     {'party_id', dmsl_domain_thrift:'PartyID'()} |
-    {'invoice_template_id', dmsl_domain_thrift:'InvoiceTemplateID'()}.
+    {'invoice_template_id', dmsl_domain_thrift:'InvoiceTemplateID'()} |
+    {'customer_id', dmsl_domain_thrift:'CustomerID'()}.
 
 %% union 'EventPayload'
 -type 'EventPayload'() ::
     {'invoice_changes', ['InvoiceChange'()]} |
     {'party_changes', ['PartyChange'()]} |
-    {'invoice_template_changes', ['InvoiceTemplateChange'()]}.
+    {'invoice_template_changes', ['InvoiceTemplateChange'()]} |
+    {'customer_changes', ['CustomerChange'()]}.
 
 %% union 'InvoiceChange'
 -type 'InvoiceChange'() ::
@@ -418,27 +528,27 @@
 %% struct 'InvoicePaymentSessionChange'
 -type 'InvoicePaymentSessionChange'() :: #'payproc_InvoicePaymentSessionChange'{}.
 
-%% union 'InvoicePaymentSessionChangePayload'
--type 'InvoicePaymentSessionChangePayload'() ::
-    {'invoice_payment_session_started', 'InvoicePaymentSessionStarted'()} |
-    {'invoice_payment_session_finished', 'InvoicePaymentSessionFinished'()} |
-    {'invoice_payment_session_suspended', 'InvoicePaymentSessionSuspended'()} |
-    {'invoice_payment_session_activated', 'InvoicePaymentSessionActivated'()} |
-    {'invoice_payment_session_transaction_bound', 'InvoicePaymentSessionTransactionBound'()} |
-    {'invoice_payment_session_proxy_state_changed', 'InvoicePaymentSessionProxyStateChanged'()} |
-    {'invoice_payment_session_interaction_requested', 'InvoicePaymentSessionInteractionRequested'()}.
+%% union 'SessionChangePayload'
+-type 'SessionChangePayload'() ::
+    {'session_started', 'SessionStarted'()} |
+    {'session_finished', 'SessionFinished'()} |
+    {'session_suspended', 'SessionSuspended'()} |
+    {'session_activated', 'SessionActivated'()} |
+    {'session_transaction_bound', 'SessionTransactionBound'()} |
+    {'session_proxy_state_changed', 'SessionProxyStateChanged'()} |
+    {'session_interaction_requested', 'SessionInteractionRequested'()}.
 
-%% struct 'InvoicePaymentSessionStarted'
--type 'InvoicePaymentSessionStarted'() :: #'payproc_InvoicePaymentSessionStarted'{}.
+%% struct 'SessionStarted'
+-type 'SessionStarted'() :: #'payproc_SessionStarted'{}.
 
-%% struct 'InvoicePaymentSessionFinished'
--type 'InvoicePaymentSessionFinished'() :: #'payproc_InvoicePaymentSessionFinished'{}.
+%% struct 'SessionFinished'
+-type 'SessionFinished'() :: #'payproc_SessionFinished'{}.
 
-%% struct 'InvoicePaymentSessionSuspended'
--type 'InvoicePaymentSessionSuspended'() :: #'payproc_InvoicePaymentSessionSuspended'{}.
+%% struct 'SessionSuspended'
+-type 'SessionSuspended'() :: #'payproc_SessionSuspended'{}.
 
-%% struct 'InvoicePaymentSessionActivated'
--type 'InvoicePaymentSessionActivated'() :: #'payproc_InvoicePaymentSessionActivated'{}.
+%% struct 'SessionActivated'
+-type 'SessionActivated'() :: #'payproc_SessionActivated'{}.
 
 %% union 'SessionResult'
 -type 'SessionResult'() ::
@@ -460,14 +570,14 @@
 %% struct 'InvoiceTemplateDeleted'
 -type 'InvoiceTemplateDeleted'() :: #'payproc_InvoiceTemplateDeleted'{}.
 
-%% struct 'InvoicePaymentSessionTransactionBound'
--type 'InvoicePaymentSessionTransactionBound'() :: #'payproc_InvoicePaymentSessionTransactionBound'{}.
+%% struct 'SessionTransactionBound'
+-type 'SessionTransactionBound'() :: #'payproc_SessionTransactionBound'{}.
 
-%% struct 'InvoicePaymentSessionProxyStateChanged'
--type 'InvoicePaymentSessionProxyStateChanged'() :: #'payproc_InvoicePaymentSessionProxyStateChanged'{}.
+%% struct 'SessionProxyStateChanged'
+-type 'SessionProxyStateChanged'() :: #'payproc_SessionProxyStateChanged'{}.
 
-%% struct 'InvoicePaymentSessionInteractionRequested'
--type 'InvoicePaymentSessionInteractionRequested'() :: #'payproc_InvoicePaymentSessionInteractionRequested'{}.
+%% struct 'SessionInteractionRequested'
+-type 'SessionInteractionRequested'() :: #'payproc_SessionInteractionRequested'{}.
 
 %% struct 'InvoicePaymentRefundChange'
 -type 'InvoicePaymentRefundChange'() :: #'payproc_InvoicePaymentRefundChange'{}.
@@ -516,6 +626,17 @@
 %% struct 'InvoicePaymentParams'
 -type 'InvoicePaymentParams'() :: #'payproc_InvoicePaymentParams'{}.
 
+%% union 'PayerParams'
+-type 'PayerParams'() ::
+    {'payment_resource', 'PaymentResourcePayerParams'()} |
+    {'customer', 'CustomerPayerParams'()}.
+
+%% struct 'PaymentResourcePayerParams'
+-type 'PaymentResourcePayerParams'() :: #'payproc_PaymentResourcePayerParams'{}.
+
+%% struct 'CustomerPayerParams'
+-type 'CustomerPayerParams'() :: #'payproc_CustomerPayerParams'{}.
+
 %% union 'InvoicePaymentParamsFlow'
 -type 'InvoicePaymentParamsFlow'() ::
     {'instant', 'InvoicePaymentParamsFlowInstant'()} |
@@ -543,6 +664,129 @@
 -type 'InvalidStatus'() ::
     {'blocking', dmsl_domain_thrift:'Blocking'()} |
     {'suspension', dmsl_domain_thrift:'Suspension'()}.
+
+%% struct 'CustomerParams'
+-type 'CustomerParams'() :: #'payproc_CustomerParams'{}.
+
+%% struct 'Customer'
+-type 'Customer'() :: #'payproc_Customer'{}.
+
+%% union 'CustomerStatus'
+-type 'CustomerStatus'() ::
+    {'unready', 'CustomerUnready'()} |
+    {'ready', 'CustomerReady'()}.
+
+%% struct 'CustomerUnready'
+-type 'CustomerUnready'() :: #'payproc_CustomerUnready'{}.
+
+%% struct 'CustomerReady'
+-type 'CustomerReady'() :: #'payproc_CustomerReady'{}.
+
+%% union 'CustomerChange'
+-type 'CustomerChange'() ::
+    {'customer_created', 'CustomerCreated'()} |
+    {'customer_deleted', 'CustomerDeleted'()} |
+    {'customer_status_changed', 'CustomerStatusChanged'()} |
+    {'customer_binding_changed', 'CustomerBindingChanged'()}.
+
+%% struct 'CustomerCreated'
+-type 'CustomerCreated'() :: #'payproc_CustomerCreated'{}.
+
+%% struct 'CustomerDeleted'
+-type 'CustomerDeleted'() :: #'payproc_CustomerDeleted'{}.
+
+%% struct 'CustomerStatusChanged'
+-type 'CustomerStatusChanged'() :: #'payproc_CustomerStatusChanged'{}.
+
+%% struct 'CustomerBindingChanged'
+-type 'CustomerBindingChanged'() :: #'payproc_CustomerBindingChanged'{}.
+
+%% struct 'CustomerBindingParams'
+-type 'CustomerBindingParams'() :: #'payproc_CustomerBindingParams'{}.
+
+%% struct 'CustomerBinding'
+-type 'CustomerBinding'() :: #'payproc_CustomerBinding'{}.
+
+%% union 'CustomerBindingStatus'
+-type 'CustomerBindingStatus'() ::
+    {'pending', 'CustomerBindingPending'()} |
+    {'succeeded', 'CustomerBindingSucceeded'()} |
+    {'failed', 'CustomerBindingFailed'()}.
+
+%% struct 'CustomerBindingPending'
+-type 'CustomerBindingPending'() :: #'payproc_CustomerBindingPending'{}.
+
+%% struct 'CustomerBindingSucceeded'
+-type 'CustomerBindingSucceeded'() :: #'payproc_CustomerBindingSucceeded'{}.
+
+%% struct 'CustomerBindingFailed'
+-type 'CustomerBindingFailed'() :: #'payproc_CustomerBindingFailed'{}.
+
+%% union 'CustomerBindingChangePayload'
+-type 'CustomerBindingChangePayload'() ::
+    {'started', 'CustomerBindingStarted'()} |
+    {'status_changed', 'CustomerBindingStatusChanged'()} |
+    {'interaction_requested', 'CustomerBindingInteractionRequested'()}.
+
+%% struct 'CustomerBindingStarted'
+-type 'CustomerBindingStarted'() :: #'payproc_CustomerBindingStarted'{}.
+
+%% struct 'CustomerBindingStatusChanged'
+-type 'CustomerBindingStatusChanged'() :: #'payproc_CustomerBindingStatusChanged'{}.
+
+%% struct 'CustomerBindingInteractionRequested'
+-type 'CustomerBindingInteractionRequested'() :: #'payproc_CustomerBindingInteractionRequested'{}.
+
+%% struct 'RecurrentPaymentTool'
+-type 'RecurrentPaymentTool'() :: #'payproc_RecurrentPaymentTool'{}.
+
+%% struct 'RecurrentPaymentToolParams'
+-type 'RecurrentPaymentToolParams'() :: #'payproc_RecurrentPaymentToolParams'{}.
+
+%% struct 'RecurrentPaymentToolCreated'
+-type 'RecurrentPaymentToolCreated'() :: #'payproc_RecurrentPaymentToolCreated'{}.
+
+%% struct 'RecurrentPaymentToolAcquired'
+-type 'RecurrentPaymentToolAcquired'() :: #'payproc_RecurrentPaymentToolAcquired'{}.
+
+%% struct 'RecurrentPaymentToolAbandoned'
+-type 'RecurrentPaymentToolAbandoned'() :: #'payproc_RecurrentPaymentToolAbandoned'{}.
+
+%% struct 'RecurrentPaymentToolFailed'
+-type 'RecurrentPaymentToolFailed'() :: #'payproc_RecurrentPaymentToolFailed'{}.
+
+%% union 'RecurrentPaymentToolStatus'
+-type 'RecurrentPaymentToolStatus'() ::
+    {'created', 'RecurrentPaymentToolCreated'()} |
+    {'acquired', 'RecurrentPaymentToolAcquired'()} |
+    {'abandoned', 'RecurrentPaymentToolAbandoned'()} |
+    {'failed', 'RecurrentPaymentToolFailed'()}.
+
+%% struct 'RecurrentPaymentToolEvent'
+-type 'RecurrentPaymentToolEvent'() :: #'payproc_RecurrentPaymentToolEvent'{}.
+
+%% struct 'RecurrentPaymentToolSessionChange'
+-type 'RecurrentPaymentToolSessionChange'() :: #'payproc_RecurrentPaymentToolSessionChange'{}.
+
+%% union 'RecurrentPaymentToolChange'
+-type 'RecurrentPaymentToolChange'() ::
+    {'rec_payment_tool_created', 'RecurrentPaymentToolHasCreated'()} |
+    {'rec_payment_tool_acquired', 'RecurrentPaymentToolHasAcquired'()} |
+    {'rec_payment_tool_abandoned', 'RecurrentPaymentToolHasAbandoned'()} |
+    {'rec_payment_tool_failed', 'RecurrentPaymentToolHasFailed'()} |
+    {'rec_payment_tool_session_changed', 'RecurrentPaymentToolSessionChange'()}.
+
+%% struct 'RecurrentPaymentToolHasCreated'
+-type 'RecurrentPaymentToolHasCreated'() :: #'payproc_RecurrentPaymentToolHasCreated'{}.
+
+%% struct 'RecurrentPaymentToolHasAcquired'
+-type 'RecurrentPaymentToolHasAcquired'() :: #'payproc_RecurrentPaymentToolHasAcquired'{}.
+
+%% struct 'RecurrentPaymentToolHasAbandoned'
+-type 'RecurrentPaymentToolHasAbandoned'() :: #'payproc_RecurrentPaymentToolHasAbandoned'{}.
+
+%% struct 'RecurrentPaymentToolHasFailed'
+-type 'RecurrentPaymentToolHasFailed'() :: #'payproc_RecurrentPaymentToolHasFailed'{}.
 
 %% struct 'PartyParams'
 -type 'PartyParams'() :: #'payproc_PartyParams'{}.
@@ -792,6 +1036,33 @@
 %% exception 'InvoiceTemplateRemoved'
 -type 'InvoiceTemplateRemoved'() :: #'payproc_InvoiceTemplateRemoved'{}.
 
+%% exception 'InvalidCustomerStatus'
+-type 'InvalidCustomerStatus'() :: #'payproc_InvalidCustomerStatus'{}.
+
+%% exception 'CustomerNotFound'
+-type 'CustomerNotFound'() :: #'payproc_CustomerNotFound'{}.
+
+%% exception 'InvalidPaymentTool'
+-type 'InvalidPaymentTool'() :: #'payproc_InvalidPaymentTool'{}.
+
+%% exception 'InvalidBinding'
+-type 'InvalidBinding'() :: #'payproc_InvalidBinding'{}.
+
+%% exception 'BindingNotFound'
+-type 'BindingNotFound'() :: #'payproc_BindingNotFound'{}.
+
+%% exception 'RecurrentPaymentToolNotFound'
+-type 'RecurrentPaymentToolNotFound'() :: #'payproc_RecurrentPaymentToolNotFound'{}.
+
+%% exception 'InvalidPaymentMethod'
+-type 'InvalidPaymentMethod'() :: #'payproc_InvalidPaymentMethod'{}.
+
+%% exception 'InvalidRecurrentPaymentToolStatus'
+-type 'InvalidRecurrentPaymentToolStatus'() :: #'payproc_InvalidRecurrentPaymentToolStatus'{}.
+
+%% exception 'NoLastEvent'
+-type 'NoLastEvent'() :: #'payproc_NoLastEvent'{}.
+
 %% exception 'PartyExists'
 -type 'PartyExists'() :: #'payproc_PartyExists'{}.
 
@@ -822,21 +1093,24 @@
 %% exception 'PartyMetaNamespaceNotFound'
 -type 'PartyMetaNamespaceNotFound'() :: #'payproc_PartyMetaNamespaceNotFound'{}.
 
-%% exception 'NoLastEvent'
--type 'NoLastEvent'() :: #'payproc_NoLastEvent'{}.
-
 %%
 %% services and functions
 %%
 -type service_name() ::
     'Invoicing' |
     'InvoiceTemplating' |
+    'CustomerManagement' |
+    'RecurrentPaymentTools' |
+    'RecurrentPaymentToolEventSink' |
     'PartyManagement' |
     'EventSink'.
 
 -type function_name() ::
     'Invoicing_service_functions'() |
     'InvoiceTemplating_service_functions'() |
+    'CustomerManagement_service_functions'() |
+    'RecurrentPaymentTools_service_functions'() |
+    'RecurrentPaymentToolEventSink_service_functions'() |
     'PartyManagement_service_functions'() |
     'EventSink_service_functions'().
 
@@ -869,6 +1143,30 @@
     'ComputeTerms'.
 
 -export_type(['InvoiceTemplating_service_functions'/0]).
+
+-type 'CustomerManagement_service_functions'() ::
+    'Create' |
+    'Get' |
+    'Delete' |
+    'StartBinding' |
+    'GetActiveBinding' |
+    'GetEvents'.
+
+-export_type(['CustomerManagement_service_functions'/0]).
+
+-type 'RecurrentPaymentTools_service_functions'() ::
+    'Create' |
+    'Abandon' |
+    'Get' |
+    'GetEvents'.
+
+-export_type(['RecurrentPaymentTools_service_functions'/0]).
+
+-type 'RecurrentPaymentToolEventSink_service_functions'() ::
+    'GetEvents' |
+    'GetLastEventID'.
+
+-export_type(['RecurrentPaymentToolEventSink_service_functions'/0]).
 
 -type 'PartyManagement_service_functions'() ::
     'Create' |
@@ -944,6 +1242,12 @@ typedefs() ->
         'Events',
         'InvoicePaymentRefund',
         'InvoicePaymentAdjustment',
+        'CustomerID',
+        'Metadata',
+        'CustomerBindingID',
+        'DisposablePaymentResource',
+        'RecurrentPaymentToolID',
+        'RecurrentPaymentToolEvents',
         'PartyID',
         'ShopID',
         'ContractID',
@@ -979,20 +1283,20 @@ structs() ->
         'InvoicePaymentStarted',
         'InvoicePaymentStatusChanged',
         'InvoicePaymentSessionChange',
-        'InvoicePaymentSessionChangePayload',
-        'InvoicePaymentSessionStarted',
-        'InvoicePaymentSessionFinished',
-        'InvoicePaymentSessionSuspended',
-        'InvoicePaymentSessionActivated',
+        'SessionChangePayload',
+        'SessionStarted',
+        'SessionFinished',
+        'SessionSuspended',
+        'SessionActivated',
         'SessionResult',
         'SessionSucceeded',
         'SessionFailed',
         'InvoiceTemplateCreated',
         'InvoiceTemplateUpdated',
         'InvoiceTemplateDeleted',
-        'InvoicePaymentSessionTransactionBound',
-        'InvoicePaymentSessionProxyStateChanged',
-        'InvoicePaymentSessionInteractionRequested',
+        'SessionTransactionBound',
+        'SessionProxyStateChanged',
+        'SessionInteractionRequested',
         'InvoicePaymentRefundChange',
         'InvoicePaymentRefundChangePayload',
         'InvoicePaymentRefundCreated',
@@ -1007,6 +1311,9 @@ structs() ->
         'InvoiceTemplateCreateParams',
         'InvoiceTemplateUpdateParams',
         'InvoicePaymentParams',
+        'PayerParams',
+        'PaymentResourcePayerParams',
+        'CustomerPayerParams',
         'InvoicePaymentParamsFlow',
         'InvoicePaymentParamsFlowInstant',
         'InvoicePaymentParamsFlowHold',
@@ -1015,6 +1322,40 @@ structs() ->
         'InvoicePaymentRefundParams',
         'InvoicePaymentAdjustmentParams',
         'InvalidStatus',
+        'CustomerParams',
+        'Customer',
+        'CustomerStatus',
+        'CustomerUnready',
+        'CustomerReady',
+        'CustomerChange',
+        'CustomerCreated',
+        'CustomerDeleted',
+        'CustomerStatusChanged',
+        'CustomerBindingChanged',
+        'CustomerBindingParams',
+        'CustomerBinding',
+        'CustomerBindingStatus',
+        'CustomerBindingPending',
+        'CustomerBindingSucceeded',
+        'CustomerBindingFailed',
+        'CustomerBindingChangePayload',
+        'CustomerBindingStarted',
+        'CustomerBindingStatusChanged',
+        'CustomerBindingInteractionRequested',
+        'RecurrentPaymentTool',
+        'RecurrentPaymentToolParams',
+        'RecurrentPaymentToolCreated',
+        'RecurrentPaymentToolAcquired',
+        'RecurrentPaymentToolAbandoned',
+        'RecurrentPaymentToolFailed',
+        'RecurrentPaymentToolStatus',
+        'RecurrentPaymentToolEvent',
+        'RecurrentPaymentToolSessionChange',
+        'RecurrentPaymentToolChange',
+        'RecurrentPaymentToolHasCreated',
+        'RecurrentPaymentToolHasAcquired',
+        'RecurrentPaymentToolHasAbandoned',
+        'RecurrentPaymentToolHasFailed',
         'PartyParams',
         'PayoutToolParams',
         'ShopParams',
@@ -1065,6 +1406,9 @@ services() ->
     [
         'Invoicing',
         'InvoiceTemplating',
+        'CustomerManagement',
+        'RecurrentPaymentTools',
+        'RecurrentPaymentToolEventSink',
         'PartyManagement',
         'EventSink'
     ].
@@ -1087,6 +1431,24 @@ typedef_info('InvoicePaymentRefund') ->
 
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
+
+typedef_info('CustomerID') ->
+    string;
+
+typedef_info('Metadata') ->
+    {struct, union, {dmsl_json_thrift, 'Value'}};
+
+typedef_info('CustomerBindingID') ->
+    string;
+
+typedef_info('DisposablePaymentResource') ->
+    {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}};
+
+typedef_info('RecurrentPaymentToolID') ->
+    string;
+
+typedef_info('RecurrentPaymentToolEvents') ->
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
 
 typedef_info('PartyID') ->
     string;
@@ -1151,14 +1513,16 @@ struct_info('EventSource') ->
     {struct, union, [
     {1, optional, string, 'invoice_id', undefined},
     {2, optional, string, 'party_id', undefined},
-    {3, optional, string, 'invoice_template_id', undefined}
+    {3, optional, string, 'invoice_template_id', undefined},
+    {4, optional, string, 'customer_id', undefined}
 ]};
 
 struct_info('EventPayload') ->
     {struct, union, [
     {1, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'invoice_changes', undefined},
     {2, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyChange'}}}, 'party_changes', undefined},
-    {3, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceTemplateChange'}}}, 'invoice_template_changes', undefined}
+    {3, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceTemplateChange'}}}, 'invoice_template_changes', undefined},
+    {4, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'CustomerChange'}}}, 'customer_changes', undefined}
 ]};
 
 struct_info('InvoiceChange') ->
@@ -1204,7 +1568,7 @@ struct_info('InvoicePaymentStarted') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
     {4, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRoute'}}, 'route', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
     {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
 ]};
 
@@ -1216,34 +1580,34 @@ struct_info('InvoicePaymentStatusChanged') ->
 struct_info('InvoicePaymentSessionChange') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChangePayload'}}, 'payload', undefined}
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
 ]};
 
-struct_info('InvoicePaymentSessionChangePayload') ->
+struct_info('SessionChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionStarted'}}, 'invoice_payment_session_started', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionFinished'}}, 'invoice_payment_session_finished', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionSuspended'}}, 'invoice_payment_session_suspended', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionActivated'}}, 'invoice_payment_session_activated', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionTransactionBound'}}, 'invoice_payment_session_transaction_bound', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionProxyStateChanged'}}, 'invoice_payment_session_proxy_state_changed', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionInteractionRequested'}}, 'invoice_payment_session_interaction_requested', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionStarted'}}, 'session_started', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionFinished'}}, 'session_finished', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionSuspended'}}, 'session_suspended', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionActivated'}}, 'session_activated', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionTransactionBound'}}, 'session_transaction_bound', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionProxyStateChanged'}}, 'session_proxy_state_changed', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionInteractionRequested'}}, 'session_interaction_requested', undefined}
 ]};
 
-struct_info('InvoicePaymentSessionStarted') ->
+struct_info('SessionStarted') ->
     {struct, struct, []};
 
-struct_info('InvoicePaymentSessionFinished') ->
+struct_info('SessionFinished') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionResult'}}, 'result', undefined}
 ]};
 
-struct_info('InvoicePaymentSessionSuspended') ->
+struct_info('SessionSuspended') ->
     {struct, struct, [
     {1, optional, string, 'tag', undefined}
 ]};
 
-struct_info('InvoicePaymentSessionActivated') ->
+struct_info('SessionActivated') ->
     {struct, struct, []};
 
 struct_info('SessionResult') ->
@@ -1273,17 +1637,17 @@ struct_info('InvoiceTemplateUpdated') ->
 struct_info('InvoiceTemplateDeleted') ->
     {struct, struct, []};
 
-struct_info('InvoicePaymentSessionTransactionBound') ->
+struct_info('SessionTransactionBound') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
-struct_info('InvoicePaymentSessionProxyStateChanged') ->
+struct_info('SessionProxyStateChanged') ->
     {struct, struct, [
     {1, required, string, 'proxy_state', undefined}
 ]};
 
-struct_info('InvoicePaymentSessionInteractionRequested') ->
+struct_info('SessionInteractionRequested') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
 ]};
@@ -1377,8 +1741,25 @@ struct_info('InvoiceTemplateUpdateParams') ->
 
 struct_info('InvoicePaymentParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined}
+]};
+
+struct_info('PayerParams') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PaymentResourcePayerParams'}}, 'payment_resource', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerPayerParams'}}, 'customer', undefined}
+]};
+
+struct_info('PaymentResourcePayerParams') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'resource', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+]};
+
+struct_info('CustomerPayerParams') ->
+    {struct, struct, [
+    {1, required, string, 'customer_id', undefined}
 ]};
 
 struct_info('InvoicePaymentParamsFlow') ->
@@ -1423,6 +1804,203 @@ struct_info('InvalidStatus') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
+]};
+
+struct_info('CustomerParams') ->
+    {struct, struct, [
+    {1, required, string, 'party_id', undefined},
+    {2, required, string, 'shop_id', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+    {4, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined}
+]};
+
+struct_info('Customer') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'owner_id', undefined},
+    {3, required, string, 'shop_id', undefined},
+    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined},
+    {5, required, string, 'created_at', undefined},
+    {6, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}}, 'bindings', undefined},
+    {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+    {8, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined}
+]};
+
+struct_info('CustomerStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerUnready'}}, 'unready', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerReady'}}, 'ready', undefined}
+]};
+
+struct_info('CustomerUnready') ->
+    {struct, struct, []};
+
+struct_info('CustomerReady') ->
+    {struct, struct, []};
+
+struct_info('CustomerChange') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerCreated'}}, 'customer_created', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerDeleted'}}, 'customer_deleted', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerStatusChanged'}}, 'customer_status_changed', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingChanged'}}, 'customer_binding_changed', undefined}
+]};
+
+struct_info('CustomerCreated') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}}, 'customer', undefined}
+]};
+
+struct_info('CustomerDeleted') ->
+    {struct, struct, []};
+
+struct_info('CustomerStatusChanged') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
+]};
+
+struct_info('CustomerBindingChanged') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingChangePayload'}}, 'payload', undefined}
+]};
+
+struct_info('CustomerBindingParams') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
+]};
+
+struct_info('CustomerBinding') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'rec_payment_tool_id', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
+    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined}
+]};
+
+struct_info('CustomerBindingStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingPending'}}, 'pending', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
+]};
+
+struct_info('CustomerBindingPending') ->
+    {struct, struct, []};
+
+struct_info('CustomerBindingSucceeded') ->
+    {struct, struct, []};
+
+struct_info('CustomerBindingFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+]};
+
+struct_info('CustomerBindingChangePayload') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStatusChanged'}}, 'status_changed', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingInteractionRequested'}}, 'interaction_requested', undefined}
+]};
+
+struct_info('CustomerBindingStarted') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}, 'binding', undefined}
+]};
+
+struct_info('CustomerBindingStatusChanged') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined}
+]};
+
+struct_info('CustomerBindingInteractionRequested') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
+]};
+
+struct_info('RecurrentPaymentTool') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'shop_id', undefined},
+    {3, required, string, 'party_id', undefined},
+    {4, required, i64, 'domain_revision', undefined},
+    {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined},
+    {6, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
+    {7, required, string, 'created_at', undefined},
+    {8, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
+    {9, optional, string, 'rec_token', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+]};
+
+struct_info('RecurrentPaymentToolParams') ->
+    {struct, struct, [
+    {1, required, string, 'party_id', undefined},
+    {2, required, string, 'shop_id', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
+]};
+
+struct_info('RecurrentPaymentToolCreated') ->
+    {struct, struct, []};
+
+struct_info('RecurrentPaymentToolAcquired') ->
+    {struct, struct, []};
+
+struct_info('RecurrentPaymentToolAbandoned') ->
+    {struct, struct, []};
+
+struct_info('RecurrentPaymentToolFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+]};
+
+struct_info('RecurrentPaymentToolStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolCreated'}}, 'created', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolAcquired'}}, 'acquired', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolAbandoned'}}, 'abandoned', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolFailed'}}, 'failed', undefined}
+]};
+
+struct_info('RecurrentPaymentToolEvent') ->
+    {struct, struct, [
+    {1, required, i64, 'id', undefined},
+    {2, required, string, 'created_at', undefined},
+    {3, required, string, 'source', undefined},
+    {4, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'payload', undefined}
+]};
+
+struct_info('RecurrentPaymentToolSessionChange') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
+]};
+
+struct_info('RecurrentPaymentToolChange') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasFailed'}}, 'rec_payment_tool_failed', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolSessionChange'}}, 'rec_payment_tool_session_changed', undefined}
+]};
+
+struct_info('RecurrentPaymentToolHasCreated') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined},
+    {2, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+]};
+
+struct_info('RecurrentPaymentToolHasAcquired') ->
+    {struct, struct, [
+    {1, required, string, 'token', undefined}
+]};
+
+struct_info('RecurrentPaymentToolHasAbandoned') ->
+    {struct, struct, []};
+
+struct_info('RecurrentPaymentToolHasFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
 ]};
 
 struct_info('PartyParams') ->
@@ -1797,6 +2375,37 @@ struct_info('InvoiceTemplateNotFound') ->
 struct_info('InvoiceTemplateRemoved') ->
     {struct, exception, []};
 
+struct_info('InvalidCustomerStatus') ->
+    {struct, exception, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
+]};
+
+struct_info('CustomerNotFound') ->
+    {struct, exception, []};
+
+struct_info('InvalidPaymentTool') ->
+    {struct, exception, []};
+
+struct_info('InvalidBinding') ->
+    {struct, exception, []};
+
+struct_info('BindingNotFound') ->
+    {struct, exception, []};
+
+struct_info('RecurrentPaymentToolNotFound') ->
+    {struct, exception, []};
+
+struct_info('InvalidPaymentMethod') ->
+    {struct, exception, []};
+
+struct_info('InvalidRecurrentPaymentToolStatus') ->
+    {struct, exception, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined}
+]};
+
+struct_info('NoLastEvent') ->
+    {struct, exception, []};
+
 struct_info('PartyExists') ->
     {struct, exception, []};
 
@@ -1831,9 +2440,6 @@ struct_info('ShopAccountNotFound') ->
     {struct, exception, []};
 
 struct_info('PartyMetaNamespaceNotFound') ->
-    {struct, exception, []};
-
-struct_info('NoLastEvent') ->
     {struct, exception, []};
 
 struct_info(_) -> erlang:error(badarg).
@@ -1873,17 +2479,17 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentSessionChange') ->
     'payproc_InvoicePaymentSessionChange';
 
-    record_name('InvoicePaymentSessionStarted') ->
-    'payproc_InvoicePaymentSessionStarted';
+    record_name('SessionStarted') ->
+    'payproc_SessionStarted';
 
-    record_name('InvoicePaymentSessionFinished') ->
-    'payproc_InvoicePaymentSessionFinished';
+    record_name('SessionFinished') ->
+    'payproc_SessionFinished';
 
-    record_name('InvoicePaymentSessionSuspended') ->
-    'payproc_InvoicePaymentSessionSuspended';
+    record_name('SessionSuspended') ->
+    'payproc_SessionSuspended';
 
-    record_name('InvoicePaymentSessionActivated') ->
-    'payproc_InvoicePaymentSessionActivated';
+    record_name('SessionActivated') ->
+    'payproc_SessionActivated';
 
     record_name('SessionSucceeded') ->
     'payproc_SessionSucceeded';
@@ -1900,14 +2506,14 @@ record_name('InternalUser') ->
     record_name('InvoiceTemplateDeleted') ->
     'payproc_InvoiceTemplateDeleted';
 
-    record_name('InvoicePaymentSessionTransactionBound') ->
-    'payproc_InvoicePaymentSessionTransactionBound';
+    record_name('SessionTransactionBound') ->
+    'payproc_SessionTransactionBound';
 
-    record_name('InvoicePaymentSessionProxyStateChanged') ->
-    'payproc_InvoicePaymentSessionProxyStateChanged';
+    record_name('SessionProxyStateChanged') ->
+    'payproc_SessionProxyStateChanged';
 
-    record_name('InvoicePaymentSessionInteractionRequested') ->
-    'payproc_InvoicePaymentSessionInteractionRequested';
+    record_name('SessionInteractionRequested') ->
+    'payproc_SessionInteractionRequested';
 
     record_name('InvoicePaymentRefundChange') ->
     'payproc_InvoicePaymentRefundChange';
@@ -1945,6 +2551,12 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentParams') ->
     'payproc_InvoicePaymentParams';
 
+    record_name('PaymentResourcePayerParams') ->
+    'payproc_PaymentResourcePayerParams';
+
+    record_name('CustomerPayerParams') ->
+    'payproc_CustomerPayerParams';
+
     record_name('InvoicePaymentParamsFlowInstant') ->
     'payproc_InvoicePaymentParamsFlowInstant';
 
@@ -1962,6 +2574,90 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentAdjustmentParams') ->
     'payproc_InvoicePaymentAdjustmentParams';
+
+    record_name('CustomerParams') ->
+    'payproc_CustomerParams';
+
+    record_name('Customer') ->
+    'payproc_Customer';
+
+    record_name('CustomerUnready') ->
+    'payproc_CustomerUnready';
+
+    record_name('CustomerReady') ->
+    'payproc_CustomerReady';
+
+    record_name('CustomerCreated') ->
+    'payproc_CustomerCreated';
+
+    record_name('CustomerDeleted') ->
+    'payproc_CustomerDeleted';
+
+    record_name('CustomerStatusChanged') ->
+    'payproc_CustomerStatusChanged';
+
+    record_name('CustomerBindingChanged') ->
+    'payproc_CustomerBindingChanged';
+
+    record_name('CustomerBindingParams') ->
+    'payproc_CustomerBindingParams';
+
+    record_name('CustomerBinding') ->
+    'payproc_CustomerBinding';
+
+    record_name('CustomerBindingPending') ->
+    'payproc_CustomerBindingPending';
+
+    record_name('CustomerBindingSucceeded') ->
+    'payproc_CustomerBindingSucceeded';
+
+    record_name('CustomerBindingFailed') ->
+    'payproc_CustomerBindingFailed';
+
+    record_name('CustomerBindingStarted') ->
+    'payproc_CustomerBindingStarted';
+
+    record_name('CustomerBindingStatusChanged') ->
+    'payproc_CustomerBindingStatusChanged';
+
+    record_name('CustomerBindingInteractionRequested') ->
+    'payproc_CustomerBindingInteractionRequested';
+
+    record_name('RecurrentPaymentTool') ->
+    'payproc_RecurrentPaymentTool';
+
+    record_name('RecurrentPaymentToolParams') ->
+    'payproc_RecurrentPaymentToolParams';
+
+    record_name('RecurrentPaymentToolCreated') ->
+    'payproc_RecurrentPaymentToolCreated';
+
+    record_name('RecurrentPaymentToolAcquired') ->
+    'payproc_RecurrentPaymentToolAcquired';
+
+    record_name('RecurrentPaymentToolAbandoned') ->
+    'payproc_RecurrentPaymentToolAbandoned';
+
+    record_name('RecurrentPaymentToolFailed') ->
+    'payproc_RecurrentPaymentToolFailed';
+
+    record_name('RecurrentPaymentToolEvent') ->
+    'payproc_RecurrentPaymentToolEvent';
+
+    record_name('RecurrentPaymentToolSessionChange') ->
+    'payproc_RecurrentPaymentToolSessionChange';
+
+    record_name('RecurrentPaymentToolHasCreated') ->
+    'payproc_RecurrentPaymentToolHasCreated';
+
+    record_name('RecurrentPaymentToolHasAcquired') ->
+    'payproc_RecurrentPaymentToolHasAcquired';
+
+    record_name('RecurrentPaymentToolHasAbandoned') ->
+    'payproc_RecurrentPaymentToolHasAbandoned';
+
+    record_name('RecurrentPaymentToolHasFailed') ->
+    'payproc_RecurrentPaymentToolHasFailed';
 
     record_name('PartyParams') ->
     'payproc_PartyParams';
@@ -2122,6 +2818,33 @@ record_name('InternalUser') ->
     record_name('InvoiceTemplateRemoved') ->
     'payproc_InvoiceTemplateRemoved';
 
+    record_name('InvalidCustomerStatus') ->
+    'payproc_InvalidCustomerStatus';
+
+    record_name('CustomerNotFound') ->
+    'payproc_CustomerNotFound';
+
+    record_name('InvalidPaymentTool') ->
+    'payproc_InvalidPaymentTool';
+
+    record_name('InvalidBinding') ->
+    'payproc_InvalidBinding';
+
+    record_name('BindingNotFound') ->
+    'payproc_BindingNotFound';
+
+    record_name('RecurrentPaymentToolNotFound') ->
+    'payproc_RecurrentPaymentToolNotFound';
+
+    record_name('InvalidPaymentMethod') ->
+    'payproc_InvalidPaymentMethod';
+
+    record_name('InvalidRecurrentPaymentToolStatus') ->
+    'payproc_InvalidRecurrentPaymentToolStatus';
+
+    record_name('NoLastEvent') ->
+    'payproc_NoLastEvent';
+
     record_name('PartyExists') ->
     'payproc_PartyExists';
 
@@ -2151,9 +2874,6 @@ record_name('InternalUser') ->
 
     record_name('PartyMetaNamespaceNotFound') ->
     'payproc_PartyMetaNamespaceNotFound';
-
-    record_name('NoLastEvent') ->
-    'payproc_NoLastEvent';
 
     record_name(_) -> error(badarg).
     
@@ -2187,6 +2907,30 @@ functions('InvoiceTemplating') ->
         'Update',
         'Delete',
         'ComputeTerms'
+    ];
+
+functions('CustomerManagement') ->
+    [
+        'Create',
+        'Get',
+        'Delete',
+        'StartBinding',
+        'GetActiveBinding',
+        'GetEvents'
+    ];
+
+functions('RecurrentPaymentTools') ->
+    [
+        'Create',
+        'Abandon',
+        'Get',
+        'GetEvents'
+    ];
+
+functions('RecurrentPaymentToolEventSink') ->
+    [
+        'GetEvents',
+        'GetLastEventID'
     ];
 
 functions('PartyManagement') ->
@@ -2593,6 +3337,159 @@ function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex4', undefined}
+    ]};
+
+function_info('CustomerManagement', 'Create', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerParams'}}, 'params', undefined}
+]};
+function_info('CustomerManagement', 'Create', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
+    function_info('CustomerManagement', 'Create', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined}
+    ]};
+function_info('CustomerManagement', 'Get', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'id', undefined}
+]};
+function_info('CustomerManagement', 'Get', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
+    function_info('CustomerManagement', 'Get', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'not_found', undefined}
+    ]};
+function_info('CustomerManagement', 'Delete', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'id', undefined}
+]};
+function_info('CustomerManagement', 'Delete', reply_type) ->
+        {struct, struct, []};
+    function_info('CustomerManagement', 'Delete', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined}
+    ]};
+function_info('CustomerManagement', 'StartBinding', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'customer_id', undefined},
+    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingParams'}}, 'params', undefined}
+]};
+function_info('CustomerManagement', 'StartBinding', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}};
+    function_info('CustomerManagement', 'StartBinding', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'invalid_contract_status', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'operation_not_permitted', undefined}
+    ]};
+function_info('CustomerManagement', 'GetActiveBinding', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'customer_id', undefined}
+]};
+function_info('CustomerManagement', 'GetActiveBinding', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}};
+    function_info('CustomerManagement', 'GetActiveBinding', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidCustomerStatus'}}, 'invalid_customer_status', undefined}
+    ]};
+function_info('CustomerManagement', 'GetEvents', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'customer_id', undefined},
+    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+]};
+function_info('CustomerManagement', 'GetEvents', reply_type) ->
+        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
+    function_info('CustomerManagement', 'GetEvents', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
+    ]};
+
+function_info('RecurrentPaymentTools', 'Create', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolParams'}}, 'params', undefined}
+]};
+function_info('RecurrentPaymentTools', 'Create', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
+    function_info('RecurrentPaymentTools', 'Create', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'shop_not_found', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'party_not_found', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'invalid_contract_status', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'operation_not_permitted', undefined}
+    ]};
+function_info('RecurrentPaymentTools', 'Abandon', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'id', undefined}
+]};
+function_info('RecurrentPaymentTools', 'Abandon', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
+    function_info('RecurrentPaymentTools', 'Abandon', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidRecurrentPaymentToolStatus'}}, 'invalid_rec_payment_tool_status', undefined}
+    ]};
+function_info('RecurrentPaymentTools', 'Get', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'id', undefined}
+]};
+function_info('RecurrentPaymentTools', 'Get', reply_type) ->
+        {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
+    function_info('RecurrentPaymentTools', 'Get', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined}
+    ]};
+function_info('RecurrentPaymentTools', 'GetEvents', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'id', undefined},
+    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+]};
+function_info('RecurrentPaymentTools', 'GetEvents', reply_type) ->
+        {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
+    function_info('RecurrentPaymentTools', 'GetEvents', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
+    ]};
+
+function_info('RecurrentPaymentToolEventSink', 'GetEvents', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+]};
+function_info('RecurrentPaymentToolEventSink', 'GetEvents', reply_type) ->
+        {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
+    function_info('RecurrentPaymentToolEventSink', 'GetEvents', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
+    ]};
+function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', params_type) ->
+    {struct, struct, []};
+function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', reply_type) ->
+        i64;
+    function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 
 function_info('PartyManagement', 'Create', params_type) ->

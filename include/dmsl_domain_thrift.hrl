@@ -3,6 +3,7 @@
 
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_msgpack_thrift.hrl").
+-include("dmsl_json_thrift.hrl").
 
 
 
@@ -90,6 +91,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'(),
+    'payer_details' :: dmsl_domain_thrift:'LegacyPayerDetails'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
@@ -134,12 +136,26 @@
 %% struct 'InvoiceTemplateCostUnlimited'
 -record('domain_InvoiceTemplateCostUnlimited', {}).
 
-%% struct 'Payer'
--record('domain_Payer', {
+%% struct 'LegacyPayerDetails'
+-record('domain_LegacyPayerDetails', {
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
     'session_id' :: dmsl_domain_thrift:'PaymentSessionID'(),
     'client_info' :: dmsl_domain_thrift:'ClientInfo'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
+%% struct 'PaymentResourcePayer'
+-record('domain_PaymentResourcePayer', {
+    'resource' :: dmsl_domain_thrift:'DisposablePaymentResource'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
+%% struct 'CustomerPayer'
+-record('domain_CustomerPayer', {
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'(),
+    'customer_binding_id' :: dmsl_domain_thrift:'CustomerBindingID'(),
+    'rec_payment_tool_id' :: dmsl_domain_thrift:'RecurrentPaymentToolID'(),
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'()
 }).
 
 %% struct 'ClientInfo'
@@ -148,8 +164,8 @@
     'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined
 }).
 
-%% struct 'InvoicePaymentRoute'
--record('domain_InvoicePaymentRoute', {
+%% struct 'PaymentRoute'
+-record('domain_PaymentRoute', {
     'provider' :: dmsl_domain_thrift:'ProviderRef'(),
     'terminal' :: dmsl_domain_thrift:'TerminalRef'()
 }).
@@ -468,6 +484,13 @@
 -record('domain_CashLimitDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
+}).
+
+%% struct 'DisposablePaymentResource'
+-record('domain_DisposablePaymentResource', {
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
+    'payment_session_id' :: dmsl_domain_thrift:'PaymentSessionID'() | undefined,
+    'client_info' :: dmsl_domain_thrift:'ClientInfo'()
 }).
 
 %% struct 'BankCard'
