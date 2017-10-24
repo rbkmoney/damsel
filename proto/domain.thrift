@@ -4,12 +4,14 @@
 
 include "base.thrift"
 include "msgpack.thrift"
+include "json.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
 
-typedef i64 DataRevision
-typedef i32 ObjectID
+typedef i64        DataRevision
+typedef i32        ObjectID
+typedef json.Value Metadata
 
 /* Common */
 
@@ -113,7 +115,8 @@ struct InvoicePayment {
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
     3:  required InvoicePaymentStatus status
-    5:  required Payer payer
+    5:  required LegacyPayerDetails payer_details
+    14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
     6:  optional InvoicePaymentContext context
@@ -222,11 +225,28 @@ union TargetInvoicePaymentStatus {
 
 }
 
-struct Payer {
+struct LegacyPayerDetails {
     1: required PaymentTool payment_tool
     2: required PaymentSessionID session_id
     3: required ClientInfo client_info
     4: required ContactInfo contact_info
+}
+
+union Payer {
+    1: PaymentResourcePayer payment_resource
+    2: CustomerPayer        customer
+}
+
+struct PaymentResourcePayer {
+    1: required DisposablePaymentResource resource
+    2: required ContactInfo               contact_info
+}
+
+struct CustomerPayer {
+    1: required CustomerID             customer_id
+    2: required CustomerBindingID      customer_binding_id
+    3: required RecurrentPaymentToolID rec_payment_tool_id
+    4: required PaymentTool            payment_tool
 }
 
 struct ClientInfo {
@@ -234,7 +254,7 @@ struct ClientInfo {
     2: optional Fingerprint fingerprint
 }
 
-struct InvoicePaymentRoute {
+struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
 }
@@ -678,9 +698,19 @@ enum BankCardPaymentSystem {
     nspkmir
 }
 
+typedef base.ID CustomerID
+typedef base.ID CustomerBindingID
+typedef base.ID RecurrentPaymentToolID
+
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
+}
+
+struct DisposablePaymentResource {
+    1: required PaymentTool      payment_tool
+    2: optional PaymentSessionID payment_session_id
+    3: required ClientInfo       client_info
 }
 
 typedef string Token

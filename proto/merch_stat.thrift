@@ -22,15 +22,28 @@ struct StatPayment {
     7 : required domain.Amount amount
     8 : required domain.Amount fee
     9 : required string currency_symbolic_code
-    10: required PaymentTool payment_tool
-    11: optional domain.IPAddress ip_address
-    12: optional domain.Fingerprint fingerprint
-    13: optional string phone_number
-    14: optional string email
-    15: required domain.PaymentSessionID session_id
-    16: optional base.Content context
-    17: optional geo_ip.LocationInfo location_info
-    18: required InvoicePaymentFlow flow
+    10: required Payer payer
+    12: optional base.Content context
+    13: optional geo_ip.LocationInfo location_info
+    14: required InvoicePaymentFlow flow
+}
+
+union Payer {
+    1: PaymentResourcePayer payment_resource
+    2: CustomerPayer        customer
+}
+
+struct PaymentResourcePayer {
+    1: required PaymentTool payment_tool
+    2: optional domain.IPAddress ip_address
+    3: optional domain.Fingerprint fingerprint
+    4: optional string phone_number
+    5: optional string email
+    6: required domain.PaymentSessionID session_id
+}
+
+struct CustomerPayer {
+    1: required domain.CustomerID customer_id
 }
 
 union InvoicePaymentFlow {
