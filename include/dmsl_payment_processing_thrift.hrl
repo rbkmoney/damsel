@@ -177,17 +177,19 @@
 -record('payproc_InvoiceTemplateCreateParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'details' :: dmsl_domain_thrift:'InvoiceDetails'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
-    'cost' :: dmsl_domain_thrift:'InvoiceTemplateCost'(),
+    'product' :: binary(),
+    'description' :: binary() | undefined,
+    'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'()
 }).
 
 %% struct 'InvoiceTemplateUpdateParams'
 -record('payproc_InvoiceTemplateUpdateParams', {
-    'details' :: dmsl_domain_thrift:'InvoiceDetails'() | undefined,
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'() | undefined,
-    'cost' :: dmsl_domain_thrift:'InvoiceTemplateCost'() | undefined,
+    'product' :: binary() | undefined,
+    'description' :: binary() | undefined,
+    'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'() | undefined,
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
 }).
 

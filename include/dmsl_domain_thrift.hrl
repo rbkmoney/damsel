@@ -127,10 +127,18 @@
     'id' :: dmsl_domain_thrift:'InvoiceTemplateID'(),
     'owner_id' :: dmsl_domain_thrift:'PartyID'(),
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
-    'details' :: dmsl_domain_thrift:'InvoiceDetails'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
-    'cost' :: dmsl_domain_thrift:'InvoiceTemplateCost'(),
+    'product' :: binary(),
+    'description' :: binary() | undefined,
+    'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
+}).
+
+%% struct 'InvoiceTemplateProduct'
+-record('domain_InvoiceTemplateProduct', {
+    'product' :: binary(),
+    'price' :: dmsl_domain_thrift:'InvoiceTemplateProductPrice'(),
+    'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()}
 }).
 
 %% struct 'InvoiceTemplateCostUnlimited'

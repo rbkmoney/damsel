@@ -1725,17 +1725,19 @@ struct_info('InvoiceTemplateCreateParams') ->
     {struct, struct, [
     {1, required, string, 'party_id', undefined},
     {2, required, string, 'shop_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
-    {5, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateCost'}}, 'cost', undefined},
+    {7, required, string, 'product', undefined},
+    {8, optional, string, 'description', undefined},
+    {9, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
     {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 
 struct_info('InvoiceTemplateUpdateParams') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateCost'}}, 'cost', undefined},
+    {5, optional, string, 'product', undefined},
+    {6, optional, string, 'description', undefined},
+    {7, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
     {4, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 

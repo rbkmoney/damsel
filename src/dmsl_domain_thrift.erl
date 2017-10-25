@@ -103,7 +103,9 @@
     'InvoicePaymentRefunded'/0,
     'InvoicePaymentFailed'/0,
     'InvoiceTemplate'/0,
-    'InvoiceTemplateCost'/0,
+    'InvoiceTemplateDetails'/0,
+    'InvoiceTemplateProduct'/0,
+    'InvoiceTemplateProductPrice'/0,
     'InvoiceTemplateCostUnlimited'/0,
     'InvoicePaymentStatus'/0,
     'TargetInvoicePaymentStatus'/0,
@@ -443,7 +445,9 @@
     'InvoicePaymentRefunded' |
     'InvoicePaymentFailed' |
     'InvoiceTemplate' |
-    'InvoiceTemplateCost' |
+    'InvoiceTemplateDetails' |
+    'InvoiceTemplateProduct' |
+    'InvoiceTemplateProductPrice' |
     'InvoiceTemplateCostUnlimited' |
     'InvoicePaymentStatus' |
     'TargetInvoicePaymentStatus' |
@@ -683,8 +687,16 @@
 %% struct 'InvoiceTemplate'
 -type 'InvoiceTemplate'() :: #'domain_InvoiceTemplate'{}.
 
-%% union 'InvoiceTemplateCost'
--type 'InvoiceTemplateCost'() ::
+%% union 'InvoiceTemplateDetails'
+-type 'InvoiceTemplateDetails'() ::
+    {'cart', 'InvoiceCart'()} |
+    {'product', 'InvoiceTemplateProduct'()}.
+
+%% struct 'InvoiceTemplateProduct'
+-type 'InvoiceTemplateProduct'() :: #'domain_InvoiceTemplateProduct'{}.
+
+%% union 'InvoiceTemplateProductPrice'
+-type 'InvoiceTemplateProductPrice'() ::
     {'fixed', 'Cash'()} |
     {'range', 'CashRange'()} |
     {'unlim', 'InvoiceTemplateCostUnlimited'()}.
@@ -1419,7 +1431,9 @@ structs() ->
         'InvoicePaymentRefunded',
         'InvoicePaymentFailed',
         'InvoiceTemplate',
-        'InvoiceTemplateCost',
+        'InvoiceTemplateDetails',
+        'InvoiceTemplateProduct',
+        'InvoiceTemplateProductPrice',
         'InvoiceTemplateCostUnlimited',
         'InvoicePaymentStatus',
         'TargetInvoicePaymentStatus',
@@ -1907,13 +1921,27 @@ struct_info('InvoiceTemplate') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'owner_id', undefined},
     {3, required, string, 'shop_id', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
     {5, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateCost'}}, 'cost', undefined},
+    {9, required, string, 'product', undefined},
+    {10, optional, string, 'description', undefined},
+    {8, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
     {7, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 
-struct_info('InvoiceTemplateCost') ->
+struct_info('InvoiceTemplateDetails') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplateProduct'}}, 'product', undefined}
+]};
+
+struct_info('InvoiceTemplateProduct') ->
+    {struct, struct, [
+    {1, required, string, 'product', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateProductPrice'}}, 'price', undefined},
+    {3, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+]};
+
+struct_info('InvoiceTemplateProductPrice') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'fixed', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'range', undefined},
@@ -3036,6 +3064,9 @@ record_name('OperationTimeout') ->
 
     record_name('InvoiceTemplate') ->
     'domain_InvoiceTemplate';
+
+    record_name('InvoiceTemplateProduct') ->
+    'domain_InvoiceTemplateProduct';
 
     record_name('InvoiceTemplateCostUnlimited') ->
     'domain_InvoiceTemplateCostUnlimited';
