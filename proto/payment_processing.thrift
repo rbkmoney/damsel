@@ -1072,6 +1072,7 @@ service RecurrentPaymentTools {
             5: PartyNotFound         party_not_found
             6: InvalidContractStatus invalid_contract_status
             7: OperationNotPermitted operation_not_permitted
+            8: InvalidPaymentMethod  invalid_payment_method
         )
 
     RecurrentPaymentTool Abandon (1: RecurrentPaymentToolID id)
