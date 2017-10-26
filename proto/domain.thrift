@@ -227,6 +227,7 @@ struct CustomerPayer {
     2: required CustomerBindingID      customer_binding_id
     3: required RecurrentPaymentToolID rec_payment_tool_id
     4: required PaymentTool            payment_tool
+    5: required ContactInfo            contact_info
 }
 
 struct ClientInfo {
