@@ -489,6 +489,7 @@ typedef base.ID ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
+    12: optional PaymentInstitutionRef payment_institution
     11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
     5: optional base.Timestamp valid_until
@@ -551,6 +552,16 @@ struct LifetimeInterval {
     1: optional i16 years
     2: optional i16 months
     3: optional i16 days
+}
+
+union ContractTemplateSelector {
+    1: list<ContractTemplateDecision> decisions
+    2: set<ContractTemplateRef> value
+}
+
+struct ContractTemplateDecision {
+    1: required Predicate if_
+    2: required ContractTemplateSelector then_
 }
 
 /** Поправки к договору **/
@@ -1148,6 +1159,17 @@ struct PayoutToolPrototype {
     3: required CurrencyRef payout_tool_currency
 }
 
+/* Payment institution */
+
+struct PaymentInstitutionRef { 1: required ObjectID id }
+
+struct PaymentInstitution {
+    1: required string name
+    2: optional string description
+    3: required SystemAccountSetSelector system_account_set
+    4: required ContractTemplateSelector templates
+}
+
 /* Root config */
 
 struct GlobalsRef {}
@@ -1239,6 +1261,11 @@ struct InspectorObject {
     2: required Inspector data
 }
 
+struct PaymentInstitutionObject {
+    1: required PaymentInstitutionRef ref
+    2: required PaymentInstitution data
+}
+
 struct SystemAccountSetObject {
     1: required SystemAccountSetRef ref
     2: required SystemAccountSet data
@@ -1273,6 +1300,7 @@ union Reference {
     5  : BankCardBINRangeRef     bank_card_bin_range
     6  : ContractTemplateRef     contract_template
     17 : TermSetHierarchyRef     term_set_hierarchy
+    18 : PaymentInstitutionRef   payment_institution
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
@@ -1296,6 +1324,7 @@ union DomainObject {
     5  : BankCardBINRangeObject     bank_card_bin_range
     6  : ContractTemplateObject     contract_template
     17 : TermSetHierarchyObject     term_set_hierarchy
+    18 : PaymentInstitutionObject   payment_institution
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
