@@ -136,16 +136,28 @@ struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 typedef base.ID InvoiceTemplateID
 
 struct InvoiceTemplate {
-    1: required InvoiceTemplateID id
-    2: required PartyID owner_id
-    3: required ShopID shop_id
-    4: required InvoiceDetails details
-    5: required LifetimeInterval invoice_lifetime
-    6: required InvoiceTemplateCost cost
-    7: optional InvoiceContext context
+    1:  required InvoiceTemplateID id
+    2:  required PartyID owner_id
+    3:  required ShopID shop_id
+    5:  required LifetimeInterval invoice_lifetime
+    9:  required string product # for backward compatibility
+    10: optional string description
+    8:  required InvoiceTemplateDetails details
+    7:  optional InvoiceContext context
 }
 
-union InvoiceTemplateCost {
+union InvoiceTemplateDetails {
+    1: InvoiceCart cart
+    2: InvoiceTemplateProduct product
+}
+
+struct InvoiceTemplateProduct {
+    1: required string product
+    2: required InvoiceTemplateProductPrice price
+    3: required map<string, msgpack.Value> metadata
+}
+
+union InvoiceTemplateProductPrice {
     1: Cash fixed
     2: CashRange range
     3: InvoiceTemplateCostUnlimited unlim
