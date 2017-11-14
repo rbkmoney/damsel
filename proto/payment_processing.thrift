@@ -785,10 +785,10 @@ struct Customer {
     3: required ShopID                shop_id
     4: required CustomerStatus        status
     5: required base.Timestamp        created_at
-    /* Список всех привязок */
     6: required list<CustomerBinding> bindings
     7: required domain.ContactInfo    contact_info
     8: required Metadata              metadata
+    9: optional CustomerBindingID     active_binding_id
 }
 
 /**
@@ -805,7 +805,7 @@ union CustomerStatus {
 struct CustomerUnready {}
 struct CustomerReady   {}
 
-// Events
+// События
 union CustomerChange {
     1: CustomerCreated        customer_created
     2: CustomerDeleted        customer_deleted
@@ -817,7 +817,11 @@ union CustomerChange {
  * Событие о создании нового плательщика.
  */
 struct CustomerCreated {
-    1: required Customer customer
+    2: required PartyID            owner_id
+    3: required ShopID             shop_id
+    4: required Metadata           metadata
+    5: required domain.ContactInfo contact_info
+    6: required base.Timestamp     created_at
 }
 
 /**
