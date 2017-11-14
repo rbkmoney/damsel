@@ -788,7 +788,7 @@ struct Customer {
     6: required list<CustomerBinding> bindings
     7: required domain.ContactInfo    contact_info
     8: required Metadata              metadata
-    9: optional CustomerBinding       active_binding
+    9: optional CustomerBindingID     active_binding_id
 }
 
 /**
