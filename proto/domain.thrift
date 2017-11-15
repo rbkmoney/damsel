@@ -560,7 +560,7 @@ union ContractTemplateSelector {
 }
 
 struct ContractTemplateDecision {
-    1: required ResidencePredicate if_
+    1: required Predicate if_
     2: required ContractTemplateSelector then_
 }
 
@@ -666,6 +666,8 @@ struct CategoryDecision {
 }
 
 /* Резиденция */
+// Для обозначения спользуется alpha-3 код по стандарту ISO_3166-1
+// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 
 enum Residence {
     ABH, /*Abkhazia*/
@@ -1298,6 +1300,7 @@ union Condition {
     3: PaymentToolCondition payment_tool
     5: ShopLocation shop_location_is
     6: PartyCondition party
+    7: Residence residence_is
 }
 
 union PaymentToolCondition {
@@ -1316,18 +1319,6 @@ struct PartyCondition {
 
 union PartyConditionDefinition {
     1: ShopID shop_is
-}
-
-union ResidencePredicate {
-    1: bool constant
-    2: ResidenceCondition condition
-    3: ResidencePredicate is_not
-    4: set<ResidencePredicate> all_of
-    5: set<ResidencePredicate> any_of
-}
-
-union ResidenceCondition {
-    1: Residence residence_is
 }
 
 /* Proxies */
@@ -1405,27 +1396,23 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 struct PartyPrototype {
     1: required ShopPrototype shop
     3: required ContractPrototype contract
+    4: required PaymentInstitutionRef test_payment_institution
 }
 
 struct ShopPrototype {
     5: required ShopID shop_id
-    1: required CategoryRef category
-    2: required CurrencyRef currency
     3: required ShopDetails details
     4: required ShopLocation location
 }
 
 struct ContractPrototype {
     1: required ContractID contract_id
-    2: required ContractTemplateRef test_contract_template
     3: required PayoutToolPrototype payout_tool
-    4: optional PaymentInstitutionRef test_payment_institution
 }
 
 struct PayoutToolPrototype {
     1: required PayoutToolID payout_tool_id
     2: required PayoutToolInfo payout_tool_info
-    3: required CurrencyRef payout_tool_currency
 }
 
 /* Payment institution */
@@ -1436,17 +1423,18 @@ struct PaymentInstitution {
     1: required string name
     2: optional string description
     3: required SystemAccountSetSelector system_account_set
-    4: required ContractTemplateSelector templates
+    4: required ContractTemplateSelector default_contract_template
     5: required ProviderSelector providers
+    6: required InspectorSelector inspector
 }
 
 union PaymentInstitutionSelector {
     1: list<PaymentInstitutionDecision> decisions
-    2: PaymentInstitutionRef value
+    2: set<PaymentInstitutionRef> value
 }
 
 struct PaymentInstitutionDecision {
-    1: required ResidencePredicate if_
+    1: required Predicate if_
     2: required PaymentInstitutionSelector then_
 }
 
@@ -1457,7 +1445,6 @@ struct GlobalsRef {}
 struct Globals {
     1: required PartyPrototypeRef party_prototype
     4: required ExternalAccountSetSelector external_account_set
-    5: required InspectorSelector inspector
     6: optional PaymentInstitutionSelector payment_institution
 }
 
