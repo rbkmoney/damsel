@@ -817,11 +817,12 @@ union CustomerChange {
  * Событие о создании нового плательщика.
  */
 struct CustomerCreated {
-    2: required PartyID            owner_id
-    3: required ShopID             shop_id
-    4: required Metadata           metadata
-    5: required domain.ContactInfo contact_info
-    6: required base.Timestamp     created_at
+    2: required CustomerID         customer_id
+    3: required PartyID            owner_id
+    4: required ShopID             shop_id
+    5: required Metadata           metadata
+    6: required domain.ContactInfo contact_info
+    7: required base.Timestamp     created_at
 }
 
 /**
