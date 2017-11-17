@@ -1407,6 +1407,12 @@ struct PaymentInstitution {
     4: required ContractTemplateSelector default_contract_template
     5: required ProviderSelector providers
     6: required InspectorSelector inspector
+    7: required PaymentInstitutionRealm realm
+}
+
+enum PaymentInstitutionRealm {
+    test,
+    live
 }
 
 union PaymentInstitutionSelector {
