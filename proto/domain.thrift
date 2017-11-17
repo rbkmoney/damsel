@@ -1393,27 +1393,8 @@ struct ExternalAccountSetDecision {
 struct PartyPrototypeRef { 1: required ObjectID id }
 
 /** Прототип мерчанта по умолчанию. */
-struct PartyPrototype {
-    1: required ShopPrototype shop
-    3: required ContractPrototype contract
-}
-
-struct ShopPrototype {
-    5: required ShopID shop_id
-    3: required ShopDetails details
-    4: required ShopLocation location
-}
-
-struct ContractPrototype {
-    1: required ContractID contract_id
-    3: required PayoutToolPrototype payout_tool
-    4: required PaymentInstitutionRef payment_institution
-}
-
-struct PayoutToolPrototype {
-    1: required PayoutToolID payout_tool_id
-    2: required PayoutToolInfo payout_tool_info
-}
+/* В данный момент не используется. */
+struct PartyPrototype {}
 
 /* Payment institution */
 
