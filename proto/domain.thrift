@@ -1396,7 +1396,6 @@ struct PartyPrototypeRef { 1: required ObjectID id }
 struct PartyPrototype {
     1: required ShopPrototype shop
     3: required ContractPrototype contract
-    4: required PaymentInstitutionRef test_payment_institution
 }
 
 struct ShopPrototype {
@@ -1408,6 +1407,7 @@ struct ShopPrototype {
 struct ContractPrototype {
     1: required ContractID contract_id
     3: required PayoutToolPrototype payout_tool
+    4: required PaymentInstitutionRef payment_institution
 }
 
 struct PayoutToolPrototype {
