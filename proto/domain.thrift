@@ -1388,14 +1388,6 @@ struct ExternalAccountSetDecision {
     2: required ExternalAccountSetSelector then_
 }
 
-/* Merchant prototype */
-
-struct PartyPrototypeRef { 1: required ObjectID id }
-
-/** Прототип мерчанта по умолчанию. */
-/* В данный момент не используется. */
-struct PartyPrototype {}
-
 /* Payment institution */
 
 struct PaymentInstitutionRef { 1: required ObjectID id }
@@ -1430,7 +1422,6 @@ struct PaymentInstitutionDecision {
 struct GlobalsRef {}
 
 struct Globals {
-    1: required PartyPrototypeRef party_prototype
     4: required ExternalAccountSetSelector external_account_set
     6: optional PaymentInstitutionSelector payment_institution
 }
@@ -1532,11 +1523,6 @@ struct ProxyObject {
     2: required ProxyDefinition data
 }
 
-struct PartyPrototypeObject {
-    1: required PartyPrototypeRef ref
-    2: required PartyPrototype data
-}
-
 struct GlobalsObject {
     1: required GlobalsRef ref
     2: required Globals data
@@ -1558,7 +1544,6 @@ union Reference {
     14 : SystemAccountSetRef     system_account_set
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
-    10 : PartyPrototypeRef       party_prototype
     11 : GlobalsRef              globals
 
     12 : DummyRef                dummy
@@ -1582,7 +1567,6 @@ union DomainObject {
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
-    10 : PartyPrototypeObject       party_prototype
     11 : GlobalsObject              globals
 
     12 : DummyObject                dummy
