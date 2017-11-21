@@ -76,7 +76,7 @@ union EventSource {
     /** Идентификатор шаблона инвойса, который породил событие. */
     3: domain.InvoiceTemplateID invoice_template_id
     /** Идентификатор плательщика, который породил событие. */
-    4: domain.CustomerID customer_id
+    4: domain.CustomerID        customer_id
 }
 
 /**
@@ -85,12 +85,12 @@ union EventSource {
 union EventPayload {
     /** Набор изменений, порождённых инвойсом. */
     1: list<InvoiceChange>          invoice_changes
-    /** Набор изменений, порождённых участником. */
-    2: list<PartyChange>            party_changes
     /** Набор изменений, порождённых шаблоном инвойса. */
     3: list<InvoiceTemplateChange>  invoice_template_changes
     /** Некоторое событие, порождённое плательщиком. */
     4: list<CustomerChange>         customer_changes
+    /** Набор версионированных изменений, порождённых участником. */
+    5: PartyEvent                   party_event
 }
 
 /**
@@ -1310,6 +1310,12 @@ struct AccountState {
 }
 
 // Events
+
+struct PartyEvent {
+    1: required base.Timestamp timestamp
+    2: required domain.PartyRevision revision
+    3: required list<PartyChange> changes
+}
 
 union PartyChange {
     1: domain.Party         party_created
