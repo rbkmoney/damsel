@@ -1139,6 +1139,7 @@ struct ShopAccountParams {
 struct ContractParams {
     1: required domain.Contractor contractor
     2: optional domain.ContractTemplateRef template
+    3: optional domain.PaymentInstitutionRef payment_institution
 }
 
 struct ContractAdjustmentParams {
