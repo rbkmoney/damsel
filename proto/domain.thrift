@@ -94,8 +94,21 @@ struct InvoiceLine {
     1: required string product
     2: required i32 quantity
     3: required Cash price
-    /* Taxes and other stuff goes here */
+    5: optional Tax tax
+    /* Other stuff goes here */
     4: required map<string, msgpack.Value> metadata
+}
+
+union Tax {
+    1: VAT vat
+}
+
+enum VAT {
+    vat0
+    vat10
+    vat18
+    vat110
+    vat118
 }
 
 struct InvoiceUnpaid    {}
@@ -380,6 +393,7 @@ struct PartyContactInfo {
 /* Shops */
 
 typedef base.ID ShopID
+typedef base.ID CashRegisterID
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -394,6 +408,7 @@ struct Shop {
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
     9: optional Proxy proxy
+   12: optional ShopCashRegister cash_register
 }
 
 struct ShopAccount {
@@ -411,6 +426,29 @@ struct ShopDetails {
 
 union ShopLocation {
     1: string url
+}
+
+/** Система налогооблажения */
+enum TaxSystem {
+    /** Общая */
+    osn
+    /** Упрощённая доход */
+    usn_income
+    /** Упрощенная доход минус расход */
+    usn_income_outcome
+    /** Единый налог на вмененный доход */
+    envd
+    /** Единый сельскохозяйственный налог */
+    esn
+    /** Патентная */
+    patent
+}
+
+struct ShopCashRegister {
+    1: required CashRegisterID id
+    /* Система налогооблажения */
+    2: optional TaxSystem tax_system
+    3: required ProxyOptions options
 }
 
 /* Инспекция платежа */
@@ -562,6 +600,26 @@ struct ContractAdjustment {
     2: optional base.Timestamp valid_since
     3: optional base.Timestamp valid_until
     4: required TermSetHierarchyRef terms
+}
+
+/** Онлайн-кассы **/
+
+struct CashRegisterRef { 1: required ObjectID id }
+
+struct CashRegister {
+    1: required string name
+    2: optional string description
+    3: required Proxy proxy
+}
+
+union CashRegisterSelector {
+    1: list<CashRegisterDecision> decisions
+    2: set<CashRegisterRef> value
+}
+
+struct CashRegisterDecision {
+    1: required Predicate if_
+    2: required CashRegisterSelector then_
 }
 
 /** Условия **/
@@ -1160,6 +1218,7 @@ struct Globals {
     5: required InspectorSelector inspector
     6: required ContractTemplateRef default_contract_template
     7: optional ProxyRef common_merchant_proxy
+    8: optional CashRegisterSelector cash_registers
 }
 
 /** Dummy (for integrity test purpose) */
@@ -1239,6 +1298,11 @@ struct InspectorObject {
     2: required Inspector data
 }
 
+struct CashRegisterObject {
+    1: required CashRegisterRef ref
+    2: required CashRegister data
+}
+
 struct SystemAccountSetObject {
     1: required SystemAccountSetRef ref
     2: required SystemAccountSet data
@@ -1276,6 +1340,7 @@ union Reference {
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
+    18 : CashRegisterRef         cash_register
     14 : SystemAccountSetRef     system_account_set
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
@@ -1299,6 +1364,7 @@ union DomainObject {
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
+    18 : CashRegisterObject         cash_register
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
