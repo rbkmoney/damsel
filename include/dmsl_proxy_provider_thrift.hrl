@@ -93,7 +93,6 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'payer_details' :: dmsl_domain_thrift:'LegacyPayerDetails'(),
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
