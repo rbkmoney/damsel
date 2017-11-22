@@ -1284,6 +1284,7 @@ union ShopEffect {
     6: ShopProxyChanged proxy_changed
     7: domain.ShopLocation location_changed
     8: domain.ShopAccount account_created
+    9: ShopCashRegisterChanged cash_register_changed
 }
 
 struct ShopContractChanged {
@@ -1293,6 +1294,10 @@ struct ShopContractChanged {
 
 struct ShopProxyChanged {
     1: optional domain.Proxy proxy
+}
+
+struct ShopCashRegisterChanged {
+    1: optional domain.ShopCashRegister cash_register
 }
 
 struct AccountState {

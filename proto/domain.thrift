@@ -94,13 +94,16 @@ struct InvoiceLine {
     1: required string product
     2: required i32 quantity
     3: required Cash price
-    4: required Tax tax
+    5: optional Tax tax
     /* Other stuff goes here */
-    5: required map<string, msgpack.Value> metadata
+    4: required map<string, msgpack.Value> metadata
 }
 
-enum Tax {
-    none
+union Tax {
+    1: VAT vat
+}
+
+enum VAT {
     vat0
     vat10
     vat18
@@ -390,7 +393,7 @@ struct PartyContactInfo {
 /* Shops */
 
 typedef base.ID ShopID
-typedef base.ID CashRegID
+typedef base.ID CashRegisterID
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -405,7 +408,7 @@ struct Shop {
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
     9: optional Proxy proxy
-   12: optional ShopCashReg cash_register
+   12: optional ShopCashRegister cash_register
 }
 
 struct ShopAccount {
@@ -425,9 +428,27 @@ union ShopLocation {
     1: string url
 }
 
-struct ShopCashReg {
-    1: required CashRegID id
-    2: required base.StringMap proxy_params
+/** Система налогооблажения */
+enum TaxSystem {
+    /** Общая */
+    osn
+    /** Упрощённая доход */
+    usn_income
+    /** Упрощенная доход минус расход */
+    usn_income_outcome
+    /** Единый налог на вмененный доход */
+    envd
+    /** Единый сельскохозяйственный налог */
+    esn
+    /** Патентная */
+    patent
+}
+
+struct ShopCashRegister {
+    1: required CashRegisterID id
+    /* Система налогооблажения */
+    2: optional TaxSystem tax_system
+    3: required ProxyOptions options
 }
 
 /* Инспекция платежа */
@@ -476,8 +497,6 @@ struct RussianLegalEntity {
     8: required string representative_document
     /* Реквизиты юр.лица */
     9: required BankAccount bank_account
-    /* Система налогооблажения */
-   10: optional TaxSystem tax_system
 }
 
 /** Банковский счёт. */
@@ -487,22 +506,6 @@ struct BankAccount {
     2: required string bank_name
     3: required string bank_post_account
     4: required string bank_bik
-}
-
-/** Система налогооблажения */
-enum TaxSystem {
-    /** Общая */
-    osn
-    /** Упрощённая доход */
-    usn_income
-    /** Упрощенная доход минус расход */
-    usn_income_outcome
-    /** Единый налог на вмененный доход */
-    envd
-    /** Единый сельскохозяйственный налог */
-    esn
-    /** Патентная */
-    patent
 }
 
 typedef base.ID PayoutToolID
@@ -601,22 +604,22 @@ struct ContractAdjustment {
 
 /** Онлайн-кассы **/
 
-struct CashRegRef { 1: required ObjectID id }
+struct CashRegisterRef { 1: required ObjectID id }
 
-struct CashReg {
+struct CashRegister {
     1: required string name
-    2: required string description
+    2: optional string description
     3: required Proxy proxy
 }
 
-union CashRegSelector {
-    1: list<CashRegDecision> decisions
-    2: set<CashRegRef> value
+union CashRegisterSelector {
+    1: list<CashRegisterDecision> decisions
+    2: set<CashRegisterRef> value
 }
 
-struct CashRegDecision {
+struct CashRegisterDecision {
     1: required Predicate if_
-    2: required CashRegSelector then_
+    2: required CashRegisterSelector then_
 }
 
 /** Условия **/
@@ -1215,7 +1218,7 @@ struct Globals {
     5: required InspectorSelector inspector
     6: required ContractTemplateRef default_contract_template
     7: optional ProxyRef common_merchant_proxy
-    8: optional CashRegSelector cash_registers
+    8: optional CashRegisterSelector cash_registers
 }
 
 /** Dummy (for integrity test purpose) */
@@ -1295,9 +1298,9 @@ struct InspectorObject {
     2: required Inspector data
 }
 
-struct CashRegObject {
-    1: required CashRegRef ref
-    2: required CashReg data
+struct CashRegisterObject {
+    1: required CashRegisterRef ref
+    2: required CashRegister data
 }
 
 struct SystemAccountSetObject {
@@ -1337,7 +1340,7 @@ union Reference {
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
-    18 : CashRegRef              cash_register
+    18 : CashRegisterRef         cash_register
     14 : SystemAccountSetRef     system_account_set
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
@@ -1361,7 +1364,7 @@ union DomainObject {
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
-    18 : CashRegObject              cash_register
+    18 : CashRegisterObject         cash_register
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
