@@ -52,6 +52,7 @@
     'PartyMetaData'/0,
     'PartyMeta'/0,
     'ShopID'/0,
+    'CashRegisterID'/0,
     'PayoutToolID'/0,
     'ContractID'/0,
     'ContractAdjustmentID'/0,
@@ -68,7 +69,9 @@
     'Domain'/0
 ]).
 -export_type([
+    'VAT'/0,
     'OnHoldExpiration'/0,
+    'TaxSystem'/0,
     'RiskScore'/0,
     'CategoryType'/0,
     'BankCardPaymentSystem'/0,
@@ -90,6 +93,7 @@
     'InvoiceDetails'/0,
     'InvoiceCart'/0,
     'InvoiceLine'/0,
+    'Tax'/0,
     'InvoiceUnpaid'/0,
     'InvoicePaid'/0,
     'InvoiceCancelled'/0,
@@ -140,6 +144,7 @@
     'ShopAccount'/0,
     'ShopDetails'/0,
     'ShopLocation'/0,
+    'ShopCashRegister'/0,
     'ContractorRef'/0,
     'Contractor'/0,
     'RegisteredUser'/0,
@@ -161,6 +166,10 @@
     'Lifetime'/0,
     'LifetimeInterval'/0,
     'ContractAdjustment'/0,
+    'CashRegisterRef'/0,
+    'CashRegister'/0,
+    'CashRegisterSelector'/0,
+    'CashRegisterDecision'/0,
     'TermSet'/0,
     'TimedTermSet'/0,
     'TermSetHierarchy'/0,
@@ -260,6 +269,7 @@
     'ProviderObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
+    'CashRegisterObject'/0,
     'SystemAccountSetObject'/0,
     'ExternalAccountSetObject'/0,
     'ProxyObject'/0,
@@ -295,6 +305,7 @@
     'PartyMetaData' |
     'PartyMeta' |
     'ShopID' |
+    'CashRegisterID' |
     'PayoutToolID' |
     'ContractID' |
     'ContractAdjustmentID' |
@@ -330,6 +341,7 @@
 -type 'PartyMetaData'() :: dmsl_msgpack_thrift:'Value'().
 -type 'PartyMeta'() :: #{'PartyMetaNamespace'() => 'PartyMetaData'()}.
 -type 'ShopID'() :: dmsl_base_thrift:'ID'().
+-type 'CashRegisterID'() :: dmsl_base_thrift:'ID'().
 -type 'PayoutToolID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractAdjustmentID'() :: dmsl_base_thrift:'ID'().
@@ -349,7 +361,9 @@
 %% enums
 %%
 -type enum_name() ::
+    'VAT' |
     'OnHoldExpiration' |
+    'TaxSystem' |
     'RiskScore' |
     'CategoryType' |
     'BankCardPaymentSystem' |
@@ -360,10 +374,27 @@
     'ExternalCashFlowAccount' |
     'CashFlowConstant'.
 
+%% enum 'VAT'
+-type 'VAT'() ::
+    vat0 |
+    vat10 |
+    vat18 |
+    vat110 |
+    vat118.
+
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
     cancel |
     capture.
+
+%% enum 'TaxSystem'
+-type 'TaxSystem'() ::
+    osn |
+    usn_income |
+    usn_income_outcome |
+    envd |
+    esn |
+    patent.
 
 %% enum 'RiskScore'
 -type 'RiskScore'() ::
@@ -432,6 +463,7 @@
     'InvoiceDetails' |
     'InvoiceCart' |
     'InvoiceLine' |
+    'Tax' |
     'InvoiceUnpaid' |
     'InvoicePaid' |
     'InvoiceCancelled' |
@@ -482,6 +514,7 @@
     'ShopAccount' |
     'ShopDetails' |
     'ShopLocation' |
+    'ShopCashRegister' |
     'ContractorRef' |
     'Contractor' |
     'RegisteredUser' |
@@ -503,6 +536,10 @@
     'Lifetime' |
     'LifetimeInterval' |
     'ContractAdjustment' |
+    'CashRegisterRef' |
+    'CashRegister' |
+    'CashRegisterSelector' |
+    'CashRegisterDecision' |
     'TermSet' |
     'TimedTermSet' |
     'TermSetHierarchy' |
@@ -602,6 +639,7 @@
     'ProviderObject' |
     'TerminalObject' |
     'InspectorObject' |
+    'CashRegisterObject' |
     'SystemAccountSetObject' |
     'ExternalAccountSetObject' |
     'ProxyObject' |
@@ -643,6 +681,10 @@
 
 %% struct 'InvoiceLine'
 -type 'InvoiceLine'() :: #'domain_InvoiceLine'{}.
+
+%% union 'Tax'
+-type 'Tax'() ::
+    {'vat', 'VAT'()}.
 
 %% struct 'InvoiceUnpaid'
 -type 'InvoiceUnpaid'() :: #'domain_InvoiceUnpaid'{}.
@@ -828,6 +870,9 @@
 -type 'ShopLocation'() ::
     {'url', binary()}.
 
+%% struct 'ShopCashRegister'
+-type 'ShopCashRegister'() :: #'domain_ShopCashRegister'{}.
+
 %% struct 'ContractorRef'
 -type 'ContractorRef'() :: #'domain_ContractorRef'{}.
 
@@ -899,6 +944,20 @@
 
 %% struct 'ContractAdjustment'
 -type 'ContractAdjustment'() :: #'domain_ContractAdjustment'{}.
+
+%% struct 'CashRegisterRef'
+-type 'CashRegisterRef'() :: #'domain_CashRegisterRef'{}.
+
+%% struct 'CashRegister'
+-type 'CashRegister'() :: #'domain_CashRegister'{}.
+
+%% union 'CashRegisterSelector'
+-type 'CashRegisterSelector'() ::
+    {'decisions', ['CashRegisterDecision'()]} |
+    {'value', ordsets:ordset('CashRegisterRef'())}.
+
+%% struct 'CashRegisterDecision'
+-type 'CashRegisterDecision'() :: #'domain_CashRegisterDecision'{}.
 
 %% struct 'TermSet'
 -type 'TermSet'() :: #'domain_TermSet'{}.
@@ -1249,6 +1308,9 @@
 %% struct 'InspectorObject'
 -type 'InspectorObject'() :: #'domain_InspectorObject'{}.
 
+%% struct 'CashRegisterObject'
+-type 'CashRegisterObject'() :: #'domain_CashRegisterObject'{}.
+
 %% struct 'SystemAccountSetObject'
 -type 'SystemAccountSetObject'() :: #'domain_SystemAccountSetObject'{}.
 
@@ -1276,6 +1338,7 @@
     {'provider', 'ProviderRef'()} |
     {'terminal', 'TerminalRef'()} |
     {'inspector', 'InspectorRef'()} |
+    {'cash_register', 'CashRegisterRef'()} |
     {'system_account_set', 'SystemAccountSetRef'()} |
     {'external_account_set', 'ExternalAccountSetRef'()} |
     {'proxy', 'ProxyRef'()} |
@@ -1296,6 +1359,7 @@
     {'provider', 'ProviderObject'()} |
     {'terminal', 'TerminalObject'()} |
     {'inspector', 'InspectorObject'()} |
+    {'cash_register', 'CashRegisterObject'()} |
     {'system_account_set', 'SystemAccountSetObject'()} |
     {'external_account_set', 'ExternalAccountSetObject'()} |
     {'proxy', 'ProxyObject'()} |
@@ -1332,7 +1396,9 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
+    'VAT'() |
     'OnHoldExpiration'() |
+    'TaxSystem'() |
     'RiskScore'() |
     'CategoryType'() |
     'BankCardPaymentSystem'() |
@@ -1372,6 +1438,7 @@ typedefs() ->
         'PartyMetaData',
         'PartyMeta',
         'ShopID',
+        'CashRegisterID',
         'PayoutToolID',
         'ContractID',
         'ContractAdjustmentID',
@@ -1392,7 +1459,9 @@ typedefs() ->
 
 enums() ->
     [
+        'VAT',
         'OnHoldExpiration',
+        'TaxSystem',
         'RiskScore',
         'CategoryType',
         'BankCardPaymentSystem',
@@ -1418,6 +1487,7 @@ structs() ->
         'InvoiceDetails',
         'InvoiceCart',
         'InvoiceLine',
+        'Tax',
         'InvoiceUnpaid',
         'InvoicePaid',
         'InvoiceCancelled',
@@ -1468,6 +1538,7 @@ structs() ->
         'ShopAccount',
         'ShopDetails',
         'ShopLocation',
+        'ShopCashRegister',
         'ContractorRef',
         'Contractor',
         'RegisteredUser',
@@ -1489,6 +1560,10 @@ structs() ->
         'Lifetime',
         'LifetimeInterval',
         'ContractAdjustment',
+        'CashRegisterRef',
+        'CashRegister',
+        'CashRegisterSelector',
+        'CashRegisterDecision',
         'TermSet',
         'TimedTermSet',
         'TermSetHierarchy',
@@ -1588,6 +1663,7 @@ structs() ->
         'ProviderObject',
         'TerminalObject',
         'InspectorObject',
+        'CashRegisterObject',
         'SystemAccountSetObject',
         'ExternalAccountSetObject',
         'ProxyObject',
@@ -1669,6 +1745,9 @@ typedef_info('PartyMeta') ->
 typedef_info('ShopID') ->
     string;
 
+typedef_info('CashRegisterID') ->
+    string;
+
 typedef_info('PayoutToolID') ->
     string;
 
@@ -1715,10 +1794,29 @@ typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
 
+enum_info('VAT') ->
+    {enum, [
+        {vat0, 0},
+        {vat10, 1},
+        {vat18, 2},
+        {vat110, 3},
+        {vat118, 4}
+    ]};
+
 enum_info('OnHoldExpiration') ->
     {enum, [
         {cancel, 0},
         {capture, 1}
+    ]};
+
+enum_info('TaxSystem') ->
+    {enum, [
+        {osn, 0},
+        {usn_income, 1},
+        {usn_income_outcome, 2},
+        {envd, 3},
+        {esn, 4},
+        {patent, 5}
     ]};
 
 enum_info('RiskScore') ->
@@ -1852,7 +1950,13 @@ struct_info('InvoiceLine') ->
     {1, required, string, 'product', undefined},
     {2, required, i32, 'quantity', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'price', undefined},
+    {5, optional, {struct, union, {dmsl_domain_thrift, 'Tax'}}, 'tax', undefined},
     {4, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+]};
+
+struct_info('Tax') ->
+    {struct, union, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'VAT'}}, 'vat', undefined}
 ]};
 
 struct_info('InvoiceUnpaid') ->
@@ -2144,7 +2248,8 @@ struct_info('Shop') ->
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
     {7, required, string, 'contract_id', undefined},
     {8, optional, string, 'payout_tool_id', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+    {9, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'ShopCashRegister'}}, 'cash_register', undefined}
 ]};
 
 struct_info('ShopAccount') ->
@@ -2164,6 +2269,13 @@ struct_info('ShopDetails') ->
 struct_info('ShopLocation') ->
     {struct, union, [
     {1, optional, string, 'url', undefined}
+]};
+
+struct_info('ShopCashRegister') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'TaxSystem'}}, 'tax_system', undefined},
+    {3, required, {map, string, string}, 'options', undefined}
 ]};
 
 struct_info('ContractorRef') ->
@@ -2305,6 +2417,30 @@ struct_info('ContractAdjustment') ->
     {2, optional, string, 'valid_since', undefined},
     {3, optional, string, 'valid_until', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined}
+]};
+
+struct_info('CashRegisterRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined}
+]};
+
+struct_info('CashRegister') ->
+    {struct, struct, [
+    {1, required, string, 'name', undefined},
+    {2, optional, string, 'description', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+]};
+
+struct_info('CashRegisterSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashRegisterDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CashRegisterRef'}}}, 'value', undefined}
+]};
+
+struct_info('CashRegisterDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CashRegisterSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('TermSet') ->
@@ -2833,7 +2969,8 @@ struct_info('Globals') ->
     {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
     {5, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
     {6, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'default_contract_template', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined},
+    {8, optional, {struct, union, {dmsl_domain_thrift, 'CashRegisterSelector'}}, 'cash_registers', undefined}
 ]};
 
 struct_info('Dummy') ->
@@ -2926,6 +3063,12 @@ struct_info('InspectorObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Inspector'}}, 'data', undefined}
 ]};
 
+struct_info('CashRegisterObject') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'CashRegisterRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRegister'}}, 'data', undefined}
+]};
+
 struct_info('SystemAccountSetObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'ref', undefined},
@@ -2968,6 +3111,7 @@ struct_info('Reference') ->
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined},
     {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'inspector', undefined},
+    {18, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterRef'}}, 'cash_register', undefined},
     {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'system_account_set', undefined},
     {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'external_account_set', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
@@ -2989,6 +3133,7 @@ struct_info('DomainObject') ->
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderObject'}}, 'provider', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalObject'}}, 'terminal', undefined},
     {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorObject'}}, 'inspector', undefined},
+    {18, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterObject'}}, 'cash_register', undefined},
     {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetObject'}}, 'system_account_set', undefined},
     {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetObject'}}, 'external_account_set', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
@@ -3143,6 +3288,9 @@ record_name('OperationTimeout') ->
     record_name('ShopDetails') ->
     'domain_ShopDetails';
 
+    record_name('ShopCashRegister') ->
+    'domain_ShopCashRegister';
+
     record_name('ContractorRef') ->
     'domain_ContractorRef';
 
@@ -3190,6 +3338,15 @@ record_name('OperationTimeout') ->
 
     record_name('ContractAdjustment') ->
     'domain_ContractAdjustment';
+
+    record_name('CashRegisterRef') ->
+    'domain_CashRegisterRef';
+
+    record_name('CashRegister') ->
+    'domain_CashRegister';
+
+    record_name('CashRegisterDecision') ->
+    'domain_CashRegisterDecision';
 
     record_name('TermSet') ->
     'domain_TermSet';
@@ -3421,6 +3578,9 @@ record_name('OperationTimeout') ->
 
     record_name('InspectorObject') ->
     'domain_InspectorObject';
+
+    record_name('CashRegisterObject') ->
+    'domain_CashRegisterObject';
 
     record_name('SystemAccountSetObject') ->
     'domain_SystemAccountSetObject';

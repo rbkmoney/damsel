@@ -521,6 +521,11 @@
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
 }).
 
+%% struct 'ShopCashRegisterChanged'
+-record('payproc_ShopCashRegisterChanged', {
+    'cash_register' :: dmsl_domain_thrift:'ShopCashRegister'() | undefined
+}).
+
 %% struct 'AccountState'
 -record('payproc_AccountState', {
     'account_id' :: dmsl_domain_thrift:'AccountID'(),

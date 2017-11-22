@@ -172,6 +172,7 @@
     'ShopEffect'/0,
     'ShopContractChanged'/0,
     'ShopProxyChanged'/0,
+    'ShopCashRegisterChanged'/0,
     'AccountState'/0,
     'PartyChange'/0,
     'ShopBlocking'/0,
@@ -400,6 +401,7 @@
     'ShopEffect' |
     'ShopContractChanged' |
     'ShopProxyChanged' |
+    'ShopCashRegisterChanged' |
     'AccountState' |
     'PartyChange' |
     'ShopBlocking' |
@@ -909,13 +911,17 @@
     {'payout_tool_changed', dmsl_domain_thrift:'PayoutToolID'()} |
     {'proxy_changed', 'ShopProxyChanged'()} |
     {'location_changed', dmsl_domain_thrift:'ShopLocation'()} |
-    {'account_created', dmsl_domain_thrift:'ShopAccount'()}.
+    {'account_created', dmsl_domain_thrift:'ShopAccount'()} |
+    {'cash_register_changed', 'ShopCashRegisterChanged'()}.
 
 %% struct 'ShopContractChanged'
 -type 'ShopContractChanged'() :: #'payproc_ShopContractChanged'{}.
 
 %% struct 'ShopProxyChanged'
 -type 'ShopProxyChanged'() :: #'payproc_ShopProxyChanged'{}.
+
+%% struct 'ShopCashRegisterChanged'
+-type 'ShopCashRegisterChanged'() :: #'payproc_ShopCashRegisterChanged'{}.
 
 %% struct 'AccountState'
 -type 'AccountState'() :: #'payproc_AccountState'{}.
@@ -1387,6 +1393,7 @@ structs() ->
         'ShopEffect',
         'ShopContractChanged',
         'ShopProxyChanged',
+        'ShopCashRegisterChanged',
         'AccountState',
         'PartyChange',
         'ShopBlocking',
@@ -2190,7 +2197,8 @@ struct_info('ShopEffect') ->
     {5, optional, string, 'payout_tool_changed', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopProxyChanged'}}, 'proxy_changed', undefined},
     {7, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined}
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
+    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopCashRegisterChanged'}}, 'cash_register_changed', undefined}
 ]};
 
 struct_info('ShopContractChanged') ->
@@ -2202,6 +2210,11 @@ struct_info('ShopContractChanged') ->
 struct_info('ShopProxyChanged') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+]};
+
+struct_info('ShopCashRegisterChanged') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ShopCashRegister'}}, 'cash_register', undefined}
 ]};
 
 struct_info('AccountState') ->
@@ -2726,6 +2739,9 @@ record_name('InternalUser') ->
 
     record_name('ShopProxyChanged') ->
     'payproc_ShopProxyChanged';
+
+    record_name('ShopCashRegisterChanged') ->
+    'payproc_ShopCashRegisterChanged';
 
     record_name('AccountState') ->
     'payproc_AccountState';

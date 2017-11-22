@@ -66,6 +66,7 @@
     'product' :: binary(),
     'quantity' :: integer(),
     'price' :: dmsl_domain_thrift:'Cash'(),
+    'tax' :: dmsl_domain_thrift:'Tax'() | undefined,
     'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()}
 }).
 
@@ -281,7 +282,8 @@
     'account' :: dmsl_domain_thrift:'ShopAccount'() | undefined,
     'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined,
-    'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
+    'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined,
+    'cash_register' :: dmsl_domain_thrift:'ShopCashRegister'() | undefined
 }).
 
 %% struct 'ShopAccount'
@@ -296,6 +298,13 @@
 -record('domain_ShopDetails', {
     'name' :: binary(),
     'description' :: binary() | undefined
+}).
+
+%% struct 'ShopCashRegister'
+-record('domain_ShopCashRegister', {
+    'id' :: dmsl_domain_thrift:'CashRegisterID'(),
+    'tax_system' :: atom() | undefined,
+    'options' :: dmsl_domain_thrift:'ProxyOptions'()
 }).
 
 %% struct 'ContractorRef'
@@ -408,6 +417,24 @@
     'valid_since' :: dmsl_base_thrift:'Timestamp'() | undefined,
     'valid_until' :: dmsl_base_thrift:'Timestamp'() | undefined,
     'terms' :: dmsl_domain_thrift:'TermSetHierarchyRef'()
+}).
+
+%% struct 'CashRegisterRef'
+-record('domain_CashRegisterRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'CashRegister'
+-record('domain_CashRegister', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'proxy' :: dmsl_domain_thrift:'Proxy'()
+}).
+
+%% struct 'CashRegisterDecision'
+-record('domain_CashRegisterDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'CashRegisterSelector'()
 }).
 
 %% struct 'TermSet'
@@ -796,7 +823,8 @@
     'external_account_set' :: dmsl_domain_thrift:'ExternalAccountSetSelector'(),
     'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
     'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'(),
-    'common_merchant_proxy' :: dmsl_domain_thrift:'ProxyRef'() | undefined
+    'common_merchant_proxy' :: dmsl_domain_thrift:'ProxyRef'() | undefined,
+    'cash_registers' :: dmsl_domain_thrift:'CashRegisterSelector'() | undefined
 }).
 
 %% struct 'Dummy'
@@ -887,6 +915,12 @@
 -record('domain_InspectorObject', {
     'ref' :: dmsl_domain_thrift:'InspectorRef'(),
     'data' :: dmsl_domain_thrift:'Inspector'()
+}).
+
+%% struct 'CashRegisterObject'
+-record('domain_CashRegisterObject', {
+    'ref' :: dmsl_domain_thrift:'CashRegisterRef'(),
+    'data' :: dmsl_domain_thrift:'CashRegister'()
 }).
 
 %% struct 'SystemAccountSetObject'
