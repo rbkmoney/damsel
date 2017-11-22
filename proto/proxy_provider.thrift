@@ -107,7 +107,6 @@ struct InvoicePayment {
     1: required domain.InvoicePaymentID id
     2: required base.Timestamp created_at
     3: optional domain.TransactionInfo trx
-    4: required domain.LegacyPayerDetails payer_details
     6: required PaymentResource payment_resource
     5: required Cash cost
     7: required domain.ContactInfo contact_info

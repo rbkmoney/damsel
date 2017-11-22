@@ -115,7 +115,6 @@ struct InvoicePayment {
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
     3:  required InvoicePaymentStatus status
-    5:  required LegacyPayerDetails payer_details
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
@@ -225,13 +224,6 @@ union TargetInvoicePaymentStatus {
 
 }
 
-struct LegacyPayerDetails {
-    1: required PaymentTool payment_tool
-    2: required PaymentSessionID session_id
-    3: required ClientInfo client_info
-    4: required ContactInfo contact_info
-}
-
 union Payer {
     1: PaymentResourcePayer payment_resource
     2: CustomerPayer        customer
@@ -247,6 +239,7 @@ struct CustomerPayer {
     2: required CustomerBindingID      customer_binding_id
     3: required RecurrentPaymentToolID rec_payment_tool_id
     4: required PaymentTool            payment_tool
+    5: required ContactInfo            contact_info
 }
 
 struct ClientInfo {
@@ -587,6 +580,7 @@ struct ContractAdjustment {
 
 struct TermSet {
     1: optional PaymentsServiceTerms payments
+    2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
 }
 
 struct TimedTermSet {
@@ -603,7 +597,11 @@ struct TermSetHierarchy {
 
 struct TermSetHierarchyRef { 1: required ObjectID id }
 
-/* Service terms */
+struct RecurrentPaytoolsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+}
+
+/* Payments service terms */
 
 struct PaymentsServiceTerms {
     /* Shop level */
@@ -1199,7 +1197,8 @@ struct Provider {
     4: required TerminalSelector terminal
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
-    6: optional PaymentsProvisionTerms terms
+    6: optional PaymentsProvisionTerms payment_terms
+    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
     7: optional ProviderAccountSet accounts = {}
 }
 
@@ -1219,6 +1218,22 @@ struct PaymentHoldsProvisionTerms {
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
+}
+
+struct RecurrentPaytoolsProvisionTerms {
+    1: required CashValueSelector     cash_value
+    2: required CategorySelector      categories
+    3: required PaymentMethodSelector payment_methods
+}
+
+union CashValueSelector {
+    1: list<CashValueDecision> decisions
+    2: Cash value
+}
+
+struct CashValueDecision {
+    1: required Predicate if_
+    2: required CashValueSelector then_
 }
 
 typedef map<CurrencyRef, ProviderAccount> ProviderAccountSet
