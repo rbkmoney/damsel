@@ -114,6 +114,7 @@ struct InvoicePayment {
     1:  required InvoicePaymentID id
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
+    15: optional PartyRevision party_revision
     3:  required InvoicePaymentStatus status
     14: required Payer payer
     8:  required Cash cost
@@ -350,6 +351,7 @@ struct Suspended {
 /* Parties */
 
 typedef base.ID PartyID
+typedef i64 PartyRevision
 
 typedef string PartyMetaNamespace
 typedef msgpack.Value PartyMetaData
@@ -364,6 +366,7 @@ struct Party {
     3: required Suspension suspension
     4: required map<ContractID, Contract> contracts
     5: required map<ShopID, Shop> shops
+    6: required PartyRevision revision
 }
 
 struct PartyContactInfo {
