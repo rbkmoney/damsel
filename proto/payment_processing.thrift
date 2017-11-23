@@ -1318,7 +1318,7 @@ struct PartyEvent {
 }
 
 union PartyChange {
-    1: domain.Party         party_created
+    1: PartyCreated         party_created
     4: domain.Blocking      party_blocking
     5: domain.Suspension    party_suspension
     6: ShopBlocking         shop_blocking
@@ -1328,6 +1328,11 @@ union PartyChange {
     8: ClaimUpdated         claim_updated
     9: PartyMetaSet         party_meta_set
     10: domain.PartyMetaNamespace party_meta_removed
+}
+
+struct PartyCreated {
+    1: required domain.PartyContactInfo contact_info
+    2: required base.Timestamp created_at
 }
 
 struct ShopBlocking {
