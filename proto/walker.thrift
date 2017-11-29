@@ -90,39 +90,54 @@
         * Подтвердить и применить заявку пользователя
         **/
         void AcceptClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user 4: i32 revision) throws (
-                    1: ClaimNotFound ex1,
-                    2: InvalidClaimStatus ex2,
-                    3: InvalidClaimRevision ex3
+            1: payment_processing.InvalidUser ex1,
+            2: payment_processing.PartyNotFound ex2,
+            3: ClaimNotFound ex3,
+            4: InvalidClaimStatus ex4,
+            5: InvalidClaimRevision ex5,
+            6: payment_processing.InvalidChangeset ex6
         )
         /**
         * Отклонить заявку
         **/
         void DenyClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: string reason 5: i32 revision) throws (
-                    1: ClaimNotFound ex1,
-                    2: InvalidClaimStatus ex2,
-                    3: InvalidClaimRevision ex3)
+            1: payment_processing.InvalidUser ex1,
+            2: payment_processing.PartyNotFound ex2,
+            3: ClaimNotFound ex3,
+            4: InvalidClaimStatus ex4,
+            5: InvalidClaimRevision ex5)
         /**
         * Получить информацию о заявке
         **/
         ClaimInfo GetClaim(1: string party_id, 2: ClaimID claim_id) throws (
-                    1: ClaimNotFound ex1 )
+            1: payment_processing.InvalidUser ex1,
+            2: payment_processing.PartyNotFound ex2,
+            3: ClaimNotFound ex3)
 
         /**
         * Создать заявку
         **/
         payment_processing.Claim CreateClaim (1: UserInformation user, 2: PartyID party_id, 3: PartyModificationUnit changeset) throws (
-                    1: ChangesetConflict ex1,
-                    2: base.InvalidRequest ex2)
+            1: payment_processing.InvalidUser ex1,
+            2: payment_processing.PartyNotFound ex2,
+            3: payment_processing.InvalidPartyStatus ex3,
+            4: ChangesetConflict ex4,
+            5: payment_processing.InvalidChangeset ex5,
+            6: base.InvalidRequest ex6)
 
         /**
         * Передает список изменений для заявки
         **/
         void UpdateClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: PartyModificationUnit changeset, 5: i32 revision) throws (
-                    1: ClaimNotFound ex4,
-                    2: InvalidClaimStatus ex5,
-                    3: InvalidClaimRevision ex6,
-                    4: ChangesetConflict ex7,
-                    5: base.InvalidRequest ex9
+            1: payment_processing.InvalidUser ex1,
+            2: payment_processing.PartyNotFound ex2,
+            3: payment_processing.InvalidPartyStatus ex3,
+            4: ClaimNotFound ex4,
+            5: InvalidClaimStatus ex5,
+            6: InvalidClaimRevision ex6,
+            7: ChangesetConflict ex7,
+            8: payment_processing.InvalidChangeset ex8,
+            9: base.InvalidRequest ex9
         )
 
         /**
