@@ -58,18 +58,4 @@
     'email' :: binary() | undefined
 }).
 
-%% exception 'ClaimNotFound'
--record('walker_ClaimNotFound', {}).
-
-%% exception 'InvalidClaimRevision'
--record('walker_InvalidClaimRevision', {}).
-
-%% exception 'ChangesetConflict'
--record('walker_ChangesetConflict', {}).
-
-%% exception 'InvalidClaimStatus'
--record('walker_InvalidClaimStatus', {
-    'status' :: binary()
-}).
-
 -endif.
