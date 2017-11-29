@@ -91,7 +91,7 @@
         /**
         * Подтвердить и применить заявку пользователя
         **/
-        void AcceptClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user 4: i32 revision) throws (
+        void AcceptClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: i32 revision) throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
@@ -102,7 +102,7 @@
         /**
         * Отклонить заявку
         **/
-        void DenyClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: string reason 5: i32 revision) throws (
+        void DenyClaim(1: string party_id, 2: ClaimID claim_id, 3: UserInformation user, 4: string reason, 5: i32 revision) throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: ClaimNotFound ex3,
@@ -112,9 +112,7 @@
         * Получить информацию о заявке
         **/
         ClaimInfo GetClaim(1: string party_id, 2: ClaimID claim_id) throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ClaimNotFound ex3)
+            1: ClaimNotFound ex1)
 
         /**
         * Создать заявку
