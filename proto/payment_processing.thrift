@@ -141,6 +141,7 @@ union InvoicePaymentChangePayload {
     2: InvoicePaymentSessionChange         invoice_payment_session_change
     7: InvoicePaymentRefundChange          invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+    8: InvoicePaymentReceiptChange         invoice_payment_receipt_change
 }
 
 /**
@@ -314,6 +315,29 @@ struct InvoicePaymentAdjustmentCreated {
  */
 struct InvoicePaymentAdjustmentStatusChanged {
     1: required domain.InvoicePaymentAdjustmentStatus status
+}
+
+/**
+ * Событие, касающееся регистрации чека по данному платежу.
+ */
+struct InvoicePaymentReceiptChange {
+    1: required domain.InvoicePaymentReceiptID id
+    2: required InvoicePaymentReceiptChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого регистрацией чека.
+ */
+union InvoicePaymentReceiptChangePayload {
+    1: InvoicePaymentReceiptCreated         invoice_payment_receipt_created
+    2: InvoicePaymentReceiptRegistered      invoice_payment_receipt_registered
+    3: InvoicePaymentReceiptFailed          invoice_payment_receipt_failed
+}
+
+struct InvoicePaymentReceiptCreated {}
+struct InvoicePaymentReceiptRegistered {}
+struct InvoicePaymentReceiptFailed {
+    1: required domain.OperationFailure failure
 }
 
 /**
