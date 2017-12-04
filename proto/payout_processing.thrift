@@ -4,7 +4,7 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.payout_processing
 namespace erlang payout_processing
 
-typedef i64 PayoutID
+typedef base.ID PayoutID
 typedef list<Event> Events
 
 typedef base.ID UserID
