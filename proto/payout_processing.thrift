@@ -4,7 +4,7 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.payout_processing
 namespace erlang payout_processing
 
-typedef base.ID PayoutID
+typedef i64 PayoutID
 typedef list<Event> Events
 
 typedef base.ID UserID
@@ -262,12 +262,12 @@ exception LimitExceeded {}
 /**
 * Диапазон времени
 * from_time - начальное время.
-* to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
+* to_time - конечное время.
 * Если from > to  - диапазон считается некорректным.
 */
 struct TimeRange {
     1: required base.Timestamp from_time
-    2: optional base.Timestamp to_time
+    2: required base.Timestamp to_time
 }
 
 struct GeneratePayoutParams {
@@ -323,7 +323,7 @@ service PayoutManagement {
     /**
      * Отменить движения по выплатам. Вернуть список отмененных выплат
      */
-    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids, 2: string details) throws (1: base.InvalidRequest ex1)
 
     /**
     * Возвращает список Payout-ов согласно запросу поиска
