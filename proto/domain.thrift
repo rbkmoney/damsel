@@ -679,6 +679,7 @@ struct CashLimitDecision {
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
+    3: DigitalWalletProvider digital_wallet
 }
 
 enum BankCardPaymentSystem {
@@ -703,6 +704,7 @@ typedef base.ID RecurrentPaymentToolID
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
+    3: DigitalWallet digital_wallet
 }
 
 struct DisposablePaymentResource {
@@ -734,6 +736,16 @@ enum TerminalPaymentProvider {
     euroset
 }
 
+typedef string DigitalWalletID
+
+struct DigitalWallet {
+    1: required DigitalWalletProvider provider
+    2: required DigitalWalletID       id
+}
+
+enum DigitalWalletProvider {
+    qiwi
+}
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
 
@@ -1050,11 +1062,24 @@ union Condition {
 
 union PaymentToolCondition {
     1: BankCardCondition bank_card
+    2: PaymentTerminalCondition payment_terminal
+    3: DigitalWalletCondition digital_wallet
 }
 
 union BankCardCondition {
+    3: bool constant
     1: BankCardPaymentSystem payment_system_is
     2: BankCardBINRangeRef bin_in
+}
+
+union PaymentTerminalCondition {
+    1: bool constant
+    2: TerminalPaymentProvider provider_is
+}
+
+union DigitalWalletCondition {
+    1: bool constant
+    2: DigitalWalletProvider provider_is
 }
 
 struct PartyCondition {
