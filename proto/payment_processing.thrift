@@ -1120,6 +1120,8 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.ContractTemplateRef ContractTemplateRef
+typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
@@ -1144,12 +1146,12 @@ struct ShopAccountParams {
 
 struct ContractParams {
     1: required domain.Contractor contractor
-    2: optional domain.ContractTemplateRef template
-    3: optional domain.PaymentInstitutionRef payment_institution
+    2: optional ContractTemplateRef template
+    3: optional PaymentInstitutionRef payment_institution
 }
 
 struct ContractAdjustmentParams {
-    1: required domain.ContractTemplateRef template
+    1: required ContractTemplateRef template
 }
 
 union PartyModification {
@@ -1364,6 +1366,10 @@ struct PartyRevisionChanged {
     2: required domain.PartyRevision revision
 }
 
+struct ResidenceParam {
+    1: optional domain.Residence residence
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -1412,6 +1418,10 @@ exception AccountNotFound {}
 exception ShopAccountNotFound {}
 
 exception PartyMetaNamespaceNotFound {}
+
+exception PaymentInstitutionNotFound {}
+
+exception ContractTemplateNotFound {}
 
 // Service
 
@@ -1563,6 +1573,16 @@ service PartyManagement {
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    /* Payment institutions */
+
+    list<PaymentInstitutionRef> GetPaymentInstitutions (1: UserInfo user, 2: ResidenceParam residence)
+
+    ContractTemplateRef GetPaymentInstitutionContractTemplate (1: UserInfo user, 2: PaymentInstitutionRef ref, 3: ResidenceParam residence)
+        throws (1: PaymentInstitutionNotFound ex1)
+
+    domain.TermSet ComputeContractTemplateTerms (1: UserInfo user, 2: ContractTemplateRef ref, 3: ResidenceParam residence)
+        throws (1: ContractTemplateNotFound ex1)
 }
 
 /* Event sink service definitions */
