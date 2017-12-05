@@ -276,7 +276,8 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'bindings' :: [dmsl_payment_processing_thrift:'CustomerBinding'()],
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
-    'metadata' :: dmsl_payment_processing_thrift:'Metadata'()
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'(),
+    'active_binding_id' :: dmsl_payment_processing_thrift:'CustomerBindingID'() | undefined
 }).
 
 %% struct 'CustomerUnready'
@@ -287,7 +288,12 @@
 
 %% struct 'CustomerCreated'
 -record('payproc_CustomerCreated', {
-    'customer' :: dmsl_payment_processing_thrift:'Customer'()
+    'customer_id' :: dmsl_payment_processing_thrift:'CustomerID'(),
+    'owner_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% struct 'CustomerDeleted'
@@ -349,7 +355,6 @@
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
-    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'(),
     'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),

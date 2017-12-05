@@ -113,7 +113,6 @@
     'InvoiceTemplateCostUnlimited'/0,
     'InvoicePaymentStatus'/0,
     'TargetInvoicePaymentStatus'/0,
-    'LegacyPayerDetails'/0,
     'Payer'/0,
     'PaymentResourcePayer'/0,
     'CustomerPayer'/0,
@@ -174,6 +173,7 @@
     'TimedTermSet'/0,
     'TermSetHierarchy'/0,
     'TermSetHierarchyRef'/0,
+    'RecurrentPaytoolsServiceTerms'/0,
     'PaymentsServiceTerms'/0,
     'PaymentHoldsServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
@@ -216,6 +216,9 @@
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
+    'RecurrentPaytoolsProvisionTerms'/0,
+    'CashValueSelector'/0,
+    'CashValueDecision'/0,
     'ProviderAccount'/0,
     'ProviderSelector'/0,
     'ProviderDecision'/0,
@@ -483,7 +486,6 @@
     'InvoiceTemplateCostUnlimited' |
     'InvoicePaymentStatus' |
     'TargetInvoicePaymentStatus' |
-    'LegacyPayerDetails' |
     'Payer' |
     'PaymentResourcePayer' |
     'CustomerPayer' |
@@ -544,6 +546,7 @@
     'TimedTermSet' |
     'TermSetHierarchy' |
     'TermSetHierarchyRef' |
+    'RecurrentPaytoolsServiceTerms' |
     'PaymentsServiceTerms' |
     'PaymentHoldsServiceTerms' |
     'PaymentRefundsServiceTerms' |
@@ -586,6 +589,9 @@
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
+    'RecurrentPaytoolsProvisionTerms' |
+    'CashValueSelector' |
+    'CashValueDecision' |
     'ProviderAccount' |
     'ProviderSelector' |
     'ProviderDecision' |
@@ -761,9 +767,6 @@
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
     {'refunded', 'InvoicePaymentRefunded'()}.
-
-%% struct 'LegacyPayerDetails'
--type 'LegacyPayerDetails'() :: #'domain_LegacyPayerDetails'{}.
 
 %% union 'Payer'
 -type 'Payer'() ::
@@ -971,6 +974,9 @@
 %% struct 'TermSetHierarchyRef'
 -type 'TermSetHierarchyRef'() :: #'domain_TermSetHierarchyRef'{}.
 
+%% struct 'RecurrentPaytoolsServiceTerms'
+-type 'RecurrentPaytoolsServiceTerms'() :: #'domain_RecurrentPaytoolsServiceTerms'{}.
+
 %% struct 'PaymentsServiceTerms'
 -type 'PaymentsServiceTerms'() :: #'domain_PaymentsServiceTerms'{}.
 
@@ -1123,6 +1129,17 @@
 
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
+
+%% struct 'RecurrentPaytoolsProvisionTerms'
+-type 'RecurrentPaytoolsProvisionTerms'() :: #'domain_RecurrentPaytoolsProvisionTerms'{}.
+
+%% union 'CashValueSelector'
+-type 'CashValueSelector'() ::
+    {'decisions', ['CashValueDecision'()]} |
+    {'value', 'Cash'()}.
+
+%% struct 'CashValueDecision'
+-type 'CashValueDecision'() :: #'domain_CashValueDecision'{}.
 
 %% struct 'ProviderAccount'
 -type 'ProviderAccount'() :: #'domain_ProviderAccount'{}.
@@ -1507,7 +1524,6 @@ structs() ->
         'InvoiceTemplateCostUnlimited',
         'InvoicePaymentStatus',
         'TargetInvoicePaymentStatus',
-        'LegacyPayerDetails',
         'Payer',
         'PaymentResourcePayer',
         'CustomerPayer',
@@ -1568,6 +1584,7 @@ structs() ->
         'TimedTermSet',
         'TermSetHierarchy',
         'TermSetHierarchyRef',
+        'RecurrentPaytoolsServiceTerms',
         'PaymentsServiceTerms',
         'PaymentHoldsServiceTerms',
         'PaymentRefundsServiceTerms',
@@ -1610,6 +1627,9 @@ structs() ->
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PaymentRefundsProvisionTerms',
+        'RecurrentPaytoolsProvisionTerms',
+        'CashValueSelector',
+        'CashValueDecision',
         'ProviderAccount',
         'ProviderSelector',
         'ProviderDecision',
@@ -1989,7 +2009,6 @@ struct_info('InvoicePayment') ->
     {2, required, string, 'created_at', undefined},
     {10, required, i64, 'domain_revision', undefined},
     {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
-    {5, required, {struct, struct, {dmsl_domain_thrift, 'LegacyPayerDetails'}}, 'payer_details', undefined},
     {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
@@ -2073,14 +2092,6 @@ struct_info('TargetInvoicePaymentStatus') ->
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
 ]};
 
-struct_info('LegacyPayerDetails') ->
-    {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {2, required, string, 'session_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
-
 struct_info('Payer') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
@@ -2098,7 +2109,8 @@ struct_info('CustomerPayer') ->
     {1, required, string, 'customer_id', undefined},
     {2, required, string, 'customer_binding_id', undefined},
     {3, required, string, 'rec_payment_tool_id', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined}
+    {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {5, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
 ]};
 
 struct_info('ClientInfo') ->
@@ -2445,7 +2457,8 @@ struct_info('CashRegisterDecision') ->
 
 struct_info('TermSet') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined}
 ]};
 
 struct_info('TimedTermSet') ->
@@ -2465,6 +2478,11 @@ struct_info('TermSetHierarchy') ->
 struct_info('TermSetHierarchyRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
+]};
+
+struct_info('RecurrentPaytoolsServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
 ]};
 
 struct_info('PaymentsServiceTerms') ->
@@ -2713,7 +2731,8 @@ struct_info('Provider') ->
     {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
     {4, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined},
     {5, required, string, 'abs_account', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined},
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'payment_terms', undefined},
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsProvisionTerms'}}, 'recurrent_paytool_terms', undefined},
     {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
 ]};
 
@@ -2736,6 +2755,25 @@ struct_info('PaymentHoldsProvisionTerms') ->
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+]};
+
+struct_info('RecurrentPaytoolsProvisionTerms') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'cash_value', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
+]};
+
+struct_info('CashValueSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashValueDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'value', undefined}
+]};
+
+struct_info('CashValueDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('ProviderAccount') ->
@@ -3216,9 +3254,6 @@ record_name('OperationTimeout') ->
     record_name('InvoiceTemplateCostUnlimited') ->
     'domain_InvoiceTemplateCostUnlimited';
 
-    record_name('LegacyPayerDetails') ->
-    'domain_LegacyPayerDetails';
-
     record_name('PaymentResourcePayer') ->
     'domain_PaymentResourcePayer';
 
@@ -3360,6 +3395,9 @@ record_name('OperationTimeout') ->
     record_name('TermSetHierarchyRef') ->
     'domain_TermSetHierarchyRef';
 
+    record_name('RecurrentPaytoolsServiceTerms') ->
+    'domain_RecurrentPaytoolsServiceTerms';
+
     record_name('PaymentsServiceTerms') ->
     'domain_PaymentsServiceTerms';
 
@@ -3449,6 +3487,12 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
+
+    record_name('RecurrentPaytoolsProvisionTerms') ->
+    'domain_RecurrentPaytoolsProvisionTerms';
+
+    record_name('CashValueDecision') ->
+    'domain_CashValueDecision';
 
     record_name('ProviderAccount') ->
     'domain_ProviderAccount';
