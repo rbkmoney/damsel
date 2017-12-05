@@ -1328,8 +1328,9 @@ union PartyChange {
 }
 
 struct PartyCreated {
-    1: required domain.PartyContactInfo contact_info
-    2: required base.Timestamp created_at
+    1: required PartyID id
+    7: required domain.PartyContactInfo contact_info
+    8: required base.Timestamp created_at
 }
 
 struct ShopBlocking {
