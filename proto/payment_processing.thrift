@@ -1372,6 +1372,11 @@ struct ResidenceParam {
     1: optional domain.Residence residence
 }
 
+union PartyRevisionParam {
+    1: base.Timestamp timestamp
+    2: domain.PartyRevision revision
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -1437,10 +1442,7 @@ service PartyManagement {
     domain.Party Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    domain.Party CheckoutByTimestamp (1: UserInfo user, 2: PartyID party_id, 3: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
-
-    domain.Party CheckoutByRevision (1: UserInfo user, 2: PartyID party_id, 3: domain.PartyRevision revision)
+    domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: PartyRevisionParam revision)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyRevision ex3)
 
     void Suspend (1: UserInfo user, 2: PartyID party_id)
