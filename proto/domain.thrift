@@ -1066,20 +1066,31 @@ union PaymentToolCondition {
     3: DigitalWalletCondition digital_wallet
 }
 
-union BankCardCondition {
-    3: bool constant
+struct BankCardCondition {
+    1: optional BankCardPaymentSystem payment_system_is // legacy
+    2: optional BankCardBINRangeRef bin_in              // legacy
+    3: optional BankCardConditionDefinition definition
+}
+
+union BankCardConditionDefinition {
     1: BankCardPaymentSystem payment_system_is
     2: BankCardBINRangeRef bin_in
 }
 
-union PaymentTerminalCondition {
-    1: bool constant
-    2: TerminalPaymentProvider provider_is
+struct PaymentTerminalCondition {
+    1: optional PaymentTerminalConditionDefinition definition
 }
 
-union DigitalWalletCondition {
-    1: bool constant
-    2: DigitalWalletProvider provider_is
+union PaymentTerminalConditionDefinition {
+    1: TerminalPaymentProvider provider_is
+}
+
+struct DigitalWalletCondition {
+    1: optional DigitalWalletConditionDefinition definition
+}
+
+union DigitalWalletConditionDefinition {
+    1: DigitalWalletProvider provider_is
 }
 
 struct PartyCondition {
