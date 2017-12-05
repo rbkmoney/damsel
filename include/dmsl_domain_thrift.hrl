@@ -302,7 +302,7 @@
 
 %% struct 'ShopCashRegister'
 -record('domain_ShopCashRegister', {
-    'id' :: dmsl_domain_thrift:'CashRegisterID'(),
+    'ref' :: dmsl_domain_thrift:'CashRegisterRef'(),
     'tax_system' :: atom() | undefined,
     'options' :: dmsl_domain_thrift:'ProxyOptions'()
 }).

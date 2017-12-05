@@ -150,6 +150,23 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentStatus'()
 }).
 
+%% struct 'InvoicePaymentReceiptChange'
+-record('payproc_InvoicePaymentReceiptChange', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentReceiptID'(),
+    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentReceiptChangePayload'()
+}).
+
+%% struct 'InvoicePaymentReceiptCreated'
+-record('payproc_InvoicePaymentReceiptCreated', {}).
+
+%% struct 'InvoicePaymentReceiptRegistered'
+-record('payproc_InvoicePaymentReceiptRegistered', {}).
+
+%% struct 'InvoicePaymentReceiptFailed'
+-record('payproc_InvoicePaymentReceiptFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
+}).
+
 %% struct 'EventRange'
 -record('payproc_EventRange', {
     'after' :: dmsl_base_thrift:'EventID'() | undefined,

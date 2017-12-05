@@ -41,6 +41,7 @@
     'InvoicePaymentID'/0,
     'InvoicePaymentRefundID'/0,
     'InvoicePaymentAdjustmentID'/0,
+    'InvoicePaymentReceiptID'/0,
     'InvoiceContext'/0,
     'InvoicePaymentContext'/0,
     'PaymentSessionID'/0,
@@ -52,7 +53,6 @@
     'PartyMetaData'/0,
     'PartyMeta'/0,
     'ShopID'/0,
-    'CashRegisterID'/0,
     'PayoutToolID'/0,
     'ContractID'/0,
     'ContractAdjustmentID'/0,
@@ -294,6 +294,7 @@
     'InvoicePaymentID' |
     'InvoicePaymentRefundID' |
     'InvoicePaymentAdjustmentID' |
+    'InvoicePaymentReceiptID' |
     'InvoiceContext' |
     'InvoicePaymentContext' |
     'PaymentSessionID' |
@@ -305,7 +306,6 @@
     'PartyMetaData' |
     'PartyMeta' |
     'ShopID' |
-    'CashRegisterID' |
     'PayoutToolID' |
     'ContractID' |
     'ContractAdjustmentID' |
@@ -330,6 +330,7 @@
 -type 'InvoicePaymentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentRefundID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentAdjustmentID'() :: dmsl_base_thrift:'ID'().
+-type 'InvoicePaymentReceiptID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoiceContext'() :: dmsl_base_thrift:'Content'().
 -type 'InvoicePaymentContext'() :: dmsl_base_thrift:'Content'().
 -type 'PaymentSessionID'() :: binary().
@@ -341,7 +342,6 @@
 -type 'PartyMetaData'() :: dmsl_msgpack_thrift:'Value'().
 -type 'PartyMeta'() :: #{'PartyMetaNamespace'() => 'PartyMetaData'()}.
 -type 'ShopID'() :: dmsl_base_thrift:'ID'().
--type 'CashRegisterID'() :: dmsl_base_thrift:'ID'().
 -type 'PayoutToolID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractAdjustmentID'() :: dmsl_base_thrift:'ID'().
@@ -1427,6 +1427,7 @@ typedefs() ->
         'InvoicePaymentID',
         'InvoicePaymentRefundID',
         'InvoicePaymentAdjustmentID',
+        'InvoicePaymentReceiptID',
         'InvoiceContext',
         'InvoicePaymentContext',
         'PaymentSessionID',
@@ -1438,7 +1439,6 @@ typedefs() ->
         'PartyMetaData',
         'PartyMeta',
         'ShopID',
-        'CashRegisterID',
         'PayoutToolID',
         'ContractID',
         'ContractAdjustmentID',
@@ -1712,6 +1712,9 @@ typedef_info('InvoicePaymentRefundID') ->
 typedef_info('InvoicePaymentAdjustmentID') ->
     string;
 
+typedef_info('InvoicePaymentReceiptID') ->
+    string;
+
 typedef_info('InvoiceContext') ->
     {struct, struct, {dmsl_base_thrift, 'Content'}};
 
@@ -1743,9 +1746,6 @@ typedef_info('PartyMeta') ->
     {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}};
 
 typedef_info('ShopID') ->
-    string;
-
-typedef_info('CashRegisterID') ->
     string;
 
 typedef_info('PayoutToolID') ->
@@ -2273,7 +2273,7 @@ struct_info('ShopLocation') ->
 
 struct_info('ShopCashRegister') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'CashRegisterRef'}}, 'ref', undefined},
     {2, optional, {enum, {dmsl_domain_thrift, 'TaxSystem'}}, 'tax_system', undefined},
     {3, required, {map, string, string}, 'options', undefined}
 ]};

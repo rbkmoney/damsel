@@ -90,6 +90,11 @@
     'InvoicePaymentAdjustmentChangePayload'/0,
     'InvoicePaymentAdjustmentCreated'/0,
     'InvoicePaymentAdjustmentStatusChanged'/0,
+    'InvoicePaymentReceiptChange'/0,
+    'InvoicePaymentReceiptChangePayload'/0,
+    'InvoicePaymentReceiptCreated'/0,
+    'InvoicePaymentReceiptRegistered'/0,
+    'InvoicePaymentReceiptFailed'/0,
     'EventRange'/0,
     'InvoiceParams'/0,
     'InvoiceWithTemplateParams'/0,
@@ -319,6 +324,11 @@
     'InvoicePaymentAdjustmentChangePayload' |
     'InvoicePaymentAdjustmentCreated' |
     'InvoicePaymentAdjustmentStatusChanged' |
+    'InvoicePaymentReceiptChange' |
+    'InvoicePaymentReceiptChangePayload' |
+    'InvoicePaymentReceiptCreated' |
+    'InvoicePaymentReceiptRegistered' |
+    'InvoicePaymentReceiptFailed' |
     'EventRange' |
     'InvoiceParams' |
     'InvoiceWithTemplateParams' |
@@ -519,7 +529,8 @@
     {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
     {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
-    {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()}.
+    {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()} |
+    {'invoice_payment_receipt_change', 'InvoicePaymentReceiptChange'()}.
 
 %% struct 'InvoicePaymentStarted'
 -type 'InvoicePaymentStarted'() :: #'payproc_InvoicePaymentStarted'{}.
@@ -609,6 +620,24 @@
 
 %% struct 'InvoicePaymentAdjustmentStatusChanged'
 -type 'InvoicePaymentAdjustmentStatusChanged'() :: #'payproc_InvoicePaymentAdjustmentStatusChanged'{}.
+
+%% struct 'InvoicePaymentReceiptChange'
+-type 'InvoicePaymentReceiptChange'() :: #'payproc_InvoicePaymentReceiptChange'{}.
+
+%% union 'InvoicePaymentReceiptChangePayload'
+-type 'InvoicePaymentReceiptChangePayload'() ::
+    {'invoice_payment_receipt_created', 'InvoicePaymentReceiptCreated'()} |
+    {'invoice_payment_receipt_registered', 'InvoicePaymentReceiptRegistered'()} |
+    {'invoice_payment_receipt_failed', 'InvoicePaymentReceiptFailed'()}.
+
+%% struct 'InvoicePaymentReceiptCreated'
+-type 'InvoicePaymentReceiptCreated'() :: #'payproc_InvoicePaymentReceiptCreated'{}.
+
+%% struct 'InvoicePaymentReceiptRegistered'
+-type 'InvoicePaymentReceiptRegistered'() :: #'payproc_InvoicePaymentReceiptRegistered'{}.
+
+%% struct 'InvoicePaymentReceiptFailed'
+-type 'InvoicePaymentReceiptFailed'() :: #'payproc_InvoicePaymentReceiptFailed'{}.
 
 %% struct 'EventRange'
 -type 'EventRange'() :: #'payproc_EventRange'{}.
@@ -1311,6 +1340,11 @@ structs() ->
         'InvoicePaymentAdjustmentChangePayload',
         'InvoicePaymentAdjustmentCreated',
         'InvoicePaymentAdjustmentStatusChanged',
+        'InvoicePaymentReceiptChange',
+        'InvoicePaymentReceiptChangePayload',
+        'InvoicePaymentReceiptCreated',
+        'InvoicePaymentReceiptRegistered',
+        'InvoicePaymentReceiptFailed',
         'EventRange',
         'InvoiceParams',
         'InvoiceWithTemplateParams',
@@ -1568,7 +1602,8 @@ struct_info('InvoicePaymentChangePayload') ->
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined}
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
+    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptChange'}}, 'invoice_payment_receipt_change', undefined}
 ]};
 
 struct_info('InvoicePaymentStarted') ->
@@ -1703,6 +1738,30 @@ struct_info('InvoicePaymentAdjustmentCreated') ->
 struct_info('InvoicePaymentAdjustmentStatusChanged') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
+]};
+
+struct_info('InvoicePaymentReceiptChange') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptChangePayload'}}, 'payload', undefined}
+]};
+
+struct_info('InvoicePaymentReceiptChangePayload') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptCreated'}}, 'invoice_payment_receipt_created', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptRegistered'}}, 'invoice_payment_receipt_registered', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptFailed'}}, 'invoice_payment_receipt_failed', undefined}
+]};
+
+struct_info('InvoicePaymentReceiptCreated') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentReceiptRegistered') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentReceiptFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
 ]};
 
 struct_info('EventRange') ->
@@ -2547,6 +2606,18 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentAdjustmentStatusChanged') ->
     'payproc_InvoicePaymentAdjustmentStatusChanged';
+
+    record_name('InvoicePaymentReceiptChange') ->
+    'payproc_InvoicePaymentReceiptChange';
+
+    record_name('InvoicePaymentReceiptCreated') ->
+    'payproc_InvoicePaymentReceiptCreated';
+
+    record_name('InvoicePaymentReceiptRegistered') ->
+    'payproc_InvoicePaymentReceiptRegistered';
+
+    record_name('InvoicePaymentReceiptFailed') ->
+    'payproc_InvoicePaymentReceiptFailed';
 
     record_name('EventRange') ->
     'payproc_EventRange';

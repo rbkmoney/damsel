@@ -61,6 +61,7 @@ typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
 typedef base.ID InvoicePaymentRefundID
 typedef base.ID InvoicePaymentAdjustmentID
+typedef base.ID InvoicePaymentReceiptID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
 typedef string PaymentSessionID
@@ -393,7 +394,6 @@ struct PartyContactInfo {
 /* Shops */
 
 typedef base.ID ShopID
-typedef base.ID CashRegisterID
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -445,7 +445,7 @@ enum TaxSystem {
 }
 
 struct ShopCashRegister {
-    1: required CashRegisterID id
+    1: required CashRegisterRef ref
     /* Система налогооблажения */
     2: optional TaxSystem tax_system
     3: required ProxyOptions options
