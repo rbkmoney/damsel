@@ -1225,6 +1225,7 @@ union ShopModification {
     10: ProxyModification proxy_modification
     11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
+    13: CashRegModification cash_register_modification
 }
 
 struct ShopContractModification {
@@ -1234,6 +1235,10 @@ struct ShopContractModification {
 
 struct ProxyModification {
     1: optional domain.Proxy proxy
+}
+
+struct CashRegModification {
+    1: optional domain.ShopCashRegister cash_register
 }
 
 // Claims
