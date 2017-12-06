@@ -1368,7 +1368,7 @@ struct PartyRevisionChanged {
     2: required domain.PartyRevision revision
 }
 
-struct ResidenceParam {
+struct ContractorParams {
     1: optional domain.Residence residence
 }
 
@@ -1583,13 +1583,13 @@ service PartyManagement {
 
     /* Payment institutions */
 
-    list<PaymentInstitutionRef> GetPaymentInstitutions (1: UserInfo user, 2: ResidenceParam residence)
-
-    ContractTemplateRef GetPaymentInstitutionContractTemplate (1: UserInfo user, 2: PaymentInstitutionRef ref, 3: ResidenceParam residence)
-        throws (1: PaymentInstitutionNotFound ex1)
-
-    domain.TermSet ComputeContractTemplateTerms (1: UserInfo user, 2: ContractTemplateRef ref, 3: ResidenceParam residence)
-        throws (1: ContractTemplateNotFound ex1)
+    domain.TermSet ComputePaymentInstitutionTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: PaymentInstitutionRef ref,
+        4: ContractorParams contractor_params
+    )
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
 }
 
 /* Event sink service definitions */
