@@ -164,6 +164,7 @@
     'ShopModification'/0,
     'ShopContractModification'/0,
     'ProxyModification'/0,
+    'CashRegModification'/0,
     'Claim'/0,
     'ClaimStatus'/0,
     'ClaimPending'/0,
@@ -398,6 +399,7 @@
     'ShopModification' |
     'ShopContractModification' |
     'ProxyModification' |
+    'CashRegModification' |
     'Claim' |
     'ClaimStatus' |
     'ClaimPending' |
@@ -882,13 +884,17 @@
     {'payout_tool_modification', dmsl_domain_thrift:'PayoutToolID'()} |
     {'proxy_modification', 'ProxyModification'()} |
     {'location_modification', dmsl_domain_thrift:'ShopLocation'()} |
-    {'shop_account_creation', 'ShopAccountParams'()}.
+    {'shop_account_creation', 'ShopAccountParams'()} |
+    {'cash_register_modification', 'CashRegModification'()}.
 
 %% struct 'ShopContractModification'
 -type 'ShopContractModification'() :: #'payproc_ShopContractModification'{}.
 
 %% struct 'ProxyModification'
 -type 'ProxyModification'() :: #'payproc_ProxyModification'{}.
+
+%% struct 'CashRegModification'
+-type 'CashRegModification'() :: #'payproc_CashRegModification'{}.
 
 %% struct 'Claim'
 -type 'Claim'() :: #'payproc_Claim'{}.
@@ -1414,6 +1420,7 @@ structs() ->
         'ShopModification',
         'ShopContractModification',
         'ProxyModification',
+        'CashRegModification',
         'Claim',
         'ClaimStatus',
         'ClaimPending',
@@ -2175,7 +2182,8 @@ struct_info('ShopModification') ->
     {9, optional, string, 'payout_tool_modification', undefined},
     {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ProxyModification'}}, 'proxy_modification', undefined},
     {11, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined}
+    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
+    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CashRegModification'}}, 'cash_register_modification', undefined}
 ]};
 
 struct_info('ShopContractModification') ->
@@ -2187,6 +2195,11 @@ struct_info('ShopContractModification') ->
 struct_info('ProxyModification') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+]};
+
+struct_info('CashRegModification') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ShopCashRegister'}}, 'cash_register', undefined}
 ]};
 
 struct_info('Claim') ->
@@ -2788,6 +2801,9 @@ record_name('InternalUser') ->
 
     record_name('ProxyModification') ->
     'payproc_ProxyModification';
+
+    record_name('CashRegModification') ->
+    'payproc_CashRegModification';
 
     record_name('Claim') ->
     'payproc_Claim';

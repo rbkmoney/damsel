@@ -492,6 +492,11 @@
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
 }).
 
+%% struct 'CashRegModification'
+-record('payproc_CashRegModification', {
+    'cash_register' :: dmsl_domain_thrift:'ShopCashRegister'() | undefined
+}).
+
 %% struct 'Claim'
 -record('payproc_Claim', {
     'id' :: dmsl_payment_processing_thrift:'ClaimID'(),
