@@ -1432,6 +1432,7 @@ struct GlobalsRef {}
 
 struct Globals {
     4: required ExternalAccountSetSelector external_account_set
+    6: optional set<PaymentInstitutionRef> payment_institutions
 }
 
 /** Dummy (for integrity test purpose) */
