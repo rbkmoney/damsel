@@ -1418,21 +1418,12 @@ struct PaymentInstitution {
     5: required ProviderSelector providers
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
+    8: required set<Residence> residences
 }
 
 enum PaymentInstitutionRealm {
     test
     live
-}
-
-union PaymentInstitutionSelector {
-    1: list<PaymentInstitutionDecision> decisions
-    2: set<PaymentInstitutionRef> value
-}
-
-struct PaymentInstitutionDecision {
-    1: required Predicate if_
-    2: required PaymentInstitutionSelector then_
 }
 
 /* Root config */
@@ -1441,7 +1432,7 @@ struct GlobalsRef {}
 
 struct Globals {
     4: required ExternalAccountSetSelector external_account_set
-    6: optional PaymentInstitutionSelector payment_institution
+    6: optional set<PaymentInstitutionRef> payment_institutions
 }
 
 /** Dummy (for integrity test purpose) */
