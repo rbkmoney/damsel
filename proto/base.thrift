@@ -50,6 +50,43 @@ enum BoundType {
     exclusive
 }
 
+/** Промежуток времени */
+union TimeSpan {
+    1: i16 seconds
+    2: i16 minutes
+    3: i16 hours
+    4: i16 days
+    5: i16 weeks
+    6: i16 months
+    7: i16 years
+}
+
+/** Смещение во времени */
+struct TimeOffset {
+    1: optional i16 seconds
+    2: optional i16 minutes
+    3: optional i16 hours
+    4: optional i16 days
+    5: optional i16 weeks
+    6: optional i16 months
+    7: optional i16 years
+}
+
+/** День недели */
+enum WeekDay { Mon Tue Wed Thu Fri Sat Sun }
+
+/** Год */
+typedef i32 Year
+
+/** Месяц года */
+enum Month { Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec }
+
+/** День месяца */
+typedef i8 Day
+
+/** Часовой пояс, согласно IANA Timezone Database. */
+typedef string Timezone
+
 /** Отображение из строки в строку */
 typedef map<string, string> StringMap
 
