@@ -176,7 +176,7 @@ struct PayoutCard {
 
 /* Вывод на расчетный счет */
 struct PayoutAccount {
-    1: required domain.BankAccount account
+    1: required domain.RussianBankAccount account
     2: required string inn
     3: required string purpose
     4: required domain.LegalAgreement legal_agreement

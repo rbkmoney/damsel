@@ -433,6 +433,7 @@ struct RegisteredUser {
 
 union LegalEntity {
     1: RussianLegalEntity russian_legal_entity
+    2: InternationalLegalEntity international_legal_entity
 }
 
 /** Юридическое лицо-резидент РФ */
@@ -454,16 +455,37 @@ struct RussianLegalEntity {
     /* Наименование документа, на основании которого действует ЕИО/представитель */
     8: required string representative_document
     /* Реквизиты юр.лица */
-    9: required BankAccount bank_account
+    9: required RussianBankAccount russian_bank_account
+}
+
+struct InternationalLegalEntity {
+    /* Наименование */
+    1: required string legal_name
+    /* Торговое наименование (если применимо) */
+    2: optional string trading_name
+    /* Адрес места регистрации */
+    3: required string registered_address
+    /* Адрес места нахождения (если отличается от регистрации)*/
+    4: optional string actual_address
+    /* Резиденция */
+    5: required Residence residence
 }
 
 /** Банковский счёт. */
 
-struct BankAccount {
+struct RussianBankAccount {
     1: required string account
     2: required string bank_name
     3: required string bank_post_account
     4: required string bank_bik
+}
+
+struct InternationalBankAccount {
+    1: required string account_holder
+    2: required string bank_name
+    3: required string bank_address
+    4: required string iban     // International Bank Account Number (ISO 13616)
+    5: required string bic      // Business Identifier Code (ISO 9362)
 }
 
 typedef base.ID PayoutToolID
@@ -476,7 +498,8 @@ struct PayoutTool {
 }
 
 union PayoutToolInfo {
-    1: BankAccount bank_account
+    1: RussianBankAccount russian_bank_account
+    2: InternationalBankAccount international_bank_account
 }
 
 typedef base.ID ContractID
