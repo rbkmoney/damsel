@@ -461,7 +461,7 @@ struct RussianLegalEntity {
 struct InternationalLegalEntity {
     /* Наименование */
     1: required string legal_name
-    /* Merchant trading name (if applicable) */
+    /* Торговое наименование (если применимо) */
     2: optional string trading_name
     /* Адрес места регистрации */
     3: required string registered_address
