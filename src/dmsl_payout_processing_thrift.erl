@@ -603,7 +603,7 @@ struct_info('PayoutSearchRequest') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'search_criteria', undefined},
     {2, optional, i64, 'from_id', undefined},
-    {3, required, i32, 'size', undefined}
+    {3, optional, i32, 'size', undefined}
 ]};
 
 struct_info('PayoutSearchResponse') ->
@@ -810,7 +810,7 @@ function_info('PayoutManagement', 'GetPayoutsInfo', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchRequest'}}, 'request', undefined}
 ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', reply_type) ->
-        {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}}};
+        {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}};
     function_info('PayoutManagement', 'GetPayoutsInfo', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}

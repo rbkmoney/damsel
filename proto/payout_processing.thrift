@@ -275,6 +275,12 @@ struct ShopParams {
     2: required domain.ShopID shop_id
 }
 
+/**
+* Параметры для генерации выплаты
+* time_range - диапазон времени, за который будет сформированы выплаты
+* shop - параметры магазина. Если не указан, то генерируются выплаты за все магазины,
+* имеющие платежи/возвраты/корректировки за указанный time_range
+**/
 struct GeneratePayoutParams {
     1: required TimeRange time_range
     2: optional ShopParams shop
@@ -306,13 +312,13 @@ enum PayoutSearchStatus {
 struct PayoutSearchRequest {
    1: required PayoutSearchCriteria search_criteria
    2: optional i64 from_id
-   3: required i32 size
+   3: optional i32 size
 }
 
 /**
 * Поисковый ответ по выплатам
 * payouts - информация по выплатам
-* last_id (inclusize) - уникальный идентификатор, соответствующий последнему элементу выборки
+* last_id (inclusive) - уникальный идентификатор, соответствующий последнему элементу выборки
 **/
 struct PayoutSearchResponse {
    1: required list<PayoutInfo> payouts
@@ -354,5 +360,5 @@ service PayoutManagement {
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
-    list<PayoutSearchResponse> GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
+    PayoutSearchResponse GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
 }

@@ -140,7 +140,7 @@
 -record('payout_processing_PayoutSearchRequest', {
     'search_criteria' :: dmsl_payout_processing_thrift:'PayoutSearchCriteria'(),
     'from_id' :: integer() | undefined,
-    'size' :: integer()
+    'size' :: integer() | undefined
 }).
 
 %% struct 'PayoutSearchResponse'
