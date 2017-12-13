@@ -270,10 +270,14 @@ struct TimeRange {
     2: required base.Timestamp to_time
 }
 
+struct ShopParams {
+    1: required domain.PartyID party_id
+    2: required domain.ShopID shop_id
+}
+
 struct GeneratePayoutParams {
     1: required TimeRange time_range
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
+    2: optional ShopParams shop
 }
 
 /**
@@ -291,6 +295,28 @@ enum PayoutSearchStatus {
     paid,
     cancelled,
     confirmed
+}
+
+/**
+* Поисковый запрос по выплатам
+* search_criteria - атрибуты поиска выплат
+* from - начальный идентификатор, после которого будет формироваться выборка
+* size - размер выборки
+**/
+struct PayoutSearchRequest {
+   1: required PayoutSearchCriteria search_criteria
+   2: optional i64 from_id
+   3: required i32 size
+}
+
+/**
+* Поисковый ответ по выплатам
+* payouts - информация по выплатам
+* last_id - уникальный идентификатор, соответствующий последнему элементу выборки
+**/
+struct PayoutSearchResponse {
+   1: required list<PayoutInfo> payouts
+   2: required i64 last_id
 }
 
 /**
@@ -313,7 +339,7 @@ service PayoutManagement {
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
      */
-    PayoutID GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /**
      * Подтвердить выплаты. Вернуть список подтвержденных выплат
@@ -328,5 +354,5 @@ service PayoutManagement {
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
-    list<PayoutInfo> GetPayoutsInfo (1: PayoutSearchCriteria search_criteria) throws (1: base.InvalidRequest ex1)
+    list<PayoutSearchResponse> GetPayoutsInfo (1: PayoutSearchRequest payout_search_request) throws (1: base.InvalidRequest ex1)
 }

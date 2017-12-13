@@ -67,8 +67,11 @@
     'EventRange'/0,
     'Pay2CardParams'/0,
     'TimeRange'/0,
+    'ShopParams'/0,
     'GeneratePayoutParams'/0,
     'PayoutSearchCriteria'/0,
+    'PayoutSearchRequest'/0,
+    'PayoutSearchResponse'/0,
     'PayoutInfo'/0
 ]).
 -export_type([
@@ -136,8 +139,11 @@
     'EventRange' |
     'Pay2CardParams' |
     'TimeRange' |
+    'ShopParams' |
     'GeneratePayoutParams' |
     'PayoutSearchCriteria' |
+    'PayoutSearchRequest' |
+    'PayoutSearchResponse' |
     'PayoutInfo'.
 
 -type exception_name() ::
@@ -242,11 +248,20 @@
 %% struct 'TimeRange'
 -type 'TimeRange'() :: #'payout_processing_TimeRange'{}.
 
+%% struct 'ShopParams'
+-type 'ShopParams'() :: #'payout_processing_ShopParams'{}.
+
 %% struct 'GeneratePayoutParams'
 -type 'GeneratePayoutParams'() :: #'payout_processing_GeneratePayoutParams'{}.
 
 %% struct 'PayoutSearchCriteria'
 -type 'PayoutSearchCriteria'() :: #'payout_processing_PayoutSearchCriteria'{}.
+
+%% struct 'PayoutSearchRequest'
+-type 'PayoutSearchRequest'() :: #'payout_processing_PayoutSearchRequest'{}.
+
+%% struct 'PayoutSearchResponse'
+-type 'PayoutSearchResponse'() :: #'payout_processing_PayoutSearchResponse'{}.
 
 %% struct 'PayoutInfo'
 -type 'PayoutInfo'() :: #'payout_processing_PayoutInfo'{}.
@@ -363,8 +378,11 @@ structs() ->
         'EventRange',
         'Pay2CardParams',
         'TimeRange',
+        'ShopParams',
         'GeneratePayoutParams',
         'PayoutSearchCriteria',
+        'PayoutSearchRequest',
+        'PayoutSearchResponse',
         'PayoutInfo'
     ].
 
@@ -562,11 +580,16 @@ struct_info('TimeRange') ->
     {2, required, string, 'to_time', undefined}
 ]};
 
+struct_info('ShopParams') ->
+    {struct, struct, [
+    {1, required, string, 'party_id', undefined},
+    {2, required, string, 'shop_id', undefined}
+]};
+
 struct_info('GeneratePayoutParams') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
-    {2, required, string, 'party_id', undefined},
-    {3, required, string, 'shop_id', undefined}
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop', undefined}
 ]};
 
 struct_info('PayoutSearchCriteria') ->
@@ -574,6 +597,19 @@ struct_info('PayoutSearchCriteria') ->
     {1, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchStatus'}}, 'status', undefined},
     {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
     {3, optional, {list, string}, 'payout_ids', undefined}
+]};
+
+struct_info('PayoutSearchRequest') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'search_criteria', undefined},
+    {2, optional, i64, 'from_id', undefined},
+    {3, required, i32, 'size', undefined}
+]};
+
+struct_info('PayoutSearchResponse') ->
+    {struct, struct, [
+    {1, required, {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutInfo'}}}, 'payouts', undefined},
+    {2, required, i64, 'last_id', undefined}
 ]};
 
 struct_info('PayoutInfo') ->
@@ -665,11 +701,20 @@ record_name('InternalUser') ->
     record_name('TimeRange') ->
     'payout_processing_TimeRange';
 
+    record_name('ShopParams') ->
+    'payout_processing_ShopParams';
+
     record_name('GeneratePayoutParams') ->
     'payout_processing_GeneratePayoutParams';
 
     record_name('PayoutSearchCriteria') ->
     'payout_processing_PayoutSearchCriteria';
+
+    record_name('PayoutSearchRequest') ->
+    'payout_processing_PayoutSearchRequest';
+
+    record_name('PayoutSearchResponse') ->
+    'payout_processing_PayoutSearchResponse';
 
     record_name('PayoutInfo') ->
     'payout_processing_PayoutInfo';
@@ -734,7 +779,7 @@ function_info('PayoutManagement', 'GeneratePayout', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'GeneratePayoutParams'}}, 'params', undefined}
 ]};
 function_info('PayoutManagement', 'GeneratePayout', reply_type) ->
-        string;
+        {list, string};
     function_info('PayoutManagement', 'GeneratePayout', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
@@ -762,10 +807,10 @@ function_info('PayoutManagement', 'CancelPayouts', reply_type) ->
     ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'search_criteria', undefined}
+    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchRequest'}}, 'payout_search_request', undefined}
 ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', reply_type) ->
-        {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutInfo'}}};
+        {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}}};
     function_info('PayoutManagement', 'GetPayoutsInfo', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
