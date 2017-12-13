@@ -807,7 +807,7 @@ function_info('PayoutManagement', 'CancelPayouts', reply_type) ->
     ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchRequest'}}, 'payout_search_request', undefined}
+    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchRequest'}}, 'request', undefined}
 ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', reply_type) ->
         {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}}};

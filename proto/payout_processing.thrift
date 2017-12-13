@@ -300,7 +300,7 @@ enum PayoutSearchStatus {
 /**
 * Поисковый запрос по выплатам
 * search_criteria - атрибуты поиска выплат
-* from - начальный идентификатор, после которого будет формироваться выборка
+* from_id (exclusive) - начальный идентификатор, после которого будет формироваться выборка
 * size - размер выборки
 **/
 struct PayoutSearchRequest {
@@ -312,7 +312,7 @@ struct PayoutSearchRequest {
 /**
 * Поисковый ответ по выплатам
 * payouts - информация по выплатам
-* last_id - уникальный идентификатор, соответствующий последнему элементу выборки
+* last_id (inclusize) - уникальный идентификатор, соответствующий последнему элементу выборки
 **/
 struct PayoutSearchResponse {
    1: required list<PayoutInfo> payouts
@@ -354,5 +354,5 @@ service PayoutManagement {
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
-    list<PayoutSearchResponse> GetPayoutsInfo (1: PayoutSearchRequest payout_search_request) throws (1: base.InvalidRequest ex1)
+    list<PayoutSearchResponse> GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
 }
