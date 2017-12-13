@@ -467,8 +467,6 @@ struct InternationalLegalEntity {
     3: required string registered_address
     /* Адрес места нахождения (если отличается от регистрации)*/
     4: optional string actual_address
-    /* Резиденция */
-    5: required Residence residence
 }
 
 /** Банковский счёт. */
@@ -1341,7 +1339,6 @@ union Condition {
     3: PaymentToolCondition payment_tool
     5: ShopLocation shop_location_is
     6: PartyCondition party
-    7: Residence residence_is
 }
 
 union PaymentToolCondition {

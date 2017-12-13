@@ -1368,10 +1368,6 @@ struct PartyRevisionChanged {
     2: required domain.PartyRevision revision
 }
 
-struct ContractorParams {
-    1: optional domain.Residence residence
-}
-
 union PartyRevisionParam {
     1: base.Timestamp timestamp
     2: domain.PartyRevision revision
@@ -1583,12 +1579,7 @@ service PartyManagement {
 
     /* Payment institutions */
 
-    domain.TermSet ComputePaymentInstitutionTerms (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: PaymentInstitutionRef ref,
-        4: ContractorParams contractor_params
-    )
+    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
 }
 
