@@ -296,7 +296,7 @@
 -export_type(['EventSink_service_functions'/0]).
 
 -type 'PayoutManagement_service_functions'() ::
-    'GeneratePayout' |
+    'GeneratePayouts' |
     'ConfirmPayouts' |
     'CancelPayouts' |
     'GetPayoutsInfo'.
@@ -743,7 +743,7 @@ functions('EventSink') ->
 
 functions('PayoutManagement') ->
     [
-        'GeneratePayout',
+        'GeneratePayouts',
         'ConfirmPayouts',
         'CancelPayouts',
         'GetPayoutsInfo'
@@ -774,33 +774,33 @@ function_info('EventSink', 'GetLastEventID', reply_type) ->
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 
-function_info('PayoutManagement', 'GeneratePayout', params_type) ->
+function_info('PayoutManagement', 'GeneratePayouts', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'GeneratePayoutParams'}}, 'params', undefined}
 ]};
-function_info('PayoutManagement', 'GeneratePayout', reply_type) ->
+function_info('PayoutManagement', 'GeneratePayouts', reply_type) ->
         {list, string};
-    function_info('PayoutManagement', 'GeneratePayout', exceptions) ->
+    function_info('PayoutManagement', 'GeneratePayouts', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'ConfirmPayouts', params_type) ->
     {struct, struct, [
-    {1, undefined, {list, string}, 'payout_ids', undefined}
+    {1, undefined, {set, string}, 'payout_ids', undefined}
 ]};
 function_info('PayoutManagement', 'ConfirmPayouts', reply_type) ->
-        {list, string};
+        {set, string};
     function_info('PayoutManagement', 'ConfirmPayouts', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'CancelPayouts', params_type) ->
     {struct, struct, [
-    {1, undefined, {list, string}, 'payout_ids', undefined},
+    {1, undefined, {set, string}, 'payout_ids', undefined},
     {2, undefined, string, 'details', undefined}
 ]};
 function_info('PayoutManagement', 'CancelPayouts', reply_type) ->
-        {list, string};
+        {set, string};
     function_info('PayoutManagement', 'CancelPayouts', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
