@@ -345,17 +345,17 @@ service PayoutManagement {
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
      */
-    list<PayoutID> GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /**
      * Подтвердить выплаты. Вернуть список подтвержденных выплат
      */
-    list<PayoutID> ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    set<PayoutID> ConfirmPayouts (1: set<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 
     /**
      * Отменить движения по выплатам. Вернуть список отмененных выплат
      */
-    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids, 2: string details) throws (1: base.InvalidRequest ex1)
+    set<PayoutID> CancelPayouts (1: set<PayoutID> payout_ids, 2: string details) throws (1: base.InvalidRequest ex1)
 
     /**
     * Возвращает список Payout-ов согласно запросу поиска
