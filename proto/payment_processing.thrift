@@ -814,10 +814,10 @@ struct Customer {
     3: required ShopID                shop_id
     4: required CustomerStatus        status
     5: required base.Timestamp        created_at
-    /* Список всех привязок */
     6: required list<CustomerBinding> bindings
     7: required domain.ContactInfo    contact_info
     8: required Metadata              metadata
+    9: optional CustomerBindingID     active_binding_id
 }
 
 /**
@@ -834,7 +834,7 @@ union CustomerStatus {
 struct CustomerUnready {}
 struct CustomerReady   {}
 
-// Events
+// События
 union CustomerChange {
     1: CustomerCreated        customer_created
     2: CustomerDeleted        customer_deleted
@@ -846,7 +846,12 @@ union CustomerChange {
  * Событие о создании нового плательщика.
  */
 struct CustomerCreated {
-    1: required Customer customer
+    2: required CustomerID         customer_id
+    3: required PartyID            owner_id
+    4: required ShopID             shop_id
+    5: required Metadata           metadata
+    6: required domain.ContactInfo contact_info
+    7: required base.Timestamp     created_at
 }
 
 /**
@@ -951,6 +956,7 @@ service CustomerManagement {
             3: InvalidShopStatus     invalid_shop_status
             4: ShopNotFound          shop_not_found
             5: PartyNotFound         party_not_found
+            6: OperationNotPermitted operation_not_permitted
         )
 
     Customer Get (1: CustomerID id)
@@ -1003,7 +1009,6 @@ struct RecurrentPaymentTool {
     2:  required ShopID                     shop_id
     3:  required PartyID                    party_id
     4:  required domain.DataRevision        domain_revision
-    5:  required domain.Cash                minimal_payment_cost
     6:  required RecurrentPaymentToolStatus status
     7:  required base.Timestamp             created_at
     8:  required DisposablePaymentResource  payment_resource
@@ -1103,6 +1108,7 @@ service RecurrentPaymentTools {
             5: PartyNotFound         party_not_found
             6: InvalidContractStatus invalid_contract_status
             7: OperationNotPermitted operation_not_permitted
+            8: InvalidPaymentMethod  invalid_payment_method
         )
 
     RecurrentPaymentTool Abandon (1: RecurrentPaymentToolID id)
