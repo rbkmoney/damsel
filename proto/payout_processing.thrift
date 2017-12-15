@@ -105,7 +105,7 @@ struct CashDescription {
     1: required domain.Cash cash
     2: required CashType cashType
     3: required i32 count
-    4: required String details
+    4: required string details
 }
 
 struct Payout {
