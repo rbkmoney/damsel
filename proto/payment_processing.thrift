@@ -323,6 +323,11 @@ struct InvoicePaymentAdjustmentStatusChanged {
 struct InvoicePaymentReceiptChange {
     1: required domain.InvoicePaymentReceiptID id
     2: required InvoicePaymentReceiptChangePayload payload
+    /**
+    * Идентификатор события, связанного с этим изменением.
+    * Необходим для синхронизации событий автомата инвойса и автомата регистрации чека.
+    */
+    3: required base.EventID event_id
 }
 
 /**
