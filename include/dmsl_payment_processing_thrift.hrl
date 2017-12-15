@@ -153,7 +153,8 @@
 %% struct 'InvoicePaymentReceiptChange'
 -record('payproc_InvoicePaymentReceiptChange', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentReceiptID'(),
-    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentReceiptChangePayload'()
+    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentReceiptChangePayload'(),
+    'event_id' :: dmsl_base_thrift:'EventID'()
 }).
 
 %% struct 'InvoicePaymentReceiptCreated'

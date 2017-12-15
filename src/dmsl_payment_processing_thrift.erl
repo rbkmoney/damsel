@@ -1750,7 +1750,8 @@ struct_info('InvoicePaymentAdjustmentStatusChanged') ->
 struct_info('InvoicePaymentReceiptChange') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptChangePayload'}}, 'payload', undefined}
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentReceiptChangePayload'}}, 'payload', undefined},
+    {3, required, i64, 'event_id', undefined}
 ]};
 
 struct_info('InvoicePaymentReceiptChangePayload') ->
