@@ -91,10 +91,10 @@ struct PayoutCreated {
 }
 
 enum CashType {
-    payment,
-    commission,
-    refund,
-    adjustment,
+    payment
+    commission
+    refund
+    adjustment
     guarantee
 }
 
