@@ -90,6 +90,24 @@ struct PayoutCreated {
     2: required UserInfo initiator
 }
 
+enum CashType {
+    payment,
+    commission,
+    refund,
+    adjustment,
+    guarantee
+}
+
+/**
+ * Расшифровка суммы вывода
+ */
+struct CashDescription {
+    1: required domain.Cash cash
+    2: required CashType cashType
+    3: required i32 count
+    4: required String details
+}
+
 struct Payout {
     1: required PayoutID id
     2: required domain.PartyID party_id
@@ -99,6 +117,7 @@ struct Payout {
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
     7: required PayoutType type
+    8: optional list<CashDescription> cash_description
 }
 
 /**
