@@ -90,23 +90,33 @@ struct PayoutCreated {
     2: required UserInfo initiator
 }
 
+/**
+ * Виды движения денежных средств
+ */
 enum CashType {
     payment
-    commission
+    fee
     refund
     adjustment
     guarantee
 }
 
 /**
- * Расшифровка суммы вывода
+ * Расшифровка части суммы вывода
+ * Описание части суммы вывода, сгруппированное по виду движения денежных средств
  */
 struct CashDescription {
     1: required domain.Cash cash
-    2: required CashType cashType
+    2: required CashType cash_type
+    /* Количество движений данного вида в выводе */
     3: required i32 count
-    4: required string details
+    4: optional string details
 }
+
+/**
+ * Список описаний сумм, сгруппированый по видам движения денежных средств
+ */
+typedef list<CashDescription> CashDescriptions
 
 struct Payout {
     1: required PayoutID id
@@ -117,7 +127,7 @@ struct Payout {
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
     7: required PayoutType type
-    8: optional list<CashDescription> cash_description
+    8: optional CashDescriptions cash_descriptions
 }
 
 /**
