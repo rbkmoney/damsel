@@ -93,7 +93,7 @@ struct PayoutCreated {
 /**
  * Виды движения денежных средств
  */
-enum CashType {
+enum CashFlowType {
     payment
     fee
     refund
@@ -107,14 +107,14 @@ enum CashType {
  */
 struct CashDescription {
     1: required domain.Cash cash
-    2: required CashType cash_type
+    2: required CashFlowType cash_flow_type
     /* Количество движений данного вида в выводе */
     3: required i32 count
     4: optional string details
 }
 
 /**
- * Список описаний сумм, сгруппированый по видам движения денежных средств
+ * Список описаний денежных сумм, из которых состоит сумма вывода
  */
 typedef list<CashDescription> CashDescriptions
 
