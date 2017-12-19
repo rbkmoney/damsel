@@ -105,7 +105,7 @@ enum CashFlowType {
  * Расшифровка части суммы вывода
  * Описание части суммы вывода, сгруппированное по виду движения денежных средств
  */
-struct CashDescription {
+struct CashFlowDescription {
     1: required domain.Cash cash
     2: required CashFlowType cash_flow_type
     /* Количество движений данного вида в выводе */
@@ -116,7 +116,7 @@ struct CashDescription {
 /**
  * Список описаний денежных сумм, из которых состоит сумма вывода
  */
-typedef list<CashDescription> CashDescriptions
+typedef list<CashFlowDescription> CashFlowDescriptions
 
 struct Payout {
     1: required PayoutID id
@@ -127,7 +127,7 @@ struct Payout {
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
     7: required PayoutType type
-    8: optional CashDescriptions cash_descriptions
+    8: optional CashFlowDescriptions cash_flow_descriptions
 }
 
 /**
