@@ -90,6 +90,12 @@
     'terminal_type' :: dmsl_merch_stat_thrift:'TerminalPaymentProvider'()
 }).
 
+%% struct 'DigitalWallet'
+-record('merchstat_DigitalWallet', {
+    'provider' :: dmsl_merch_stat_thrift:'DigitalWalletProvider'(),
+    'id' :: dmsl_merch_stat_thrift:'DigitalWalletID'()
+}).
+
 %% struct 'BankAccount'
 -record('merchstat_BankAccount', {
     'account' :: binary(),
