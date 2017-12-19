@@ -34,9 +34,11 @@
 -export_type([
     'PayoutID'/0,
     'Events'/0,
-    'UserID'/0
+    'UserID'/0,
+    'CashFlowDescriptions'/0
 ]).
 -export_type([
+    'CashFlowType'/0,
     'PayoutSearchStatus'/0
 ]).
 -export_type([
@@ -50,6 +52,7 @@
     'EventPayload'/0,
     'PayoutChange'/0,
     'PayoutCreated'/0,
+    'CashFlowDescription'/0,
     'Payout'/0,
     'PayoutStatus'/0,
     'PayoutUnpaid'/0,
@@ -89,17 +92,28 @@
 -type typedef_name() ::
     'PayoutID' |
     'Events' |
-    'UserID'.
+    'UserID' |
+    'CashFlowDescriptions'.
 
 -type 'PayoutID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
+-type 'CashFlowDescriptions'() :: ['CashFlowDescription'()].
 
 %%
 %% enums
 %%
 -type enum_name() ::
+    'CashFlowType' |
     'PayoutSearchStatus'.
+
+%% enum 'CashFlowType'
+-type 'CashFlowType'() ::
+    payment |
+    fee |
+    refund |
+    adjustment |
+    guarantee.
 
 %% enum 'PayoutSearchStatus'
 -type 'PayoutSearchStatus'() ::
@@ -122,6 +136,7 @@
     'EventPayload' |
     'PayoutChange' |
     'PayoutCreated' |
+    'CashFlowDescription' |
     'Payout' |
     'PayoutStatus' |
     'PayoutUnpaid' |
@@ -188,6 +203,9 @@
 
 %% struct 'PayoutCreated'
 -type 'PayoutCreated'() :: #'payout_processing_PayoutCreated'{}.
+
+%% struct 'CashFlowDescription'
+-type 'CashFlowDescription'() :: #'payout_processing_CashFlowDescription'{}.
 
 %% struct 'Payout'
 -type 'Payout'() :: #'payout_processing_Payout'{}.
@@ -324,6 +342,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
+    'CashFlowType'() |
     'PayoutSearchStatus'().
 
 -type enum_field_info() ::
@@ -337,13 +356,15 @@ typedefs() ->
     [
         'PayoutID',
         'Events',
-        'UserID'
+        'UserID',
+        'CashFlowDescriptions'
     ].
 
 -spec enums() -> [enum_name()].
 
 enums() ->
     [
+        'CashFlowType',
         'PayoutSearchStatus'
     ].
 
@@ -361,6 +382,7 @@ structs() ->
         'EventPayload',
         'PayoutChange',
         'PayoutCreated',
+        'CashFlowDescription',
         'Payout',
         'PayoutStatus',
         'PayoutUnpaid',
@@ -410,9 +432,21 @@ typedef_info('Events') ->
 typedef_info('UserID') ->
     string;
 
+typedef_info('CashFlowDescriptions') ->
+    {list, {struct, struct, {dmsl_payout_processing_thrift, 'CashFlowDescription'}}};
+
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('CashFlowType') ->
+    {enum, [
+        {payment, 0},
+        {fee, 1},
+        {refund, 2},
+        {adjustment, 3},
+        {guarantee, 4}
+    ]};
 
 enum_info('PayoutSearchStatus') ->
     {enum, [
@@ -478,6 +512,14 @@ struct_info('PayoutCreated') ->
     {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'UserInfo'}}, 'initiator', undefined}
 ]};
 
+struct_info('CashFlowDescription') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {2, required, {enum, {dmsl_payout_processing_thrift, 'CashFlowType'}}, 'cash_flow_type', undefined},
+    {3, required, i32, 'count', undefined},
+    {4, optional, string, 'details', undefined}
+]};
+
 struct_info('Payout') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
@@ -486,7 +528,8 @@ struct_info('Payout') ->
     {4, required, string, 'created_at', undefined},
     {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
     {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'payout_flow', undefined},
-    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined}
+    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
+    {8, optional, {list, {struct, struct, {dmsl_payout_processing_thrift, 'CashFlowDescription'}}}, 'cash_flow_descriptions', undefined}
 ]};
 
 struct_info('PayoutStatus') ->
@@ -658,6 +701,9 @@ record_name('InternalUser') ->
 
     record_name('PayoutCreated') ->
     'payout_processing_PayoutCreated';
+
+    record_name('CashFlowDescription') ->
+    'payout_processing_CashFlowDescription';
 
     record_name('Payout') ->
     'payout_processing_Payout';
