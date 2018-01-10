@@ -1446,9 +1446,9 @@ enum PaymentInstitutionRealm {
     live
 }
 
-struct MigrationData {
-    1: required PaymentInstitutionRef test_contract_payment_inst
-    2: required PaymentInstitutionRef live_contract_payment_inst
+struct ContractPaymentInstitutionDefaults {
+    1: required PaymentInstitutionRef test
+    2: required PaymentInstitutionRef live
 }
 
 /* Root config */
@@ -1458,7 +1458,7 @@ struct GlobalsRef {}
 struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     6: optional set<PaymentInstitutionRef> payment_institutions
-    42: optional MigrationData migration_data
+    42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
 }
 
 /** Dummy (for integrity test purpose) */
