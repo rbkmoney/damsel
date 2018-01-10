@@ -56,6 +56,12 @@ struct Failure {
 struct SleepIntent {
     /** Таймер, определяющий когда следует продолжить взаимодействие. */
     1: required base.Timer timer
+
+    /**
+     * Взаимодействие с пользователем, в случае если таковое необходимо для продолжения прогресса
+     * в рамках сессии взаимодействия.
+     */
+    2: optional user_interaction.UserInteraction user_interaction
 }
 
 typedef base.Tag CallbackTag
