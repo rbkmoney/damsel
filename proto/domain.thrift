@@ -506,7 +506,7 @@ typedef base.ID ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
-    12: optional PaymentInstitutionRef payment_institution
+    12: required PaymentInstitutionRef payment_institution
     11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
     5: optional base.Timestamp valid_until
@@ -1446,6 +1446,11 @@ enum PaymentInstitutionRealm {
     live
 }
 
+struct ContractPaymentInstitutionDefaults {
+    1: required PaymentInstitutionRef test
+    2: required PaymentInstitutionRef live
+}
+
 /* Root config */
 
 struct GlobalsRef {}
@@ -1453,6 +1458,7 @@ struct GlobalsRef {}
 struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     6: optional set<PaymentInstitutionRef> payment_institutions
+    42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
 }
 
 /** Dummy (for integrity test purpose) */
