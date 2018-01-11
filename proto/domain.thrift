@@ -506,7 +506,7 @@ typedef base.ID ContractID
 struct Contract {
     1: required ContractID id
     3: optional Contractor contractor
-    12: required PaymentInstitutionRef payment_institution
+    12: optional PaymentInstitutionRef payment_institution
     11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
     5: optional base.Timestamp valid_until
