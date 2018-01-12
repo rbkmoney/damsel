@@ -1597,6 +1597,7 @@ struct ProxyObject {
     2: required ProxyDefinition data
 }
 
+/* deprecated */
 struct PartyPrototypeObject {
     1: required PartyPrototypeRef ref
     2: required PartyPrototype data
@@ -1623,12 +1624,13 @@ union Reference {
     14 : SystemAccountSetRef     system_account_set
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
-    10 : PartyPrototypeRef       party_prototype
     11 : GlobalsRef              globals
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
 
+    /* deprecated */
+    10 : PartyPrototypeRef       party_prototype
 }
 
 union DomainObject {
@@ -1647,12 +1649,13 @@ union DomainObject {
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
-    10 : PartyPrototypeObject       party_prototype
     11 : GlobalsObject              globals
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
 
+    /* deprecated */
+    10 : PartyPrototypeObject       party_prototype
 }
 
 /* Domain */
