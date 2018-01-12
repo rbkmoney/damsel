@@ -79,7 +79,8 @@
     'ProviderCashFlowAccount'/0,
     'SystemCashFlowAccount'/0,
     'ExternalCashFlowAccount'/0,
-    'CashFlowConstant'/0
+    'CashFlowConstant'/0,
+    'RoundingMethod'/0
 ]).
 -export_type([
     'ContactInfo'/0,
@@ -372,7 +373,8 @@
     'ProviderCashFlowAccount' |
     'SystemCashFlowAccount' |
     'ExternalCashFlowAccount' |
-    'CashFlowConstant'.
+    'CashFlowConstant' |
+    'RoundingMethod'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
@@ -435,6 +437,11 @@
 -type 'CashFlowConstant'() ::
     invoice_amount |
     payment_amount.
+
+%% enum 'RoundingMethod'
+-type 'RoundingMethod'() ::
+    round_half_towards_zero |
+    round_half_away_from_zero.
 
 %%
 %% structs, unions and exceptions
@@ -1404,7 +1411,8 @@
     'ProviderCashFlowAccount'() |
     'SystemCashFlowAccount'() |
     'ExternalCashFlowAccount'() |
-    'CashFlowConstant'().
+    'CashFlowConstant'() |
+    'RoundingMethod'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -1466,7 +1474,8 @@ enums() ->
         'ProviderCashFlowAccount',
         'SystemCashFlowAccount',
         'ExternalCashFlowAccount',
-        'CashFlowConstant'
+        'CashFlowConstant',
+        'RoundingMethod'
     ].
 
 -spec structs() -> [struct_name()].
@@ -1863,6 +1872,12 @@ enum_info('CashFlowConstant') ->
     {enum, [
         {invoice_amount, 0},
         {payment_amount, 1}
+    ]};
+
+enum_info('RoundingMethod') ->
+    {enum, [
+        {round_half_towards_zero, 0},
+        {round_half_away_from_zero, 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -2632,7 +2647,8 @@ struct_info('CashVolumeFixed') ->
 struct_info('CashVolumeShare') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, 'of', undefined}
+    {2, required, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, 'of', undefined},
+    {3, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
 ]};
 
 struct_info('CashVolumeProduct') ->

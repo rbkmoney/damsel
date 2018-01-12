@@ -588,7 +588,8 @@
 %% struct 'CashVolumeShare'
 -record('domain_CashVolumeShare', {
     'parts' :: dmsl_base_thrift:'Rational'(),
-    'of' :: atom()
+    'of' :: atom(),
+    'rounding_method' :: dmsl_domain_thrift:'RoundingMethod'() | undefined
 }).
 
 %% struct 'CashFlowDecision'
