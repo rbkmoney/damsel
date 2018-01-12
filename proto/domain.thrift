@@ -909,12 +909,15 @@ struct CashVolumeFixed {
 struct CashVolumeShare {
     1: required base.Rational parts
     2: required CashFlowConstant of
-    3: optional Rounding rounding
+    3: optional RoundingMethod rounding_method
 }
 
-enum Rounding {
-    from_zero
-    to_zero
+/** Метод округления к целому числу. */
+enum RoundingMethod {
+    /** https://en.wikipedia.org/wiki/Rounding#Round_half_towards_zero. */
+    round_half_towards_zero
+    /** https://en.wikipedia.org/wiki/Rounding#Round_half_away_from_zero. */
+    round_half_away_from_zero
 }
 
 /** Композиция различных объёмов. */
