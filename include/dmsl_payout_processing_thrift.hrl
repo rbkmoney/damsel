@@ -35,14 +35,6 @@
     'initiator' :: dmsl_payout_processing_thrift:'UserInfo'()
 }).
 
-%% struct 'CashFlowDescription'
--record('payout_processing_CashFlowDescription', {
-    'cash' :: dmsl_domain_thrift:'Cash'(),
-    'cash_flow_type' :: atom(),
-    'count' :: integer(),
-    'details' :: binary() | undefined
-}).
-
 %% struct 'Payout'
 -record('payout_processing_Payout', {
     'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
@@ -51,8 +43,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
-    'cash_flow_descriptions' :: dmsl_payout_processing_thrift:'CashFlowDescriptions'() | undefined
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'()
 }).
 
 %% struct 'PayoutUnpaid'
