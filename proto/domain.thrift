@@ -909,6 +909,12 @@ struct CashVolumeFixed {
 struct CashVolumeShare {
     1: required base.Rational parts
     2: required CashFlowConstant of
+    3: optional Rounding rounding
+}
+
+enum Rounding {
+    from_zero
+    to_zero
 }
 
 /** Композиция различных объёмов. */
