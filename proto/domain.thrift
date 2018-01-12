@@ -1452,7 +1452,7 @@ struct ContractPaymentInstitutionDefaults {
 }
 
 /* Merchant, shop, contract & payout_tool prototypes */
-/* all depricated */
+/* all deprecated */
 
 struct PartyPrototypeRef { 1: required ObjectID id }
 
@@ -1486,24 +1486,18 @@ struct PayoutToolPrototype {
 struct GlobalsRef {}
 
 struct Globals {
-    /* depricated */
-    1: optional PartyPrototypeRef party_prototype
-    /* depricated */
-    2: optional ProviderSelector providers
-    /* depricated */
-    3: optional SystemAccountSetSelector system_account_set
 
     4: required ExternalAccountSetSelector external_account_set
-
-    /* depricated */
-    5: optional InspectorSelector inspector
-    /* depricated */
-    6: optional ContractTemplateRef default_contract_template
-    /* depricated */
-    7: optional ProxyRef common_merchant_proxy
-
     8: optional set<PaymentInstitutionRef> payment_institutions
     42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
+
+    /* deprecated */
+    1: optional PartyPrototypeRef party_prototype
+    2: optional ProviderSelector providers
+    3: optional SystemAccountSetSelector system_account_set
+    5: optional InspectorSelector inspector
+    6: optional ContractTemplateRef default_contract_template
+    7: optional ProxyRef common_merchant_proxy
 }
 
 /** Dummy (for integrity test purpose) */
