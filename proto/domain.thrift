@@ -389,7 +389,6 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
-    9: optional Proxy proxy
 }
 
 struct ShopAccount {
@@ -493,6 +492,7 @@ struct PayoutTool {
     4: required base.Timestamp created_at
     2: required CurrencyRef currency
     3: required PayoutToolInfo payout_tool_info
+    5: optional ScheduleRef payout_schedule
 }
 
 union PayoutToolInfo {
@@ -626,7 +626,7 @@ struct TermSetHierarchyRef { 1: required ObjectID id }
 
 struct PaymentsServiceTerms {
     /* Shop level */
-    // It looks like you belong to the better place, something they call `AccountsServiceTerms`.
+    // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
     /* Invoice level*/
@@ -657,51 +657,17 @@ struct RecurrentPaytoolsServiceTerms {
 /* Payouts service terms */
 
 struct PayoutsServiceTerms {
+    /* Payout schedule level */
+    4: optional ScheduleSelector payout_schedules
     /* Payout level */
     1: optional PayoutMethodSelector payout_methods
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector fees
-    5: optional PayoutScheduleSelector schedule
-}
-
-struct PayoutSchedule {
-    1: required base.TimeSpan period
-    2: required list<base.TimeOffset> pivots
-    3: required PayoutCompilationPolicy policy
+    5: optional PayoutCompilationPolicy policy
 }
 
 struct PayoutCompilationPolicy {
-    1: required base.TimeOffset assets_lag
-}
-
-// struct OperationLimit {
-//     1: required OperationMetricRef ref
-//     2: required i32 offset
-//     3: optional
-// }
-
-// struct OperationMetric {
-//     1: required string name
-//     2: optional string description
-//     3: required TimeSpan timespan
-//     // 4: required CalendarRef calendar
-//     // 5: required Subject ??
-// }
-
-/* Calendars */
-
-struct CalendarRef { 1: required ObjectID id }
-
-struct Calendar {
-    1: required string name
-    2: optional string description
-    3: required base.Timezone timezone
-    4: required CalendarBankingHolidaySet banking_holidays
-}
-
-struct CalendarBankingHolidaySet {
-    1: required list<base.WeekDay> weekends
-    2: required map<base.Year, map<base.Month, base.Day>> holidays
+    1: required base.TimeSpan assets_freeze_for
 }
 
 /* Currencies */
@@ -997,6 +963,48 @@ enum Residence {
     SSD /*South Sudan*/
     JAM /*Jamaica*/
     JPN /*Japan*/
+}
+
+/* Schedules */
+
+struct ScheduleRef { 1: required ObjectID id }
+
+struct Schedule {
+    1: required string name
+    2: optional string description
+    3: required base.Schedule schedule
+}
+
+union ScheduleSelector {
+    1: list<ScheduleDecision> decisions
+    2: set<ScheduleRef> value
+}
+
+struct ScheduleDecision {
+    1: required Predicate if_
+    2: required ScheduleSelector then_
+}
+
+/* Calendars */
+
+struct CalendarRef { 1: required ObjectID id }
+
+struct Calendar {
+    1: required string name
+    2: optional string description
+    3: required base.Timezone timezone
+    4: required CalendarWeekendSet weekends
+    5: required CalendarHolidaySet holidays
+}
+
+typedef set<base.DayOfWeek> CalendarWeekendSet
+typedef map<base.Year, set<CalendarHoliday>> CalendarHolidaySet
+
+struct CalendarHoliday {
+    1: required string name
+    2: optional string description
+    3: required base.DayOfMonth day
+    4: required base.Month month
 }
 
 /* Limits */
@@ -1579,8 +1587,8 @@ struct DummyLinkObject {
     2: DummyLink data
 }
 
-
 /* Type enumerations */
+
 struct ContractTemplateObject {
     1: required ContractTemplateRef ref
     2: required ContractTemplate data
@@ -1599,6 +1607,16 @@ struct CategoryObject {
 struct CurrencyObject {
     1: required CurrencyRef ref
     2: required Currency data
+}
+
+struct ScheduleObject {
+    1: required ScheduleRef ref
+    2: required Schedule data
+}
+
+struct CalendarObject {
+    1: required CalendarRef ref
+    2: required Calendar data
 }
 
 struct PaymentMethodObject {
@@ -1666,6 +1684,8 @@ union Reference {
 
     1  : CategoryRef             category
     2  : CurrencyRef             currency
+    18 : ScheduleRef             schedule
+    19 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     4  : ContractorRef           contractor
     5  : BankCardBINRangeRef     bank_card_bin_range
@@ -1691,6 +1711,8 @@ union DomainObject {
 
     1  : CategoryObject             category
     2  : CurrencyObject             currency
+    18 : ScheduleObject             schedule
+    19 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     4  : ContractorObject           contractor
     5  : BankCardBINRangeObject     bank_card_bin_range
