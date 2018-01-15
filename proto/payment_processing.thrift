@@ -76,7 +76,7 @@ union EventSource {
     /** Идентификатор шаблона инвойса, который породил событие. */
     3: domain.InvoiceTemplateID invoice_template_id
     /** Идентификатор плательщика, который породил событие. */
-    4: domain.CustomerID customer_id
+    4: domain.CustomerID        customer_id
 }
 
 /**
@@ -446,6 +446,7 @@ struct InvoicePaymentAdjustmentParams {
 // forward-declared
 exception PartyNotFound {}
 exception PartyNotExistsYet {}
+exception InvalidPartyRevision {}
 exception ShopNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
@@ -1120,6 +1121,8 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.ContractTemplateRef ContractTemplateRef
+typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
@@ -1144,11 +1147,12 @@ struct ShopAccountParams {
 
 struct ContractParams {
     1: required domain.Contractor contractor
-    2: optional domain.ContractTemplateRef template
+    2: optional ContractTemplateRef template
+    3: optional PaymentInstitutionRef payment_institution
 }
 
 struct ContractAdjustmentParams {
-    1: required domain.ContractTemplateRef template
+    1: required ContractTemplateRef template
 }
 
 union PartyModification {
@@ -1311,7 +1315,7 @@ struct AccountState {
 // Events
 
 union PartyChange {
-    1: domain.Party         party_created
+    1: PartyCreated         party_created
     4: domain.Blocking      party_blocking
     5: domain.Suspension    party_suspension
     6: ShopBlocking         shop_blocking
@@ -1321,6 +1325,13 @@ union PartyChange {
     8: ClaimUpdated         claim_updated
     9: PartyMetaSet         party_meta_set
     10: domain.PartyMetaNamespace party_meta_removed
+    11: PartyRevisionChanged revision_changed
+}
+
+struct PartyCreated {
+    1: required PartyID id
+    7: required domain.PartyContactInfo contact_info
+    8: required base.Timestamp created_at
 }
 
 struct ShopBlocking {
@@ -1350,6 +1361,16 @@ struct ClaimUpdated {
 struct PartyMetaSet {
     1: required domain.PartyMetaNamespace ns
     2: required domain.PartyMetaData data
+}
+
+struct PartyRevisionChanged {
+    1: required base.Timestamp timestamp
+    2: required domain.PartyRevision revision
+}
+
+union PartyRevisionParam {
+    1: base.Timestamp timestamp
+    2: domain.PartyRevision revision
 }
 
 // Exceptions
@@ -1401,6 +1422,10 @@ exception ShopAccountNotFound {}
 
 exception PartyMetaNamespaceNotFound {}
 
+exception PaymentInstitutionNotFound {}
+
+exception ContractTemplateNotFound {}
+
 // Service
 
 service PartyManagement {
@@ -1413,8 +1438,8 @@ service PartyManagement {
     domain.Party Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
+    domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: PartyRevisionParam revision)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyRevision ex3)
 
     void Suspend (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
@@ -1551,6 +1576,11 @@ service PartyManagement {
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    /* Payment institutions */
+
+    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
 }
 
 /* Event sink service definitions */
