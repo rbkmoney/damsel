@@ -1121,6 +1121,7 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.PayoutToolID PayoutToolID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
