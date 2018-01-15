@@ -231,7 +231,8 @@ struct_info('Failure') ->
 
 struct_info('SleepIntent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined}
+    {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined},
+    {2, optional, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'user_interaction', undefined}
 ]};
 
 struct_info('SuspendIntent') ->
