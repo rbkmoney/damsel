@@ -670,6 +670,31 @@ struct PayoutCompilationPolicy {
     1: required base.TimeSpan assets_freeze_for
 }
 
+/* Payout methods */
+
+enum PayoutMethod {
+    russian_bank_account
+    international_bank_account
+}
+
+struct PayoutMethodRef { 1: required PayoutMethod id }
+
+/** Способ вывода, категория средства вывода. */
+struct PayoutMethodDefinition {
+    1: required string name
+    2: required string description
+}
+
+union PayoutMethodSelector {
+    1: list<PayoutMethodDecision> decisions
+    2: set<PayoutMethodRef> value
+}
+
+struct PayoutMethodDecision {
+    1: required Predicate if_
+    2: required PayoutMethodSelector then_
+}
+
 /* Currencies */
 
 /** Символьный код, уникально идентифицирующий валюту. */
@@ -1495,6 +1520,7 @@ struct PaymentInstitutionRef { 1: required ObjectID id }
 struct PaymentInstitution {
     1: required string name
     2: optional string description
+    9: optional CalendarRef calendar
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
     5: required ProviderSelector providers
@@ -1624,6 +1650,11 @@ struct PaymentMethodObject {
     2: required PaymentMethodDefinition data
 }
 
+struct PayoutMethodObject {
+    1: required PayoutMethodRef ref
+    2: required PayoutMethodDefinition data
+}
+
 struct BankCardBINRangeObject {
     1: required BankCardBINRangeRef ref
     2: required BankCardBINRange data
@@ -1684,9 +1715,10 @@ union Reference {
 
     1  : CategoryRef             category
     2  : CurrencyRef             currency
-    18 : ScheduleRef             schedule
-    19 : CalendarRef             calendar
+    19 : ScheduleRef             schedule
+    20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
+    21 : PayoutMethodRef         payout_method
     4  : ContractorRef           contractor
     5  : BankCardBINRangeRef     bank_card_bin_range
     6  : ContractTemplateRef     contract_template
@@ -1711,9 +1743,10 @@ union DomainObject {
 
     1  : CategoryObject             category
     2  : CurrencyObject             currency
-    18 : ScheduleObject             schedule
-    19 : CalendarObject             calendar
+    19 : ScheduleObject             schedule
+    20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
+    21 : PayoutMethodObject         payout_method
     4  : ContractorObject           contractor
     5  : BankCardBINRangeObject     bank_card_bin_range
     6  : ContractTemplateObject     contract_template
