@@ -74,19 +74,24 @@ service Keyring {
 
 }
 
-/** Интерфейс для приложений */
+/**
+ * Интерфейс для приложений
+ *
+ * При недоступности (отсутствии или залоченности) кейринга сервис сигнализирует об этом с помощью
+ * woody-ошибки `Resource Unavailable`.
+ */
 service Storage {
 
     /** Получить карточные данные без CVV */
     CardData GetCardData (1: domain.Token token)
-        throws (1: CardDataNotFound not_found, 2: KeyringLocked locked)
+        throws (1: CardDataNotFound not_found)
 
     /** Получить карточные данные c CVV */
     CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSessionID session_id)
-        throws (1: CardDataNotFound not_found, 2: KeyringLocked locked)
+        throws (1: CardDataNotFound not_found)
 
     /** Сохранить карточные данные */
     PutCardDataResult PutCardData (1: CardData card_data)
-        throws (1: InvalidCardData invalid, 2: KeyringLocked locked)
+        throws (1: InvalidCardData invalid)
 
 }
