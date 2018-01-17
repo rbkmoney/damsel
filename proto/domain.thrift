@@ -70,6 +70,7 @@ typedef string IPAddress
 struct Invoice {
     1 : required InvoiceID id
     2 : required PartyID owner_id
+    13: optional PartyRevision party_revision
     3 : required ShopID shop_id
     4 : required base.Timestamp created_at
     6 : required InvoiceStatus status
