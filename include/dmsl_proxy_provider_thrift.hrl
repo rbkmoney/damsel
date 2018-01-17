@@ -37,7 +37,6 @@
 -record('prxprv_RecurrentTokenProxyResult', {
     'intent' :: dmsl_proxy_provider_thrift:'RecurrentTokenIntent'(),
     'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
-    'token' :: dmsl_domain_thrift:'Token'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
