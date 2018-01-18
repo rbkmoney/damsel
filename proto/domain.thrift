@@ -1226,10 +1226,13 @@ enum ExternalCashFlowAccount {
 }
 
 enum CashFlowConstant {
-    invoice_amount
-    payment_amount
+    operation_amount = 1
     // ...
     // TODO
+
+    /* deprecated */
+    invoice_amount = 0
+    payment_amount = 1
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
