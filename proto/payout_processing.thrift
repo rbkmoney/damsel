@@ -262,18 +262,28 @@ exception LimitExceeded {}
 /**
 * Диапазон времени
 * from_time - начальное время.
-* to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
+* to_time - конечное время.
 * Если from > to  - диапазон считается некорректным.
 */
 struct TimeRange {
     1: required base.Timestamp from_time
-    2: optional base.Timestamp to_time
+    2: required base.Timestamp to_time
 }
 
+struct ShopParams {
+    1: required domain.PartyID party_id
+    2: required domain.ShopID shop_id
+}
+
+/**
+* Параметры для генерации выплаты
+* time_range - диапазон времени, за который будет сформированы выплаты
+* shop - параметры магазина. Если не указан, то генерируются выплаты за все магазины,
+* имеющие платежи/возвраты/корректировки за указанный time_range
+**/
 struct GeneratePayoutParams {
     1: required TimeRange time_range
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
+    2: optional ShopParams shop
 }
 
 /**
@@ -291,6 +301,29 @@ enum PayoutSearchStatus {
     paid,
     cancelled,
     confirmed
+}
+
+/**
+* Поисковый запрос по выплатам
+* search_criteria - атрибуты поиска выплат
+* from_id (exclusive) - начальный идентификатор, после которого будет формироваться выборка
+* size - размер выборки. Не может быть отрицательным и больше 1000, в случае если не указан,
+* то значение будет равно 1000.
+**/
+struct PayoutSearchRequest {
+   1: required PayoutSearchCriteria search_criteria
+   2: optional i64 from_id
+   3: optional i32 size
+}
+
+/**
+* Поисковый ответ по выплатам
+* payouts - информация по выплатам
+* last_id (inclusive) - уникальный идентификатор, соответствующий последнему элементу выборки
+**/
+struct PayoutSearchResponse {
+   1: required list<PayoutInfo> payouts
+   2: required i64 last_id
 }
 
 /**
@@ -313,20 +346,20 @@ service PayoutManagement {
     /**
      * Сгенерировать и отправить по почте выводы за указанный промежуток времени
      */
-    PayoutID GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /**
      * Подтвердить выплаты. Вернуть список подтвержденных выплат
      */
-    list<PayoutID> ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    set<PayoutID> ConfirmPayouts (1: set<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 
     /**
      * Отменить движения по выплатам. Вернуть список отмененных выплат
      */
-    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    set<PayoutID> CancelPayouts (1: set<PayoutID> payout_ids, 2: string details) throws (1: base.InvalidRequest ex1)
 
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
-    list<PayoutInfo> GetPayoutsInfo (1: PayoutSearchCriteria search_criteria) throws (1: base.InvalidRequest ex1)
+    PayoutSearchResponse GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
 }
