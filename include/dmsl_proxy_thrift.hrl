@@ -22,7 +22,8 @@
 
 %% struct 'SleepIntent'
 -record('SleepIntent', {
-    'timer' :: dmsl_base_thrift:'Timer'()
+    'timer' :: dmsl_base_thrift:'Timer'(),
+    'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined
 }).
 
 %% struct 'SuspendIntent'

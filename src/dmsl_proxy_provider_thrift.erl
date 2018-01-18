@@ -328,7 +328,6 @@ struct_info('RecurrentTokenProxyResult') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_proxy_provider_thrift, 'RecurrentTokenIntent'}}, 'intent', undefined},
     {2, optional, string, 'next_state', undefined},
-    {3, optional, string, 'token', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 

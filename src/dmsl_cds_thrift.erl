@@ -365,8 +365,7 @@ function_info('Storage', 'GetCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'CardData'}};
     function_info('Storage', 'GetCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'GetSessionCardData', params_type) ->
     {struct, struct, [
@@ -377,8 +376,7 @@ function_info('Storage', 'GetSessionCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'CardData'}};
     function_info('Storage', 'GetSessionCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'PutCardData', params_type) ->
     {struct, struct, [
@@ -388,8 +386,7 @@ function_info('Storage', 'PutCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
     function_info('Storage', 'PutCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
