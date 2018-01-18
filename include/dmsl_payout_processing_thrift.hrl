@@ -114,14 +114,19 @@
 %% struct 'TimeRange'
 -record('payout_processing_TimeRange', {
     'from_time' :: dmsl_base_thrift:'Timestamp'(),
-    'to_time' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'to_time' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'ShopParams'
+-record('payout_processing_ShopParams', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'()
 }).
 
 %% struct 'GeneratePayoutParams'
 -record('payout_processing_GeneratePayoutParams', {
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
-    'party_id' :: dmsl_domain_thrift:'PartyID'(),
-    'shop_id' :: dmsl_domain_thrift:'ShopID'()
+    'shop' :: dmsl_payout_processing_thrift:'ShopParams'() | undefined
 }).
 
 %% struct 'PayoutSearchCriteria'
@@ -129,6 +134,19 @@
     'status' :: dmsl_payout_processing_thrift:'PayoutSearchStatus'() | undefined,
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
     'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
+}).
+
+%% struct 'PayoutSearchRequest'
+-record('payout_processing_PayoutSearchRequest', {
+    'search_criteria' :: dmsl_payout_processing_thrift:'PayoutSearchCriteria'(),
+    'from_id' :: integer() | undefined,
+    'size' :: integer() | undefined
+}).
+
+%% struct 'PayoutSearchResponse'
+-record('payout_processing_PayoutSearchResponse', {
+    'payouts' :: [dmsl_payout_processing_thrift:'PayoutInfo'()],
+    'last_id' :: integer()
 }).
 
 %% struct 'PayoutInfo'
