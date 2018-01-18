@@ -307,7 +307,8 @@ enum PayoutSearchStatus {
 * Поисковый запрос по выплатам
 * search_criteria - атрибуты поиска выплат
 * from_id (exclusive) - начальный идентификатор, после которого будет формироваться выборка
-* size - размер выборки
+* size - размер выборки. Не может быть отрицательным и больше 1000, в случае если не указан,
+* то значение будет равно 1000.
 **/
 struct PayoutSearchRequest {
    1: required PayoutSearchCriteria search_criteria
