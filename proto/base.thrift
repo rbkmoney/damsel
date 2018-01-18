@@ -136,13 +136,11 @@ union ScheduleFragment {
 }
 
 union ScheduleDayOfWeek {
-    1: ScheduleEvery every
-    2: set<DayOfWeek> on
+    1: set<DayOfWeek> on
 }
 
 union ScheduleMonth {
-    1: ScheduleEvery every
-    2: set<Month> on
+    1: set<Month> on
 }
 
 union ScheduleYear {
