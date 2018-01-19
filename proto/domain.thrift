@@ -1229,8 +1229,8 @@ enum CashFlowConstant {
     // TODO
 
     /* deprecated */
-    invoice_amount = 0
-    payment_amount = 1
+    // invoice_amount = 0
+    // payment_amount = 1
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
