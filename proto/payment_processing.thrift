@@ -1121,6 +1121,7 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.PayoutToolID PayoutToolID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
@@ -1193,6 +1194,7 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
+    2: domain.ScheduleRef schedule_modification
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -1208,9 +1210,11 @@ union ShopModification {
     7: domain.ShopDetails details_modification
     8: ShopContractModification contract_modification
     9: domain.PayoutToolID payout_tool_modification
-    10: ProxyModification proxy_modification
     11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
+
+    /* deprecated */
+    10: ProxyModification proxy_modification
 }
 
 struct ShopContractModification {
@@ -1218,6 +1222,7 @@ struct ShopContractModification {
     2: required domain.PayoutToolID payout_tool_id
 }
 
+/* deprecated */
 struct ProxyModification {
     1: optional domain.Proxy proxy
 }
@@ -1276,8 +1281,18 @@ union ContractEffect {
     1: domain.Contract created
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
-    4: domain.PayoutTool payout_tool_created
     5: domain.LegalAgreement legal_agreement_bound
+    4: domain.PayoutTool payout_tool_created
+    6: PayoutToolEffectUnit payout_tool_effect
+}
+
+struct PayoutToolEffectUnit {
+    1: required PayoutToolID payout_tool_id
+    2: required PayoutToolEffect effect
+}
+
+union PayoutToolEffect {
+    1: domain.ScheduleRef schedule_changed
 }
 
 struct ShopEffectUnit {
@@ -1291,9 +1306,11 @@ union ShopEffect {
     3: domain.ShopDetails details_changed
     4: ShopContractChanged contract_changed
     5: domain.PayoutToolID payout_tool_changed
-    6: ShopProxyChanged proxy_changed
     7: domain.ShopLocation location_changed
     8: domain.ShopAccount account_created
+
+    /* deprecated */
+    6: ShopProxyChanged proxy_changed
 }
 
 struct ShopContractChanged {
@@ -1301,6 +1318,7 @@ struct ShopContractChanged {
     2: required domain.PayoutToolID payout_tool_id
 }
 
+/* deprecated */
 struct ShopProxyChanged {
     1: optional domain.Proxy proxy
 }
