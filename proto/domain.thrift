@@ -1018,11 +1018,9 @@ struct Calendar {
     1: required string name
     2: optional string description
     3: required base.Timezone timezone
-    4: required CalendarWeekendSet weekends
-    5: required CalendarHolidaySet holidays
+    4: required CalendarHolidaySet holidays
 }
 
-typedef set<base.DayOfWeek> CalendarWeekendSet
 typedef map<base.Year, set<CalendarHoliday>> CalendarHolidaySet
 
 struct CalendarHoliday {
