@@ -86,7 +86,7 @@
 
 %% struct 'PayoutAccount'
 -record('payout_processing_PayoutAccount', {
-    'account' :: dmsl_domain_thrift:'BankAccount'(),
+    'account' :: dmsl_domain_thrift:'RussianBankAccount'(),
     'inn' :: binary(),
     'purpose' :: binary(),
     'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()

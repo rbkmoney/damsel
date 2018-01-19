@@ -39,6 +39,7 @@
 -record('domain_Invoice', {
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
     'owner_id' :: dmsl_domain_thrift:'PartyID'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_domain_thrift:'InvoiceStatus'(),
@@ -90,6 +91,7 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
@@ -253,7 +255,8 @@
     'blocking' :: dmsl_domain_thrift:'Blocking'(),
     'suspension' :: dmsl_domain_thrift:'Suspension'(),
     'contracts' :: #{dmsl_domain_thrift:'ContractID'() => dmsl_domain_thrift:'Contract'()},
-    'shops' :: #{dmsl_domain_thrift:'ShopID'() => dmsl_domain_thrift:'Shop'()}
+    'shops' :: #{dmsl_domain_thrift:'ShopID'() => dmsl_domain_thrift:'Shop'()},
+    'revision' :: dmsl_domain_thrift:'PartyRevision'()
 }).
 
 %% struct 'PartyContactInfo'
@@ -310,15 +313,32 @@
     'representative_position' :: binary(),
     'representative_full_name' :: binary(),
     'representative_document' :: binary(),
-    'bank_account' :: dmsl_domain_thrift:'BankAccount'()
+    'russian_bank_account' :: dmsl_domain_thrift:'RussianBankAccount'()
 }).
 
-%% struct 'BankAccount'
--record('domain_BankAccount', {
+%% struct 'InternationalLegalEntity'
+-record('domain_InternationalLegalEntity', {
+    'legal_name' :: binary(),
+    'trading_name' :: binary() | undefined,
+    'registered_address' :: binary(),
+    'actual_address' :: binary() | undefined
+}).
+
+%% struct 'RussianBankAccount'
+-record('domain_RussianBankAccount', {
     'account' :: binary(),
     'bank_name' :: binary(),
     'bank_post_account' :: binary(),
     'bank_bik' :: binary()
+}).
+
+%% struct 'InternationalBankAccount'
+-record('domain_InternationalBankAccount', {
+    'account_holder' :: binary(),
+    'bank_name' :: binary(),
+    'bank_address' :: binary(),
+    'iban' :: binary(),
+    'bic' :: binary()
 }).
 
 %% struct 'PayoutTool'
@@ -333,6 +353,7 @@
 -record('domain_Contract', {
     'id' :: dmsl_domain_thrift:'ContractID'(),
     'contractor' :: dmsl_domain_thrift:'Contractor'() | undefined,
+    'payment_institution' :: dmsl_domain_thrift:'PaymentInstitutionRef'() | undefined,
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'valid_since' :: dmsl_base_thrift:'Timestamp'() | undefined,
     'valid_until' :: dmsl_base_thrift:'Timestamp'() | undefined,
@@ -391,6 +412,12 @@
     'years' :: integer() | undefined,
     'months' :: integer() | undefined,
     'days' :: integer() | undefined
+}).
+
+%% struct 'ContractTemplateDecision'
+-record('domain_ContractTemplateDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'ContractTemplateSelector'()
 }).
 
 %% struct 'ContractAdjustment'
@@ -763,6 +790,29 @@
     'then_' :: dmsl_domain_thrift:'ExternalAccountSetSelector'()
 }).
 
+%% struct 'PaymentInstitutionRef'
+-record('domain_PaymentInstitutionRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'PaymentInstitution'
+-record('domain_PaymentInstitution', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'(),
+    'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'(),
+    'providers' :: dmsl_domain_thrift:'ProviderSelector'(),
+    'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
+    'realm' :: dmsl_domain_thrift:'PaymentInstitutionRealm'(),
+    'residences' :: ordsets:ordset(atom())
+}).
+
+%% struct 'ContractPaymentInstitutionDefaults'
+-record('domain_ContractPaymentInstitutionDefaults', {
+    'test' :: dmsl_domain_thrift:'PaymentInstitutionRef'(),
+    'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
+}).
+
 %% struct 'PartyPrototypeRef'
 -record('domain_PartyPrototypeRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -802,12 +852,14 @@
 
 %% struct 'Globals'
 -record('domain_Globals', {
-    'party_prototype' :: dmsl_domain_thrift:'PartyPrototypeRef'(),
-    'providers' :: dmsl_domain_thrift:'ProviderSelector'(),
-    'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'(),
     'external_account_set' :: dmsl_domain_thrift:'ExternalAccountSetSelector'(),
-    'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
-    'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'(),
+    'payment_institutions' :: ordsets:ordset(dmsl_domain_thrift:'PaymentInstitutionRef'()) | undefined,
+    'contract_payment_institution_defaults' :: dmsl_domain_thrift:'ContractPaymentInstitutionDefaults'() | undefined,
+    'party_prototype' :: dmsl_domain_thrift:'PartyPrototypeRef'() | undefined,
+    'providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined,
+    'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
+    'inspector' :: dmsl_domain_thrift:'InspectorSelector'() | undefined,
+    'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'() | undefined,
     'common_merchant_proxy' :: dmsl_domain_thrift:'ProxyRef'() | undefined
 }).
 
@@ -899,6 +951,12 @@
 -record('domain_InspectorObject', {
     'ref' :: dmsl_domain_thrift:'InspectorRef'(),
     'data' :: dmsl_domain_thrift:'Inspector'()
+}).
+
+%% struct 'PaymentInstitutionObject'
+-record('domain_PaymentInstitutionObject', {
+    'ref' :: dmsl_domain_thrift:'PaymentInstitutionRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentInstitution'()
 }).
 
 %% struct 'SystemAccountSetObject'

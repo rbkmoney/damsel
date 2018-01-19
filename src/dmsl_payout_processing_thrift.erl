@@ -103,10 +103,10 @@
 
 %% enum 'PayoutSearchStatus'
 -type 'PayoutSearchStatus'() ::
-    unpaid |
-    paid |
-    cancelled |
-    confirmed.
+    'unpaid' |
+    'paid' |
+    'cancelled' |
+    'confirmed'.
 
 %%
 %% structs, unions and exceptions
@@ -416,10 +416,10 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('PayoutSearchStatus') ->
     {enum, [
-        {unpaid, 0},
-        {paid, 1},
-        {cancelled, 2},
-        {confirmed, 3}
+        {'unpaid', 0},
+        {'paid', 1},
+        {'cancelled', 2},
+        {'confirmed', 3}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -549,7 +549,7 @@ struct_info('PayoutCard') ->
 
 struct_info('PayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankAccount'}}, 'account', undefined},
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'account', undefined},
     {2, required, string, 'inn', undefined},
     {3, required, string, 'purpose', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}

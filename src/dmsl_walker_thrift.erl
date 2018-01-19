@@ -94,10 +94,10 @@
 
 %% enum 'ActionType'
 -type 'ActionType'() ::
-    assigned |
-    comment |
-    status_changed |
-    claim_changed.
+    'assigned' |
+    'comment' |
+    'status_changed' |
+    'claim_changed'.
 
 %%
 %% structs, unions and exceptions
@@ -269,10 +269,10 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('ActionType') ->
     {enum, [
-        {assigned, 0},
-        {comment, 1},
-        {status_changed, 2},
-        {claim_changed, 3}
+        {'assigned', 0},
+        {'comment', 1},
+        {'status_changed', 2},
+        {'claim_changed', 3}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
