@@ -40,7 +40,6 @@ struct RecurrentTokenContext {
 struct RecurrentTokenProxyResult {
     1: required RecurrentTokenIntent   intent
     2: optional proxy.ProxyState       next_state
-    3: optional domain.Token           token
     4: optional domain.TransactionInfo trx
 }
 
