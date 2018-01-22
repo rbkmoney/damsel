@@ -45,6 +45,8 @@
     'PartyID'/0,
     'ShopID'/0,
     'ContractID'/0,
+    'ContractTemplateRef'/0,
+    'PaymentInstitutionRef'/0,
     'PartyChangeset'/0,
     'ClaimID'/0,
     'ClaimRevision'/0,
@@ -174,11 +176,14 @@
     'ShopProxyChanged'/0,
     'AccountState'/0,
     'PartyChange'/0,
+    'PartyCreated'/0,
     'ShopBlocking'/0,
     'ShopSuspension'/0,
     'ClaimStatusChanged'/0,
     'ClaimUpdated'/0,
     'PartyMetaSet'/0,
+    'PartyRevisionChanged'/0,
+    'PartyRevisionParam'/0,
     'InvalidChangesetReason'/0,
     'ContractStatusInvalid'/0,
     'ShopStatusInvalid'/0,
@@ -187,6 +192,7 @@
 -export_type([
     'PartyNotFound'/0,
     'PartyNotExistsYet'/0,
+    'InvalidPartyRevision'/0,
     'ShopNotFound'/0,
     'InvalidPartyStatus'/0,
     'InvalidShopStatus'/0,
@@ -225,7 +231,9 @@
     'InvalidChangeset'/0,
     'AccountNotFound'/0,
     'ShopAccountNotFound'/0,
-    'PartyMetaNamespaceNotFound'/0
+    'PartyMetaNamespaceNotFound'/0,
+    'PaymentInstitutionNotFound'/0,
+    'ContractTemplateNotFound'/0
 ]).
 
 -type namespace() :: 'payproc'.
@@ -247,6 +255,8 @@
     'PartyID' |
     'ShopID' |
     'ContractID' |
+    'ContractTemplateRef' |
+    'PaymentInstitutionRef' |
     'PartyChangeset' |
     'ClaimID' |
     'ClaimRevision' |
@@ -265,6 +275,8 @@
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
 -type 'ContractID'() :: dmsl_domain_thrift:'ContractID'().
+-type 'ContractTemplateRef'() :: dmsl_domain_thrift:'ContractTemplateRef'().
+-type 'PaymentInstitutionRef'() :: dmsl_domain_thrift:'PaymentInstitutionRef'().
 -type 'PartyChangeset'() :: ['PartyModification'()].
 -type 'ClaimID'() :: integer().
 -type 'ClaimRevision'() :: integer().
@@ -402,11 +414,14 @@
     'ShopProxyChanged' |
     'AccountState' |
     'PartyChange' |
+    'PartyCreated' |
     'ShopBlocking' |
     'ShopSuspension' |
     'ClaimStatusChanged' |
     'ClaimUpdated' |
     'PartyMetaSet' |
+    'PartyRevisionChanged' |
+    'PartyRevisionParam' |
     'InvalidChangesetReason' |
     'ContractStatusInvalid' |
     'ShopStatusInvalid' |
@@ -415,6 +430,7 @@
 -type exception_name() ::
     'PartyNotFound' |
     'PartyNotExistsYet' |
+    'InvalidPartyRevision' |
     'ShopNotFound' |
     'InvalidPartyStatus' |
     'InvalidShopStatus' |
@@ -453,7 +469,9 @@
     'InvalidChangeset' |
     'AccountNotFound' |
     'ShopAccountNotFound' |
-    'PartyMetaNamespaceNotFound'.
+    'PartyMetaNamespaceNotFound' |
+    'PaymentInstitutionNotFound' |
+    'ContractTemplateNotFound'.
 
 %% struct 'UserInfo'
 -type 'UserInfo'() :: #'payproc_UserInfo'{}.
@@ -922,7 +940,7 @@
 
 %% union 'PartyChange'
 -type 'PartyChange'() ::
-    {'party_created', dmsl_domain_thrift:'Party'()} |
+    {'party_created', 'PartyCreated'()} |
     {'party_blocking', dmsl_domain_thrift:'Blocking'()} |
     {'party_suspension', dmsl_domain_thrift:'Suspension'()} |
     {'shop_blocking', 'ShopBlocking'()} |
@@ -931,7 +949,11 @@
     {'claim_status_changed', 'ClaimStatusChanged'()} |
     {'claim_updated', 'ClaimUpdated'()} |
     {'party_meta_set', 'PartyMetaSet'()} |
-    {'party_meta_removed', dmsl_domain_thrift:'PartyMetaNamespace'()}.
+    {'party_meta_removed', dmsl_domain_thrift:'PartyMetaNamespace'()} |
+    {'revision_changed', 'PartyRevisionChanged'()}.
+
+%% struct 'PartyCreated'
+-type 'PartyCreated'() :: #'payproc_PartyCreated'{}.
 
 %% struct 'ShopBlocking'
 -type 'ShopBlocking'() :: #'payproc_ShopBlocking'{}.
@@ -947,6 +969,14 @@
 
 %% struct 'PartyMetaSet'
 -type 'PartyMetaSet'() :: #'payproc_PartyMetaSet'{}.
+
+%% struct 'PartyRevisionChanged'
+-type 'PartyRevisionChanged'() :: #'payproc_PartyRevisionChanged'{}.
+
+%% union 'PartyRevisionParam'
+-type 'PartyRevisionParam'() ::
+    {'timestamp', dmsl_base_thrift:'Timestamp'()} |
+    {'revision', dmsl_domain_thrift:'PartyRevision'()}.
 
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
@@ -975,6 +1005,9 @@
 
 %% exception 'PartyNotExistsYet'
 -type 'PartyNotExistsYet'() :: #'payproc_PartyNotExistsYet'{}.
+
+%% exception 'InvalidPartyRevision'
+-type 'InvalidPartyRevision'() :: #'payproc_InvalidPartyRevision'{}.
 
 %% exception 'ShopNotFound'
 -type 'ShopNotFound'() :: #'payproc_ShopNotFound'{}.
@@ -1093,6 +1126,12 @@
 %% exception 'PartyMetaNamespaceNotFound'
 -type 'PartyMetaNamespaceNotFound'() :: #'payproc_PartyMetaNamespaceNotFound'{}.
 
+%% exception 'PaymentInstitutionNotFound'
+-type 'PaymentInstitutionNotFound'() :: #'payproc_PaymentInstitutionNotFound'{}.
+
+%% exception 'ContractTemplateNotFound'
+-type 'ContractTemplateNotFound'() :: #'payproc_ContractTemplateNotFound'{}.
+
 %%
 %% services and functions
 %%
@@ -1197,7 +1236,8 @@
     'RevokeClaim' |
     'GetEvents' |
     'GetShopAccount' |
-    'GetAccountState'.
+    'GetAccountState' |
+    'ComputePaymentInstitutionTerms'.
 
 -export_type(['PartyManagement_service_functions'/0]).
 
@@ -1251,6 +1291,8 @@ typedefs() ->
         'PartyID',
         'ShopID',
         'ContractID',
+        'ContractTemplateRef',
+        'PaymentInstitutionRef',
         'PartyChangeset',
         'ClaimID',
         'ClaimRevision',
@@ -1389,11 +1431,14 @@ structs() ->
         'ShopProxyChanged',
         'AccountState',
         'PartyChange',
+        'PartyCreated',
         'ShopBlocking',
         'ShopSuspension',
         'ClaimStatusChanged',
         'ClaimUpdated',
         'PartyMetaSet',
+        'PartyRevisionChanged',
+        'PartyRevisionParam',
         'InvalidChangesetReason',
         'ContractStatusInvalid',
         'ShopStatusInvalid',
@@ -1458,6 +1503,12 @@ typedef_info('ShopID') ->
 
 typedef_info('ContractID') ->
     string;
+
+typedef_info('ContractTemplateRef') ->
+    {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}};
+
+typedef_info('PaymentInstitutionRef') ->
+    {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}};
 
 typedef_info('PartyChangeset') ->
     {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}};
@@ -2038,7 +2089,8 @@ struct_info('ShopAccountParams') ->
 struct_info('ContractParams') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined}
 ]};
 
 struct_info('ContractAdjustmentParams') ->
@@ -2219,7 +2271,7 @@ struct_info('AccountState') ->
 
 struct_info('PartyChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Party'}}, 'party_created', undefined},
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyCreated'}}, 'party_created', undefined},
     {4, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'party_blocking', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'party_suspension', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopBlocking'}}, 'shop_blocking', undefined},
@@ -2228,7 +2280,15 @@ struct_info('PartyChange') ->
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimStatusChanged'}}, 'claim_status_changed', undefined},
     {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimUpdated'}}, 'claim_updated', undefined},
     {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyMetaSet'}}, 'party_meta_set', undefined},
-    {10, optional, string, 'party_meta_removed', undefined}
+    {10, optional, string, 'party_meta_removed', undefined},
+    {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyRevisionChanged'}}, 'revision_changed', undefined}
+]};
+
+struct_info('PartyCreated') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {7, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined},
+    {8, required, string, 'created_at', undefined}
 ]};
 
 struct_info('ShopBlocking') ->
@@ -2263,6 +2323,18 @@ struct_info('PartyMetaSet') ->
     {struct, struct, [
     {1, required, string, 'ns', undefined},
     {2, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'data', undefined}
+]};
+
+struct_info('PartyRevisionChanged') ->
+    {struct, struct, [
+    {1, required, string, 'timestamp', undefined},
+    {2, required, i64, 'revision', undefined}
+]};
+
+struct_info('PartyRevisionParam') ->
+    {struct, union, [
+    {1, optional, string, 'timestamp', undefined},
+    {2, optional, i64, 'revision', undefined}
 ]};
 
 struct_info('InvalidChangesetReason') ->
@@ -2302,6 +2374,9 @@ struct_info('PartyNotFound') ->
     {struct, exception, []};
 
 struct_info('PartyNotExistsYet') ->
+    {struct, exception, []};
+
+struct_info('InvalidPartyRevision') ->
     {struct, exception, []};
 
 struct_info('ShopNotFound') ->
@@ -2447,6 +2522,12 @@ struct_info('ShopAccountNotFound') ->
     {struct, exception, []};
 
 struct_info('PartyMetaNamespaceNotFound') ->
+    {struct, exception, []};
+
+struct_info('PaymentInstitutionNotFound') ->
+    {struct, exception, []};
+
+struct_info('ContractTemplateNotFound') ->
     {struct, exception, []};
 
 struct_info(_) -> erlang:error(badarg).
@@ -2735,6 +2816,9 @@ record_name('InternalUser') ->
     record_name('AccountState') ->
     'payproc_AccountState';
 
+    record_name('PartyCreated') ->
+    'payproc_PartyCreated';
+
     record_name('ShopBlocking') ->
     'payproc_ShopBlocking';
 
@@ -2750,6 +2834,9 @@ record_name('InternalUser') ->
     record_name('PartyMetaSet') ->
     'payproc_PartyMetaSet';
 
+    record_name('PartyRevisionChanged') ->
+    'payproc_PartyRevisionChanged';
+
     record_name('ContractStatusInvalid') ->
     'payproc_ContractStatusInvalid';
 
@@ -2764,6 +2851,9 @@ record_name('InternalUser') ->
 
     record_name('PartyNotExistsYet') ->
     'payproc_PartyNotExistsYet';
+
+    record_name('InvalidPartyRevision') ->
+    'payproc_InvalidPartyRevision';
 
     record_name('ShopNotFound') ->
     'payproc_ShopNotFound';
@@ -2882,6 +2972,12 @@ record_name('InternalUser') ->
     record_name('PartyMetaNamespaceNotFound') ->
     'payproc_PartyMetaNamespaceNotFound';
 
+    record_name('PaymentInstitutionNotFound') ->
+    'payproc_PaymentInstitutionNotFound';
+
+    record_name('ContractTemplateNotFound') ->
+    'payproc_ContractTemplateNotFound';
+
     record_name(_) -> error(badarg).
     
     -spec functions(service_name()) -> [function_name()] | no_return().
@@ -2970,7 +3066,8 @@ functions('PartyManagement') ->
         'RevokeClaim',
         'GetEvents',
         'GetShopAccount',
-        'GetAccountState'
+        'GetAccountState',
+        'ComputePaymentInstitutionTerms'
     ];
 
 functions('EventSink') ->
@@ -3530,7 +3627,7 @@ function_info('PartyManagement', 'Checkout', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'timestamp', undefined}
+    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'revision', undefined}
 ]};
 function_info('PartyManagement', 'Checkout', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'Party'}};
@@ -3538,7 +3635,7 @@ function_info('PartyManagement', 'Checkout', reply_type) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined}
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyRevision'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'Suspend', params_type) ->
     {struct, struct, [
@@ -3933,6 +4030,20 @@ function_info('PartyManagement', 'GetAccountState', reply_type) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AccountNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined}
+]};
+function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('PartyManagement', 'ComputePaymentInstitutionTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PaymentInstitutionNotFound'}}, 'ex3', undefined}
     ]};
 
 function_info('EventSink', 'GetEvents', params_type) ->

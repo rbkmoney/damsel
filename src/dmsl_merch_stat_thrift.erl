@@ -115,16 +115,16 @@
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
-    cancel |
-    capture.
+    'cancel' |
+    'capture'.
 
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
-    euroset.
+    'euroset'.
 
 %% enum 'DigitalWalletProvider'
 -type 'DigitalWalletProvider'() ::
-    qiwi.
+    'qiwi'.
 
 %%
 %% structs, unions and exceptions
@@ -477,18 +477,18 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('OnHoldExpiration') ->
     {enum, [
-        {cancel, 0},
-        {capture, 1}
+        {'cancel', 0},
+        {'capture', 1}
     ]};
 
 enum_info('TerminalPaymentProvider') ->
     {enum, [
-        {euroset, 0}
+        {'euroset', 0}
     ]};
 
 enum_info('DigitalWalletProvider') ->
     {enum, [
-        {qiwi, 0}
+        {'qiwi', 0}
     ]};
 
 enum_info(_) -> erlang:error(badarg).

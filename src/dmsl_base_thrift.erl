@@ -87,8 +87,8 @@
 
 %% enum 'BoundType'
 -type 'BoundType'() ::
-    inclusive |
-    exclusive.
+    'inclusive' |
+    'exclusive'.
 
 %%
 %% structs, unions and exceptions
@@ -232,8 +232,8 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('BoundType') ->
     {enum, [
-        {inclusive, 0},
-        {exclusive, 1}
+        {'inclusive', 0},
+        {'exclusive', 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).

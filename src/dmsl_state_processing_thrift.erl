@@ -104,8 +104,8 @@
 
 %% enum 'Direction'
 -type 'Direction'() ::
-    forward |
-    backward.
+    'forward' |
+    'backward'.
 
 %%
 %% structs, unions and exceptions
@@ -375,8 +375,8 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('Direction') ->
     {enum, [
-        {forward, 1},
-        {backward, 2}
+        {'forward', 1},
+        {'backward', 2}
     ]};
 
 enum_info(_) -> erlang:error(badarg).

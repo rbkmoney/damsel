@@ -427,12 +427,13 @@
 %% struct 'ContractParams'
 -record('payproc_ContractParams', {
     'contractor' :: dmsl_domain_thrift:'Contractor'(),
-    'template' :: dmsl_domain_thrift:'ContractTemplateRef'() | undefined
+    'template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'() | undefined,
+    'payment_institution' :: dmsl_payment_processing_thrift:'PaymentInstitutionRef'() | undefined
 }).
 
 %% struct 'ContractAdjustmentParams'
 -record('payproc_ContractAdjustmentParams', {
-    'template' :: dmsl_domain_thrift:'ContractTemplateRef'()
+    'template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'()
 }).
 
 %% struct 'ContractModificationUnit'
@@ -534,6 +535,13 @@
     'currency' :: dmsl_domain_thrift:'Currency'()
 }).
 
+%% struct 'PartyCreated'
+-record('payproc_PartyCreated', {
+    'id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
 %% struct 'ShopBlocking'
 -record('payproc_ShopBlocking', {
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
@@ -568,6 +576,12 @@
     'data' :: dmsl_domain_thrift:'PartyMetaData'()
 }).
 
+%% struct 'PartyRevisionChanged'
+-record('payproc_PartyRevisionChanged', {
+    'timestamp' :: dmsl_base_thrift:'Timestamp'(),
+    'revision' :: dmsl_domain_thrift:'PartyRevision'()
+}).
+
 %% struct 'ContractStatusInvalid'
 -record('payproc_ContractStatusInvalid', {
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
@@ -592,6 +606,9 @@
 
 %% exception 'PartyNotExistsYet'
 -record('payproc_PartyNotExistsYet', {}).
+
+%% exception 'InvalidPartyRevision'
+-record('payproc_InvalidPartyRevision', {}).
 
 %% exception 'ShopNotFound'
 -record('payproc_ShopNotFound', {}).
@@ -737,5 +754,11 @@
 
 %% exception 'PartyMetaNamespaceNotFound'
 -record('payproc_PartyMetaNamespaceNotFound', {}).
+
+%% exception 'PaymentInstitutionNotFound'
+-record('payproc_PaymentInstitutionNotFound', {}).
+
+%% exception 'ContractTemplateNotFound'
+-record('payproc_ContractTemplateNotFound', {}).
 
 -endif.
