@@ -459,6 +459,11 @@
     'modification' :: dmsl_payment_processing_thrift:'PayoutToolModification'()
 }).
 
+%% struct 'ScheduleModification'
+-record('payproc_ScheduleModification', {
+    'schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
+}).
+
 %% struct 'ShopModificationUnit'
 -record('payproc_ShopModificationUnit', {
     'id' :: dmsl_payment_processing_thrift:'ShopID'(),
@@ -514,6 +519,11 @@
 -record('payproc_PayoutToolEffectUnit', {
     'payout_tool_id' :: dmsl_payment_processing_thrift:'PayoutToolID'(),
     'effect' :: dmsl_payment_processing_thrift:'PayoutToolEffect'()
+}).
+
+%% struct 'ScheduleChanged'
+-record('payproc_ScheduleChanged', {
+    'schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
 }).
 
 %% struct 'ShopEffectUnit'

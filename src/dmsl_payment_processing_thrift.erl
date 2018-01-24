@@ -158,6 +158,7 @@
     'ContractAdjustmentModification'/0,
     'PayoutToolModificationUnit'/0,
     'PayoutToolModification'/0,
+    'ScheduleModification'/0,
     'ShopModificationUnit'/0,
     'ShopModification'/0,
     'ShopContractModification'/0,
@@ -173,6 +174,7 @@
     'ContractEffect'/0,
     'PayoutToolEffectUnit'/0,
     'PayoutToolEffect'/0,
+    'ScheduleChanged'/0,
     'ShopEffectUnit'/0,
     'ShopEffect'/0,
     'ShopContractChanged'/0,
@@ -400,6 +402,7 @@
     'ContractAdjustmentModification' |
     'PayoutToolModificationUnit' |
     'PayoutToolModification' |
+    'ScheduleModification' |
     'ShopModificationUnit' |
     'ShopModification' |
     'ShopContractModification' |
@@ -415,6 +418,7 @@
     'ContractEffect' |
     'PayoutToolEffectUnit' |
     'PayoutToolEffect' |
+    'ScheduleChanged' |
     'ShopEffectUnit' |
     'ShopEffect' |
     'ShopContractChanged' |
@@ -863,7 +867,10 @@
 %% union 'PayoutToolModification'
 -type 'PayoutToolModification'() ::
     {'creation', 'PayoutToolParams'()} |
-    {'schedule_modification', dmsl_domain_thrift:'ScheduleRef'()}.
+    {'schedule_modification', 'ScheduleModification'()}.
+
+%% struct 'ScheduleModification'
+-type 'ScheduleModification'() :: #'payproc_ScheduleModification'{}.
 
 %% struct 'ShopModificationUnit'
 -type 'ShopModificationUnit'() :: #'payproc_ShopModificationUnit'{}.
@@ -929,7 +936,10 @@
 
 %% union 'PayoutToolEffect'
 -type 'PayoutToolEffect'() ::
-    {'schedule_changed', dmsl_domain_thrift:'ScheduleRef'()}.
+    {'schedule_changed', 'ScheduleChanged'()}.
+
+%% struct 'ScheduleChanged'
+-type 'ScheduleChanged'() :: #'payproc_ScheduleChanged'{}.
 
 %% struct 'ShopEffectUnit'
 -type 'ShopEffectUnit'() :: #'payproc_ShopEffectUnit'{}.
@@ -1429,6 +1439,7 @@ structs() ->
         'ContractAdjustmentModification',
         'PayoutToolModificationUnit',
         'PayoutToolModification',
+        'ScheduleModification',
         'ShopModificationUnit',
         'ShopModification',
         'ShopContractModification',
@@ -1444,6 +1455,7 @@ structs() ->
         'ContractEffect',
         'PayoutToolEffectUnit',
         'PayoutToolEffect',
+        'ScheduleChanged',
         'ShopEffectUnit',
         'ShopEffect',
         'ShopContractChanged',
@@ -2166,7 +2178,12 @@ struct_info('PayoutToolModificationUnit') ->
 struct_info('PayoutToolModification') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule_modification', undefined}
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleModification'}}, 'schedule_modification', undefined}
+]};
+
+struct_info('ScheduleModification') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ShopModificationUnit') ->
@@ -2264,7 +2281,12 @@ struct_info('PayoutToolEffectUnit') ->
 
 struct_info('PayoutToolEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule_changed', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleChanged'}}, 'schedule_changed', undefined}
+]};
+
+struct_info('ScheduleChanged') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ShopEffectUnit') ->
@@ -2812,6 +2834,9 @@ record_name('InternalUser') ->
     record_name('PayoutToolModificationUnit') ->
     'payproc_PayoutToolModificationUnit';
 
+    record_name('ScheduleModification') ->
+    'payproc_ScheduleModification';
+
     record_name('ShopModificationUnit') ->
     'payproc_ShopModificationUnit';
 
@@ -2841,6 +2866,9 @@ record_name('InternalUser') ->
 
     record_name('PayoutToolEffectUnit') ->
     'payproc_PayoutToolEffectUnit';
+
+    record_name('ScheduleChanged') ->
+    'payproc_ScheduleChanged';
 
     record_name('ShopEffectUnit') ->
     'payproc_ShopEffectUnit';
