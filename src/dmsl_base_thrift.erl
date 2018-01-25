@@ -342,29 +342,29 @@ enum_info('BoundType') ->
 
 enum_info('DayOfWeek') ->
     {enum, [
-        {'mon', 0},
-        {'tue', 1},
-        {'wed', 2},
-        {'thu', 3},
-        {'fri', 4},
-        {'sat', 5},
-        {'sun', 6}
+        {'mon', 1},
+        {'tue', 2},
+        {'wed', 3},
+        {'thu', 4},
+        {'fri', 5},
+        {'sat', 6},
+        {'sun', 7}
     ]};
 
 enum_info('Month') ->
     {enum, [
-        {'jan', 0},
-        {'feb', 1},
-        {'mar', 2},
-        {'apr', 3},
-        {'may', 4},
-        {'jun', 5},
-        {'jul', 6},
-        {'aug', 7},
-        {'sep', 8},
-        {'oct', 9},
-        {'nov', 10},
-        {'dec', 11}
+        {'jan', 1},
+        {'feb', 2},
+        {'mar', 3},
+        {'apr', 4},
+        {'may', 5},
+        {'jun', 6},
+        {'jul', 7},
+        {'aug', 8},
+        {'sep', 9},
+        {'oct', 10},
+        {'nov', 11},
+        {'dec', 12}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
