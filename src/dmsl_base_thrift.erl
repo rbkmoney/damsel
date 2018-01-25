@@ -180,10 +180,12 @@
 
 %% union 'ScheduleDayOfWeek'
 -type 'ScheduleDayOfWeek'() ::
+    {'every', 'ScheduleEvery'()} |
     {'on', ordsets:ordset(atom())}.
 
 %% union 'ScheduleMonth'
 -type 'ScheduleMonth'() ::
+    {'every', 'ScheduleEvery'()} |
     {'on', ordsets:ordset(atom())}.
 
 %% union 'ScheduleYear'
@@ -422,12 +424,14 @@ struct_info('ScheduleFragment') ->
 
 struct_info('ScheduleDayOfWeek') ->
     {struct, union, [
-    {1, optional, {set, {enum, {dmsl_base_thrift, 'DayOfWeek'}}}, 'on', undefined}
+    {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
+    {2, optional, {set, {enum, {dmsl_base_thrift, 'DayOfWeek'}}}, 'on', undefined}
 ]};
 
 struct_info('ScheduleMonth') ->
     {struct, union, [
-    {1, optional, {set, {enum, {dmsl_base_thrift, 'Month'}}}, 'on', undefined}
+    {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
+    {2, optional, {set, {enum, {dmsl_base_thrift, 'Month'}}}, 'on', undefined}
 ]};
 
 struct_info('ScheduleYear') ->
