@@ -598,6 +598,13 @@
     'revision' :: dmsl_domain_thrift:'PartyRevision'()
 }).
 
+%% struct 'PayoutParams'
+-record('payproc_PayoutParams', {
+    'id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'timestamp' :: dmsl_base_thrift:'Timestamp'()
+}).
+
 %% struct 'ContractStatusInvalid'
 -record('payproc_ContractStatusInvalid', {
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),

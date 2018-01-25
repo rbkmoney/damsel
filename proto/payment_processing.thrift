@@ -1400,6 +1400,12 @@ union PartyRevisionParam {
     2: domain.PartyRevision revision
 }
 
+struct PayoutParams {
+    1: required ShopID id
+    2: required domain.Cash amount
+    3: required base.Timestamp timestamp
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -1608,6 +1614,11 @@ service PartyManagement {
 
     domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
+
+    /* Payouts */
+    /* TODO looks like adhoc. Rework after feedback. Or not. */
+    domain.FinalCashFlow ComputePayoutCashFlow (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4, 5: base.InvalidRequest ex5)
 }
 
 /* Event sink service definitions */

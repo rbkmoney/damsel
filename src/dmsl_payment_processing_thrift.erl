@@ -189,6 +189,7 @@
     'PartyMetaSet'/0,
     'PartyRevisionChanged'/0,
     'PartyRevisionParam'/0,
+    'PayoutParams'/0,
     'InvalidChangesetReason'/0,
     'ContractStatusInvalid'/0,
     'ShopStatusInvalid'/0,
@@ -433,6 +434,7 @@
     'PartyMetaSet' |
     'PartyRevisionChanged' |
     'PartyRevisionParam' |
+    'PayoutParams' |
     'InvalidChangesetReason' |
     'ContractStatusInvalid' |
     'ShopStatusInvalid' |
@@ -1004,6 +1006,9 @@
     {'timestamp', dmsl_base_thrift:'Timestamp'()} |
     {'revision', dmsl_domain_thrift:'PartyRevision'()}.
 
+%% struct 'PayoutParams'
+-type 'PayoutParams'() :: #'payproc_PayoutParams'{}.
+
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
     {'contract_not_exists', 'ContractID'()} |
@@ -1263,7 +1268,8 @@
     'GetEvents' |
     'GetShopAccount' |
     'GetAccountState' |
-    'ComputePaymentInstitutionTerms'.
+    'ComputePaymentInstitutionTerms' |
+    'ComputePayoutCashFlow'.
 
 -export_type(['PartyManagement_service_functions'/0]).
 
@@ -1470,6 +1476,7 @@ structs() ->
         'PartyMetaSet',
         'PartyRevisionChanged',
         'PartyRevisionParam',
+        'PayoutParams',
         'InvalidChangesetReason',
         'ContractStatusInvalid',
         'ShopStatusInvalid',
@@ -2394,6 +2401,13 @@ struct_info('PartyRevisionParam') ->
     {2, optional, i64, 'revision', undefined}
 ]};
 
+struct_info('PayoutParams') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+    {3, required, string, 'timestamp', undefined}
+]};
+
 struct_info('InvalidChangesetReason') ->
     {struct, union, [
     {1, optional, string, 'contract_not_exists', undefined},
@@ -2903,6 +2917,9 @@ record_name('InternalUser') ->
     record_name('PartyRevisionChanged') ->
     'payproc_PartyRevisionChanged';
 
+    record_name('PayoutParams') ->
+    'payproc_PayoutParams';
+
     record_name('ContractStatusInvalid') ->
     'payproc_ContractStatusInvalid';
 
@@ -3133,7 +3150,8 @@ functions('PartyManagement') ->
         'GetEvents',
         'GetShopAccount',
         'GetAccountState',
-        'ComputePaymentInstitutionTerms'
+        'ComputePaymentInstitutionTerms',
+        'ComputePayoutCashFlow'
     ];
 
 functions('EventSink') ->
@@ -4110,6 +4128,22 @@ function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) -
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PaymentInstitutionNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePayoutCashFlow', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutParams'}}, 'params', undefined}
+]};
+function_info('PartyManagement', 'ComputePayoutCashFlow', reply_type) ->
+        {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
+    function_info('PartyManagement', 'ComputePayoutCashFlow', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined}
     ]};
 
 function_info('EventSink', 'GetEvents', params_type) ->
