@@ -1058,6 +1058,7 @@ struct CashLimitDecision {
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
+    3: DigitalWalletProvider digital_wallet
 }
 
 enum BankCardPaymentSystem {
@@ -1082,6 +1083,7 @@ typedef base.ID RecurrentPaymentToolID
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
+    3: DigitalWallet digital_wallet
 }
 
 struct DisposablePaymentResource {
@@ -1113,6 +1115,16 @@ enum TerminalPaymentProvider {
     euroset
 }
 
+typedef string DigitalWalletID
+
+struct DigitalWallet {
+    1: required DigitalWalletProvider provider
+    2: required DigitalWalletID       id
+}
+
+enum DigitalWalletProvider {
+    qiwi
+}
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
 
@@ -1279,6 +1291,15 @@ struct CashVolumeFixed {
 struct CashVolumeShare {
     1: required base.Rational parts
     2: required CashFlowConstant of
+    3: optional RoundingMethod rounding_method
+}
+
+/** Метод округления к целому числу. */
+enum RoundingMethod {
+    /** https://en.wikipedia.org/wiki/Rounding#Round_half_towards_zero. */
+    round_half_towards_zero
+    /** https://en.wikipedia.org/wiki/Rounding#Round_half_away_from_zero. */
+    round_half_away_from_zero
 }
 
 /** Композиция различных объёмов. */
@@ -1432,11 +1453,35 @@ union Condition {
 
 union PaymentToolCondition {
     1: BankCardCondition bank_card
+    2: PaymentTerminalCondition payment_terminal
+    3: DigitalWalletCondition digital_wallet
 }
 
-union BankCardCondition {
+struct BankCardCondition {
+    1: optional BankCardPaymentSystem payment_system_is // legacy
+    2: optional BankCardBINRangeRef bin_in              // legacy
+    3: optional BankCardConditionDefinition definition
+}
+
+union BankCardConditionDefinition {
     1: BankCardPaymentSystem payment_system_is
     2: BankCardBINRangeRef bin_in
+}
+
+struct PaymentTerminalCondition {
+    1: optional PaymentTerminalConditionDefinition definition
+}
+
+union PaymentTerminalConditionDefinition {
+    1: TerminalPaymentProvider provider_is
+}
+
+struct DigitalWalletCondition {
+    1: optional DigitalWalletConditionDefinition definition
+}
+
+union DigitalWalletConditionDefinition {
+    1: DigitalWalletProvider provider_is
 }
 
 struct PartyCondition {
