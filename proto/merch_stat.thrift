@@ -94,6 +94,7 @@ union InvoicePaymentStatus {
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
+    3: DigitalWallet digital_wallet
 }
 
 struct BankCard {
@@ -109,6 +110,17 @@ struct PaymentTerminal {
 
 enum TerminalPaymentProvider {
     euroset
+}
+
+typedef string DigitalWalletID
+
+struct DigitalWallet {
+    1: required DigitalWalletProvider provider
+    2: required DigitalWalletID       id
+}
+
+enum DigitalWalletProvider {
+    qiwi
 }
 
 struct BankAccount {

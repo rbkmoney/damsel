@@ -610,6 +610,12 @@
     'terminal_type' :: dmsl_domain_thrift:'TerminalPaymentProvider'()
 }).
 
+%% struct 'DigitalWallet'
+-record('domain_DigitalWallet', {
+    'provider' :: dmsl_domain_thrift:'DigitalWalletProvider'(),
+    'id' :: dmsl_domain_thrift:'DigitalWalletID'()
+}).
+
 %% struct 'BankCardBINRangeRef'
 -record('domain_BankCardBINRangeRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -680,7 +686,8 @@
 %% struct 'CashVolumeShare'
 -record('domain_CashVolumeShare', {
     'parts' :: dmsl_base_thrift:'Rational'(),
-    'of' :: atom()
+    'of' :: atom(),
+    'rounding_method' :: dmsl_domain_thrift:'RoundingMethod'() | undefined
 }).
 
 %% struct 'CashFlowDecision'
@@ -787,6 +794,23 @@
 -record('domain_TerminalDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'TerminalSelector'()
+}).
+
+%% struct 'BankCardCondition'
+-record('domain_BankCardCondition', {
+    'payment_system_is' :: atom() | undefined,
+    'bin_in' :: dmsl_domain_thrift:'BankCardBINRangeRef'() | undefined,
+    'definition' :: dmsl_domain_thrift:'BankCardConditionDefinition'() | undefined
+}).
+
+%% struct 'PaymentTerminalCondition'
+-record('domain_PaymentTerminalCondition', {
+    'definition' :: dmsl_domain_thrift:'PaymentTerminalConditionDefinition'() | undefined
+}).
+
+%% struct 'DigitalWalletCondition'
+-record('domain_DigitalWalletCondition', {
+    'definition' :: dmsl_domain_thrift:'DigitalWalletConditionDefinition'() | undefined
 }).
 
 %% struct 'PartyCondition'

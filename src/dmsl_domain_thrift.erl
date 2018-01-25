@@ -62,6 +62,7 @@
     'CustomerBindingID'/0,
     'RecurrentPaymentToolID'/0,
     'Token'/0,
+    'DigitalWalletID'/0,
     'CashFlowContext'/0,
     'CashFlow'/0,
     'FinalCashFlow'/0,
@@ -77,11 +78,13 @@
     'Residence'/0,
     'BankCardPaymentSystem'/0,
     'TerminalPaymentProvider'/0,
+    'DigitalWalletProvider'/0,
     'MerchantCashFlowAccount'/0,
     'ProviderCashFlowAccount'/0,
     'SystemCashFlowAccount'/0,
     'ExternalCashFlowAccount'/0,
     'CashFlowConstant'/0,
+    'RoundingMethod'/0,
     'PaymentInstitutionRealm'/0
 ]).
 -export_type([
@@ -205,6 +208,7 @@
     'DisposablePaymentResource'/0,
     'BankCard'/0,
     'PaymentTerminal'/0,
+    'DigitalWallet'/0,
     'BankCardBINRangeRef'/0,
     'BankCardBINRange'/0,
     'PaymentMethodRef'/0,
@@ -247,6 +251,11 @@
     'Condition'/0,
     'PaymentToolCondition'/0,
     'BankCardCondition'/0,
+    'BankCardConditionDefinition'/0,
+    'PaymentTerminalCondition'/0,
+    'PaymentTerminalConditionDefinition'/0,
+    'DigitalWalletCondition'/0,
+    'DigitalWalletConditionDefinition'/0,
     'PartyCondition'/0,
     'PartyConditionDefinition'/0,
     'ProxyRef'/0,
@@ -337,6 +346,7 @@
     'CustomerBindingID' |
     'RecurrentPaymentToolID' |
     'Token' |
+    'DigitalWalletID' |
     'CashFlowContext' |
     'CashFlow' |
     'FinalCashFlow' |
@@ -374,6 +384,7 @@
 -type 'CustomerBindingID'() :: dmsl_base_thrift:'ID'().
 -type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
 -type 'Token'() :: binary().
+-type 'DigitalWalletID'() :: binary().
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
@@ -392,11 +403,13 @@
     'Residence' |
     'BankCardPaymentSystem' |
     'TerminalPaymentProvider' |
+    'DigitalWalletProvider' |
     'MerchantCashFlowAccount' |
     'ProviderCashFlowAccount' |
     'SystemCashFlowAccount' |
     'ExternalCashFlowAccount' |
     'CashFlowConstant' |
+    'RoundingMethod' |
     'PaymentInstitutionRealm'.
 
 %% enum 'OnHoldExpiration'
@@ -693,6 +706,10 @@
 -type 'TerminalPaymentProvider'() ::
     'euroset'.
 
+%% enum 'DigitalWalletProvider'
+-type 'DigitalWalletProvider'() ::
+    'qiwi'.
+
 %% enum 'MerchantCashFlowAccount'
 -type 'MerchantCashFlowAccount'() ::
     'settlement' |
@@ -714,6 +731,11 @@
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
     'operation_amount'.
+
+%% enum 'RoundingMethod'
+-type 'RoundingMethod'() ::
+    'round_half_towards_zero' |
+    'round_half_away_from_zero'.
 
 %% enum 'PaymentInstitutionRealm'
 -type 'PaymentInstitutionRealm'() ::
@@ -844,6 +866,7 @@
     'DisposablePaymentResource' |
     'BankCard' |
     'PaymentTerminal' |
+    'DigitalWallet' |
     'BankCardBINRangeRef' |
     'BankCardBINRange' |
     'PaymentMethodRef' |
@@ -886,6 +909,11 @@
     'Condition' |
     'PaymentToolCondition' |
     'BankCardCondition' |
+    'BankCardConditionDefinition' |
+    'PaymentTerminalCondition' |
+    'PaymentTerminalConditionDefinition' |
+    'DigitalWalletCondition' |
+    'DigitalWalletConditionDefinition' |
     'PartyCondition' |
     'PartyConditionDefinition' |
     'ProxyRef' |
@@ -1350,12 +1378,14 @@
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
     {'bank_card', 'BankCardPaymentSystem'()} |
-    {'payment_terminal', 'TerminalPaymentProvider'()}.
+    {'payment_terminal', 'TerminalPaymentProvider'()} |
+    {'digital_wallet', 'DigitalWalletProvider'()}.
 
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
     {'bank_card', 'BankCard'()} |
-    {'payment_terminal', 'PaymentTerminal'()}.
+    {'payment_terminal', 'PaymentTerminal'()} |
+    {'digital_wallet', 'DigitalWallet'()}.
 
 %% struct 'DisposablePaymentResource'
 -type 'DisposablePaymentResource'() :: #'domain_DisposablePaymentResource'{}.
@@ -1365,6 +1395,9 @@
 
 %% struct 'PaymentTerminal'
 -type 'PaymentTerminal'() :: #'domain_PaymentTerminal'{}.
+
+%% struct 'DigitalWallet'
+-type 'DigitalWallet'() :: #'domain_DigitalWallet'{}.
 
 %% struct 'BankCardBINRangeRef'
 -type 'BankCardBINRangeRef'() :: #'domain_BankCardBINRangeRef'{}.
@@ -1522,12 +1555,31 @@
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
-    {'bank_card', 'BankCardCondition'()}.
+    {'bank_card', 'BankCardCondition'()} |
+    {'payment_terminal', 'PaymentTerminalCondition'()} |
+    {'digital_wallet', 'DigitalWalletCondition'()}.
 
-%% union 'BankCardCondition'
--type 'BankCardCondition'() ::
+%% struct 'BankCardCondition'
+-type 'BankCardCondition'() :: #'domain_BankCardCondition'{}.
+
+%% union 'BankCardConditionDefinition'
+-type 'BankCardConditionDefinition'() ::
     {'payment_system_is', atom()} |
     {'bin_in', 'BankCardBINRangeRef'()}.
+
+%% struct 'PaymentTerminalCondition'
+-type 'PaymentTerminalCondition'() :: #'domain_PaymentTerminalCondition'{}.
+
+%% union 'PaymentTerminalConditionDefinition'
+-type 'PaymentTerminalConditionDefinition'() ::
+    {'provider_is', atom()}.
+
+%% struct 'DigitalWalletCondition'
+-type 'DigitalWalletCondition'() :: #'domain_DigitalWalletCondition'{}.
+
+%% union 'DigitalWalletConditionDefinition'
+-type 'DigitalWalletConditionDefinition'() ::
+    {'provider_is', atom()}.
 
 %% struct 'PartyCondition'
 -type 'PartyCondition'() :: #'domain_PartyCondition'{}.
@@ -1767,11 +1819,13 @@
     'Residence'() |
     'BankCardPaymentSystem'() |
     'TerminalPaymentProvider'() |
+    'DigitalWalletProvider'() |
     'MerchantCashFlowAccount'() |
     'ProviderCashFlowAccount'() |
     'SystemCashFlowAccount'() |
     'ExternalCashFlowAccount'() |
     'CashFlowConstant'() |
+    'RoundingMethod'() |
     'PaymentInstitutionRealm'().
 
 -type enum_field_info() ::
@@ -1813,6 +1867,7 @@ typedefs() ->
         'CustomerBindingID',
         'RecurrentPaymentToolID',
         'Token',
+        'DigitalWalletID',
         'CashFlowContext',
         'CashFlow',
         'FinalCashFlow',
@@ -1832,11 +1887,13 @@ enums() ->
         'Residence',
         'BankCardPaymentSystem',
         'TerminalPaymentProvider',
+        'DigitalWalletProvider',
         'MerchantCashFlowAccount',
         'ProviderCashFlowAccount',
         'SystemCashFlowAccount',
         'ExternalCashFlowAccount',
         'CashFlowConstant',
+        'RoundingMethod',
         'PaymentInstitutionRealm'
     ].
 
@@ -1964,6 +2021,7 @@ structs() ->
         'DisposablePaymentResource',
         'BankCard',
         'PaymentTerminal',
+        'DigitalWallet',
         'BankCardBINRangeRef',
         'BankCardBINRange',
         'PaymentMethodRef',
@@ -2006,6 +2064,11 @@ structs() ->
         'Condition',
         'PaymentToolCondition',
         'BankCardCondition',
+        'BankCardConditionDefinition',
+        'PaymentTerminalCondition',
+        'PaymentTerminalConditionDefinition',
+        'DigitalWalletCondition',
+        'DigitalWalletConditionDefinition',
         'PartyCondition',
         'PartyConditionDefinition',
         'ProxyRef',
@@ -2160,6 +2223,9 @@ typedef_info('RecurrentPaymentToolID') ->
     string;
 
 typedef_info('Token') ->
+    string;
+
+typedef_info('DigitalWalletID') ->
     string;
 
 typedef_info('CashFlowContext') ->
@@ -2485,6 +2551,11 @@ enum_info('TerminalPaymentProvider') ->
         {'euroset', 0}
     ]};
 
+enum_info('DigitalWalletProvider') ->
+    {enum, [
+        {'qiwi', 0}
+    ]};
+
 enum_info('MerchantCashFlowAccount') ->
     {enum, [
         {'settlement', 0},
@@ -2510,6 +2581,12 @@ enum_info('ExternalCashFlowAccount') ->
 enum_info('CashFlowConstant') ->
     {enum, [
         {'operation_amount', 1}
+    ]};
+
+enum_info('RoundingMethod') ->
+    {enum, [
+        {'round_half_towards_zero', 0},
+        {'round_half_away_from_zero', 1}
     ]};
 
 enum_info('PaymentInstitutionRealm') ->
@@ -3269,13 +3346,15 @@ struct_info('CashLimitDecision') ->
 struct_info('PaymentMethod') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined}
+    {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
+    {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined}
 ]};
 
 struct_info('PaymentTool') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
 ]};
 
 struct_info('DisposablePaymentResource') ->
@@ -3296,6 +3375,12 @@ struct_info('BankCard') ->
 struct_info('PaymentTerminal') ->
     {struct, struct, [
     {1, required, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
+]};
+
+struct_info('DigitalWallet') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
+    {2, required, string, 'id', undefined}
 ]};
 
 struct_info('BankCardBINRangeRef') ->
@@ -3395,7 +3480,8 @@ struct_info('CashVolumeFixed') ->
 struct_info('CashVolumeShare') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, 'of', undefined}
+    {2, required, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, 'of', undefined},
+    {3, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
 ]};
 
 struct_info('CashVolumeProduct') ->
@@ -3561,13 +3647,42 @@ struct_info('Condition') ->
 
 struct_info('PaymentToolCondition') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined}
 ]};
 
 struct_info('BankCardCondition') ->
+    {struct, struct, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'BankCardConditionDefinition'}}, 'definition', undefined}
+]};
+
+struct_info('BankCardConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined}
+]};
+
+struct_info('PaymentTerminalCondition') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTerminalConditionDefinition'}}, 'definition', undefined}
+]};
+
+struct_info('PaymentTerminalConditionDefinition') ->
+    {struct, union, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'provider_is', undefined}
+]};
+
+struct_info('DigitalWalletCondition') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'DigitalWalletConditionDefinition'}}, 'definition', undefined}
+]};
+
+struct_info('DigitalWalletConditionDefinition') ->
+    {struct, union, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider_is', undefined}
 ]};
 
 struct_info('PartyCondition') ->
@@ -4210,6 +4325,9 @@ record_name('OperationTimeout') ->
     record_name('PaymentTerminal') ->
     'domain_PaymentTerminal';
 
+    record_name('DigitalWallet') ->
+    'domain_DigitalWallet';
+
     record_name('BankCardBINRangeRef') ->
     'domain_BankCardBINRangeRef';
 
@@ -4293,6 +4411,15 @@ record_name('OperationTimeout') ->
 
     record_name('TerminalDecision') ->
     'domain_TerminalDecision';
+
+    record_name('BankCardCondition') ->
+    'domain_BankCardCondition';
+
+    record_name('PaymentTerminalCondition') ->
+    'domain_PaymentTerminalCondition';
+
+    record_name('DigitalWalletCondition') ->
+    'domain_DigitalWalletCondition';
 
     record_name('PartyCondition') ->
     'domain_PartyCondition';

@@ -32,13 +32,15 @@
 -export_type([struct_info/0]).
 
 -export_type([
+    'DigitalWalletID'/0,
     'PayoutID'/0,
     'StatInfo'/0,
     'InvalidRequest'/0
 ]).
 -export_type([
     'OnHoldExpiration'/0,
-    'TerminalPaymentProvider'/0
+    'TerminalPaymentProvider'/0,
+    'DigitalWalletProvider'/0
 ]).
 -export_type([
     'StatPayment'/0,
@@ -61,6 +63,7 @@
     'PaymentTool'/0,
     'BankCard'/0,
     'PaymentTerminal'/0,
+    'DigitalWallet'/0,
     'BankAccount'/0,
     'StatInvoice'/0,
     'InvoiceUnpaid'/0,
@@ -92,10 +95,12 @@
 %% typedefs
 %%
 -type typedef_name() ::
+    'DigitalWalletID' |
     'PayoutID' |
     'StatInfo' |
     'InvalidRequest'.
 
+-type 'DigitalWalletID'() :: binary().
 -type 'PayoutID'() :: dmsl_base_thrift:'ID'().
 -type 'StatInfo'() :: #{binary() => binary()}.
 -type 'InvalidRequest'() :: dmsl_base_thrift:'InvalidRequest'().
@@ -105,7 +110,8 @@
 %%
 -type enum_name() ::
     'OnHoldExpiration' |
-    'TerminalPaymentProvider'.
+    'TerminalPaymentProvider' |
+    'DigitalWalletProvider'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
@@ -115,6 +121,10 @@
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
     'euroset'.
+
+%% enum 'DigitalWalletProvider'
+-type 'DigitalWalletProvider'() ::
+    'qiwi'.
 
 %%
 %% structs, unions and exceptions
@@ -140,6 +150,7 @@
     'PaymentTool' |
     'BankCard' |
     'PaymentTerminal' |
+    'DigitalWallet' |
     'BankAccount' |
     'StatInvoice' |
     'InvoiceUnpaid' |
@@ -230,13 +241,17 @@
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
     {'bank_card', 'BankCard'()} |
-    {'payment_terminal', 'PaymentTerminal'()}.
+    {'payment_terminal', 'PaymentTerminal'()} |
+    {'digital_wallet', 'DigitalWallet'()}.
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'merchstat_BankCard'{}.
 
 %% struct 'PaymentTerminal'
 -type 'PaymentTerminal'() :: #'merchstat_PaymentTerminal'{}.
+
+%% struct 'DigitalWallet'
+-type 'DigitalWallet'() :: #'merchstat_DigitalWallet'{}.
 
 %% struct 'BankAccount'
 -type 'BankAccount'() :: #'merchstat_BankAccount'{}.
@@ -356,7 +371,8 @@
 
 -type enum_choice() ::
     'OnHoldExpiration'() |
-    'TerminalPaymentProvider'().
+    'TerminalPaymentProvider'() |
+    'DigitalWalletProvider'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -367,6 +383,7 @@
 
 typedefs() ->
     [
+        'DigitalWalletID',
         'PayoutID',
         'StatInfo',
         'InvalidRequest'
@@ -377,7 +394,8 @@ typedefs() ->
 enums() ->
     [
         'OnHoldExpiration',
-        'TerminalPaymentProvider'
+        'TerminalPaymentProvider',
+        'DigitalWalletProvider'
     ].
 
 -spec structs() -> [struct_name()].
@@ -404,6 +422,7 @@ structs() ->
         'PaymentTool',
         'BankCard',
         'PaymentTerminal',
+        'DigitalWallet',
         'BankAccount',
         'StatInvoice',
         'InvoiceUnpaid',
@@ -440,6 +459,9 @@ namespace() ->
 
 -spec typedef_info(typedef_name()) -> field_type() | no_return().
 
+typedef_info('DigitalWalletID') ->
+    string;
+
 typedef_info('PayoutID') ->
     string;
 
@@ -462,6 +484,11 @@ enum_info('OnHoldExpiration') ->
 enum_info('TerminalPaymentProvider') ->
     {enum, [
         {'euroset', 0}
+    ]};
+
+enum_info('DigitalWalletProvider') ->
+    {enum, [
+        {'qiwi', 0}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -569,7 +596,8 @@ struct_info('InvoicePaymentStatus') ->
 struct_info('PaymentTool') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined}
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
 ]};
 
 struct_info('BankCard') ->
@@ -583,6 +611,12 @@ struct_info('BankCard') ->
 struct_info('PaymentTerminal') ->
     {struct, struct, [
     {1, required, {enum, {dmsl_merch_stat_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
+]};
+
+struct_info('DigitalWallet') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_merch_stat_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
+    {2, required, string, 'id', undefined}
 ]};
 
 struct_info('BankAccount') ->
@@ -765,6 +799,9 @@ record_name('PaymentResourcePayer') ->
 
     record_name('PaymentTerminal') ->
     'merchstat_PaymentTerminal';
+
+    record_name('DigitalWallet') ->
+    'merchstat_DigitalWallet';
 
     record_name('BankAccount') ->
     'merchstat_BankAccount';
