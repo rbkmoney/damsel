@@ -69,13 +69,34 @@ struct TimeSpan {
 }
 
 /** День недели */
-enum DayOfWeek { Mon Tue Wed Thu Fri Sat Sun }
+enum DayOfWeek {
+    Mon = 1
+    Tue = 2
+    Wed = 3
+    Thu = 4
+    Fri = 5
+    Sat = 6
+    Sun = 7
+}
 
 /** Год */
 typedef i32 Year
 
 /** Месяц года */
-enum Month { Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec }
+enum Month {
+    Jan = 1
+    Feb = 2
+    Mar = 3
+    Apr = 4
+    May = 5
+    Jun = 6
+    Jul = 7
+    Aug = 8
+    Sep = 9
+    Oct = 10
+    Nov = 11
+    Dec = 12
+}
 
 /** День месяца */
 typedef i8 DayOfMonth
