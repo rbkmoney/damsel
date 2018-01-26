@@ -347,14 +347,17 @@ function_info('Keyring', 'Lock', params_type) ->
 function_info('Keyring', 'Lock', reply_type) ->
         {struct, struct, []};
     function_info('Keyring', 'Lock', exceptions) ->
-        {struct, struct, []};
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'NoKeyring'}}, 'no_keyring', undefined}
+    ]};
 function_info('Keyring', 'Rotate', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'Rotate', reply_type) ->
         {struct, struct, []};
     function_info('Keyring', 'Rotate', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined},
+        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'NoKeyring'}}, 'no_keyring', undefined}
     ]};
 
 function_info('Storage', 'GetCardData', params_type) ->
