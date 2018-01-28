@@ -429,6 +429,8 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
+    /** Сумма возврата. */
+    2: required domain.Cash cash
 }
 
 /**
