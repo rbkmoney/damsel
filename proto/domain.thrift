@@ -303,6 +303,7 @@ struct InvoicePaymentRefund {
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
     4: required DataRevision domain_revision
+    6: required Cash cash
     5: optional string reason
 }
 
@@ -649,6 +650,8 @@ struct PaymentHoldsServiceTerms {
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
+    3: optional CashLimitSelector cash_limit
+    4: optional ActionTimeSelector action_time
 }
 
 /* Currencies */
@@ -1081,6 +1084,22 @@ union HoldLifetimeSelector {
 struct HoldLifetimeDecision {
     1: required Predicate if_
     2: required HoldLifetimeSelector then_
+}
+
+/* Refunds */
+
+struct ActionTime {
+    1: required i32 seconds
+}
+
+union ActionTimeSelector {
+    1: list<ActionTimeDecision> decisions
+    2: ActionTime value
+}
+
+struct ActionTimeDecision {
+    1: required Predicate if_
+    2: required ActionTimeSelector then_
 }
 
 /* Flows */
