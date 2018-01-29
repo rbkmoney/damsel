@@ -678,7 +678,6 @@ service Invoicing {
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
-            5: InvoicePaymentRefundPending ex5,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
