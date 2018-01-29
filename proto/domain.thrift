@@ -303,7 +303,7 @@ struct InvoicePaymentRefund {
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
     4: required DataRevision domain_revision
-    6: required Cash cash
+    6: optional Cash cash
     5: optional string reason
 }
 
