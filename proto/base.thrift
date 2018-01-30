@@ -61,7 +61,6 @@ enum BoundType {
 struct TimeSpan {
     1: optional i16 years
     2: optional i16 months
-    3: optional i16 weeks
     4: optional i16 days
     5: optional i16 hours
     6: optional i16 minutes
