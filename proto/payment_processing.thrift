@@ -1194,11 +1194,6 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
-    2: ScheduleModification schedule_modification
-}
-
-struct ScheduleModification {
-    1: optional domain.ScheduleRef schedule
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -1287,20 +1282,6 @@ union ContractEffect {
     3: domain.ContractAdjustment adjustment_created
     5: domain.LegalAgreement legal_agreement_bound
     4: domain.PayoutTool payout_tool_created
-    6: PayoutToolEffectUnit payout_tool_effect
-}
-
-struct PayoutToolEffectUnit {
-    1: required PayoutToolID payout_tool_id
-    2: required PayoutToolEffect effect
-}
-
-union PayoutToolEffect {
-    1: ScheduleChanged schedule_changed
-}
-
-struct ScheduleChanged {
-    1: optional domain.ScheduleRef schedule
 }
 
 struct ShopEffectUnit {

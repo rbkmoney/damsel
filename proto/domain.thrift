@@ -493,7 +493,6 @@ struct PayoutTool {
     4: required base.Timestamp created_at
     2: required CurrencyRef currency
     3: required PayoutToolInfo payout_tool_info
-    5: optional ScheduleRef payout_schedule
 }
 
 union PayoutToolInfo {
