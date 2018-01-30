@@ -390,6 +390,7 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
+   12: optional ScheduleRef payout_schedule
 }
 
 struct ShopAccount {
