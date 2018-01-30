@@ -1223,7 +1223,7 @@ struct ShopContractModification {
 }
 
 struct ScheduleModification {
-    1: optional ScheduleRef schedule
+    1: optional domain.ScheduleRef schedule
 }
 
 /* deprecated */
@@ -1314,7 +1314,7 @@ struct ShopContractChanged {
 }
 
 struct ScheduleChanged {
-    1: optional ScheduleRef schedule
+    1: optional domain.ScheduleRef schedule
 }
 
 /* deprecated */
