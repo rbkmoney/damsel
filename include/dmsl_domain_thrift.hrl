@@ -275,7 +275,8 @@
     'category' :: dmsl_domain_thrift:'CategoryRef'(),
     'account' :: dmsl_domain_thrift:'ShopAccount'() | undefined,
     'contract_id' :: dmsl_domain_thrift:'ContractID'(),
-    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined,
+    'payout_schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
 }).
 
 %% struct 'ShopAccount'
@@ -345,8 +346,7 @@
     'id' :: dmsl_domain_thrift:'PayoutToolID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'currency' :: dmsl_domain_thrift:'CurrencyRef'(),
-    'payout_tool_info' :: dmsl_domain_thrift:'PayoutToolInfo'(),
-    'payout_schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
+    'payout_tool_info' :: dmsl_domain_thrift:'PayoutToolInfo'()
 }).
 
 %% struct 'Contract'

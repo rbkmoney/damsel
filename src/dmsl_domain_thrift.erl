@@ -2950,7 +2950,8 @@ struct_info('Shop') ->
     {5, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
     {7, required, string, 'contract_id', undefined},
-    {8, optional, string, 'payout_tool_id', undefined}
+    {8, optional, string, 'payout_tool_id', undefined},
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'payout_schedule', undefined}
 ]};
 
 struct_info('ShopAccount') ->
@@ -3037,8 +3038,7 @@ struct_info('PayoutTool') ->
     {1, required, string, 'id', undefined},
     {4, required, string, 'created_at', undefined},
     {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'payout_schedule', undefined}
+    {3, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined}
 ]};
 
 struct_info('PayoutToolInfo') ->

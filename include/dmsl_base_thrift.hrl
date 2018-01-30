@@ -25,7 +25,6 @@
 -record('TimeSpan', {
     'years' :: integer() | undefined,
     'months' :: integer() | undefined,
-    'weeks' :: integer() | undefined,
     'days' :: integer() | undefined,
     'hours' :: integer() | undefined,
     'minutes' :: integer() | undefined,

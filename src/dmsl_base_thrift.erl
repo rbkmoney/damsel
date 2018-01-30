@@ -393,7 +393,6 @@ struct_info('TimeSpan') ->
     {struct, struct, [
     {1, optional, i16, 'years', undefined},
     {2, optional, i16, 'months', undefined},
-    {3, optional, i16, 'weeks', undefined},
     {4, optional, i16, 'days', undefined},
     {5, optional, i16, 'hours', undefined},
     {6, optional, i16, 'minutes', undefined},

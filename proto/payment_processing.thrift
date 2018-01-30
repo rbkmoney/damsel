@@ -1194,11 +1194,6 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
-    2: ScheduleModification schedule_modification
-}
-
-struct ScheduleModification {
-    1: optional domain.ScheduleRef schedule
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -1216,6 +1211,7 @@ union ShopModification {
     9: domain.PayoutToolID payout_tool_modification
     11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
+    13: ScheduleModification payout_schedule_modification
 
     /* deprecated */
     10: ProxyModification proxy_modification
@@ -1224,6 +1220,10 @@ union ShopModification {
 struct ShopContractModification {
     1: required ContractID contract_id
     2: required domain.PayoutToolID payout_tool_id
+}
+
+struct ScheduleModification {
+    1: optional domain.ScheduleRef schedule
 }
 
 /* deprecated */
@@ -1287,20 +1287,6 @@ union ContractEffect {
     3: domain.ContractAdjustment adjustment_created
     5: domain.LegalAgreement legal_agreement_bound
     4: domain.PayoutTool payout_tool_created
-    6: PayoutToolEffectUnit payout_tool_effect
-}
-
-struct PayoutToolEffectUnit {
-    1: required PayoutToolID payout_tool_id
-    2: required PayoutToolEffect effect
-}
-
-union PayoutToolEffect {
-    1: ScheduleChanged schedule_changed
-}
-
-struct ScheduleChanged {
-    1: optional domain.ScheduleRef schedule
 }
 
 struct ShopEffectUnit {
@@ -1316,6 +1302,7 @@ union ShopEffect {
     5: domain.PayoutToolID payout_tool_changed
     7: domain.ShopLocation location_changed
     8: domain.ShopAccount account_created
+    9: ScheduleChanged payout_schedule_changed
 
     /* deprecated */
     6: ShopProxyChanged proxy_changed
@@ -1324,6 +1311,10 @@ union ShopEffect {
 struct ShopContractChanged {
     1: required ContractID contract_id
     2: required domain.PayoutToolID payout_tool_id
+}
+
+struct ScheduleChanged {
+    1: optional domain.ScheduleRef schedule
 }
 
 /* deprecated */

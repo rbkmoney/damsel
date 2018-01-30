@@ -158,10 +158,10 @@
     'ContractAdjustmentModification'/0,
     'PayoutToolModificationUnit'/0,
     'PayoutToolModification'/0,
-    'ScheduleModification'/0,
     'ShopModificationUnit'/0,
     'ShopModification'/0,
     'ShopContractModification'/0,
+    'ScheduleModification'/0,
     'ProxyModification'/0,
     'Claim'/0,
     'ClaimStatus'/0,
@@ -172,12 +172,10 @@
     'ClaimEffect'/0,
     'ContractEffectUnit'/0,
     'ContractEffect'/0,
-    'PayoutToolEffectUnit'/0,
-    'PayoutToolEffect'/0,
-    'ScheduleChanged'/0,
     'ShopEffectUnit'/0,
     'ShopEffect'/0,
     'ShopContractChanged'/0,
+    'ScheduleChanged'/0,
     'ShopProxyChanged'/0,
     'AccountState'/0,
     'PartyChange'/0,
@@ -403,10 +401,10 @@
     'ContractAdjustmentModification' |
     'PayoutToolModificationUnit' |
     'PayoutToolModification' |
-    'ScheduleModification' |
     'ShopModificationUnit' |
     'ShopModification' |
     'ShopContractModification' |
+    'ScheduleModification' |
     'ProxyModification' |
     'Claim' |
     'ClaimStatus' |
@@ -417,12 +415,10 @@
     'ClaimEffect' |
     'ContractEffectUnit' |
     'ContractEffect' |
-    'PayoutToolEffectUnit' |
-    'PayoutToolEffect' |
-    'ScheduleChanged' |
     'ShopEffectUnit' |
     'ShopEffect' |
     'ShopContractChanged' |
+    'ScheduleChanged' |
     'ShopProxyChanged' |
     'AccountState' |
     'PartyChange' |
@@ -868,11 +864,7 @@
 
 %% union 'PayoutToolModification'
 -type 'PayoutToolModification'() ::
-    {'creation', 'PayoutToolParams'()} |
-    {'schedule_modification', 'ScheduleModification'()}.
-
-%% struct 'ScheduleModification'
--type 'ScheduleModification'() :: #'payproc_ScheduleModification'{}.
+    {'creation', 'PayoutToolParams'()}.
 
 %% struct 'ShopModificationUnit'
 -type 'ShopModificationUnit'() :: #'payproc_ShopModificationUnit'{}.
@@ -886,10 +878,14 @@
     {'payout_tool_modification', dmsl_domain_thrift:'PayoutToolID'()} |
     {'location_modification', dmsl_domain_thrift:'ShopLocation'()} |
     {'shop_account_creation', 'ShopAccountParams'()} |
+    {'payout_schedule_modification', 'ScheduleModification'()} |
     {'proxy_modification', 'ProxyModification'()}.
 
 %% struct 'ShopContractModification'
 -type 'ShopContractModification'() :: #'payproc_ShopContractModification'{}.
+
+%% struct 'ScheduleModification'
+-type 'ScheduleModification'() :: #'payproc_ScheduleModification'{}.
 
 %% struct 'ProxyModification'
 -type 'ProxyModification'() :: #'payproc_ProxyModification'{}.
@@ -930,18 +926,7 @@
     {'status_changed', dmsl_domain_thrift:'ContractStatus'()} |
     {'adjustment_created', dmsl_domain_thrift:'ContractAdjustment'()} |
     {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()} |
-    {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()} |
-    {'payout_tool_effect', 'PayoutToolEffectUnit'()}.
-
-%% struct 'PayoutToolEffectUnit'
--type 'PayoutToolEffectUnit'() :: #'payproc_PayoutToolEffectUnit'{}.
-
-%% union 'PayoutToolEffect'
--type 'PayoutToolEffect'() ::
-    {'schedule_changed', 'ScheduleChanged'()}.
-
-%% struct 'ScheduleChanged'
--type 'ScheduleChanged'() :: #'payproc_ScheduleChanged'{}.
+    {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()}.
 
 %% struct 'ShopEffectUnit'
 -type 'ShopEffectUnit'() :: #'payproc_ShopEffectUnit'{}.
@@ -955,10 +940,14 @@
     {'payout_tool_changed', dmsl_domain_thrift:'PayoutToolID'()} |
     {'location_changed', dmsl_domain_thrift:'ShopLocation'()} |
     {'account_created', dmsl_domain_thrift:'ShopAccount'()} |
+    {'payout_schedule_changed', 'ScheduleChanged'()} |
     {'proxy_changed', 'ShopProxyChanged'()}.
 
 %% struct 'ShopContractChanged'
 -type 'ShopContractChanged'() :: #'payproc_ShopContractChanged'{}.
+
+%% struct 'ScheduleChanged'
+-type 'ScheduleChanged'() :: #'payproc_ScheduleChanged'{}.
 
 %% struct 'ShopProxyChanged'
 -type 'ShopProxyChanged'() :: #'payproc_ShopProxyChanged'{}.
@@ -1445,10 +1434,10 @@ structs() ->
         'ContractAdjustmentModification',
         'PayoutToolModificationUnit',
         'PayoutToolModification',
-        'ScheduleModification',
         'ShopModificationUnit',
         'ShopModification',
         'ShopContractModification',
+        'ScheduleModification',
         'ProxyModification',
         'Claim',
         'ClaimStatus',
@@ -1459,12 +1448,10 @@ structs() ->
         'ClaimEffect',
         'ContractEffectUnit',
         'ContractEffect',
-        'PayoutToolEffectUnit',
-        'PayoutToolEffect',
-        'ScheduleChanged',
         'ShopEffectUnit',
         'ShopEffect',
         'ShopContractChanged',
+        'ScheduleChanged',
         'ShopProxyChanged',
         'AccountState',
         'PartyChange',
@@ -2184,13 +2171,7 @@ struct_info('PayoutToolModificationUnit') ->
 
 struct_info('PayoutToolModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleModification'}}, 'schedule_modification', undefined}
-]};
-
-struct_info('ScheduleModification') ->
-    {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined}
 ]};
 
 struct_info('ShopModificationUnit') ->
@@ -2208,6 +2189,7 @@ struct_info('ShopModification') ->
     {9, optional, string, 'payout_tool_modification', undefined},
     {11, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
     {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
+    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined},
     {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ProxyModification'}}, 'proxy_modification', undefined}
 ]};
 
@@ -2215,6 +2197,11 @@ struct_info('ShopContractModification') ->
     {struct, struct, [
     {1, required, string, 'contract_id', undefined},
     {2, required, string, 'payout_tool_id', undefined}
+]};
+
+struct_info('ScheduleModification') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ProxyModification') ->
@@ -2276,24 +2263,7 @@ struct_info('ContractEffect') ->
     {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolEffectUnit'}}, 'payout_tool_effect', undefined}
-]};
-
-struct_info('PayoutToolEffectUnit') ->
-    {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'PayoutToolEffect'}}, 'effect', undefined}
-]};
-
-struct_info('PayoutToolEffect') ->
-    {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleChanged'}}, 'schedule_changed', undefined}
-]};
-
-struct_info('ScheduleChanged') ->
-    {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined}
 ]};
 
 struct_info('ShopEffectUnit') ->
@@ -2311,6 +2281,7 @@ struct_info('ShopEffect') ->
     {5, optional, string, 'payout_tool_changed', undefined},
     {7, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
+    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleChanged'}}, 'payout_schedule_changed', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopProxyChanged'}}, 'proxy_changed', undefined}
 ]};
 
@@ -2318,6 +2289,11 @@ struct_info('ShopContractChanged') ->
     {struct, struct, [
     {1, required, string, 'contract_id', undefined},
     {2, required, string, 'payout_tool_id', undefined}
+]};
+
+struct_info('ScheduleChanged') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ShopProxyChanged') ->
@@ -2848,14 +2824,14 @@ record_name('InternalUser') ->
     record_name('PayoutToolModificationUnit') ->
     'payproc_PayoutToolModificationUnit';
 
-    record_name('ScheduleModification') ->
-    'payproc_ScheduleModification';
-
     record_name('ShopModificationUnit') ->
     'payproc_ShopModificationUnit';
 
     record_name('ShopContractModification') ->
     'payproc_ShopContractModification';
+
+    record_name('ScheduleModification') ->
+    'payproc_ScheduleModification';
 
     record_name('ProxyModification') ->
     'payproc_ProxyModification';
@@ -2878,17 +2854,14 @@ record_name('InternalUser') ->
     record_name('ContractEffectUnit') ->
     'payproc_ContractEffectUnit';
 
-    record_name('PayoutToolEffectUnit') ->
-    'payproc_PayoutToolEffectUnit';
-
-    record_name('ScheduleChanged') ->
-    'payproc_ScheduleChanged';
-
     record_name('ShopEffectUnit') ->
     'payproc_ShopEffectUnit';
 
     record_name('ShopContractChanged') ->
     'payproc_ShopContractChanged';
+
+    record_name('ScheduleChanged') ->
+    'payproc_ScheduleChanged';
 
     record_name('ShopProxyChanged') ->
     'payproc_ShopProxyChanged';
