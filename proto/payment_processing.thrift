@@ -430,7 +430,7 @@ struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
     /** Сумма возврата. */
-    2: required domain.Cash cash
+    2: optional domain.Cash cash
 }
 
 /**
@@ -494,6 +494,10 @@ exception InvalidPaymentAdjustmentStatus {
 
 exception InvoiceTemplateNotFound {}
 exception InvoiceTemplateRemoved {}
+
+exception InvoicePaymentAmountExceeded {
+    1: required domain.Cash cash
+}
 
 service Invoicing {
 
@@ -681,6 +685,7 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
+            9: InvoicePaymentAmountExceeded ex9
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
