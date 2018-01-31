@@ -50,6 +50,23 @@ enum BoundType {
     exclusive
 }
 
+/**
+ * Промежуток во времени.
+ *
+ * Порядок применения отрезков к моменту времени: от более протяжённых (годы) к
+ * менее протяжённым (секунды).
+ *
+ * Если какой-либо отрезок не задан, предполагается, что он равен 0.
+ */
+struct TimeSpan {
+    1: optional i16 years
+    2: optional i16 months
+    4: optional i16 days
+    5: optional i16 hours
+    6: optional i16 minutes
+    7: optional i16 seconds
+}
+
 /** Отображение из строки в строку */
 typedef map<string, string> StringMap
 

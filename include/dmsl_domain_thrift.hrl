@@ -482,7 +482,7 @@
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'action_time' :: dmsl_domain_thrift:'ActionTimeSelector'() | undefined
+    'eligibility_time' :: dmsl_domain_thrift:'EligibilityTimeSelector'() | undefined
 }).
 
 %% struct 'CurrencyRef'
@@ -588,15 +588,10 @@
     'then_' :: dmsl_domain_thrift:'HoldLifetimeSelector'()
 }).
 
-%% struct 'ActionTime'
--record('domain_ActionTime', {
-    'seconds' :: integer()
-}).
-
-%% struct 'ActionTimeDecision'
--record('domain_ActionTimeDecision', {
+%% struct 'EligibilityTimeDecision'
+-record('domain_EligibilityTimeDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
-    'then_' :: dmsl_domain_thrift:'ActionTimeSelector'()
+    'then_' :: dmsl_domain_thrift:'EligibilityTimeSelector'()
 }).
 
 %% struct 'CashFlowPosting'

@@ -48,6 +48,7 @@
     'Content'/0,
     'TimestampInterval'/0,
     'TimestampIntervalBound'/0,
+    'TimeSpan'/0,
     'Rational'/0,
     'Timer'/0
 ]).
@@ -97,6 +98,7 @@
     'Content' |
     'TimestampInterval' |
     'TimestampIntervalBound' |
+    'TimeSpan' |
     'Rational' |
     'Timer'.
 
@@ -111,6 +113,9 @@
 
 %% struct 'TimestampIntervalBound'
 -type 'TimestampIntervalBound'() :: #'TimestampIntervalBound'{}.
+
+%% struct 'TimeSpan'
+-type 'TimeSpan'() :: #'TimeSpan'{}.
 
 %% struct 'Rational'
 -type 'Rational'() :: #'Rational'{}.
@@ -186,6 +191,7 @@ structs() ->
         'Content',
         'TimestampInterval',
         'TimestampIntervalBound',
+        'TimeSpan',
         'Rational',
         'Timer'
     ].
@@ -258,6 +264,16 @@ struct_info('TimestampIntervalBound') ->
     {2, required, string, 'bound_time', undefined}
 ]};
 
+struct_info('TimeSpan') ->
+    {struct, struct, [
+    {1, optional, i16, 'years', undefined},
+    {2, optional, i16, 'months', undefined},
+    {4, optional, i16, 'days', undefined},
+    {5, optional, i16, 'hours', undefined},
+    {6, optional, i16, 'minutes', undefined},
+    {7, optional, i16, 'seconds', undefined}
+]};
+
 struct_info('Rational') ->
     {struct, struct, [
     {1, required, i64, 'p', undefined},
@@ -287,6 +303,9 @@ record_name('TimestampInterval') ->
 
     record_name('TimestampIntervalBound') ->
     'TimestampIntervalBound';
+
+    record_name('TimeSpan') ->
+    'TimeSpan';
 
     record_name('Rational') ->
     'Rational';

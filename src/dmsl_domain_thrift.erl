@@ -203,9 +203,8 @@
     'HoldLifetime'/0,
     'HoldLifetimeSelector'/0,
     'HoldLifetimeDecision'/0,
-    'ActionTime'/0,
-    'ActionTimeSelector'/0,
-    'ActionTimeDecision'/0,
+    'EligibilityTimeSelector'/0,
+    'EligibilityTimeDecision'/0,
     'CashFlowAccount'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
@@ -841,9 +840,8 @@
     'HoldLifetime' |
     'HoldLifetimeSelector' |
     'HoldLifetimeDecision' |
-    'ActionTime' |
-    'ActionTimeSelector' |
-    'ActionTimeDecision' |
+    'EligibilityTimeSelector' |
+    'EligibilityTimeDecision' |
     'CashFlowAccount' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
@@ -1352,16 +1350,13 @@
 %% struct 'HoldLifetimeDecision'
 -type 'HoldLifetimeDecision'() :: #'domain_HoldLifetimeDecision'{}.
 
-%% struct 'ActionTime'
--type 'ActionTime'() :: #'domain_ActionTime'{}.
+%% union 'EligibilityTimeSelector'
+-type 'EligibilityTimeSelector'() ::
+    {'decisions', ['EligibilityTimeDecision'()]} |
+    {'value', dmsl_base_thrift:'TimeSpan'()}.
 
-%% union 'ActionTimeSelector'
--type 'ActionTimeSelector'() ::
-    {'decisions', ['ActionTimeDecision'()]} |
-    {'value', 'ActionTime'()}.
-
-%% struct 'ActionTimeDecision'
--type 'ActionTimeDecision'() :: #'domain_ActionTimeDecision'{}.
+%% struct 'EligibilityTimeDecision'
+-type 'EligibilityTimeDecision'() :: #'domain_EligibilityTimeDecision'{}.
 
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
@@ -1933,9 +1928,8 @@ structs() ->
         'HoldLifetime',
         'HoldLifetimeSelector',
         'HoldLifetimeDecision',
-        'ActionTime',
-        'ActionTimeSelector',
-        'ActionTimeDecision',
+        'EligibilityTimeSelector',
+        'EligibilityTimeDecision',
         'CashFlowAccount',
         'CashFlowPosting',
         'FinalCashFlowPosting',
@@ -3093,7 +3087,7 @@ struct_info('PaymentRefundsServiceTerms') ->
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'ActionTimeSelector'}}, 'action_time', undefined}
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'EligibilityTimeSelector'}}, 'eligibility_time', undefined}
 ]};
 
 struct_info('CurrencyRef') ->
@@ -3249,21 +3243,16 @@ struct_info('HoldLifetimeDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
 ]};
 
-struct_info('ActionTime') ->
-    {struct, struct, [
-    {1, required, i32, 'seconds', undefined}
-]};
-
-struct_info('ActionTimeSelector') ->
+struct_info('EligibilityTimeSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ActionTimeDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ActionTime'}}, 'value', undefined}
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'EligibilityTimeDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'value', undefined}
 ]};
 
-struct_info('ActionTimeDecision') ->
+struct_info('EligibilityTimeDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'ActionTimeSelector'}}, 'then_', undefined}
+    {2, required, {struct, union, {dmsl_domain_thrift, 'EligibilityTimeSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CashFlowAccount') ->
@@ -4122,11 +4111,8 @@ record_name('OperationTimeout') ->
     record_name('HoldLifetimeDecision') ->
     'domain_HoldLifetimeDecision';
 
-    record_name('ActionTime') ->
-    'domain_ActionTime';
-
-    record_name('ActionTimeDecision') ->
-    'domain_ActionTimeDecision';
+    record_name('EligibilityTimeDecision') ->
+    'domain_EligibilityTimeDecision';
 
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
