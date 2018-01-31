@@ -429,7 +429,10 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
-    /** Сумма возврата. */
+    /** 
+     * Сумма возврата. 
+     * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
+     */
     2: optional domain.Cash cash
 }
 
@@ -495,7 +498,8 @@ exception InvalidPaymentAdjustmentStatus {
 exception InvoiceTemplateNotFound {}
 exception InvoiceTemplateRemoved {}
 
-exception InvoicePaymentAmountExceeded {
+exception InvoicePaymentMaximumAmountExceeded {
+    /** Сумма платежа */
     1: required domain.Cash cash
 }
 
@@ -685,7 +689,7 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
-            9: InvoicePaymentAmountExceeded ex9
+            9: InvoicePaymentMaximumAmountExceeded ex9
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
