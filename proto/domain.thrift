@@ -651,7 +651,7 @@ struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
     3: optional CashLimitSelector cash_limit
-    4: optional EligibilityTimeSelector eligibility_time
+    4: optional TimeSpanSelector eligibility_time
 }
 
 /* Currencies */
@@ -1088,14 +1088,14 @@ struct HoldLifetimeDecision {
 
 /* Refunds */
 
-union EligibilityTimeSelector {
-    1: list<EligibilityTimeDecision> decisions
+union TimeSpanSelector {
+    1: list<TimeSpanDecision> decisions
     2: base.TimeSpan value
 }
 
-struct EligibilityTimeDecision {
+struct TimeSpanDecision {
     1: required Predicate if_
-    2: required EligibilityTimeSelector then_
+    2: required TimeSpanSelector then_
 }
 
 /* Flows */

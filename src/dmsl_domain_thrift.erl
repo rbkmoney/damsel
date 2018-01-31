@@ -203,8 +203,8 @@
     'HoldLifetime'/0,
     'HoldLifetimeSelector'/0,
     'HoldLifetimeDecision'/0,
-    'EligibilityTimeSelector'/0,
-    'EligibilityTimeDecision'/0,
+    'TimeSpanSelector'/0,
+    'TimeSpanDecision'/0,
     'CashFlowAccount'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
@@ -840,8 +840,8 @@
     'HoldLifetime' |
     'HoldLifetimeSelector' |
     'HoldLifetimeDecision' |
-    'EligibilityTimeSelector' |
-    'EligibilityTimeDecision' |
+    'TimeSpanSelector' |
+    'TimeSpanDecision' |
     'CashFlowAccount' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
@@ -1350,13 +1350,13 @@
 %% struct 'HoldLifetimeDecision'
 -type 'HoldLifetimeDecision'() :: #'domain_HoldLifetimeDecision'{}.
 
-%% union 'EligibilityTimeSelector'
--type 'EligibilityTimeSelector'() ::
-    {'decisions', ['EligibilityTimeDecision'()]} |
+%% union 'TimeSpanSelector'
+-type 'TimeSpanSelector'() ::
+    {'decisions', ['TimeSpanDecision'()]} |
     {'value', dmsl_base_thrift:'TimeSpan'()}.
 
-%% struct 'EligibilityTimeDecision'
--type 'EligibilityTimeDecision'() :: #'domain_EligibilityTimeDecision'{}.
+%% struct 'TimeSpanDecision'
+-type 'TimeSpanDecision'() :: #'domain_TimeSpanDecision'{}.
 
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
@@ -1928,8 +1928,8 @@ structs() ->
         'HoldLifetime',
         'HoldLifetimeSelector',
         'HoldLifetimeDecision',
-        'EligibilityTimeSelector',
-        'EligibilityTimeDecision',
+        'TimeSpanSelector',
+        'TimeSpanDecision',
         'CashFlowAccount',
         'CashFlowPosting',
         'FinalCashFlowPosting',
@@ -3087,7 +3087,7 @@ struct_info('PaymentRefundsServiceTerms') ->
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'EligibilityTimeSelector'}}, 'eligibility_time', undefined}
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined}
 ]};
 
 struct_info('CurrencyRef') ->
@@ -3243,16 +3243,16 @@ struct_info('HoldLifetimeDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
 ]};
 
-struct_info('EligibilityTimeSelector') ->
+struct_info('TimeSpanSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'EligibilityTimeDecision'}}}, 'decisions', undefined},
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TimeSpanDecision'}}}, 'decisions', undefined},
     {2, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'value', undefined}
 ]};
 
-struct_info('EligibilityTimeDecision') ->
+struct_info('TimeSpanDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'EligibilityTimeSelector'}}, 'then_', undefined}
+    {2, required, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CashFlowAccount') ->
@@ -4111,8 +4111,8 @@ record_name('OperationTimeout') ->
     record_name('HoldLifetimeDecision') ->
     'domain_HoldLifetimeDecision';
 
-    record_name('EligibilityTimeDecision') ->
-    'domain_EligibilityTimeDecision';
+    record_name('TimeSpanDecision') ->
+    'domain_TimeSpanDecision';
 
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
