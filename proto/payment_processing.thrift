@@ -498,9 +498,8 @@ exception InvalidPaymentAdjustmentStatus {
 exception InvoiceTemplateNotFound {}
 exception InvoiceTemplateRemoved {}
 
-exception InvoicePaymentMaximumAmountExceeded {
-    /** Сумма платежа */
-    1: required domain.Cash cash
+exception InvoicePaymentAmountExceeded {
+    1: required domain.Cash maximum
 }
 
 service Invoicing {
@@ -689,7 +688,7 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
-            9: InvoicePaymentMaximumAmountExceeded ex9
+            9: InvoicePaymentAmountExceeded ex9
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
