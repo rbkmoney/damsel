@@ -23,16 +23,37 @@ struct ContactInfo {
 
 union OperationFailure {
     1: OperationTimeout operation_timeout
-    2: ExternalFailure  external_failure
+    2: Failure          failure
 }
 
 struct OperationTimeout {}
 
-struct ExternalFailure {
-    /** Уникальный признак ошибки, пригодный для обработки машиной */
-    1: required string code
-    /** Описание ошибки, пригодное для восприятия человеком */
-    2: optional string description
+/**
+ * "Динамическое" представление ошибки,
+ * должно использоваться только для передачи,
+ * для интропретации нужно использовать конвертацию в типизированный вид.
+ *
+ * Если при попытке интропретировать код через типизированный вид происходит ошибка (нет такого типа),
+ * то это означает, что ошибка не известна, и такую ситуацию нужно уметь обрабатывать.
+ *
+ * Старые ошибки совместимы с новыми и будут читаться.
+ * Поле description будет в поле reason, а в поле code будет код ошибки
+ * (который будет интропретирован как неизвестная ошибка).
+ */
+struct Failure {
+    1: required FailureCode     code;
+
+    2: optional FailureReason   reason;
+    3: optional SubFailure      sub;
+}
+
+typedef string FailureCode;
+typedef string FailureReason; // причина возникшей ошибки и пояснение откуда она взялась
+
+// возможность делать коды ошибок иерархическими
+struct SubFailure {
+    1: required FailureCode  code;
+    2: optional SubFailure   sub;
 }
 
 /** Сумма в минимальных денежных единицах. */
