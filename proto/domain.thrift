@@ -1449,6 +1449,7 @@ union Condition {
     3: PaymentToolCondition payment_tool
     5: ShopLocation shop_location_is
     6: PartyCondition party
+    7: PayoutMethod payout_method_is
 }
 
 union PaymentToolCondition {

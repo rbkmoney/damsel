@@ -1551,7 +1551,8 @@
     {'cost_in', 'CashRange'()} |
     {'payment_tool', 'PaymentToolCondition'()} |
     {'shop_location_is', 'ShopLocation'()} |
-    {'party', 'PartyCondition'()}.
+    {'party', 'PartyCondition'()} |
+    {'payout_method_is', atom()}.
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
@@ -3642,7 +3643,8 @@ struct_info('Condition') ->
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cost_in', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'payment_tool', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'shop_location_is', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
+    {7, optional, {enum, {dmsl_domain_thrift, 'PayoutMethod'}}, 'payout_method_is', undefined}
 ]};
 
 struct_info('PaymentToolCondition') ->
