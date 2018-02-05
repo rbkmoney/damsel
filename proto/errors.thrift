@@ -1,9 +1,5 @@
 /**
  * TODO
- */
-
-/**
- * TODO
  *  - RefundError
  *  - RecurrentsError
  *  - WalletError
@@ -11,6 +7,29 @@
  *  - CashRegistrationFailed
  *  -
  */
+
+/**
+  * Статическое представление ошибок.
+  * (динамическое представление — domain.Failure)
+  *
+  * Формат динамического представления следующий
+  * (по контексту применения известно, что это за операция, и её тип ошибки
+  %  в данном случае PaymentFailed):
+  *
+  * domain.Failure{
+  *     code = "AuthorizationFailed",
+  *     reason = "sngb error '87' — 'Invalid CVV'",
+  *     sub = domain.SubFailure{
+  *         code = "PaymentToolRejected",
+  *         sub = domain.SubFailure{
+  *             code = "BankCardError",
+  *             sub = domain.SubFailure{
+  *                 code = "InvalidCVV"
+  *             }
+  *         }
+  *     }
+  * }
+  */
 
 union PaymentFailed {
     1: RejectedByInspector      rejected_by_inspector
@@ -59,7 +78,6 @@ struct AttemptsNumberLimitExceeded  {}
 
 union PaymentToolRejected {
     1: BankCardError bank_card_error
-    //  wallet_error
 }
 
 union BankCardError {
