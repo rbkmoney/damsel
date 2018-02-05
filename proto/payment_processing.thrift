@@ -1609,7 +1609,7 @@ service PartyManagement {
     /* Payouts */
     /* TODO looks like adhoc. Rework after feedback. Or not. */
     domain.FinalCashFlow ComputePayoutCashFlow (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4, 5: base.InvalidRequest ex5)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4, 5: OperationNotPermitted ex5)
 }
 
 /* Event sink service definitions */
