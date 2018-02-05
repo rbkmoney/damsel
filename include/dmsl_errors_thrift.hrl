@@ -6,8 +6,8 @@
 %% struct 'RejectedByInspector'
 -record('RejectedByInspector', {}).
 
-%% struct 'PreauthorizationError'
--record('PreauthorizationError', {}).
+%% struct 'PreauthorizationFailed'
+-record('PreauthorizationFailed', {}).
 
 %% struct 'SilentReject'
 -record('SilentReject', {}).

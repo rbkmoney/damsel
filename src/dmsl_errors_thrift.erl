@@ -32,9 +32,9 @@
 -export_type([struct_info/0]).
 
 -export_type([
-    'PaymentError'/0,
+    'PaymentFailed'/0,
     'RejectedByInspector'/0,
-    'PreauthorizationError'/0,
+    'PreauthorizationFailed'/0,
     'AuthorizationFailed'/0,
     'SilentReject'/0,
     'MerchantBlocked'/0,
@@ -49,7 +49,7 @@
     'WeeklyLimitExceeded'/0,
     'MonthlyLimitExceeded'/0,
     'AttemptsNumberLimitExceeded'/0,
-    'PaymentToolError'/0,
+    'PaymentToolRejected'/0,
     'BankCardError'/0,
     'InvalidCardNumber'/0,
     'ExpiredCard'/0,
@@ -77,9 +77,9 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
-    'PaymentError' |
+    'PaymentFailed' |
     'RejectedByInspector' |
-    'PreauthorizationError' |
+    'PreauthorizationFailed' |
     'AuthorizationFailed' |
     'SilentReject' |
     'MerchantBlocked' |
@@ -94,7 +94,7 @@
     'WeeklyLimitExceeded' |
     'MonthlyLimitExceeded' |
     'AttemptsNumberLimitExceeded' |
-    'PaymentToolError' |
+    'PaymentToolRejected' |
     'BankCardError' |
     'InvalidCardNumber' |
     'ExpiredCard' |
@@ -106,17 +106,17 @@
 
 -type exception_name() :: none().
 
-%% union 'PaymentError'
--type 'PaymentError'() ::
+%% union 'PaymentFailed'
+-type 'PaymentFailed'() ::
     {'rejected_by_inspector', 'RejectedByInspector'()} |
-    {'preauthorization_error', 'PreauthorizationError'()} |
+    {'preauthorization_failed', 'PreauthorizationFailed'()} |
     {'authorization_failed', 'AuthorizationFailed'()}.
 
 %% struct 'RejectedByInspector'
 -type 'RejectedByInspector'() :: #'RejectedByInspector'{}.
 
-%% struct 'PreauthorizationError'
--type 'PreauthorizationError'() :: #'PreauthorizationError'{}.
+%% struct 'PreauthorizationFailed'
+-type 'PreauthorizationFailed'() :: #'PreauthorizationFailed'{}.
 
 %% union 'AuthorizationFailed'
 -type 'AuthorizationFailed'() ::
@@ -128,7 +128,7 @@
     {'account_stolen', 'AccountStolen'()} |
     {'insufficient_funds', 'InsufficientFunds'()} |
     {'limit_exceeded', 'LimitExceeded'()} |
-    {'payment_tool_error', 'PaymentToolError'()}.
+    {'payment_tool_error', 'PaymentToolRejected'()}.
 
 %% struct 'SilentReject'
 -type 'SilentReject'() :: #'SilentReject'{}.
@@ -174,8 +174,8 @@
 %% struct 'AttemptsNumberLimitExceeded'
 -type 'AttemptsNumberLimitExceeded'() :: #'AttemptsNumberLimitExceeded'{}.
 
-%% union 'PaymentToolError'
--type 'PaymentToolError'() ::
+%% union 'PaymentToolRejected'
+-type 'PaymentToolRejected'() ::
     {'bank_card_error', 'BankCardError'()}.
 
 %% union 'BankCardError'
@@ -257,9 +257,9 @@ enums() ->
 
 structs() ->
     [
-        'PaymentError',
+        'PaymentFailed',
         'RejectedByInspector',
-        'PreauthorizationError',
+        'PreauthorizationFailed',
         'AuthorizationFailed',
         'SilentReject',
         'MerchantBlocked',
@@ -274,7 +274,7 @@ structs() ->
         'WeeklyLimitExceeded',
         'MonthlyLimitExceeded',
         'AttemptsNumberLimitExceeded',
-        'PaymentToolError',
+        'PaymentToolRejected',
         'BankCardError',
         'InvalidCardNumber',
         'ExpiredCard',
@@ -305,17 +305,17 @@ enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
 
-struct_info('PaymentError') ->
+struct_info('PaymentFailed') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_errors_thrift, 'RejectedByInspector'}}, 'rejected_by_inspector', undefined},
-    {2, optional, {struct, struct, {dmsl_errors_thrift, 'PreauthorizationError'}}, 'preauthorization_error', undefined},
+    {2, optional, {struct, struct, {dmsl_errors_thrift, 'PreauthorizationFailed'}}, 'preauthorization_failed', undefined},
     {3, optional, {struct, union, {dmsl_errors_thrift, 'AuthorizationFailed'}}, 'authorization_failed', undefined}
 ]};
 
 struct_info('RejectedByInspector') ->
     {struct, struct, []};
 
-struct_info('PreauthorizationError') ->
+struct_info('PreauthorizationFailed') ->
     {struct, struct, []};
 
 struct_info('AuthorizationFailed') ->
@@ -328,7 +328,7 @@ struct_info('AuthorizationFailed') ->
     {6, optional, {struct, struct, {dmsl_errors_thrift, 'AccountStolen'}}, 'account_stolen', undefined},
     {7, optional, {struct, struct, {dmsl_errors_thrift, 'InsufficientFunds'}}, 'insufficient_funds', undefined},
     {8, optional, {struct, union, {dmsl_errors_thrift, 'LimitExceeded'}}, 'limit_exceeded', undefined},
-    {9, optional, {struct, union, {dmsl_errors_thrift, 'PaymentToolError'}}, 'payment_tool_error', undefined}
+    {9, optional, {struct, union, {dmsl_errors_thrift, 'PaymentToolRejected'}}, 'payment_tool_error', undefined}
 ]};
 
 struct_info('SilentReject') ->
@@ -376,7 +376,7 @@ struct_info('MonthlyLimitExceeded') ->
 struct_info('AttemptsNumberLimitExceeded') ->
     {struct, struct, []};
 
-struct_info('PaymentToolError') ->
+struct_info('PaymentToolRejected') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_errors_thrift, 'BankCardError'}}, 'bank_card_error', undefined}
 ]};
@@ -420,8 +420,8 @@ struct_info(_) -> erlang:error(badarg).
 record_name('RejectedByInspector') ->
     'RejectedByInspector';
 
-record_name('PreauthorizationError') ->
-    'PreauthorizationError';
+record_name('PreauthorizationFailed') ->
+    'PreauthorizationFailed';
 
     record_name('SilentReject') ->
     'SilentReject';
