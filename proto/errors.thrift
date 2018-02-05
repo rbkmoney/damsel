@@ -1,5 +1,9 @@
 /**
  * TODO
+ */
+
+/**
+ * TODO
  *  - RefundError
  *  - RecurrentsError
  *  - WalletError
@@ -8,14 +12,14 @@
  *  -
  */
 
-union PaymentError {
+union PaymentFailed {
     1: RejectedByInspector      rejected_by_inspector
-    2: PreauthorizationError    preauthorization_error
+    2: PreauthorizationFailed   preauthorization_failed
     3: AuthorizationFailed      authorization_failed
 }
 
 struct RejectedByInspector   {}
-struct PreauthorizationError {}
+struct PreauthorizationFailed {}
 
 union AuthorizationFailed {
     1: SilentReject             silent_reject
@@ -26,7 +30,7 @@ union AuthorizationFailed {
     6: AccountStolen            account_stolen
     7: InsufficientFunds        insufficient_funds
     8: LimitExceeded            limit_exceeded
-    9: PaymentToolError         payment_tool_error
+    9: PaymentToolRejected      payment_tool_error
 }
 
 struct SilentReject      {}
@@ -53,7 +57,7 @@ struct MonthlyLimitExceeded         {}
 struct AttemptsNumberLimitExceeded  {}
 
 
-union PaymentToolError {
+union PaymentToolRejected {
     1: BankCardError bank_card_error
     //  wallet_error
 }
