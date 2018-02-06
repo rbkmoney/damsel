@@ -50,12 +50,12 @@
     'MonthlyLimitExceeded'/0,
     'AttemptsNumberLimitExceeded'/0,
     'PaymentToolRejected'/0,
-    'BankCardError'/0,
+    'BankCardRejected'/0,
     'InvalidCardNumber'/0,
     'ExpiredCard'/0,
     'InvalidCardHolder'/0,
     'InvalidCVV'/0,
-    'CardNotSupported'/0,
+    'CardUnsupported'/0,
     'IssuerNotFound'/0,
     'RestictedCard'/0
 ]).
@@ -95,12 +95,12 @@
     'MonthlyLimitExceeded' |
     'AttemptsNumberLimitExceeded' |
     'PaymentToolRejected' |
-    'BankCardError' |
+    'BankCardRejected' |
     'InvalidCardNumber' |
     'ExpiredCard' |
     'InvalidCardHolder' |
     'InvalidCVV' |
-    'CardNotSupported' |
+    'CardUnsupported' |
     'IssuerNotFound' |
     'RestictedCard'.
 
@@ -128,7 +128,7 @@
     {'account_stolen', 'AccountStolen'()} |
     {'insufficient_funds', 'InsufficientFunds'()} |
     {'limit_exceeded', 'LimitExceeded'()} |
-    {'payment_tool_error', 'PaymentToolRejected'()}.
+    {'payment_tool_rejected', 'PaymentToolRejected'()}.
 
 %% struct 'SilentReject'
 -type 'SilentReject'() :: #'SilentReject'{}.
@@ -176,15 +176,15 @@
 
 %% union 'PaymentToolRejected'
 -type 'PaymentToolRejected'() ::
-    {'bank_card_error', 'BankCardError'()}.
+    {'bank_card_rejected', 'BankCardRejected'()}.
 
-%% union 'BankCardError'
--type 'BankCardError'() ::
+%% union 'BankCardRejected'
+-type 'BankCardRejected'() ::
     {'invalid_card_number', 'InvalidCardNumber'()} |
     {'expired_card', 'ExpiredCard'()} |
     {'invalid_card_holder', 'InvalidCardHolder'()} |
     {'invalid_cvv', 'InvalidCVV'()} |
-    {'card_not_supported', 'CardNotSupported'()} |
+    {'card_unsupported', 'CardUnsupported'()} |
     {'issuer_not_found', 'IssuerNotFound'()} |
     {'resticted_card', 'RestictedCard'()}.
 
@@ -200,8 +200,8 @@
 %% struct 'InvalidCVV'
 -type 'InvalidCVV'() :: #'InvalidCVV'{}.
 
-%% struct 'CardNotSupported'
--type 'CardNotSupported'() :: #'CardNotSupported'{}.
+%% struct 'CardUnsupported'
+-type 'CardUnsupported'() :: #'CardUnsupported'{}.
 
 %% struct 'IssuerNotFound'
 -type 'IssuerNotFound'() :: #'IssuerNotFound'{}.
@@ -275,12 +275,12 @@ structs() ->
         'MonthlyLimitExceeded',
         'AttemptsNumberLimitExceeded',
         'PaymentToolRejected',
-        'BankCardError',
+        'BankCardRejected',
         'InvalidCardNumber',
         'ExpiredCard',
         'InvalidCardHolder',
         'InvalidCVV',
-        'CardNotSupported',
+        'CardUnsupported',
         'IssuerNotFound',
         'RestictedCard'
     ].
@@ -328,7 +328,7 @@ struct_info('AuthorizationFailed') ->
     {6, optional, {struct, struct, {dmsl_errors_thrift, 'AccountStolen'}}, 'account_stolen', undefined},
     {7, optional, {struct, struct, {dmsl_errors_thrift, 'InsufficientFunds'}}, 'insufficient_funds', undefined},
     {8, optional, {struct, union, {dmsl_errors_thrift, 'LimitExceeded'}}, 'limit_exceeded', undefined},
-    {9, optional, {struct, union, {dmsl_errors_thrift, 'PaymentToolRejected'}}, 'payment_tool_error', undefined}
+    {9, optional, {struct, union, {dmsl_errors_thrift, 'PaymentToolRejected'}}, 'payment_tool_rejected', undefined}
 ]};
 
 struct_info('SilentReject') ->
@@ -378,16 +378,16 @@ struct_info('AttemptsNumberLimitExceeded') ->
 
 struct_info('PaymentToolRejected') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_errors_thrift, 'BankCardError'}}, 'bank_card_error', undefined}
+    {1, optional, {struct, union, {dmsl_errors_thrift, 'BankCardRejected'}}, 'bank_card_rejected', undefined}
 ]};
 
-struct_info('BankCardError') ->
+struct_info('BankCardRejected') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_errors_thrift, 'InvalidCardNumber'}}, 'invalid_card_number', undefined},
     {2, optional, {struct, struct, {dmsl_errors_thrift, 'ExpiredCard'}}, 'expired_card', undefined},
     {3, optional, {struct, struct, {dmsl_errors_thrift, 'InvalidCardHolder'}}, 'invalid_card_holder', undefined},
     {4, optional, {struct, struct, {dmsl_errors_thrift, 'InvalidCVV'}}, 'invalid_cvv', undefined},
-    {5, optional, {struct, struct, {dmsl_errors_thrift, 'CardNotSupported'}}, 'card_not_supported', undefined},
+    {5, optional, {struct, struct, {dmsl_errors_thrift, 'CardUnsupported'}}, 'card_unsupported', undefined},
     {6, optional, {struct, struct, {dmsl_errors_thrift, 'IssuerNotFound'}}, 'issuer_not_found', undefined},
     {7, optional, {struct, struct, {dmsl_errors_thrift, 'RestictedCard'}}, 'resticted_card', undefined}
 ]};
@@ -404,7 +404,7 @@ struct_info('InvalidCardHolder') ->
 struct_info('InvalidCVV') ->
     {struct, struct, []};
 
-struct_info('CardNotSupported') ->
+struct_info('CardUnsupported') ->
     {struct, struct, []};
 
 struct_info('IssuerNotFound') ->
@@ -471,8 +471,8 @@ record_name('PreauthorizationFailed') ->
     record_name('InvalidCVV') ->
     'InvalidCVV';
 
-    record_name('CardNotSupported') ->
-    'CardNotSupported';
+    record_name('CardUnsupported') ->
+    'CardUnsupported';
 
     record_name('IssuerNotFound') ->
     'IssuerNotFound';

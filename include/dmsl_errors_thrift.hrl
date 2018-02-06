@@ -57,8 +57,8 @@
 %% struct 'InvalidCVV'
 -record('InvalidCVV', {}).
 
-%% struct 'CardNotSupported'
--record('CardNotSupported', {}).
+%% struct 'CardUnsupported'
+-record('CardUnsupported', {}).
 
 %% struct 'IssuerNotFound'
 -record('IssuerNotFound', {}).
