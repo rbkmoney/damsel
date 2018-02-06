@@ -14,7 +14,7 @@
   *
   * Формат динамического представления следующий
   * (по контексту применения известно, что это за операция, и её тип ошибки
-  %  в данном случае PaymentFailed):
+  *  в данном случае PaymentFailed):
   *
   * domain.Failure{
   *     code = "AuthorizationFailed",
@@ -22,7 +22,7 @@
   *     sub = domain.SubFailure{
   *         code = "PaymentToolRejected",
   *         sub = domain.SubFailure{
-  *             code = "BankCardError",
+  *             code = "BankCardRejected",
   *             sub = domain.SubFailure{
   *                 code = "InvalidCVV"
   *             }
@@ -49,7 +49,7 @@ union AuthorizationFailed {
     6: AccountStolen            account_stolen
     7: InsufficientFunds        insufficient_funds
     8: LimitExceeded            limit_exceeded
-    9: PaymentToolRejected      payment_tool_error
+    9: PaymentToolRejected      payment_tool_rejected
 }
 
 struct SilentReject      {}
@@ -77,23 +77,23 @@ struct AttemptsNumberLimitExceeded  {}
 
 
 union PaymentToolRejected {
-    1: BankCardError bank_card_error
+    1: BankCardRejected bank_card_rejected
 }
 
-union BankCardError {
+union BankCardRejected {
     1: InvalidCardNumber  invalid_card_number
     2: ExpiredCard        expired_card
     3: InvalidCardHolder  invalid_card_holder
     4: InvalidCVV         invalid_cvv
-    5: CardNotSupported   card_not_supported // ?
-    6: IssuerNotFound     issuer_not_found   // ?
-    7: RestictedCard      resticted_card     // ?
+    5: CardUnsupported    card_unsupported // ?
+    6: IssuerNotFound     issuer_not_found // ?
+    7: RestictedCard      resticted_card   // ?
 }
 
 struct InvalidCardNumber {}
 struct ExpiredCard       {}
 struct InvalidCardHolder {}
 struct InvalidCVV        {}
-struct CardNotSupported  {}
+struct CardUnsupported   {}
 struct IssuerNotFound    {}
 struct RestictedCard     {}
