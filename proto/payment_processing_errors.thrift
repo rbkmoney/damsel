@@ -12,8 +12,12 @@
   * Статическое представление ошибок.
   * (динамическое представление — domain.Failure)
   *
-  * Формат динамического представления следующий
-  * (по контексту применения известно, что это за операция, и её тип ошибки
+  * Формат динамического представления следующий.
+  * При переводе из статического в динамический вид в поле code пишется строковое представления имени типа.
+  * Далее если это не структура, а юнион, то в поле sub пишется SubFailure,
+  * в поле code которой пишется строковое представления имени типа и т.д.
+  *
+  * Например (по контексту применения известно, что это за операция, и её тип ошибки
   *  в данном случае PaymentFailed):
   *
   * domain.Failure{
@@ -29,10 +33,6 @@
   *         }
   *     }
   * }
-  *
-  * При переводе из статического в динамический вид в поле code пишется строковое представления имени типа.
-  * Далее если это не структура, а юнион, то в поле sub пишется SubFailure,
-  * в поле code которой пишется строковое представления имени типа
   *
   */
 
@@ -67,18 +67,28 @@ struct InsufficientFunds {}
 
 
 union LimitExceeded {
-    1: SingleOperationLimitExceeded single_operation_limit_exceeded
-    2: DailyLimitExceeded           daily_limit_exceeded
-    3: WeeklyLimitExceeded          weekly_limit_exceeded
-    4: MonthlyLimitExceeded         monthly_limit_exceeded
-    5: AttemptsNumberLimitExceeded  attempts_number_exceeded
+  1: AmountLimit amount_limit
+  2: NumberLimit number_limit
 }
 
-struct SingleOperationLimitExceeded {}
-struct DailyLimitExceeded           {}
-struct WeeklyLimitExceeded          {}
-struct MonthlyLimitExceeded         {}
-struct AttemptsNumberLimitExceeded  {}
+union AmountLimit {
+  1: Onetime onetime
+  2: Daily   daily
+  3: Weekly  weekly
+  4: Monthly monthly
+}
+
+union NumberLimit {
+  1: Onetime onetime
+  2: Daily   daily
+  3: Weekly  weekly
+  4: Monthly monthly
+}
+
+struct Onetime {}
+struct Daily   {}
+struct Weekly  {}
+struct Monthly  {}
 
 
 union PaymentToolRejected {
