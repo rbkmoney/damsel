@@ -1,3 +1,6 @@
+namespace java com.rbkmoney.damsel.payment_processing_errors
+namespace erlang payprocerr
+
 /**
  * TODO
  *  - RefundFailure
