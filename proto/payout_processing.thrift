@@ -189,7 +189,7 @@ struct RussianPayoutAccount {
 
 struct InternationalPayoutAccount {
    1: required domain.InternationalBankAccount bank_account
-   2: optional string registered_number
+   2: required domain.InternationalLegalEntity legal_entity
    3: required string purpose
    4: required domain.LegalAgreement legal_agreement
 }
