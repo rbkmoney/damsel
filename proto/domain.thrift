@@ -998,7 +998,7 @@ struct Schedule {
     1: required string name
     2: optional string description
     3: required base.Schedule schedule
-    4: required PayoutCompilationPolicy payout_compilation_policy
+    4: required PayoutCompilationPolicy policy
 }
 
 union ScheduleSelector {
