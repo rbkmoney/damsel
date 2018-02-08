@@ -1,114 +1,105 @@
 /**
  * TODO
- *  - RefundError
- *  - RecurrentsError
- *  - WalletError
+ *  - RefundFailure
+ *  - RecurrentsFailure
+ *  - WalletReject
  *  - ForbiddenIssuerCountry
- *  - CashRegistrationFailed
+ *  - CashRegistrationFailure
  *  -
  */
 
 /**
-  * Статическое представление ошибок.
-  * (динамическое представление — domain.Failure)
   *
-  * Формат динамического представления следующий.
-  * При переводе из статического в динамический вид в поле code пишется строковое представления имени типа.
-  * Далее если это не структура, а юнион, то в поле sub пишется SubFailure,
-  * в поле code которой пишется строковое представления имени типа и т.д.
   *
-  * Например (по контексту применения известно, что это за операция, и её тип ошибки
-  *  в данном случае PaymentFailed):
+  * # Статическое представление ошибок. (динамическое представление — domain.Failure)
   *
-  * domain.Failure{
-  *     code = "AuthorizationFailed",
-  *     reason = "sngb error '87' — 'Invalid CVV'",
-  *     sub = domain.SubFailure{
-  *         code = "PaymentToolRejected",
-  *         sub = domain.SubFailure{
-  *             code = "BankCardRejected",
-  *             sub = domain.SubFailure{
-  *                 code = "InvalidCVV"
+  * При переводе из статического в динамические формат представления следующий.
+  * В поле code пишется строковое представления имени варианта в union,
+  * далее если это не структура, а юнион, то в поле sub пишется SubFailure,
+  * который рекурсивно обрабатывается по аналогичном правилам.
+  *
+  * Текстовое представление аналогично через имена вариантов в юнион с разделителем в виде двоеточия.
+  *
+  *
+  * ## Например
+  *
+  *
+  * ### Статически типизированное представление
+  *
+  * ```
+  * PaymentFailure{
+  *     authorization_failure = AuthorizationFailure{
+  *         payment_tool_reject = PaymentToolReject{
+  *             bank_card_reject = BankCardReject{
+  *                 invalid_cvv = GeneralFailure{}
   *             }
   *         }
   *     }
   * }
+  * ```
+  *
+  *
+  * ### Текстовое представление
+  *
+  * `authorization_failure:payment_tool_reject:bank_card_reject:invalid_cvv`
+  *
+  *
+  * ### Динамически типизированное представление
+  *
+  * ```
+  * domain.Failure{
+  *     code = "authorization_failure",
+  *     reason = "sngb error '87' — 'Invalid CVV'",
+  *     sub = domain.SubFailure{
+  *         code = "payment_tool_reject",
+  *         sub = domain.SubFailure{
+  *             code = "bank_card_reject",
+  *             sub = domain.SubFailure{
+  *                 code = "invalid_cvv"
+  *             }
+  *         }
+  *     }
+  * }
+  * ```
   *
   */
 
-union PaymentFailed {
-    1: RejectedByInspector      rejected_by_inspector
-    2: PreauthorizationFailed   preauthorization_failed
-    3: AuthorizationFailed      authorization_failed
+union PaymentFailure {
+    1: GeneralFailure       reject_by_inspector
+    2: GeneralFailure       preauthorization_failure
+    3: AuthorizationFailure authorization_failure
 }
 
-struct RejectedByInspector   {}
-struct PreauthorizationFailed {}
-
-union AuthorizationFailed {
-    1: SilentReject             silent_reject
-    2: MerchantBlocked          merchant_blocked
-    3: OperationDisabled        operation_disabled
-    4: AccountNotFound          account_not_found
-    5: AccountBlocked           account_blocked
-    6: AccountStolen            account_stolen
-    7: InsufficientFunds        insufficient_funds
-    8: LimitExceeded            limit_exceeded
-    9: PaymentToolRejected      payment_tool_rejected
+union AuthorizationFailure {
+     1: GeneralFailure    unknown // "silent reject" / "do not honor" / ...
+     2: GeneralFailure    merchant_blocked
+     3: GeneralFailure    operation_disabled
+     4: GeneralFailure    account_not_found
+     5: GeneralFailure    account_blocked
+     6: GeneralFailure    account_stolen
+     7: GeneralFailure    insufficient_funds
+     8: LimitExceeded     account_limit_exceeded
+     9: LimitExceeded     provider_limit_exceeded
+    10: PaymentToolReject payment_tool_reject
 }
-
-struct SilentReject      {}
-struct MerchantBlocked   {}
-struct OperationDisabled {}
-struct AccountNotFound   {}
-struct AccountBlocked    {}
-struct AccountStolen     {}
-struct InsufficientFunds {}
-
 
 union LimitExceeded {
-  1: AmountLimit amount_limit
-  2: NumberLimit number_limit
+  1: GeneralFailure unknown
+  2: GeneralFailure amount
+  3: GeneralFailure number
 }
 
-union AmountLimit {
-  1: Onetime onetime
-  2: Daily   daily
-  3: Weekly  weekly
-  4: Monthly monthly
+union PaymentToolReject {
+    1: BankCardReject bank_card_reject
 }
 
-union NumberLimit {
-  1: Onetime onetime
-  2: Daily   daily
-  3: Weekly  weekly
-  4: Monthly monthly
+union BankCardReject {
+    2: GeneralFailure invalid_card_number
+    3: GeneralFailure expired_card
+    4: GeneralFailure invalid_card_holder
+    5: GeneralFailure invalid_cvv
+    6: GeneralFailure card_unsupported // ?
+    7: GeneralFailure issuer_not_found // ?
 }
 
-struct Onetime {}
-struct Daily   {}
-struct Weekly  {}
-struct Monthly  {}
-
-
-union PaymentToolRejected {
-    1: BankCardRejected bank_card_rejected
-}
-
-union BankCardRejected {
-    1: InvalidCardNumber  invalid_card_number
-    2: ExpiredCard        expired_card
-    3: InvalidCardHolder  invalid_card_holder
-    4: InvalidCVV         invalid_cvv
-    5: CardUnsupported    card_unsupported // ?
-    6: IssuerNotFound     issuer_not_found // ?
-    7: RestictedCard      resticted_card   // ?
-}
-
-struct InvalidCardNumber {}
-struct ExpiredCard       {}
-struct InvalidCardHolder {}
-struct InvalidCVV        {}
-struct CardUnsupported   {}
-struct IssuerNotFound    {}
-struct RestictedCard     {}
+struct GeneralFailure {}
