@@ -469,7 +469,7 @@ struct InternationalLegalEntity {
     /* Адрес места нахождения (если отличается от регистрации)*/
     4: optional string actual_address
     /* Регистрационный номер */
-    5: required string registered_number
+    5: optional string registered_number
 }
 
 /** Банковский счёт. */
