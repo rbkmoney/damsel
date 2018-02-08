@@ -32,36 +32,15 @@
 -export_type([struct_info/0]).
 
 -export_type([
-    'PaymentFailed'/0,
-    'RejectedByInspector'/0,
-    'PreauthorizationFailed'/0,
-    'AuthorizationFailed'/0,
-    'SilentReject'/0,
-    'MerchantBlocked'/0,
-    'OperationDisabled'/0,
-    'AccountNotFound'/0,
-    'AccountBlocked'/0,
-    'AccountStolen'/0,
-    'InsufficientFunds'/0,
+    'PaymentFailure'/0,
+    'AuthorizationFailure'/0,
     'LimitExceeded'/0,
-    'AmountLimit'/0,
-    'NumberLimit'/0,
-    'Onetime'/0,
-    'Daily'/0,
-    'Weekly'/0,
-    'Monthly'/0,
-    'PaymentToolRejected'/0,
-    'BankCardRejected'/0,
-    'InvalidCardNumber'/0,
-    'ExpiredCard'/0,
-    'InvalidCardHolder'/0,
-    'InvalidCVV'/0,
-    'CardUnsupported'/0,
-    'IssuerNotFound'/0,
-    'RestictedCard'/0
+    'PaymentToolReject'/0,
+    'BankCardReject'/0,
+    'GeneralFailure'/0
 ]).
 
--type namespace() :: ''.
+-type namespace() :: 'payprocerr'.
 
 %%
 %% typedefs
@@ -78,146 +57,55 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
-    'PaymentFailed' |
-    'RejectedByInspector' |
-    'PreauthorizationFailed' |
-    'AuthorizationFailed' |
-    'SilentReject' |
-    'MerchantBlocked' |
-    'OperationDisabled' |
-    'AccountNotFound' |
-    'AccountBlocked' |
-    'AccountStolen' |
-    'InsufficientFunds' |
+    'PaymentFailure' |
+    'AuthorizationFailure' |
     'LimitExceeded' |
-    'AmountLimit' |
-    'NumberLimit' |
-    'Onetime' |
-    'Daily' |
-    'Weekly' |
-    'Monthly' |
-    'PaymentToolRejected' |
-    'BankCardRejected' |
-    'InvalidCardNumber' |
-    'ExpiredCard' |
-    'InvalidCardHolder' |
-    'InvalidCVV' |
-    'CardUnsupported' |
-    'IssuerNotFound' |
-    'RestictedCard'.
+    'PaymentToolReject' |
+    'BankCardReject' |
+    'GeneralFailure'.
 
 -type exception_name() :: none().
 
-%% union 'PaymentFailed'
--type 'PaymentFailed'() ::
-    {'rejected_by_inspector', 'RejectedByInspector'()} |
-    {'preauthorization_failed', 'PreauthorizationFailed'()} |
-    {'authorization_failed', 'AuthorizationFailed'()}.
+%% union 'PaymentFailure'
+-type 'PaymentFailure'() ::
+    {'reject_by_inspector', 'GeneralFailure'()} |
+    {'preauthorization_failure', 'GeneralFailure'()} |
+    {'authorization_failure', 'AuthorizationFailure'()}.
 
-%% struct 'RejectedByInspector'
--type 'RejectedByInspector'() :: #'RejectedByInspector'{}.
-
-%% struct 'PreauthorizationFailed'
--type 'PreauthorizationFailed'() :: #'PreauthorizationFailed'{}.
-
-%% union 'AuthorizationFailed'
--type 'AuthorizationFailed'() ::
-    {'silent_reject', 'SilentReject'()} |
-    {'merchant_blocked', 'MerchantBlocked'()} |
-    {'operation_disabled', 'OperationDisabled'()} |
-    {'account_not_found', 'AccountNotFound'()} |
-    {'account_blocked', 'AccountBlocked'()} |
-    {'account_stolen', 'AccountStolen'()} |
-    {'insufficient_funds', 'InsufficientFunds'()} |
-    {'limit_exceeded', 'LimitExceeded'()} |
-    {'payment_tool_rejected', 'PaymentToolRejected'()}.
-
-%% struct 'SilentReject'
--type 'SilentReject'() :: #'SilentReject'{}.
-
-%% struct 'MerchantBlocked'
--type 'MerchantBlocked'() :: #'MerchantBlocked'{}.
-
-%% struct 'OperationDisabled'
--type 'OperationDisabled'() :: #'OperationDisabled'{}.
-
-%% struct 'AccountNotFound'
--type 'AccountNotFound'() :: #'AccountNotFound'{}.
-
-%% struct 'AccountBlocked'
--type 'AccountBlocked'() :: #'AccountBlocked'{}.
-
-%% struct 'AccountStolen'
--type 'AccountStolen'() :: #'AccountStolen'{}.
-
-%% struct 'InsufficientFunds'
--type 'InsufficientFunds'() :: #'InsufficientFunds'{}.
+%% union 'AuthorizationFailure'
+-type 'AuthorizationFailure'() ::
+    {'unknown', 'GeneralFailure'()} |
+    {'merchant_blocked', 'GeneralFailure'()} |
+    {'operation_disabled', 'GeneralFailure'()} |
+    {'account_not_found', 'GeneralFailure'()} |
+    {'account_blocked', 'GeneralFailure'()} |
+    {'account_stolen', 'GeneralFailure'()} |
+    {'insufficient_funds', 'GeneralFailure'()} |
+    {'account_limit_exceeded', 'LimitExceeded'()} |
+    {'provider_limit_exceeded', 'LimitExceeded'()} |
+    {'payment_tool_reject', 'PaymentToolReject'()}.
 
 %% union 'LimitExceeded'
 -type 'LimitExceeded'() ::
-    {'amount_limit', 'AmountLimit'()} |
-    {'number_limit', 'NumberLimit'()}.
+    {'unknown', 'GeneralFailure'()} |
+    {'amount', 'GeneralFailure'()} |
+    {'number', 'GeneralFailure'()}.
 
-%% union 'AmountLimit'
--type 'AmountLimit'() ::
-    {'onetime', 'Onetime'()} |
-    {'daily', 'Daily'()} |
-    {'weekly', 'Weekly'()} |
-    {'monthly', 'Monthly'()}.
+%% union 'PaymentToolReject'
+-type 'PaymentToolReject'() ::
+    {'bank_card_reject', 'BankCardReject'()}.
 
-%% union 'NumberLimit'
--type 'NumberLimit'() ::
-    {'onetime', 'Onetime'()} |
-    {'daily', 'Daily'()} |
-    {'weekly', 'Weekly'()} |
-    {'monthly', 'Monthly'()}.
+%% union 'BankCardReject'
+-type 'BankCardReject'() ::
+    {'invalid_card_number', 'GeneralFailure'()} |
+    {'expired_card', 'GeneralFailure'()} |
+    {'invalid_card_holder', 'GeneralFailure'()} |
+    {'invalid_cvv', 'GeneralFailure'()} |
+    {'card_unsupported', 'GeneralFailure'()} |
+    {'issuer_not_found', 'GeneralFailure'()}.
 
-%% struct 'Onetime'
--type 'Onetime'() :: #'Onetime'{}.
-
-%% struct 'Daily'
--type 'Daily'() :: #'Daily'{}.
-
-%% struct 'Weekly'
--type 'Weekly'() :: #'Weekly'{}.
-
-%% struct 'Monthly'
--type 'Monthly'() :: #'Monthly'{}.
-
-%% union 'PaymentToolRejected'
--type 'PaymentToolRejected'() ::
-    {'bank_card_rejected', 'BankCardRejected'()}.
-
-%% union 'BankCardRejected'
--type 'BankCardRejected'() ::
-    {'invalid_card_number', 'InvalidCardNumber'()} |
-    {'expired_card', 'ExpiredCard'()} |
-    {'invalid_card_holder', 'InvalidCardHolder'()} |
-    {'invalid_cvv', 'InvalidCVV'()} |
-    {'card_unsupported', 'CardUnsupported'()} |
-    {'issuer_not_found', 'IssuerNotFound'()} |
-    {'resticted_card', 'RestictedCard'()}.
-
-%% struct 'InvalidCardNumber'
--type 'InvalidCardNumber'() :: #'InvalidCardNumber'{}.
-
-%% struct 'ExpiredCard'
--type 'ExpiredCard'() :: #'ExpiredCard'{}.
-
-%% struct 'InvalidCardHolder'
--type 'InvalidCardHolder'() :: #'InvalidCardHolder'{}.
-
-%% struct 'InvalidCVV'
--type 'InvalidCVV'() :: #'InvalidCVV'{}.
-
-%% struct 'CardUnsupported'
--type 'CardUnsupported'() :: #'CardUnsupported'{}.
-
-%% struct 'IssuerNotFound'
--type 'IssuerNotFound'() :: #'IssuerNotFound'{}.
-
-%% struct 'RestictedCard'
--type 'RestictedCard'() :: #'RestictedCard'{}.
+%% struct 'GeneralFailure'
+-type 'GeneralFailure'() :: #'payprocerr_GeneralFailure'{}.
 
 %%
 %% services and functions
@@ -267,33 +155,12 @@ enums() ->
 
 structs() ->
     [
-        'PaymentFailed',
-        'RejectedByInspector',
-        'PreauthorizationFailed',
-        'AuthorizationFailed',
-        'SilentReject',
-        'MerchantBlocked',
-        'OperationDisabled',
-        'AccountNotFound',
-        'AccountBlocked',
-        'AccountStolen',
-        'InsufficientFunds',
+        'PaymentFailure',
+        'AuthorizationFailure',
         'LimitExceeded',
-        'AmountLimit',
-        'NumberLimit',
-        'Onetime',
-        'Daily',
-        'Weekly',
-        'Monthly',
-        'PaymentToolRejected',
-        'BankCardRejected',
-        'InvalidCardNumber',
-        'ExpiredCard',
-        'InvalidCardHolder',
-        'InvalidCVV',
-        'CardUnsupported',
-        'IssuerNotFound',
-        'RestictedCard'
+        'PaymentToolReject',
+        'BankCardReject',
+        'GeneralFailure'
     ].
 
 -spec services() -> [].
@@ -304,7 +171,7 @@ services() ->
 -spec namespace() -> namespace().
 
 namespace() ->
-    ''.
+    'payprocerr'.
 
 -spec typedef_info(_) -> no_return().
 
@@ -316,189 +183,60 @@ enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
 
-struct_info('PaymentFailed') ->
+struct_info('PaymentFailure') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'RejectedByInspector'}}, 'rejected_by_inspector', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'PreauthorizationFailed'}}, 'preauthorization_failed', undefined},
-    {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailed'}}, 'authorization_failed', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'reject_by_inspector', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'preauthorization_failure', undefined},
+    {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failure', undefined}
 ]};
 
-struct_info('RejectedByInspector') ->
-    {struct, struct, []};
-
-struct_info('PreauthorizationFailed') ->
-    {struct, struct, []};
-
-struct_info('AuthorizationFailed') ->
+struct_info('AuthorizationFailure') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'SilentReject'}}, 'silent_reject', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'MerchantBlocked'}}, 'merchant_blocked', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'OperationDisabled'}}, 'operation_disabled', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'AccountNotFound'}}, 'account_not_found', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'AccountBlocked'}}, 'account_blocked', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'AccountStolen'}}, 'account_stolen', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'InsufficientFunds'}}, 'insufficient_funds', undefined},
-    {8, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'limit_exceeded', undefined},
-    {9, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolRejected'}}, 'payment_tool_rejected', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'merchant_blocked', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'operation_disabled', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'account_not_found', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'account_blocked', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'account_stolen', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'insufficient_funds', undefined},
+    {8, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'account_limit_exceeded', undefined},
+    {9, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'provider_limit_exceeded', undefined},
+    {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolReject'}}, 'payment_tool_reject', undefined}
 ]};
-
-struct_info('SilentReject') ->
-    {struct, struct, []};
-
-struct_info('MerchantBlocked') ->
-    {struct, struct, []};
-
-struct_info('OperationDisabled') ->
-    {struct, struct, []};
-
-struct_info('AccountNotFound') ->
-    {struct, struct, []};
-
-struct_info('AccountBlocked') ->
-    {struct, struct, []};
-
-struct_info('AccountStolen') ->
-    {struct, struct, []};
-
-struct_info('InsufficientFunds') ->
-    {struct, struct, []};
 
 struct_info('LimitExceeded') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AmountLimit'}}, 'amount_limit', undefined},
-    {2, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'NumberLimit'}}, 'number_limit', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'amount', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'number', undefined}
 ]};
 
-struct_info('AmountLimit') ->
+struct_info('PaymentToolReject') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Onetime'}}, 'onetime', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Daily'}}, 'daily', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Weekly'}}, 'weekly', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Monthly'}}, 'monthly', undefined}
+    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'BankCardReject'}}, 'bank_card_reject', undefined}
 ]};
 
-struct_info('NumberLimit') ->
+struct_info('BankCardReject') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Onetime'}}, 'onetime', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Daily'}}, 'daily', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Weekly'}}, 'weekly', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'Monthly'}}, 'monthly', undefined}
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'invalid_card_number', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'expired_card', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'invalid_card_holder', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'invalid_cvv', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'card_unsupported', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'issuer_not_found', undefined}
 ]};
 
-struct_info('Onetime') ->
-    {struct, struct, []};
-
-struct_info('Daily') ->
-    {struct, struct, []};
-
-struct_info('Weekly') ->
-    {struct, struct, []};
-
-struct_info('Monthly') ->
-    {struct, struct, []};
-
-struct_info('PaymentToolRejected') ->
-    {struct, union, [
-    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'BankCardRejected'}}, 'bank_card_rejected', undefined}
-]};
-
-struct_info('BankCardRejected') ->
-    {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'InvalidCardNumber'}}, 'invalid_card_number', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'ExpiredCard'}}, 'expired_card', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'InvalidCardHolder'}}, 'invalid_card_holder', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'InvalidCVV'}}, 'invalid_cvv', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'CardUnsupported'}}, 'card_unsupported', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'IssuerNotFound'}}, 'issuer_not_found', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'RestictedCard'}}, 'resticted_card', undefined}
-]};
-
-struct_info('InvalidCardNumber') ->
-    {struct, struct, []};
-
-struct_info('ExpiredCard') ->
-    {struct, struct, []};
-
-struct_info('InvalidCardHolder') ->
-    {struct, struct, []};
-
-struct_info('InvalidCVV') ->
-    {struct, struct, []};
-
-struct_info('CardUnsupported') ->
-    {struct, struct, []};
-
-struct_info('IssuerNotFound') ->
-    {struct, struct, []};
-
-struct_info('RestictedCard') ->
+struct_info('GeneralFailure') ->
     {struct, struct, []};
 
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
 
-record_name('RejectedByInspector') ->
-    'RejectedByInspector';
+record_name('GeneralFailure') ->
+    'payprocerr_GeneralFailure';
 
-record_name('PreauthorizationFailed') ->
-    'PreauthorizationFailed';
-
-    record_name('SilentReject') ->
-    'SilentReject';
-
-    record_name('MerchantBlocked') ->
-    'MerchantBlocked';
-
-    record_name('OperationDisabled') ->
-    'OperationDisabled';
-
-    record_name('AccountNotFound') ->
-    'AccountNotFound';
-
-    record_name('AccountBlocked') ->
-    'AccountBlocked';
-
-    record_name('AccountStolen') ->
-    'AccountStolen';
-
-    record_name('InsufficientFunds') ->
-    'InsufficientFunds';
-
-    record_name('Onetime') ->
-    'Onetime';
-
-    record_name('Daily') ->
-    'Daily';
-
-    record_name('Weekly') ->
-    'Weekly';
-
-    record_name('Monthly') ->
-    'Monthly';
-
-    record_name('InvalidCardNumber') ->
-    'InvalidCardNumber';
-
-    record_name('ExpiredCard') ->
-    'ExpiredCard';
-
-    record_name('InvalidCardHolder') ->
-    'InvalidCardHolder';
-
-    record_name('InvalidCVV') ->
-    'InvalidCVV';
-
-    record_name('CardUnsupported') ->
-    'CardUnsupported';
-
-    record_name('IssuerNotFound') ->
-    'IssuerNotFound';
-
-    record_name('RestictedCard') ->
-    'RestictedCard';
-
-    record_name(_) -> error(badarg).
+record_name(_) -> error(badarg).
     
     -spec functions(_) -> no_return().
 
