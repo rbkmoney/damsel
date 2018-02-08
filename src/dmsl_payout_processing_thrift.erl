@@ -63,6 +63,8 @@
     'PayoutType'/0,
     'PayoutCard'/0,
     'PayoutAccount'/0,
+    'RussianPayoutAccount'/0,
+    'InternationalPayoutAccount'/0,
     'PayoutStatusChanged'/0,
     'EventRange'/0,
     'Pay2CardParams'/0,
@@ -135,6 +137,8 @@
     'PayoutType' |
     'PayoutCard' |
     'PayoutAccount' |
+    'RussianPayoutAccount' |
+    'InternationalPayoutAccount' |
     'PayoutStatusChanged' |
     'EventRange' |
     'Pay2CardParams' |
@@ -233,8 +237,16 @@
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'payout_processing_PayoutCard'{}.
 
-%% struct 'PayoutAccount'
--type 'PayoutAccount'() :: #'payout_processing_PayoutAccount'{}.
+%% union 'PayoutAccount'
+-type 'PayoutAccount'() ::
+    {'russian_payout_account', 'RussianPayoutAccount'()} |
+    {'international_payout_account', 'InternationalPayoutAccount'()}.
+
+%% struct 'RussianPayoutAccount'
+-type 'RussianPayoutAccount'() :: #'payout_processing_RussianPayoutAccount'{}.
+
+%% struct 'InternationalPayoutAccount'
+-type 'InternationalPayoutAccount'() :: #'payout_processing_InternationalPayoutAccount'{}.
 
 %% struct 'PayoutStatusChanged'
 -type 'PayoutStatusChanged'() :: #'payout_processing_PayoutStatusChanged'{}.
@@ -374,6 +386,8 @@ structs() ->
         'PayoutType',
         'PayoutCard',
         'PayoutAccount',
+        'RussianPayoutAccount',
+        'InternationalPayoutAccount',
         'PayoutStatusChanged',
         'EventRange',
         'Pay2CardParams',
@@ -539,7 +553,7 @@ struct_info('PayoutConfirmed') ->
 struct_info('PayoutType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
+    {2, optional, {struct, union, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
 ]};
 
 struct_info('PayoutCard') ->
@@ -548,9 +562,23 @@ struct_info('PayoutCard') ->
 ]};
 
 struct_info('PayoutAccount') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
+]};
+
+struct_info('RussianPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'account', undefined},
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
     {2, required, string, 'inn', undefined},
+    {3, required, string, 'purpose', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
+]};
+
+struct_info('InternationalPayoutAccount') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'InternationalLegalEntity'}}, 'legal_entity', undefined},
     {3, required, string, 'purpose', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
 ]};
@@ -686,8 +714,11 @@ record_name('InternalUser') ->
     record_name('PayoutCard') ->
     'payout_processing_PayoutCard';
 
-    record_name('PayoutAccount') ->
-    'payout_processing_PayoutAccount';
+    record_name('RussianPayoutAccount') ->
+    'payout_processing_RussianPayoutAccount';
+
+    record_name('InternationalPayoutAccount') ->
+    'payout_processing_InternationalPayoutAccount';
 
     record_name('PayoutStatusChanged') ->
     'payout_processing_PayoutStatusChanged';

@@ -84,10 +84,18 @@
     'card' :: dmsl_domain_thrift:'BankCard'()
 }).
 
-%% struct 'PayoutAccount'
--record('payout_processing_PayoutAccount', {
-    'account' :: dmsl_domain_thrift:'RussianBankAccount'(),
+%% struct 'RussianPayoutAccount'
+-record('payout_processing_RussianPayoutAccount', {
+    'bank_account' :: dmsl_domain_thrift:'RussianBankAccount'(),
     'inn' :: binary(),
+    'purpose' :: binary(),
+    'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
+}).
+
+%% struct 'InternationalPayoutAccount'
+-record('payout_processing_InternationalPayoutAccount', {
+    'bank_account' :: dmsl_domain_thrift:'InternationalBankAccount'(),
+    'legal_entity' :: dmsl_domain_thrift:'InternationalLegalEntity'(),
     'purpose' :: binary(),
     'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
 }).
