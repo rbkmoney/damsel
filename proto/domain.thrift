@@ -680,6 +680,8 @@ enum PayoutMethod {
 
 struct PayoutMethodRef { 1: required PayoutMethod id }
 
+struct PayoutCompilationPolicyRef { 1: required ObjectID id }
+
 /** Способ вывода, категория средства вывода. */
 struct PayoutMethodDefinition {
     1: required string name
@@ -999,6 +1001,7 @@ struct Schedule {
     1: required string name
     2: optional string description
     3: required base.Schedule schedule
+    4: required PayoutCompilationPolicyRef payout_compilation_policy
 }
 
 union ScheduleSelector {
@@ -1703,6 +1706,11 @@ struct PayoutMethodObject {
     2: required PayoutMethodDefinition data
 }
 
+struct PayoutCompilationPolicyObject {
+    1: required PayoutCompilationPolicyRef ref
+    2: required PayoutCompilationPolicy data
+}
+
 struct BankCardBINRangeObject {
     1: required BankCardBINRangeRef ref
     2: required BankCardBINRange data
@@ -1761,58 +1769,60 @@ struct GlobalsObject {
 
 union Reference {
 
-    1  : CategoryRef             category
-    2  : CurrencyRef             currency
-    19 : ScheduleRef             schedule
-    20 : CalendarRef             calendar
-    3  : PaymentMethodRef        payment_method
-    21 : PayoutMethodRef         payout_method
-    4  : ContractorRef           contractor
-    5  : BankCardBINRangeRef     bank_card_bin_range
-    6  : ContractTemplateRef     contract_template
-    17 : TermSetHierarchyRef     term_set_hierarchy
-    18 : PaymentInstitutionRef   payment_institution
-    7  : ProviderRef             provider
-    8  : TerminalRef             terminal
-    15 : InspectorRef            inspector
-    14 : SystemAccountSetRef     system_account_set
-    16 : ExternalAccountSetRef   external_account_set
-    9  : ProxyRef                proxy
-    11 : GlobalsRef              globals
+    1  : CategoryRef                  category
+    2  : CurrencyRef                  currency
+    19 : ScheduleRef                  schedule
+    20 : CalendarRef                  calendar
+    3  : PaymentMethodRef             payment_method
+    21 : PayoutMethodRef              payout_method
+    22 : PayoutCompilationPolicyRef   payout_compilation_policy_ref
+    4  : ContractorRef                contractor
+    5  : BankCardBINRangeRef          bank_card_bin_range
+    6  : ContractTemplateRef          contract_template
+    17 : TermSetHierarchyRef          term_set_hierarchy
+    18 : PaymentInstitutionRef        payment_institution
+    7  : ProviderRef                  provider
+    8  : TerminalRef                  terminal
+    15 : InspectorRef                 inspector
+    14 : SystemAccountSetRef          system_account_set
+    16 : ExternalAccountSetRef        external_account_set
+    9  : ProxyRef                     proxy
+    11 : GlobalsRef                   globals
 
-    12 : DummyRef                dummy
-    13 : DummyLinkRef            dummy_link
+    12 : DummyRef                     dummy
+    13 : DummyLinkRef                 dummy_link
 
     /* deprecated */
-    10 : PartyPrototypeRef       party_prototype
+    10 : PartyPrototypeRef            party_prototype
 }
 
 union DomainObject {
 
-    1  : CategoryObject             category
-    2  : CurrencyObject             currency
-    19 : ScheduleObject             schedule
-    20 : CalendarObject             calendar
-    3  : PaymentMethodObject        payment_method
-    21 : PayoutMethodObject         payout_method
-    4  : ContractorObject           contractor
-    5  : BankCardBINRangeObject     bank_card_bin_range
-    6  : ContractTemplateObject     contract_template
-    17 : TermSetHierarchyObject     term_set_hierarchy
-    18 : PaymentInstitutionObject   payment_institution
-    7  : ProviderObject             provider
-    8  : TerminalObject             terminal
-    15 : InspectorObject            inspector
-    14 : SystemAccountSetObject     system_account_set
-    16 : ExternalAccountSetObject   external_account_set
-    9  : ProxyObject                proxy
-    11 : GlobalsObject              globals
+    1  : CategoryObject                  category
+    2  : CurrencyObject                  currency
+    19 : ScheduleObject                  schedule
+    20 : CalendarObject                  calendar
+    3  : PaymentMethodObject             payment_method
+    21 : PayoutMethodObject              payout_method
+    22 : PayoutCompilationPolicyObject   payout_compilation_policy
+    4  : ContractorObject                contractor
+    5  : BankCardBINRangeObject          bank_card_bin_range
+    6  : ContractTemplateObject          contract_template
+    17 : TermSetHierarchyObject          term_set_hierarchy
+    18 : PaymentInstitutionObject        payment_institution
+    7  : ProviderObject                  provider
+    8  : TerminalObject                  terminal
+    15 : InspectorObject                 inspector
+    14 : SystemAccountSetObject          system_account_set
+    16 : ExternalAccountSetObject        external_account_set
+    9  : ProxyObject                     proxy
+    11 : GlobalsObject                   globals
 
-    12 : DummyObject                dummy
-    13 : DummyLinkObject            dummy_link
+    12 : DummyObject                     dummy
+    13 : DummyLinkObject                 dummy_link
 
     /* deprecated */
-    10 : PartyPrototypeObject       party_prototype
+    10 : PartyPrototypeObject            party_prototype
 }
 
 /* Domain */
