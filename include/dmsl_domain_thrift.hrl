@@ -321,7 +321,8 @@
     'legal_name' :: binary(),
     'trading_name' :: binary() | undefined,
     'registered_address' :: binary(),
-    'actual_address' :: binary() | undefined
+    'actual_address' :: binary() | undefined,
+    'registered_number' :: binary() | undefined
 }).
 
 %% struct 'RussianBankAccount'
@@ -338,7 +339,8 @@
     'bank_name' :: binary(),
     'bank_address' :: binary(),
     'iban' :: binary(),
-    'bic' :: binary()
+    'bic' :: binary(),
+    'local_bank_code' :: binary() | undefined
 }).
 
 %% struct 'PayoutTool'

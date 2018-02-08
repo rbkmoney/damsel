@@ -468,6 +468,8 @@ struct InternationalLegalEntity {
     3: required string registered_address
     /* Адрес места нахождения (если отличается от регистрации)*/
     4: optional string actual_address
+    /* Регистрационный номер */
+    5: optional string registered_number
 }
 
 /** Банковский счёт. */
@@ -485,6 +487,7 @@ struct InternationalBankAccount {
     3: required string bank_address
     4: required string iban     // International Bank Account Number (ISO 13616)
     5: required string bic      // Business Identifier Code (ISO 9362)
+    6: optional string local_bank_code // Национальный код банка
 }
 
 typedef base.ID PayoutToolID

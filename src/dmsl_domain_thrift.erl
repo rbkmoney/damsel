@@ -3014,7 +3014,8 @@ struct_info('InternationalLegalEntity') ->
     {1, required, string, 'legal_name', undefined},
     {2, optional, string, 'trading_name', undefined},
     {3, required, string, 'registered_address', undefined},
-    {4, optional, string, 'actual_address', undefined}
+    {4, optional, string, 'actual_address', undefined},
+    {5, optional, string, 'registered_number', undefined}
 ]};
 
 struct_info('RussianBankAccount') ->
@@ -3031,7 +3032,8 @@ struct_info('InternationalBankAccount') ->
     {2, required, string, 'bank_name', undefined},
     {3, required, string, 'bank_address', undefined},
     {4, required, string, 'iban', undefined},
-    {5, required, string, 'bic', undefined}
+    {5, required, string, 'bic', undefined},
+    {6, optional, string, 'local_bank_code', undefined}
 ]};
 
 struct_info('PayoutTool') ->
