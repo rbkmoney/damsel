@@ -1,4 +1,4 @@
-namespace java com.rbkmoney.damsel.payment_processing_errors
+namespace java com.rbkmoney.damsel.payment_processing.errors
 namespace erlang payprocerr
 
 /**
@@ -31,9 +31,9 @@ namespace erlang payprocerr
   *
   * ```
   * PaymentFailure{
-  *     authorization_failure = AuthorizationFailure{
-  *         payment_tool_reject = PaymentToolReject{
-  *             bank_card_reject = BankCardReject{
+  *     authorization_failure = AuthorizationFailed{
+  *         payment_tool_reject = PaymentToolRejected{
+  *             bank_card_reject = BankCardRejected{
   *                 invalid_cvv = GeneralFailure{}
   *             }
   *         }
@@ -68,22 +68,22 @@ namespace erlang payprocerr
   */
 
 union PaymentFailure {
-    1: GeneralFailure       reject_by_inspector
-    2: GeneralFailure       preauthorization_failure
-    3: AuthorizationFailure authorization_failure
+    1: GeneralFailure      reject_by_inspector
+    2: GeneralFailure      preauthorization_failure
+    3: AuthorizationFailed authorization_failure
 }
 
-union AuthorizationFailure {
-     1: GeneralFailure    unknown // "silent reject" / "do not honor" / ...
-     2: GeneralFailure    merchant_blocked
-     3: GeneralFailure    operation_disabled
-     4: GeneralFailure    account_not_found
-     5: GeneralFailure    account_blocked
-     6: GeneralFailure    account_stolen
-     7: GeneralFailure    insufficient_funds
-     8: LimitExceeded     account_limit_exceeded
-     9: LimitExceeded     provider_limit_exceeded
-    10: PaymentToolReject payment_tool_reject
+union AuthorizationFailed {
+     1: GeneralFailure      unknown // "silent reject" / "do not honor" / ...
+     2: GeneralFailure      merchant_blocked
+     3: GeneralFailure      operation_blocked
+     4: GeneralFailure      account_not_found
+     5: GeneralFailure      account_blocked
+     6: GeneralFailure      account_stolen
+     7: GeneralFailure      insufficient_funds
+     8: LimitExceeded       account_limit_exceeded
+     9: LimitExceeded       provider_limit_exceeded
+    10: PaymentToolRejected payment_tool_reject
 }
 
 union LimitExceeded {
@@ -92,11 +92,11 @@ union LimitExceeded {
   3: GeneralFailure number
 }
 
-union PaymentToolReject {
-    1: BankCardReject bank_card_reject
+union PaymentToolRejected {
+    1: BankCardRejected bank_card_reject
 }
 
-union BankCardReject {
+union BankCardRejected {
     2: GeneralFailure invalid_card_number
     3: GeneralFailure expired_card
     4: GeneralFailure invalid_card_holder

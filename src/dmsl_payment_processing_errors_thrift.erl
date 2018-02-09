@@ -33,10 +33,10 @@
 
 -export_type([
     'PaymentFailure'/0,
-    'AuthorizationFailure'/0,
+    'AuthorizationFailed'/0,
     'LimitExceeded'/0,
-    'PaymentToolReject'/0,
-    'BankCardReject'/0,
+    'PaymentToolRejected'/0,
+    'BankCardRejected'/0,
     'GeneralFailure'/0
 ]).
 
@@ -58,10 +58,10 @@
 %%
 -type struct_name() ::
     'PaymentFailure' |
-    'AuthorizationFailure' |
+    'AuthorizationFailed' |
     'LimitExceeded' |
-    'PaymentToolReject' |
-    'BankCardReject' |
+    'PaymentToolRejected' |
+    'BankCardRejected' |
     'GeneralFailure'.
 
 -type exception_name() :: none().
@@ -70,20 +70,20 @@
 -type 'PaymentFailure'() ::
     {'reject_by_inspector', 'GeneralFailure'()} |
     {'preauthorization_failure', 'GeneralFailure'()} |
-    {'authorization_failure', 'AuthorizationFailure'()}.
+    {'authorization_failure', 'AuthorizationFailed'()}.
 
-%% union 'AuthorizationFailure'
--type 'AuthorizationFailure'() ::
+%% union 'AuthorizationFailed'
+-type 'AuthorizationFailed'() ::
     {'unknown', 'GeneralFailure'()} |
     {'merchant_blocked', 'GeneralFailure'()} |
-    {'operation_disabled', 'GeneralFailure'()} |
+    {'operation_blocked', 'GeneralFailure'()} |
     {'account_not_found', 'GeneralFailure'()} |
     {'account_blocked', 'GeneralFailure'()} |
     {'account_stolen', 'GeneralFailure'()} |
     {'insufficient_funds', 'GeneralFailure'()} |
     {'account_limit_exceeded', 'LimitExceeded'()} |
     {'provider_limit_exceeded', 'LimitExceeded'()} |
-    {'payment_tool_reject', 'PaymentToolReject'()}.
+    {'payment_tool_reject', 'PaymentToolRejected'()}.
 
 %% union 'LimitExceeded'
 -type 'LimitExceeded'() ::
@@ -91,12 +91,12 @@
     {'amount', 'GeneralFailure'()} |
     {'number', 'GeneralFailure'()}.
 
-%% union 'PaymentToolReject'
--type 'PaymentToolReject'() ::
-    {'bank_card_reject', 'BankCardReject'()}.
+%% union 'PaymentToolRejected'
+-type 'PaymentToolRejected'() ::
+    {'bank_card_reject', 'BankCardRejected'()}.
 
-%% union 'BankCardReject'
--type 'BankCardReject'() ::
+%% union 'BankCardRejected'
+-type 'BankCardRejected'() ::
     {'invalid_card_number', 'GeneralFailure'()} |
     {'expired_card', 'GeneralFailure'()} |
     {'invalid_card_holder', 'GeneralFailure'()} |
@@ -156,10 +156,10 @@ enums() ->
 structs() ->
     [
         'PaymentFailure',
-        'AuthorizationFailure',
+        'AuthorizationFailed',
         'LimitExceeded',
-        'PaymentToolReject',
-        'BankCardReject',
+        'PaymentToolRejected',
+        'BankCardRejected',
         'GeneralFailure'
     ].
 
@@ -187,21 +187,21 @@ struct_info('PaymentFailure') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'reject_by_inspector', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'preauthorization_failure', undefined},
-    {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failure', undefined}
+    {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailed'}}, 'authorization_failure', undefined}
 ]};
 
-struct_info('AuthorizationFailure') ->
+struct_info('AuthorizationFailed') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'merchant_blocked', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'operation_disabled', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'operation_blocked', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'account_not_found', undefined},
     {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'account_blocked', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'account_stolen', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'insufficient_funds', undefined},
     {8, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'account_limit_exceeded', undefined},
     {9, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'provider_limit_exceeded', undefined},
-    {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolReject'}}, 'payment_tool_reject', undefined}
+    {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolRejected'}}, 'payment_tool_reject', undefined}
 ]};
 
 struct_info('LimitExceeded') ->
@@ -211,12 +211,12 @@ struct_info('LimitExceeded') ->
     {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'number', undefined}
 ]};
 
-struct_info('PaymentToolReject') ->
+struct_info('PaymentToolRejected') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'BankCardReject'}}, 'bank_card_reject', undefined}
+    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'BankCardRejected'}}, 'bank_card_reject', undefined}
 ]};
 
-struct_info('BankCardReject') ->
+struct_info('BankCardRejected') ->
     {struct, union, [
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'invalid_card_number', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'expired_card', undefined},
