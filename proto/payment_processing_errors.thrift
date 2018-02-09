@@ -31,10 +31,10 @@ namespace erlang payprocerr
   *
   * ```
   * PaymentFailure{
-  *     authorization_failure = AuthorizationFailed{
-  *         payment_tool_reject = PaymentToolRejected{
-  *             bank_card_reject = BankCardRejected{
-  *                 invalid_cvv = GeneralFailure{}
+  *     authorization_failed = AuthorizationFailure{
+  *         payment_tool_rejected = PaymentToolReject{
+  *             bank_card_rejected = BankCardReject{
+  *                 cvv_invalid = GeneralFailure{}
   *             }
   *         }
   *     }
@@ -44,21 +44,21 @@ namespace erlang payprocerr
   *
   * ### Текстовое представление
   *
-  * `authorization_failure:payment_tool_reject:bank_card_reject:invalid_cvv`
+  * `authorization_failed:payment_tool_rejected:bank_card_rejected:cvv_invalid`
   *
   *
   * ### Динамически типизированное представление
   *
   * ```
   * domain.Failure{
-  *     code = "authorization_failure",
+  *     code = "authorization_failed",
   *     reason = "sngb error '87' — 'Invalid CVV'",
   *     sub = domain.SubFailure{
-  *         code = "payment_tool_reject",
+  *         code = "payment_tool_rejected",
   *         sub = domain.SubFailure{
-  *             code = "bank_card_reject",
+  *             code = "bank_card_rejected",
   *             sub = domain.SubFailure{
-  *                 code = "invalid_cvv"
+  *                 code = "cvv_invalid"
   *             }
   *         }
   *     }
@@ -68,22 +68,22 @@ namespace erlang payprocerr
   */
 
 union PaymentFailure {
-    1: GeneralFailure      reject_by_inspector
-    2: GeneralFailure      preauthorization_failure
-    3: AuthorizationFailed authorization_failure
+    1: GeneralFailure       rejected_by_inspector
+    2: GeneralFailure       preauthorization_failed
+    3: AuthorizationFailure authorization_failed
 }
 
-union AuthorizationFailed {
-     1: GeneralFailure      unknown // "silent reject" / "do not honor" / ...
-     2: GeneralFailure      merchant_blocked
-     3: GeneralFailure      operation_blocked
-     4: GeneralFailure      account_not_found
-     5: GeneralFailure      account_blocked
-     6: GeneralFailure      account_stolen
-     7: GeneralFailure      insufficient_funds
-     8: LimitExceeded       account_limit_exceeded
-     9: LimitExceeded       provider_limit_exceeded
-    10: PaymentToolRejected payment_tool_reject
+union AuthorizationFailure {
+     1: GeneralFailure    unknown // "silent reject" / "do not honor" / ...
+     2: GeneralFailure    merchant_blocked
+     3: GeneralFailure    operation_blocked
+     4: GeneralFailure    account_not_found
+     5: GeneralFailure    account_blocked
+     6: GeneralFailure    account_stolen
+     7: GeneralFailure    insufficient_funds
+     8: LimitExceeded     account_limit_exceeded
+     9: LimitExceeded     provider_limit_exceeded
+    10: PaymentToolReject payment_tool_rejected
 }
 
 union LimitExceeded {
@@ -92,15 +92,15 @@ union LimitExceeded {
   3: GeneralFailure number
 }
 
-union PaymentToolRejected {
-    1: BankCardRejected bank_card_reject
+union PaymentToolReject {
+    1: BankCardReject bank_card_rejected
 }
 
-union BankCardRejected {
-    2: GeneralFailure invalid_card_number
-    3: GeneralFailure expired_card
-    4: GeneralFailure invalid_card_holder
-    5: GeneralFailure invalid_cvv
+union BankCardReject {
+    2: GeneralFailure card_number_invalid
+    3: GeneralFailure card_expired
+    4: GeneralFailure card_holder_invalid
+    5: GeneralFailure cvv_invalid
     6: GeneralFailure card_unsupported // ?
     7: GeneralFailure issuer_not_found // ?
 }
