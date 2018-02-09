@@ -97,7 +97,7 @@ enum CashFlowType {
     payment
     refund
     adjustment
-    guarantee
+    guarantee_deposit
 }
 
 /**
