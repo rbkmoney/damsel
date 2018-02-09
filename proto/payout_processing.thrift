@@ -111,7 +111,6 @@ struct CashFlowDescription {
     4: required CashFlowType cash_flow_type
     /* Количество движений данного вида в выводе */
     5: required i32 count
-    6: optional string details
 }
 
 /**
