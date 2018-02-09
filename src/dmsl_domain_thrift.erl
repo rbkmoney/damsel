@@ -706,8 +706,7 @@
 
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
-    'invoice_amount' |
-    'payment_amount'.
+    'operation_amount'.
 
 %% enum 'RoundingMethod'
 -type 'RoundingMethod'() ::
@@ -2467,8 +2466,7 @@ enum_info('ExternalCashFlowAccount') ->
 
 enum_info('CashFlowConstant') ->
     {enum, [
-        {'invoice_amount', 0},
-        {'payment_amount', 1}
+        {'operation_amount', 1}
     ]};
 
 enum_info('RoundingMethod') ->
