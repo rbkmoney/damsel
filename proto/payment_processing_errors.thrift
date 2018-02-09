@@ -42,7 +42,7 @@ namespace erlang payprocerr
   * ```
   *
   *
-  * ### Текстовое представление
+  * ### Текстовое представление (нужно только если есть желание представлять ошибки в виде текста)
   *
   * `authorization_failed:payment_tool_rejected:bank_card_rejected:cvv_invalid`
   *
@@ -101,8 +101,8 @@ union BankCardReject {
     3: GeneralFailure card_expired
     4: GeneralFailure card_holder_invalid
     5: GeneralFailure cvv_invalid
-    6: GeneralFailure card_unsupported // ?
-    7: GeneralFailure issuer_not_found // ?
+    6: GeneralFailure card_unsupported
+    7: GeneralFailure issuer_not_found
 }
 
 struct GeneralFailure {}
