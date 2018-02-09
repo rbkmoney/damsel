@@ -95,7 +95,6 @@ struct PayoutCreated {
   */
 enum CashFlowType {
     payment
-    fee
     refund
     adjustment
     guarantee
@@ -107,10 +106,12 @@ enum CashFlowType {
 */
 struct CashFlowDescription {
     1: required domain.Cash cash
-    2: required CashFlowType cash_flow_type
+    2: optional domain.Cash fee
+    3: required TimeRange time_range
+    4: required CashFlowType cash_flow_type
     /* Количество движений данного вида в выводе */
-    3: required i32 count
-    4: optional string details
+    5: required i32 count
+    6: optional string details
 }
 
 /**
