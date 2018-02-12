@@ -1282,6 +1282,11 @@ struct PaymentHoldsProvisionTerms {
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
+    /**
+     * Если cash_limit задан, то частичные рефанды разрешены,
+     * в противном случае запрещены.
+     */
+    2: optional CashLimitSelector cash_limit
 }
 
 struct RecurrentPaytoolsProvisionTerms {
