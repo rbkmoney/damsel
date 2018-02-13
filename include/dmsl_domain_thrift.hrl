@@ -481,8 +481,13 @@
 -record('domain_PaymentRefundsServiceTerms', {
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'eligibility_time' :: dmsl_domain_thrift:'TimeSpanSelector'() | undefined
+    'eligibility_time' :: dmsl_domain_thrift:'TimeSpanSelector'() | undefined,
+    'partial_refunds' :: dmsl_domain_thrift:'PartialRefundsServiceTerms'() | undefined
+}).
+
+%% struct 'PartialRefundsServiceTerms'
+-record('domain_PartialRefundsServiceTerms', {
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
 }).
 
 %% struct 'CurrencyRef'
@@ -669,7 +674,13 @@
 
 %% struct 'PaymentRefundsProvisionTerms'
 -record('domain_PaymentRefundsProvisionTerms', {
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
+    'partial_refunds' :: dmsl_domain_thrift:'PartialRefundsProvisionTerms'() | undefined
+}).
+
+%% struct 'PartialRefundsProvisionTerms'
+-record('domain_PartialRefundsProvisionTerms', {
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
 %% struct 'RecurrentPaytoolsProvisionTerms'

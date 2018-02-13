@@ -178,6 +178,7 @@
     'PaymentsServiceTerms'/0,
     'PaymentHoldsServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
+    'PartialRefundsServiceTerms'/0,
     'CurrencyRef'/0,
     'Currency'/0,
     'CurrencySelector'/0,
@@ -220,6 +221,7 @@
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
+    'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
     'CashValueSelector'/0,
     'CashValueDecision'/0,
@@ -814,6 +816,7 @@
     'PaymentsServiceTerms' |
     'PaymentHoldsServiceTerms' |
     'PaymentRefundsServiceTerms' |
+    'PartialRefundsServiceTerms' |
     'CurrencyRef' |
     'Currency' |
     'CurrencySelector' |
@@ -856,6 +859,7 @@
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
+    'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
     'CashValueSelector' |
     'CashValueDecision' |
@@ -1256,6 +1260,9 @@
 %% struct 'PaymentRefundsServiceTerms'
 -type 'PaymentRefundsServiceTerms'() :: #'domain_PaymentRefundsServiceTerms'{}.
 
+%% struct 'PartialRefundsServiceTerms'
+-type 'PartialRefundsServiceTerms'() :: #'domain_PartialRefundsServiceTerms'{}.
+
 %% struct 'CurrencyRef'
 -type 'CurrencyRef'() :: #'domain_CurrencyRef'{}.
 
@@ -1412,6 +1419,9 @@
 
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
+
+%% struct 'PartialRefundsProvisionTerms'
+-type 'PartialRefundsProvisionTerms'() :: #'domain_PartialRefundsProvisionTerms'{}.
 
 %% struct 'RecurrentPaytoolsProvisionTerms'
 -type 'RecurrentPaytoolsProvisionTerms'() :: #'domain_RecurrentPaytoolsProvisionTerms'{}.
@@ -1902,6 +1912,7 @@ structs() ->
         'PaymentsServiceTerms',
         'PaymentHoldsServiceTerms',
         'PaymentRefundsServiceTerms',
+        'PartialRefundsServiceTerms',
         'CurrencyRef',
         'Currency',
         'CurrencySelector',
@@ -1944,6 +1955,7 @@ structs() ->
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PaymentRefundsProvisionTerms',
+        'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
         'CashValueSelector',
         'CashValueDecision',
@@ -3084,8 +3096,13 @@ struct_info('PaymentRefundsServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsServiceTerms'}}, 'partial_refunds', undefined}
+]};
+
+struct_info('PartialRefundsServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
 ]};
 
 struct_info('CurrencyRef') ->
@@ -3355,7 +3372,13 @@ struct_info('PaymentHoldsProvisionTerms') ->
 
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsProvisionTerms'}}, 'partial_refunds', undefined}
+]};
+
+struct_info('PartialRefundsProvisionTerms') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
 ]};
 
 struct_info('RecurrentPaytoolsProvisionTerms') ->
@@ -4058,6 +4081,9 @@ record_name('OperationTimeout') ->
     record_name('PaymentRefundsServiceTerms') ->
     'domain_PaymentRefundsServiceTerms';
 
+    record_name('PartialRefundsServiceTerms') ->
+    'domain_PartialRefundsServiceTerms';
+
     record_name('CurrencyRef') ->
     'domain_CurrencyRef';
 
@@ -4144,6 +4170,9 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
+
+    record_name('PartialRefundsProvisionTerms') ->
+    'domain_PartialRefundsProvisionTerms';
 
     record_name('RecurrentPaytoolsProvisionTerms') ->
     'domain_RecurrentPaytoolsProvisionTerms';
