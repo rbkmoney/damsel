@@ -399,6 +399,15 @@
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
+%% struct 'Varset'
+-record('payproc_Varset', {
+    'category' :: dmsl_domain_thrift:'CategoryRef'() | undefined,
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
+    'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined
+}).
+
 %% struct 'PartyParams'
 -record('payproc_PartyParams', {
     'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'()

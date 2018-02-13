@@ -1125,6 +1125,14 @@ typedef domain.PayoutToolID PayoutToolID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
+struct Varset {
+    1: optional domain.CategoryRef category
+    2: optional domain.CurrencyRef currency
+    3: optional domain.Cash amount
+    4: optional domain.PaymentMethodRef payment_method
+    5: optional domain.PayoutMethodRef payout_method
+}
+
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
 }
@@ -1603,7 +1611,7 @@ service PartyManagement {
 
     /* Payment institutions */
 
-    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref)
+    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
 
     /* Payouts */

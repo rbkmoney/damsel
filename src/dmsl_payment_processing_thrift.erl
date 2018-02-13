@@ -144,6 +144,7 @@
     'RecurrentPaymentToolHasAcquired'/0,
     'RecurrentPaymentToolHasAbandoned'/0,
     'RecurrentPaymentToolHasFailed'/0,
+    'Varset'/0,
     'PartyParams'/0,
     'PayoutToolParams'/0,
     'ShopParams'/0,
@@ -387,6 +388,7 @@
     'RecurrentPaymentToolHasAcquired' |
     'RecurrentPaymentToolHasAbandoned' |
     'RecurrentPaymentToolHasFailed' |
+    'Varset' |
     'PartyParams' |
     'PayoutToolParams' |
     'ShopParams' |
@@ -814,6 +816,9 @@
 
 %% struct 'RecurrentPaymentToolHasFailed'
 -type 'RecurrentPaymentToolHasFailed'() :: #'payproc_RecurrentPaymentToolHasFailed'{}.
+
+%% struct 'Varset'
+-type 'Varset'() :: #'payproc_Varset'{}.
 
 %% struct 'PartyParams'
 -type 'PartyParams'() :: #'payproc_PartyParams'{}.
@@ -1420,6 +1425,7 @@ structs() ->
         'RecurrentPaymentToolHasAcquired',
         'RecurrentPaymentToolHasAbandoned',
         'RecurrentPaymentToolHasFailed',
+        'Varset',
         'PartyParams',
         'PayoutToolParams',
         'ShopParams',
@@ -2087,6 +2093,15 @@ struct_info('RecurrentPaymentToolHasAbandoned') ->
 struct_info('RecurrentPaymentToolHasFailed') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+]};
+
+struct_info('Varset') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined}
 ]};
 
 struct_info('PartyParams') ->
@@ -2793,6 +2808,9 @@ record_name('InternalUser') ->
 
     record_name('RecurrentPaymentToolHasFailed') ->
     'payproc_RecurrentPaymentToolHasFailed';
+
+    record_name('Varset') ->
+    'payproc_Varset';
 
     record_name('PartyParams') ->
     'payproc_PartyParams';
@@ -4092,7 +4110,8 @@ function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) 
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined}
+    {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
+    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
 ]};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
