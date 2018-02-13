@@ -650,8 +650,12 @@ struct PaymentHoldsServiceTerms {
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
-    3: optional CashLimitSelector cash_limit
-    4: optional TimeSpanSelector eligibility_time
+    3: optional TimeSpanSelector eligibility_time
+    4: optional PartialRefundsServiceTerms partial_refunds
+}
+
+struct PartialRefundsServiceTerms {
+    1: optional CashLimitSelector cash_limit
 }
 
 /* Currencies */
@@ -1283,10 +1287,13 @@ struct PaymentHoldsProvisionTerms {
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
     /**
-     * Если cash_limit задан, то частичные рефанды разрешены,
-     * в противном случае запрещены.
+     * Условия для частичных рефандов.
      */
-    2: optional CashLimitSelector cash_limit
+    2: optional PartialRefundsProvisionTerms partial_refunds
+}
+
+struct PartialRefundsProvisionTerms {
+    1: required CashLimitSelector cash_limit
 }
 
 struct RecurrentPaytoolsProvisionTerms {
