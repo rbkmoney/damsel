@@ -390,7 +390,7 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
-   12: optional ScheduleRef payout_schedule
+   12: optional PayoutScheduleRef payout_schedule
 }
 
 struct ShopAccount {
@@ -659,7 +659,7 @@ struct RecurrentPaytoolsServiceTerms {
 
 struct PayoutsServiceTerms {
     /* Payout schedule level */
-    4: optional ScheduleSelector payout_schedules
+    4: optional PayoutScheduleSelector payout_schedules
     /* Payout level */
     1: optional PayoutMethodSelector payout_methods
     2: optional CashLimitSelector cash_limit
@@ -992,23 +992,23 @@ enum Residence {
 
 /* Schedules */
 
-struct ScheduleRef { 1: required ObjectID id }
+struct PayoutScheduleRef { 1: required ObjectID id }
 
-struct Schedule {
+struct PayoutSchedule {
     1: required string name
     2: optional string description
     3: required base.Schedule schedule
     4: required PayoutCompilationPolicy policy
 }
 
-union ScheduleSelector {
-    1: list<ScheduleDecision> decisions
-    2: set<ScheduleRef> value
+union PayoutScheduleSelector {
+    1: list<PayoutScheduleDecision> decisions
+    2: set<PayoutScheduleRef> value
 }
 
-struct ScheduleDecision {
+struct PayoutScheduleDecision {
     1: required Predicate if_
-    2: required ScheduleSelector then_
+    2: required PayoutScheduleSelector then_
 }
 
 /* Calendars */
@@ -1683,9 +1683,9 @@ struct CurrencyObject {
     2: required Currency data
 }
 
-struct ScheduleObject {
-    1: required ScheduleRef ref
-    2: required Schedule data
+struct PayoutScheduleObject {
+    1: required PayoutScheduleRef ref
+    2: required PayoutSchedule data
 }
 
 struct CalendarObject {
@@ -1763,7 +1763,7 @@ union Reference {
 
     1  : CategoryRef             category
     2  : CurrencyRef             currency
-    19 : ScheduleRef             schedule
+    19 : PayoutScheduleRef       payout_schedule
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
@@ -1791,7 +1791,7 @@ union DomainObject {
 
     1  : CategoryObject             category
     2  : CurrencyObject             currency
-    19 : ScheduleObject             schedule
+    19 : PayoutScheduleObject       payout_schedule
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method
