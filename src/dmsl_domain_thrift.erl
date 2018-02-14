@@ -192,10 +192,10 @@
     'CurrencyDecision'/0,
     'CategorySelector'/0,
     'CategoryDecision'/0,
-    'ScheduleRef'/0,
-    'Schedule'/0,
-    'ScheduleSelector'/0,
-    'ScheduleDecision'/0,
+    'PayoutScheduleRef'/0,
+    'PayoutSchedule'/0,
+    'PayoutScheduleSelector'/0,
+    'PayoutScheduleDecision'/0,
     'CalendarRef'/0,
     'Calendar'/0,
     'CalendarHoliday'/0,
@@ -291,7 +291,7 @@
     'TermSetHierarchyObject'/0,
     'CategoryObject'/0,
     'CurrencyObject'/0,
-    'ScheduleObject'/0,
+    'PayoutScheduleObject'/0,
     'CalendarObject'/0,
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
@@ -850,10 +850,10 @@
     'CurrencyDecision' |
     'CategorySelector' |
     'CategoryDecision' |
-    'ScheduleRef' |
-    'Schedule' |
-    'ScheduleSelector' |
-    'ScheduleDecision' |
+    'PayoutScheduleRef' |
+    'PayoutSchedule' |
+    'PayoutScheduleSelector' |
+    'PayoutScheduleDecision' |
     'CalendarRef' |
     'Calendar' |
     'CalendarHoliday' |
@@ -949,7 +949,7 @@
     'TermSetHierarchyObject' |
     'CategoryObject' |
     'CurrencyObject' |
-    'ScheduleObject' |
+    'PayoutScheduleObject' |
     'CalendarObject' |
     'PaymentMethodObject' |
     'PayoutMethodObject' |
@@ -1336,19 +1336,19 @@
 %% struct 'CategoryDecision'
 -type 'CategoryDecision'() :: #'domain_CategoryDecision'{}.
 
-%% struct 'ScheduleRef'
--type 'ScheduleRef'() :: #'domain_ScheduleRef'{}.
+%% struct 'PayoutScheduleRef'
+-type 'PayoutScheduleRef'() :: #'domain_PayoutScheduleRef'{}.
 
-%% struct 'Schedule'
--type 'Schedule'() :: #'domain_Schedule'{}.
+%% struct 'PayoutSchedule'
+-type 'PayoutSchedule'() :: #'domain_PayoutSchedule'{}.
 
-%% union 'ScheduleSelector'
--type 'ScheduleSelector'() ::
-    {'decisions', ['ScheduleDecision'()]} |
-    {'value', ordsets:ordset('ScheduleRef'())}.
+%% union 'PayoutScheduleSelector'
+-type 'PayoutScheduleSelector'() ::
+    {'decisions', ['PayoutScheduleDecision'()]} |
+    {'value', ordsets:ordset('PayoutScheduleRef'())}.
 
-%% struct 'ScheduleDecision'
--type 'ScheduleDecision'() :: #'domain_ScheduleDecision'{}.
+%% struct 'PayoutScheduleDecision'
+-type 'PayoutScheduleDecision'() :: #'domain_PayoutScheduleDecision'{}.
 
 %% struct 'CalendarRef'
 -type 'CalendarRef'() :: #'domain_CalendarRef'{}.
@@ -1692,8 +1692,8 @@
 %% struct 'CurrencyObject'
 -type 'CurrencyObject'() :: #'domain_CurrencyObject'{}.
 
-%% struct 'ScheduleObject'
--type 'ScheduleObject'() :: #'domain_ScheduleObject'{}.
+%% struct 'PayoutScheduleObject'
+-type 'PayoutScheduleObject'() :: #'domain_PayoutScheduleObject'{}.
 
 %% struct 'CalendarObject'
 -type 'CalendarObject'() :: #'domain_CalendarObject'{}.
@@ -1741,7 +1741,7 @@
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
     {'currency', 'CurrencyRef'()} |
-    {'schedule', 'ScheduleRef'()} |
+    {'payout_schedule', 'PayoutScheduleRef'()} |
     {'calendar', 'CalendarRef'()} |
     {'payment_method', 'PaymentMethodRef'()} |
     {'payout_method', 'PayoutMethodRef'()} |
@@ -1765,7 +1765,7 @@
 -type 'DomainObject'() ::
     {'category', 'CategoryObject'()} |
     {'currency', 'CurrencyObject'()} |
-    {'schedule', 'ScheduleObject'()} |
+    {'payout_schedule', 'PayoutScheduleObject'()} |
     {'calendar', 'CalendarObject'()} |
     {'payment_method', 'PaymentMethodObject'()} |
     {'payout_method', 'PayoutMethodObject'()} |
@@ -2006,10 +2006,10 @@ structs() ->
         'CurrencyDecision',
         'CategorySelector',
         'CategoryDecision',
-        'ScheduleRef',
-        'Schedule',
-        'ScheduleSelector',
-        'ScheduleDecision',
+        'PayoutScheduleRef',
+        'PayoutSchedule',
+        'PayoutScheduleSelector',
+        'PayoutScheduleDecision',
         'CalendarRef',
         'Calendar',
         'CalendarHoliday',
@@ -2105,7 +2105,7 @@ structs() ->
         'TermSetHierarchyObject',
         'CategoryObject',
         'CurrencyObject',
-        'ScheduleObject',
+        'PayoutScheduleObject',
         'CalendarObject',
         'PaymentMethodObject',
         'PayoutMethodObject',
@@ -2952,7 +2952,7 @@ struct_info('Shop') ->
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
     {7, required, string, 'contract_id', undefined},
     {8, optional, string, 'payout_tool_id', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'payout_schedule', undefined}
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule', undefined}
 ]};
 
 struct_info('ShopAccount') ->
@@ -3205,11 +3205,10 @@ struct_info('RecurrentPaytoolsServiceTerms') ->
 
 struct_info('PayoutsServiceTerms') ->
     {struct, struct, [
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'ScheduleSelector'}}, 'payout_schedules', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'PayoutScheduleSelector'}}, 'payout_schedules', undefined},
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
 ]};
 
 struct_info('PayoutCompilationPolicy') ->
@@ -3277,28 +3276,29 @@ struct_info('CategoryDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'then_', undefined}
 ]};
 
-struct_info('ScheduleRef') ->
+struct_info('PayoutScheduleRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
 ]};
 
-struct_info('Schedule') ->
+struct_info('PayoutSchedule') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, optional, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_base_thrift, 'Schedule'}}, 'schedule', undefined}
+    {3, required, {struct, struct, {dmsl_base_thrift, 'Schedule'}}, 'schedule', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
 ]};
 
-struct_info('ScheduleSelector') ->
+struct_info('PayoutScheduleSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ScheduleDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}}, 'value', undefined}
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}}, 'value', undefined}
 ]};
 
-struct_info('ScheduleDecision') ->
+struct_info('PayoutScheduleDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'ScheduleSelector'}}, 'then_', undefined}
+    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutScheduleSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CalendarRef') ->
@@ -3906,10 +3906,10 @@ struct_info('CurrencyObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'data', undefined}
 ]};
 
-struct_info('ScheduleObject') ->
+struct_info('PayoutScheduleObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Schedule'}}, 'data', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutSchedule'}}, 'data', undefined}
 ]};
 
 struct_info('CalendarObject') ->
@@ -4000,7 +4000,7 @@ struct_info('Reference') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule', undefined},
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
@@ -4025,7 +4025,7 @@ struct_info('DomainObject') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryObject'}}, 'category', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyObject'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleObject'}}, 'schedule', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleObject'}}, 'payout_schedule', undefined},
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
@@ -4296,14 +4296,14 @@ record_name('OperationTimeout') ->
     record_name('CategoryDecision') ->
     'domain_CategoryDecision';
 
-    record_name('ScheduleRef') ->
-    'domain_ScheduleRef';
+    record_name('PayoutScheduleRef') ->
+    'domain_PayoutScheduleRef';
 
-    record_name('Schedule') ->
-    'domain_Schedule';
+    record_name('PayoutSchedule') ->
+    'domain_PayoutSchedule';
 
-    record_name('ScheduleDecision') ->
-    'domain_ScheduleDecision';
+    record_name('PayoutScheduleDecision') ->
+    'domain_PayoutScheduleDecision';
 
     record_name('CalendarRef') ->
     'domain_CalendarRef';
@@ -4521,8 +4521,8 @@ record_name('OperationTimeout') ->
     record_name('CurrencyObject') ->
     'domain_CurrencyObject';
 
-    record_name('ScheduleObject') ->
-    'domain_ScheduleObject';
+    record_name('PayoutScheduleObject') ->
+    'domain_PayoutScheduleObject';
 
     record_name('CalendarObject') ->
     'domain_CalendarObject';

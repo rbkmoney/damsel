@@ -2216,7 +2216,7 @@ struct_info('ShopContractModification') ->
 
 struct_info('ScheduleModification') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ProxyModification') ->
@@ -2308,7 +2308,7 @@ struct_info('ShopContractChanged') ->
 
 struct_info('ScheduleChanged') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ScheduleRef'}}, 'schedule', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ShopProxyChanged') ->

@@ -482,7 +482,7 @@
 
 %% struct 'ScheduleModification'
 -record('payproc_ScheduleModification', {
-    'schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
+    'schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
 }).
 
 %% struct 'ProxyModification'
@@ -538,7 +538,7 @@
 
 %% struct 'ScheduleChanged'
 -record('payproc_ScheduleChanged', {
-    'schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
+    'schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
 }).
 
 %% struct 'ShopProxyChanged'

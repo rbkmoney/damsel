@@ -276,7 +276,7 @@
     'account' :: dmsl_domain_thrift:'ShopAccount'() | undefined,
     'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined,
-    'payout_schedule' :: dmsl_domain_thrift:'ScheduleRef'() | undefined
+    'payout_schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
 }).
 
 %% struct 'ShopAccount'
@@ -487,11 +487,10 @@
 
 %% struct 'PayoutsServiceTerms'
 -record('domain_PayoutsServiceTerms', {
-    'payout_schedules' :: dmsl_domain_thrift:'ScheduleSelector'() | undefined,
+    'payout_schedules' :: dmsl_domain_thrift:'PayoutScheduleSelector'() | undefined,
     'payout_methods' :: dmsl_domain_thrift:'PayoutMethodSelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'policy' :: dmsl_domain_thrift:'PayoutCompilationPolicy'() | undefined
+    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'PayoutCompilationPolicy'
@@ -541,22 +540,23 @@
     'then_' :: dmsl_domain_thrift:'CategorySelector'()
 }).
 
-%% struct 'ScheduleRef'
--record('domain_ScheduleRef', {
+%% struct 'PayoutScheduleRef'
+-record('domain_PayoutScheduleRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
 }).
 
-%% struct 'Schedule'
--record('domain_Schedule', {
+%% struct 'PayoutSchedule'
+-record('domain_PayoutSchedule', {
     'name' :: binary(),
     'description' :: binary() | undefined,
-    'schedule' :: dmsl_base_thrift:'Schedule'()
+    'schedule' :: dmsl_base_thrift:'Schedule'(),
+    'policy' :: dmsl_domain_thrift:'PayoutCompilationPolicy'()
 }).
 
-%% struct 'ScheduleDecision'
--record('domain_ScheduleDecision', {
+%% struct 'PayoutScheduleDecision'
+-record('domain_PayoutScheduleDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
-    'then_' :: dmsl_domain_thrift:'ScheduleSelector'()
+    'then_' :: dmsl_domain_thrift:'PayoutScheduleSelector'()
 }).
 
 %% struct 'CalendarRef'
@@ -1015,10 +1015,10 @@
     'data' :: dmsl_domain_thrift:'Currency'()
 }).
 
-%% struct 'ScheduleObject'
--record('domain_ScheduleObject', {
-    'ref' :: dmsl_domain_thrift:'ScheduleRef'(),
-    'data' :: dmsl_domain_thrift:'Schedule'()
+%% struct 'PayoutScheduleObject'
+-record('domain_PayoutScheduleObject', {
+    'ref' :: dmsl_domain_thrift:'PayoutScheduleRef'(),
+    'data' :: dmsl_domain_thrift:'PayoutSchedule'()
 }).
 
 %% struct 'CalendarObject'
