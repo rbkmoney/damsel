@@ -35,6 +35,8 @@
     'DataRevision'/0,
     'ObjectID'/0,
     'Metadata'/0,
+    'FailureCode'/0,
+    'FailureReason'/0,
     'Amount'/0,
     'AccountID'/0,
     'InvoiceID'/0,
@@ -89,7 +91,8 @@
     'ContactInfo'/0,
     'OperationFailure'/0,
     'OperationTimeout'/0,
-    'ExternalFailure'/0,
+    'Failure'/0,
+    'SubFailure'/0,
     'Cash'/0,
     'TransactionInfo'/0,
     'Invoice'/0,
@@ -301,6 +304,8 @@
     'DataRevision' |
     'ObjectID' |
     'Metadata' |
+    'FailureCode' |
+    'FailureReason' |
     'Amount' |
     'AccountID' |
     'InvoiceID' |
@@ -338,6 +343,8 @@
 -type 'DataRevision'() :: integer().
 -type 'ObjectID'() :: integer().
 -type 'Metadata'() :: dmsl_json_thrift:'Value'().
+-type 'FailureCode'() :: binary().
+-type 'FailureReason'() :: binary().
 -type 'Amount'() :: integer().
 -type 'AccountID'() :: integer().
 -type 'InvoiceID'() :: dmsl_base_thrift:'ID'().
@@ -724,7 +731,8 @@
     'ContactInfo' |
     'OperationFailure' |
     'OperationTimeout' |
-    'ExternalFailure' |
+    'Failure' |
+    'SubFailure' |
     'Cash' |
     'TransactionInfo' |
     'Invoice' |
@@ -934,13 +942,16 @@
 %% union 'OperationFailure'
 -type 'OperationFailure'() ::
     {'operation_timeout', 'OperationTimeout'()} |
-    {'external_failure', 'ExternalFailure'()}.
+    {'failure', 'Failure'()}.
 
 %% struct 'OperationTimeout'
 -type 'OperationTimeout'() :: #'domain_OperationTimeout'{}.
 
-%% struct 'ExternalFailure'
--type 'ExternalFailure'() :: #'domain_ExternalFailure'{}.
+%% struct 'Failure'
+-type 'Failure'() :: #'domain_Failure'{}.
+
+%% struct 'SubFailure'
+-type 'SubFailure'() :: #'domain_SubFailure'{}.
 
 %% struct 'Cash'
 -type 'Cash'() :: #'domain_Cash'{}.
@@ -1740,6 +1751,8 @@ typedefs() ->
         'DataRevision',
         'ObjectID',
         'Metadata',
+        'FailureCode',
+        'FailureReason',
         'Amount',
         'AccountID',
         'InvoiceID',
@@ -1802,7 +1815,8 @@ structs() ->
         'ContactInfo',
         'OperationFailure',
         'OperationTimeout',
-        'ExternalFailure',
+        'Failure',
+        'SubFailure',
         'Cash',
         'TransactionInfo',
         'Invoice',
@@ -2025,6 +2039,12 @@ typedef_info('ObjectID') ->
 
 typedef_info('Metadata') ->
     {struct, union, {dmsl_json_thrift, 'Value'}};
+
+typedef_info('FailureCode') ->
+    string;
+
+typedef_info('FailureReason') ->
+    string;
 
 typedef_info('Amount') ->
     i64;
@@ -2482,16 +2502,23 @@ struct_info('ContactInfo') ->
 struct_info('OperationFailure') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalFailure'}}, 'external_failure', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
 ]};
 
 struct_info('OperationTimeout') ->
     {struct, struct, []};
 
-struct_info('ExternalFailure') ->
+struct_info('Failure') ->
     {struct, struct, [
     {1, required, string, 'code', undefined},
-    {2, optional, string, 'description', undefined}
+    {2, optional, string, 'reason', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'SubFailure'}}, 'sub', undefined}
+]};
+
+struct_info('SubFailure') ->
+    {struct, struct, [
+    {1, required, string, 'code', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'SubFailure'}}, 'sub', undefined}
 ]};
 
 struct_info('Cash') ->
@@ -3818,8 +3845,11 @@ record_name('ContactInfo') ->
 record_name('OperationTimeout') ->
     'domain_OperationTimeout';
 
-    record_name('ExternalFailure') ->
-    'domain_ExternalFailure';
+    record_name('Failure') ->
+    'domain_Failure';
+
+    record_name('SubFailure') ->
+    'domain_SubFailure';
 
     record_name('Cash') ->
     'domain_Cash';

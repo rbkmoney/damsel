@@ -2,10 +2,31 @@
 -define(dmsl_proxy_provider_thrift_included__, yeah).
 
 -include("dmsl_base_thrift.hrl").
--include("dmsl_proxy_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
+-include("dmsl_user_interaction_thrift.hrl").
 
 
+
+%% struct 'FinishIntent'
+-record('prxprv_FinishIntent', {
+    'status' :: dmsl_proxy_provider_thrift:'FinishStatus'()
+}).
+
+%% struct 'Success'
+-record('prxprv_Success', {}).
+
+%% struct 'SleepIntent'
+-record('prxprv_SleepIntent', {
+    'timer' :: dmsl_base_thrift:'Timer'(),
+    'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined
+}).
+
+%% struct 'SuspendIntent'
+-record('prxprv_SuspendIntent', {
+    'tag' :: dmsl_proxy_provider_thrift:'CallbackTag'(),
+    'timeout' :: dmsl_base_thrift:'Timer'(),
+    'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined
+}).
 
 %% struct 'RecurrentPaymentTool'
 -record('prxprv_RecurrentPaymentTool', {
@@ -23,7 +44,7 @@
 
 %% struct 'RecurrentTokenSession'
 -record('prxprv_RecurrentTokenSession', {
-    'state' :: dmsl_proxy_thrift:'ProxyState'() | undefined
+    'state' :: dmsl_proxy_provider_thrift:'ProxyState'() | undefined
 }).
 
 %% struct 'RecurrentTokenContext'
@@ -36,7 +57,7 @@
 %% struct 'RecurrentTokenProxyResult'
 -record('prxprv_RecurrentTokenProxyResult', {
     'intent' :: dmsl_proxy_provider_thrift:'RecurrentTokenIntent'(),
-    'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
+    'next_state' :: dmsl_proxy_provider_thrift:'ProxyState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
@@ -52,7 +73,7 @@
 
 %% struct 'RecurrentTokenCallbackResult'
 -record('prxprv_RecurrentTokenCallbackResult', {
-    'response' :: dmsl_proxy_thrift:'CallbackResponse'(),
+    'response' :: dmsl_proxy_provider_thrift:'CallbackResponse'(),
     'result' :: dmsl_proxy_provider_thrift:'RecurrentTokenProxyResult'()
 }).
 
@@ -113,7 +134,7 @@
 %% struct 'Session'
 -record('prxprv_Session', {
     'target' :: dmsl_domain_thrift:'TargetInvoicePaymentStatus'(),
-    'state' :: dmsl_proxy_thrift:'ProxyState'() | undefined
+    'state' :: dmsl_proxy_provider_thrift:'ProxyState'() | undefined
 }).
 
 %% struct 'PaymentContext'
@@ -125,21 +146,21 @@
 
 %% struct 'PaymentProxyResult'
 -record('prxprv_PaymentProxyResult', {
-    'intent' :: dmsl_proxy_thrift:'Intent'(),
-    'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
+    'intent' :: dmsl_proxy_provider_thrift:'Intent'(),
+    'next_state' :: dmsl_proxy_provider_thrift:'ProxyState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'PaymentCallbackResult'
 -record('prxprv_PaymentCallbackResult', {
-    'response' :: dmsl_proxy_thrift:'CallbackResponse'(),
+    'response' :: dmsl_proxy_provider_thrift:'CallbackResponse'(),
     'result' :: dmsl_proxy_provider_thrift:'PaymentCallbackProxyResult'()
 }).
 
 %% struct 'PaymentCallbackProxyResult'
 -record('prxprv_PaymentCallbackProxyResult', {
-    'intent' :: dmsl_proxy_thrift:'Intent'() | undefined,
-    'next_state' :: dmsl_proxy_thrift:'ProxyState'() | undefined,
+    'intent' :: dmsl_proxy_provider_thrift:'Intent'() | undefined,
+    'next_state' :: dmsl_proxy_provider_thrift:'ProxyState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
