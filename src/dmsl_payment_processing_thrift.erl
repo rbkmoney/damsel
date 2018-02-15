@@ -1170,7 +1170,8 @@
     'RefundPayment' |
     'GetPaymentRefund' |
     'Fulfill' |
-    'Rescind'.
+    'Rescind' |
+    'Repair'.
 
 -export_type(['Invoicing_service_functions'/0]).
 
@@ -3000,7 +3001,8 @@ functions('Invoicing') ->
         'RefundPayment',
         'GetPaymentRefund',
         'Fulfill',
-        'Rescind'
+        'Rescind',
+        'Repair'
     ];
 
 functions('InvoiceTemplating') ->
@@ -3364,6 +3366,20 @@ function_info('Invoicing', 'Rescind', reply_type) ->
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex7', undefined}
+    ]};
+function_info('Invoicing', 'Repair', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined}
+]};
+function_info('Invoicing', 'Repair', reply_type) ->
+        {struct, struct, []};
+    function_info('Invoicing', 'Repair', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 
 function_info('InvoiceTemplating', 'Create', params_type) ->
