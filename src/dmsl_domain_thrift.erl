@@ -713,7 +713,8 @@
 %% enum 'MerchantCashFlowAccount'
 -type 'MerchantCashFlowAccount'() ::
     'settlement' |
-    'guarantee'.
+    'guarantee' |
+    'payout'.
 
 %% enum 'ProviderCashFlowAccount'
 -type 'ProviderCashFlowAccount'() ::
@@ -2560,7 +2561,8 @@ enum_info('DigitalWalletProvider') ->
 enum_info('MerchantCashFlowAccount') ->
     {enum, [
         {'settlement', 0},
-        {'guarantee', 1}
+        {'guarantee', 1},
+        {'payout', 2}
     ]};
 
 enum_info('ProviderCashFlowAccount') ->
