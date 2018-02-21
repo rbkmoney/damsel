@@ -1200,6 +1200,12 @@ enum MerchantCashFlowAccount {
      */
     guarantee
 
+    /**
+         * Счёт выплаченных средств:
+         *  - учёт средств выплаченных мерчанту.
+         */
+    payout
+
 }
 
 enum ProviderCashFlowAccount {
