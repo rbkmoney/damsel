@@ -415,7 +415,7 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
-    9: optional Proxy proxy
+   12: optional PayoutScheduleRef payout_schedule
 }
 
 struct ShopAccount {
@@ -493,6 +493,8 @@ struct InternationalLegalEntity {
     3: required string registered_address
     /* Адрес места нахождения (если отличается от регистрации)*/
     4: optional string actual_address
+    /* Регистрационный номер */
+    5: optional string registered_number
 }
 
 /** Банковский счёт. */
@@ -510,6 +512,7 @@ struct InternationalBankAccount {
     3: required string bank_address
     4: required string iban     // International Bank Account Number (ISO 13616)
     5: required string bic      // Business Identifier Code (ISO 9362)
+    6: optional string local_bank_code // Национальный код банка
 }
 
 typedef base.ID PayoutToolID
@@ -631,6 +634,7 @@ struct ContractAdjustment {
 struct TermSet {
     1: optional PaymentsServiceTerms payments
     2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
+    3: optional PayoutsServiceTerms payouts
 }
 
 struct TimedTermSet {
@@ -647,14 +651,11 @@ struct TermSetHierarchy {
 
 struct TermSetHierarchyRef { 1: required ObjectID id }
 
-struct RecurrentPaytoolsServiceTerms {
-    1: optional PaymentMethodSelector payment_methods
-}
-
 /* Payments service terms */
 
 struct PaymentsServiceTerms {
     /* Shop level */
+    // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
     /* Invoice level*/
@@ -674,6 +675,52 @@ struct PaymentHoldsServiceTerms {
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
+}
+
+/* Recurrent payment tools service terms */
+
+struct RecurrentPaytoolsServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+}
+
+/* Payouts service terms */
+
+struct PayoutsServiceTerms {
+    /* Payout schedule level */
+    4: optional PayoutScheduleSelector payout_schedules
+    /* Payout level */
+    1: optional PayoutMethodSelector payout_methods
+    2: optional CashLimitSelector cash_limit
+    3: optional CashFlowSelector fees
+}
+
+struct PayoutCompilationPolicy {
+    1: required base.TimeSpan assets_freeze_for
+}
+
+/* Payout methods */
+
+enum PayoutMethod {
+    russian_bank_account
+    international_bank_account
+}
+
+struct PayoutMethodRef { 1: required PayoutMethod id }
+
+/** Способ вывода, категория средства вывода. */
+struct PayoutMethodDefinition {
+    1: required string name
+    2: required string description
+}
+
+union PayoutMethodSelector {
+    1: list<PayoutMethodDecision> decisions
+    2: set<PayoutMethodRef> value
+}
+
+struct PayoutMethodDecision {
+    1: required Predicate if_
+    2: required PayoutMethodSelector then_
 }
 
 /* Currencies */
@@ -971,6 +1018,47 @@ enum Residence {
     JPN /*Japan*/
 }
 
+/* Schedules */
+
+struct PayoutScheduleRef { 1: required ObjectID id }
+
+struct PayoutSchedule {
+    1: required string name
+    2: optional string description
+    3: required base.Schedule schedule
+    4: required PayoutCompilationPolicy policy
+}
+
+union PayoutScheduleSelector {
+    1: list<PayoutScheduleDecision> decisions
+    2: set<PayoutScheduleRef> value
+}
+
+struct PayoutScheduleDecision {
+    1: required Predicate if_
+    2: required PayoutScheduleSelector then_
+}
+
+/* Calendars */
+
+struct CalendarRef { 1: required ObjectID id }
+
+struct Calendar {
+    1: required string name
+    2: optional string description
+    3: required base.Timezone timezone
+    4: required CalendarHolidaySet holidays
+}
+
+typedef map<base.Year, set<CalendarHoliday>> CalendarHolidaySet
+
+struct CalendarHoliday {
+    1: required string name
+    2: optional string description
+    3: required base.DayOfMonth day
+    4: required base.Month month
+}
+
 /* Limits */
 
 struct CashRange {
@@ -1137,6 +1225,12 @@ enum MerchantCashFlowAccount {
      */
     guarantee
 
+    /**
+         * Счёт выплаченных средств:
+         *  - учёт средств выплаченных мерчанту.
+         */
+    payout
+
 }
 
 enum ProviderCashFlowAccount {
@@ -1177,10 +1271,13 @@ enum ExternalCashFlowAccount {
 }
 
 enum CashFlowConstant {
-    invoice_amount
-    payment_amount
+    operation_amount = 1
     // ...
     // TODO
+
+    /* deprecated */
+    // invoice_amount = 0
+    // payment_amount = 1
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
@@ -1386,6 +1483,7 @@ union Condition {
     3: PaymentToolCondition payment_tool
     5: ShopLocation shop_location_is
     6: PartyCondition party
+    7: PayoutMethodRef payout_method_is
 }
 
 union PaymentToolCondition {
@@ -1504,6 +1602,7 @@ struct PaymentInstitutionRef { 1: required ObjectID id }
 struct PaymentInstitution {
     1: required string name
     2: optional string description
+    9: optional CalendarRef calendar
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
     5: required ProviderSelector providers
@@ -1596,8 +1695,8 @@ struct DummyLinkObject {
     2: DummyLink data
 }
 
-
 /* Type enumerations */
+
 struct ContractTemplateObject {
     1: required ContractTemplateRef ref
     2: required ContractTemplate data
@@ -1618,9 +1717,24 @@ struct CurrencyObject {
     2: required Currency data
 }
 
+struct PayoutScheduleObject {
+    1: required PayoutScheduleRef ref
+    2: required PayoutSchedule data
+}
+
+struct CalendarObject {
+    1: required CalendarRef ref
+    2: required Calendar data
+}
+
 struct PaymentMethodObject {
     1: required PaymentMethodRef ref
     2: required PaymentMethodDefinition data
+}
+
+struct PayoutMethodObject {
+    1: required PayoutMethodRef ref
+    2: required PayoutMethodDefinition data
 }
 
 struct BankCardBINRangeObject {
@@ -1683,7 +1797,10 @@ union Reference {
 
     1  : CategoryRef             category
     2  : CurrencyRef             currency
+    19 : PayoutScheduleRef       payout_schedule
+    20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
+    21 : PayoutMethodRef         payout_method
     4  : ContractorRef           contractor
     5  : BankCardBINRangeRef     bank_card_bin_range
     6  : ContractTemplateRef     contract_template
@@ -1708,7 +1825,10 @@ union DomainObject {
 
     1  : CategoryObject             category
     2  : CurrencyObject             currency
+    19 : PayoutScheduleObject       payout_schedule
+    20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
+    21 : PayoutMethodObject         payout_method
     4  : ContractorObject           contractor
     5  : BankCardBINRangeObject     bank_card_bin_range
     6  : ContractTemplateObject     contract_template

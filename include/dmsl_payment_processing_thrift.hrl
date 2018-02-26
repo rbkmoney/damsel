@@ -399,6 +399,15 @@
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
+%% struct 'Varset'
+-record('payproc_Varset', {
+    'category' :: dmsl_domain_thrift:'CategoryRef'() | undefined,
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
+    'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined
+}).
+
 %% struct 'PartyParams'
 -record('payproc_PartyParams', {
     'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'()
@@ -471,6 +480,11 @@
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
+%% struct 'ScheduleModification'
+-record('payproc_ScheduleModification', {
+    'schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
+}).
+
 %% struct 'ProxyModification'
 -record('payproc_ProxyModification', {
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
@@ -520,6 +534,11 @@
 -record('payproc_ShopContractChanged', {
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
+}).
+
+%% struct 'ScheduleChanged'
+-record('payproc_ScheduleChanged', {
+    'schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
 }).
 
 %% struct 'ShopProxyChanged'
@@ -580,6 +599,13 @@
 -record('payproc_PartyRevisionChanged', {
     'timestamp' :: dmsl_base_thrift:'Timestamp'(),
     'revision' :: dmsl_domain_thrift:'PartyRevision'()
+}).
+
+%% struct 'PayoutParams'
+-record('payproc_PayoutParams', {
+    'id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'timestamp' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% struct 'ContractStatusInvalid'

@@ -34,9 +34,11 @@
 -export_type([
     'PayoutID'/0,
     'Events'/0,
-    'UserID'/0
+    'UserID'/0,
+    'CashFlowDescriptions'/0
 ]).
 -export_type([
+    'CashFlowType'/0,
     'PayoutSearchStatus'/0
 ]).
 -export_type([
@@ -50,6 +52,7 @@
     'EventPayload'/0,
     'PayoutChange'/0,
     'PayoutCreated'/0,
+    'CashFlowDescription'/0,
     'Payout'/0,
     'PayoutStatus'/0,
     'PayoutUnpaid'/0,
@@ -63,6 +66,8 @@
     'PayoutType'/0,
     'PayoutCard'/0,
     'PayoutAccount'/0,
+    'RussianPayoutAccount'/0,
+    'InternationalPayoutAccount'/0,
     'PayoutStatusChanged'/0,
     'EventRange'/0,
     'Pay2CardParams'/0,
@@ -89,17 +94,26 @@
 -type typedef_name() ::
     'PayoutID' |
     'Events' |
-    'UserID'.
+    'UserID' |
+    'CashFlowDescriptions'.
 
 -type 'PayoutID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
+-type 'CashFlowDescriptions'() :: ['CashFlowDescription'()].
 
 %%
 %% enums
 %%
 -type enum_name() ::
+    'CashFlowType' |
     'PayoutSearchStatus'.
+
+%% enum 'CashFlowType'
+-type 'CashFlowType'() ::
+    'payment' |
+    'refund' |
+    'adjustment'.
 
 %% enum 'PayoutSearchStatus'
 -type 'PayoutSearchStatus'() ::
@@ -122,6 +136,7 @@
     'EventPayload' |
     'PayoutChange' |
     'PayoutCreated' |
+    'CashFlowDescription' |
     'Payout' |
     'PayoutStatus' |
     'PayoutUnpaid' |
@@ -135,6 +150,8 @@
     'PayoutType' |
     'PayoutCard' |
     'PayoutAccount' |
+    'RussianPayoutAccount' |
+    'InternationalPayoutAccount' |
     'PayoutStatusChanged' |
     'EventRange' |
     'Pay2CardParams' |
@@ -189,6 +206,9 @@
 %% struct 'PayoutCreated'
 -type 'PayoutCreated'() :: #'payout_processing_PayoutCreated'{}.
 
+%% struct 'CashFlowDescription'
+-type 'CashFlowDescription'() :: #'payout_processing_CashFlowDescription'{}.
+
 %% struct 'Payout'
 -type 'Payout'() :: #'payout_processing_Payout'{}.
 
@@ -233,8 +253,16 @@
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'payout_processing_PayoutCard'{}.
 
-%% struct 'PayoutAccount'
--type 'PayoutAccount'() :: #'payout_processing_PayoutAccount'{}.
+%% union 'PayoutAccount'
+-type 'PayoutAccount'() ::
+    {'russian_payout_account', 'RussianPayoutAccount'()} |
+    {'international_payout_account', 'InternationalPayoutAccount'()}.
+
+%% struct 'RussianPayoutAccount'
+-type 'RussianPayoutAccount'() :: #'payout_processing_RussianPayoutAccount'{}.
+
+%% struct 'InternationalPayoutAccount'
+-type 'InternationalPayoutAccount'() :: #'payout_processing_InternationalPayoutAccount'{}.
 
 %% struct 'PayoutStatusChanged'
 -type 'PayoutStatusChanged'() :: #'payout_processing_PayoutStatusChanged'{}.
@@ -324,6 +352,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
+    'CashFlowType'() |
     'PayoutSearchStatus'().
 
 -type enum_field_info() ::
@@ -337,13 +366,15 @@ typedefs() ->
     [
         'PayoutID',
         'Events',
-        'UserID'
+        'UserID',
+        'CashFlowDescriptions'
     ].
 
 -spec enums() -> [enum_name()].
 
 enums() ->
     [
+        'CashFlowType',
         'PayoutSearchStatus'
     ].
 
@@ -361,6 +392,7 @@ structs() ->
         'EventPayload',
         'PayoutChange',
         'PayoutCreated',
+        'CashFlowDescription',
         'Payout',
         'PayoutStatus',
         'PayoutUnpaid',
@@ -374,6 +406,8 @@ structs() ->
         'PayoutType',
         'PayoutCard',
         'PayoutAccount',
+        'RussianPayoutAccount',
+        'InternationalPayoutAccount',
         'PayoutStatusChanged',
         'EventRange',
         'Pay2CardParams',
@@ -410,9 +444,19 @@ typedef_info('Events') ->
 typedef_info('UserID') ->
     string;
 
+typedef_info('CashFlowDescriptions') ->
+    {list, {struct, struct, {dmsl_payout_processing_thrift, 'CashFlowDescription'}}};
+
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('CashFlowType') ->
+    {enum, [
+        {'payment', 0},
+        {'refund', 1},
+        {'adjustment', 2}
+    ]};
 
 enum_info('PayoutSearchStatus') ->
     {enum, [
@@ -478,6 +522,15 @@ struct_info('PayoutCreated') ->
     {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'UserInfo'}}, 'initiator', undefined}
 ]};
 
+struct_info('CashFlowDescription') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'fee', undefined},
+    {3, required, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
+    {4, required, {enum, {dmsl_payout_processing_thrift, 'CashFlowType'}}, 'cash_flow_type', undefined},
+    {5, required, i32, 'count', undefined}
+]};
+
 struct_info('Payout') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
@@ -486,7 +539,8 @@ struct_info('Payout') ->
     {4, required, string, 'created_at', undefined},
     {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
     {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'payout_flow', undefined},
-    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined}
+    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
+    {8, optional, {list, {struct, struct, {dmsl_payout_processing_thrift, 'CashFlowDescription'}}}, 'cash_flow_descriptions', undefined}
 ]};
 
 struct_info('PayoutStatus') ->
@@ -539,7 +593,7 @@ struct_info('PayoutConfirmed') ->
 struct_info('PayoutType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
+    {2, optional, {struct, union, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
 ]};
 
 struct_info('PayoutCard') ->
@@ -548,9 +602,23 @@ struct_info('PayoutCard') ->
 ]};
 
 struct_info('PayoutAccount') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
+]};
+
+struct_info('RussianPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'account', undefined},
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
     {2, required, string, 'inn', undefined},
+    {3, required, string, 'purpose', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
+]};
+
+struct_info('InternationalPayoutAccount') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'InternationalLegalEntity'}}, 'legal_entity', undefined},
     {3, required, string, 'purpose', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
 ]};
@@ -659,6 +727,9 @@ record_name('InternalUser') ->
     record_name('PayoutCreated') ->
     'payout_processing_PayoutCreated';
 
+    record_name('CashFlowDescription') ->
+    'payout_processing_CashFlowDescription';
+
     record_name('Payout') ->
     'payout_processing_Payout';
 
@@ -686,8 +757,11 @@ record_name('InternalUser') ->
     record_name('PayoutCard') ->
     'payout_processing_PayoutCard';
 
-    record_name('PayoutAccount') ->
-    'payout_processing_PayoutAccount';
+    record_name('RussianPayoutAccount') ->
+    'payout_processing_RussianPayoutAccount';
+
+    record_name('InternationalPayoutAccount') ->
+    'payout_processing_InternationalPayoutAccount';
 
     record_name('PayoutStatusChanged') ->
     'payout_processing_PayoutStatusChanged';

@@ -35,6 +35,15 @@
     'initiator' :: dmsl_payout_processing_thrift:'UserInfo'()
 }).
 
+%% struct 'CashFlowDescription'
+-record('payout_processing_CashFlowDescription', {
+    'cash' :: dmsl_domain_thrift:'Cash'(),
+    'fee' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
+    'cash_flow_type' :: atom(),
+    'count' :: integer()
+}).
+
 %% struct 'Payout'
 -record('payout_processing_Payout', {
     'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
@@ -43,7 +52,8 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'type' :: dmsl_payout_processing_thrift:'PayoutType'()
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
+    'cash_flow_descriptions' :: dmsl_payout_processing_thrift:'CashFlowDescriptions'() | undefined
 }).
 
 %% struct 'PayoutUnpaid'
@@ -84,10 +94,18 @@
     'card' :: dmsl_domain_thrift:'BankCard'()
 }).
 
-%% struct 'PayoutAccount'
--record('payout_processing_PayoutAccount', {
-    'account' :: dmsl_domain_thrift:'RussianBankAccount'(),
+%% struct 'RussianPayoutAccount'
+-record('payout_processing_RussianPayoutAccount', {
+    'bank_account' :: dmsl_domain_thrift:'RussianBankAccount'(),
     'inn' :: binary(),
+    'purpose' :: binary(),
+    'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
+}).
+
+%% struct 'InternationalPayoutAccount'
+-record('payout_processing_InternationalPayoutAccount', {
+    'bank_account' :: dmsl_domain_thrift:'InternationalBankAccount'(),
+    'legal_entity' :: dmsl_domain_thrift:'InternationalLegalEntity'(),
     'purpose' :: binary(),
     'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
 }).
