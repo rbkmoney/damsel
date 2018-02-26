@@ -31,7 +31,7 @@ struct RawStockEvent {
     1: required EventID id
     2: required Timestamp time
     3: required i32 version
-    4: required binary raw_event
+    4: required base.Content raw_event
 }
 
 /**
