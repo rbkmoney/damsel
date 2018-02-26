@@ -715,7 +715,17 @@ service Invoicing {
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7
         )
-    }
+
+    /* Ad-hoc repairs */
+
+    void Repair (1: UserInfo user, 2: domain.InvoiceID id, 3: list<InvoiceChange> changes)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: base.InvalidRequest ex3
+        )
+
+}
 
 service InvoiceTemplating {
 

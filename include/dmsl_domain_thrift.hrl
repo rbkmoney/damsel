@@ -16,10 +16,17 @@
 %% struct 'OperationTimeout'
 -record('domain_OperationTimeout', {}).
 
-%% struct 'ExternalFailure'
--record('domain_ExternalFailure', {
-    'code' :: binary(),
-    'description' :: binary() | undefined
+%% struct 'Failure'
+-record('domain_Failure', {
+    'code' :: dmsl_domain_thrift:'FailureCode'(),
+    'reason' :: dmsl_domain_thrift:'FailureReason'() | undefined,
+    'sub' :: dmsl_domain_thrift:'SubFailure'() | undefined
+}).
+
+%% struct 'SubFailure'
+-record('domain_SubFailure', {
+    'code' :: dmsl_domain_thrift:'FailureCode'(),
+    'sub' :: dmsl_domain_thrift:'SubFailure'() | undefined
 }).
 
 %% struct 'Cash'
