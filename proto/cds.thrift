@@ -67,10 +67,10 @@ service Keyring {
     UnlockStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
 
     /** Зашифровать кейринг */
-    void Lock () throws ()
+    void Lock () throws (1: NoKeyring no_keyring)
 
     /** Добавить новый ключ в кейринг */
-    void Rotate () throws (1: KeyringLocked locked)
+    void Rotate () throws (1: KeyringLocked locked, 2: NoKeyring no_keyring)
 
 }
 
