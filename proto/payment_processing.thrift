@@ -724,7 +724,17 @@ service Invoicing {
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7
         )
-    }
+
+    /* Ad-hoc repairs */
+
+    void Repair (1: UserInfo user, 2: domain.InvoiceID id, 3: list<InvoiceChange> changes)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: base.InvalidRequest ex3
+        )
+
+}
 
 service InvoiceTemplating {
 
@@ -1130,8 +1140,17 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.PayoutToolID PayoutToolID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
+
+struct Varset {
+    1: optional domain.CategoryRef category
+    2: optional domain.CurrencyRef currency
+    3: optional domain.Cash amount
+    4: optional domain.PaymentMethodRef payment_method
+    5: optional domain.PayoutMethodRef payout_method
+}
 
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
@@ -1217,9 +1236,12 @@ union ShopModification {
     7: domain.ShopDetails details_modification
     8: ShopContractModification contract_modification
     9: domain.PayoutToolID payout_tool_modification
-    10: ProxyModification proxy_modification
     11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
+    13: ScheduleModification payout_schedule_modification
+
+    /* deprecated */
+    10: ProxyModification proxy_modification
 }
 
 struct ShopContractModification {
@@ -1227,6 +1249,11 @@ struct ShopContractModification {
     2: required domain.PayoutToolID payout_tool_id
 }
 
+struct ScheduleModification {
+    1: optional domain.PayoutScheduleRef schedule
+}
+
+/* deprecated */
 struct ProxyModification {
     1: optional domain.Proxy proxy
 }
@@ -1285,8 +1312,8 @@ union ContractEffect {
     1: domain.Contract created
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
-    4: domain.PayoutTool payout_tool_created
     5: domain.LegalAgreement legal_agreement_bound
+    4: domain.PayoutTool payout_tool_created
 }
 
 struct ShopEffectUnit {
@@ -1300,9 +1327,12 @@ union ShopEffect {
     3: domain.ShopDetails details_changed
     4: ShopContractChanged contract_changed
     5: domain.PayoutToolID payout_tool_changed
-    6: ShopProxyChanged proxy_changed
     7: domain.ShopLocation location_changed
     8: domain.ShopAccount account_created
+    9: ScheduleChanged payout_schedule_changed
+
+    /* deprecated */
+    6: ShopProxyChanged proxy_changed
 }
 
 struct ShopContractChanged {
@@ -1310,6 +1340,11 @@ struct ShopContractChanged {
     2: required domain.PayoutToolID payout_tool_id
 }
 
+struct ScheduleChanged {
+    1: optional domain.PayoutScheduleRef schedule
+}
+
+/* deprecated */
 struct ShopProxyChanged {
     1: optional domain.Proxy proxy
 }
@@ -1381,6 +1416,12 @@ struct PartyRevisionChanged {
 union PartyRevisionParam {
     1: base.Timestamp timestamp
     2: domain.PartyRevision revision
+}
+
+struct PayoutParams {
+    1: required ShopID id
+    2: required domain.Cash amount
+    3: required base.Timestamp timestamp
 }
 
 // Exceptions
@@ -1589,8 +1630,13 @@ service PartyManagement {
 
     /* Payment institutions */
 
-    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref)
+    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
+
+    /* Payouts */
+    /* TODO looks like adhoc. Rework after feedback. Or not. */
+    domain.FinalCashFlow ComputePayoutCashFlow (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4, 5: OperationNotPermitted ex5)
 }
 
 /* Event sink service definitions */
