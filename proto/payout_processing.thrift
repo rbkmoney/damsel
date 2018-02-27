@@ -90,6 +90,33 @@ struct PayoutCreated {
     2: required UserInfo initiator
 }
 
+/**
+  * Виды движения денежных средств
+  */
+enum CashFlowType {
+    payment
+    refund
+    adjustment
+}
+
+/**
+* Расшифровка части суммы вывода
+* Описание части суммы вывода, сгруппированное по виду движения денежных средств
+*/
+struct CashFlowDescription {
+    1: required domain.Cash cash
+    2: optional domain.Cash fee
+    3: required TimeRange time_range
+    4: required CashFlowType cash_flow_type
+    /* Количество движений данного вида в выводе */
+    5: required i32 count
+}
+
+/**
+* Список описаний денежных сумм, из которых состоит сумма вывода
+*/
+typedef list<CashFlowDescription> CashFlowDescriptions
+
 struct Payout {
     1: required PayoutID id
     2: required domain.PartyID party_id
@@ -99,6 +126,7 @@ struct Payout {
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
     7: required PayoutType type
+    8: optional CashFlowDescriptions cash_flow_descriptions
 }
 
 /**
@@ -175,11 +203,23 @@ struct PayoutCard {
 }
 
 /* Вывод на расчетный счет */
-struct PayoutAccount {
-    1: required domain.RussianBankAccount account
+union PayoutAccount {
+    1: RussianPayoutAccount       russian_payout_account
+    2: InternationalPayoutAccount international_payout_account
+}
+
+struct RussianPayoutAccount {
+    1: required domain.RussianBankAccount bank_account
     2: required string inn
     3: required string purpose
     4: required domain.LegalAgreement legal_agreement
+}
+
+struct InternationalPayoutAccount {
+   1: required domain.InternationalBankAccount bank_account
+   2: required domain.InternationalLegalEntity legal_entity
+   3: required string purpose
+   4: required domain.LegalAgreement legal_agreement
 }
 
 /**

@@ -45,6 +45,7 @@
     'PartyID'/0,
     'ShopID'/0,
     'ContractID'/0,
+    'PayoutToolID'/0,
     'ContractTemplateRef'/0,
     'PaymentInstitutionRef'/0,
     'PartyChangeset'/0,
@@ -143,6 +144,7 @@
     'RecurrentPaymentToolHasAcquired'/0,
     'RecurrentPaymentToolHasAbandoned'/0,
     'RecurrentPaymentToolHasFailed'/0,
+    'Varset'/0,
     'PartyParams'/0,
     'PayoutToolParams'/0,
     'ShopParams'/0,
@@ -160,6 +162,7 @@
     'ShopModificationUnit'/0,
     'ShopModification'/0,
     'ShopContractModification'/0,
+    'ScheduleModification'/0,
     'ProxyModification'/0,
     'Claim'/0,
     'ClaimStatus'/0,
@@ -173,6 +176,7 @@
     'ShopEffectUnit'/0,
     'ShopEffect'/0,
     'ShopContractChanged'/0,
+    'ScheduleChanged'/0,
     'ShopProxyChanged'/0,
     'AccountState'/0,
     'PartyChange'/0,
@@ -184,6 +188,7 @@
     'PartyMetaSet'/0,
     'PartyRevisionChanged'/0,
     'PartyRevisionParam'/0,
+    'PayoutParams'/0,
     'InvalidChangesetReason'/0,
     'ContractStatusInvalid'/0,
     'ShopStatusInvalid'/0,
@@ -256,6 +261,7 @@
     'PartyID' |
     'ShopID' |
     'ContractID' |
+    'PayoutToolID' |
     'ContractTemplateRef' |
     'PaymentInstitutionRef' |
     'PartyChangeset' |
@@ -276,6 +282,7 @@
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
 -type 'ContractID'() :: dmsl_domain_thrift:'ContractID'().
+-type 'PayoutToolID'() :: dmsl_domain_thrift:'PayoutToolID'().
 -type 'ContractTemplateRef'() :: dmsl_domain_thrift:'ContractTemplateRef'().
 -type 'PaymentInstitutionRef'() :: dmsl_domain_thrift:'PaymentInstitutionRef'().
 -type 'PartyChangeset'() :: ['PartyModification'()].
@@ -382,6 +389,7 @@
     'RecurrentPaymentToolHasAcquired' |
     'RecurrentPaymentToolHasAbandoned' |
     'RecurrentPaymentToolHasFailed' |
+    'Varset' |
     'PartyParams' |
     'PayoutToolParams' |
     'ShopParams' |
@@ -399,6 +407,7 @@
     'ShopModificationUnit' |
     'ShopModification' |
     'ShopContractModification' |
+    'ScheduleModification' |
     'ProxyModification' |
     'Claim' |
     'ClaimStatus' |
@@ -412,6 +421,7 @@
     'ShopEffectUnit' |
     'ShopEffect' |
     'ShopContractChanged' |
+    'ScheduleChanged' |
     'ShopProxyChanged' |
     'AccountState' |
     'PartyChange' |
@@ -423,6 +433,7 @@
     'PartyMetaSet' |
     'PartyRevisionChanged' |
     'PartyRevisionParam' |
+    'PayoutParams' |
     'InvalidChangesetReason' |
     'ContractStatusInvalid' |
     'ShopStatusInvalid' |
@@ -808,6 +819,9 @@
 %% struct 'RecurrentPaymentToolHasFailed'
 -type 'RecurrentPaymentToolHasFailed'() :: #'payproc_RecurrentPaymentToolHasFailed'{}.
 
+%% struct 'Varset'
+-type 'Varset'() :: #'payproc_Varset'{}.
+
 %% struct 'PartyParams'
 -type 'PartyParams'() :: #'payproc_PartyParams'{}.
 
@@ -869,12 +883,16 @@
     {'details_modification', dmsl_domain_thrift:'ShopDetails'()} |
     {'contract_modification', 'ShopContractModification'()} |
     {'payout_tool_modification', dmsl_domain_thrift:'PayoutToolID'()} |
-    {'proxy_modification', 'ProxyModification'()} |
     {'location_modification', dmsl_domain_thrift:'ShopLocation'()} |
-    {'shop_account_creation', 'ShopAccountParams'()}.
+    {'shop_account_creation', 'ShopAccountParams'()} |
+    {'payout_schedule_modification', 'ScheduleModification'()} |
+    {'proxy_modification', 'ProxyModification'()}.
 
 %% struct 'ShopContractModification'
 -type 'ShopContractModification'() :: #'payproc_ShopContractModification'{}.
+
+%% struct 'ScheduleModification'
+-type 'ScheduleModification'() :: #'payproc_ScheduleModification'{}.
 
 %% struct 'ProxyModification'
 -type 'ProxyModification'() :: #'payproc_ProxyModification'{}.
@@ -914,8 +932,8 @@
     {'created', dmsl_domain_thrift:'Contract'()} |
     {'status_changed', dmsl_domain_thrift:'ContractStatus'()} |
     {'adjustment_created', dmsl_domain_thrift:'ContractAdjustment'()} |
-    {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()} |
-    {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()}.
+    {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()} |
+    {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()}.
 
 %% struct 'ShopEffectUnit'
 -type 'ShopEffectUnit'() :: #'payproc_ShopEffectUnit'{}.
@@ -927,12 +945,16 @@
     {'details_changed', dmsl_domain_thrift:'ShopDetails'()} |
     {'contract_changed', 'ShopContractChanged'()} |
     {'payout_tool_changed', dmsl_domain_thrift:'PayoutToolID'()} |
-    {'proxy_changed', 'ShopProxyChanged'()} |
     {'location_changed', dmsl_domain_thrift:'ShopLocation'()} |
-    {'account_created', dmsl_domain_thrift:'ShopAccount'()}.
+    {'account_created', dmsl_domain_thrift:'ShopAccount'()} |
+    {'payout_schedule_changed', 'ScheduleChanged'()} |
+    {'proxy_changed', 'ShopProxyChanged'()}.
 
 %% struct 'ShopContractChanged'
 -type 'ShopContractChanged'() :: #'payproc_ShopContractChanged'{}.
+
+%% struct 'ScheduleChanged'
+-type 'ScheduleChanged'() :: #'payproc_ScheduleChanged'{}.
 
 %% struct 'ShopProxyChanged'
 -type 'ShopProxyChanged'() :: #'payproc_ShopProxyChanged'{}.
@@ -979,6 +1001,9 @@
 -type 'PartyRevisionParam'() ::
     {'timestamp', dmsl_base_thrift:'Timestamp'()} |
     {'revision', dmsl_domain_thrift:'PartyRevision'()}.
+
+%% struct 'PayoutParams'
+-type 'PayoutParams'() :: #'payproc_PayoutParams'{}.
 
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
@@ -1175,7 +1200,8 @@
     'RefundPayment' |
     'GetPaymentRefund' |
     'Fulfill' |
-    'Rescind'.
+    'Rescind' |
+    'Repair'.
 
 -export_type(['Invoicing_service_functions'/0]).
 
@@ -1242,7 +1268,8 @@
     'GetEvents' |
     'GetShopAccount' |
     'GetAccountState' |
-    'ComputePaymentInstitutionTerms'.
+    'ComputePaymentInstitutionTerms' |
+    'ComputePayoutCashFlow'.
 
 -export_type(['PartyManagement_service_functions'/0]).
 
@@ -1296,6 +1323,7 @@ typedefs() ->
         'PartyID',
         'ShopID',
         'ContractID',
+        'PayoutToolID',
         'ContractTemplateRef',
         'PaymentInstitutionRef',
         'PartyChangeset',
@@ -1403,6 +1431,7 @@ structs() ->
         'RecurrentPaymentToolHasAcquired',
         'RecurrentPaymentToolHasAbandoned',
         'RecurrentPaymentToolHasFailed',
+        'Varset',
         'PartyParams',
         'PayoutToolParams',
         'ShopParams',
@@ -1420,6 +1449,7 @@ structs() ->
         'ShopModificationUnit',
         'ShopModification',
         'ShopContractModification',
+        'ScheduleModification',
         'ProxyModification',
         'Claim',
         'ClaimStatus',
@@ -1433,6 +1463,7 @@ structs() ->
         'ShopEffectUnit',
         'ShopEffect',
         'ShopContractChanged',
+        'ScheduleChanged',
         'ShopProxyChanged',
         'AccountState',
         'PartyChange',
@@ -1444,6 +1475,7 @@ structs() ->
         'PartyMetaSet',
         'PartyRevisionChanged',
         'PartyRevisionParam',
+        'PayoutParams',
         'InvalidChangesetReason',
         'ContractStatusInvalid',
         'ShopStatusInvalid',
@@ -1507,6 +1539,9 @@ typedef_info('ShopID') ->
     string;
 
 typedef_info('ContractID') ->
+    string;
+
+typedef_info('PayoutToolID') ->
     string;
 
 typedef_info('ContractTemplateRef') ->
@@ -2067,6 +2102,15 @@ struct_info('RecurrentPaymentToolHasFailed') ->
     {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
 ]};
 
+struct_info('Varset') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined}
+]};
+
 struct_info('PartyParams') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined}
@@ -2165,15 +2209,21 @@ struct_info('ShopModification') ->
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_modification', undefined},
     {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopContractModification'}}, 'contract_modification', undefined},
     {9, optional, string, 'payout_tool_modification', undefined},
-    {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ProxyModification'}}, 'proxy_modification', undefined},
     {11, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined}
+    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
+    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined},
+    {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ProxyModification'}}, 'proxy_modification', undefined}
 ]};
 
 struct_info('ShopContractModification') ->
     {struct, struct, [
     {1, required, string, 'contract_id', undefined},
     {2, required, string, 'payout_tool_id', undefined}
+]};
+
+struct_info('ScheduleModification') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ProxyModification') ->
@@ -2234,8 +2284,8 @@ struct_info('ContractEffect') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'created', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined}
 ]};
 
 struct_info('ShopEffectUnit') ->
@@ -2251,15 +2301,21 @@ struct_info('ShopEffect') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_changed', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopContractChanged'}}, 'contract_changed', undefined},
     {5, optional, string, 'payout_tool_changed', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopProxyChanged'}}, 'proxy_changed', undefined},
     {7, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined}
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
+    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleChanged'}}, 'payout_schedule_changed', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopProxyChanged'}}, 'proxy_changed', undefined}
 ]};
 
 struct_info('ShopContractChanged') ->
     {struct, struct, [
     {1, required, string, 'contract_id', undefined},
     {2, required, string, 'payout_tool_id', undefined}
+]};
+
+struct_info('ScheduleChanged') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ShopProxyChanged') ->
@@ -2341,6 +2397,13 @@ struct_info('PartyRevisionParam') ->
     {struct, union, [
     {1, optional, string, 'timestamp', undefined},
     {2, optional, i64, 'revision', undefined}
+]};
+
+struct_info('PayoutParams') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+    {3, required, string, 'timestamp', undefined}
 ]};
 
 struct_info('InvalidChangesetReason') ->
@@ -2758,6 +2821,9 @@ record_name('InternalUser') ->
     record_name('RecurrentPaymentToolHasFailed') ->
     'payproc_RecurrentPaymentToolHasFailed';
 
+    record_name('Varset') ->
+    'payproc_Varset';
+
     record_name('PartyParams') ->
     'payproc_PartyParams';
 
@@ -2794,6 +2860,9 @@ record_name('InternalUser') ->
     record_name('ShopContractModification') ->
     'payproc_ShopContractModification';
 
+    record_name('ScheduleModification') ->
+    'payproc_ScheduleModification';
+
     record_name('ProxyModification') ->
     'payproc_ProxyModification';
 
@@ -2821,6 +2890,9 @@ record_name('InternalUser') ->
     record_name('ShopContractChanged') ->
     'payproc_ShopContractChanged';
 
+    record_name('ScheduleChanged') ->
+    'payproc_ScheduleChanged';
+
     record_name('ShopProxyChanged') ->
     'payproc_ShopProxyChanged';
 
@@ -2847,6 +2919,9 @@ record_name('InternalUser') ->
 
     record_name('PartyRevisionChanged') ->
     'payproc_PartyRevisionChanged';
+
+    record_name('PayoutParams') ->
+    'payproc_PayoutParams';
 
     record_name('ContractStatusInvalid') ->
     'payproc_ContractStatusInvalid';
@@ -3014,7 +3089,8 @@ functions('Invoicing') ->
         'RefundPayment',
         'GetPaymentRefund',
         'Fulfill',
-        'Rescind'
+        'Rescind',
+        'Repair'
     ];
 
 functions('InvoiceTemplating') ->
@@ -3081,7 +3157,8 @@ functions('PartyManagement') ->
         'GetEvents',
         'GetShopAccount',
         'GetAccountState',
-        'ComputePaymentInstitutionTerms'
+        'ComputePaymentInstitutionTerms',
+        'ComputePayoutCashFlow'
     ];
 
 functions('EventSink') ->
@@ -3378,6 +3455,20 @@ function_info('Invoicing', 'Rescind', reply_type) ->
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex7', undefined}
+    ]};
+function_info('Invoicing', 'Repair', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined}
+]};
+function_info('Invoicing', 'Repair', reply_type) ->
+        {struct, struct, []};
+    function_info('Invoicing', 'Repair', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 
 function_info('InvoiceTemplating', 'Create', params_type) ->
@@ -4049,7 +4140,8 @@ function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) 
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined}
+    {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
+    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
 ]};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -4058,6 +4150,22 @@ function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) -
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PaymentInstitutionNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePayoutCashFlow', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutParams'}}, 'params', undefined}
+]};
+function_info('PartyManagement', 'ComputePayoutCashFlow', reply_type) ->
+        {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
+    function_info('PartyManagement', 'ComputePayoutCashFlow', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex5', undefined}
     ]};
 
 function_info('EventSink', 'GetEvents', params_type) ->

@@ -16,10 +16,17 @@
 %% struct 'OperationTimeout'
 -record('domain_OperationTimeout', {}).
 
-%% struct 'ExternalFailure'
--record('domain_ExternalFailure', {
-    'code' :: binary(),
-    'description' :: binary() | undefined
+%% struct 'Failure'
+-record('domain_Failure', {
+    'code' :: dmsl_domain_thrift:'FailureCode'(),
+    'reason' :: dmsl_domain_thrift:'FailureReason'() | undefined,
+    'sub' :: dmsl_domain_thrift:'SubFailure'() | undefined
+}).
+
+%% struct 'SubFailure'
+-record('domain_SubFailure', {
+    'code' :: dmsl_domain_thrift:'FailureCode'(),
+    'sub' :: dmsl_domain_thrift:'SubFailure'() | undefined
 }).
 
 %% struct 'Cash'
@@ -277,7 +284,7 @@
     'account' :: dmsl_domain_thrift:'ShopAccount'() | undefined,
     'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined,
-    'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
+    'payout_schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
 }).
 
 %% struct 'ShopAccount'
@@ -322,7 +329,8 @@
     'legal_name' :: binary(),
     'trading_name' :: binary() | undefined,
     'registered_address' :: binary(),
-    'actual_address' :: binary() | undefined
+    'actual_address' :: binary() | undefined,
+    'registered_number' :: binary() | undefined
 }).
 
 %% struct 'RussianBankAccount'
@@ -339,7 +347,8 @@
     'bank_name' :: binary(),
     'bank_address' :: binary(),
     'iban' :: binary(),
-    'bic' :: binary()
+    'bic' :: binary(),
+    'local_bank_code' :: binary() | undefined
 }).
 
 %% struct 'PayoutTool'
@@ -433,7 +442,8 @@
 %% struct 'TermSet'
 -record('domain_TermSet', {
     'payments' :: dmsl_domain_thrift:'PaymentsServiceTerms'() | undefined,
-    'recurrent_paytools' :: dmsl_domain_thrift:'RecurrentPaytoolsServiceTerms'() | undefined
+    'recurrent_paytools' :: dmsl_domain_thrift:'RecurrentPaytoolsServiceTerms'() | undefined,
+    'payouts' :: dmsl_domain_thrift:'PayoutsServiceTerms'() | undefined
 }).
 
 %% struct 'TimedTermSet'
@@ -453,11 +463,6 @@
 %% struct 'TermSetHierarchyRef'
 -record('domain_TermSetHierarchyRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
-}).
-
-%% struct 'RecurrentPaytoolsServiceTerms'
--record('domain_RecurrentPaytoolsServiceTerms', {
-    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined
 }).
 
 %% struct 'PaymentsServiceTerms'
@@ -490,6 +495,41 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
 }).
 
+%% struct 'RecurrentPaytoolsServiceTerms'
+-record('domain_RecurrentPaytoolsServiceTerms', {
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined
+}).
+
+%% struct 'PayoutsServiceTerms'
+-record('domain_PayoutsServiceTerms', {
+    'payout_schedules' :: dmsl_domain_thrift:'PayoutScheduleSelector'() | undefined,
+    'payout_methods' :: dmsl_domain_thrift:'PayoutMethodSelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+}).
+
+%% struct 'PayoutCompilationPolicy'
+-record('domain_PayoutCompilationPolicy', {
+    'assets_freeze_for' :: dmsl_base_thrift:'TimeSpan'()
+}).
+
+%% struct 'PayoutMethodRef'
+-record('domain_PayoutMethodRef', {
+    'id' :: atom()
+}).
+
+%% struct 'PayoutMethodDefinition'
+-record('domain_PayoutMethodDefinition', {
+    'name' :: binary(),
+    'description' :: binary()
+}).
+
+%% struct 'PayoutMethodDecision'
+-record('domain_PayoutMethodDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'PayoutMethodSelector'()
+}).
+
 %% struct 'CurrencyRef'
 -record('domain_CurrencyRef', {
     'symbolic_code' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
@@ -513,6 +553,46 @@
 -record('domain_CategoryDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'CategorySelector'()
+}).
+
+%% struct 'PayoutScheduleRef'
+-record('domain_PayoutScheduleRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'PayoutSchedule'
+-record('domain_PayoutSchedule', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'schedule' :: dmsl_base_thrift:'Schedule'(),
+    'policy' :: dmsl_domain_thrift:'PayoutCompilationPolicy'()
+}).
+
+%% struct 'PayoutScheduleDecision'
+-record('domain_PayoutScheduleDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'PayoutScheduleSelector'()
+}).
+
+%% struct 'CalendarRef'
+-record('domain_CalendarRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'Calendar'
+-record('domain_Calendar', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'timezone' :: dmsl_base_thrift:'Timezone'(),
+    'holidays' :: dmsl_domain_thrift:'CalendarHolidaySet'()
+}).
+
+%% struct 'CalendarHoliday'
+-record('domain_CalendarHoliday', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'day' :: dmsl_base_thrift:'DayOfMonth'(),
+    'month' :: atom()
 }).
 
 %% struct 'CashRange'
@@ -843,6 +923,7 @@
 -record('domain_PaymentInstitution', {
     'name' :: binary(),
     'description' :: binary() | undefined,
+    'calendar' :: dmsl_domain_thrift:'CalendarRef'() | undefined,
     'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'(),
     'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'(),
     'providers' :: dmsl_domain_thrift:'ProviderSelector'(),
@@ -961,10 +1042,28 @@
     'data' :: dmsl_domain_thrift:'Currency'()
 }).
 
+%% struct 'PayoutScheduleObject'
+-record('domain_PayoutScheduleObject', {
+    'ref' :: dmsl_domain_thrift:'PayoutScheduleRef'(),
+    'data' :: dmsl_domain_thrift:'PayoutSchedule'()
+}).
+
+%% struct 'CalendarObject'
+-record('domain_CalendarObject', {
+    'ref' :: dmsl_domain_thrift:'CalendarRef'(),
+    'data' :: dmsl_domain_thrift:'Calendar'()
+}).
+
 %% struct 'PaymentMethodObject'
 -record('domain_PaymentMethodObject', {
     'ref' :: dmsl_domain_thrift:'PaymentMethodRef'(),
     'data' :: dmsl_domain_thrift:'PaymentMethodDefinition'()
+}).
+
+%% struct 'PayoutMethodObject'
+-record('domain_PayoutMethodObject', {
+    'ref' :: dmsl_domain_thrift:'PayoutMethodRef'(),
+    'data' :: dmsl_domain_thrift:'PayoutMethodDefinition'()
 }).
 
 %% struct 'BankCardBINRangeObject'
