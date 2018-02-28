@@ -12,6 +12,14 @@
     'source_event' :: dmsl_event_stock_thrift:'SourceEvent'()
 }).
 
+%% struct 'RawStockEvent'
+-record('event_stock_RawStockEvent', {
+    'id' :: dmsl_event_stock_thrift:'EventID'(),
+    'time' :: dmsl_event_stock_thrift:'Timestamp'(),
+    'version' :: binary(),
+    'raw_event' :: dmsl_base_thrift:'Content'()
+}).
+
 %% struct 'EventIDRange'
 -record('event_stock_EventIDRange', {
     'from_id' :: dmsl_event_stock_thrift:'EventIDBound'(),

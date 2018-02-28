@@ -6,6 +6,7 @@ namespace java com.rbkmoney.damsel.event_stock
 namespace erlang event_stock
 
 typedef list<StockEvent> StockEvents
+typedef list<RawStockEvent> RawStockEvents
 typedef base.EventID EventID
 typedef base.Timestamp Timestamp
 typedef base.InvalidRequest InvalidRequest
@@ -24,6 +25,13 @@ union SourceEvent {
 */
 struct StockEvent {
     1: required SourceEvent source_event
+}
+
+struct RawStockEvent {
+    1: required EventID id
+    2: required Timestamp time
+    3: required string version
+    4: required base.Content raw_event
 }
 
 /**
@@ -121,4 +129,15 @@ service EventRepository {
     StockEvent GetFirstEvent () throws (1: NoStockEvent ex1)
 }
 
+/**
+* Интерфейс BM для клиентов. (Версия, работающая с geck msgpack cтруктурами)
+*/
+service RawEventRepository {
+
+    RawStockEvents GetEvents(1: EventConstraint constraint) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+
+    RawStockEvent GetLastEvent () throws (1: NoStockEvent ex1)
+
+    RawStockEvent GetFirstEvent () throws (1: NoStockEvent ex1)
+}
 

@@ -33,6 +33,7 @@
 
 -export_type([
     'StockEvents'/0,
+    'RawStockEvents'/0,
     'EventID'/0,
     'Timestamp'/0,
     'InvalidRequest'/0
@@ -40,6 +41,7 @@
 -export_type([
     'SourceEvent'/0,
     'StockEvent'/0,
+    'RawStockEvent'/0,
     'EventIDBound'/0,
     'EventIDRange'/0,
     'EventTimeBound'/0,
@@ -59,11 +61,13 @@
 %%
 -type typedef_name() ::
     'StockEvents' |
+    'RawStockEvents' |
     'EventID' |
     'Timestamp' |
     'InvalidRequest'.
 
 -type 'StockEvents'() :: ['StockEvent'()].
+-type 'RawStockEvents'() :: ['RawStockEvent'()].
 -type 'EventID'() :: dmsl_base_thrift:'EventID'().
 -type 'Timestamp'() :: dmsl_base_thrift:'Timestamp'().
 -type 'InvalidRequest'() :: dmsl_base_thrift:'InvalidRequest'().
@@ -79,6 +83,7 @@
 -type struct_name() ::
     'SourceEvent' |
     'StockEvent' |
+    'RawStockEvent' |
     'EventIDBound' |
     'EventIDRange' |
     'EventTimeBound' |
@@ -97,6 +102,9 @@
 
 %% struct 'StockEvent'
 -type 'StockEvent'() :: #'event_stock_StockEvent'{}.
+
+%% struct 'RawStockEvent'
+-type 'RawStockEvent'() :: #'event_stock_RawStockEvent'{}.
 
 %% union 'EventIDBound'
 -type 'EventIDBound'() ::
@@ -132,10 +140,12 @@
 %% services and functions
 %%
 -type service_name() ::
-    'EventRepository'.
+    'EventRepository' |
+    'RawEventRepository'.
 
 -type function_name() ::
-    'EventRepository_service_functions'().
+    'EventRepository_service_functions'() |
+    'RawEventRepository_service_functions'().
 
 -type 'EventRepository_service_functions'() ::
     'GetEvents' |
@@ -143,6 +153,13 @@
     'GetFirstEvent'.
 
 -export_type(['EventRepository_service_functions'/0]).
+
+-type 'RawEventRepository_service_functions'() ::
+    'GetEvents' |
+    'GetLastEvent' |
+    'GetFirstEvent'.
+
+-export_type(['RawEventRepository_service_functions'/0]).
 
 
 -type struct_flavour() :: struct | exception | union.
@@ -176,6 +193,7 @@
 typedefs() ->
     [
         'StockEvents',
+        'RawStockEvents',
         'EventID',
         'Timestamp',
         'InvalidRequest'
@@ -192,6 +210,7 @@ structs() ->
     [
         'SourceEvent',
         'StockEvent',
+        'RawStockEvent',
         'EventIDBound',
         'EventIDRange',
         'EventTimeBound',
@@ -204,7 +223,8 @@ structs() ->
 
 services() ->
     [
-        'EventRepository'
+        'EventRepository',
+        'RawEventRepository'
     ].
 
 -spec namespace() -> namespace().
@@ -216,6 +236,9 @@ namespace() ->
 
 typedef_info('StockEvents') ->
     {list, {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}}};
+
+typedef_info('RawStockEvents') ->
+    {list, {struct, struct, {dmsl_event_stock_thrift, 'RawStockEvent'}}};
 
 typedef_info('EventID') ->
     i64;
@@ -243,6 +266,14 @@ struct_info('SourceEvent') ->
 struct_info('StockEvent') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_event_stock_thrift, 'SourceEvent'}}, 'source_event', undefined}
+]};
+
+struct_info('RawStockEvent') ->
+    {struct, struct, [
+    {1, required, i64, 'id', undefined},
+    {2, required, string, 'time', undefined},
+    {3, required, string, 'version', undefined},
+    {4, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'raw_event', undefined}
 ]};
 
 struct_info('EventIDBound') ->
@@ -296,7 +327,10 @@ struct_info(_) -> erlang:error(badarg).
 record_name('StockEvent') ->
     'event_stock_StockEvent';
 
-record_name('EventIDRange') ->
+record_name('RawStockEvent') ->
+    'event_stock_RawStockEvent';
+
+    record_name('EventIDRange') ->
     'event_stock_EventIDRange';
 
     record_name('EventTimeRange') ->
@@ -316,6 +350,13 @@ record_name('EventIDRange') ->
     -spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('EventRepository') ->
+    [
+        'GetEvents',
+        'GetLastEvent',
+        'GetFirstEvent'
+    ];
+
+functions('RawEventRepository') ->
     [
         'GetEvents',
         'GetLastEvent',
@@ -351,6 +392,34 @@ function_info('EventRepository', 'GetFirstEvent', params_type) ->
 function_info('EventRepository', 'GetFirstEvent', reply_type) ->
         {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}};
     function_info('EventRepository', 'GetFirstEvent', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_event_stock_thrift, 'NoStockEvent'}}, 'ex1', undefined}
+    ]};
+
+function_info('RawEventRepository', 'GetEvents', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_event_stock_thrift, 'EventConstraint'}}, 'constraint', undefined}
+]};
+function_info('RawEventRepository', 'GetEvents', reply_type) ->
+        {list, {struct, struct, {dmsl_event_stock_thrift, 'RawStockEvent'}}};
+    function_info('RawEventRepository', 'GetEvents', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_event_stock_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+    ]};
+function_info('RawEventRepository', 'GetLastEvent', params_type) ->
+    {struct, struct, []};
+function_info('RawEventRepository', 'GetLastEvent', reply_type) ->
+        {struct, struct, {dmsl_event_stock_thrift, 'RawStockEvent'}};
+    function_info('RawEventRepository', 'GetLastEvent', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_event_stock_thrift, 'NoStockEvent'}}, 'ex1', undefined}
+    ]};
+function_info('RawEventRepository', 'GetFirstEvent', params_type) ->
+    {struct, struct, []};
+function_info('RawEventRepository', 'GetFirstEvent', reply_type) ->
+        {struct, struct, {dmsl_event_stock_thrift, 'RawStockEvent'}};
+    function_info('RawEventRepository', 'GetFirstEvent', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_event_stock_thrift, 'NoStockEvent'}}, 'ex1', undefined}
     ]};
