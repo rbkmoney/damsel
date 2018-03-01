@@ -6,7 +6,6 @@ namespace java com.rbkmoney.damsel.event_stock
 namespace erlang event_stock
 
 typedef list<StockEvent> StockEvents
-typedef list<RawStockEvent> RawStockEvents
 typedef base.EventID EventID
 typedef base.Timestamp Timestamp
 typedef base.InvalidRequest InvalidRequest
@@ -17,21 +16,28 @@ typedef base.InvalidRequest InvalidRequest
 union SourceEvent {
     1: payment_processing.Event processing_event
     2: payout_processing.Event payout_event
+    100: RawEvent raw_event
 }
 
 /**
 * Событие, которое BM отдает клиентам.
 * source_event - Исходное событие, к которому применяeтся фильтр.
+* id - id события, соответствующее идентификатору source_event
+* time - время создания события, соответствующее времени создания в source_event
+* version - версия thrift протокола, которой соответствуют передаваемые данные
 */
 struct StockEvent {
     1: required SourceEvent source_event
+    2: optional EventID id
+    3: optional Timestamp time
+    4: optional string version
 }
 
-struct RawStockEvent {
-    1: required EventID id
-    2: required Timestamp time
-    3: required string version
-    4: required base.Content raw_event
+/**
+* Событие в виде абстрактной структуры данных geck, по умолчанию application/msgpack
+*/
+struct RawEvent {
+    4: required base.Content content
 }
 
 /**
@@ -127,17 +133,5 @@ service EventRepository {
      * Возвращает наиболее раннее событие, имеющееся в хранилище.
      */
     StockEvent GetFirstEvent () throws (1: NoStockEvent ex1)
-}
-
-/**
-* Интерфейс BM для клиентов. (Версия, работающая с geck msgpack cтруктурами)
-*/
-service RawEventRepository {
-
-    RawStockEvents GetEvents(1: EventConstraint constraint) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
-
-    RawStockEvent GetLastEvent () throws (1: NoStockEvent ex1)
-
-    RawStockEvent GetFirstEvent () throws (1: NoStockEvent ex1)
 }
 
