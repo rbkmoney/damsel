@@ -1440,6 +1440,11 @@ union InvalidChangesetReason {
     8: ShopID shop_already_exists
     9: ShopStatusInvalid shop_status_invalid
     10: ContractTermsViolated contract_terms_violated
+    11: ContractTemplateInvalid contract_template_invalid
+    12: ContractPaymentInstitutionInvalid contract_payment_institution_invalid
+    13: ShopID shop_without_account
+    14: ShopPayoutToolInvalid shop_payout_tool_invalid
+    15: ShopPayoutScheduleInvalid shop_payout_schedule_invalid
 }
 
 struct ContractStatusInvalid {
@@ -1456,6 +1461,26 @@ struct ContractTermsViolated {
     1: required ShopID shop_id
     2: required ContractID contract_id
     3: required domain.TermSet terms
+}
+
+struct ContractTemplateInvalid {
+    1: required ContractID contract_id
+    2: optional ContractTemplateRef contract_template
+}
+
+struct ContractPaymentInstitutionInvalid {
+    1: required ContractID contract_id
+    2: optional PaymentInstitutionRef payment_institution
+}
+
+struct ShopPayoutToolInvalid {
+    1: required ShopID shop_id
+    2: optional domain.PayoutToolID payout_tool_id
+}
+
+struct ShopPayoutScheduleInvalid {
+    1: required ShopID shop_id
+    2: optional domain.PayoutScheduleRef schedule
 }
 
 exception AccountNotFound {}
