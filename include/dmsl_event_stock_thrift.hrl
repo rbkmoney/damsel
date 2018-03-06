@@ -9,15 +9,15 @@
 
 %% struct 'StockEvent'
 -record('event_stock_StockEvent', {
-    'source_event' :: dmsl_event_stock_thrift:'SourceEvent'()
+    'source_event' :: dmsl_event_stock_thrift:'SourceEvent'(),
+    'id' :: dmsl_event_stock_thrift:'EventID'() | undefined,
+    'time' :: dmsl_event_stock_thrift:'Timestamp'() | undefined,
+    'version' :: binary() | undefined
 }).
 
-%% struct 'RawStockEvent'
--record('event_stock_RawStockEvent', {
-    'id' :: dmsl_event_stock_thrift:'EventID'(),
-    'time' :: dmsl_event_stock_thrift:'Timestamp'(),
-    'version' :: binary(),
-    'raw_event' :: dmsl_base_thrift:'Content'()
+%% struct 'RawEvent'
+-record('event_stock_RawEvent', {
+    'content' :: dmsl_base_thrift:'Content'()
 }).
 
 %% struct 'EventIDRange'
