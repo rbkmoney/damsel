@@ -79,11 +79,22 @@ struct InvoiceFulfilled {}
 union InvoicePaymentEventType {
     1: InvoicePaymentCreated created
     2: InvoicePaymentStatusChanged status_changed
+    3: InvoicePaymentRefundChange invoice_payment_refund_change
 }
 
 struct InvoicePaymentCreated {}
 struct InvoicePaymentStatusChanged {
     1: optional InvoicePaymentStatus value
+}
+
+struct InvoicePaymentRefundChange {
+    1: InvoicePaymentRefundCreated invoice_payment_refund_created
+    2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
+}
+
+struct InvoicePaymentRefundCreated {}
+struct InvoicePaymentRefundStatusChanged {
+    1: required InvoicePaymentRefundStatus value
 }
 
 union InvoicePaymentStatus {
@@ -101,6 +112,16 @@ struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    {}
 struct InvoicePaymentRefunded  {}
+
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
+}
+
+struct InvoicePaymentRefundPending {}
+struct InvoicePaymentRefundSucceeded {}
+struct InvoicePaymentRefundFailed {}
 
 struct CustomerEventFilter {
     1: required set<CustomerEventType> types
