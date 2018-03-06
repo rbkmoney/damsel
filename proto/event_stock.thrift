@@ -16,14 +16,28 @@ typedef base.InvalidRequest InvalidRequest
 union SourceEvent {
     1: payment_processing.Event processing_event
     2: payout_processing.Event payout_event
+    100: RawEvent raw_event
 }
 
 /**
 * Событие, которое BM отдает клиентам.
 * source_event - Исходное событие, к которому применяeтся фильтр.
+* id - id события, соответствующее идентификатору source_event
+* time - время создания события, соответствующее времени создания в source_event
+* version - версия thrift протокола, которой соответствуют передаваемые данные
 */
 struct StockEvent {
     1: required SourceEvent source_event
+    2: optional EventID id
+    3: optional Timestamp time
+    4: optional string version
+}
+
+/**
+* Событие в виде абстрактной структуры данных geck, по умолчанию application/msgpack
+*/
+struct RawEvent {
+    4: required base.Content content
 }
 
 /**
@@ -120,5 +134,4 @@ service EventRepository {
      */
     StockEvent GetFirstEvent () throws (1: NoStockEvent ex1)
 }
-
 
