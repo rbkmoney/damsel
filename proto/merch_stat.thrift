@@ -123,11 +123,20 @@ enum DigitalWalletProvider {
     qiwi
 }
 
-struct BankAccount {
+struct RussianBankAccount {
     1: required string account
     2: required string bank_name
     3: required string bank_post_account
     4: required string bank_bik
+}
+
+struct InternationalBankAccount {
+    1: required string account_holder
+    2: required string bank_name
+    3: required string bank_address
+    4: required string iban
+    5: required string bic
+    6: optional string local_bank_code
 }
 
 /**
@@ -194,10 +203,20 @@ struct PayoutCard {
     1: required BankCard card
 }
 
-struct PayoutAccount {
-    1: required BankAccount account
-    4: required string inn
-    5: required string purpose
+union PayoutAccount {
+    1: RussianPayoutAccount       russian_payout_account
+    2: InternationalPayoutAccount international_payout_account
+}
+
+struct RussianPayoutAccount {
+    1: required RussianBankAccount bank_account
+    2: required string inn
+    3: required string purpose
+}
+
+struct InternationalPayoutAccount {
+   1: required InternationalBankAccount bank_account
+   2: required string purpose
 }
 
 union PayoutStatus {
