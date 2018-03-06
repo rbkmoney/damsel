@@ -197,6 +197,7 @@ struct InvoicePayment {
 struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefundID id
     2: required base.Timestamp                created_at
+    4: required Cash                          cash
     3: optional domain.TransactionInfo        trx
 }
 
