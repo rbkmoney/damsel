@@ -177,7 +177,8 @@
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'from_time' :: dmsl_base_thrift:'Timestamp'(),
     'to_time' :: dmsl_base_thrift:'Timestamp'(),
-    'created_at' :: dmsl_base_thrift:'Timestamp'()
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'cash_flow_descriptions' :: dmsl_payout_processing_thrift:'CashFlowDescriptions'() | undefined
 }).
 
 %% exception 'NoLastEvent'

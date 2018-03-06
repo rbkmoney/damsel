@@ -690,7 +690,8 @@ struct_info('PayoutInfo') ->
     {6, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
     {7, required, string, 'from_time', undefined},
     {8, required, string, 'to_time', undefined},
-    {9, required, string, 'created_at', undefined}
+    {9, required, string, 'created_at', undefined},
+    {10, optional, {list, {struct, struct, {dmsl_payout_processing_thrift, 'CashFlowDescription'}}}, 'cash_flow_descriptions', undefined}
 ]};
 
 struct_info('NoLastEvent') ->
