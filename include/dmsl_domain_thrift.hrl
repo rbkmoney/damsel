@@ -218,6 +218,7 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentRefundStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'reason' :: binary() | undefined
 }).
 
@@ -484,7 +485,14 @@
 %% struct 'PaymentRefundsServiceTerms'
 -record('domain_PaymentRefundsServiceTerms', {
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
-    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'eligibility_time' :: dmsl_domain_thrift:'TimeSpanSelector'() | undefined,
+    'partial_refunds' :: dmsl_domain_thrift:'PartialRefundsServiceTerms'() | undefined
+}).
+
+%% struct 'PartialRefundsServiceTerms'
+-record('domain_PartialRefundsServiceTerms', {
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
 }).
 
 %% struct 'RecurrentPaytoolsServiceTerms'
@@ -665,6 +673,12 @@
     'then_' :: dmsl_domain_thrift:'HoldLifetimeSelector'()
 }).
 
+%% struct 'TimeSpanDecision'
+-record('domain_TimeSpanDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'TimeSpanSelector'()
+}).
+
 %% struct 'CashFlowPosting'
 -record('domain_CashFlowPosting', {
     'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
@@ -740,7 +754,13 @@
 
 %% struct 'PaymentRefundsProvisionTerms'
 -record('domain_PaymentRefundsProvisionTerms', {
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
+    'partial_refunds' :: dmsl_domain_thrift:'PartialRefundsProvisionTerms'() | undefined
+}).
+
+%% struct 'PartialRefundsProvisionTerms'
+-record('domain_PartialRefundsProvisionTerms', {
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
 %% struct 'RecurrentPaytoolsProvisionTerms'

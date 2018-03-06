@@ -182,6 +182,7 @@
     'PaymentsServiceTerms'/0,
     'PaymentHoldsServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
+    'PartialRefundsServiceTerms'/0,
     'RecurrentPaytoolsServiceTerms'/0,
     'PayoutsServiceTerms'/0,
     'PayoutCompilationPolicy'/0,
@@ -221,6 +222,8 @@
     'HoldLifetime'/0,
     'HoldLifetimeSelector'/0,
     'HoldLifetimeDecision'/0,
+    'TimeSpanSelector'/0,
+    'TimeSpanDecision'/0,
     'CashFlowAccount'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
@@ -236,6 +239,7 @@
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
+    'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
     'CashValueSelector'/0,
     'CashValueDecision'/0,
@@ -846,6 +850,7 @@
     'PaymentsServiceTerms' |
     'PaymentHoldsServiceTerms' |
     'PaymentRefundsServiceTerms' |
+    'PartialRefundsServiceTerms' |
     'RecurrentPaytoolsServiceTerms' |
     'PayoutsServiceTerms' |
     'PayoutCompilationPolicy' |
@@ -885,6 +890,8 @@
     'HoldLifetime' |
     'HoldLifetimeSelector' |
     'HoldLifetimeDecision' |
+    'TimeSpanSelector' |
+    'TimeSpanDecision' |
     'CashFlowAccount' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
@@ -900,6 +907,7 @@
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
+    'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
     'CashValueSelector' |
     'CashValueDecision' |
@@ -1303,6 +1311,9 @@
 %% struct 'PaymentRefundsServiceTerms'
 -type 'PaymentRefundsServiceTerms'() :: #'domain_PaymentRefundsServiceTerms'{}.
 
+%% struct 'PartialRefundsServiceTerms'
+-type 'PartialRefundsServiceTerms'() :: #'domain_PartialRefundsServiceTerms'{}.
+
 %% struct 'RecurrentPaytoolsServiceTerms'
 -type 'RecurrentPaytoolsServiceTerms'() :: #'domain_RecurrentPaytoolsServiceTerms'{}.
 
@@ -1442,6 +1453,14 @@
 %% struct 'HoldLifetimeDecision'
 -type 'HoldLifetimeDecision'() :: #'domain_HoldLifetimeDecision'{}.
 
+%% union 'TimeSpanSelector'
+-type 'TimeSpanSelector'() ::
+    {'decisions', ['TimeSpanDecision'()]} |
+    {'value', dmsl_base_thrift:'TimeSpan'()}.
+
+%% struct 'TimeSpanDecision'
+-type 'TimeSpanDecision'() :: #'domain_TimeSpanDecision'{}.
+
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
     {'merchant', 'MerchantCashFlowAccount'()} |
@@ -1497,6 +1516,9 @@
 
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
+
+%% struct 'PartialRefundsProvisionTerms'
+-type 'PartialRefundsProvisionTerms'() :: #'domain_PartialRefundsProvisionTerms'{}.
 
 %% struct 'RecurrentPaytoolsProvisionTerms'
 -type 'RecurrentPaytoolsProvisionTerms'() :: #'domain_RecurrentPaytoolsProvisionTerms'{}.
@@ -2008,6 +2030,7 @@ structs() ->
         'PaymentsServiceTerms',
         'PaymentHoldsServiceTerms',
         'PaymentRefundsServiceTerms',
+        'PartialRefundsServiceTerms',
         'RecurrentPaytoolsServiceTerms',
         'PayoutsServiceTerms',
         'PayoutCompilationPolicy',
@@ -2047,6 +2070,8 @@ structs() ->
         'HoldLifetime',
         'HoldLifetimeSelector',
         'HoldLifetimeDecision',
+        'TimeSpanSelector',
+        'TimeSpanDecision',
         'CashFlowAccount',
         'CashFlowPosting',
         'FinalCashFlowPosting',
@@ -2062,6 +2087,7 @@ structs() ->
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PaymentRefundsProvisionTerms',
+        'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
         'CashValueSelector',
         'CashValueDecision',
@@ -2897,6 +2923,7 @@ struct_info('InvoicePaymentRefund') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
     {4, required, i64, 'domain_revision', undefined},
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {5, optional, string, 'reason', undefined}
 ]};
 
@@ -3224,7 +3251,14 @@ struct_info('PaymentHoldsServiceTerms') ->
 struct_info('PaymentRefundsServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsServiceTerms'}}, 'partial_refunds', undefined}
+]};
+
+struct_info('PartialRefundsServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
 ]};
 
 struct_info('RecurrentPaytoolsServiceTerms') ->
@@ -3467,6 +3501,18 @@ struct_info('HoldLifetimeDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
 ]};
 
+struct_info('TimeSpanSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TimeSpanDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'value', undefined}
+]};
+
+struct_info('TimeSpanDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'then_', undefined}
+]};
+
 struct_info('CashFlowAccount') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'merchant', undefined},
@@ -3569,7 +3615,13 @@ struct_info('PaymentHoldsProvisionTerms') ->
 
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsProvisionTerms'}}, 'partial_refunds', undefined}
+]};
+
+struct_info('PartialRefundsProvisionTerms') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
 ]};
 
 struct_info('RecurrentPaytoolsProvisionTerms') ->
@@ -4298,6 +4350,9 @@ record_name('OperationTimeout') ->
     record_name('PaymentRefundsServiceTerms') ->
     'domain_PaymentRefundsServiceTerms';
 
+    record_name('PartialRefundsServiceTerms') ->
+    'domain_PartialRefundsServiceTerms';
+
     record_name('RecurrentPaytoolsServiceTerms') ->
     'domain_RecurrentPaytoolsServiceTerms';
 
@@ -4385,6 +4440,9 @@ record_name('OperationTimeout') ->
     record_name('HoldLifetimeDecision') ->
     'domain_HoldLifetimeDecision';
 
+    record_name('TimeSpanDecision') ->
+    'domain_TimeSpanDecision';
+
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
 
@@ -4417,6 +4475,9 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
+
+    record_name('PartialRefundsProvisionTerms') ->
+    'domain_PartialRefundsProvisionTerms';
 
     record_name('RecurrentPaytoolsProvisionTerms') ->
     'domain_RecurrentPaytoolsProvisionTerms';

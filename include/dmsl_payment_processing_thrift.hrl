@@ -233,7 +233,8 @@
 
 %% struct 'InvoicePaymentRefundParams'
 -record('payproc_InvoicePaymentRefundParams', {
-    'reason' :: binary() | undefined
+    'reason' :: binary() | undefined,
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentParams'
@@ -713,6 +714,11 @@
 
 %% exception 'InvoiceTemplateRemoved'
 -record('payproc_InvoiceTemplateRemoved', {}).
+
+%% exception 'InvoicePaymentAmountExceeded'
+-record('payproc_InvoicePaymentAmountExceeded', {
+    'maximum' :: dmsl_domain_thrift:'Cash'()
+}).
 
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {
