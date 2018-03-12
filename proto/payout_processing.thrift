@@ -104,12 +104,14 @@ enum CashFlowType {
 * Описание части суммы вывода, сгруппированное по виду движения денежных средств
 */
 struct CashFlowDescription {
-    1: required domain.Cash cash
-    2: optional domain.Cash fee
-    3: required TimeRange time_range
-    4: required CashFlowType cash_flow_type
+    1: required domain.Amount amount
+    2: required domain.Amount fee
+    3: required string currency_symbolic_code
+    4: required base.Timestamp from_time
+    5: required base.Timestamp to_time
+    6: required CashFlowType cash_flow_type
     /* Количество движений данного вида в выводе */
-    5: required i32 count
+    7: required i32 count
 }
 
 /**

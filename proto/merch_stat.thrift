@@ -202,7 +202,7 @@ enum CashFlowType {
 
 struct CashFlowDescription {
     1: required domain.Amount amount
-    2: optional domain.Amount fee
+    2: required domain.Amount fee
     3: required string currency_symbolic_code
     4: required base.Timestamp from_time
     5: required base.Timestamp to_time
