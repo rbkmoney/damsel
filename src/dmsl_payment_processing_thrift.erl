@@ -222,6 +222,7 @@
     'InvalidPaymentAdjustmentStatus'/0,
     'InvoiceTemplateNotFound'/0,
     'InvoiceTemplateRemoved'/0,
+    'InvoicePaymentAmountExceeded'/0,
     'InvalidCustomerStatus'/0,
     'CustomerNotFound'/0,
     'InvalidPaymentTool'/0,
@@ -470,6 +471,7 @@
     'InvalidPaymentAdjustmentStatus' |
     'InvoiceTemplateNotFound' |
     'InvoiceTemplateRemoved' |
+    'InvoicePaymentAmountExceeded' |
     'InvalidCustomerStatus' |
     'CustomerNotFound' |
     'InvalidPaymentTool' |
@@ -1118,6 +1120,9 @@
 
 %% exception 'InvoiceTemplateRemoved'
 -type 'InvoiceTemplateRemoved'() :: #'payproc_InvoiceTemplateRemoved'{}.
+
+%% exception 'InvoicePaymentAmountExceeded'
+-type 'InvoicePaymentAmountExceeded'() :: #'payproc_InvoicePaymentAmountExceeded'{}.
 
 %% exception 'InvalidCustomerStatus'
 -type 'InvalidCustomerStatus'() :: #'payproc_InvalidCustomerStatus'{}.
@@ -1908,7 +1913,8 @@ struct_info('InvoicePayment') ->
 
 struct_info('InvoicePaymentRefundParams') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
+    {1, optional, string, 'reason', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
 ]};
 
 struct_info('InvoicePaymentAdjustmentParams') ->
@@ -2578,6 +2584,11 @@ struct_info('InvoiceTemplateNotFound') ->
 struct_info('InvoiceTemplateRemoved') ->
     {struct, exception, []};
 
+struct_info('InvoicePaymentAmountExceeded') ->
+    {struct, exception, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'maximum', undefined}
+]};
+
 struct_info('InvalidCustomerStatus') ->
     {struct, exception, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
@@ -3060,6 +3071,9 @@ record_name('InternalUser') ->
     record_name('InvoiceTemplateRemoved') ->
     'payproc_InvoiceTemplateRemoved';
 
+    record_name('InvoicePaymentAmountExceeded') ->
+    'payproc_InvoicePaymentAmountExceeded';
+
     record_name('InvalidCustomerStatus') ->
     'payproc_InvalidCustomerStatus';
 
@@ -3456,10 +3470,10 @@ function_info('Invoicing', 'RefundPayment', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundPending'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InsufficientAccountBalance'}}, 'ex7', undefined},
-        {8, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex8', undefined}
+        {8, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex9', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [
