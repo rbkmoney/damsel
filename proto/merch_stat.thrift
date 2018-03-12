@@ -192,7 +192,24 @@ struct StatPayout {
     7 : required domain.Amount fee
     8 : required string currency_symbolic_code
     9 : required PayoutType type
+    10: optional CashFlowDescriptions cash_flow_descriptions
 }
+
+enum CashFlowType {
+    payment
+    refund
+}
+
+struct CashFlowDescription {
+    1: required domain.Cash cash
+    2: optional domain.Cash fee
+    3: required base.Timestamp from_time
+    4: required base.Timestamp to_time
+    5: required CashFlowType cash_flow_type
+    6: required i32 count
+}
+
+typedef list<CashFlowDescription> CashFlowDescriptions
 
 union PayoutType {
     1: PayoutCard bank_card
