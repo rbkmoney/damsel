@@ -37,9 +37,11 @@
 
 %% struct 'CashFlowDescription'
 -record('payout_processing_CashFlowDescription', {
-    'cash' :: dmsl_domain_thrift:'Cash'(),
-    'fee' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency_symbolic_code' :: binary(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
     'cash_flow_type' :: atom(),
     'count' :: integer()
 }).

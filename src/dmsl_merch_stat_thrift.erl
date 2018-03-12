@@ -748,7 +748,7 @@ struct_info('StatPayout') ->
 struct_info('CashFlowDescription') ->
     {struct, struct, [
     {1, required, i64, 'amount', undefined},
-    {2, optional, i64, 'fee', undefined},
+    {2, required, i64, 'fee', undefined},
     {3, required, string, 'currency_symbolic_code', undefined},
     {4, required, string, 'from_time', undefined},
     {5, required, string, 'to_time', undefined},
