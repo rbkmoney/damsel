@@ -201,12 +201,13 @@ enum CashFlowType {
 }
 
 struct CashFlowDescription {
-    1: required domain.Cash cash
-    2: optional domain.Cash fee
-    3: required base.Timestamp from_time
-    4: required base.Timestamp to_time
-    5: required CashFlowType cash_flow_type
-    6: required i32 count
+    1: required domain.Amount cash
+    2: optional domain.Amount fee
+    3: required string currency_symbolic_code
+    4: required base.Timestamp from_time
+    5: required base.Timestamp to_time
+    6: required CashFlowType cash_flow_type
+    7: required i32 count
 }
 
 typedef list<CashFlowDescription> CashFlowDescriptions

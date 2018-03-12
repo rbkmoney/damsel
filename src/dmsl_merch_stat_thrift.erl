@@ -747,12 +747,13 @@ struct_info('StatPayout') ->
 
 struct_info('CashFlowDescription') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'fee', undefined},
-    {3, required, string, 'from_time', undefined},
-    {4, required, string, 'to_time', undefined},
-    {5, required, {enum, {dmsl_merch_stat_thrift, 'CashFlowType'}}, 'cash_flow_type', undefined},
-    {6, required, i32, 'count', undefined}
+    {1, required, i64, 'cash', undefined},
+    {2, optional, i64, 'fee', undefined},
+    {3, required, string, 'currency_symbolic_code', undefined},
+    {4, required, string, 'from_time', undefined},
+    {5, required, string, 'to_time', undefined},
+    {6, required, {enum, {dmsl_merch_stat_thrift, 'CashFlowType'}}, 'cash_flow_type', undefined},
+    {7, required, i32, 'count', undefined}
 ]};
 
 struct_info('PayoutType') ->

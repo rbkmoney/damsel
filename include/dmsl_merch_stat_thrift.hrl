@@ -168,8 +168,9 @@
 
 %% struct 'CashFlowDescription'
 -record('merchstat_CashFlowDescription', {
-    'cash' :: dmsl_domain_thrift:'Cash'(),
-    'fee' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'cash' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'() | undefined,
+    'currency_symbolic_code' :: binary(),
     'from_time' :: dmsl_base_thrift:'Timestamp'(),
     'to_time' :: dmsl_base_thrift:'Timestamp'(),
     'cash_flow_type' :: atom(),
