@@ -58,6 +58,9 @@
     'InvoicePaymentEventType'/0,
     'InvoicePaymentCreated'/0,
     'InvoicePaymentStatusChanged'/0,
+    'InvoicePaymentRefundChange'/0,
+    'InvoicePaymentRefundCreated'/0,
+    'InvoicePaymentRefundStatusChanged'/0,
     'InvoicePaymentStatus'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentProcessed'/0,
@@ -65,6 +68,10 @@
     'InvoicePaymentCancelled'/0,
     'InvoicePaymentFailed'/0,
     'InvoicePaymentRefunded'/0,
+    'InvoicePaymentRefundStatus'/0,
+    'InvoicePaymentRefundPending'/0,
+    'InvoicePaymentRefundSucceeded'/0,
+    'InvoicePaymentRefundFailed'/0,
     'CustomerEventFilter'/0,
     'CustomerEventType'/0,
     'CustomerCreated'/0,
@@ -123,6 +130,9 @@
     'InvoicePaymentEventType' |
     'InvoicePaymentCreated' |
     'InvoicePaymentStatusChanged' |
+    'InvoicePaymentRefundChange' |
+    'InvoicePaymentRefundCreated' |
+    'InvoicePaymentRefundStatusChanged' |
     'InvoicePaymentStatus' |
     'InvoicePaymentPending' |
     'InvoicePaymentProcessed' |
@@ -130,6 +140,10 @@
     'InvoicePaymentCancelled' |
     'InvoicePaymentFailed' |
     'InvoicePaymentRefunded' |
+    'InvoicePaymentRefundStatus' |
+    'InvoicePaymentRefundPending' |
+    'InvoicePaymentRefundSucceeded' |
+    'InvoicePaymentRefundFailed' |
     'CustomerEventFilter' |
     'CustomerEventType' |
     'CustomerCreated' |
@@ -214,13 +228,23 @@
 %% union 'InvoicePaymentEventType'
 -type 'InvoicePaymentEventType'() ::
     {'created', 'InvoicePaymentCreated'()} |
-    {'status_changed', 'InvoicePaymentStatusChanged'()}.
+    {'status_changed', 'InvoicePaymentStatusChanged'()} |
+    {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()}.
 
 %% struct 'InvoicePaymentCreated'
 -type 'InvoicePaymentCreated'() :: #'webhooker_InvoicePaymentCreated'{}.
 
 %% struct 'InvoicePaymentStatusChanged'
 -type 'InvoicePaymentStatusChanged'() :: #'webhooker_InvoicePaymentStatusChanged'{}.
+
+%% struct 'InvoicePaymentRefundChange'
+-type 'InvoicePaymentRefundChange'() :: #'webhooker_InvoicePaymentRefundChange'{}.
+
+%% struct 'InvoicePaymentRefundCreated'
+-type 'InvoicePaymentRefundCreated'() :: #'webhooker_InvoicePaymentRefundCreated'{}.
+
+%% struct 'InvoicePaymentRefundStatusChanged'
+-type 'InvoicePaymentRefundStatusChanged'() :: #'webhooker_InvoicePaymentRefundStatusChanged'{}.
 
 %% union 'InvoicePaymentStatus'
 -type 'InvoicePaymentStatus'() ::
@@ -248,6 +272,21 @@
 
 %% struct 'InvoicePaymentRefunded'
 -type 'InvoicePaymentRefunded'() :: #'webhooker_InvoicePaymentRefunded'{}.
+
+%% union 'InvoicePaymentRefundStatus'
+-type 'InvoicePaymentRefundStatus'() ::
+    {'pending', 'InvoicePaymentRefundPending'()} |
+    {'succeeded', 'InvoicePaymentRefundSucceeded'()} |
+    {'failed', 'InvoicePaymentRefundFailed'()}.
+
+%% struct 'InvoicePaymentRefundPending'
+-type 'InvoicePaymentRefundPending'() :: #'webhooker_InvoicePaymentRefundPending'{}.
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-type 'InvoicePaymentRefundSucceeded'() :: #'webhooker_InvoicePaymentRefundSucceeded'{}.
+
+%% struct 'InvoicePaymentRefundFailed'
+-type 'InvoicePaymentRefundFailed'() :: #'webhooker_InvoicePaymentRefundFailed'{}.
 
 %% struct 'CustomerEventFilter'
 -type 'CustomerEventFilter'() :: #'webhooker_CustomerEventFilter'{}.
@@ -369,6 +408,9 @@ structs() ->
         'InvoicePaymentEventType',
         'InvoicePaymentCreated',
         'InvoicePaymentStatusChanged',
+        'InvoicePaymentRefundChange',
+        'InvoicePaymentRefundCreated',
+        'InvoicePaymentRefundStatusChanged',
         'InvoicePaymentStatus',
         'InvoicePaymentPending',
         'InvoicePaymentProcessed',
@@ -376,6 +418,10 @@ structs() ->
         'InvoicePaymentCancelled',
         'InvoicePaymentFailed',
         'InvoicePaymentRefunded',
+        'InvoicePaymentRefundStatus',
+        'InvoicePaymentRefundPending',
+        'InvoicePaymentRefundSucceeded',
+        'InvoicePaymentRefundFailed',
         'CustomerEventFilter',
         'CustomerEventType',
         'CustomerCreated',
@@ -512,7 +558,8 @@ struct_info('InvoiceFulfilled') ->
 struct_info('InvoicePaymentEventType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined}
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined}
 ]};
 
 struct_info('InvoicePaymentCreated') ->
@@ -521,6 +568,20 @@ struct_info('InvoicePaymentCreated') ->
 struct_info('InvoicePaymentStatusChanged') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentStatus'}}, 'value', undefined}
+]};
+
+struct_info('InvoicePaymentRefundChange') ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
+    {2, undefined, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined}
+]};
+
+struct_info('InvoicePaymentRefundCreated') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundStatusChanged') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatus'}}, 'value', undefined}
 ]};
 
 struct_info('InvoicePaymentStatus') ->
@@ -549,6 +610,22 @@ struct_info('InvoicePaymentFailed') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentRefunded') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+]};
+
+struct_info('InvoicePaymentRefundPending') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundSucceeded') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundFailed') ->
     {struct, struct, []};
 
 struct_info('CustomerEventFilter') ->
@@ -642,6 +719,15 @@ record_name('WebhookParams') ->
     record_name('InvoicePaymentStatusChanged') ->
     'webhooker_InvoicePaymentStatusChanged';
 
+    record_name('InvoicePaymentRefundChange') ->
+    'webhooker_InvoicePaymentRefundChange';
+
+    record_name('InvoicePaymentRefundCreated') ->
+    'webhooker_InvoicePaymentRefundCreated';
+
+    record_name('InvoicePaymentRefundStatusChanged') ->
+    'webhooker_InvoicePaymentRefundStatusChanged';
+
     record_name('InvoicePaymentPending') ->
     'webhooker_InvoicePaymentPending';
 
@@ -659,6 +745,15 @@ record_name('WebhookParams') ->
 
     record_name('InvoicePaymentRefunded') ->
     'webhooker_InvoicePaymentRefunded';
+
+    record_name('InvoicePaymentRefundPending') ->
+    'webhooker_InvoicePaymentRefundPending';
+
+    record_name('InvoicePaymentRefundSucceeded') ->
+    'webhooker_InvoicePaymentRefundSucceeded';
+
+    record_name('InvoicePaymentRefundFailed') ->
+    'webhooker_InvoicePaymentRefundFailed';
 
     record_name('CustomerEventFilter') ->
     'webhooker_CustomerEventFilter';

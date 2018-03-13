@@ -328,6 +328,7 @@ struct InvoicePaymentRefund {
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
     4: required DataRevision domain_revision
+    6: optional Cash cash
     5: optional string reason
 }
 
@@ -675,6 +676,12 @@ struct PaymentHoldsServiceTerms {
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
+    3: optional TimeSpanSelector eligibility_time
+    4: optional PartialRefundsServiceTerms partial_refunds
+}
+
+struct PartialRefundsServiceTerms {
+    1: optional CashLimitSelector cash_limit
 }
 
 /* Recurrent payment tools service terms */
@@ -1196,6 +1203,18 @@ struct HoldLifetimeDecision {
     2: required HoldLifetimeSelector then_
 }
 
+/* Refunds */
+
+union TimeSpanSelector {
+    1: list<TimeSpanDecision> decisions
+    2: base.TimeSpan value
+}
+
+struct TimeSpanDecision {
+    1: required Predicate if_
+    2: required TimeSpanSelector then_
+}
+
 /* Flows */
 
 // TODO
@@ -1386,6 +1405,14 @@ struct PaymentHoldsProvisionTerms {
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
+    /**
+     * Условия для частичных рефандов.
+     */
+    2: optional PartialRefundsProvisionTerms partial_refunds
+}
+
+struct PartialRefundsProvisionTerms {
+    1: required CashLimitSelector cash_limit
 }
 
 struct RecurrentPaytoolsProvisionTerms {

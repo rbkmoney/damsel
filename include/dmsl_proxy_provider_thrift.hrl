@@ -122,6 +122,7 @@
 -record('prxprv_InvoicePaymentRefund', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'cash' :: dmsl_proxy_provider_thrift:'Cash'(),
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 

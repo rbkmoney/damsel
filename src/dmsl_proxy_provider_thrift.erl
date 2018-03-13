@@ -517,6 +517,7 @@ struct_info('InvoicePaymentRefund') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
+    {4, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cash', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
