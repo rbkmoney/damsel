@@ -65,15 +65,10 @@ enum OnHoldExpiration {
 
 union OperationFailure {
     1: OperationTimeout operation_timeout
-    2: ExternalFailure  external_failure
+    2: domain.Failure  failure
 }
 
 struct OperationTimeout {}
-
-struct ExternalFailure {
-    1: required string code
-    2: optional string description
-}
 
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
