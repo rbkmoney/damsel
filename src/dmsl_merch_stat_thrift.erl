@@ -34,7 +34,7 @@
 -export_type([
     'DigitalWalletID'/0,
     'PayoutID'/0,
-    'CashFlowDescriptions'/0,
+    'PayoutSummary'/0,
     'StatInfo'/0,
     'InvalidRequest'/0
 ]).
@@ -42,7 +42,7 @@
     'OnHoldExpiration'/0,
     'TerminalPaymentProvider'/0,
     'DigitalWalletProvider'/0,
-    'CashFlowType'/0
+    'OperationType'/0
 ]).
 -export_type([
     'StatPayment'/0,
@@ -76,7 +76,7 @@
     'InvoiceStatus'/0,
     'StatCustomer'/0,
     'StatPayout'/0,
-    'CashFlowDescription'/0,
+    'PayoutSummaryItem'/0,
     'PayoutType'/0,
     'PayoutCard'/0,
     'PayoutAccount'/0,
@@ -103,13 +103,13 @@
 -type typedef_name() ::
     'DigitalWalletID' |
     'PayoutID' |
-    'CashFlowDescriptions' |
+    'PayoutSummary' |
     'StatInfo' |
     'InvalidRequest'.
 
 -type 'DigitalWalletID'() :: binary().
 -type 'PayoutID'() :: dmsl_base_thrift:'ID'().
--type 'CashFlowDescriptions'() :: ['CashFlowDescription'()].
+-type 'PayoutSummary'() :: ['PayoutSummaryItem'()].
 -type 'StatInfo'() :: #{binary() => binary()}.
 -type 'InvalidRequest'() :: dmsl_base_thrift:'InvalidRequest'().
 
@@ -120,7 +120,7 @@
     'OnHoldExpiration' |
     'TerminalPaymentProvider' |
     'DigitalWalletProvider' |
-    'CashFlowType'.
+    'OperationType'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
@@ -135,8 +135,8 @@
 -type 'DigitalWalletProvider'() ::
     'qiwi'.
 
-%% enum 'CashFlowType'
--type 'CashFlowType'() ::
+%% enum 'OperationType'
+-type 'OperationType'() ::
     'payment' |
     'refund'.
 
@@ -175,7 +175,7 @@
     'InvoiceStatus' |
     'StatCustomer' |
     'StatPayout' |
-    'CashFlowDescription' |
+    'PayoutSummaryItem' |
     'PayoutType' |
     'PayoutCard' |
     'PayoutAccount' |
@@ -305,8 +305,8 @@
 %% struct 'StatPayout'
 -type 'StatPayout'() :: #'merchstat_StatPayout'{}.
 
-%% struct 'CashFlowDescription'
--type 'CashFlowDescription'() :: #'merchstat_CashFlowDescription'{}.
+%% struct 'PayoutSummaryItem'
+-type 'PayoutSummaryItem'() :: #'merchstat_PayoutSummaryItem'{}.
 
 %% union 'PayoutType'
 -type 'PayoutType'() ::
@@ -405,7 +405,7 @@
     'OnHoldExpiration'() |
     'TerminalPaymentProvider'() |
     'DigitalWalletProvider'() |
-    'CashFlowType'().
+    'OperationType'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -418,7 +418,7 @@ typedefs() ->
     [
         'DigitalWalletID',
         'PayoutID',
-        'CashFlowDescriptions',
+        'PayoutSummary',
         'StatInfo',
         'InvalidRequest'
     ].
@@ -430,7 +430,7 @@ enums() ->
         'OnHoldExpiration',
         'TerminalPaymentProvider',
         'DigitalWalletProvider',
-        'CashFlowType'
+        'OperationType'
     ].
 
 -spec structs() -> [struct_name()].
@@ -468,7 +468,7 @@ structs() ->
         'InvoiceStatus',
         'StatCustomer',
         'StatPayout',
-        'CashFlowDescription',
+        'PayoutSummaryItem',
         'PayoutType',
         'PayoutCard',
         'PayoutAccount',
@@ -504,8 +504,8 @@ typedef_info('DigitalWalletID') ->
 typedef_info('PayoutID') ->
     string;
 
-typedef_info('CashFlowDescriptions') ->
-    {list, {struct, struct, {dmsl_merch_stat_thrift, 'CashFlowDescription'}}};
+typedef_info('PayoutSummary') ->
+    {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}};
 
 typedef_info('StatInfo') ->
     {map, string, string};
@@ -533,7 +533,7 @@ enum_info('DigitalWalletProvider') ->
         {'qiwi', 0}
     ]};
 
-enum_info('CashFlowType') ->
+enum_info('OperationType') ->
     {enum, [
         {'payment', 0},
         {'refund', 1}
@@ -742,17 +742,17 @@ struct_info('StatPayout') ->
     {7, required, i64, 'fee', undefined},
     {8, required, string, 'currency_symbolic_code', undefined},
     {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'type', undefined},
-    {10, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'CashFlowDescription'}}}, 'cash_flow_descriptions', undefined}
+    {10, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined}
 ]};
 
-struct_info('CashFlowDescription') ->
+struct_info('PayoutSummaryItem') ->
     {struct, struct, [
     {1, required, i64, 'amount', undefined},
     {2, required, i64, 'fee', undefined},
     {3, required, string, 'currency_symbolic_code', undefined},
     {4, required, string, 'from_time', undefined},
     {5, required, string, 'to_time', undefined},
-    {6, required, {enum, {dmsl_merch_stat_thrift, 'CashFlowType'}}, 'cash_flow_type', undefined},
+    {6, required, {enum, {dmsl_merch_stat_thrift, 'OperationType'}}, 'operation_type', undefined},
     {7, required, i32, 'count', undefined}
 ]};
 
@@ -912,8 +912,8 @@ record_name('PaymentResourcePayer') ->
     record_name('StatPayout') ->
     'merchstat_StatPayout';
 
-    record_name('CashFlowDescription') ->
-    'merchstat_CashFlowDescription';
+    record_name('PayoutSummaryItem') ->
+    'merchstat_PayoutSummaryItem';
 
     record_name('PayoutCard') ->
     'merchstat_PayoutCard';

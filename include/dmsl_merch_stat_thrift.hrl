@@ -163,17 +163,17 @@
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
     'type' :: dmsl_merch_stat_thrift:'PayoutType'(),
-    'cash_flow_descriptions' :: dmsl_merch_stat_thrift:'CashFlowDescriptions'() | undefined
+    'summary' :: dmsl_merch_stat_thrift:'PayoutSummary'() | undefined
 }).
 
-%% struct 'CashFlowDescription'
--record('merchstat_CashFlowDescription', {
+%% struct 'PayoutSummaryItem'
+-record('merchstat_PayoutSummaryItem', {
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
     'from_time' :: dmsl_base_thrift:'Timestamp'(),
     'to_time' :: dmsl_base_thrift:'Timestamp'(),
-    'cash_flow_type' :: atom(),
+    'operation_type' :: atom(),
     'count' :: integer()
 }).
 
