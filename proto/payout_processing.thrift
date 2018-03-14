@@ -381,7 +381,7 @@ struct PayoutInfo {
     7: required base.Timestamp from_time
     8: required base.Timestamp to_time
     9: required base.Timestamp created_at
-    10: optional CashFlowDescriptions cash_flow_descriptions
+    10: optional PayoutSummary summary
 }
 
 service PayoutManagement {
