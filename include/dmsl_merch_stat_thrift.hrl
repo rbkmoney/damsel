@@ -96,12 +96,22 @@
     'id' :: dmsl_merch_stat_thrift:'DigitalWalletID'()
 }).
 
-%% struct 'BankAccount'
--record('merchstat_BankAccount', {
+%% struct 'RussianBankAccount'
+-record('merchstat_RussianBankAccount', {
     'account' :: binary(),
     'bank_name' :: binary(),
     'bank_post_account' :: binary(),
     'bank_bik' :: binary()
+}).
+
+%% struct 'InternationalBankAccount'
+-record('merchstat_InternationalBankAccount', {
+    'account_holder' :: binary(),
+    'bank_name' :: binary(),
+    'bank_address' :: binary(),
+    'iban' :: binary(),
+    'bic' :: binary(),
+    'local_bank_code' :: binary() | undefined
 }).
 
 %% struct 'StatInvoice'
@@ -152,7 +162,19 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'type' :: dmsl_merch_stat_thrift:'PayoutType'()
+    'type' :: dmsl_merch_stat_thrift:'PayoutType'(),
+    'summary' :: dmsl_merch_stat_thrift:'PayoutSummary'() | undefined
+}).
+
+%% struct 'PayoutSummaryItem'
+-record('merchstat_PayoutSummaryItem', {
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency_symbolic_code' :: binary(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
+    'operation_type' :: atom(),
+    'count' :: integer()
 }).
 
 %% struct 'PayoutCard'
@@ -160,10 +182,16 @@
     'card' :: dmsl_merch_stat_thrift:'BankCard'()
 }).
 
-%% struct 'PayoutAccount'
--record('merchstat_PayoutAccount', {
-    'account' :: dmsl_merch_stat_thrift:'BankAccount'(),
+%% struct 'RussianPayoutAccount'
+-record('merchstat_RussianPayoutAccount', {
+    'bank_account' :: dmsl_merch_stat_thrift:'RussianBankAccount'(),
     'inn' :: binary(),
+    'purpose' :: binary()
+}).
+
+%% struct 'InternationalPayoutAccount'
+-record('merchstat_InternationalPayoutAccount', {
+    'bank_account' :: dmsl_merch_stat_thrift:'InternationalBankAccount'(),
     'purpose' :: binary()
 }).
 
