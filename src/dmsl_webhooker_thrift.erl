@@ -237,8 +237,10 @@
 %% struct 'InvoicePaymentStatusChanged'
 -type 'InvoicePaymentStatusChanged'() :: #'webhooker_InvoicePaymentStatusChanged'{}.
 
-%% struct 'InvoicePaymentRefundChange'
--type 'InvoicePaymentRefundChange'() :: #'webhooker_InvoicePaymentRefundChange'{}.
+%% union 'InvoicePaymentRefundChange'
+-type 'InvoicePaymentRefundChange'() ::
+    {'invoice_payment_refund_created', 'InvoicePaymentRefundCreated'()} |
+    {'invoice_payment_refund_status_changed', 'InvoicePaymentRefundStatusChanged'()}.
 
 %% struct 'InvoicePaymentRefundCreated'
 -type 'InvoicePaymentRefundCreated'() :: #'webhooker_InvoicePaymentRefundCreated'{}.
@@ -559,7 +561,7 @@ struct_info('InvoicePaymentEventType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCreated'}}, 'created', undefined},
     {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined}
+    {3, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined}
 ]};
 
 struct_info('InvoicePaymentCreated') ->
@@ -571,9 +573,9 @@ struct_info('InvoicePaymentStatusChanged') ->
 ]};
 
 struct_info('InvoicePaymentRefundChange') ->
-    {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
-    {2, undefined, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined}
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundCreated') ->
@@ -718,9 +720,6 @@ record_name('WebhookParams') ->
 
     record_name('InvoicePaymentStatusChanged') ->
     'webhooker_InvoicePaymentStatusChanged';
-
-    record_name('InvoicePaymentRefundChange') ->
-    'webhooker_InvoicePaymentRefundChange';
 
     record_name('InvoicePaymentRefundCreated') ->
     'webhooker_InvoicePaymentRefundCreated';
