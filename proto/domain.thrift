@@ -584,7 +584,9 @@ union IdentificationDocumentStatus {
 
 struct AbsolutlyNotApproved {}
 struct PartialyApproved {}
-struct FullyApproved {}
+struct FullyApproved {
+    1: optional base.Timestamp valid_until
+}
 
 typedef base.ID PayoutToolID
 
