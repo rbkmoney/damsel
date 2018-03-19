@@ -609,47 +609,37 @@
     'timestamp' :: dmsl_base_thrift:'Timestamp'()
 }).
 
-%% struct 'ContractStatusInvalid'
--record('payproc_ContractStatusInvalid', {
-    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
-    'status' :: dmsl_domain_thrift:'ContractStatus'()
+%% struct 'InvalidContract'
+-record('payproc_InvalidContract', {
+    'id' :: dmsl_payment_processing_thrift:'ContractID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidContractReason'()
 }).
 
-%% struct 'ShopStatusInvalid'
--record('payproc_ShopStatusInvalid', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
+%% struct 'InvalidShop'
+-record('payproc_InvalidShop', {
+    'id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidShopReason'()
 }).
 
 %% struct 'ContractTermsViolated'
 -record('payproc_ContractTermsViolated', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'terms' :: dmsl_domain_thrift:'TermSet'()
 }).
 
 %% struct 'ContractTemplateInvalid'
 -record('payproc_ContractTemplateInvalid', {
-    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'contract_template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'() | undefined
 }).
 
 %% struct 'ContractPaymentInstitutionInvalid'
 -record('payproc_ContractPaymentInstitutionInvalid', {
-    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'payment_institution' :: dmsl_payment_processing_thrift:'PaymentInstitutionRef'() | undefined
 }).
 
 %% struct 'ShopPayoutToolInvalid'
 -record('payproc_ShopPayoutToolInvalid', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
-}).
-
-%% struct 'ShopPayoutScheduleInvalid'
--record('payproc_ShopPayoutScheduleInvalid', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'schedule' :: dmsl_domain_thrift:'PayoutScheduleRef'() | undefined
 }).
 
 %% exception 'PartyNotFound'
