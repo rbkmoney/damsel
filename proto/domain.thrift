@@ -394,7 +394,7 @@ struct Party {
     9: required map<ContractorID, PartyContractor> contractors
     4: required map<ContractID, Contract> contracts
     5: required map<ShopID, Shop> shops
-    10: required map<RBKWalletID, RBKWallet> wallets
+    10: required map<RBKMWalletID, RBKMWallet> wallets
     6: required PartyRevision revision
 }
 
@@ -439,18 +439,18 @@ union ShopLocation {
 }
 
 
-/** RBK Wallets **/
+/** RBKM Wallets **/
 
-typedef base.ID RBKWalletID
+typedef base.ID RBKMWalletID
 
-struct RBKWallet {
-    1: required RBKWalletID id
+struct RBKMWallet {
+    1: required RBKMWalletID id
     2: optional string name
     3: required ContractID contract
-    4: required RBKWalletAccount account
+    4: required RBKMWalletAccount account
 }
 
-struct RBKWalletAccount {
+struct RBKMWalletAccount {
     1: required CurrencyRef currency
     2: required AccountID settlement
 
@@ -551,10 +551,32 @@ union PrivateEntity {
 
 struct RussianPrivateEntity {
     1: required string name
-    2: required PrivateEntityStatus status
+    2: required list<IdentificationDocument> documents
 }
 
-union PrivateEntityStatus {
+struct IdentificationDocument {
+    1: required base.ID id
+    2: required IdentificationDocumentStatus status
+    3: required IdentificationDocumentDetails details
+}
+
+union IdentificationDocumentDetails {
+    1: RussianIdentificationDocument russian_id
+}
+
+union RussianIdentificationDocument {
+    1: RussianPassport passport
+}
+
+struct RussianPassport {
+    1: required string serial
+    2: required string number
+    3: required base.Timestamp date_of_issue
+    4: required string place_of_issue
+    5: required string place_of_issue_code
+}
+
+union IdentificationDocumentStatus {
     1: AbsolutlyNotApproved absolutly_not_approved
     2: PartialyApproved partialy_approved
     3: FullyApproved fully_approved
@@ -760,7 +782,7 @@ struct PayoutCompilationPolicy {
     1: required base.TimeSpan assets_freeze_for
 }
 
-/** RBKWallets service terms **/
+/** RBKMWallets service terms **/
 
 struct WalletServiceTerms {
     1: optional CurrencySelector currencies
