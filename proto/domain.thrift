@@ -786,6 +786,7 @@ struct PayoutCompilationPolicy {
 
 struct WalletServiceTerms {
     1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
 }
 
 /* Payout methods */
@@ -1594,6 +1595,7 @@ union Condition {
     5: ShopLocation shop_location_is
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
+    8: IdentificationDocumentStatus identification_document_status_is
 }
 
 union PaymentToolCondition {
@@ -1636,6 +1638,7 @@ struct PartyCondition {
 
 union PartyConditionDefinition {
     1: ShopID shop_is
+    2: RBKMWalletID wallet_is
 }
 
 /* Proxies */
