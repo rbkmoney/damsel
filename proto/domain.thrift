@@ -446,8 +446,11 @@ typedef base.ID RBKMWalletID
 struct RBKMWallet {
     1: required RBKMWalletID id
     2: optional string name
-    3: required ContractID contract
-    4: required RBKMWalletAccount account
+    3: required base.Timestamp created_at
+    4: required Blocking blocking
+    5: required Suspension suspension
+    6: required ContractID contract
+    7: required RBKMWalletAccount account
 }
 
 struct RBKMWalletAccount {
@@ -566,14 +569,27 @@ union IdentificationDocumentDetails {
 
 union RussianIdentificationDocument {
     1: RussianPassport passport
+    2: RussianTaxCertificate tax_certificate
+    3: RussianRetireeInsuranceCertificate retiree_insurance_certificate
 }
 
 struct RussianPassport {
-    1: required string serial
-    2: required string number
-    3: required base.Timestamp date_of_issue
-    4: required string place_of_issue
-    5: required string place_of_issue_code
+    1: required string first_name
+    2: required string second_name
+    3: required string middle_name
+    4: required string series
+    5: required string number
+    6: required base.Timestamp date_of_issue
+    7: required string issuer_name
+    8: required string issuer_code
+}
+
+struct RussianTaxCertificate {
+    1: required string inn
+}
+
+struct RussianRetireeInsuranceCertificate {
+    1: required string snils // snails %)
 }
 
 union IdentificationDocumentStatus {
