@@ -327,7 +327,8 @@
     'GeneratePayouts' |
     'ConfirmPayouts' |
     'CancelPayouts' |
-    'GetPayoutsInfo'.
+    'GetPayoutsInfo' |
+    'GenerateReport'.
 
 -export_type(['PayoutManagement_service_functions'/0]).
 
@@ -823,7 +824,8 @@ functions('PayoutManagement') ->
         'GeneratePayouts',
         'ConfirmPayouts',
         'CancelPayouts',
-        'GetPayoutsInfo'
+        'GetPayoutsInfo',
+        'GenerateReport'
     ];
 
 functions(_) -> error(badarg).
@@ -889,6 +891,16 @@ function_info('PayoutManagement', 'GetPayoutsInfo', params_type) ->
 function_info('PayoutManagement', 'GetPayoutsInfo', reply_type) ->
         {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}};
     function_info('PayoutManagement', 'GetPayoutsInfo', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
+    ]};
+function_info('PayoutManagement', 'GenerateReport', params_type) ->
+    {struct, struct, [
+    {1, undefined, {set, string}, 'payout_ids', undefined}
+]};
+function_info('PayoutManagement', 'GenerateReport', reply_type) ->
+        {struct, struct, []};
+    function_info('PayoutManagement', 'GenerateReport', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
