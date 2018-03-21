@@ -429,8 +429,8 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
-    /** 
-     * Сумма возврата. 
+    /**
+     * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
      */
     2: optional domain.Cash cash
@@ -1454,24 +1454,23 @@ struct InvalidShop {
 }
 
 union InvalidContractReason {
-    1: ContractID contract_not_exists
-    2: ContractID contract_already_exists
-    3: domain.ContractStatus contract_status_invalid
+    1: ContractID not_exists
+    2: ContractID already_exists
+    3: domain.ContractStatus invalid_status
     4: domain.ContractAdjustmentID contract_adjustment_already_exists
     5: domain.PayoutToolID payout_tool_not_exists
     6: domain.PayoutToolID payout_tool_already_exists
-    7: ContractTemplateInvalid contract_template_invalid
-    8: ContractPaymentInstitutionInvalid contract_payment_institution_invalid
+    7: InvalidObjectReference invalid_object_reference
 }
 
 union InvalidShopReason {
-    1: ShopID shop_not_exists
-    2: ShopID shop_already_exists
-    3: ShopID shop_without_account
-    4: InvalidStatus shop_status_invalid
+    1: ShopID not_exists
+    2: ShopID already_exists
+    3: ShopID no_account
+    4: InvalidStatus invalid_status
     5: ContractTermsViolated contract_terms_violated
     6: ShopPayoutToolInvalid payout_tool_invalid
-    7: domain.PayoutScheduleRef payout_schedule_invalid
+    7: InvalidObjectReference invalid_object_reference
 }
 
 struct ContractTermsViolated {
@@ -1479,16 +1478,12 @@ struct ContractTermsViolated {
     2: required domain.TermSet terms
 }
 
-struct ContractTemplateInvalid {
-    1: optional ContractTemplateRef contract_template
-}
-
-struct ContractPaymentInstitutionInvalid {
-    1: optional PaymentInstitutionRef payment_institution
-}
-
 struct ShopPayoutToolInvalid {
     1: optional domain.PayoutToolID payout_tool_id
+}
+
+struct InvalidObjectReference {
+    1: optional domain.Reference ref
 }
 
 exception AccountNotFound {}
