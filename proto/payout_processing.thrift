@@ -405,4 +405,14 @@ service PayoutManagement {
     * Возвращает список Payout-ов согласно запросу поиска
     **/
     PayoutSearchResponse GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Сгенерировать и отправить по почте отчет по выплатам резидентам за исключением указанных номеров выплат
+     */
+    void SendResidentsReport(1: set<PayoutID> excluded_payout_ids) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Сгенерировать и отправить по почте отчет по выплатам нерезидентам за исключением указанных номеров выплат
+     */
+    void SendNonResidentsReport(1: set<PayoutID> excluded_payout_ids) throws (1: base.InvalidRequest ex1)
 }
