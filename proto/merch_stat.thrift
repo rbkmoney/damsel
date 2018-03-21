@@ -249,6 +249,32 @@ struct PayoutPaid {}
 struct PayoutCancelled { 1: required string details }
 struct PayoutConfirmed {}
 
+/**
+ * Информация о рефанде.
+  * **/
+struct StatRefund {
+    1: required domain.InvoicePaymentRefundID id
+    2: required InvoicePaymentRefundStatus status
+    3: required base.Timestamp created_at
+    4: required domain.Amount amount
+    5: required domain.Amount fee
+    6: required string currency_symbolic_code
+    7: optional string reason
+}
+
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
+}
+
+struct InvoicePaymentRefundPending {}
+struct InvoicePaymentRefundSucceeded {}
+
+struct InvoicePaymentRefundFailed {
+    1: required OperationFailure failure
+}
+
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
 
@@ -279,6 +305,7 @@ union StatResponseData {
     3: list<StatCustomer> customers
     4: list<StatInfo> records
     5: list<StatPayout> payouts
+    6: list<StatRefund> refunds
 }
 
 /**
