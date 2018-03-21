@@ -387,7 +387,7 @@ struct PayoutInfo {
 service PayoutManagement {
     /********************* Вывод на счет ************************/
     /**
-     * Сгенерировать и отправить по почте выводы за указанный промежуток времени
+     * Сгенерировать выводы за указанный промежуток времени
      */
     list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
