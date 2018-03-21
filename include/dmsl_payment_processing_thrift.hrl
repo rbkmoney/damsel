@@ -627,19 +627,14 @@
     'terms' :: dmsl_domain_thrift:'TermSet'()
 }).
 
-%% struct 'ContractTemplateInvalid'
--record('payproc_ContractTemplateInvalid', {
-    'contract_template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'() | undefined
-}).
-
-%% struct 'ContractPaymentInstitutionInvalid'
--record('payproc_ContractPaymentInstitutionInvalid', {
-    'payment_institution' :: dmsl_payment_processing_thrift:'PaymentInstitutionRef'() | undefined
-}).
-
 %% struct 'ShopPayoutToolInvalid'
 -record('payproc_ShopPayoutToolInvalid', {
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
+}).
+
+%% struct 'InvalidObjectReference'
+-record('payproc_InvalidObjectReference', {
+    'ref' :: dmsl_domain_thrift:'Reference'() | undefined
 }).
 
 %% exception 'PartyNotFound'

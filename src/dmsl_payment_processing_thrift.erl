@@ -195,9 +195,8 @@
     'InvalidContractReason'/0,
     'InvalidShopReason'/0,
     'ContractTermsViolated'/0,
-    'ContractTemplateInvalid'/0,
-    'ContractPaymentInstitutionInvalid'/0,
-    'ShopPayoutToolInvalid'/0
+    'ShopPayoutToolInvalid'/0,
+    'InvalidObjectReference'/0
 ]).
 -export_type([
     'PartyNotFound'/0,
@@ -445,9 +444,8 @@
     'InvalidContractReason' |
     'InvalidShopReason' |
     'ContractTermsViolated' |
-    'ContractTemplateInvalid' |
-    'ContractPaymentInstitutionInvalid' |
-    'ShopPayoutToolInvalid'.
+    'ShopPayoutToolInvalid' |
+    'InvalidObjectReference'.
 
 -type exception_name() ::
     'PartyNotFound' |
@@ -1028,36 +1026,32 @@
 
 %% union 'InvalidContractReason'
 -type 'InvalidContractReason'() ::
-    {'contract_not_exists', 'ContractID'()} |
-    {'contract_already_exists', 'ContractID'()} |
-    {'contract_status_invalid', dmsl_domain_thrift:'ContractStatus'()} |
+    {'not_exists', 'ContractID'()} |
+    {'already_exists', 'ContractID'()} |
+    {'invalid_status', dmsl_domain_thrift:'ContractStatus'()} |
     {'contract_adjustment_already_exists', dmsl_domain_thrift:'ContractAdjustmentID'()} |
     {'payout_tool_not_exists', dmsl_domain_thrift:'PayoutToolID'()} |
     {'payout_tool_already_exists', dmsl_domain_thrift:'PayoutToolID'()} |
-    {'contract_template_invalid', 'ContractTemplateInvalid'()} |
-    {'contract_payment_institution_invalid', 'ContractPaymentInstitutionInvalid'()}.
+    {'invalid_object_reference', 'InvalidObjectReference'()}.
 
 %% union 'InvalidShopReason'
 -type 'InvalidShopReason'() ::
-    {'shop_not_exists', 'ShopID'()} |
-    {'shop_already_exists', 'ShopID'()} |
-    {'shop_without_account', 'ShopID'()} |
-    {'shop_status_invalid', 'InvalidStatus'()} |
+    {'not_exists', 'ShopID'()} |
+    {'already_exists', 'ShopID'()} |
+    {'no_account', 'ShopID'()} |
+    {'invalid_status', 'InvalidStatus'()} |
     {'contract_terms_violated', 'ContractTermsViolated'()} |
     {'payout_tool_invalid', 'ShopPayoutToolInvalid'()} |
-    {'payout_schedule_invalid', dmsl_domain_thrift:'PayoutScheduleRef'()}.
+    {'invalid_object_reference', 'InvalidObjectReference'()}.
 
 %% struct 'ContractTermsViolated'
 -type 'ContractTermsViolated'() :: #'payproc_ContractTermsViolated'{}.
 
-%% struct 'ContractTemplateInvalid'
--type 'ContractTemplateInvalid'() :: #'payproc_ContractTemplateInvalid'{}.
-
-%% struct 'ContractPaymentInstitutionInvalid'
--type 'ContractPaymentInstitutionInvalid'() :: #'payproc_ContractPaymentInstitutionInvalid'{}.
-
 %% struct 'ShopPayoutToolInvalid'
 -type 'ShopPayoutToolInvalid'() :: #'payproc_ShopPayoutToolInvalid'{}.
+
+%% struct 'InvalidObjectReference'
+-type 'InvalidObjectReference'() :: #'payproc_InvalidObjectReference'{}.
 
 %% exception 'PartyNotFound'
 -type 'PartyNotFound'() :: #'payproc_PartyNotFound'{}.
@@ -1514,9 +1508,8 @@ structs() ->
         'InvalidContractReason',
         'InvalidShopReason',
         'ContractTermsViolated',
-        'ContractTemplateInvalid',
-        'ContractPaymentInstitutionInvalid',
-        'ShopPayoutToolInvalid'
+        'ShopPayoutToolInvalid',
+        'InvalidObjectReference'
     ].
 
 -spec services() -> [service_name()].
@@ -2463,25 +2456,24 @@ struct_info('InvalidShop') ->
 
 struct_info('InvalidContractReason') ->
     {struct, union, [
-    {1, optional, string, 'contract_not_exists', undefined},
-    {2, optional, string, 'contract_already_exists', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'contract_status_invalid', undefined},
+    {1, optional, string, 'not_exists', undefined},
+    {2, optional, string, 'already_exists', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'invalid_status', undefined},
     {4, optional, string, 'contract_adjustment_already_exists', undefined},
     {5, optional, string, 'payout_tool_not_exists', undefined},
     {6, optional, string, 'payout_tool_already_exists', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTemplateInvalid'}}, 'contract_template_invalid', undefined},
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractPaymentInstitutionInvalid'}}, 'contract_payment_institution_invalid', undefined}
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
 ]};
 
 struct_info('InvalidShopReason') ->
     {struct, union, [
-    {1, optional, string, 'shop_not_exists', undefined},
-    {2, optional, string, 'shop_already_exists', undefined},
-    {3, optional, string, 'shop_without_account', undefined},
-    {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'shop_status_invalid', undefined},
+    {1, optional, string, 'not_exists', undefined},
+    {2, optional, string, 'already_exists', undefined},
+    {3, optional, string, 'no_account', undefined},
+    {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
     {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopPayoutToolInvalid'}}, 'payout_tool_invalid', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule_invalid', undefined}
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
 ]};
 
 struct_info('ContractTermsViolated') ->
@@ -2490,19 +2482,14 @@ struct_info('ContractTermsViolated') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSet'}}, 'terms', undefined}
 ]};
 
-struct_info('ContractTemplateInvalid') ->
-    {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined}
-]};
-
-struct_info('ContractPaymentInstitutionInvalid') ->
-    {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined}
-]};
-
 struct_info('ShopPayoutToolInvalid') ->
     {struct, struct, [
     {1, optional, string, 'payout_tool_id', undefined}
+]};
+
+struct_info('InvalidObjectReference') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'ref', undefined}
 ]};
 
 struct_info('PartyNotFound') ->
@@ -2998,14 +2985,11 @@ record_name('InternalUser') ->
     record_name('ContractTermsViolated') ->
     'payproc_ContractTermsViolated';
 
-    record_name('ContractTemplateInvalid') ->
-    'payproc_ContractTemplateInvalid';
-
-    record_name('ContractPaymentInstitutionInvalid') ->
-    'payproc_ContractPaymentInstitutionInvalid';
-
     record_name('ShopPayoutToolInvalid') ->
     'payproc_ShopPayoutToolInvalid';
+
+    record_name('InvalidObjectReference') ->
+    'payproc_InvalidObjectReference';
 
     record_name('PartyNotFound') ->
     'payproc_PartyNotFound';
