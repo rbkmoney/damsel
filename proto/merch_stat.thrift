@@ -253,13 +253,17 @@ struct PayoutConfirmed {}
  * Информация о рефанде.
   * **/
 struct StatRefund {
-    1: required domain.InvoicePaymentRefundID id
-    2: required InvoicePaymentRefundStatus status
-    3: required base.Timestamp created_at
-    4: required domain.Amount amount
-    5: required domain.Amount fee
-    6: required string currency_symbolic_code
-    7: optional string reason
+    1 : required domain.InvoicePaymentRefundID id
+    2 : required domain.InvoicePaymentID payment_id
+    3 : required domain.InvoiceID invoice_id
+    4 : required domain.PartyID owner_id
+    5 : required domain.ShopID shop_id
+    6 : required InvoicePaymentRefundStatus status
+    7 : required base.Timestamp created_at
+    8 : required domain.Amount amount
+    9 : required domain.Amount fee
+    10: required string currency_symbolic_code
+    11: optional string reason
 }
 
 union InvoicePaymentRefundStatus {
