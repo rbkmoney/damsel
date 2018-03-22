@@ -212,6 +212,10 @@
 %% struct 'StatRefund'
 -record('merchstat_StatRefund', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
+    'payment_id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
+    'invoice_id' :: dmsl_domain_thrift:'InvoiceID'(),
+    'owner_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
     'status' :: dmsl_merch_stat_thrift:'InvoicePaymentRefundStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'amount' :: dmsl_domain_thrift:'Amount'(),

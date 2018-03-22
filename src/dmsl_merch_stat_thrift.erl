@@ -845,12 +845,16 @@ struct_info('PayoutConfirmed') ->
 struct_info('StatRefund') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, i64, 'amount', undefined},
-    {5, required, i64, 'fee', undefined},
-    {6, required, string, 'currency_symbolic_code', undefined},
-    {7, optional, string, 'reason', undefined}
+    {2, required, string, 'payment_id', undefined},
+    {3, required, string, 'invoice_id', undefined},
+    {4, required, string, 'owner_id', undefined},
+    {5, required, string, 'shop_id', undefined},
+    {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
+    {7, required, string, 'created_at', undefined},
+    {8, required, i64, 'amount', undefined},
+    {9, required, i64, 'fee', undefined},
+    {10, required, string, 'currency_symbolic_code', undefined},
+    {11, optional, string, 'reason', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundStatus') ->
