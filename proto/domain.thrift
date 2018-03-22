@@ -1094,6 +1094,7 @@ union PaymentMethod {
     1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
+    4: MobilePaymentSystem mobile_payment
 }
 
 enum BankCardPaymentSystem {
@@ -1119,6 +1120,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: TokenizedBankCard tokenized_bank_card
 }
 
 struct DisposablePaymentResource {
@@ -1159,6 +1161,19 @@ struct DigitalWallet {
 
 enum DigitalWalletProvider {
     qiwi
+}
+
+/** Платеж с помощью мобильного устройства **/
+
+struct TokenizedBankCard {
+    1: required Token token
+    2: required MobilePaymentSystem mobile_payment_system
+}
+
+/** Тип системы мобильных платежей **/
+
+enum MobilePaymentSystem {
+    applepay
 }
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
@@ -1517,6 +1532,7 @@ union PaymentToolCondition {
     1: BankCardCondition bank_card
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
+    4: TokenizedBankCardCondition tokenized_bank_card
 }
 
 struct BankCardCondition {
@@ -1534,6 +1550,10 @@ struct PaymentTerminalCondition {
     1: optional PaymentTerminalConditionDefinition definition
 }
 
+struct TokenizedBankCardCondition {
+    1: optional TokenizedBankCardConditionDefinition definition
+}
+
 union PaymentTerminalConditionDefinition {
     1: TerminalPaymentProvider provider_is
 }
@@ -1544,6 +1564,10 @@ struct DigitalWalletCondition {
 
 union DigitalWalletConditionDefinition {
     1: DigitalWalletProvider provider_is
+}
+
+union TokenizedBankCardConditionDefinition {
+    1: MobilePaymentSystem mobile_payment_system_is
 }
 
 struct PartyCondition {
