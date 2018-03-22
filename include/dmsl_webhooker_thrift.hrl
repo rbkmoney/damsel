@@ -71,12 +71,6 @@
     'value' :: dmsl_webhooker_thrift:'InvoicePaymentStatus'() | undefined
 }).
 
-%% struct 'InvoicePaymentRefundChange'
--record('webhooker_InvoicePaymentRefundChange', {
-    'invoice_payment_refund_created' :: dmsl_webhooker_thrift:'InvoicePaymentRefundCreated'(),
-    'invoice_payment_refund_status_changed' :: dmsl_webhooker_thrift:'InvoicePaymentRefundStatusChanged'()
-}).
-
 %% struct 'InvoicePaymentRefundCreated'
 -record('webhooker_InvoicePaymentRefundCreated', {}).
 

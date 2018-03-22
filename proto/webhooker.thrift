@@ -87,7 +87,7 @@ struct InvoicePaymentStatusChanged {
     1: optional InvoicePaymentStatus value
 }
 
-struct InvoicePaymentRefundChange {
+union InvoicePaymentRefundChange {
     1: InvoicePaymentRefundCreated invoice_payment_refund_created
     2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
 }
