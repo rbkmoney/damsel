@@ -720,6 +720,11 @@
     'maximum' :: dmsl_domain_thrift:'Cash'()
 }).
 
+%% exception 'InconsistentRefundCurrency'
+-record('payproc_InconsistentRefundCurrency', {
+    'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
+}).
+
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {
     'status' :: dmsl_payment_processing_thrift:'CustomerStatus'()
