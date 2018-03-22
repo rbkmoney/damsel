@@ -463,6 +463,7 @@ union LegalEntity {
     2: InternationalLegalEntity international_legal_entity
 }
 
+// TODO refactor with RepresentativePerson
 /** Юридическое лицо-резидент РФ */
 struct RussianLegalEntity {
     /* Наименование */
@@ -545,12 +546,40 @@ struct Contract {
     8: required list<ContractAdjustment> adjustments
     9: required list<PayoutTool> payout_tools
     10: optional LegalAgreement legal_agreement
+    13: optional ActPreferences act_preferences
 }
 
 /** Юридическое соглашение */
 struct LegalAgreement {
     1: required base.Timestamp signed_at
     2: required string legal_agreement_id
+}
+
+struct ActPreferences {
+    1: required ActScheduleRef schedule
+    2: required RepresentativePerson signer
+}
+
+struct RepresentativePerson {
+    /* Наименование должности ЕИО/представителя */
+    1: required string position
+    /* ФИО ЕИО/представителя */
+    2: required string full_name
+    /* Документ, на основании которого действует ЕИО/представитель */
+    3: required RepresentativeDocument document
+}
+
+union RepresentativeDocument {
+    1: ArticlesOfAssociation articles_of_association    // устав
+    2: PowerOfAttorney power_of_attorney                // доверенность
+}
+
+struct ArticlesOfAssociation {}
+
+struct PowerOfAttorney {
+    1: required string number
+    2: required base.Timestamp valid_since
+    3: optional base.Timestamp valid_until
 }
 
 union ContractStatus {
@@ -636,6 +665,7 @@ struct TermSet {
     1: optional PaymentsServiceTerms payments
     2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
     3: optional PayoutsServiceTerms payouts
+    4: optional ReportsServiceTerms reports
 }
 
 struct TimedTermSet {
@@ -728,6 +758,16 @@ union PayoutMethodSelector {
 struct PayoutMethodDecision {
     1: required Predicate if_
     2: required PayoutMethodSelector then_
+}
+
+/* Reports service terms */
+struct ReportsServiceTerms {
+    1: optional ActsServiceTerms acts
+}
+
+/* Service Acceptance Acts (Акты об оказании услуг) */
+struct ActsServiceTerms {
+    1: optional ActScheduleSelector act_schedules
 }
 
 /* Currencies */
@@ -1044,6 +1084,24 @@ union PayoutScheduleSelector {
 struct PayoutScheduleDecision {
     1: required Predicate if_
     2: required PayoutScheduleSelector then_
+}
+
+struct ActScheduleRef { 1: required ObjectID id }
+
+struct ActSchedule {
+    1: required string name
+    2: optional string description
+    3: required base.Schedule schedule
+}
+
+union ActScheduleSelector {
+    1: list<ActScheduleDecision> decisions
+    2: set<ActScheduleRef> value
+}
+
+struct ActScheduleDecision {
+    1: required Predicate if_
+    2: required ActScheduleSelector then_
 }
 
 /* Calendars */
@@ -1749,6 +1807,11 @@ struct PayoutScheduleObject {
     2: required PayoutSchedule data
 }
 
+struct ActScheduleObject {
+    1: required ActScheduleRef ref
+    2: required ActSchedule data
+}
+
 struct CalendarObject {
     1: required CalendarRef ref
     2: required Calendar data
@@ -1825,6 +1888,7 @@ union Reference {
     1  : CategoryRef             category
     2  : CurrencyRef             currency
     19 : PayoutScheduleRef       payout_schedule
+    22 : ActScheduleRef          act_schedule
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
@@ -1853,6 +1917,7 @@ union DomainObject {
     1  : CategoryObject             category
     2  : CurrencyObject             currency
     19 : PayoutScheduleObject       payout_schedule
+    22 : ActScheduleObject          act_schedule
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method

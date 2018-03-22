@@ -429,8 +429,8 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
-    /** 
-     * Сумма возврата. 
+    /**
+     * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
      */
     2: optional domain.Cash cash
@@ -1199,6 +1199,7 @@ union ContractModification {
     3: ContractAdjustmentModificationUnit adjustment_modification
     4: PayoutToolModificationUnit payout_tool_modification
     5: domain.LegalAgreement legal_agreement_binding
+    6: ActPreferencesModification act_preferences_modification
 }
 
 struct ContractTermination {
@@ -1221,6 +1222,10 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
+}
+
+struct ActPreferencesModification {
+    1: optional domain.ActPreferences act_preferences
 }
 
 typedef list<PartyModification> PartyChangeset
