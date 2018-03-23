@@ -136,6 +136,7 @@ struct Schedule {
     2: required ScheduleMonth month
     3: required ScheduleFragment day_of_month
     4: required ScheduleDayOfWeek day_of_week
+    8: optional ScheduleFragment working_day
     5: required ScheduleFragment hour
     6: required ScheduleFragment minute
     7: required ScheduleFragment second
