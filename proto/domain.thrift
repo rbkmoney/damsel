@@ -1108,6 +1108,7 @@ struct Calendar {
     2: optional string description
     3: required base.Timezone timezone
     4: required CalendarHolidaySet holidays
+    5: optional base.DayOfWeek first_day_of_week
 }
 
 typedef map<base.Year, set<CalendarHoliday>> CalendarHolidaySet
