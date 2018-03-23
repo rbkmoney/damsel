@@ -553,14 +553,15 @@ struct Contract {
 struct LegalAgreement {
     1: required base.Timestamp signed_at
     2: required string legal_agreement_id
+    3: optional base.Timestamp valid_until
 }
 
 struct ActPreferences {
     1: required ActScheduleRef schedule
-    2: required RepresentativePerson signer
+    2: required Representative signer
 }
 
-struct RepresentativePerson {
+struct Representative {
     /* Наименование должности ЕИО/представителя */
     1: required string position
     /* ФИО ЕИО/представителя */
@@ -571,16 +572,10 @@ struct RepresentativePerson {
 
 union RepresentativeDocument {
     1: ArticlesOfAssociation articles_of_association    // устав
-    2: PowerOfAttorney power_of_attorney                // доверенность
+    2: LegalAgreement power_of_attorney                // доверенность
 }
 
 struct ArticlesOfAssociation {}
-
-struct PowerOfAttorney {
-    1: required string number
-    2: required base.Timestamp valid_since
-    3: optional base.Timestamp valid_until
-}
 
 union ContractStatus {
     1: ContractActive active
