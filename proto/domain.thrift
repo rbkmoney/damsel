@@ -1168,6 +1168,7 @@ enum DigitalWalletProvider {
 struct TokenizedBankCard {
     1: required Token token
     2: required MobilePaymentSystem mobile_payment_system
+    3: required string bin
 }
 
 /** Тип системы мобильных платежей **/
@@ -1568,6 +1569,7 @@ union DigitalWalletConditionDefinition {
 
 union TokenizedBankCardConditionDefinition {
     1: MobilePaymentSystem mobile_payment_system_is
+    2: BankCardBINRangeRef bin_in
 }
 
 struct PartyCondition {
