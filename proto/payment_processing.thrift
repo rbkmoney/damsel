@@ -1199,7 +1199,7 @@ union ContractModification {
     3: ContractAdjustmentModificationUnit adjustment_modification
     4: PayoutToolModificationUnit payout_tool_modification
     5: domain.LegalAgreement legal_agreement_binding
-    6: ActPreferencesModification act_preferences_modification
+    6: domain.ReportPreferences report_preferences_modification
 }
 
 struct ContractTermination {
@@ -1222,10 +1222,6 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
-}
-
-struct ActPreferencesModification {
-    1: optional domain.ActPreferences act_preferences
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -1319,6 +1315,7 @@ union ContractEffect {
     3: domain.ContractAdjustment adjustment_created
     5: domain.LegalAgreement legal_agreement_bound
     4: domain.PayoutTool payout_tool_created
+    6: domain.ReportPreferences report_preferences_changed
 }
 
 struct ShopEffectUnit {

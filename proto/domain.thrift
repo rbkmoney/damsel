@@ -546,7 +546,7 @@ struct Contract {
     8: required list<ContractAdjustment> adjustments
     9: required list<PayoutTool> payout_tools
     10: optional LegalAgreement legal_agreement
-    13: optional ActPreferences act_preferences
+    13: optional ReportPreferences report_preferences
 }
 
 /** Юридическое соглашение */
@@ -556,7 +556,11 @@ struct LegalAgreement {
     3: optional base.Timestamp valid_until
 }
 
-struct ActPreferences {
+struct ReportPreferences {
+    1: optional ServiceAcceptanceActPreferences acts_preferences
+}
+
+struct ServiceAcceptanceActPreferences {
     1: required BusinessScheduleRef schedule
     2: required Representative signer
 }
@@ -759,12 +763,12 @@ struct PayoutMethodDecision {
 
 /* Reports service terms */
 struct ReportsServiceTerms {
-    1: optional ActsServiceTerms acts
+    1: optional ServiceAcceptanceActsTerms acts
 }
 
 /* Service Acceptance Acts (Акты об оказании услуг) */
-struct ActsServiceTerms {
-    1: optional BusinessScheduleSelector act_schedules
+struct ServiceAcceptanceActsTerms {
+    1: optional BusinessScheduleSelector schedules
 }
 
 /* Currencies */
