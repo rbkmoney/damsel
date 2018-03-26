@@ -35,12 +35,14 @@
     'initiator' :: dmsl_payout_processing_thrift:'UserInfo'()
 }).
 
-%% struct 'CashFlowDescription'
--record('payout_processing_CashFlowDescription', {
-    'cash' :: dmsl_domain_thrift:'Cash'(),
-    'fee' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
-    'cash_flow_type' :: atom(),
+%% struct 'PayoutSummaryItem'
+-record('payout_processing_PayoutSummaryItem', {
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency_symbolic_code' :: binary(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
+    'operation_type' :: atom(),
     'count' :: integer()
 }).
 
@@ -53,7 +55,7 @@
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
     'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
-    'cash_flow_descriptions' :: dmsl_payout_processing_thrift:'CashFlowDescriptions'() | undefined
+    'summary' :: dmsl_payout_processing_thrift:'PayoutSummary'() | undefined
 }).
 
 %% struct 'PayoutUnpaid'
@@ -177,7 +179,8 @@
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'from_time' :: dmsl_base_thrift:'Timestamp'(),
     'to_time' :: dmsl_base_thrift:'Timestamp'(),
-    'created_at' :: dmsl_base_thrift:'Timestamp'()
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'summary' :: dmsl_payout_processing_thrift:'PayoutSummary'() | undefined
 }).
 
 %% exception 'NoLastEvent'
