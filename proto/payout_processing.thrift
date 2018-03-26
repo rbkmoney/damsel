@@ -91,9 +91,9 @@ struct PayoutCreated {
 }
 
 /**
-  * Виды движения денежных средств
+  * Виды операций над денежными средствами
   */
-enum CashFlowType {
+enum OperationType {
     payment
     refund
     adjustment
@@ -103,19 +103,21 @@ enum CashFlowType {
 * Расшифровка части суммы вывода
 * Описание части суммы вывода, сгруппированное по виду движения денежных средств
 */
-struct CashFlowDescription {
-    1: required domain.Cash cash
-    2: optional domain.Cash fee
-    3: required TimeRange time_range
-    4: required CashFlowType cash_flow_type
+struct PayoutSummaryItem {
+    1: required domain.Amount amount
+    2: required domain.Amount fee
+    3: required string currency_symbolic_code
+    4: required base.Timestamp from_time
+    5: required base.Timestamp to_time
+    6: required OperationType operation_type
     /* Количество движений данного вида в выводе */
-    5: required i32 count
+    7: required i32 count
 }
 
 /**
 * Список описаний денежных сумм, из которых состоит сумма вывода
 */
-typedef list<CashFlowDescription> CashFlowDescriptions
+typedef list<PayoutSummaryItem> PayoutSummary
 
 struct Payout {
     1: required PayoutID id
@@ -126,7 +128,7 @@ struct Payout {
     5: required PayoutStatus status
     6: required domain.FinalCashFlow payout_flow
     7: required PayoutType type
-    8: optional CashFlowDescriptions cash_flow_descriptions
+    8: optional PayoutSummary summary
 }
 
 /**
@@ -379,12 +381,13 @@ struct PayoutInfo {
     7: required base.Timestamp from_time
     8: required base.Timestamp to_time
     9: required base.Timestamp created_at
+    10: optional PayoutSummary summary
 }
 
 service PayoutManagement {
     /********************* Вывод на счет ************************/
     /**
-     * Сгенерировать и отправить по почте выводы за указанный промежуток времени
+     * Сгенерировать выводы за указанный промежуток времени
      */
     list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
@@ -402,4 +405,9 @@ service PayoutManagement {
     * Возвращает список Payout-ов согласно запросу поиска
     **/
     PayoutSearchResponse GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Сгенерировать отчет по выплатам
+     */
+    void GenerateReport(1: set<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 }
