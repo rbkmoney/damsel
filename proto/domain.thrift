@@ -1091,10 +1091,14 @@ struct CashLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    1: BankCardPaymentSystem bank_card
+    1: PaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
-    4: MobilePaymentSystem mobile_payment
+}
+
+struct PaymentSystem {
+    1: required BankCardPaymentSystem bank_card
+    2: optional MobilePaymentSystem mobile
 }
 
 enum BankCardPaymentSystem {
@@ -1112,6 +1116,12 @@ enum BankCardPaymentSystem {
     nspkmir
 }
 
+/** Тип системы мобильных платежей **/
+
+enum MobilePaymentSystem {
+    applepay
+}
+
 typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
 typedef base.ID RecurrentPaymentToolID
@@ -1120,7 +1130,6 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
-    4: TokenizedBankCard tokenized_bank_card
 }
 
 struct DisposablePaymentResource {
@@ -1133,7 +1142,7 @@ typedef string Token
 
 struct BankCard {
     1: required Token token
-    2: required BankCardPaymentSystem payment_system
+    2: required PaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
 }
@@ -1161,20 +1170,6 @@ struct DigitalWallet {
 
 enum DigitalWalletProvider {
     qiwi
-}
-
-/** Платеж с помощью мобильного устройства **/
-
-struct TokenizedBankCard {
-    1: required Token token
-    2: required MobilePaymentSystem mobile_payment_system
-    3: required string bin
-}
-
-/** Тип системы мобильных платежей **/
-
-enum MobilePaymentSystem {
-    applepay
 }
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
@@ -1533,7 +1528,6 @@ union PaymentToolCondition {
     1: BankCardCondition bank_card
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
-    4: TokenizedBankCardCondition tokenized_bank_card
 }
 
 struct BankCardCondition {
@@ -1543,16 +1537,17 @@ struct BankCardCondition {
 }
 
 union BankCardConditionDefinition {
-    1: BankCardPaymentSystem payment_system_is
+    1: PaymentSystemCondition payment_system
     2: BankCardBINRangeRef bin_in
+}
+
+struct PaymentSystemCondition {
+    1: required set<BankCardPaymentSystem> bank_card_payment_systems
+    2: optional set<MobilePaymentSystem> mobile_payment_systems
 }
 
 struct PaymentTerminalCondition {
     1: optional PaymentTerminalConditionDefinition definition
-}
-
-struct TokenizedBankCardCondition {
-    1: optional TokenizedBankCardConditionDefinition definition
 }
 
 union PaymentTerminalConditionDefinition {
@@ -1565,11 +1560,6 @@ struct DigitalWalletCondition {
 
 union DigitalWalletConditionDefinition {
     1: DigitalWalletProvider provider_is
-}
-
-union TokenizedBankCardConditionDefinition {
-    1: MobilePaymentSystem mobile_payment_system_is
-    2: BankCardBINRangeRef bin_in
 }
 
 struct PartyCondition {
