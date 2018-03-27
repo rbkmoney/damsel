@@ -1098,8 +1098,8 @@ union PaymentMethod {
 }
 
 struct MobilePaymentMethod {
-    1: required BankCardPaymentSystem payment_system
-    2: optional MobilePaymentSystem mobile_payment_system
+    1: optional BankCardPaymentSystem payment_system
+    2: required MobilePaymentSystem mobile_payment_system
 }
 
 enum BankCardPaymentSystem {
@@ -1145,7 +1145,7 @@ typedef string Token
 
 struct BankCard {
     1: required Token token
-    2: required BankCardPaymentSystem payment_system
+    2: optional BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
     5: optional MobilePaymentSystem mobile_payment_system
@@ -1547,7 +1547,7 @@ union BankCardConditionDefinition {
 }
 
 struct PaymentSystemCondition {
-    1: required BankCardPaymentSystem payment_system_is
+    1: optional BankCardPaymentSystem payment_system_is
     2: optional MobilePaymentSystem mobile_payment_system_is
 }
 
