@@ -273,10 +273,13 @@ union InvoicePaymentRefundStatus {
 }
 
 struct InvoicePaymentRefundPending {}
-struct InvoicePaymentRefundSucceeded {}
+struct InvoicePaymentRefundSucceeded {
+    1: required base.Timestamp at
+}
 
 struct InvoicePaymentRefundFailed {
     1: required OperationFailure failure
+    2: required base.Timestamp at
 }
 
 typedef map<string, string> StatInfo
