@@ -1094,12 +1094,12 @@ union PaymentMethod {
     1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
-    4: MobilePaymentMethod mobile
+    4: TokenizedBankCard tokenized_bank_card
 }
 
-struct MobilePaymentMethod {
-    1: optional BankCardPaymentSystem payment_system
-    2: required MobilePaymentSystem mobile_payment_system
+struct TokenizedBankCard {
+    1: required BankCardPaymentSystem payment_system
+    2: required BankCardTokenProvider token_provider
 }
 
 enum BankCardPaymentSystem {
@@ -1117,9 +1117,9 @@ enum BankCardPaymentSystem {
     nspkmir
 }
 
-/** Тип системы мобильных платежей **/
+/** Тип платежного токена **/
 
-enum MobilePaymentSystem {
+enum BankCardTokenProvider {
     applepay
     googlepay
     samsungpay
@@ -1145,10 +1145,10 @@ typedef string Token
 
 struct BankCard {
     1: required Token token
-    2: optional BankCardPaymentSystem payment_system
+    2: required BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
-    5: optional MobilePaymentSystem mobile_payment_system
+    5: optional BankCardTokenProvider token_provider
 }
 
 /** Платеж через терминал **/
@@ -1541,14 +1541,14 @@ struct BankCardCondition {
 }
 
 union BankCardConditionDefinition {
-    1: BankCardPaymentSystem payment_system_is
+    1: BankCardPaymentSystem payment_system_is // deprecated
     2: BankCardBINRangeRef bin_in
     3: PaymentSystemCondition payment_system
 }
 
 struct PaymentSystemCondition {
-    1: optional BankCardPaymentSystem payment_system_is
-    2: optional MobilePaymentSystem mobile_payment_system_is
+    1: required BankCardPaymentSystem payment_system_is
+    2: optional BankCardTokenProvider token_provider_is
 }
 
 struct PaymentTerminalCondition {
