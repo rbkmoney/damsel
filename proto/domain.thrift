@@ -1091,14 +1091,15 @@ struct CashLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    1: PaymentSystem bank_card
+    1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
+    4: MobilePaymentMethod mobile
 }
 
-struct PaymentSystem {
-    1: required BankCardPaymentSystem bank_card
-    2: optional MobilePaymentSystem mobile
+struct MobilePaymentMethod {
+    1: required BankCardPaymentSystem payment_system
+    2: optional MobilePaymentSystem mobile_payment_system
 }
 
 enum BankCardPaymentSystem {
@@ -1120,6 +1121,8 @@ enum BankCardPaymentSystem {
 
 enum MobilePaymentSystem {
     applepay
+    googlepay
+    samsungpay
 }
 
 typedef base.ID CustomerID
@@ -1142,9 +1145,10 @@ typedef string Token
 
 struct BankCard {
     1: required Token token
-    2: required PaymentSystem payment_system
+    2: required BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+    5: optional MobilePaymentSystem mobile_payment_system
 }
 
 /** Платеж через терминал **/
@@ -1537,13 +1541,14 @@ struct BankCardCondition {
 }
 
 union BankCardConditionDefinition {
-    1: PaymentSystemCondition payment_system
+    1: BankCardPaymentSystem payment_system_is
     2: BankCardBINRangeRef bin_in
+    3: PaymentSystemCondition payment_system
 }
 
 struct PaymentSystemCondition {
-    1: required set<BankCardPaymentSystem> bank_card_payment_systems
-    2: optional set<MobilePaymentSystem> mobile_payment_systems
+    1: required BankCardPaymentSystem payment_system_is
+    2: optional MobilePaymentSystem mobile_payment_system_is
 }
 
 struct PaymentTerminalCondition {
