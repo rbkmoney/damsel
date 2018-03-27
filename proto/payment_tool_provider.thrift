@@ -4,7 +4,7 @@ include "domain.thrift"
 namespace java com.rbkmoney.damsel.payment_tool_provider
 namespace erlang paytoolprv
 
-struct WrappedPayment {
+struct WrappedPaymentTool {
     1: required PaymentRequest request
 }
 
@@ -23,11 +23,10 @@ struct SamsungPayRequest {
     2: required string reference_id
 }
 
-struct UnwrappedPayment {
+struct UnwrappedPaymentTool {
     1: required CardInfo card_info
     2: required CardPaymentData payment_data
     3: required PaymentDetails details
-
 }
 
 union PaymentDetails {
@@ -40,7 +39,6 @@ struct ApplePayDetails {
     2: required domain.Amount amount
     3: required i16 currency_numeric_code
     4: required string device_id
-
 }
 
 struct SamsungPayDetails {
@@ -50,16 +48,16 @@ struct SamsungPayDetails {
 struct CardInfo {
     1: optional string display_name
     2: optional string cardholder_name
-    3: optional string last4digits
-    4: optional CardCalss card_class
+    3: optional string last_4_digits
+    4: optional CardClass card_class
     5: optional domain.BankCardPaymentSystem payment_system
 }
 
-enum CardCalss {
-    credit,
-    debit,
-    prepaid,
-    store,
+enum CardClass {
+    credit
+    debit
+    prepaid
+    store
     unknown
 }
 
@@ -70,7 +68,7 @@ union CardPaymentData {
 struct TokenizedCard {
     1: required string dpan
     2: required ExpDate exp_date
-    3: required AuthType auth_type
+    3: required AuthData auth_data
 }
 
 struct ExpDate {
@@ -80,16 +78,16 @@ struct ExpDate {
     2: required i16 year
 }
 
-union AuthType {
+union AuthData {
     1: Auth3DS auth_3ds
 }
 
 struct Auth3DS {
     1: required string cryptogram
-    2: optional string eci_indicator
+    2: optional string eci
 }
 
-service PaymentToolProvier {
-    UnwrappedPayment Unwrap(1: WrappedPayment payment) throws (1: base.InvalidRequest ex1)
+service PaymentToolProvider {
+    UnwrappedPaymentTool Unwrap(1: WrappedPaymentTool payment_tool) throws (1: base.InvalidRequest ex1)
 }
 
