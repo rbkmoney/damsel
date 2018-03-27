@@ -228,11 +228,14 @@
 -record('merchstat_InvoicePaymentRefundPending', {}).
 
 %% struct 'InvoicePaymentRefundSucceeded'
--record('merchstat_InvoicePaymentRefundSucceeded', {}).
+-record('merchstat_InvoicePaymentRefundSucceeded', {
+    'at' :: dmsl_base_thrift:'Timestamp'()
+}).
 
 %% struct 'InvoicePaymentRefundFailed'
 -record('merchstat_InvoicePaymentRefundFailed', {
-    'failure' :: dmsl_merch_stat_thrift:'OperationFailure'()
+    'failure' :: dmsl_merch_stat_thrift:'OperationFailure'(),
+    'at' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% struct 'StatRequest'

@@ -868,11 +868,14 @@ struct_info('InvoicePaymentRefundPending') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentRefundSucceeded') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, required, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentRefundFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined}
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+    {2, required, string, 'at', undefined}
 ]};
 
 struct_info('StatRequest') ->
