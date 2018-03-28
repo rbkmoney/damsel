@@ -51,12 +51,6 @@
 %% struct 'OperationTimeout'
 -record('merchstat_OperationTimeout', {}).
 
-%% struct 'ExternalFailure'
--record('merchstat_ExternalFailure', {
-    'code' :: binary(),
-    'description' :: binary() | undefined
-}).
-
 %% struct 'InvoicePaymentPending'
 -record('merchstat_InvoicePaymentPending', {}).
 

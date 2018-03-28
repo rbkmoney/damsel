@@ -54,7 +54,6 @@
     'InvoicePaymentFlowHold'/0,
     'OperationFailure'/0,
     'OperationTimeout'/0,
-    'ExternalFailure'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentProcessed'/0,
     'InvoicePaymentCaptured'/0,
@@ -158,7 +157,6 @@
     'InvoicePaymentFlowHold' |
     'OperationFailure' |
     'OperationTimeout' |
-    'ExternalFailure' |
     'InvoicePaymentPending' |
     'InvoicePaymentProcessed' |
     'InvoicePaymentCaptured' |
@@ -231,13 +229,10 @@
 %% union 'OperationFailure'
 -type 'OperationFailure'() ::
     {'operation_timeout', 'OperationTimeout'()} |
-    {'external_failure', 'ExternalFailure'()}.
+    {'failure', dmsl_domain_thrift:'Failure'()}.
 
 %% struct 'OperationTimeout'
 -type 'OperationTimeout'() :: #'merchstat_OperationTimeout'{}.
-
-%% struct 'ExternalFailure'
--type 'ExternalFailure'() :: #'merchstat_ExternalFailure'{}.
 
 %% struct 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'merchstat_InvoicePaymentPending'{}.
@@ -475,7 +470,6 @@ structs() ->
         'InvoicePaymentFlowHold',
         'OperationFailure',
         'OperationTimeout',
-        'ExternalFailure',
         'InvoicePaymentPending',
         'InvoicePaymentProcessed',
         'InvoicePaymentCaptured',
@@ -633,17 +627,11 @@ struct_info('InvoicePaymentFlowHold') ->
 struct_info('OperationFailure') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'ExternalFailure'}}, 'external_failure', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
 ]};
 
 struct_info('OperationTimeout') ->
     {struct, struct, []};
-
-struct_info('ExternalFailure') ->
-    {struct, struct, [
-    {1, required, string, 'code', undefined},
-    {2, optional, string, 'description', undefined}
-]};
 
 struct_info('InvoicePaymentPending') ->
     {struct, struct, []};
@@ -925,9 +913,6 @@ record_name('PaymentResourcePayer') ->
 
     record_name('OperationTimeout') ->
     'merchstat_OperationTimeout';
-
-    record_name('ExternalFailure') ->
-    'merchstat_ExternalFailure';
 
     record_name('InvoicePaymentPending') ->
     'merchstat_InvoicePaymentPending';
