@@ -1329,6 +1329,7 @@ union CashFlowAccount {
     2: ProviderCashFlowAccount provider
     3: SystemCashFlowAccount system
     4: ExternalCashFlowAccount external
+    5: RBKMWalletCashFlowAccount wallet
 }
 
 enum MerchantCashFlowAccount {
@@ -1389,6 +1390,11 @@ enum ExternalCashFlowAccount {
      */
     outcome
 
+}
+
+enum RBKMWalletCashFlowAccount {
+    settlement
+    payout
 }
 
 enum CashFlowConstant {
