@@ -429,8 +429,8 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
-    /** 
-     * Сумма возврата. 
+    /**
+     * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
      */
     2: optional domain.Cash cash
@@ -453,8 +453,10 @@ exception PartyNotFound {}
 exception PartyNotExistsYet {}
 exception InvalidPartyRevision {}
 exception ShopNotFound {}
+exception WalletNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+exception InvalidWalletStatus { 1: required InvalidStatus status }
 exception InvalidContractStatus { 1: required domain.ContractStatus status }
 
 union InvalidStatus {
@@ -1141,6 +1143,7 @@ typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
 typedef domain.PayoutToolID PayoutToolID
+typedef domain.RBKMWalletID RBKMWalletID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
@@ -1535,7 +1538,7 @@ service PartyManagement {
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
-     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+    void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
     void ActivateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
@@ -1549,6 +1552,23 @@ service PartyManagement {
 
     domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
+
+    /* RBKMWallet */
+
+    domain.RBKMWallet GetWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3)
+
+    void SuspendWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    void ActivateWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    void BlockWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    void UnblockWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
 
     /* Claim */
 
