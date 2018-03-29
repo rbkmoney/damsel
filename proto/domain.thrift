@@ -477,6 +477,8 @@ typedef base.ID ContractorID
 struct PartyContractor {
     1: required ContractorID id
     2: required Contractor contractor
+    3: required ContractorIdentificationStatus status
+    4: required list<IdentificationDocument> documents
 }
 
 /** Лицо, выступающее стороной договора. */
@@ -530,6 +532,12 @@ struct InternationalLegalEntity {
     5: optional string registered_number
 }
 
+union ContractorIdentificationStatus {
+    1: AbsolutlyNotApproved absolutly_not_approved
+    2: PartialyApproved partialy_approved
+    3: FullyApproved fully_approved
+}
+
 /** Банковский счёт. */
 
 struct RussianBankAccount {
@@ -554,13 +562,11 @@ union PrivateEntity {
 
 struct RussianPrivateEntity {
     1: required string name
-    2: required list<IdentificationDocument> documents
 }
 
 struct IdentificationDocument {
     1: required base.ID id
-    2: required IdentificationDocumentStatus status
-    3: required IdentificationDocumentDetails details
+    2: required IdentificationDocumentDetails details
 }
 
 union IdentificationDocumentDetails {
@@ -590,12 +596,6 @@ struct RussianTaxCertificate {
 
 struct RussianRetireeInsuranceCertificate {
     1: required string snils // snails %)
-}
-
-union IdentificationDocumentStatus {
-    1: AbsolutlyNotApproved absolutly_not_approved
-    2: PartialyApproved partialy_approved
-    3: FullyApproved fully_approved
 }
 
 struct AbsolutlyNotApproved {}
@@ -1619,7 +1619,7 @@ union Condition {
     5: ShopLocation shop_location_is
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
-    8: IdentificationDocumentStatus identification_document_status_is
+    8: ContractorIdentificationStatus identification_status_is
 }
 
 union PaymentToolCondition {
