@@ -85,7 +85,8 @@
     {'provider_limit_exceeded', 'LimitExceeded'()} |
     {'payment_tool_rejected', 'PaymentToolReject'()} |
     {'security_policy_violated', 'GeneralFailure'()} |
-    {'temporary_unavailable', 'GeneralFailure'()}.
+    {'temporarily_unavailable', 'GeneralFailure'()} |
+    {'rejected_by_issuer', 'GeneralFailure'()}.
 
 %% union 'LimitExceeded'
 -type 'LimitExceeded'() ::
@@ -206,7 +207,8 @@ struct_info('AuthorizationFailure') ->
     {9, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'provider_limit_exceeded', undefined},
     {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolReject'}}, 'payment_tool_rejected', undefined},
     {11, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'security_policy_violated', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'temporary_unavailable', undefined}
+    {12, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'temporarily_unavailable', undefined},
+    {13, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'rejected_by_issuer', undefined}
 ]};
 
 struct_info('LimitExceeded') ->
