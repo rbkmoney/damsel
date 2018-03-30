@@ -83,7 +83,9 @@
     {'insufficient_funds', 'GeneralFailure'()} |
     {'account_limit_exceeded', 'LimitExceeded'()} |
     {'provider_limit_exceeded', 'LimitExceeded'()} |
-    {'payment_tool_rejected', 'PaymentToolReject'()}.
+    {'payment_tool_rejected', 'PaymentToolReject'()} |
+    {'security_policy_violated', 'GeneralFailure'()} |
+    {'temporary_unavailable', 'GeneralFailure'()}.
 
 %% union 'LimitExceeded'
 -type 'LimitExceeded'() ::
@@ -93,15 +95,16 @@
 
 %% union 'PaymentToolReject'
 -type 'PaymentToolReject'() ::
+    {'unknown', 'GeneralFailure'()} |
     {'bank_card_rejected', 'BankCardReject'()}.
 
 %% union 'BankCardReject'
 -type 'BankCardReject'() ::
+    {'unknown', 'GeneralFailure'()} |
     {'card_number_invalid', 'GeneralFailure'()} |
     {'card_expired', 'GeneralFailure'()} |
     {'card_holder_invalid', 'GeneralFailure'()} |
     {'cvv_invalid', 'GeneralFailure'()} |
-    {'card_unsupported', 'GeneralFailure'()} |
     {'issuer_not_found', 'GeneralFailure'()}.
 
 %% struct 'GeneralFailure'
@@ -201,7 +204,9 @@ struct_info('AuthorizationFailure') ->
     {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'insufficient_funds', undefined},
     {8, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'account_limit_exceeded', undefined},
     {9, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitExceeded'}}, 'provider_limit_exceeded', undefined},
-    {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolReject'}}, 'payment_tool_rejected', undefined}
+    {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolReject'}}, 'payment_tool_rejected', undefined},
+    {11, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'security_policy_violated', undefined},
+    {12, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'temporary_unavailable', undefined}
 ]};
 
 struct_info('LimitExceeded') ->
@@ -213,16 +218,17 @@ struct_info('LimitExceeded') ->
 
 struct_info('PaymentToolReject') ->
     {struct, union, [
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
     {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'BankCardReject'}}, 'bank_card_rejected', undefined}
 ]};
 
 struct_info('BankCardReject') ->
     {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'card_number_invalid', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'card_expired', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'card_holder_invalid', undefined},
     {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'cvv_invalid', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'card_unsupported', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'issuer_not_found', undefined}
 ]};
 
