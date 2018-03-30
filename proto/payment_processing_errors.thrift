@@ -85,7 +85,8 @@ union AuthorizationFailure {
      9: LimitExceeded     provider_limit_exceeded
     10: PaymentToolReject payment_tool_rejected
     11: GeneralFailure    security_policy_violated
-    12: GeneralFailure    temporary_unavailable
+    12: GeneralFailure    temporarily_unavailable
+    13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
 }
 
 union LimitExceeded {
@@ -100,7 +101,7 @@ union PaymentToolReject {
 }
 
 union BankCardReject {
-    1: GeneralFailure unknown             // "silent reject" / "do not honor" / rejected by issuer / ...
+    1: GeneralFailure unknown
     2: GeneralFailure card_number_invalid
     3: GeneralFailure card_expired
     4: GeneralFailure card_holder_invalid
