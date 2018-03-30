@@ -1535,8 +1535,6 @@ union PaymentToolCondition {
 }
 
 struct BankCardCondition {
-    1: optional BankCardPaymentSystem payment_system_is // legacy
-    2: optional BankCardBINRangeRef bin_in              // legacy
     3: optional BankCardConditionDefinition definition
 }
 
@@ -1669,36 +1667,6 @@ struct ContractPaymentInstitutionDefaults {
     2: required PaymentInstitutionRef live
 }
 
-/* Merchant, shop, contract & payout_tool prototypes */
-/* all deprecated */
-
-struct PartyPrototypeRef { 1: required ObjectID id }
-
-struct PartyPrototype {
-    1: required ShopPrototype shop
-    3: required ContractPrototype contract
-}
-
-struct ShopPrototype {
-    5: required ShopID shop_id
-    1: required CategoryRef category
-    2: required CurrencyRef currency
-    3: required ShopDetails details
-    4: required ShopLocation location
-}
-
-struct ContractPrototype {
-    1: required ContractID contract_id
-    2: required ContractTemplateRef test_contract_template
-    3: required PayoutToolPrototype payout_tool
-}
-
-struct PayoutToolPrototype {
-    1: required PayoutToolID payout_tool_id
-    2: required PayoutToolInfo payout_tool_info
-    3: required CurrencyRef payout_tool_currency
-}
-
 /* Root config */
 
 struct GlobalsRef {}
@@ -1709,13 +1677,6 @@ struct Globals {
     8: optional set<PaymentInstitutionRef> payment_institutions
     42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
 
-    /* deprecated */
-    1: optional PartyPrototypeRef party_prototype
-    2: optional ProviderSelector providers
-    3: optional SystemAccountSetSelector system_account_set
-    5: optional InspectorSelector inspector
-    6: optional ContractTemplateRef default_contract_template
-    7: optional ProxyRef common_merchant_proxy
 }
 
 /** Dummy (for integrity test purpose) */
@@ -1830,12 +1791,6 @@ struct ProxyObject {
     2: required ProxyDefinition data
 }
 
-/* deprecated */
-struct PartyPrototypeObject {
-    1: required PartyPrototypeRef ref
-    2: required PartyPrototype data
-}
-
 struct GlobalsObject {
     1: required GlobalsRef ref
     2: required Globals data
@@ -1864,9 +1819,6 @@ union Reference {
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
-
-    /* deprecated */
-    10 : PartyPrototypeRef       party_prototype
 }
 
 union DomainObject {
@@ -1892,9 +1844,6 @@ union DomainObject {
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
-
-    /* deprecated */
-    10 : PartyPrototypeObject       party_prototype
 }
 
 /* Domain */
