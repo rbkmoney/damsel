@@ -478,7 +478,7 @@ struct PartyContractor {
     1: required ContractorID id
     2: required Contractor contractor
     3: required ContractorIdentificationStatus status
-    4: required list<IdentificationDocument> documents
+    4: required map<IdentityDocumentID, IdentityDocument> documents
 }
 
 /** Лицо, выступающее стороной договора. */
@@ -538,6 +538,12 @@ union ContractorIdentificationStatus {
     3: FullyApproved fully_approved
 }
 
+struct AbsolutlyNotApproved {}
+struct PartialyApproved {}
+struct FullyApproved {
+    1: optional base.Timestamp valid_until
+}
+
 /** Банковский счёт. */
 
 struct RussianBankAccount {
@@ -564,16 +570,18 @@ struct RussianPrivateEntity {
     1: required string name
 }
 
-struct IdentificationDocument {
-    1: required base.ID id
-    2: required IdentificationDocumentDetails details
+typedef base.ID IdentityDocumentID
+
+struct IdentityDocument {
+    1: required IdentityDocumentID id
+    2: required IdentityDocumentDetails details
 }
 
-union IdentificationDocumentDetails {
-    1: RussianIdentificationDocument russian_id
+union IdentityDocumentDetails {
+    1: RussianIdentityDocument russian_id
 }
 
-union RussianIdentificationDocument {
+union RussianIdentityDocument {
     1: RussianPassport passport
     2: RussianTaxCertificate tax_certificate
     3: RussianRetireeInsuranceCertificate retiree_insurance_certificate
@@ -583,11 +591,13 @@ struct RussianPassport {
     1: required string first_name
     2: required string second_name
     3: required string middle_name
-    4: required string series
-    5: required string number
-    6: required base.Timestamp date_of_issue
-    7: required string issuer_name
-    8: required string issuer_code
+    4: required base.Timestamp date_of_birth
+    5: required string place_of_birth
+    6: required string series
+    7: required string number
+    8: required base.Timestamp date_of_issue
+    9: required string issuer_name
+    10: required string issuer_code
 }
 
 struct RussianTaxCertificate {
@@ -595,13 +605,7 @@ struct RussianTaxCertificate {
 }
 
 struct RussianRetireeInsuranceCertificate {
-    1: required string snils // snails %)
-}
-
-struct AbsolutlyNotApproved {}
-struct PartialyApproved {}
-struct FullyApproved {
-    1: optional base.Timestamp valid_until
+    1: required string snils
 }
 
 typedef base.ID PayoutToolID
