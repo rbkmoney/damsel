@@ -478,7 +478,6 @@ struct PartyContractor {
     1: required ContractorID id
     2: required Contractor contractor
     3: required ContractorIdentificationStatus status
-    4: required map<IdentityDocumentID, IdentityDocument> documents
 }
 
 /** Лицо, выступающее стороной договора. */
@@ -568,23 +567,9 @@ union PrivateEntity {
 
 struct RussianPrivateEntity {
     1: required string name
-}
-
-typedef base.ID IdentityDocumentID
-
-struct IdentityDocument {
-    1: required IdentityDocumentID id
-    2: required IdentityDocumentDetails details
-}
-
-union IdentityDocumentDetails {
-    1: RussianIdentityDocument russian_id
-}
-
-union RussianIdentityDocument {
-    1: RussianPassport passport
-    2: RussianTaxCertificate tax_certificate
-    3: RussianRetireeInsuranceCertificate retiree_insurance_certificate
+    2: optional RussianPassport passport
+    3: optional RussianTaxCertificate tax_certificate
+    4: optional RussianRetireeInsuranceCertificate retiree_insurance_certificate
 }
 
 struct RussianPassport {
