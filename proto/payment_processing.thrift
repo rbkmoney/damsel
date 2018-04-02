@@ -1143,7 +1143,7 @@ typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
 typedef domain.PayoutToolID PayoutToolID
-typedef domain.RBKMWalletID RBKMWalletID
+typedef domain.WalletID WalletID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
@@ -1553,21 +1553,21 @@ service PartyManagement {
     domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
 
-    /* RBKMWallet */
+    /* Wallet */
 
-    domain.RBKMWallet GetWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id)
+    domain.Wallet GetWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3)
 
-    void SuspendWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id)
+    void SuspendWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
 
-    void ActivateWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id)
+    void ActivateWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
 
-    void BlockWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id, 4: string reason)
+    void BlockWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
 
-    void UnblockWallet (1: UserInfo user, 2: PartyID party_id, 3: RBKMWalletID id, 4: string reason)
+    void UnblockWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
 
     /* Claim */

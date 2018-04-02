@@ -394,7 +394,7 @@ struct Party {
     9: required map<ContractorID, PartyContractor> contractors
     4: required map<ContractID, Contract> contracts
     5: required map<ShopID, Shop> shops
-    10: required map<RBKMWalletID, RBKMWallet> wallets
+    10: required map<WalletID, Wallet> wallets
     6: required PartyRevision revision
 }
 
@@ -441,19 +441,19 @@ union ShopLocation {
 
 /** RBKM Wallets **/
 
-typedef base.ID RBKMWalletID
+typedef base.ID WalletID
 
-struct RBKMWallet {
-    1: required RBKMWalletID id
+struct Wallet {
+    1: required WalletID id
     2: optional string name
     3: required base.Timestamp created_at
     4: required Blocking blocking
     5: required Suspension suspension
     6: required ContractID contract
-    7: required RBKMWalletAccount account
+    7: required WalletAccount account
 }
 
-struct RBKMWalletAccount {
+struct WalletAccount {
     1: required CurrencyRef currency
     2: required AccountID settlement
 
@@ -804,7 +804,7 @@ struct PayoutCompilationPolicy {
     1: required base.TimeSpan assets_freeze_for
 }
 
-/** RBKMWallets service terms **/
+/** Wallets service terms **/
 
 struct WalletServiceTerms {
     1: optional CurrencySelector currencies
@@ -1333,7 +1333,7 @@ union CashFlowAccount {
     2: ProviderCashFlowAccount provider
     3: SystemCashFlowAccount system
     4: ExternalCashFlowAccount external
-    5: RBKMWalletCashFlowAccount wallet
+    5: WalletCashFlowAccount wallet
 }
 
 enum MerchantCashFlowAccount {
@@ -1396,7 +1396,7 @@ enum ExternalCashFlowAccount {
 
 }
 
-enum RBKMWalletCashFlowAccount {
+enum WalletCashFlowAccount {
     settlement
     payout
 }
@@ -1666,7 +1666,7 @@ struct PartyCondition {
 
 union PartyConditionDefinition {
     1: ShopID shop_is
-    2: RBKMWalletID wallet_is
+    2: WalletID wallet_is
 }
 
 /* Proxies */
