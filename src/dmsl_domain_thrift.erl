@@ -284,11 +284,6 @@
     'PaymentInstitutionRef'/0,
     'PaymentInstitution'/0,
     'ContractPaymentInstitutionDefaults'/0,
-    'PartyPrototypeRef'/0,
-    'PartyPrototype'/0,
-    'ShopPrototype'/0,
-    'ContractPrototype'/0,
-    'PayoutToolPrototype'/0,
     'GlobalsRef'/0,
     'Globals'/0,
     'Dummy'/0,
@@ -314,7 +309,6 @@
     'SystemAccountSetObject'/0,
     'ExternalAccountSetObject'/0,
     'ProxyObject'/0,
-    'PartyPrototypeObject'/0,
     'GlobalsObject'/0,
     'Reference'/0,
     'DomainObject'/0
@@ -961,11 +955,6 @@
     'PaymentInstitutionRef' |
     'PaymentInstitution' |
     'ContractPaymentInstitutionDefaults' |
-    'PartyPrototypeRef' |
-    'PartyPrototype' |
-    'ShopPrototype' |
-    'ContractPrototype' |
-    'PayoutToolPrototype' |
     'GlobalsRef' |
     'Globals' |
     'Dummy' |
@@ -991,7 +980,6 @@
     'SystemAccountSetObject' |
     'ExternalAccountSetObject' |
     'ProxyObject' |
-    'PartyPrototypeObject' |
     'GlobalsObject' |
     'Reference' |
     'DomainObject'.
@@ -1695,21 +1683,6 @@
 %% struct 'ContractPaymentInstitutionDefaults'
 -type 'ContractPaymentInstitutionDefaults'() :: #'domain_ContractPaymentInstitutionDefaults'{}.
 
-%% struct 'PartyPrototypeRef'
--type 'PartyPrototypeRef'() :: #'domain_PartyPrototypeRef'{}.
-
-%% struct 'PartyPrototype'
--type 'PartyPrototype'() :: #'domain_PartyPrototype'{}.
-
-%% struct 'ShopPrototype'
--type 'ShopPrototype'() :: #'domain_ShopPrototype'{}.
-
-%% struct 'ContractPrototype'
--type 'ContractPrototype'() :: #'domain_ContractPrototype'{}.
-
-%% struct 'PayoutToolPrototype'
--type 'PayoutToolPrototype'() :: #'domain_PayoutToolPrototype'{}.
-
 %% struct 'GlobalsRef'
 -type 'GlobalsRef'() :: #'domain_GlobalsRef'{}.
 
@@ -1785,9 +1758,6 @@
 %% struct 'ProxyObject'
 -type 'ProxyObject'() :: #'domain_ProxyObject'{}.
 
-%% struct 'PartyPrototypeObject'
--type 'PartyPrototypeObject'() :: #'domain_PartyPrototypeObject'{}.
-
 %% struct 'GlobalsObject'
 -type 'GlobalsObject'() :: #'domain_GlobalsObject'{}.
 
@@ -1812,8 +1782,7 @@
     {'proxy', 'ProxyRef'()} |
     {'globals', 'GlobalsRef'()} |
     {'dummy', 'DummyRef'()} |
-    {'dummy_link', 'DummyLinkRef'()} |
-    {'party_prototype', 'PartyPrototypeRef'()}.
+    {'dummy_link', 'DummyLinkRef'()}.
 
 %% union 'DomainObject'
 -type 'DomainObject'() ::
@@ -1836,8 +1805,7 @@
     {'proxy', 'ProxyObject'()} |
     {'globals', 'GlobalsObject'()} |
     {'dummy', 'DummyObject'()} |
-    {'dummy_link', 'DummyLinkObject'()} |
-    {'party_prototype', 'PartyPrototypeObject'()}.
+    {'dummy_link', 'DummyLinkObject'()}.
 
 %%
 %% services and functions
@@ -2153,11 +2121,6 @@ structs() ->
         'PaymentInstitutionRef',
         'PaymentInstitution',
         'ContractPaymentInstitutionDefaults',
-        'PartyPrototypeRef',
-        'PartyPrototype',
-        'ShopPrototype',
-        'ContractPrototype',
-        'PayoutToolPrototype',
         'GlobalsRef',
         'Globals',
         'Dummy',
@@ -2183,7 +2146,6 @@ structs() ->
         'SystemAccountSetObject',
         'ExternalAccountSetObject',
         'ProxyObject',
-        'PartyPrototypeObject',
         'GlobalsObject',
         'Reference',
         'DomainObject'
@@ -3778,8 +3740,6 @@ struct_info('PaymentToolCondition') ->
 
 struct_info('BankCardCondition') ->
     {struct, struct, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'BankCardConditionDefinition'}}, 'definition', undefined}
 ]};
 
@@ -3929,40 +3889,6 @@ struct_info('ContractPaymentInstitutionDefaults') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
 ]};
 
-struct_info('PartyPrototypeRef') ->
-    {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
-
-struct_info('PartyPrototype') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ShopPrototype'}}, 'shop', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ContractPrototype'}}, 'contract', undefined}
-]};
-
-struct_info('ShopPrototype') ->
-    {struct, struct, [
-    {5, required, string, 'shop_id', undefined},
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined}
-]};
-
-struct_info('ContractPrototype') ->
-    {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'test_contract_template', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'PayoutToolPrototype'}}, 'payout_tool', undefined}
-]};
-
-struct_info('PayoutToolPrototype') ->
-    {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'payout_tool_currency', undefined}
-]};
-
 struct_info('GlobalsRef') ->
     {struct, struct, []};
 
@@ -3970,13 +3896,7 @@ struct_info('Globals') ->
     {struct, struct, [
     {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
     {8, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}}, 'payment_institutions', undefined},
-    {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined},
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
-    {5, optional, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'default_contract_template', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
+    {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined}
 ]};
 
 struct_info('Dummy') ->
@@ -4111,12 +4031,6 @@ struct_info('ProxyObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'ProxyDefinition'}}, 'data', undefined}
 ]};
 
-struct_info('PartyPrototypeObject') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototype'}}, 'data', undefined}
-]};
-
 struct_info('GlobalsObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'ref', undefined},
@@ -4144,8 +4058,7 @@ struct_info('Reference') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined}
 ]};
 
 struct_info('DomainObject') ->
@@ -4169,8 +4082,7 @@ struct_info('DomainObject') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -4615,21 +4527,6 @@ record_name('OperationTimeout') ->
     record_name('ContractPaymentInstitutionDefaults') ->
     'domain_ContractPaymentInstitutionDefaults';
 
-    record_name('PartyPrototypeRef') ->
-    'domain_PartyPrototypeRef';
-
-    record_name('PartyPrototype') ->
-    'domain_PartyPrototype';
-
-    record_name('ShopPrototype') ->
-    'domain_ShopPrototype';
-
-    record_name('ContractPrototype') ->
-    'domain_ContractPrototype';
-
-    record_name('PayoutToolPrototype') ->
-    'domain_PayoutToolPrototype';
-
     record_name('GlobalsRef') ->
     'domain_GlobalsRef';
 
@@ -4704,9 +4601,6 @@ record_name('OperationTimeout') ->
 
     record_name('ProxyObject') ->
     'domain_ProxyObject';
-
-    record_name('PartyPrototypeObject') ->
-    'domain_PartyPrototypeObject';
 
     record_name('GlobalsObject') ->
     'domain_GlobalsObject';
