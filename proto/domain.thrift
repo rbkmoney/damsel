@@ -450,7 +450,7 @@ struct Wallet {
     4: required Blocking blocking
     5: required Suspension suspension
     6: required ContractID contract
-    7: required WalletAccount account
+    7: optional WalletAccount account
 }
 
 struct WalletAccount {
@@ -531,16 +531,10 @@ struct InternationalLegalEntity {
     5: optional string registered_number
 }
 
-union ContractorIdentificationStatus {
-    1: AbsolutlyNotApproved absolutly_not_approved
-    2: PartialyApproved partialy_approved
-    3: FullyApproved fully_approved
-}
-
-struct AbsolutlyNotApproved {}
-struct PartialyApproved {}
-struct FullyApproved {
-    1: optional base.Timestamp valid_until
+enum ContractorIdentificationStatus {
+    not_identified = 100
+    partialy_identified = 200
+    fully_identified = 300
 }
 
 /** Банковский счёт. */

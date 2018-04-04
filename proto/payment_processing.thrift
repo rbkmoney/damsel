@@ -1142,6 +1142,7 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.ContractorID ContractorID
 typedef domain.PayoutToolID PayoutToolID
 typedef domain.WalletID WalletID
 typedef domain.ContractTemplateRef ContractTemplateRef
@@ -1177,9 +1178,12 @@ struct ShopAccountParams {
 }
 
 struct ContractParams {
-    1: required domain.Contractor contractor
+    4: optional ContractorID contractor_id
     2: optional ContractTemplateRef template
     3: optional PaymentInstitutionRef payment_institution
+
+    // depricated
+    1: optional domain.Contractor contractor
 }
 
 struct ContractAdjustmentParams {
@@ -1187,8 +1191,20 @@ struct ContractAdjustmentParams {
 }
 
 union PartyModification {
+    8: ContractorModificationUnit contractor_modification
     4: ContractModificationUnit contract_modification
     6: ShopModificationUnit shop_modification
+    7: WalletModificationUnit wallet_modification
+}
+
+struct ContractorModificationUnit {
+    1: required ContractorID id
+    2: required ContractorModification modification
+}
+
+union ContractorModification {
+    1: domain.Contractor creation
+    2: domain.ContractorIdentificationStatus status_modification
 }
 
 struct ContractModificationUnit {
@@ -1202,6 +1218,7 @@ union ContractModification {
     3: ContractAdjustmentModificationUnit adjustment_modification
     4: PayoutToolModificationUnit payout_tool_modification
     5: domain.LegalAgreement legal_agreement_binding
+    6: ContractorID contractor_modification
 }
 
 struct ContractTermination {
@@ -1261,6 +1278,25 @@ struct ProxyModification {
     1: optional domain.Proxy proxy
 }
 
+struct WalletModificationUnit {
+    1: required WalletID id
+    2: required WalletModification modification
+}
+
+union WalletModification {
+    1: WalletParams creation
+    2: WalletAccountParams account_creation
+}
+
+struct WalletParams {
+    1: optional string name
+    2: required ContractID contract_id
+}
+
+struct WalletAccountParams {
+    1: required domain.CurrencyRef currency
+}
+
 // Claims
 
 typedef i64 ClaimID
@@ -1304,6 +1340,8 @@ union ClaimEffect {
     /* 1: PartyEffect Reserved for future */
     2: ContractEffectUnit contract_effect
     3: ShopEffectUnit shop_effect
+    4: ContractorEffectUnit contractor_effect
+    5: WalletEffectUnit wallet_effect
 }
 
 struct ContractEffectUnit {
@@ -1315,8 +1353,9 @@ union ContractEffect {
     1: domain.Contract created
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
-    5: domain.LegalAgreement legal_agreement_bound
     4: domain.PayoutTool payout_tool_created
+    5: domain.LegalAgreement legal_agreement_bound
+    6: ContractorID contractor_changed
 }
 
 struct ShopEffectUnit {
@@ -1347,6 +1386,26 @@ struct ScheduleChanged {
     1: optional domain.PayoutScheduleRef schedule
 }
 
+struct ContractorEffectUnit {
+    1: required ContractorID id
+    2: required ContractorEffect effect
+}
+
+union ContractorEffect {
+    1: domain.PartyContractor created
+    2: domain.ContractorIdentificationStatus status_changed
+}
+
+struct WalletEffectUnit {
+    1: required WalletID id
+    2: required WalletEffect effect
+}
+
+union WalletEffect {
+    1: domain.Wallet created
+    2: domain.WalletAccount account_created
+}
+
 /* deprecated */
 struct ShopProxyChanged {
     1: optional domain.Proxy proxy
@@ -1368,6 +1427,8 @@ union PartyChange {
     5: domain.Suspension    party_suspension        // #
     6: ShopBlocking         shop_blocking           // #
     7: ShopSuspension       shop_suspension         // #
+    12: WalletBlocking      wallet_blocking         // #
+    13: WalletSuspension    wallet_suspension       // #
     2: Claim                claim_created
     3: ClaimStatusChanged   claim_status_changed    // #
     8: ClaimUpdated         claim_updated
@@ -1389,6 +1450,16 @@ struct ShopBlocking {
 
 struct ShopSuspension {
     1: required ShopID shop_id
+    2: required domain.Suspension suspension
+}
+
+struct WalletBlocking {
+    1: required WalletID wallet_id
+    2: required domain.Blocking blocking
+}
+
+struct WalletSuspension {
+    1: required WalletID wallet_id
     2: required domain.Suspension suspension
 }
 
