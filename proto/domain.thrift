@@ -473,11 +473,15 @@ enum RiskScore {
 /* Contracts */
 
 typedef base.ID ContractorID
+typedef base.Opaque IdentityDocumentToken
+typedef base.ID ContractorOwnerID
 
 struct PartyContractor {
     1: required ContractorID id
     2: required Contractor contractor
     3: required ContractorIdentificationStatus status
+    4: optional ContractorOwnerID owner_id
+    5: required list<IdentityDocumentToken> identity_documents
 }
 
 /** Лицо, выступающее стороной договора. */
@@ -560,31 +564,10 @@ union PrivateEntity {
 }
 
 struct RussianPrivateEntity {
-    1: required string name
-    2: optional RussianPassport passport
-    3: optional RussianTaxCertificate tax_certificate
-    4: optional RussianRetireeInsuranceCertificate retiree_insurance_certificate
-}
-
-struct RussianPassport {
     1: required string first_name
     2: required string second_name
     3: required string middle_name
-    4: required base.Timestamp date_of_birth
-    5: required string place_of_birth
-    6: required string series
-    7: required string number
-    8: required base.Timestamp date_of_issue
-    9: required string issuer_name
-    10: required string issuer_code
-}
-
-struct RussianTaxCertificate {
-    1: required string inn
-}
-
-struct RussianRetireeInsuranceCertificate {
-    1: required string snils
+    4: required ContactInfo contact_info
 }
 
 typedef base.ID PayoutToolID

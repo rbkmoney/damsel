@@ -1205,6 +1205,16 @@ struct ContractorModificationUnit {
 union ContractorModification {
     1: domain.Contractor creation
     2: domain.ContractorIdentificationStatus status_modification
+    3: ContractorOwnerModification owner_modification
+    4: ContractorIdentityDocumentsModification identity_documents_modification
+}
+
+struct ContractorOwnerModification {
+    1: optional domain.ContractorOwnerID owner_id
+}
+
+struct ContractorIdentityDocumentsModification {
+    1: required list<domain.IdentityDocumentToken> identity_documents
 }
 
 struct ContractModificationUnit {
@@ -1394,6 +1404,16 @@ struct ContractorEffectUnit {
 union ContractorEffect {
     1: domain.PartyContractor created
     2: domain.ContractorIdentificationStatus status_changed
+    3: ContractorOwnerChanged owner_changed
+    4: ContractorIdentityDocumentsChanged identity_documents_changed
+}
+
+struct ContractorOwnerChanged {
+    1: optional domain.ContractorOwnerID owner_id
+}
+
+struct ContractorIdentityDocumentsChanged {
+    1: required list<domain.IdentityDocumentToken> identity_documents
 }
 
 struct WalletEffectUnit {
