@@ -504,6 +504,10 @@ exception InvoicePaymentAmountExceeded {
     1: required domain.Cash maximum
 }
 
+exception InconsistentRefundCurrency {
+    1: required domain.CurrencySymbolicCode currency
+}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -691,6 +695,7 @@ service Invoicing {
             7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
             9: InvoicePaymentAmountExceeded ex9
+            10: InconsistentRefundCurrency ex10
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (

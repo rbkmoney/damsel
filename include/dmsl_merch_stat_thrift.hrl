@@ -51,12 +51,6 @@
 %% struct 'OperationTimeout'
 -record('merchstat_OperationTimeout', {}).
 
-%% struct 'ExternalFailure'
--record('merchstat_ExternalFailure', {
-    'code' :: binary(),
-    'description' :: binary() | undefined
-}).
-
 %% struct 'InvoicePaymentPending'
 -record('merchstat_InvoicePaymentPending', {}).
 
@@ -208,6 +202,35 @@
 
 %% struct 'PayoutConfirmed'
 -record('merchstat_PayoutConfirmed', {}).
+
+%% struct 'StatRefund'
+-record('merchstat_StatRefund', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
+    'payment_id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
+    'invoice_id' :: dmsl_domain_thrift:'InvoiceID'(),
+    'owner_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'status' :: dmsl_merch_stat_thrift:'InvoicePaymentRefundStatus'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency_symbolic_code' :: binary(),
+    'reason' :: binary() | undefined
+}).
+
+%% struct 'InvoicePaymentRefundPending'
+-record('merchstat_InvoicePaymentRefundPending', {}).
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-record('merchstat_InvoicePaymentRefundSucceeded', {
+    'at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'InvoicePaymentRefundFailed'
+-record('merchstat_InvoicePaymentRefundFailed', {
+    'failure' :: dmsl_merch_stat_thrift:'OperationFailure'(),
+    'at' :: dmsl_base_thrift:'Timestamp'()
+}).
 
 %% struct 'StatRequest'
 -record('merchstat_StatRequest', {

@@ -54,7 +54,6 @@
     'InvoicePaymentFlowHold'/0,
     'OperationFailure'/0,
     'OperationTimeout'/0,
-    'ExternalFailure'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentProcessed'/0,
     'InvoicePaymentCaptured'/0,
@@ -87,6 +86,11 @@
     'PayoutPaid'/0,
     'PayoutCancelled'/0,
     'PayoutConfirmed'/0,
+    'StatRefund'/0,
+    'InvoicePaymentRefundStatus'/0,
+    'InvoicePaymentRefundPending'/0,
+    'InvoicePaymentRefundSucceeded'/0,
+    'InvoicePaymentRefundFailed'/0,
     'StatRequest'/0,
     'StatResponse'/0,
     'StatResponseData'/0
@@ -153,7 +157,6 @@
     'InvoicePaymentFlowHold' |
     'OperationFailure' |
     'OperationTimeout' |
-    'ExternalFailure' |
     'InvoicePaymentPending' |
     'InvoicePaymentProcessed' |
     'InvoicePaymentCaptured' |
@@ -186,6 +189,11 @@
     'PayoutPaid' |
     'PayoutCancelled' |
     'PayoutConfirmed' |
+    'StatRefund' |
+    'InvoicePaymentRefundStatus' |
+    'InvoicePaymentRefundPending' |
+    'InvoicePaymentRefundSucceeded' |
+    'InvoicePaymentRefundFailed' |
     'StatRequest' |
     'StatResponse' |
     'StatResponseData'.
@@ -221,13 +229,10 @@
 %% union 'OperationFailure'
 -type 'OperationFailure'() ::
     {'operation_timeout', 'OperationTimeout'()} |
-    {'external_failure', 'ExternalFailure'()}.
+    {'failure', dmsl_domain_thrift:'Failure'()}.
 
 %% struct 'OperationTimeout'
 -type 'OperationTimeout'() :: #'merchstat_OperationTimeout'{}.
-
-%% struct 'ExternalFailure'
--type 'ExternalFailure'() :: #'merchstat_ExternalFailure'{}.
 
 %% struct 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'merchstat_InvoicePaymentPending'{}.
@@ -346,6 +351,24 @@
 %% struct 'PayoutConfirmed'
 -type 'PayoutConfirmed'() :: #'merchstat_PayoutConfirmed'{}.
 
+%% struct 'StatRefund'
+-type 'StatRefund'() :: #'merchstat_StatRefund'{}.
+
+%% union 'InvoicePaymentRefundStatus'
+-type 'InvoicePaymentRefundStatus'() ::
+    {'pending', 'InvoicePaymentRefundPending'()} |
+    {'succeeded', 'InvoicePaymentRefundSucceeded'()} |
+    {'failed', 'InvoicePaymentRefundFailed'()}.
+
+%% struct 'InvoicePaymentRefundPending'
+-type 'InvoicePaymentRefundPending'() :: #'merchstat_InvoicePaymentRefundPending'{}.
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-type 'InvoicePaymentRefundSucceeded'() :: #'merchstat_InvoicePaymentRefundSucceeded'{}.
+
+%% struct 'InvoicePaymentRefundFailed'
+-type 'InvoicePaymentRefundFailed'() :: #'merchstat_InvoicePaymentRefundFailed'{}.
+
 %% struct 'StatRequest'
 -type 'StatRequest'() :: #'merchstat_StatRequest'{}.
 
@@ -358,7 +381,8 @@
     {'invoices', ['StatInvoice'()]} |
     {'customers', ['StatCustomer'()]} |
     {'records', ['StatInfo'()]} |
-    {'payouts', ['StatPayout'()]}.
+    {'payouts', ['StatPayout'()]} |
+    {'refunds', ['StatRefund'()]}.
 
 %% exception 'DatasetTooBig'
 -type 'DatasetTooBig'() :: #'merchstat_DatasetTooBig'{}.
@@ -446,7 +470,6 @@ structs() ->
         'InvoicePaymentFlowHold',
         'OperationFailure',
         'OperationTimeout',
-        'ExternalFailure',
         'InvoicePaymentPending',
         'InvoicePaymentProcessed',
         'InvoicePaymentCaptured',
@@ -479,6 +502,11 @@ structs() ->
         'PayoutPaid',
         'PayoutCancelled',
         'PayoutConfirmed',
+        'StatRefund',
+        'InvoicePaymentRefundStatus',
+        'InvoicePaymentRefundPending',
+        'InvoicePaymentRefundSucceeded',
+        'InvoicePaymentRefundFailed',
         'StatRequest',
         'StatResponse',
         'StatResponseData'
@@ -599,17 +627,11 @@ struct_info('InvoicePaymentFlowHold') ->
 struct_info('OperationFailure') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'ExternalFailure'}}, 'external_failure', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
 ]};
 
 struct_info('OperationTimeout') ->
     {struct, struct, []};
-
-struct_info('ExternalFailure') ->
-    {struct, struct, [
-    {1, required, string, 'code', undefined},
-    {2, optional, string, 'description', undefined}
-]};
 
 struct_info('InvoicePaymentPending') ->
     {struct, struct, []};
@@ -808,6 +830,42 @@ struct_info('PayoutCancelled') ->
 struct_info('PayoutConfirmed') ->
     {struct, struct, []};
 
+struct_info('StatRefund') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'payment_id', undefined},
+    {3, required, string, 'invoice_id', undefined},
+    {4, required, string, 'owner_id', undefined},
+    {5, required, string, 'shop_id', undefined},
+    {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
+    {7, required, string, 'created_at', undefined},
+    {8, required, i64, 'amount', undefined},
+    {9, required, i64, 'fee', undefined},
+    {10, required, string, 'currency_symbolic_code', undefined},
+    {11, optional, string, 'reason', undefined}
+]};
+
+struct_info('InvoicePaymentRefundStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+]};
+
+struct_info('InvoicePaymentRefundPending') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundSucceeded') ->
+    {struct, struct, [
+    {1, required, string, 'at', undefined}
+]};
+
+struct_info('InvoicePaymentRefundFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+    {2, required, string, 'at', undefined}
+]};
+
 struct_info('StatRequest') ->
     {struct, struct, [
     {1, required, string, 'dsl', undefined}
@@ -825,7 +883,8 @@ struct_info('StatResponseData') ->
     {2, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}}, 'invoices', undefined},
     {3, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatCustomer'}}}, 'customers', undefined},
     {4, optional, {list, {map, string, string}}, 'records', undefined},
-    {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined}
+    {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
+    {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
 ]};
 
 struct_info('DatasetTooBig') ->
@@ -854,9 +913,6 @@ record_name('PaymentResourcePayer') ->
 
     record_name('OperationTimeout') ->
     'merchstat_OperationTimeout';
-
-    record_name('ExternalFailure') ->
-    'merchstat_ExternalFailure';
 
     record_name('InvoicePaymentPending') ->
     'merchstat_InvoicePaymentPending';
@@ -935,6 +991,18 @@ record_name('PaymentResourcePayer') ->
 
     record_name('PayoutConfirmed') ->
     'merchstat_PayoutConfirmed';
+
+    record_name('StatRefund') ->
+    'merchstat_StatRefund';
+
+    record_name('InvoicePaymentRefundPending') ->
+    'merchstat_InvoicePaymentRefundPending';
+
+    record_name('InvoicePaymentRefundSucceeded') ->
+    'merchstat_InvoicePaymentRefundSucceeded';
+
+    record_name('InvoicePaymentRefundFailed') ->
+    'merchstat_InvoicePaymentRefundFailed';
 
     record_name('StatRequest') ->
     'merchstat_StatRequest';
