@@ -474,14 +474,12 @@ enum RiskScore {
 
 typedef base.ID ContractorID
 typedef base.Opaque IdentityDocumentToken
-typedef base.ID ContractorOwnerID
 
 struct PartyContractor {
     1: required ContractorID id
     2: required Contractor contractor
-    3: required ContractorIdentificationStatus status
-    4: optional ContractorOwnerID owner_id
-    5: required list<IdentityDocumentToken> identity_documents
+    3: required ContractorIdentificationLevel status
+    4: required list<IdentityDocumentToken> identity_documents
 }
 
 /** Лицо, выступающее стороной договора. */
@@ -535,10 +533,10 @@ struct InternationalLegalEntity {
     5: optional string registered_number
 }
 
-enum ContractorIdentificationStatus {
-    not_identified = 100
-    partialy_identified = 200
-    fully_identified = 300
+enum ContractorIdentificationLevel {
+    none = 100
+    partial = 200
+    full = 300
 }
 
 /** Банковский счёт. */
@@ -1585,7 +1583,7 @@ union Condition {
     5: ShopLocation shop_location_is
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
-    8: ContractorIdentificationStatus identification_status_is
+    8: ContractorIdentificationLevel identification_level_is
 }
 
 union PaymentToolCondition {
