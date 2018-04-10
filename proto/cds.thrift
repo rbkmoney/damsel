@@ -33,16 +33,10 @@ struct PutCardDataResult {
     2: required domain.PaymentSessionID session_id
 }
 
-/** Данные сессии */
-struct SessionData {
-    1: required VerificationData verification_data
-}
-
-/** Данные, необходимые для проверки подлинности транзакции */
-union VerificationData {
+/** Данные верификации банковской карты */
+struct BankCard {
     /** Код верификации [0-9]{3,4} */
     1: string cvv
-    2: PaymentToken payment_token
 }
 
 /** Данные верификации платежного токена */
@@ -51,6 +45,17 @@ struct PaymentToken {
     1: required string cryptogram
     /** Тип транзакции */
     2: optional string eci
+}
+
+/** Данные, необходимые для проверки подлинности транзакции */
+union VerificationData {
+    1: BankCard bank_card
+    2: PaymentToken payment_token
+}
+
+/** Данные сессии */
+struct SessionData {
+    1: required VerificationData verification_data
 }
 
 struct Unlocked {}
