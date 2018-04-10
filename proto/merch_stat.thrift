@@ -65,22 +65,20 @@ enum OnHoldExpiration {
 
 union OperationFailure {
     1: OperationTimeout operation_timeout
-    2: ExternalFailure  external_failure
+    2: domain.Failure  failure
 }
 
 struct OperationTimeout {}
 
-struct ExternalFailure {
-    1: required string code
-    2: optional string description
-}
-
 struct InvoicePaymentPending   {}
-struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured  {}
-struct InvoicePaymentCancelled {}
-struct InvoicePaymentRefunded  {}
-struct InvoicePaymentFailed    { 1: required OperationFailure failure }
+struct InvoicePaymentProcessed { 1: optional base.Timestamp at }
+struct InvoicePaymentCaptured  { 1: optional base.Timestamp at }
+struct InvoicePaymentCancelled { 1: optional base.Timestamp at }
+struct InvoicePaymentRefunded  { 1: optional base.Timestamp at }
+struct InvoicePaymentFailed    {
+    1: required OperationFailure failure
+    2: optional base.Timestamp at
+}
 
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
@@ -158,9 +156,15 @@ struct StatInvoice {
 }
 
 struct InvoiceUnpaid    {}
-struct InvoicePaid      {}
-struct InvoiceCancelled { 1: required string details }
-struct InvoiceFulfilled { 1: required string details }
+struct InvoicePaid      { 1: optional base.Timestamp at }
+struct InvoiceCancelled {
+    1: required string details
+    2: optional base.Timestamp at
+}
+struct InvoiceFulfilled {
+    1: required string details
+    2: optional base.Timestamp at
+}
 
 union InvoiceStatus {
     1: InvoiceUnpaid unpaid

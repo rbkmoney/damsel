@@ -51,30 +51,33 @@
 %% struct 'OperationTimeout'
 -record('merchstat_OperationTimeout', {}).
 
-%% struct 'ExternalFailure'
--record('merchstat_ExternalFailure', {
-    'code' :: binary(),
-    'description' :: binary() | undefined
-}).
-
 %% struct 'InvoicePaymentPending'
 -record('merchstat_InvoicePaymentPending', {}).
 
 %% struct 'InvoicePaymentProcessed'
--record('merchstat_InvoicePaymentProcessed', {}).
+-record('merchstat_InvoicePaymentProcessed', {
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
 
 %% struct 'InvoicePaymentCaptured'
--record('merchstat_InvoicePaymentCaptured', {}).
+-record('merchstat_InvoicePaymentCaptured', {
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
 
 %% struct 'InvoicePaymentCancelled'
--record('merchstat_InvoicePaymentCancelled', {}).
+-record('merchstat_InvoicePaymentCancelled', {
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
 
 %% struct 'InvoicePaymentRefunded'
--record('merchstat_InvoicePaymentRefunded', {}).
+-record('merchstat_InvoicePaymentRefunded', {
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
 
 %% struct 'InvoicePaymentFailed'
 -record('merchstat_InvoicePaymentFailed', {
-    'failure' :: dmsl_merch_stat_thrift:'OperationFailure'()
+    'failure' :: dmsl_merch_stat_thrift:'OperationFailure'(),
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'BankCard'
@@ -134,16 +137,20 @@
 -record('merchstat_InvoiceUnpaid', {}).
 
 %% struct 'InvoicePaid'
--record('merchstat_InvoicePaid', {}).
+-record('merchstat_InvoicePaid', {
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
 
 %% struct 'InvoiceCancelled'
 -record('merchstat_InvoiceCancelled', {
-    'details' :: binary()
+    'details' :: binary(),
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoiceFulfilled'
 -record('merchstat_InvoiceFulfilled', {
-    'details' :: binary()
+    'details' :: binary(),
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'StatCustomer'
