@@ -33,8 +33,8 @@ struct PutCardDataResult {
     2: required domain.PaymentSessionID session_id
 }
 
-/** Данные верификации банковской карты */
-struct BankCard {
+/** Код проверки подлинности банковской карты */
+struct CardSecurityCode {
     /** Код верификации [0-9]{3,4} */
     1: string cvv
 }
@@ -49,7 +49,7 @@ struct PaymentToken {
 
 /** Данные, необходимые для проверки подлинности транзакции */
 union VerificationData {
-    1: BankCard bank_card
+    1: CardSecurityCode card_security_code
     2: PaymentToken payment_token
 }
 
@@ -119,7 +119,7 @@ service Storage {
         throws (1: CardDataNotFound not_found)
 
     /** Получить данные сессии */
-    SessionData GetSessionData (1: domain.Token token, 2: domain.PaymentSessionID session_id)
+    SessionData GetSessionData (1: domain.PaymentSessionID session_id)
         throws (1: SessionDataNotFound not_found)
 
     /** Сохранить карточные данные */
