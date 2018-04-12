@@ -36,7 +36,7 @@ struct PutCardDataResult {
 /** Код проверки подлинности банковской карты */
 struct CardSecurityCode {
     /** Код верификации [0-9]{3,4} */
-    1: string cvv
+    1: string value
 }
 
 /** Данные верификации платежного токена */
