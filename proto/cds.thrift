@@ -23,13 +23,39 @@ struct CardData {
     2: required ExpDate exp_date
     /** Имя держателя */
     3: optional string cardholder_name
+    /** Deprecated */
     /** Код верификации [0-9]{3,4} */
-    4: required string cvv
+    4: optional string cvv
 }
 
 struct PutCardDataResult {
     1: required domain.BankCard bank_card
     2: required domain.PaymentSessionID session_id
+}
+
+/** Код проверки подлинности банковской карты */
+struct CardSecurityCode {
+    /** Код верификации [0-9]{3,4} */
+    1: string value
+}
+
+/** Данные, необходимые для авторизации по 3DS протоколу */
+struct Auth3DS {
+    /** Криптограмма для проверки подлинности */
+    1: required string cryptogram
+    /** Тип транзакции */
+    2: optional string eci
+}
+
+/** Данные, необходимые для проверки подлинности банковской карты */
+union AuthData {
+    1: CardSecurityCode card_security_code
+    2: Auth3DS auth_3ds
+}
+
+/** Данные сессии */
+struct SessionData {
+    1: required AuthData auth_data
 }
 
 struct Unlocked {}
@@ -44,6 +70,8 @@ union UnlockStatus {
 exception InvalidCardData {}
 
 exception CardDataNotFound {}
+
+exception SessionDataNotFound {}
 
 exception NoKeyring {}
 
@@ -90,8 +118,12 @@ service Storage {
     CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSessionID session_id)
         throws (1: CardDataNotFound not_found)
 
+    /** Получить данные сессии */
+    SessionData GetSessionData (1: domain.PaymentSessionID session_id)
+        throws (1: SessionDataNotFound not_found)
+
     /** Сохранить карточные данные */
-    PutCardDataResult PutCardData (1: CardData card_data)
+    PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data)
         throws (1: InvalidCardData invalid)
 
 }
