@@ -39,23 +39,23 @@ struct CardSecurityCode {
     1: string value
 }
 
-/** Данные верификации платежного токена */
-struct PaymentToken {
+/** Данные, необходимые для авторизации по 3DS протоколу */
+struct Auth3DS {
     /** Криптограмма для проверки подлинности */
     1: required string cryptogram
     /** Тип транзакции */
     2: optional string eci
 }
 
-/** Данные, необходимые для проверки подлинности транзакции */
-union VerificationData {
+/** Данные, необходимые для проверки подлинности банковской карты */
+union AuthData {
     1: CardSecurityCode card_security_code
-    2: PaymentToken payment_token
+    2: Auth3DS auth_3ds
 }
 
 /** Данные сессии */
 struct SessionData {
-    1: required VerificationData verification_data
+    1: required AuthData auth_data
 }
 
 struct Unlocked {}
