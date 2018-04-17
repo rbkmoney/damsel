@@ -36,7 +36,7 @@ struct PutCardDataResult {
 /** Код проверки подлинности банковской карты */
 struct CardSecurityCode {
     /** Код верификации [0-9]{3,4} */
-    1: string value
+    1: required string value
 }
 
 /** Данные, необходимые для авторизации по 3DS протоколу */
