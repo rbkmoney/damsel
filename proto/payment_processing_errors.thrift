@@ -74,7 +74,7 @@ union PaymentFailure {
 }
 
 union AuthorizationFailure {
-     1: GeneralFailure    unknown // "silent reject" / "do not honor" / ...
+     1: GeneralFailure    unknown
      2: GeneralFailure    merchant_blocked
      3: GeneralFailure    operation_blocked
      4: GeneralFailure    account_not_found
@@ -84,6 +84,9 @@ union AuthorizationFailure {
      8: LimitExceeded     account_limit_exceeded
      9: LimitExceeded     provider_limit_exceeded
     10: PaymentToolReject payment_tool_rejected
+    11: GeneralFailure    security_policy_violated
+    12: GeneralFailure    temporarily_unavailable
+    13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
 }
 
 union LimitExceeded {
@@ -93,15 +96,17 @@ union LimitExceeded {
 }
 
 union PaymentToolReject {
+    2: GeneralFailure unknown
     1: BankCardReject bank_card_rejected
 }
 
 union BankCardReject {
+    1: GeneralFailure unknown
     2: GeneralFailure card_number_invalid
     3: GeneralFailure card_expired
     4: GeneralFailure card_holder_invalid
     5: GeneralFailure cvv_invalid
-    6: GeneralFailure card_unsupported
+    // 6: GeneralFailure card_unsupported // на самом деле это нужно было роутить в другую сторону
     7: GeneralFailure issuer_not_found
 }
 
