@@ -276,7 +276,7 @@ struct_info('PutCardDataResult') ->
 
 struct_info('CardSecurityCode') ->
     {struct, struct, [
-    {1, undefined, string, 'value', undefined}
+    {1, required, string, 'value', undefined}
 ]};
 
 struct_info('Auth3DS') ->
