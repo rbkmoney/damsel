@@ -637,20 +637,29 @@ struct_info('InvoicePaymentPending') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentProcessed') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentCaptured') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentCancelled') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentRefunded') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined}
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+    {2, optional, string, 'at', undefined}
 ]};
 
 struct_info('InvoicePaymentStatus') ->
@@ -727,16 +736,20 @@ struct_info('InvoiceUnpaid') ->
     {struct, struct, []};
 
 struct_info('InvoicePaid') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoiceCancelled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
+    {1, required, string, 'details', undefined},
+    {2, optional, string, 'at', undefined}
 ]};
 
 struct_info('InvoiceFulfilled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
+    {1, required, string, 'details', undefined},
+    {2, optional, string, 'at', undefined}
 ]};
 
 struct_info('InvoiceStatus') ->
