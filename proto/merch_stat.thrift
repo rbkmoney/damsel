@@ -71,11 +71,14 @@ union OperationFailure {
 struct OperationTimeout {}
 
 struct InvoicePaymentPending   {}
-struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured  {}
-struct InvoicePaymentCancelled {}
-struct InvoicePaymentRefunded  {}
-struct InvoicePaymentFailed    { 1: required OperationFailure failure }
+struct InvoicePaymentProcessed { 1: optional base.Timestamp at }
+struct InvoicePaymentCaptured  { 1: optional base.Timestamp at }
+struct InvoicePaymentCancelled { 1: optional base.Timestamp at }
+struct InvoicePaymentRefunded  { 1: optional base.Timestamp at }
+struct InvoicePaymentFailed    {
+    1: required OperationFailure failure
+    2: optional base.Timestamp at
+}
 
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
@@ -153,9 +156,15 @@ struct StatInvoice {
 }
 
 struct InvoiceUnpaid    {}
-struct InvoicePaid      {}
-struct InvoiceCancelled { 1: required string details }
-struct InvoiceFulfilled { 1: required string details }
+struct InvoicePaid      { 1: optional base.Timestamp at }
+struct InvoiceCancelled {
+    1: required string details
+    2: optional base.Timestamp at
+}
+struct InvoiceFulfilled {
+    1: required string details
+    2: optional base.Timestamp at
+}
 
 union InvoiceStatus {
     1: InvoiceUnpaid unpaid
