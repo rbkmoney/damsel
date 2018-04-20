@@ -96,7 +96,7 @@
     'StatResponseData'/0
 ]).
 -export_type([
-    'DatasetTooBig'/0
+    'BadToken'/0
 ]).
 
 -type namespace() :: 'merchstat'.
@@ -199,7 +199,7 @@
     'StatResponseData'.
 
 -type exception_name() ::
-    'DatasetTooBig'.
+    'BadToken'.
 
 %% struct 'StatPayment'
 -type 'StatPayment'() :: #'merchstat_StatPayment'{}.
@@ -384,8 +384,8 @@
     {'payouts', ['StatPayout'()]} |
     {'refunds', ['StatRefund'()]}.
 
-%% exception 'DatasetTooBig'
--type 'DatasetTooBig'() :: #'merchstat_DatasetTooBig'{}.
+%% exception 'BadToken'
+-type 'BadToken'() :: #'merchstat_BadToken'{}.
 
 %%
 %% services and functions
@@ -881,13 +881,15 @@ struct_info('InvoicePaymentRefundFailed') ->
 
 struct_info('StatRequest') ->
     {struct, struct, [
-    {1, required, string, 'dsl', undefined}
+    {1, required, string, 'dsl', undefined},
+    {2, optional, string, 'continuation_token', undefined}
 ]};
 
 struct_info('StatResponse') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_merch_stat_thrift, 'StatResponseData'}}, 'data', undefined},
-    {2, optional, i32, 'total_count', undefined}
+    {2, optional, i32, 'total_count', undefined},
+    {3, optional, string, 'continuation_token', undefined}
 ]};
 
 struct_info('StatResponseData') ->
@@ -900,9 +902,9 @@ struct_info('StatResponseData') ->
     {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
 ]};
 
-struct_info('DatasetTooBig') ->
+struct_info('BadToken') ->
     {struct, exception, [
-    {1, undefined, i32, 'limit', undefined}
+    {1, undefined, string, 'reason', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -1023,8 +1025,8 @@ record_name('PaymentResourcePayer') ->
     record_name('StatResponse') ->
     'merchstat_StatResponse';
 
-    record_name('DatasetTooBig') ->
-    'merchstat_DatasetTooBig';
+    record_name('BadToken') ->
+    'merchstat_BadToken';
 
     record_name(_) -> error(badarg).
     
@@ -1053,7 +1055,7 @@ function_info('MerchantStatistics', 'GetPayments', reply_type) ->
     function_info('MerchantStatistics', 'GetPayments', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetInvoices', params_type) ->
     {struct, struct, [
@@ -1064,7 +1066,7 @@ function_info('MerchantStatistics', 'GetInvoices', reply_type) ->
     function_info('MerchantStatistics', 'GetInvoices', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetCustomers', params_type) ->
     {struct, struct, [
@@ -1075,7 +1077,7 @@ function_info('MerchantStatistics', 'GetCustomers', reply_type) ->
     function_info('MerchantStatistics', 'GetCustomers', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetPayouts', params_type) ->
     {struct, struct, [
@@ -1086,7 +1088,7 @@ function_info('MerchantStatistics', 'GetPayouts', reply_type) ->
     function_info('MerchantStatistics', 'GetPayouts', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetStatistics', params_type) ->
     {struct, struct, [
@@ -1097,7 +1099,7 @@ function_info('MerchantStatistics', 'GetStatistics', reply_type) ->
     function_info('MerchantStatistics', 'GetStatistics', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
