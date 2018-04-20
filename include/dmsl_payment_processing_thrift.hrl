@@ -667,23 +667,32 @@
     'timestamp' :: dmsl_base_thrift:'Timestamp'()
 }).
 
-%% struct 'ContractStatusInvalid'
--record('payproc_ContractStatusInvalid', {
-    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
-    'status' :: dmsl_domain_thrift:'ContractStatus'()
+%% struct 'InvalidContract'
+-record('payproc_InvalidContract', {
+    'id' :: dmsl_payment_processing_thrift:'ContractID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidContractReason'()
 }).
 
-%% struct 'ShopStatusInvalid'
--record('payproc_ShopStatusInvalid', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
+%% struct 'InvalidShop'
+-record('payproc_InvalidShop', {
+    'id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidShopReason'()
 }).
 
 %% struct 'ContractTermsViolated'
 -record('payproc_ContractTermsViolated', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'terms' :: dmsl_domain_thrift:'TermSet'()
+}).
+
+%% struct 'ShopPayoutToolInvalid'
+-record('payproc_ShopPayoutToolInvalid', {
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
+}).
+
+%% struct 'InvalidObjectReference'
+-record('payproc_InvalidObjectReference', {
+    'ref' :: dmsl_domain_thrift:'Reference'() | undefined
 }).
 
 %% exception 'PartyNotFound'
