@@ -247,18 +247,20 @@
 
 %% struct 'StatRequest'
 -record('merchstat_StatRequest', {
-    'dsl' :: binary()
+    'dsl' :: binary(),
+    'continuation_token' :: binary() | undefined
 }).
 
 %% struct 'StatResponse'
 -record('merchstat_StatResponse', {
     'data' :: dmsl_merch_stat_thrift:'StatResponseData'(),
-    'total_count' :: integer() | undefined
+    'total_count' :: integer() | undefined,
+    'continuation_token' :: binary() | undefined
 }).
 
-%% exception 'DatasetTooBig'
--record('merchstat_DatasetTooBig', {
-    'limit' :: integer()
+%% exception 'BadToken'
+-record('merchstat_BadToken', {
+    'reason' :: binary()
 }).
 
 -endif.
