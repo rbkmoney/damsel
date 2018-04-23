@@ -372,15 +372,15 @@ struct PayoutSearchResponse {
 * Info по выплате для отображения в админке
 **/
 struct PayoutInfo {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    4: required domain.Amount amount
-    5: required PayoutType type
-    6: required PayoutStatus status
-    7: required base.Timestamp from_time
-    8: required base.Timestamp to_time
-    9: required base.Timestamp created_at
+     1: required PayoutID id
+     2: required domain.PartyID party_id
+     3: required domain.ShopID shop_id
+     4: required domain.Cash amount
+     5: required PayoutType type
+     6: required PayoutSearchStatus status
+     7: required base.Timestamp from_time
+     8: required base.Timestamp to_time
+     9: required base.Timestamp created_at
     10: optional PayoutSummary summary
 }
 
