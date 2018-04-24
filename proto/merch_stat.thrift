@@ -65,22 +65,20 @@ enum OnHoldExpiration {
 
 union OperationFailure {
     1: OperationTimeout operation_timeout
-    2: ExternalFailure  external_failure
+    2: domain.Failure  failure
 }
 
 struct OperationTimeout {}
 
-struct ExternalFailure {
-    1: required string code
-    2: optional string description
-}
-
 struct InvoicePaymentPending   {}
-struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured  {}
-struct InvoicePaymentCancelled {}
-struct InvoicePaymentRefunded  {}
-struct InvoicePaymentFailed    { 1: required OperationFailure failure }
+struct InvoicePaymentProcessed { 1: optional base.Timestamp at }
+struct InvoicePaymentCaptured  { 1: optional base.Timestamp at }
+struct InvoicePaymentCancelled { 1: optional base.Timestamp at }
+struct InvoicePaymentRefunded  { 1: optional base.Timestamp at }
+struct InvoicePaymentFailed    {
+    1: required OperationFailure failure
+    2: optional base.Timestamp at
+}
 
 union InvoicePaymentStatus {
     1: InvoicePaymentPending pending
@@ -158,9 +156,15 @@ struct StatInvoice {
 }
 
 struct InvoiceUnpaid    {}
-struct InvoicePaid      {}
-struct InvoiceCancelled { 1: required string details }
-struct InvoiceFulfilled { 1: required string details }
+struct InvoicePaid      { 1: optional base.Timestamp at }
+struct InvoiceCancelled {
+    1: required string details
+    2: optional base.Timestamp at
+}
+struct InvoiceFulfilled {
+    1: required string details
+    2: optional base.Timestamp at
+}
 
 union InvoiceStatus {
     1: InvoiceUnpaid unpaid
@@ -249,25 +253,63 @@ struct PayoutPaid {}
 struct PayoutCancelled { 1: required string details }
 struct PayoutConfirmed {}
 
+/**
+ * Информация о рефанде.
+  * **/
+struct StatRefund {
+    1 : required domain.InvoicePaymentRefundID id
+    2 : required domain.InvoicePaymentID payment_id
+    3 : required domain.InvoiceID invoice_id
+    4 : required domain.PartyID owner_id
+    5 : required domain.ShopID shop_id
+    6 : required InvoicePaymentRefundStatus status
+    7 : required base.Timestamp created_at
+    8 : required domain.Amount amount
+    9 : required domain.Amount fee
+    10: required string currency_symbolic_code
+    11: optional string reason
+}
+
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
+}
+
+struct InvoicePaymentRefundPending {}
+struct InvoicePaymentRefundSucceeded {
+    1: required base.Timestamp at
+}
+
+struct InvoicePaymentRefundFailed {
+    1: required OperationFailure failure
+    2: required base.Timestamp at
+}
+
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
 
 /**
 * Данные запроса к сервису. Формат и функциональность запроса зависят от DSL.
  * DSL содержит условия выборки, а также id мерчанта, по которому производится выборка.
+ * continuation_token - токен, который передается в случае обращения за следующим блоком данных, соответствующих dsl
 */
 struct StatRequest {
     1: required string dsl
+    2: optional string continuation_token
 }
 
 /**
 * Данные ответа сервиса.
 * data - данные, тип зависит от целевой функции.
 * total_count - ожидаемое общее количество данных (т.е. размер всех данных результата, без ограничений по количеству)
+* continuation_token - токен, сигнализирующий о том, что в ответе передана только часть данных, для получения следующей части
+* нужно повторно обратиться к сервису, указав тот-же набор условий и continuation_token. Если токена нет, получена последняя часть данных.
 */
 struct StatResponse {
     1: required StatResponseData data
     2: optional i32 total_count
+    3: optional string continuation_token
 }
 
 /**
@@ -279,40 +321,40 @@ union StatResponseData {
     3: list<StatCustomer> customers
     4: list<StatInfo> records
     5: list<StatPayout> payouts
+    6: list<StatRefund> refunds
 }
 
 /**
-* Ошибка превышения максимального размера блока данных, доступного для отправки клиенту.
-* limit - текущий максимальный размер блока.
+* Ошибка обработки переданного токена, при получении такой ошибки клиент должен заново запросить все данные, соответсвующие dsl запросу
 */
-exception DatasetTooBig {
-    1: i32 limit;
+exception BadToken {
+    1: string reason
 }
 
 service MerchantStatistics {
     /**
      * Возвращает набор данных о платежах
      */
-    StatResponse GetPayments(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StatResponse GetPayments(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      *  Возвращает набор данных об инвойсах
      */
-    StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает набор данных о покупателях
      */
-    StatResponse GetCustomers(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StatResponse GetCustomers(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает набор данных о выплатах
      */
-     StatResponse GetPayouts(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StatResponse GetPayouts(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
      */
-    StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 2: DatasetTooBig ex2)
+    StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 }
 
