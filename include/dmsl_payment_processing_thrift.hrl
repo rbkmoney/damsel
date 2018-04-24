@@ -679,6 +679,23 @@
     'reason' :: dmsl_payment_processing_thrift:'InvalidShopReason'()
 }).
 
+%% struct 'InvalidWallet'
+-record('payproc_InvalidWallet', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidWalletReason'()
+}).
+
+%% struct 'InvalidContractor'
+-record('payproc_InvalidContractor', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidContractorReason'()
+}).
+
+%% struct 'ContractorNotExists'
+-record('payproc_ContractorNotExists', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'() | undefined
+}).
+
 %% struct 'ContractTermsViolated'
 -record('payproc_ContractTermsViolated', {
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),

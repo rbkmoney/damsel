@@ -1530,6 +1530,8 @@ exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 union InvalidChangesetReason {
     1: InvalidContract invalid_contract
     2: InvalidShop invalid_shop
+    3: InvalidWallet invalid_wallet
+    4: InvalidContractor invalid_contractor
 }
 
 struct InvalidContract {
@@ -1542,6 +1544,16 @@ struct InvalidShop {
     2: required InvalidShopReason reason
 }
 
+struct InvalidWallet {
+    1: required WalletID id
+    2: required InvalidWalletReason reason
+}
+
+struct InvalidContractor {
+    1: required ContractorID id
+    2: required InvalidContractorReason reason
+}
+
 union InvalidContractReason {
     1: ContractID not_exists
     2: ContractID already_exists
@@ -1550,6 +1562,7 @@ union InvalidContractReason {
     5: domain.PayoutToolID payout_tool_not_exists
     6: domain.PayoutToolID payout_tool_already_exists
     7: InvalidObjectReference invalid_object_reference
+    8: ContractorNotExists contractor_not_exists
 }
 
 union InvalidShopReason {
@@ -1560,6 +1573,23 @@ union InvalidShopReason {
     5: ContractTermsViolated contract_terms_violated
     6: ShopPayoutToolInvalid payout_tool_invalid
     7: InvalidObjectReference invalid_object_reference
+}
+
+union InvalidWalletReason {
+    1: WalletID not_exists
+    2: WalletID already_exists
+    3: WalletID no_account
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+}
+
+union InvalidContractorReason {
+    1: ContractorID not_exists
+    2: ContractorID already_exists
+}
+
+struct ContractorNotExists {
+    1: optional ContractorID id
 }
 
 struct ContractTermsViolated {

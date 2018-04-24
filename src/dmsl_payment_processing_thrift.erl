@@ -208,8 +208,13 @@
     'InvalidChangesetReason'/0,
     'InvalidContract'/0,
     'InvalidShop'/0,
+    'InvalidWallet'/0,
+    'InvalidContractor'/0,
     'InvalidContractReason'/0,
     'InvalidShopReason'/0,
+    'InvalidWalletReason'/0,
+    'InvalidContractorReason'/0,
+    'ContractorNotExists'/0,
     'ContractTermsViolated'/0,
     'ShopPayoutToolInvalid'/0,
     'InvalidObjectReference'/0
@@ -478,8 +483,13 @@
     'InvalidChangesetReason' |
     'InvalidContract' |
     'InvalidShop' |
+    'InvalidWallet' |
+    'InvalidContractor' |
     'InvalidContractReason' |
     'InvalidShopReason' |
+    'InvalidWalletReason' |
+    'InvalidContractorReason' |
+    'ContractorNotExists' |
     'ContractTermsViolated' |
     'ShopPayoutToolInvalid' |
     'InvalidObjectReference'.
@@ -1116,13 +1126,21 @@
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
     {'invalid_contract', 'InvalidContract'()} |
-    {'invalid_shop', 'InvalidShop'()}.
+    {'invalid_shop', 'InvalidShop'()} |
+    {'invalid_wallet', 'InvalidWallet'()} |
+    {'invalid_contractor', 'InvalidContractor'()}.
 
 %% struct 'InvalidContract'
 -type 'InvalidContract'() :: #'payproc_InvalidContract'{}.
 
 %% struct 'InvalidShop'
 -type 'InvalidShop'() :: #'payproc_InvalidShop'{}.
+
+%% struct 'InvalidWallet'
+-type 'InvalidWallet'() :: #'payproc_InvalidWallet'{}.
+
+%% struct 'InvalidContractor'
+-type 'InvalidContractor'() :: #'payproc_InvalidContractor'{}.
 
 %% union 'InvalidContractReason'
 -type 'InvalidContractReason'() ::
@@ -1132,7 +1150,8 @@
     {'contract_adjustment_already_exists', dmsl_domain_thrift:'ContractAdjustmentID'()} |
     {'payout_tool_not_exists', dmsl_domain_thrift:'PayoutToolID'()} |
     {'payout_tool_already_exists', dmsl_domain_thrift:'PayoutToolID'()} |
-    {'invalid_object_reference', 'InvalidObjectReference'()}.
+    {'invalid_object_reference', 'InvalidObjectReference'()} |
+    {'contractor_not_exists', 'ContractorNotExists'()}.
 
 %% union 'InvalidShopReason'
 -type 'InvalidShopReason'() ::
@@ -1143,6 +1162,22 @@
     {'contract_terms_violated', 'ContractTermsViolated'()} |
     {'payout_tool_invalid', 'ShopPayoutToolInvalid'()} |
     {'invalid_object_reference', 'InvalidObjectReference'()}.
+
+%% union 'InvalidWalletReason'
+-type 'InvalidWalletReason'() ::
+    {'not_exists', 'WalletID'()} |
+    {'already_exists', 'WalletID'()} |
+    {'no_account', 'WalletID'()} |
+    {'invalid_status', 'InvalidStatus'()} |
+    {'contract_terms_violated', 'ContractTermsViolated'()}.
+
+%% union 'InvalidContractorReason'
+-type 'InvalidContractorReason'() ::
+    {'not_exists', 'ContractorID'()} |
+    {'already_exists', 'ContractorID'()}.
+
+%% struct 'ContractorNotExists'
+-type 'ContractorNotExists'() :: #'payproc_ContractorNotExists'{}.
 
 %% struct 'ContractTermsViolated'
 -type 'ContractTermsViolated'() :: #'payproc_ContractTermsViolated'{}.
@@ -1635,8 +1670,13 @@ structs() ->
         'InvalidChangesetReason',
         'InvalidContract',
         'InvalidShop',
+        'InvalidWallet',
+        'InvalidContractor',
         'InvalidContractReason',
         'InvalidShopReason',
+        'InvalidWalletReason',
+        'InvalidContractorReason',
+        'ContractorNotExists',
         'ContractTermsViolated',
         'ShopPayoutToolInvalid',
         'InvalidObjectReference'
@@ -2667,7 +2707,9 @@ struct_info('PayoutParams') ->
 struct_info('InvalidChangesetReason') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContract'}}, 'invalid_contract', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidShop'}}, 'invalid_shop', undefined}
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidShop'}}, 'invalid_shop', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidWallet'}}, 'invalid_wallet', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContractor'}}, 'invalid_contractor', undefined}
 ]};
 
 struct_info('InvalidContract') ->
@@ -2682,6 +2724,18 @@ struct_info('InvalidShop') ->
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidShopReason'}}, 'reason', undefined}
 ]};
 
+struct_info('InvalidWallet') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidWalletReason'}}, 'reason', undefined}
+]};
+
+struct_info('InvalidContractor') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidContractorReason'}}, 'reason', undefined}
+]};
+
 struct_info('InvalidContractReason') ->
     {struct, union, [
     {1, optional, string, 'not_exists', undefined},
@@ -2690,7 +2744,8 @@ struct_info('InvalidContractReason') ->
     {4, optional, string, 'contract_adjustment_already_exists', undefined},
     {5, optional, string, 'payout_tool_not_exists', undefined},
     {6, optional, string, 'payout_tool_already_exists', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined},
+    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorNotExists'}}, 'contractor_not_exists', undefined}
 ]};
 
 struct_info('InvalidShopReason') ->
@@ -2702,6 +2757,26 @@ struct_info('InvalidShopReason') ->
     {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopPayoutToolInvalid'}}, 'payout_tool_invalid', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
+]};
+
+struct_info('InvalidWalletReason') ->
+    {struct, union, [
+    {1, optional, string, 'not_exists', undefined},
+    {2, optional, string, 'already_exists', undefined},
+    {3, optional, string, 'no_account', undefined},
+    {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined}
+]};
+
+struct_info('InvalidContractorReason') ->
+    {struct, union, [
+    {1, optional, string, 'not_exists', undefined},
+    {2, optional, string, 'already_exists', undefined}
+]};
+
+struct_info('ContractorNotExists') ->
+    {struct, struct, [
+    {1, optional, string, 'id', undefined}
 ]};
 
 struct_info('ContractTermsViolated') ->
@@ -3252,6 +3327,15 @@ record_name('InternalUser') ->
 
     record_name('InvalidShop') ->
     'payproc_InvalidShop';
+
+    record_name('InvalidWallet') ->
+    'payproc_InvalidWallet';
+
+    record_name('InvalidContractor') ->
+    'payproc_InvalidContractor';
+
+    record_name('ContractorNotExists') ->
+    'payproc_ContractorNotExists';
 
     record_name('ContractTermsViolated') ->
     'payproc_ContractTermsViolated';
