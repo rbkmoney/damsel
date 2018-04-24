@@ -1531,6 +1531,7 @@ union InvalidChangesetReason {
     1: InvalidContract invalid_contract
     2: InvalidShop invalid_shop
     3: InvalidWallet invalid_wallet
+    4: InvalidContractor invalid_contractor
 }
 
 struct InvalidContract {
@@ -1546,6 +1547,11 @@ struct InvalidShop {
 struct InvalidWallet {
     1: required WalletID id
     2: required InvalidWalletReason reason
+}
+
+struct InvalidContractor {
+    1: required ContractorID id
+    2: required InvalidContractorReason reason
 }
 
 union InvalidContractReason {
@@ -1575,6 +1581,11 @@ union InvalidWalletReason {
     3: WalletID no_account
     4: InvalidStatus invalid_status
     5: ContractTermsViolated contract_terms_violated
+}
+
+union InvalidContractorReason {
+    1: ContractorID not_exists
+    2: ContractorID already_exists
 }
 
 struct ContractorNotExists {
