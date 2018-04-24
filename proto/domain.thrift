@@ -565,6 +565,7 @@ struct ServiceAcceptanceActPreferences {
     1: required BusinessScheduleRef schedule
     2: required base.TimeSpan time_interval
     3: required Representative signer
+    4: optional bool need_reference
 }
 
 struct PaymentRegistryPreferences {
