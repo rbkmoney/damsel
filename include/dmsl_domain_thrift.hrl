@@ -384,13 +384,15 @@
 
 %% struct 'ReportPreferences'
 -record('domain_ReportPreferences', {
-    'acts_preferences' :: dmsl_domain_thrift:'ServiceAcceptanceActPreferences'() | undefined
+    'service_acceptance_act_preferences' :: dmsl_domain_thrift:'ServiceAcceptanceActPreferences'() | undefined
 }).
 
 %% struct 'ServiceAcceptanceActPreferences'
 -record('domain_ServiceAcceptanceActPreferences', {
     'schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'(),
-    'signer' :: dmsl_domain_thrift:'Representative'()
+    'signer' :: dmsl_domain_thrift:'Representative'(),
+    'need_sign' :: boolean(),
+    'need_reference' :: boolean()
 }).
 
 %% struct 'Representative'

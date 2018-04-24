@@ -3175,13 +3175,15 @@ struct_info('LegalAgreement') ->
 
 struct_info('ReportPreferences') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActPreferences'}}, 'acts_preferences', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActPreferences'}}, 'service_acceptance_act_preferences', undefined}
 ]};
 
 struct_info('ServiceAcceptanceActPreferences') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined}
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined},
+    {3, required, bool, 'need_sign', undefined},
+    {4, required, bool, 'need_reference', undefined}
 ]};
 
 struct_info('Representative') ->
