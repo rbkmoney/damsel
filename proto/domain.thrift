@@ -563,8 +563,8 @@ struct ReportPreferences {
 struct ServiceAcceptanceActPreferences {
     1: required BusinessScheduleRef schedule
     2: required Representative signer
-    3: optional bool need_sign
-    4: optional bool need_reference
+    3: required bool need_sign
+    4: required bool need_reference
 }
 
 struct Representative {
