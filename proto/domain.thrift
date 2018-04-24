@@ -558,19 +558,13 @@ struct LegalAgreement {
 
 struct ReportPreferences {
     1: optional ServiceAcceptanceActPreferences service_acceptance_act_preferences
-    2: optional PaymentRegistryPreferences payment_registry_preferences
 }
 
 struct ServiceAcceptanceActPreferences {
     1: required BusinessScheduleRef schedule
-    2: required base.TimeSpan time_interval
-    3: required Representative signer
+    2: required Representative signer
+    3: optional bool need_sign
     4: optional bool need_reference
-}
-
-struct PaymentRegistryPreferences {
-    1: required BusinessScheduleRef schedule
-    2: required base.TimeSpan time_interval
 }
 
 struct Representative {
