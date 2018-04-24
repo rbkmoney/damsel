@@ -1446,32 +1446,51 @@ exception ChangesetConflict { 1: required ClaimID conflicted_id }
 exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
-    1: ContractID contract_not_exists
-    2: ContractID contract_already_exists
-    3: ContractStatusInvalid contract_status_invalid
+    1: InvalidContract invalid_contract
+    2: InvalidShop invalid_shop
+}
+
+struct InvalidContract {
+    1: required ContractID id
+    2: required InvalidContractReason reason
+}
+
+struct InvalidShop {
+    1: required ShopID id
+    2: required InvalidShopReason reason
+}
+
+union InvalidContractReason {
+    1: ContractID not_exists
+    2: ContractID already_exists
+    3: domain.ContractStatus invalid_status
     4: domain.ContractAdjustmentID contract_adjustment_already_exists
     5: domain.PayoutToolID payout_tool_not_exists
     6: domain.PayoutToolID payout_tool_already_exists
-    7: ShopID shop_not_exists
-    8: ShopID shop_already_exists
-    9: ShopStatusInvalid shop_status_invalid
-    10: ContractTermsViolated contract_terms_violated
+    7: InvalidObjectReference invalid_object_reference
 }
 
-struct ContractStatusInvalid {
-    1: required ContractID contract_id
-    2: required domain.ContractStatus status
-}
-
-struct ShopStatusInvalid {
-    1: required ShopID shop_id
-    2: required InvalidStatus status
+union InvalidShopReason {
+    1: ShopID not_exists
+    2: ShopID already_exists
+    3: ShopID no_account
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+    6: ShopPayoutToolInvalid payout_tool_invalid
+    7: InvalidObjectReference invalid_object_reference
 }
 
 struct ContractTermsViolated {
-    1: required ShopID shop_id
-    2: required ContractID contract_id
-    3: required domain.TermSet terms
+    1: required ContractID contract_id
+    2: required domain.TermSet terms
+}
+
+struct ShopPayoutToolInvalid {
+    1: optional domain.PayoutToolID payout_tool_id
+}
+
+struct InvalidObjectReference {
+    1: optional domain.Reference ref
 }
 
 exception AccountNotFound {}
