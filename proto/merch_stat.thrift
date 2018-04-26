@@ -93,6 +93,12 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: TokenizedBankCard tokenized_bank_card
+}
+
+struct TokenizedBankCard {
+    1: required domain.BankCardPaymentSystem payment_system
+    2: required domain.BankCardTokenProvider token_provider
 }
 
 struct BankCard {
@@ -100,6 +106,7 @@ struct BankCard {
     2: required domain.BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+    5: optional domain.BankCardTokenProvider token_provider
 }
 
 struct PaymentTerminal {
