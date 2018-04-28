@@ -3181,9 +3181,7 @@ struct_info('ReportPreferences') ->
 struct_info('ServiceAcceptanceActPreferences') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined},
-    {3, required, bool, 'need_sign', undefined},
-    {4, required, bool, 'need_reference', undefined}
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined}
 ]};
 
 struct_info('Representative') ->

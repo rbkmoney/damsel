@@ -390,9 +390,7 @@
 %% struct 'ServiceAcceptanceActPreferences'
 -record('domain_ServiceAcceptanceActPreferences', {
     'schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'(),
-    'signer' :: dmsl_domain_thrift:'Representative'(),
-    'need_sign' :: boolean(),
-    'need_reference' :: boolean()
+    'signer' :: dmsl_domain_thrift:'Representative'()
 }).
 
 %% struct 'Representative'
