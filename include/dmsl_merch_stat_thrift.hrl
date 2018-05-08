@@ -85,7 +85,8 @@
     'token' :: dmsl_domain_thrift:'Token'(),
     'payment_system' :: atom(),
     'bin' :: binary(),
-    'masked_pan' :: binary()
+    'masked_pan' :: binary(),
+    'token_provider' :: atom() | undefined
 }).
 
 %% struct 'PaymentTerminal'
