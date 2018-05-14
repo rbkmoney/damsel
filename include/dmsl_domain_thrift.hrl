@@ -643,6 +643,12 @@
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
+%% struct 'TokenizedBankCard'
+-record('domain_TokenizedBankCard', {
+    'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
+    'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'()
+}).
+
 %% struct 'DisposablePaymentResource'
 -record('domain_DisposablePaymentResource', {
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
@@ -655,7 +661,8 @@
     'token' :: dmsl_domain_thrift:'Token'(),
     'payment_system' :: atom(),
     'bin' :: binary(),
-    'masked_pan' :: binary()
+    'masked_pan' :: binary(),
+    'token_provider' :: atom() | undefined
 }).
 
 %% struct 'PaymentTerminal'
@@ -863,9 +870,13 @@
 
 %% struct 'BankCardCondition'
 -record('domain_BankCardCondition', {
-    'payment_system_is' :: atom() | undefined,
-    'bin_in' :: dmsl_domain_thrift:'BankCardBINRangeRef'() | undefined,
     'definition' :: dmsl_domain_thrift:'BankCardConditionDefinition'() | undefined
+}).
+
+%% struct 'PaymentSystemCondition'
+-record('domain_PaymentSystemCondition', {
+    'payment_system_is' :: atom(),
+    'token_provider_is' :: atom() | undefined
 }).
 
 %% struct 'PaymentTerminalCondition'
@@ -974,40 +985,6 @@
     'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
 }).
 
-%% struct 'PartyPrototypeRef'
--record('domain_PartyPrototypeRef', {
-    'id' :: dmsl_domain_thrift:'ObjectID'()
-}).
-
-%% struct 'PartyPrototype'
--record('domain_PartyPrototype', {
-    'shop' :: dmsl_domain_thrift:'ShopPrototype'(),
-    'contract' :: dmsl_domain_thrift:'ContractPrototype'()
-}).
-
-%% struct 'ShopPrototype'
--record('domain_ShopPrototype', {
-    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
-    'category' :: dmsl_domain_thrift:'CategoryRef'(),
-    'currency' :: dmsl_domain_thrift:'CurrencyRef'(),
-    'details' :: dmsl_domain_thrift:'ShopDetails'(),
-    'location' :: dmsl_domain_thrift:'ShopLocation'()
-}).
-
-%% struct 'ContractPrototype'
--record('domain_ContractPrototype', {
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
-    'test_contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'(),
-    'payout_tool' :: dmsl_domain_thrift:'PayoutToolPrototype'()
-}).
-
-%% struct 'PayoutToolPrototype'
--record('domain_PayoutToolPrototype', {
-    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
-    'payout_tool_info' :: dmsl_domain_thrift:'PayoutToolInfo'(),
-    'payout_tool_currency' :: dmsl_domain_thrift:'CurrencyRef'()
-}).
-
 %% struct 'GlobalsRef'
 -record('domain_GlobalsRef', {}).
 
@@ -1015,13 +992,7 @@
 -record('domain_Globals', {
     'external_account_set' :: dmsl_domain_thrift:'ExternalAccountSetSelector'(),
     'payment_institutions' :: ordsets:ordset(dmsl_domain_thrift:'PaymentInstitutionRef'()) | undefined,
-    'contract_payment_institution_defaults' :: dmsl_domain_thrift:'ContractPaymentInstitutionDefaults'() | undefined,
-    'party_prototype' :: dmsl_domain_thrift:'PartyPrototypeRef'() | undefined,
-    'providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined,
-    'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
-    'inspector' :: dmsl_domain_thrift:'InspectorSelector'() | undefined,
-    'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'() | undefined,
-    'common_merchant_proxy' :: dmsl_domain_thrift:'ProxyRef'() | undefined
+    'contract_payment_institution_defaults' :: dmsl_domain_thrift:'ContractPaymentInstitutionDefaults'() | undefined
 }).
 
 %% struct 'Dummy'
@@ -1154,12 +1125,6 @@
 -record('domain_ProxyObject', {
     'ref' :: dmsl_domain_thrift:'ProxyRef'(),
     'data' :: dmsl_domain_thrift:'ProxyDefinition'()
-}).
-
-%% struct 'PartyPrototypeObject'
--record('domain_PartyPrototypeObject', {
-    'ref' :: dmsl_domain_thrift:'PartyPrototypeRef'(),
-    'data' :: dmsl_domain_thrift:'PartyPrototype'()
 }).
 
 %% struct 'GlobalsObject'
