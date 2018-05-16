@@ -163,6 +163,11 @@
     'PayoutToolInfo'/0,
     'Contract'/0,
     'LegalAgreement'/0,
+    'ReportPreferences'/0,
+    'ServiceAcceptanceActPreferences'/0,
+    'Representative'/0,
+    'RepresentativeDocument'/0,
+    'ArticlesOfAssociation'/0,
     'ContractStatus'/0,
     'ContractActive'/0,
     'ContractTerminated'/0,
@@ -191,16 +196,18 @@
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
     'PayoutMethodDecision'/0,
+    'ReportsServiceTerms'/0,
+    'ServiceAcceptanceActsTerms'/0,
     'CurrencyRef'/0,
     'Currency'/0,
     'CurrencySelector'/0,
     'CurrencyDecision'/0,
     'CategorySelector'/0,
     'CategoryDecision'/0,
-    'PayoutScheduleRef'/0,
-    'PayoutSchedule'/0,
-    'PayoutScheduleSelector'/0,
-    'PayoutScheduleDecision'/0,
+    'BusinessScheduleRef'/0,
+    'BusinessSchedule'/0,
+    'BusinessScheduleSelector'/0,
+    'BusinessScheduleDecision'/0,
     'CalendarRef'/0,
     'Calendar'/0,
     'CalendarHoliday'/0,
@@ -296,7 +303,7 @@
     'TermSetHierarchyObject'/0,
     'CategoryObject'/0,
     'CurrencyObject'/0,
-    'PayoutScheduleObject'/0,
+    'BusinessScheduleObject'/0,
     'CalendarObject'/0,
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
@@ -834,6 +841,11 @@
     'PayoutToolInfo' |
     'Contract' |
     'LegalAgreement' |
+    'ReportPreferences' |
+    'ServiceAcceptanceActPreferences' |
+    'Representative' |
+    'RepresentativeDocument' |
+    'ArticlesOfAssociation' |
     'ContractStatus' |
     'ContractActive' |
     'ContractTerminated' |
@@ -862,16 +874,18 @@
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
     'PayoutMethodDecision' |
+    'ReportsServiceTerms' |
+    'ServiceAcceptanceActsTerms' |
     'CurrencyRef' |
     'Currency' |
     'CurrencySelector' |
     'CurrencyDecision' |
     'CategorySelector' |
     'CategoryDecision' |
-    'PayoutScheduleRef' |
-    'PayoutSchedule' |
-    'PayoutScheduleSelector' |
-    'PayoutScheduleDecision' |
+    'BusinessScheduleRef' |
+    'BusinessSchedule' |
+    'BusinessScheduleSelector' |
+    'BusinessScheduleDecision' |
     'CalendarRef' |
     'Calendar' |
     'CalendarHoliday' |
@@ -967,7 +981,7 @@
     'TermSetHierarchyObject' |
     'CategoryObject' |
     'CurrencyObject' |
-    'PayoutScheduleObject' |
+    'BusinessScheduleObject' |
     'CalendarObject' |
     'PaymentMethodObject' |
     'PayoutMethodObject' |
@@ -1244,6 +1258,23 @@
 %% struct 'LegalAgreement'
 -type 'LegalAgreement'() :: #'domain_LegalAgreement'{}.
 
+%% struct 'ReportPreferences'
+-type 'ReportPreferences'() :: #'domain_ReportPreferences'{}.
+
+%% struct 'ServiceAcceptanceActPreferences'
+-type 'ServiceAcceptanceActPreferences'() :: #'domain_ServiceAcceptanceActPreferences'{}.
+
+%% struct 'Representative'
+-type 'Representative'() :: #'domain_Representative'{}.
+
+%% union 'RepresentativeDocument'
+-type 'RepresentativeDocument'() ::
+    {'articles_of_association', 'ArticlesOfAssociation'()} |
+    {'power_of_attorney', 'LegalAgreement'()}.
+
+%% struct 'ArticlesOfAssociation'
+-type 'ArticlesOfAssociation'() :: #'domain_ArticlesOfAssociation'{}.
+
 %% union 'ContractStatus'
 -type 'ContractStatus'() ::
     {'active', 'ContractActive'()} |
@@ -1337,6 +1368,12 @@
 %% struct 'PayoutMethodDecision'
 -type 'PayoutMethodDecision'() :: #'domain_PayoutMethodDecision'{}.
 
+%% struct 'ReportsServiceTerms'
+-type 'ReportsServiceTerms'() :: #'domain_ReportsServiceTerms'{}.
+
+%% struct 'ServiceAcceptanceActsTerms'
+-type 'ServiceAcceptanceActsTerms'() :: #'domain_ServiceAcceptanceActsTerms'{}.
+
 %% struct 'CurrencyRef'
 -type 'CurrencyRef'() :: #'domain_CurrencyRef'{}.
 
@@ -1359,19 +1396,19 @@
 %% struct 'CategoryDecision'
 -type 'CategoryDecision'() :: #'domain_CategoryDecision'{}.
 
-%% struct 'PayoutScheduleRef'
--type 'PayoutScheduleRef'() :: #'domain_PayoutScheduleRef'{}.
+%% struct 'BusinessScheduleRef'
+-type 'BusinessScheduleRef'() :: #'domain_BusinessScheduleRef'{}.
 
-%% struct 'PayoutSchedule'
--type 'PayoutSchedule'() :: #'domain_PayoutSchedule'{}.
+%% struct 'BusinessSchedule'
+-type 'BusinessSchedule'() :: #'domain_BusinessSchedule'{}.
 
-%% union 'PayoutScheduleSelector'
--type 'PayoutScheduleSelector'() ::
-    {'decisions', ['PayoutScheduleDecision'()]} |
-    {'value', ordsets:ordset('PayoutScheduleRef'())}.
+%% union 'BusinessScheduleSelector'
+-type 'BusinessScheduleSelector'() ::
+    {'decisions', ['BusinessScheduleDecision'()]} |
+    {'value', ordsets:ordset('BusinessScheduleRef'())}.
 
-%% struct 'PayoutScheduleDecision'
--type 'PayoutScheduleDecision'() :: #'domain_PayoutScheduleDecision'{}.
+%% struct 'BusinessScheduleDecision'
+-type 'BusinessScheduleDecision'() :: #'domain_BusinessScheduleDecision'{}.
 
 %% struct 'CalendarRef'
 -type 'CalendarRef'() :: #'domain_CalendarRef'{}.
@@ -1719,8 +1756,8 @@
 %% struct 'CurrencyObject'
 -type 'CurrencyObject'() :: #'domain_CurrencyObject'{}.
 
-%% struct 'PayoutScheduleObject'
--type 'PayoutScheduleObject'() :: #'domain_PayoutScheduleObject'{}.
+%% struct 'BusinessScheduleObject'
+-type 'BusinessScheduleObject'() :: #'domain_BusinessScheduleObject'{}.
 
 %% struct 'CalendarObject'
 -type 'CalendarObject'() :: #'domain_CalendarObject'{}.
@@ -1765,7 +1802,7 @@
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
     {'currency', 'CurrencyRef'()} |
-    {'payout_schedule', 'PayoutScheduleRef'()} |
+    {'business_schedule', 'BusinessScheduleRef'()} |
     {'calendar', 'CalendarRef'()} |
     {'payment_method', 'PaymentMethodRef'()} |
     {'payout_method', 'PayoutMethodRef'()} |
@@ -1788,7 +1825,7 @@
 -type 'DomainObject'() ::
     {'category', 'CategoryObject'()} |
     {'currency', 'CurrencyObject'()} |
-    {'payout_schedule', 'PayoutScheduleObject'()} |
+    {'business_schedule', 'BusinessScheduleObject'()} |
     {'calendar', 'CalendarObject'()} |
     {'payment_method', 'PaymentMethodObject'()} |
     {'payout_method', 'PayoutMethodObject'()} |
@@ -2000,6 +2037,11 @@ structs() ->
         'PayoutToolInfo',
         'Contract',
         'LegalAgreement',
+        'ReportPreferences',
+        'ServiceAcceptanceActPreferences',
+        'Representative',
+        'RepresentativeDocument',
+        'ArticlesOfAssociation',
         'ContractStatus',
         'ContractActive',
         'ContractTerminated',
@@ -2028,16 +2070,18 @@ structs() ->
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
         'PayoutMethodDecision',
+        'ReportsServiceTerms',
+        'ServiceAcceptanceActsTerms',
         'CurrencyRef',
         'Currency',
         'CurrencySelector',
         'CurrencyDecision',
         'CategorySelector',
         'CategoryDecision',
-        'PayoutScheduleRef',
-        'PayoutSchedule',
-        'PayoutScheduleSelector',
-        'PayoutScheduleDecision',
+        'BusinessScheduleRef',
+        'BusinessSchedule',
+        'BusinessScheduleSelector',
+        'BusinessScheduleDecision',
         'CalendarRef',
         'Calendar',
         'CalendarHoliday',
@@ -2133,7 +2177,7 @@ structs() ->
         'TermSetHierarchyObject',
         'CategoryObject',
         'CurrencyObject',
-        'PayoutScheduleObject',
+        'BusinessScheduleObject',
         'CalendarObject',
         'PaymentMethodObject',
         'PayoutMethodObject',
@@ -3001,7 +3045,7 @@ struct_info('Shop') ->
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
     {7, required, string, 'contract_id', undefined},
     {8, optional, string, 'payout_tool_id', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule', undefined}
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'payout_schedule', undefined}
 ]};
 
 struct_info('ShopAccount') ->
@@ -3111,14 +3155,43 @@ struct_info('Contract') ->
     {7, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined},
     {8, required, {list, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}}, 'adjustments', undefined},
     {9, required, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}}, 'payout_tools', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined},
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences', undefined}
 ]};
 
 struct_info('LegalAgreement') ->
     {struct, struct, [
     {1, required, string, 'signed_at', undefined},
-    {2, required, string, 'legal_agreement_id', undefined}
+    {2, required, string, 'legal_agreement_id', undefined},
+    {3, optional, string, 'valid_until', undefined}
 ]};
+
+struct_info('ReportPreferences') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActPreferences'}}, 'service_acceptance_act_preferences', undefined}
+]};
+
+struct_info('ServiceAcceptanceActPreferences') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined}
+]};
+
+struct_info('Representative') ->
+    {struct, struct, [
+    {1, required, string, 'position', undefined},
+    {2, required, string, 'full_name', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'RepresentativeDocument'}}, 'document', undefined}
+]};
+
+struct_info('RepresentativeDocument') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ArticlesOfAssociation'}}, 'articles_of_association', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'power_of_attorney', undefined}
+]};
+
+struct_info('ArticlesOfAssociation') ->
+    {struct, struct, []};
 
 struct_info('ContractStatus') ->
     {struct, union, [
@@ -3202,7 +3275,8 @@ struct_info('TermSet') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined}
 ]};
 
 struct_info('TimedTermSet') ->
@@ -3261,7 +3335,7 @@ struct_info('RecurrentPaytoolsServiceTerms') ->
 
 struct_info('PayoutsServiceTerms') ->
     {struct, struct, [
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'PayoutScheduleSelector'}}, 'payout_schedules', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'payout_schedules', undefined},
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
@@ -3293,6 +3367,16 @@ struct_info('PayoutMethodDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'then_', undefined}
+]};
+
+struct_info('ReportsServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActsTerms'}}, 'acts', undefined}
+]};
+
+struct_info('ServiceAcceptanceActsTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'schedules', undefined}
 ]};
 
 struct_info('CurrencyRef') ->
@@ -3332,29 +3416,30 @@ struct_info('CategoryDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'then_', undefined}
 ]};
 
-struct_info('PayoutScheduleRef') ->
+struct_info('BusinessScheduleRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
 ]};
 
-struct_info('PayoutSchedule') ->
+struct_info('BusinessSchedule') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, optional, string, 'description', undefined},
     {3, required, {struct, struct, {dmsl_base_thrift, 'Schedule'}}, 'schedule', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
+    {5, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'delay', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
 ]};
 
-struct_info('PayoutScheduleSelector') ->
+struct_info('BusinessScheduleSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}}, 'value', undefined}
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}}, 'value', undefined}
 ]};
 
-struct_info('PayoutScheduleDecision') ->
+struct_info('BusinessScheduleDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutScheduleSelector'}}, 'then_', undefined}
+    {2, required, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CalendarRef') ->
@@ -3367,7 +3452,8 @@ struct_info('Calendar') ->
     {1, required, string, 'name', undefined},
     {2, optional, string, 'description', undefined},
     {3, required, string, 'timezone', undefined},
-    {4, required, {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}}, 'holidays', undefined}
+    {4, required, {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}}, 'holidays', undefined},
+    {5, optional, {enum, {dmsl_base_thrift, 'DayOfWeek'}}, 'first_day_of_week', undefined}
 ]};
 
 struct_info('CalendarHoliday') ->
@@ -3953,10 +4039,10 @@ struct_info('CurrencyObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'data', undefined}
 ]};
 
-struct_info('PayoutScheduleObject') ->
+struct_info('BusinessScheduleObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutSchedule'}}, 'data', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'BusinessSchedule'}}, 'data', undefined}
 ]};
 
 struct_info('CalendarObject') ->
@@ -4041,7 +4127,7 @@ struct_info('Reference') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'business_schedule', undefined},
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
@@ -4065,7 +4151,7 @@ struct_info('DomainObject') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryObject'}}, 'category', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyObject'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleObject'}}, 'payout_schedule', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleObject'}}, 'business_schedule', undefined},
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
@@ -4257,6 +4343,18 @@ record_name('OperationTimeout') ->
     record_name('LegalAgreement') ->
     'domain_LegalAgreement';
 
+    record_name('ReportPreferences') ->
+    'domain_ReportPreferences';
+
+    record_name('ServiceAcceptanceActPreferences') ->
+    'domain_ServiceAcceptanceActPreferences';
+
+    record_name('Representative') ->
+    'domain_Representative';
+
+    record_name('ArticlesOfAssociation') ->
+    'domain_ArticlesOfAssociation';
+
     record_name('ContractActive') ->
     'domain_ContractActive';
 
@@ -4329,6 +4427,12 @@ record_name('OperationTimeout') ->
     record_name('PayoutMethodDecision') ->
     'domain_PayoutMethodDecision';
 
+    record_name('ReportsServiceTerms') ->
+    'domain_ReportsServiceTerms';
+
+    record_name('ServiceAcceptanceActsTerms') ->
+    'domain_ServiceAcceptanceActsTerms';
+
     record_name('CurrencyRef') ->
     'domain_CurrencyRef';
 
@@ -4341,14 +4445,14 @@ record_name('OperationTimeout') ->
     record_name('CategoryDecision') ->
     'domain_CategoryDecision';
 
-    record_name('PayoutScheduleRef') ->
-    'domain_PayoutScheduleRef';
+    record_name('BusinessScheduleRef') ->
+    'domain_BusinessScheduleRef';
 
-    record_name('PayoutSchedule') ->
-    'domain_PayoutSchedule';
+    record_name('BusinessSchedule') ->
+    'domain_BusinessSchedule';
 
-    record_name('PayoutScheduleDecision') ->
-    'domain_PayoutScheduleDecision';
+    record_name('BusinessScheduleDecision') ->
+    'domain_BusinessScheduleDecision';
 
     record_name('CalendarRef') ->
     'domain_CalendarRef';
@@ -4563,8 +4667,8 @@ record_name('OperationTimeout') ->
     record_name('CurrencyObject') ->
     'domain_CurrencyObject';
 
-    record_name('PayoutScheduleObject') ->
-    'domain_PayoutScheduleObject';
+    record_name('BusinessScheduleObject') ->
+    'domain_BusinessScheduleObject';
 
     record_name('CalendarObject') ->
     'domain_CalendarObject';
