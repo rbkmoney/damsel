@@ -9,7 +9,8 @@
 %% struct 'AccountPrototype'
 -record('accounter_AccountPrototype', {
     'currency_sym_code' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
-    'description' :: binary() | undefined
+    'description' :: binary() | undefined,
+    'creation_time' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'Account'
@@ -19,7 +20,8 @@
     'max_available_amount' :: dmsl_domain_thrift:'Amount'(),
     'min_available_amount' :: dmsl_domain_thrift:'Amount'(),
     'currency_sym_code' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
-    'description' :: binary() | undefined
+    'description' :: binary() | undefined,
+    'creation_time' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'Posting'

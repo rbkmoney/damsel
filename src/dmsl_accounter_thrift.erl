@@ -224,7 +224,8 @@ enum_info(_) -> erlang:error(badarg).
 struct_info('AccountPrototype') ->
     {struct, struct, [
     {1, required, string, 'currency_sym_code', undefined},
-    {2, optional, string, 'description', undefined}
+    {2, optional, string, 'description', undefined},
+    {3, optional, string, 'creation_time', undefined}
 ]};
 
 struct_info('Account') ->
@@ -234,7 +235,8 @@ struct_info('Account') ->
     {3, required, i64, 'max_available_amount', undefined},
     {4, required, i64, 'min_available_amount', undefined},
     {5, required, string, 'currency_sym_code', undefined},
-    {6, optional, string, 'description', undefined}
+    {6, optional, string, 'description', undefined},
+    {7, optional, string, 'creation_time', undefined}
 ]};
 
 struct_info('Posting') ->
