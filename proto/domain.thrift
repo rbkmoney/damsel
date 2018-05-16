@@ -416,7 +416,7 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
-   12: optional PayoutScheduleRef payout_schedule
+   12: optional BusinessScheduleRef payout_schedule
 }
 
 struct ShopAccount {
@@ -463,6 +463,7 @@ union LegalEntity {
     2: InternationalLegalEntity international_legal_entity
 }
 
+// TODO refactor with RepresentativePerson
 /** Юридическое лицо-резидент РФ */
 struct RussianLegalEntity {
     /* Наименование */
@@ -545,13 +546,40 @@ struct Contract {
     8: required list<ContractAdjustment> adjustments
     9: required list<PayoutTool> payout_tools
     10: optional LegalAgreement legal_agreement
+    13: optional ReportPreferences report_preferences
 }
 
 /** Юридическое соглашение */
 struct LegalAgreement {
     1: required base.Timestamp signed_at
     2: required string legal_agreement_id
+    3: optional base.Timestamp valid_until
 }
+
+struct ReportPreferences {
+    1: optional ServiceAcceptanceActPreferences service_acceptance_act_preferences
+}
+
+struct ServiceAcceptanceActPreferences {
+    1: required BusinessScheduleRef schedule
+    2: required Representative signer
+}
+
+struct Representative {
+    /* Наименование должности ЕИО/представителя */
+    1: required string position
+    /* ФИО ЕИО/представителя */
+    2: required string full_name
+    /* Документ, на основании которого действует ЕИО/представитель */
+    3: required RepresentativeDocument document
+}
+
+union RepresentativeDocument {
+    1: ArticlesOfAssociation articles_of_association    // устав
+    2: LegalAgreement power_of_attorney                // доверенность
+}
+
+struct ArticlesOfAssociation {}
 
 union ContractStatus {
     1: ContractActive active
@@ -636,6 +664,7 @@ struct TermSet {
     1: optional PaymentsServiceTerms payments
     2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
     3: optional PayoutsServiceTerms payouts
+    4: optional ReportsServiceTerms reports
 }
 
 struct TimedTermSet {
@@ -694,13 +723,15 @@ struct RecurrentPaytoolsServiceTerms {
 
 struct PayoutsServiceTerms {
     /* Payout schedule level */
-    4: optional PayoutScheduleSelector payout_schedules
+    4: optional BusinessScheduleSelector payout_schedules
     /* Payout level */
     1: optional PayoutMethodSelector payout_methods
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector fees
 }
 
+
+// legacy
 struct PayoutCompilationPolicy {
     1: required base.TimeSpan assets_freeze_for
 }
@@ -728,6 +759,16 @@ union PayoutMethodSelector {
 struct PayoutMethodDecision {
     1: required Predicate if_
     2: required PayoutMethodSelector then_
+}
+
+/* Reports service terms */
+struct ReportsServiceTerms {
+    1: optional ServiceAcceptanceActsTerms acts
+}
+
+/* Service Acceptance Acts (Акты об оказании услуг) */
+struct ServiceAcceptanceActsTerms {
+    1: optional BusinessScheduleSelector schedules
 }
 
 /* Currencies */
@@ -1027,23 +1068,25 @@ enum Residence {
 
 /* Schedules */
 
-struct PayoutScheduleRef { 1: required ObjectID id }
+struct BusinessScheduleRef { 1: required ObjectID id }
 
-struct PayoutSchedule {
+struct BusinessSchedule {
     1: required string name
     2: optional string description
     3: required base.Schedule schedule
-    4: required PayoutCompilationPolicy policy
+    5: optional base.TimeSpan delay
+    // legacy
+    4: optional PayoutCompilationPolicy policy
 }
 
-union PayoutScheduleSelector {
-    1: list<PayoutScheduleDecision> decisions
-    2: set<PayoutScheduleRef> value
+union BusinessScheduleSelector {
+    1: list<BusinessScheduleDecision> decisions
+    2: set<BusinessScheduleRef> value
 }
 
-struct PayoutScheduleDecision {
+struct BusinessScheduleDecision {
     1: required Predicate if_
-    2: required PayoutScheduleSelector then_
+    2: required BusinessScheduleSelector then_
 }
 
 /* Calendars */
@@ -1055,6 +1098,7 @@ struct Calendar {
     2: optional string description
     3: required base.Timezone timezone
     4: required CalendarHolidaySet holidays
+    5: optional base.DayOfWeek first_day_of_week
 }
 
 typedef map<base.Year, set<CalendarHoliday>> CalendarHolidaySet
@@ -1726,9 +1770,9 @@ struct CurrencyObject {
     2: required Currency data
 }
 
-struct PayoutScheduleObject {
-    1: required PayoutScheduleRef ref
-    2: required PayoutSchedule data
+struct BusinessScheduleObject {
+    1: required BusinessScheduleRef ref
+    2: required BusinessSchedule data
 }
 
 struct CalendarObject {
@@ -1800,7 +1844,7 @@ union Reference {
 
     1  : CategoryRef             category
     2  : CurrencyRef             currency
-    19 : PayoutScheduleRef       payout_schedule
+    19 : BusinessScheduleRef     business_schedule
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
@@ -1825,7 +1869,7 @@ union DomainObject {
 
     1  : CategoryObject             category
     2  : CurrencyObject             currency
-    19 : PayoutScheduleObject       payout_schedule
+    19 : BusinessScheduleObject     business_schedule
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method

@@ -1204,6 +1204,7 @@ union ContractModification {
     3: ContractAdjustmentModificationUnit adjustment_modification
     4: PayoutToolModificationUnit payout_tool_modification
     5: domain.LegalAgreement legal_agreement_binding
+    6: domain.ReportPreferences report_preferences_modification
 }
 
 struct ContractTermination {
@@ -1255,7 +1256,7 @@ struct ShopContractModification {
 }
 
 struct ScheduleModification {
-    1: optional domain.PayoutScheduleRef schedule
+    1: optional domain.BusinessScheduleRef schedule
 }
 
 /* deprecated */
@@ -1319,6 +1320,7 @@ union ContractEffect {
     3: domain.ContractAdjustment adjustment_created
     5: domain.LegalAgreement legal_agreement_bound
     4: domain.PayoutTool payout_tool_created
+    6: domain.ReportPreferences report_preferences_changed
 }
 
 struct ShopEffectUnit {
@@ -1346,7 +1348,7 @@ struct ShopContractChanged {
 }
 
 struct ScheduleChanged {
-    1: optional domain.PayoutScheduleRef schedule
+    1: optional domain.BusinessScheduleRef schedule
 }
 
 /* deprecated */
