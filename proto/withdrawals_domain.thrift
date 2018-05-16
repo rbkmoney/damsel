@@ -14,15 +14,14 @@ struct Withdrawal {
     4: optional Identity receiver
 }
 
-struct Destination {
-    1: required base.ID id
-    // TODO
+union Destination {
+    1: domain.BankCard bank_card
 }
 
 struct Identity {
     1: required base.ID id
-    2: required list<IdentityDocument> documents
-    3: required list<ContactDetail> contact
+    2: optional list<IdentityDocument> documents
+    3: optional list<ContactDetail> contact
 }
 
 union IdentityDocument {
@@ -31,7 +30,7 @@ union IdentityDocument {
 
 struct RUSDomesticPassport {
     1: required string token
-    2: required string fullname_masked
+    2: optional string fullname_masked
 }
 
 union ContactDetail {

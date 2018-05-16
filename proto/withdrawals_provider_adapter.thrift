@@ -52,7 +52,7 @@ union FinishStatus {
 }
 
 struct Success {
-    // TODO
+    1: required domain.TransactionInfo trx_info
 }
 
 /**
