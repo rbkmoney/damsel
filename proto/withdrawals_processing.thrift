@@ -12,6 +12,7 @@ typedef base.Timestamp Timestamp
 
 typedef base.ID WithdrawalID
 typedef withdrawals_domain.Withdrawal Withdrawal
+typedef withdrawals_domain.Failure Failure
 
 struct WithdrawalState {
     1: required WithdrawalID id
@@ -32,20 +33,6 @@ struct WithdrawalPending {}
 struct WithdrawalSucceeded {}
 struct WithdrawalFailed {
     1: required Failure failure
-}
-
-struct Failure {
-    1: required FailureCode     code
-    2: optional FailureReason   reason
-    3: optional SubFailure      sub
-}
-
-typedef string FailureCode
-typedef string FailureReason
-
-struct SubFailure {
-    1: required FailureCode  code
-    2: optional SubFailure   sub
 }
 
 // Events

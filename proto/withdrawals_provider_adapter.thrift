@@ -6,7 +6,7 @@ include "withdrawals_domain.thrift"
 namespace java com.rbkmoney.damsel.withdrawals.provider_adapter
 namespace erlang wthadpt
 
-///
+typedef withdrawals_domain.Failure Failure
 
 /**
  * Adapter options.
@@ -48,7 +48,7 @@ union FinishStatus {
     /** Успешное завершение взаимодействия. */
     1: Success success
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
-    2: domain.Failure failure
+    2: Failure failure
 }
 
 struct Success {
