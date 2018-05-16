@@ -43,6 +43,7 @@ struct Account {
     4: required domain.Amount min_available_amount
     5: required domain.CurrencySymbolicCode currency_sym_code
     6: optional string description
+    7: optional base.Timestamp creation_time
 }
 
 /**
