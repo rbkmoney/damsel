@@ -21,7 +21,8 @@
     'payer' :: dmsl_merch_stat_thrift:'Payer'(),
     'context' :: dmsl_base_thrift:'Content'() | undefined,
     'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
-    'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'()
+    'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'(),
+    'short_id' :: binary() | undefined
 }).
 
 %% struct 'PaymentResourcePayer'
