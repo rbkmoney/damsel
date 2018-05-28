@@ -11,6 +11,7 @@ struct WrappedPaymentTool {
 union PaymentRequest {
     1: ApplePayRequest apple
     2: SamsungPayRequest samsung
+    3: GooglePayRequest google
 }
 
 struct ApplePayRequest {
@@ -23,6 +24,11 @@ struct SamsungPayRequest {
     2: required string reference_id
 }
 
+struct GooglePayRequest {
+    1: required string gateway_merchant_id
+    2: required base.Content payment_token
+}
+
 struct UnwrappedPaymentTool {
     1: required CardInfo card_info
     2: required CardPaymentData payment_data
@@ -32,6 +38,7 @@ struct UnwrappedPaymentTool {
 union PaymentDetails {
     1: ApplePayDetails apple
     2: SamsungPayDetails samsung
+    3: GooglePayDetails google
 }
 
 struct ApplePayDetails {
@@ -43,6 +50,11 @@ struct ApplePayDetails {
 
 struct SamsungPayDetails {
     1: optional string device_id
+}
+
+struct GooglePayDetails {
+    1: required string message_id
+    2: required base.Timestamp message_expiration
 }
 
 struct CardInfo {
@@ -63,12 +75,18 @@ enum CardClass {
 
 union CardPaymentData {
     1: TokenizedCard tokenized_card
+    2: Card card
 }
 
 struct TokenizedCard {
     1: required string dpan
     2: required ExpDate exp_date
     3: required AuthData auth_data
+}
+
+struct Card {
+    1: required string pan
+    2: required ExpDate exp_date
 }
 
 struct ExpDate {
