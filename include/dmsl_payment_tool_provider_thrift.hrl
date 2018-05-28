@@ -23,6 +23,12 @@
     'reference_id' :: binary()
 }).
 
+%% struct 'GooglePayRequest'
+-record('paytoolprv_GooglePayRequest', {
+    'gateway_merchant_id' :: binary(),
+    'payment_token' :: dmsl_base_thrift:'Content'()
+}).
+
 %% struct 'UnwrappedPaymentTool'
 -record('paytoolprv_UnwrappedPaymentTool', {
     'card_info' :: dmsl_payment_tool_provider_thrift:'CardInfo'(),
@@ -43,6 +49,12 @@
     'device_id' :: binary() | undefined
 }).
 
+%% struct 'GooglePayDetails'
+-record('paytoolprv_GooglePayDetails', {
+    'message_id' :: binary(),
+    'message_expiration' :: dmsl_base_thrift:'Timestamp'()
+}).
+
 %% struct 'CardInfo'
 -record('paytoolprv_CardInfo', {
     'display_name' :: binary() | undefined,
@@ -57,6 +69,12 @@
     'dpan' :: binary(),
     'exp_date' :: dmsl_payment_tool_provider_thrift:'ExpDate'(),
     'auth_data' :: dmsl_payment_tool_provider_thrift:'AuthData'()
+}).
+
+%% struct 'Card'
+-record('paytoolprv_Card', {
+    'pan' :: binary(),
+    'exp_date' :: dmsl_payment_tool_provider_thrift:'ExpDate'()
 }).
 
 %% struct 'ExpDate'
