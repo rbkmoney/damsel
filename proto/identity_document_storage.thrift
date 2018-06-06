@@ -19,18 +19,20 @@ struct RussianDomesticPassport {
     2: required string number
     /* Наименование выдавшего паспорт органа */
     3: required string issuer
+    /* Код подразделения выдавшего паспорт органа */
+    4: required string issuer_code
     /* Дата выдачи паспорта */
-    4: required base.Timestamp issued_at
+    5: required base.Timestamp issued_at
     /* Фамилия гражданина */
-    5: required string family_name
+    6: required string family_name
     /* Имя гражданина */
-    6: required string first_name
+    7: required string first_name
     /* Отчество гражданина */
-    7: optional string patronymic
+    8: optional string patronymic
     /* Дата рождения гражданина */
-    8: required base.Timestamp birth_date
+    9: required base.Timestamp birth_date
     /* Место рождения гражданина */
-    9: required string birth_place
+    10: required string birth_place
 }
 
 /* Страховое свидетельство обязательного пенсионного страхования */
