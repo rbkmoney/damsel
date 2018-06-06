@@ -59,8 +59,12 @@ struct SafeRussianRetireeInsuranceCertificate {
     1: required string number_masked
 }
 
+exception IdentityDocumentNotFound {}
+
 service IdentityStorage {
 
     SafeIdentityDocumentData Put (1: IdentityDocument identity_document)
+
     IdentityDocument Get (1: IdentityDocumentToken token)
+        throws (1: IdentityDocumentNotFound not_found)
 }
