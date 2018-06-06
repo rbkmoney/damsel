@@ -1,6 +1,6 @@
 include "base.thrift"
 
-namespace java com.rbkmoney.damsel.identity_storage
+namespace java com.rbkmoney.damsel.identity_document_storage
 namespace erlang id_storage
 
 /**
@@ -61,7 +61,7 @@ struct SafeRussianRetireeInsuranceCertificate {
 
 exception IdentityDocumentNotFound {}
 
-service IdentityStorage {
+service IdentityDocumentStorage {
 
     SafeIdentityDocumentData Put (1: IdentityDocument identity_document)
 
