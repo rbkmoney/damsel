@@ -20,12 +20,6 @@ typedef domain.ProxyOptions Options
 typedef msgpack.Value InternalState
 
 /**
- * Запрос/ответ адаптера при обработке обратного вызова в рамках сессии.
- */
-typedef msgpack.Value Callback
-typedef msgpack.Value CallbackResponse
-
-/**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
  * стороной.
  */
