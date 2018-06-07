@@ -28,6 +28,7 @@ union EventFilter {
     1: PartyEventFilter party
     2: InvoiceEventFilter invoice
     3: CustomerEventFilter customer
+    4: WalletEventFilter wallet
 }
 
 struct PartyEventFilter {
@@ -148,6 +149,24 @@ union CustomerBindingEvent {
 struct CustomerBindingStarted {}
 struct CustomerBindingSucceeded {}
 struct CustomerBindingFailed {}
+
+struct WalletEventFilter {
+    1: required set<WalletEventType> types
+}
+
+union WalletEventType {
+    1: WalletWithdrawalEventType withdrawal
+}
+
+union WalletWithdrawalEventType {
+    1: WalletWithdrawalStarted started
+    2: WalletWithdrawalSucceeded succeeded
+    3: WalletWithdrawalFailed failed
+}
+
+struct WalletWithdrawalStarted {}
+struct WalletWithdrawalSucceeded {}
+struct WalletWithdrawalFailed {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
