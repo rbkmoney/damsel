@@ -83,6 +83,7 @@
     'PayoutMethod'/0,
     'Residence'/0,
     'BankCardPaymentSystem'/0,
+    'BankCardTokenProvider'/0,
     'TerminalPaymentProvider'/0,
     'DigitalWalletProvider'/0,
     'MerchantCashFlowAccount'/0,
@@ -171,6 +172,11 @@
     'PayoutToolInfo'/0,
     'Contract'/0,
     'LegalAgreement'/0,
+    'ReportPreferences'/0,
+    'ServiceAcceptanceActPreferences'/0,
+    'Representative'/0,
+    'RepresentativeDocument'/0,
+    'ArticlesOfAssociation'/0,
     'ContractStatus'/0,
     'ContractActive'/0,
     'ContractTerminated'/0,
@@ -200,16 +206,18 @@
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
     'PayoutMethodDecision'/0,
+    'ReportsServiceTerms'/0,
+    'ServiceAcceptanceActsTerms'/0,
     'CurrencyRef'/0,
     'Currency'/0,
     'CurrencySelector'/0,
     'CurrencyDecision'/0,
     'CategorySelector'/0,
     'CategoryDecision'/0,
-    'PayoutScheduleRef'/0,
-    'PayoutSchedule'/0,
-    'PayoutScheduleSelector'/0,
-    'PayoutScheduleDecision'/0,
+    'BusinessScheduleRef'/0,
+    'BusinessSchedule'/0,
+    'BusinessScheduleSelector'/0,
+    'BusinessScheduleDecision'/0,
     'CalendarRef'/0,
     'Calendar'/0,
     'CalendarHoliday'/0,
@@ -218,6 +226,7 @@
     'CashLimitSelector'/0,
     'CashLimitDecision'/0,
     'PaymentMethod'/0,
+    'TokenizedBankCard'/0,
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
     'BankCard'/0,
@@ -269,6 +278,7 @@
     'PaymentToolCondition'/0,
     'BankCardCondition'/0,
     'BankCardConditionDefinition'/0,
+    'PaymentSystemCondition'/0,
     'PaymentTerminalCondition'/0,
     'PaymentTerminalConditionDefinition'/0,
     'DigitalWalletCondition'/0,
@@ -291,11 +301,6 @@
     'PaymentInstitutionRef'/0,
     'PaymentInstitution'/0,
     'ContractPaymentInstitutionDefaults'/0,
-    'PartyPrototypeRef'/0,
-    'PartyPrototype'/0,
-    'ShopPrototype'/0,
-    'ContractPrototype'/0,
-    'PayoutToolPrototype'/0,
     'GlobalsRef'/0,
     'Globals'/0,
     'Dummy'/0,
@@ -308,7 +313,7 @@
     'TermSetHierarchyObject'/0,
     'CategoryObject'/0,
     'CurrencyObject'/0,
-    'PayoutScheduleObject'/0,
+    'BusinessScheduleObject'/0,
     'CalendarObject'/0,
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
@@ -320,7 +325,6 @@
     'SystemAccountSetObject'/0,
     'ExternalAccountSetObject'/0,
     'ProxyObject'/0,
-    'PartyPrototypeObject'/0,
     'GlobalsObject'/0,
     'Reference'/0,
     'DomainObject'/0
@@ -429,6 +433,7 @@
     'PayoutMethod' |
     'Residence' |
     'BankCardPaymentSystem' |
+    'BankCardTokenProvider' |
     'TerminalPaymentProvider' |
     'DigitalWalletProvider' |
     'MerchantCashFlowAccount' |
@@ -736,6 +741,12 @@
     'jcb' |
     'nspkmir'.
 
+%% enum 'BankCardTokenProvider'
+-type 'BankCardTokenProvider'() ::
+    'applepay' |
+    'googlepay' |
+    'samsungpay'.
+
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
     'euroset'.
@@ -862,6 +873,11 @@
     'PayoutToolInfo' |
     'Contract' |
     'LegalAgreement' |
+    'ReportPreferences' |
+    'ServiceAcceptanceActPreferences' |
+    'Representative' |
+    'RepresentativeDocument' |
+    'ArticlesOfAssociation' |
     'ContractStatus' |
     'ContractActive' |
     'ContractTerminated' |
@@ -891,16 +907,18 @@
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
     'PayoutMethodDecision' |
+    'ReportsServiceTerms' |
+    'ServiceAcceptanceActsTerms' |
     'CurrencyRef' |
     'Currency' |
     'CurrencySelector' |
     'CurrencyDecision' |
     'CategorySelector' |
     'CategoryDecision' |
-    'PayoutScheduleRef' |
-    'PayoutSchedule' |
-    'PayoutScheduleSelector' |
-    'PayoutScheduleDecision' |
+    'BusinessScheduleRef' |
+    'BusinessSchedule' |
+    'BusinessScheduleSelector' |
+    'BusinessScheduleDecision' |
     'CalendarRef' |
     'Calendar' |
     'CalendarHoliday' |
@@ -909,6 +927,7 @@
     'CashLimitSelector' |
     'CashLimitDecision' |
     'PaymentMethod' |
+    'TokenizedBankCard' |
     'PaymentTool' |
     'DisposablePaymentResource' |
     'BankCard' |
@@ -960,6 +979,7 @@
     'PaymentToolCondition' |
     'BankCardCondition' |
     'BankCardConditionDefinition' |
+    'PaymentSystemCondition' |
     'PaymentTerminalCondition' |
     'PaymentTerminalConditionDefinition' |
     'DigitalWalletCondition' |
@@ -982,11 +1002,6 @@
     'PaymentInstitutionRef' |
     'PaymentInstitution' |
     'ContractPaymentInstitutionDefaults' |
-    'PartyPrototypeRef' |
-    'PartyPrototype' |
-    'ShopPrototype' |
-    'ContractPrototype' |
-    'PayoutToolPrototype' |
     'GlobalsRef' |
     'Globals' |
     'Dummy' |
@@ -999,7 +1014,7 @@
     'TermSetHierarchyObject' |
     'CategoryObject' |
     'CurrencyObject' |
-    'PayoutScheduleObject' |
+    'BusinessScheduleObject' |
     'CalendarObject' |
     'PaymentMethodObject' |
     'PayoutMethodObject' |
@@ -1011,7 +1026,6 @@
     'SystemAccountSetObject' |
     'ExternalAccountSetObject' |
     'ProxyObject' |
-    'PartyPrototypeObject' |
     'GlobalsObject' |
     'Reference' |
     'DomainObject'.
@@ -1290,6 +1304,23 @@
 %% struct 'LegalAgreement'
 -type 'LegalAgreement'() :: #'domain_LegalAgreement'{}.
 
+%% struct 'ReportPreferences'
+-type 'ReportPreferences'() :: #'domain_ReportPreferences'{}.
+
+%% struct 'ServiceAcceptanceActPreferences'
+-type 'ServiceAcceptanceActPreferences'() :: #'domain_ServiceAcceptanceActPreferences'{}.
+
+%% struct 'Representative'
+-type 'Representative'() :: #'domain_Representative'{}.
+
+%% union 'RepresentativeDocument'
+-type 'RepresentativeDocument'() ::
+    {'articles_of_association', 'ArticlesOfAssociation'()} |
+    {'power_of_attorney', 'LegalAgreement'()}.
+
+%% struct 'ArticlesOfAssociation'
+-type 'ArticlesOfAssociation'() :: #'domain_ArticlesOfAssociation'{}.
+
 %% union 'ContractStatus'
 -type 'ContractStatus'() ::
     {'active', 'ContractActive'()} |
@@ -1386,6 +1417,12 @@
 %% struct 'PayoutMethodDecision'
 -type 'PayoutMethodDecision'() :: #'domain_PayoutMethodDecision'{}.
 
+%% struct 'ReportsServiceTerms'
+-type 'ReportsServiceTerms'() :: #'domain_ReportsServiceTerms'{}.
+
+%% struct 'ServiceAcceptanceActsTerms'
+-type 'ServiceAcceptanceActsTerms'() :: #'domain_ServiceAcceptanceActsTerms'{}.
+
 %% struct 'CurrencyRef'
 -type 'CurrencyRef'() :: #'domain_CurrencyRef'{}.
 
@@ -1408,19 +1445,19 @@
 %% struct 'CategoryDecision'
 -type 'CategoryDecision'() :: #'domain_CategoryDecision'{}.
 
-%% struct 'PayoutScheduleRef'
--type 'PayoutScheduleRef'() :: #'domain_PayoutScheduleRef'{}.
+%% struct 'BusinessScheduleRef'
+-type 'BusinessScheduleRef'() :: #'domain_BusinessScheduleRef'{}.
 
-%% struct 'PayoutSchedule'
--type 'PayoutSchedule'() :: #'domain_PayoutSchedule'{}.
+%% struct 'BusinessSchedule'
+-type 'BusinessSchedule'() :: #'domain_BusinessSchedule'{}.
 
-%% union 'PayoutScheduleSelector'
--type 'PayoutScheduleSelector'() ::
-    {'decisions', ['PayoutScheduleDecision'()]} |
-    {'value', ordsets:ordset('PayoutScheduleRef'())}.
+%% union 'BusinessScheduleSelector'
+-type 'BusinessScheduleSelector'() ::
+    {'decisions', ['BusinessScheduleDecision'()]} |
+    {'value', ordsets:ordset('BusinessScheduleRef'())}.
 
-%% struct 'PayoutScheduleDecision'
--type 'PayoutScheduleDecision'() :: #'domain_PayoutScheduleDecision'{}.
+%% struct 'BusinessScheduleDecision'
+-type 'BusinessScheduleDecision'() :: #'domain_BusinessScheduleDecision'{}.
 
 %% struct 'CalendarRef'
 -type 'CalendarRef'() :: #'domain_CalendarRef'{}.
@@ -1451,7 +1488,11 @@
 -type 'PaymentMethod'() ::
     {'bank_card', 'BankCardPaymentSystem'()} |
     {'payment_terminal', 'TerminalPaymentProvider'()} |
-    {'digital_wallet', 'DigitalWalletProvider'()}.
+    {'digital_wallet', 'DigitalWalletProvider'()} |
+    {'tokenized_bank_card', 'TokenizedBankCard'()}.
+
+%% struct 'TokenizedBankCard'
+-type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
 
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
@@ -1651,7 +1692,11 @@
 %% union 'BankCardConditionDefinition'
 -type 'BankCardConditionDefinition'() ::
     {'payment_system_is', atom()} |
-    {'bin_in', 'BankCardBINRangeRef'()}.
+    {'bin_in', 'BankCardBINRangeRef'()} |
+    {'payment_system', 'PaymentSystemCondition'()}.
+
+%% struct 'PaymentSystemCondition'
+-type 'PaymentSystemCondition'() :: #'domain_PaymentSystemCondition'{}.
 
 %% struct 'PaymentTerminalCondition'
 -type 'PaymentTerminalCondition'() :: #'domain_PaymentTerminalCondition'{}.
@@ -1727,21 +1772,6 @@
 %% struct 'ContractPaymentInstitutionDefaults'
 -type 'ContractPaymentInstitutionDefaults'() :: #'domain_ContractPaymentInstitutionDefaults'{}.
 
-%% struct 'PartyPrototypeRef'
--type 'PartyPrototypeRef'() :: #'domain_PartyPrototypeRef'{}.
-
-%% struct 'PartyPrototype'
--type 'PartyPrototype'() :: #'domain_PartyPrototype'{}.
-
-%% struct 'ShopPrototype'
--type 'ShopPrototype'() :: #'domain_ShopPrototype'{}.
-
-%% struct 'ContractPrototype'
--type 'ContractPrototype'() :: #'domain_ContractPrototype'{}.
-
-%% struct 'PayoutToolPrototype'
--type 'PayoutToolPrototype'() :: #'domain_PayoutToolPrototype'{}.
-
 %% struct 'GlobalsRef'
 -type 'GlobalsRef'() :: #'domain_GlobalsRef'{}.
 
@@ -1778,8 +1808,8 @@
 %% struct 'CurrencyObject'
 -type 'CurrencyObject'() :: #'domain_CurrencyObject'{}.
 
-%% struct 'PayoutScheduleObject'
--type 'PayoutScheduleObject'() :: #'domain_PayoutScheduleObject'{}.
+%% struct 'BusinessScheduleObject'
+-type 'BusinessScheduleObject'() :: #'domain_BusinessScheduleObject'{}.
 
 %% struct 'CalendarObject'
 -type 'CalendarObject'() :: #'domain_CalendarObject'{}.
@@ -1814,9 +1844,6 @@
 %% struct 'ProxyObject'
 -type 'ProxyObject'() :: #'domain_ProxyObject'{}.
 
-%% struct 'PartyPrototypeObject'
--type 'PartyPrototypeObject'() :: #'domain_PartyPrototypeObject'{}.
-
 %% struct 'GlobalsObject'
 -type 'GlobalsObject'() :: #'domain_GlobalsObject'{}.
 
@@ -1824,7 +1851,7 @@
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
     {'currency', 'CurrencyRef'()} |
-    {'payout_schedule', 'PayoutScheduleRef'()} |
+    {'business_schedule', 'BusinessScheduleRef'()} |
     {'calendar', 'CalendarRef'()} |
     {'payment_method', 'PaymentMethodRef'()} |
     {'payout_method', 'PayoutMethodRef'()} |
@@ -1840,14 +1867,13 @@
     {'proxy', 'ProxyRef'()} |
     {'globals', 'GlobalsRef'()} |
     {'dummy', 'DummyRef'()} |
-    {'dummy_link', 'DummyLinkRef'()} |
-    {'party_prototype', 'PartyPrototypeRef'()}.
+    {'dummy_link', 'DummyLinkRef'()}.
 
 %% union 'DomainObject'
 -type 'DomainObject'() ::
     {'category', 'CategoryObject'()} |
     {'currency', 'CurrencyObject'()} |
-    {'payout_schedule', 'PayoutScheduleObject'()} |
+    {'business_schedule', 'BusinessScheduleObject'()} |
     {'calendar', 'CalendarObject'()} |
     {'payment_method', 'PaymentMethodObject'()} |
     {'payout_method', 'PayoutMethodObject'()} |
@@ -1863,8 +1889,7 @@
     {'proxy', 'ProxyObject'()} |
     {'globals', 'GlobalsObject'()} |
     {'dummy', 'DummyObject'()} |
-    {'dummy_link', 'DummyLinkObject'()} |
-    {'party_prototype', 'PartyPrototypeObject'()}.
+    {'dummy_link', 'DummyLinkObject'()}.
 
 %%
 %% services and functions
@@ -1901,6 +1926,7 @@
     'PayoutMethod'() |
     'Residence'() |
     'BankCardPaymentSystem'() |
+    'BankCardTokenProvider'() |
     'TerminalPaymentProvider'() |
     'DigitalWalletProvider'() |
     'MerchantCashFlowAccount'() |
@@ -1976,6 +2002,7 @@ enums() ->
         'PayoutMethod',
         'Residence',
         'BankCardPaymentSystem',
+        'BankCardTokenProvider',
         'TerminalPaymentProvider',
         'DigitalWalletProvider',
         'MerchantCashFlowAccount',
@@ -2068,6 +2095,11 @@ structs() ->
         'PayoutToolInfo',
         'Contract',
         'LegalAgreement',
+        'ReportPreferences',
+        'ServiceAcceptanceActPreferences',
+        'Representative',
+        'RepresentativeDocument',
+        'ArticlesOfAssociation',
         'ContractStatus',
         'ContractActive',
         'ContractTerminated',
@@ -2097,16 +2129,18 @@ structs() ->
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
         'PayoutMethodDecision',
+        'ReportsServiceTerms',
+        'ServiceAcceptanceActsTerms',
         'CurrencyRef',
         'Currency',
         'CurrencySelector',
         'CurrencyDecision',
         'CategorySelector',
         'CategoryDecision',
-        'PayoutScheduleRef',
-        'PayoutSchedule',
-        'PayoutScheduleSelector',
-        'PayoutScheduleDecision',
+        'BusinessScheduleRef',
+        'BusinessSchedule',
+        'BusinessScheduleSelector',
+        'BusinessScheduleDecision',
         'CalendarRef',
         'Calendar',
         'CalendarHoliday',
@@ -2115,6 +2149,7 @@ structs() ->
         'CashLimitSelector',
         'CashLimitDecision',
         'PaymentMethod',
+        'TokenizedBankCard',
         'PaymentTool',
         'DisposablePaymentResource',
         'BankCard',
@@ -2166,6 +2201,7 @@ structs() ->
         'PaymentToolCondition',
         'BankCardCondition',
         'BankCardConditionDefinition',
+        'PaymentSystemCondition',
         'PaymentTerminalCondition',
         'PaymentTerminalConditionDefinition',
         'DigitalWalletCondition',
@@ -2188,11 +2224,6 @@ structs() ->
         'PaymentInstitutionRef',
         'PaymentInstitution',
         'ContractPaymentInstitutionDefaults',
-        'PartyPrototypeRef',
-        'PartyPrototype',
-        'ShopPrototype',
-        'ContractPrototype',
-        'PayoutToolPrototype',
         'GlobalsRef',
         'Globals',
         'Dummy',
@@ -2205,7 +2236,7 @@ structs() ->
         'TermSetHierarchyObject',
         'CategoryObject',
         'CurrencyObject',
-        'PayoutScheduleObject',
+        'BusinessScheduleObject',
         'CalendarObject',
         'PaymentMethodObject',
         'PayoutMethodObject',
@@ -2217,7 +2248,6 @@ structs() ->
         'SystemAccountSetObject',
         'ExternalAccountSetObject',
         'ProxyObject',
-        'PartyPrototypeObject',
         'GlobalsObject',
         'Reference',
         'DomainObject'
@@ -2668,6 +2698,13 @@ enum_info('BankCardPaymentSystem') ->
         {'nspkmir', 11}
     ]};
 
+enum_info('BankCardTokenProvider') ->
+    {enum, [
+        {'applepay', 0},
+        {'googlepay', 1},
+        {'samsungpay', 2}
+    ]};
+
 enum_info('TerminalPaymentProvider') ->
     {enum, [
         {'euroset', 0}
@@ -3090,7 +3127,7 @@ struct_info('Shop') ->
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
     {7, required, string, 'contract_id', undefined},
     {8, optional, string, 'payout_tool_id', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule', undefined}
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'payout_schedule', undefined}
 ]};
 
 struct_info('ShopAccount') ->
@@ -3226,7 +3263,7 @@ struct_info('PayoutToolInfo') ->
 struct_info('Contract') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
-    {13, optional, string, 'contractor_id', undefined},
+    {14, optional, string, 'contractor_id', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
     {11, required, string, 'created_at', undefined},
     {4, optional, string, 'valid_since', undefined},
@@ -3236,14 +3273,43 @@ struct_info('Contract') ->
     {8, required, {list, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}}, 'adjustments', undefined},
     {9, required, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}}, 'payout_tools', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined},
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
 ]};
 
 struct_info('LegalAgreement') ->
     {struct, struct, [
     {1, required, string, 'signed_at', undefined},
-    {2, required, string, 'legal_agreement_id', undefined}
+    {2, required, string, 'legal_agreement_id', undefined},
+    {3, optional, string, 'valid_until', undefined}
 ]};
+
+struct_info('ReportPreferences') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActPreferences'}}, 'service_acceptance_act_preferences', undefined}
+]};
+
+struct_info('ServiceAcceptanceActPreferences') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined}
+]};
+
+struct_info('Representative') ->
+    {struct, struct, [
+    {1, required, string, 'position', undefined},
+    {2, required, string, 'full_name', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'RepresentativeDocument'}}, 'document', undefined}
+]};
+
+struct_info('RepresentativeDocument') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ArticlesOfAssociation'}}, 'articles_of_association', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'power_of_attorney', undefined}
+]};
+
+struct_info('ArticlesOfAssociation') ->
+    {struct, struct, []};
 
 struct_info('ContractStatus') ->
     {struct, union, [
@@ -3328,7 +3394,8 @@ struct_info('TermSet') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined}
 ]};
 
 struct_info('TimedTermSet') ->
@@ -3387,7 +3454,7 @@ struct_info('RecurrentPaytoolsServiceTerms') ->
 
 struct_info('PayoutsServiceTerms') ->
     {struct, struct, [
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'PayoutScheduleSelector'}}, 'payout_schedules', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'payout_schedules', undefined},
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
@@ -3427,6 +3494,16 @@ struct_info('PayoutMethodDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'then_', undefined}
 ]};
 
+struct_info('ReportsServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActsTerms'}}, 'acts', undefined}
+]};
+
+struct_info('ServiceAcceptanceActsTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'schedules', undefined}
+]};
+
 struct_info('CurrencyRef') ->
     {struct, struct, [
     {1, required, string, 'symbolic_code', undefined}
@@ -3464,29 +3541,30 @@ struct_info('CategoryDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'then_', undefined}
 ]};
 
-struct_info('PayoutScheduleRef') ->
+struct_info('BusinessScheduleRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
 ]};
 
-struct_info('PayoutSchedule') ->
+struct_info('BusinessSchedule') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, optional, string, 'description', undefined},
     {3, required, {struct, struct, {dmsl_base_thrift, 'Schedule'}}, 'schedule', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
+    {5, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'delay', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
 ]};
 
-struct_info('PayoutScheduleSelector') ->
+struct_info('BusinessScheduleSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}}, 'value', undefined}
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}}, 'value', undefined}
 ]};
 
-struct_info('PayoutScheduleDecision') ->
+struct_info('BusinessScheduleDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutScheduleSelector'}}, 'then_', undefined}
+    {2, required, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('CalendarRef') ->
@@ -3499,7 +3577,8 @@ struct_info('Calendar') ->
     {1, required, string, 'name', undefined},
     {2, optional, string, 'description', undefined},
     {3, required, string, 'timezone', undefined},
-    {4, required, {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}}, 'holidays', undefined}
+    {4, required, {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}}, 'holidays', undefined},
+    {5, optional, {enum, {dmsl_base_thrift, 'DayOfWeek'}}, 'first_day_of_week', undefined}
 ]};
 
 struct_info('CalendarHoliday') ->
@@ -3538,7 +3617,14 @@ struct_info('PaymentMethod') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
     {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
-    {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined}
+    {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined}
+]};
+
+struct_info('TokenizedBankCard') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+    {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
 ]};
 
 struct_info('PaymentTool') ->
@@ -3560,7 +3646,8 @@ struct_info('BankCard') ->
     {1, required, string, 'token', undefined},
     {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
     {3, required, string, 'bin', undefined},
-    {4, required, string, 'masked_pan', undefined}
+    {4, required, string, 'masked_pan', undefined},
+    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
@@ -3866,15 +3953,20 @@ struct_info('PaymentToolCondition') ->
 
 struct_info('BankCardCondition') ->
     {struct, struct, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'BankCardConditionDefinition'}}, 'definition', undefined}
 ]};
 
 struct_info('BankCardConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined}
+]};
+
+struct_info('PaymentSystemCondition') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider_is', undefined}
 ]};
 
 struct_info('PaymentTerminalCondition') ->
@@ -4012,40 +4104,6 @@ struct_info('ContractPaymentInstitutionDefaults') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
 ]};
 
-struct_info('PartyPrototypeRef') ->
-    {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
-
-struct_info('PartyPrototype') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ShopPrototype'}}, 'shop', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ContractPrototype'}}, 'contract', undefined}
-]};
-
-struct_info('ShopPrototype') ->
-    {struct, struct, [
-    {5, required, string, 'shop_id', undefined},
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined}
-]};
-
-struct_info('ContractPrototype') ->
-    {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'test_contract_template', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'PayoutToolPrototype'}}, 'payout_tool', undefined}
-]};
-
-struct_info('PayoutToolPrototype') ->
-    {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'payout_tool_currency', undefined}
-]};
-
 struct_info('GlobalsRef') ->
     {struct, struct, []};
 
@@ -4053,13 +4111,7 @@ struct_info('Globals') ->
     {struct, struct, [
     {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
     {8, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}}, 'payment_institutions', undefined},
-    {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined},
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
-    {5, optional, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'default_contract_template', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'common_merchant_proxy', undefined}
+    {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined}
 ]};
 
 struct_info('Dummy') ->
@@ -4116,10 +4168,10 @@ struct_info('CurrencyObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'data', undefined}
 ]};
 
-struct_info('PayoutScheduleObject') ->
+struct_info('BusinessScheduleObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutSchedule'}}, 'data', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'BusinessSchedule'}}, 'data', undefined}
 ]};
 
 struct_info('CalendarObject') ->
@@ -4188,12 +4240,6 @@ struct_info('ProxyObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'ProxyDefinition'}}, 'data', undefined}
 ]};
 
-struct_info('PartyPrototypeObject') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototype'}}, 'data', undefined}
-]};
-
 struct_info('GlobalsObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'ref', undefined},
@@ -4204,7 +4250,7 @@ struct_info('Reference') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'payout_schedule', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'business_schedule', undefined},
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
@@ -4220,15 +4266,14 @@ struct_info('Reference') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined}
 ]};
 
 struct_info('DomainObject') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryObject'}}, 'category', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyObject'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleObject'}}, 'payout_schedule', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleObject'}}, 'business_schedule', undefined},
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
@@ -4244,8 +4289,7 @@ struct_info('DomainObject') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -4429,6 +4473,18 @@ record_name('OperationTimeout') ->
     record_name('LegalAgreement') ->
     'domain_LegalAgreement';
 
+    record_name('ReportPreferences') ->
+    'domain_ReportPreferences';
+
+    record_name('ServiceAcceptanceActPreferences') ->
+    'domain_ServiceAcceptanceActPreferences';
+
+    record_name('Representative') ->
+    'domain_Representative';
+
+    record_name('ArticlesOfAssociation') ->
+    'domain_ArticlesOfAssociation';
+
     record_name('ContractActive') ->
     'domain_ContractActive';
 
@@ -4504,6 +4560,12 @@ record_name('OperationTimeout') ->
     record_name('PayoutMethodDecision') ->
     'domain_PayoutMethodDecision';
 
+    record_name('ReportsServiceTerms') ->
+    'domain_ReportsServiceTerms';
+
+    record_name('ServiceAcceptanceActsTerms') ->
+    'domain_ServiceAcceptanceActsTerms';
+
     record_name('CurrencyRef') ->
     'domain_CurrencyRef';
 
@@ -4516,14 +4578,14 @@ record_name('OperationTimeout') ->
     record_name('CategoryDecision') ->
     'domain_CategoryDecision';
 
-    record_name('PayoutScheduleRef') ->
-    'domain_PayoutScheduleRef';
+    record_name('BusinessScheduleRef') ->
+    'domain_BusinessScheduleRef';
 
-    record_name('PayoutSchedule') ->
-    'domain_PayoutSchedule';
+    record_name('BusinessSchedule') ->
+    'domain_BusinessSchedule';
 
-    record_name('PayoutScheduleDecision') ->
-    'domain_PayoutScheduleDecision';
+    record_name('BusinessScheduleDecision') ->
+    'domain_BusinessScheduleDecision';
 
     record_name('CalendarRef') ->
     'domain_CalendarRef';
@@ -4539,6 +4601,9 @@ record_name('OperationTimeout') ->
 
     record_name('CashLimitDecision') ->
     'domain_CashLimitDecision';
+
+    record_name('TokenizedBankCard') ->
+    'domain_TokenizedBankCard';
 
     record_name('DisposablePaymentResource') ->
     'domain_DisposablePaymentResource';
@@ -4645,6 +4710,9 @@ record_name('OperationTimeout') ->
     record_name('BankCardCondition') ->
     'domain_BankCardCondition';
 
+    record_name('PaymentSystemCondition') ->
+    'domain_PaymentSystemCondition';
+
     record_name('PaymentTerminalCondition') ->
     'domain_PaymentTerminalCondition';
 
@@ -4696,21 +4764,6 @@ record_name('OperationTimeout') ->
     record_name('ContractPaymentInstitutionDefaults') ->
     'domain_ContractPaymentInstitutionDefaults';
 
-    record_name('PartyPrototypeRef') ->
-    'domain_PartyPrototypeRef';
-
-    record_name('PartyPrototype') ->
-    'domain_PartyPrototype';
-
-    record_name('ShopPrototype') ->
-    'domain_ShopPrototype';
-
-    record_name('ContractPrototype') ->
-    'domain_ContractPrototype';
-
-    record_name('PayoutToolPrototype') ->
-    'domain_PayoutToolPrototype';
-
     record_name('GlobalsRef') ->
     'domain_GlobalsRef';
 
@@ -4747,8 +4800,8 @@ record_name('OperationTimeout') ->
     record_name('CurrencyObject') ->
     'domain_CurrencyObject';
 
-    record_name('PayoutScheduleObject') ->
-    'domain_PayoutScheduleObject';
+    record_name('BusinessScheduleObject') ->
+    'domain_BusinessScheduleObject';
 
     record_name('CalendarObject') ->
     'domain_CalendarObject';
@@ -4782,9 +4835,6 @@ record_name('OperationTimeout') ->
 
     record_name('ProxyObject') ->
     'domain_ProxyObject';
-
-    record_name('PartyPrototypeObject') ->
-    'domain_PartyPrototypeObject';
 
     record_name('GlobalsObject') ->
     'domain_GlobalsObject';

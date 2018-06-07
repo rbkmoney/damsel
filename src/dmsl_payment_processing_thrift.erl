@@ -927,6 +927,7 @@
     {'adjustment_modification', 'ContractAdjustmentModificationUnit'()} |
     {'payout_tool_modification', 'PayoutToolModificationUnit'()} |
     {'legal_agreement_binding', dmsl_domain_thrift:'LegalAgreement'()} |
+    {'report_preferences_modification', dmsl_domain_thrift:'ReportPreferences'()} |
     {'contractor_modification', 'ContractorID'()}.
 
 %% struct 'ContractTermination'
@@ -1023,6 +1024,7 @@
     {'adjustment_created', dmsl_domain_thrift:'ContractAdjustment'()} |
     {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()} |
     {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()} |
+    {'report_preferences_changed', dmsl_domain_thrift:'ReportPreferences'()} |
     {'contractor_changed', 'ContractorID'()}.
 
 %% struct 'ShopEffectUnit'
@@ -2394,7 +2396,8 @@ struct_info('ContractModification') ->
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractAdjustmentModificationUnit'}}, 'adjustment_modification', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolModificationUnit'}}, 'payout_tool_modification', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_binding', undefined},
-    {6, optional, string, 'contractor_modification', undefined}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined},
+    {7, optional, string, 'contractor_modification', undefined}
 ]};
 
 struct_info('ContractTermination') ->
@@ -2451,7 +2454,7 @@ struct_info('ShopContractModification') ->
 
 struct_info('ScheduleModification') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'schedule', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ProxyModification') ->
@@ -2539,7 +2542,8 @@ struct_info('ContractEffect') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
-    {6, optional, string, 'contractor_changed', undefined}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
+    {7, optional, string, 'contractor_changed', undefined}
 ]};
 
 struct_info('ShopEffectUnit') ->
@@ -2569,7 +2573,7 @@ struct_info('ShopContractChanged') ->
 
 struct_info('ScheduleChanged') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutScheduleRef'}}, 'schedule', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
 ]};
 
 struct_info('ContractorEffectUnit') ->

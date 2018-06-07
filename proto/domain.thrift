@@ -418,7 +418,7 @@ struct Shop {
     6: optional ShopAccount account
     7: required ContractID contract_id
     8: optional PayoutToolID payout_tool_id
-   12: optional PayoutScheduleRef payout_schedule
+   12: optional BusinessScheduleRef payout_schedule
 }
 
 struct ShopAccount {
@@ -498,6 +498,7 @@ union LegalEntity {
     2: InternationalLegalEntity international_legal_entity
 }
 
+// TODO refactor with RepresentativePerson
 /** Юридическое лицо-резидент РФ */
 struct RussianLegalEntity {
     /* Наименование */
@@ -587,7 +588,7 @@ typedef base.ID ContractID
 /** Договор */
 struct Contract {
     1: required ContractID id
-    13: optional ContractorID contractor_id
+    14: optional ContractorID contractor_id
     12: optional PaymentInstitutionRef payment_institution
     11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
@@ -600,7 +601,7 @@ struct Contract {
     // maybe they should be directly in party
     9: required list<PayoutTool> payout_tools
     10: optional LegalAgreement legal_agreement
-
+    13: optional ReportPreferences report_preferences
     // deprecated
     3: optional Contractor contractor
 }
@@ -609,7 +610,33 @@ struct Contract {
 struct LegalAgreement {
     1: required base.Timestamp signed_at
     2: required string legal_agreement_id
+    3: optional base.Timestamp valid_until
 }
+
+struct ReportPreferences {
+    1: optional ServiceAcceptanceActPreferences service_acceptance_act_preferences
+}
+
+struct ServiceAcceptanceActPreferences {
+    1: required BusinessScheduleRef schedule
+    2: required Representative signer
+}
+
+struct Representative {
+    /* Наименование должности ЕИО/представителя */
+    1: required string position
+    /* ФИО ЕИО/представителя */
+    2: required string full_name
+    /* Документ, на основании которого действует ЕИО/представитель */
+    3: required RepresentativeDocument document
+}
+
+union RepresentativeDocument {
+    1: ArticlesOfAssociation articles_of_association    // устав
+    2: LegalAgreement power_of_attorney                // доверенность
+}
+
+struct ArticlesOfAssociation {}
 
 union ContractStatus {
     1: ContractActive active
@@ -694,7 +721,8 @@ struct TermSet {
     1: optional PaymentsServiceTerms payments
     2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
     3: optional PayoutsServiceTerms payouts
-    4: optional WalletServiceTerms wallets
+    4: optional ReportsServiceTerms reports
+    5: optional WalletServiceTerms wallets
 }
 
 struct TimedTermSet {
@@ -753,13 +781,15 @@ struct RecurrentPaytoolsServiceTerms {
 
 struct PayoutsServiceTerms {
     /* Payout schedule level */
-    4: optional PayoutScheduleSelector payout_schedules
+    4: optional BusinessScheduleSelector payout_schedules
     /* Payout level */
     1: optional PayoutMethodSelector payout_methods
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector fees
 }
 
+
+// legacy
 struct PayoutCompilationPolicy {
     1: required base.TimeSpan assets_freeze_for
 }
@@ -794,6 +824,16 @@ union PayoutMethodSelector {
 struct PayoutMethodDecision {
     1: required Predicate if_
     2: required PayoutMethodSelector then_
+}
+
+/* Reports service terms */
+struct ReportsServiceTerms {
+    1: optional ServiceAcceptanceActsTerms acts
+}
+
+/* Service Acceptance Acts (Акты об оказании услуг) */
+struct ServiceAcceptanceActsTerms {
+    1: optional BusinessScheduleSelector schedules
 }
 
 /* Currencies */
@@ -1093,23 +1133,25 @@ enum Residence {
 
 /* Schedules */
 
-struct PayoutScheduleRef { 1: required ObjectID id }
+struct BusinessScheduleRef { 1: required ObjectID id }
 
-struct PayoutSchedule {
+struct BusinessSchedule {
     1: required string name
     2: optional string description
     3: required base.Schedule schedule
-    4: required PayoutCompilationPolicy policy
+    5: optional base.TimeSpan delay
+    // legacy
+    4: optional PayoutCompilationPolicy policy
 }
 
-union PayoutScheduleSelector {
-    1: list<PayoutScheduleDecision> decisions
-    2: set<PayoutScheduleRef> value
+union BusinessScheduleSelector {
+    1: list<BusinessScheduleDecision> decisions
+    2: set<BusinessScheduleRef> value
 }
 
-struct PayoutScheduleDecision {
+struct BusinessScheduleDecision {
     1: required Predicate if_
-    2: required PayoutScheduleSelector then_
+    2: required BusinessScheduleSelector then_
 }
 
 /* Calendars */
@@ -1121,6 +1163,7 @@ struct Calendar {
     2: optional string description
     3: required base.Timezone timezone
     4: required CalendarHolidaySet holidays
+    5: optional base.DayOfWeek first_day_of_week
 }
 
 typedef map<base.Year, set<CalendarHoliday>> CalendarHolidaySet
@@ -1160,6 +1203,12 @@ union PaymentMethod {
     1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
+    4: TokenizedBankCard tokenized_bank_card
+}
+
+struct TokenizedBankCard {
+    1: required BankCardPaymentSystem payment_system
+    2: required BankCardTokenProvider token_provider
 }
 
 enum BankCardPaymentSystem {
@@ -1175,6 +1224,14 @@ enum BankCardPaymentSystem {
     unionpay
     jcb
     nspkmir
+}
+
+/** Тип платежного токена **/
+
+enum BankCardTokenProvider {
+    applepay
+    googlepay
+    samsungpay
 }
 
 typedef base.ID CustomerID
@@ -1200,6 +1257,7 @@ struct BankCard {
     2: required BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+    5: optional BankCardTokenProvider token_provider
 }
 
 /** Платеж через терминал **/
@@ -1593,14 +1651,18 @@ union PaymentToolCondition {
 }
 
 struct BankCardCondition {
-    1: optional BankCardPaymentSystem payment_system_is // legacy
-    2: optional BankCardBINRangeRef bin_in              // legacy
     3: optional BankCardConditionDefinition definition
 }
 
 union BankCardConditionDefinition {
-    1: BankCardPaymentSystem payment_system_is
+    1: BankCardPaymentSystem payment_system_is // deprecated
     2: BankCardBINRangeRef bin_in
+    3: PaymentSystemCondition payment_system
+}
+
+struct PaymentSystemCondition {
+    1: required BankCardPaymentSystem payment_system_is
+    2: optional BankCardTokenProvider token_provider_is
 }
 
 struct PaymentTerminalCondition {
@@ -1723,36 +1785,6 @@ struct ContractPaymentInstitutionDefaults {
     2: required PaymentInstitutionRef live
 }
 
-/* Merchant, shop, contract & payout_tool prototypes */
-/* all deprecated */
-
-struct PartyPrototypeRef { 1: required ObjectID id }
-
-struct PartyPrototype {
-    1: required ShopPrototype shop
-    3: required ContractPrototype contract
-}
-
-struct ShopPrototype {
-    5: required ShopID shop_id
-    1: required CategoryRef category
-    2: required CurrencyRef currency
-    3: required ShopDetails details
-    4: required ShopLocation location
-}
-
-struct ContractPrototype {
-    1: required ContractID contract_id
-    2: required ContractTemplateRef test_contract_template
-    3: required PayoutToolPrototype payout_tool
-}
-
-struct PayoutToolPrototype {
-    1: required PayoutToolID payout_tool_id
-    2: required PayoutToolInfo payout_tool_info
-    3: required CurrencyRef payout_tool_currency
-}
-
 /* Root config */
 
 struct GlobalsRef {}
@@ -1763,13 +1795,6 @@ struct Globals {
     8: optional set<PaymentInstitutionRef> payment_institutions
     42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
 
-    /* deprecated */
-    1: optional PartyPrototypeRef party_prototype
-    2: optional ProviderSelector providers
-    3: optional SystemAccountSetSelector system_account_set
-    5: optional InspectorSelector inspector
-    6: optional ContractTemplateRef default_contract_template
-    7: optional ProxyRef common_merchant_proxy
 }
 
 /** Dummy (for integrity test purpose) */
@@ -1819,9 +1844,9 @@ struct CurrencyObject {
     2: required Currency data
 }
 
-struct PayoutScheduleObject {
-    1: required PayoutScheduleRef ref
-    2: required PayoutSchedule data
+struct BusinessScheduleObject {
+    1: required BusinessScheduleRef ref
+    2: required BusinessSchedule data
 }
 
 struct CalendarObject {
@@ -1879,12 +1904,6 @@ struct ProxyObject {
     2: required ProxyDefinition data
 }
 
-/* deprecated */
-struct PartyPrototypeObject {
-    1: required PartyPrototypeRef ref
-    2: required PartyPrototype data
-}
-
 struct GlobalsObject {
     1: required GlobalsRef ref
     2: required Globals data
@@ -1894,7 +1913,7 @@ union Reference {
 
     1  : CategoryRef             category
     2  : CurrencyRef             currency
-    19 : PayoutScheduleRef       payout_schedule
+    19 : BusinessScheduleRef     business_schedule
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
@@ -1912,16 +1931,13 @@ union Reference {
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
-
-    /* deprecated */
-    10 : PartyPrototypeRef       party_prototype
 }
 
 union DomainObject {
 
     1  : CategoryObject             category
     2  : CurrencyObject             currency
-    19 : PayoutScheduleObject       payout_schedule
+    19 : BusinessScheduleObject     business_schedule
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method
@@ -1939,9 +1955,6 @@ union DomainObject {
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
-
-    /* deprecated */
-    10 : PartyPrototypeObject       party_prototype
 }
 
 /* Domain */

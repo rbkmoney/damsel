@@ -585,7 +585,8 @@ struct_info('StatPayment') ->
     {10, required, {struct, union, {dmsl_merch_stat_thrift, 'Payer'}}, 'payer', undefined},
     {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
     {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
-    {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined}
+    {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
+    {15, optional, string, 'short_id', undefined}
 ]};
 
 struct_info('Payer') ->
@@ -684,7 +685,8 @@ struct_info('BankCard') ->
     {1, required, string, 'token', undefined},
     {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
     {3, required, string, 'bin', undefined},
-    {4, required, string, 'masked_pan', undefined}
+    {4, required, string, 'masked_pan', undefined},
+    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
