@@ -12,7 +12,7 @@ typedef base.Timestamp Timestamp
 
 typedef base.ID WithdrawalID
 typedef withdrawals_domain.Withdrawal Withdrawal
-typedef withdrawals_domain.Failure Failure
+typedef domain.Failure Failure
 
 struct WithdrawalState {
     1: required WithdrawalID id

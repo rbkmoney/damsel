@@ -6,7 +6,7 @@ include "withdrawals_domain.thrift"
 namespace java com.rbkmoney.damsel.withdrawals.provider_adapter
 namespace erlang wthadpt
 
-typedef withdrawals_domain.Failure Failure
+typedef domain.Failure Failure
 
 /**
  * Adapter options.
