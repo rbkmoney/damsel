@@ -26,6 +26,7 @@ struct StatPayment {
     12: optional base.Content context
     13: optional geo_ip.LocationInfo location_info
     14: required InvoicePaymentFlow flow
+    15: optional string short_id
 }
 
 union Payer {
@@ -100,6 +101,7 @@ struct BankCard {
     2: required domain.BankCardPaymentSystem payment_system
     3: required string bin
     4: required string masked_pan
+    5: optional domain.BankCardTokenProvider token_provider
 }
 
 struct PaymentTerminal {
