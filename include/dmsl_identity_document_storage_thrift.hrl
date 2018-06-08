@@ -6,7 +6,7 @@
 
 
 %% struct 'RussianDomesticPassport'
--record('id_storage_RussianDomesticPassport', {
+-record('ident_doc_store_RussianDomesticPassport', {
     'series' :: binary(),
     'number' :: binary(),
     'issuer' :: binary(),
@@ -20,29 +20,29 @@
 }).
 
 %% struct 'RussianRetireeInsuranceCertificate'
--record('id_storage_RussianRetireeInsuranceCertificate', {
+-record('ident_doc_store_RussianRetireeInsuranceCertificate', {
     'number' :: binary()
 }).
 
 %% struct 'SafeIdentityDocumentData'
--record('id_storage_SafeIdentityDocumentData', {
+-record('ident_doc_store_SafeIdentityDocumentData', {
     'token' :: dmsl_identity_document_storage_thrift:'IdentityDocumentToken'(),
     'safe_identity_document' :: dmsl_identity_document_storage_thrift:'SafeIdentityDocument'()
 }).
 
 %% struct 'SafeRussianDomesticPassport'
--record('id_storage_SafeRussianDomesticPassport', {
+-record('ident_doc_store_SafeRussianDomesticPassport', {
     'series_masked' :: binary(),
     'number_masked' :: binary(),
     'fullname_masked' :: binary()
 }).
 
 %% struct 'SafeRussianRetireeInsuranceCertificate'
--record('id_storage_SafeRussianRetireeInsuranceCertificate', {
+-record('ident_doc_store_SafeRussianRetireeInsuranceCertificate', {
     'number_masked' :: binary()
 }).
 
 %% exception 'IdentityDocumentNotFound'
--record('id_storage_IdentityDocumentNotFound', {}).
+-record('ident_doc_store_IdentityDocumentNotFound', {}).
 
 -endif.

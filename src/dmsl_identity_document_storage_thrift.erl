@@ -47,7 +47,7 @@
     'IdentityDocumentNotFound'/0
 ]).
 
--type namespace() :: 'id_storage'.
+-type namespace() :: 'ident_doc_store'.
 
 %%
 %% typedefs
@@ -83,13 +83,13 @@
     {'russian_retiree_insurance_certificate', 'RussianRetireeInsuranceCertificate'()}.
 
 %% struct 'RussianDomesticPassport'
--type 'RussianDomesticPassport'() :: #'id_storage_RussianDomesticPassport'{}.
+-type 'RussianDomesticPassport'() :: #'ident_doc_store_RussianDomesticPassport'{}.
 
 %% struct 'RussianRetireeInsuranceCertificate'
--type 'RussianRetireeInsuranceCertificate'() :: #'id_storage_RussianRetireeInsuranceCertificate'{}.
+-type 'RussianRetireeInsuranceCertificate'() :: #'ident_doc_store_RussianRetireeInsuranceCertificate'{}.
 
 %% struct 'SafeIdentityDocumentData'
--type 'SafeIdentityDocumentData'() :: #'id_storage_SafeIdentityDocumentData'{}.
+-type 'SafeIdentityDocumentData'() :: #'ident_doc_store_SafeIdentityDocumentData'{}.
 
 %% union 'SafeIdentityDocument'
 -type 'SafeIdentityDocument'() ::
@@ -97,13 +97,13 @@
     {'safe_russian_retiree_insurance_certificate', 'SafeRussianRetireeInsuranceCertificate'()}.
 
 %% struct 'SafeRussianDomesticPassport'
--type 'SafeRussianDomesticPassport'() :: #'id_storage_SafeRussianDomesticPassport'{}.
+-type 'SafeRussianDomesticPassport'() :: #'ident_doc_store_SafeRussianDomesticPassport'{}.
 
 %% struct 'SafeRussianRetireeInsuranceCertificate'
--type 'SafeRussianRetireeInsuranceCertificate'() :: #'id_storage_SafeRussianRetireeInsuranceCertificate'{}.
+-type 'SafeRussianRetireeInsuranceCertificate'() :: #'ident_doc_store_SafeRussianRetireeInsuranceCertificate'{}.
 
 %% exception 'IdentityDocumentNotFound'
--type 'IdentityDocumentNotFound'() :: #'id_storage_IdentityDocumentNotFound'{}.
+-type 'IdentityDocumentNotFound'() :: #'ident_doc_store_IdentityDocumentNotFound'{}.
 
 %%
 %% services and functions
@@ -182,7 +182,7 @@ services() ->
 -spec namespace() -> namespace().
 
 namespace() ->
-    'id_storage'.
+    'ident_doc_store'.
 
 -spec typedef_info(typedef_name()) -> field_type() | no_return().
 
@@ -254,22 +254,22 @@ struct_info(_) -> erlang:error(badarg).
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
 
 record_name('RussianDomesticPassport') ->
-    'id_storage_RussianDomesticPassport';
+    'ident_doc_store_RussianDomesticPassport';
 
 record_name('RussianRetireeInsuranceCertificate') ->
-    'id_storage_RussianRetireeInsuranceCertificate';
+    'ident_doc_store_RussianRetireeInsuranceCertificate';
 
     record_name('SafeIdentityDocumentData') ->
-    'id_storage_SafeIdentityDocumentData';
+    'ident_doc_store_SafeIdentityDocumentData';
 
     record_name('SafeRussianDomesticPassport') ->
-    'id_storage_SafeRussianDomesticPassport';
+    'ident_doc_store_SafeRussianDomesticPassport';
 
     record_name('SafeRussianRetireeInsuranceCertificate') ->
-    'id_storage_SafeRussianRetireeInsuranceCertificate';
+    'ident_doc_store_SafeRussianRetireeInsuranceCertificate';
 
     record_name('IdentityDocumentNotFound') ->
-    'id_storage_IdentityDocumentNotFound';
+    'ident_doc_store_IdentityDocumentNotFound';
 
     record_name(_) -> error(badarg).
     
