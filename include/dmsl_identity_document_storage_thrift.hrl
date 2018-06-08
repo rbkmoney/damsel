@@ -24,24 +24,6 @@
     'number' :: binary()
 }).
 
-%% struct 'SafeIdentityDocumentData'
--record('ident_doc_store_SafeIdentityDocumentData', {
-    'token' :: dmsl_identity_document_storage_thrift:'IdentityDocumentToken'(),
-    'safe_identity_document' :: dmsl_identity_document_storage_thrift:'SafeIdentityDocument'()
-}).
-
-%% struct 'SafeRussianDomesticPassport'
--record('ident_doc_store_SafeRussianDomesticPassport', {
-    'series_masked' :: binary(),
-    'number_masked' :: binary(),
-    'fullname_masked' :: binary()
-}).
-
-%% struct 'SafeRussianRetireeInsuranceCertificate'
--record('ident_doc_store_SafeRussianRetireeInsuranceCertificate', {
-    'number_masked' :: binary()
-}).
-
 %% exception 'IdentityDocumentNotFound'
 -record('ident_doc_store_IdentityDocumentNotFound', {}).
 

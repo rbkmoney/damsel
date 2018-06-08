@@ -37,11 +37,7 @@
 -export_type([
     'IdentityDocument'/0,
     'RussianDomesticPassport'/0,
-    'RussianRetireeInsuranceCertificate'/0,
-    'SafeIdentityDocumentData'/0,
-    'SafeIdentityDocument'/0,
-    'SafeRussianDomesticPassport'/0,
-    'SafeRussianRetireeInsuranceCertificate'/0
+    'RussianRetireeInsuranceCertificate'/0
 ]).
 -export_type([
     'IdentityDocumentNotFound'/0
@@ -68,11 +64,7 @@
 -type struct_name() ::
     'IdentityDocument' |
     'RussianDomesticPassport' |
-    'RussianRetireeInsuranceCertificate' |
-    'SafeIdentityDocumentData' |
-    'SafeIdentityDocument' |
-    'SafeRussianDomesticPassport' |
-    'SafeRussianRetireeInsuranceCertificate'.
+    'RussianRetireeInsuranceCertificate'.
 
 -type exception_name() ::
     'IdentityDocumentNotFound'.
@@ -87,20 +79,6 @@
 
 %% struct 'RussianRetireeInsuranceCertificate'
 -type 'RussianRetireeInsuranceCertificate'() :: #'ident_doc_store_RussianRetireeInsuranceCertificate'{}.
-
-%% struct 'SafeIdentityDocumentData'
--type 'SafeIdentityDocumentData'() :: #'ident_doc_store_SafeIdentityDocumentData'{}.
-
-%% union 'SafeIdentityDocument'
--type 'SafeIdentityDocument'() ::
-    {'safe_russian_domestic_passport', 'SafeRussianDomesticPassport'()} |
-    {'safe_russian_retiree_insurance_certificate', 'SafeRussianRetireeInsuranceCertificate'()}.
-
-%% struct 'SafeRussianDomesticPassport'
--type 'SafeRussianDomesticPassport'() :: #'ident_doc_store_SafeRussianDomesticPassport'{}.
-
-%% struct 'SafeRussianRetireeInsuranceCertificate'
--type 'SafeRussianRetireeInsuranceCertificate'() :: #'ident_doc_store_SafeRussianRetireeInsuranceCertificate'{}.
 
 %% exception 'IdentityDocumentNotFound'
 -type 'IdentityDocumentNotFound'() :: #'ident_doc_store_IdentityDocumentNotFound'{}.
@@ -165,11 +143,7 @@ structs() ->
     [
         'IdentityDocument',
         'RussianDomesticPassport',
-        'RussianRetireeInsuranceCertificate',
-        'SafeIdentityDocumentData',
-        'SafeIdentityDocument',
-        'SafeRussianDomesticPassport',
-        'SafeRussianRetireeInsuranceCertificate'
+        'RussianRetireeInsuranceCertificate'
     ].
 
 -spec services() -> [service_name()].
@@ -222,30 +196,6 @@ struct_info('RussianRetireeInsuranceCertificate') ->
     {1, required, string, 'number', undefined}
 ]};
 
-struct_info('SafeIdentityDocumentData') ->
-    {struct, struct, [
-    {1, required, string, 'token', undefined},
-    {2, required, {struct, union, {dmsl_identity_document_storage_thrift, 'SafeIdentityDocument'}}, 'safe_identity_document', undefined}
-]};
-
-struct_info('SafeIdentityDocument') ->
-    {struct, union, [
-    {1, optional, {struct, struct, {dmsl_identity_document_storage_thrift, 'SafeRussianDomesticPassport'}}, 'safe_russian_domestic_passport', undefined},
-    {2, optional, {struct, struct, {dmsl_identity_document_storage_thrift, 'SafeRussianRetireeInsuranceCertificate'}}, 'safe_russian_retiree_insurance_certificate', undefined}
-]};
-
-struct_info('SafeRussianDomesticPassport') ->
-    {struct, struct, [
-    {1, required, string, 'series_masked', undefined},
-    {2, required, string, 'number_masked', undefined},
-    {3, required, string, 'fullname_masked', undefined}
-]};
-
-struct_info('SafeRussianRetireeInsuranceCertificate') ->
-    {struct, struct, [
-    {1, required, string, 'number_masked', undefined}
-]};
-
 struct_info('IdentityDocumentNotFound') ->
     {struct, exception, []};
 
@@ -258,15 +208,6 @@ record_name('RussianDomesticPassport') ->
 
 record_name('RussianRetireeInsuranceCertificate') ->
     'ident_doc_store_RussianRetireeInsuranceCertificate';
-
-    record_name('SafeIdentityDocumentData') ->
-    'ident_doc_store_SafeIdentityDocumentData';
-
-    record_name('SafeRussianDomesticPassport') ->
-    'ident_doc_store_SafeRussianDomesticPassport';
-
-    record_name('SafeRussianRetireeInsuranceCertificate') ->
-    'ident_doc_store_SafeRussianRetireeInsuranceCertificate';
 
     record_name('IdentityDocumentNotFound') ->
     'ident_doc_store_IdentityDocumentNotFound';
@@ -291,7 +232,7 @@ function_info('IdentityDocumentStorage', 'Put', params_type) ->
     {1, undefined, {struct, union, {dmsl_identity_document_storage_thrift, 'IdentityDocument'}}, 'identity_document', undefined}
 ]};
 function_info('IdentityDocumentStorage', 'Put', reply_type) ->
-        {struct, struct, {dmsl_identity_document_storage_thrift, 'SafeIdentityDocumentData'}};
+        string;
     function_info('IdentityDocumentStorage', 'Put', exceptions) ->
         {struct, struct, []};
 function_info('IdentityDocumentStorage', 'Get', params_type) ->

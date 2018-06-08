@@ -41,31 +41,11 @@ struct RussianRetireeInsuranceCertificate {
     1: required string number
 }
 
-struct SafeIdentityDocumentData {
-    1: required IdentityDocumentToken token
-    2: required SafeIdentityDocument safe_identity_document
-}
-
-union SafeIdentityDocument {
-    1: SafeRussianDomesticPassport safe_russian_domestic_passport
-    2: SafeRussianRetireeInsuranceCertificate safe_russian_retiree_insurance_certificate
-}
-
-struct SafeRussianDomesticPassport {
-    1: required string series_masked
-    2: required string number_masked
-    3: required string fullname_masked
-}
-
-struct SafeRussianRetireeInsuranceCertificate {
-    1: required string number_masked
-}
-
 exception IdentityDocumentNotFound {}
 
 service IdentityDocumentStorage {
 
-    SafeIdentityDocumentData Put (1: IdentityDocument identity_document)
+    IdentityDocumentToken Put (1: IdentityDocument identity_document)
 
     IdentityDocument Get (1: IdentityDocumentToken token)
         throws (1: IdentityDocumentNotFound not_found)
