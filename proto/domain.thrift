@@ -786,6 +786,7 @@ struct PayoutsServiceTerms {
     1: optional PayoutMethodSelector payout_methods
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector fees
+    5: optional CumulativeLimitSelector cumulative_cash_limit
 }
 
 
@@ -824,6 +825,21 @@ union PayoutMethodSelector {
 struct PayoutMethodDecision {
     1: required Predicate if_
     2: required PayoutMethodSelector then_
+}
+
+union CumulativeLimitSelector {
+    1: list<CumulativeLimitDecision> decisions
+    2: set<CumulativeLimit> value
+}
+
+struct CumulativeLimitDecision {
+    1: required Predicate if_
+    2: required CumulativeLimitSelector then_
+}
+
+struct CumulativeLimit {
+    1: required base.TimeSpan period
+    2: required CashRange cash
 }
 
 /* Reports service terms */
