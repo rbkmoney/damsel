@@ -123,6 +123,7 @@ struct Payout {
     1: required PayoutID id
     2: required domain.PartyID party_id
     3: required domain.ShopID shop_id
+    9: required domain.ContractID contract_id
     /* Время формирования платежного поручения, либо выплаты на карту  */
     4: required base.Timestamp created_at
     5: required PayoutStatus status
@@ -325,7 +326,7 @@ struct ShopParams {
 **/
 struct GeneratePayoutParams {
     1: required TimeRange time_range
-    2: optional ShopParams shop
+    2: required ShopParams shop
 }
 
 /**
@@ -375,6 +376,7 @@ struct PayoutInfo {
      1: required PayoutID id
      2: required domain.PartyID party_id
      3: required domain.ShopID shop_id
+    11: required domain.ContractID contract_id
      4: required domain.Cash amount
      5: required PayoutType type
      6: required PayoutSearchStatus status
