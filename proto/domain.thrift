@@ -820,12 +820,12 @@ struct CumulativeLimit {
 
 enum CumulativeLimitPeriod {
     // TODO tried to kepp them as simple as possible
-    current_year,
-    current_month,
-    current_week,
+    current_year
+    current_month
+    current_week
 
-    previous_year,
-    previous_month,
+    previous_year
+    previous_month
     previous_week
 }
 
