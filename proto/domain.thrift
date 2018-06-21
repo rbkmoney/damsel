@@ -799,7 +799,7 @@ struct PayoutCompilationPolicy {
 struct WalletServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
-    3: optional CumulativeLimitSelector cumulative_cash_limit
+    3: optional CumulativeLimitSelector turnover_limit
 }
 
 union CumulativeLimitSelector {
@@ -819,14 +819,10 @@ struct CumulativeLimit {
 }
 
 enum CumulativeLimitPeriod {
-    // TODO tried to kepp them as simple as possible
-    current_year
-    current_month
-    current_week
-
-    previous_year
-    previous_month
-    previous_week
+    today
+    this_week
+    this_month
+    this_year
 }
 
 /* Payout methods */
