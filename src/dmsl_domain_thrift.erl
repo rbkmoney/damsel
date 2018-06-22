@@ -80,6 +80,7 @@
     'RiskScore'/0,
     'ContractorIdentificationLevel'/0,
     'CategoryType'/0,
+    'CumulativeLimitPeriod'/0,
     'PayoutMethod'/0,
     'Residence'/0,
     'BankCardPaymentSystem'/0,
@@ -202,6 +203,9 @@
     'PayoutsServiceTerms'/0,
     'PayoutCompilationPolicy'/0,
     'WalletServiceTerms'/0,
+    'CumulativeLimitSelector'/0,
+    'CumulativeLimitDecision'/0,
+    'CumulativeLimit'/0,
     'PayoutMethodRef'/0,
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
@@ -430,6 +434,7 @@
     'RiskScore' |
     'ContractorIdentificationLevel' |
     'CategoryType' |
+    'CumulativeLimitPeriod' |
     'PayoutMethod' |
     'Residence' |
     'BankCardPaymentSystem' |
@@ -466,6 +471,13 @@
 -type 'CategoryType'() ::
     'test' |
     'live'.
+
+%% enum 'CumulativeLimitPeriod'
+-type 'CumulativeLimitPeriod'() ::
+    'today' |
+    'this_week' |
+    'this_month' |
+    'this_year'.
 
 %% enum 'PayoutMethod'
 -type 'PayoutMethod'() ::
@@ -903,6 +915,9 @@
     'PayoutsServiceTerms' |
     'PayoutCompilationPolicy' |
     'WalletServiceTerms' |
+    'CumulativeLimitSelector' |
+    'CumulativeLimitDecision' |
+    'CumulativeLimit' |
     'PayoutMethodRef' |
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
@@ -1402,6 +1417,17 @@
 
 %% struct 'WalletServiceTerms'
 -type 'WalletServiceTerms'() :: #'domain_WalletServiceTerms'{}.
+
+%% union 'CumulativeLimitSelector'
+-type 'CumulativeLimitSelector'() ::
+    {'decisions', ['CumulativeLimitDecision'()]} |
+    {'value', ordsets:ordset('CumulativeLimit'())}.
+
+%% struct 'CumulativeLimitDecision'
+-type 'CumulativeLimitDecision'() :: #'domain_CumulativeLimitDecision'{}.
+
+%% struct 'CumulativeLimit'
+-type 'CumulativeLimit'() :: #'domain_CumulativeLimit'{}.
 
 %% struct 'PayoutMethodRef'
 -type 'PayoutMethodRef'() :: #'domain_PayoutMethodRef'{}.
@@ -1923,6 +1949,7 @@
     'RiskScore'() |
     'ContractorIdentificationLevel'() |
     'CategoryType'() |
+    'CumulativeLimitPeriod'() |
     'PayoutMethod'() |
     'Residence'() |
     'BankCardPaymentSystem'() |
@@ -1999,6 +2026,7 @@ enums() ->
         'RiskScore',
         'ContractorIdentificationLevel',
         'CategoryType',
+        'CumulativeLimitPeriod',
         'PayoutMethod',
         'Residence',
         'BankCardPaymentSystem',
@@ -2125,6 +2153,9 @@ structs() ->
         'PayoutsServiceTerms',
         'PayoutCompilationPolicy',
         'WalletServiceTerms',
+        'CumulativeLimitSelector',
+        'CumulativeLimitDecision',
+        'CumulativeLimit',
         'PayoutMethodRef',
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
@@ -2419,6 +2450,14 @@ enum_info('CategoryType') ->
     {enum, [
         {'test', 0},
         {'live', 1}
+    ]};
+
+enum_info('CumulativeLimitPeriod') ->
+    {enum, [
+        {'today', 0},
+        {'this_week', 1},
+        {'this_month', 2},
+        {'this_year', 3}
     ]};
 
 enum_info('PayoutMethod') ->
@@ -3468,7 +3507,26 @@ struct_info('PayoutCompilationPolicy') ->
 struct_info('WalletServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined}
+]};
+
+struct_info('CumulativeLimitSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimitDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimit'}}}, 'value', undefined}
+]};
+
+struct_info('CumulativeLimitDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'then_', undefined}
+]};
+
+struct_info('CumulativeLimit') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'CumulativeLimitPeriod'}}, 'period', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cash', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -4550,6 +4608,12 @@ record_name('OperationTimeout') ->
 
     record_name('WalletServiceTerms') ->
     'domain_WalletServiceTerms';
+
+    record_name('CumulativeLimitDecision') ->
+    'domain_CumulativeLimitDecision';
+
+    record_name('CumulativeLimit') ->
+    'domain_CumulativeLimit';
 
     record_name('PayoutMethodRef') ->
     'domain_PayoutMethodRef';

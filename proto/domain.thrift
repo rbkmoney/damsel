@@ -799,6 +799,30 @@ struct PayoutCompilationPolicy {
 struct WalletServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
+    3: optional CumulativeLimitSelector turnover_limit
+}
+
+union CumulativeLimitSelector {
+    1: list<CumulativeLimitDecision> decisions
+    2: set<CumulativeLimit> value
+}
+
+struct CumulativeLimitDecision {
+    1: required Predicate if_
+    2: required CumulativeLimitSelector then_
+}
+
+// TODO think about abstracting period & cash to some union of diferend metrics & bounds
+struct CumulativeLimit {
+    1: required CumulativeLimitPeriod period
+    2: required CashRange cash
+}
+
+enum CumulativeLimitPeriod {
+    today
+    this_week
+    this_month
+    this_year
 }
 
 /* Payout methods */

@@ -573,7 +573,20 @@
 %% struct 'WalletServiceTerms'
 -record('domain_WalletServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'turnover_limit' :: dmsl_domain_thrift:'CumulativeLimitSelector'() | undefined
+}).
+
+%% struct 'CumulativeLimitDecision'
+-record('domain_CumulativeLimitDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'CumulativeLimitSelector'()
+}).
+
+%% struct 'CumulativeLimit'
+-record('domain_CumulativeLimit', {
+    'period' :: dmsl_domain_thrift:'CumulativeLimitPeriod'(),
+    'cash' :: dmsl_domain_thrift:'CashRange'()
 }).
 
 %% struct 'PayoutMethodRef'
