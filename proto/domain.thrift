@@ -1307,6 +1307,7 @@ struct DigitalWallet {
 
 enum DigitalWalletProvider {
     qiwi
+    rbkmoney
 }
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
