@@ -765,7 +765,8 @@
 
 %% enum 'DigitalWalletProvider'
 -type 'DigitalWalletProvider'() ::
-    'qiwi'.
+    'qiwi' |
+    'rbkmoney'.
 
 %% enum 'MerchantCashFlowAccount'
 -type 'MerchantCashFlowAccount'() ::
@@ -2751,7 +2752,8 @@ enum_info('TerminalPaymentProvider') ->
 
 enum_info('DigitalWalletProvider') ->
     {enum, [
-        {'qiwi', 0}
+        {'qiwi', 0},
+        {'rbkmoney', 1}
     ]};
 
 enum_info('MerchantCashFlowAccount') ->
