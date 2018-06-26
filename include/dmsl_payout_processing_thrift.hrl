@@ -51,6 +51,7 @@
     'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
@@ -146,7 +147,7 @@
 %% struct 'GeneratePayoutParams'
 -record('payout_processing_GeneratePayoutParams', {
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
-    'shop' :: dmsl_payout_processing_thrift:'ShopParams'() | undefined
+    'shop' :: dmsl_payout_processing_thrift:'ShopParams'()
 }).
 
 %% struct 'PayoutSearchCriteria'
@@ -174,6 +175,7 @@
     'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'amount' :: dmsl_domain_thrift:'Cash'(),
     'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
     'status' :: atom(),

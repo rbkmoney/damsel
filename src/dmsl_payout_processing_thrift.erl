@@ -539,6 +539,7 @@ struct_info('Payout') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'party_id', undefined},
     {3, required, string, 'shop_id', undefined},
+    {9, required, string, 'contract_id', undefined},
     {4, required, string, 'created_at', undefined},
     {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
     {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'payout_flow', undefined},
@@ -660,7 +661,7 @@ struct_info('ShopParams') ->
 struct_info('GeneratePayoutParams') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop', undefined}
+    {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop', undefined}
 ]};
 
 struct_info('PayoutSearchCriteria') ->
@@ -688,6 +689,7 @@ struct_info('PayoutInfo') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'party_id', undefined},
     {3, required, string, 'shop_id', undefined},
+    {11, required, string, 'contract_id', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
     {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
     {6, required, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchStatus'}}, 'status', undefined},
