@@ -49,8 +49,23 @@
 %% struct 'InvoicePaymentStarted'
 -record('payproc_InvoicePaymentStarted', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
-    'risk_score' :: atom(),
-    'route' :: dmsl_domain_thrift:'PaymentRoute'(),
+    'risk_score' :: atom() | undefined,
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'() | undefined
+}).
+
+%% struct 'InvoicePaymentRiskScoreChanged'
+-record('payproc_InvoicePaymentRiskScoreChanged', {
+    'risk_score' :: atom()
+}).
+
+%% struct 'InvoicePaymentRouteChanged'
+-record('payproc_InvoicePaymentRouteChanged', {
+    'route' :: dmsl_domain_thrift:'PaymentRoute'()
+}).
+
+%% struct 'InvoicePaymentCashFlowChanged'
+-record('payproc_InvoicePaymentCashFlowChanged', {
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
