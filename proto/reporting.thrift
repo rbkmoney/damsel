@@ -127,6 +127,13 @@ service Reporting {
   Report GetReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
+  * Запрос на отмену отчета
+  *
+  * ReportNotFound, если отчет не найден
+  */
+  void cancelReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
+
+  /**
   * Сгенерировать ссылку на файл
   * file_id - идентификатор файла
   * expires_at - время до которого ссылка будет считаться действительной
