@@ -158,6 +158,7 @@
     'GetReports' |
     'GenerateReport' |
     'GetReport' |
+    'cancelReport' |
     'GeneratePresignedUrl'.
 
 -export_type(['Reporting_service_functions'/0]).
@@ -374,6 +375,7 @@ functions('Reporting') ->
         'GetReports',
         'GenerateReport',
         'GetReport',
+        'cancelReport',
         'GeneratePresignedUrl'
     ];
 
@@ -416,6 +418,18 @@ function_info('Reporting', 'GetReport', params_type) ->
 function_info('Reporting', 'GetReport', reply_type) ->
         {struct, struct, {dmsl_reporting_thrift, 'Report'}};
     function_info('Reporting', 'GetReport', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'ReportNotFound'}}, 'ex1', undefined}
+    ]};
+function_info('Reporting', 'cancelReport', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'party_id', undefined},
+    {2, undefined, string, 'shop_id', undefined},
+    {3, undefined, i64, 'report_id', undefined}
+]};
+function_info('Reporting', 'cancelReport', reply_type) ->
+        {struct, struct, []};
+    function_info('Reporting', 'cancelReport', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'ReportNotFound'}}, 'ex1', undefined}
     ]};

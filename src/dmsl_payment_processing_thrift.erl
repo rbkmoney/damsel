@@ -71,6 +71,9 @@
     'InvoicePaymentChange'/0,
     'InvoicePaymentChangePayload'/0,
     'InvoicePaymentStarted'/0,
+    'InvoicePaymentRiskScoreChanged'/0,
+    'InvoicePaymentRouteChanged'/0,
+    'InvoicePaymentCashFlowChanged'/0,
     'InvoicePaymentStatusChanged'/0,
     'InvoicePaymentSessionChange'/0,
     'SessionChangePayload'/0,
@@ -346,6 +349,9 @@
     'InvoicePaymentChange' |
     'InvoicePaymentChangePayload' |
     'InvoicePaymentStarted' |
+    'InvoicePaymentRiskScoreChanged' |
+    'InvoicePaymentRouteChanged' |
+    'InvoicePaymentCashFlowChanged' |
     'InvoicePaymentStatusChanged' |
     'InvoicePaymentSessionChange' |
     'SessionChangePayload' |
@@ -603,6 +609,9 @@
 %% union 'InvoicePaymentChangePayload'
 -type 'InvoicePaymentChangePayload'() ::
     {'invoice_payment_started', 'InvoicePaymentStarted'()} |
+    {'invoice_payment_risk_score_changed', 'InvoicePaymentRiskScoreChanged'()} |
+    {'invoice_payment_route_changed', 'InvoicePaymentRouteChanged'()} |
+    {'invoice_payment_cash_flow_changed', 'InvoicePaymentCashFlowChanged'()} |
     {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
     {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
@@ -610,6 +619,15 @@
 
 %% struct 'InvoicePaymentStarted'
 -type 'InvoicePaymentStarted'() :: #'payproc_InvoicePaymentStarted'{}.
+
+%% struct 'InvoicePaymentRiskScoreChanged'
+-type 'InvoicePaymentRiskScoreChanged'() :: #'payproc_InvoicePaymentRiskScoreChanged'{}.
+
+%% struct 'InvoicePaymentRouteChanged'
+-type 'InvoicePaymentRouteChanged'() :: #'payproc_InvoicePaymentRouteChanged'{}.
+
+%% struct 'InvoicePaymentCashFlowChanged'
+-type 'InvoicePaymentCashFlowChanged'() :: #'payproc_InvoicePaymentCashFlowChanged'{}.
 
 %% struct 'InvoicePaymentStatusChanged'
 -type 'InvoicePaymentStatusChanged'() :: #'payproc_InvoicePaymentStatusChanged'{}.
@@ -1536,6 +1554,9 @@ structs() ->
         'InvoicePaymentChange',
         'InvoicePaymentChangePayload',
         'InvoicePaymentStarted',
+        'InvoicePaymentRiskScoreChanged',
+        'InvoicePaymentRouteChanged',
+        'InvoicePaymentCashFlowChanged',
         'InvoicePaymentStatusChanged',
         'InvoicePaymentSessionChange',
         'SessionChangePayload',
@@ -1858,6 +1879,9 @@ struct_info('InvoicePaymentChange') ->
 struct_info('InvoicePaymentChangePayload') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStarted'}}, 'invoice_payment_started', undefined},
+    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRiskScoreChanged'}}, 'invoice_payment_risk_score_changed', undefined},
+    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRouteChanged'}}, 'invoice_payment_route_changed', undefined},
+    {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCashFlowChanged'}}, 'invoice_payment_cash_flow_changed', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
@@ -1867,9 +1891,24 @@ struct_info('InvoicePaymentChangePayload') ->
 struct_info('InvoicePaymentStarted') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {4, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+    {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+]};
+
+struct_info('InvoicePaymentRiskScoreChanged') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+]};
+
+struct_info('InvoicePaymentRouteChanged') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+]};
+
+struct_info('InvoicePaymentCashFlowChanged') ->
+    {struct, struct, [
+    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
 ]};
 
 struct_info('InvoicePaymentStatusChanged') ->
@@ -3008,6 +3047,15 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentStarted') ->
     'payproc_InvoicePaymentStarted';
+
+    record_name('InvoicePaymentRiskScoreChanged') ->
+    'payproc_InvoicePaymentRiskScoreChanged';
+
+    record_name('InvoicePaymentRouteChanged') ->
+    'payproc_InvoicePaymentRouteChanged';
+
+    record_name('InvoicePaymentCashFlowChanged') ->
+    'payproc_InvoicePaymentCashFlowChanged';
 
     record_name('InvoicePaymentStatusChanged') ->
     'payproc_InvoicePaymentStatusChanged';
