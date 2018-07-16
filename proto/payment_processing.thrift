@@ -137,6 +137,9 @@ struct InvoicePaymentChange {
  */
 union InvoicePaymentChangePayload {
     1: InvoicePaymentStarted               invoice_payment_started
+    8: InvoicePaymentRiskScoreChanged      invoice_payment_risk_score_changed
+    9: InvoicePaymentRouteChanged          invoice_payment_route_changed
+    10: InvoicePaymentCashFlowChanged      invoice_payment_cash_flow_changed
     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
     2: InvoicePaymentSessionChange         invoice_payment_session_change
     7: InvoicePaymentRefundChange          invoice_payment_refund_change
@@ -149,12 +152,38 @@ union InvoicePaymentChangePayload {
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
+
+    /** deprecated */
     /** Оценка риска платежа. */
-    4: required domain.RiskScore risk_score
+    4: optional domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
-    2: required domain.PaymentRoute route
+    2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
-    3: required domain.FinalCashFlow cash_flow
+    3: optional domain.FinalCashFlow cash_flow
+}
+
+/**
+ * Событие об изменении оценки риска платежа.
+ */
+struct InvoicePaymentRiskScoreChanged {
+    /** Оценка риска платежа. */
+    1: required domain.RiskScore risk_score
+}
+
+/**
+ * Событие об изменении маршрута обработки платежа.
+ */
+struct InvoicePaymentRouteChanged {
+    /** Выбранный маршрут обработки платежа. */
+    1: required domain.PaymentRoute route
+}
+
+/**
+ * Событие об изменении данных финансового взаимодействия.
+ */
+struct InvoicePaymentCashFlowChanged {
+    /** Данные финансового взаимодействия. */
+    1: required domain.FinalCashFlow cash_flow
 }
 
 /**
