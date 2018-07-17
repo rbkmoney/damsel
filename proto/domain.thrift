@@ -140,6 +140,8 @@ struct InvoicePayment {
     1:  required InvoicePaymentID id
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
+    16: optional PartyID owner_id
+    17: optional ShopID shop_id
     15: optional PartyRevision party_revision
     3:  required InvoicePaymentStatus status
     14: required Payer payer

@@ -152,7 +152,6 @@ union InvoicePaymentChangePayload {
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
-    5: optional domain.PartyID party_id
 
     /** deprecated */
     /** Оценка риска платежа. */
