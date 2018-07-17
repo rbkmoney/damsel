@@ -391,8 +391,10 @@ struct Party {
     8: required base.Timestamp created_at
     2: required Blocking blocking
     3: required Suspension suspension
+    9: required map<ContractorID, PartyContractor> contractors
     4: required map<ContractID, Contract> contracts
     5: required map<ShopID, Shop> shops
+    10: required map<WalletID, Wallet> wallets
     6: required PartyRevision revision
 }
 
@@ -436,6 +438,30 @@ union ShopLocation {
     1: string url
 }
 
+
+/** RBKM Wallets **/
+
+typedef base.ID WalletID
+
+struct Wallet {
+    1: required WalletID id
+    2: optional string name
+    3: required base.Timestamp created_at
+    4: required Blocking blocking
+    5: required Suspension suspension
+    6: required ContractID contract
+    7: optional WalletAccount account
+}
+
+struct WalletAccount {
+    1: required CurrencyRef currency
+    2: required AccountID settlement
+
+    // TODO
+    // ?????
+    3: required AccountID payout
+}
+
 /* Инспекция платежа */
 
 enum RiskScore {
@@ -446,12 +472,21 @@ enum RiskScore {
 
 /* Contracts */
 
-struct ContractorRef { 1: required ObjectID id }
+typedef base.ID ContractorID
+typedef base.Opaque IdentityDocumentToken
+
+struct PartyContractor {
+    1: required ContractorID id
+    2: required Contractor contractor
+    3: required ContractorIdentificationLevel status
+    4: required list<IdentityDocumentToken> identity_documents
+}
 
 /** Лицо, выступающее стороной договора. */
 union Contractor {
-    1: LegalEntity legal_entity
     2: RegisteredUser registered_user
+    1: LegalEntity legal_entity
+    3: PrivateEntity private_entity
 }
 
 struct RegisteredUser {
@@ -499,6 +534,12 @@ struct InternationalLegalEntity {
     5: optional string registered_number
 }
 
+enum ContractorIdentificationLevel {
+    none = 100
+    partial = 200
+    full = 300
+}
+
 /** Банковский счёт. */
 
 struct RussianBankAccount {
@@ -515,6 +556,17 @@ struct InternationalBankAccount {
     4: required string iban     // International Bank Account Number (ISO 13616)
     5: required string bic      // Business Identifier Code (ISO 9362)
     6: optional string local_bank_code // Национальный код банка
+}
+
+union PrivateEntity {
+    1: RussianPrivateEntity russian_private_entity
+}
+
+struct RussianPrivateEntity {
+    1: required string first_name
+    2: required string second_name
+    3: required string middle_name
+    4: required ContactInfo contact_info
 }
 
 typedef base.ID PayoutToolID
@@ -536,7 +588,7 @@ typedef base.ID ContractID
 /** Договор */
 struct Contract {
     1: required ContractID id
-    3: optional Contractor contractor
+    14: optional ContractorID contractor_id
     12: optional PaymentInstitutionRef payment_institution
     11: required base.Timestamp created_at
     4: optional base.Timestamp valid_since
@@ -544,9 +596,14 @@ struct Contract {
     6: required ContractStatus status
     7: required TermSetHierarchyRef terms
     8: required list<ContractAdjustment> adjustments
+    // TODO think about it
+    // looks like payout tools are a bit off here,
+    // maybe they should be directly in party
     9: required list<PayoutTool> payout_tools
     10: optional LegalAgreement legal_agreement
     13: optional ReportPreferences report_preferences
+    // deprecated
+    3: optional Contractor contractor
 }
 
 /** Юридическое соглашение */
@@ -665,6 +722,7 @@ struct TermSet {
     2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
     3: optional PayoutsServiceTerms payouts
     4: optional ReportsServiceTerms reports
+    5: optional WalletServiceTerms wallets
 }
 
 struct TimedTermSet {
@@ -734,6 +792,37 @@ struct PayoutsServiceTerms {
 // legacy
 struct PayoutCompilationPolicy {
     1: required base.TimeSpan assets_freeze_for
+}
+
+/** Wallets service terms **/
+
+struct WalletServiceTerms {
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional CumulativeLimitSelector turnover_limit
+}
+
+union CumulativeLimitSelector {
+    1: list<CumulativeLimitDecision> decisions
+    2: set<CumulativeLimit> value
+}
+
+struct CumulativeLimitDecision {
+    1: required Predicate if_
+    2: required CumulativeLimitSelector then_
+}
+
+// TODO think about abstracting period & cash to some union of diferend metrics & bounds
+struct CumulativeLimit {
+    1: required CumulativeLimitPeriod period
+    2: required CashRange cash
+}
+
+enum CumulativeLimitPeriod {
+    today
+    this_week
+    this_month
+    this_year
 }
 
 /* Payout methods */
@@ -1218,6 +1307,7 @@ struct DigitalWallet {
 
 enum DigitalWalletProvider {
     qiwi
+    rbkmoney
 }
 
 struct BankCardBINRangeRef { 1: required ObjectID id }
@@ -1286,6 +1376,7 @@ union CashFlowAccount {
     2: ProviderCashFlowAccount provider
     3: SystemCashFlowAccount system
     4: ExternalCashFlowAccount external
+    5: WalletCashFlowAccount wallet
 }
 
 enum MerchantCashFlowAccount {
@@ -1346,6 +1437,11 @@ enum ExternalCashFlowAccount {
      */
     outcome
 
+}
+
+enum WalletCashFlowAccount {
+    settlement
+    payout
 }
 
 enum CashFlowConstant {
@@ -1570,6 +1666,7 @@ union Condition {
     5: ShopLocation shop_location_is
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
+    8: ContractorIdentificationLevel identification_level_is
 }
 
 union PaymentToolCondition {
@@ -1616,6 +1713,7 @@ struct PartyCondition {
 
 union PartyConditionDefinition {
     1: ShopID shop_is
+    2: WalletID wallet_is
 }
 
 /* Proxies */
@@ -1695,6 +1793,7 @@ struct PaymentInstitution {
     9: optional CalendarRef calendar
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
+    10: optional ContractTemplateSelector default_wallet_contract_template
     5: required ProviderSelector providers
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
@@ -1795,11 +1894,6 @@ struct BankCardBINRangeObject {
     2: required BankCardBINRange data
 }
 
-struct ContractorObject {
-    1: required ContractorRef ref
-    2: required Contractor data
-}
-
 struct ProviderObject {
     1: required ProviderRef ref
     2: required Provider data
@@ -1848,7 +1942,6 @@ union Reference {
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
-    4  : ContractorRef           contractor
     5  : BankCardBINRangeRef     bank_card_bin_range
     6  : ContractTemplateRef     contract_template
     17 : TermSetHierarchyRef     term_set_hierarchy
@@ -1873,7 +1966,6 @@ union DomainObject {
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method
-    4  : ContractorObject           contractor
     5  : BankCardBINRangeObject     bank_card_bin_range
     6  : ContractTemplateObject     contract_template
     17 : TermSetHierarchyObject     term_set_hierarchy
