@@ -482,8 +482,10 @@ exception PartyNotFound {}
 exception PartyNotExistsYet {}
 exception InvalidPartyRevision {}
 exception ShopNotFound {}
+exception WalletNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+exception InvalidWalletStatus { 1: required InvalidStatus status }
 exception InvalidContractStatus { 1: required domain.ContractStatus status }
 
 union InvalidStatus {
@@ -1174,7 +1176,9 @@ service RecurrentPaymentToolEventSink {
 typedef domain.PartyID PartyID
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.ContractorID ContractorID
 typedef domain.PayoutToolID PayoutToolID
+typedef domain.WalletID WalletID
 typedef domain.ContractTemplateRef ContractTemplateRef
 typedef domain.PaymentInstitutionRef PaymentInstitutionRef
 
@@ -1208,9 +1212,12 @@ struct ShopAccountParams {
 }
 
 struct ContractParams {
-    1: required domain.Contractor contractor
+    4: optional ContractorID contractor_id
     2: optional ContractTemplateRef template
     3: optional PaymentInstitutionRef payment_institution
+
+    // depricated
+    1: optional domain.Contractor contractor
 }
 
 struct ContractAdjustmentParams {
@@ -1218,8 +1225,25 @@ struct ContractAdjustmentParams {
 }
 
 union PartyModification {
+    8: ContractorModificationUnit contractor_modification
     4: ContractModificationUnit contract_modification
     6: ShopModificationUnit shop_modification
+    7: WalletModificationUnit wallet_modification
+}
+
+struct ContractorModificationUnit {
+    1: required ContractorID id
+    2: required ContractorModification modification
+}
+
+union ContractorModification {
+    1: domain.Contractor creation
+    2: domain.ContractorIdentificationLevel identification_level_modification
+    3: ContractorIdentityDocumentsModification identity_documents_modification
+}
+
+struct ContractorIdentityDocumentsModification {
+    1: required list<domain.IdentityDocumentToken> identity_documents
 }
 
 struct ContractModificationUnit {
@@ -1234,6 +1258,7 @@ union ContractModification {
     4: PayoutToolModificationUnit payout_tool_modification
     5: domain.LegalAgreement legal_agreement_binding
     6: domain.ReportPreferences report_preferences_modification
+    7: ContractorID contractor_modification
 }
 
 struct ContractTermination {
@@ -1293,6 +1318,25 @@ struct ProxyModification {
     1: optional domain.Proxy proxy
 }
 
+struct WalletModificationUnit {
+    1: required WalletID id
+    2: required WalletModification modification
+}
+
+union WalletModification {
+    1: WalletParams creation
+    2: WalletAccountParams account_creation
+}
+
+struct WalletParams {
+    1: optional string name
+    2: required ContractID contract_id
+}
+
+struct WalletAccountParams {
+    1: required domain.CurrencyRef currency
+}
+
 // Claims
 
 typedef i64 ClaimID
@@ -1336,6 +1380,8 @@ union ClaimEffect {
     /* 1: PartyEffect Reserved for future */
     2: ContractEffectUnit contract_effect
     3: ShopEffectUnit shop_effect
+    4: ContractorEffectUnit contractor_effect
+    5: WalletEffectUnit wallet_effect
 }
 
 struct ContractEffectUnit {
@@ -1347,9 +1393,10 @@ union ContractEffect {
     1: domain.Contract created
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
-    5: domain.LegalAgreement legal_agreement_bound
     4: domain.PayoutTool payout_tool_created
+    5: domain.LegalAgreement legal_agreement_bound
     6: domain.ReportPreferences report_preferences_changed
+    7: ContractorID contractor_changed
 }
 
 struct ShopEffectUnit {
@@ -1380,6 +1427,31 @@ struct ScheduleChanged {
     1: optional domain.BusinessScheduleRef schedule
 }
 
+struct ContractorEffectUnit {
+    1: required ContractorID id
+    2: required ContractorEffect effect
+}
+
+union ContractorEffect {
+    1: domain.PartyContractor created
+    2: domain.ContractorIdentificationLevel identification_level_changed
+    3: ContractorIdentityDocumentsChanged identity_documents_changed
+}
+
+struct ContractorIdentityDocumentsChanged {
+    1: required list<domain.IdentityDocumentToken> identity_documents
+}
+
+struct WalletEffectUnit {
+    1: required WalletID id
+    2: required WalletEffect effect
+}
+
+union WalletEffect {
+    1: domain.Wallet created
+    2: domain.WalletAccount account_created
+}
+
 /* deprecated */
 struct ShopProxyChanged {
     1: optional domain.Proxy proxy
@@ -1401,6 +1473,8 @@ union PartyChange {
     5: domain.Suspension    party_suspension        // #
     6: ShopBlocking         shop_blocking           // #
     7: ShopSuspension       shop_suspension         // #
+    12: WalletBlocking      wallet_blocking         // #
+    13: WalletSuspension    wallet_suspension       // #
     2: Claim                claim_created
     3: ClaimStatusChanged   claim_status_changed    // #
     8: ClaimUpdated         claim_updated
@@ -1422,6 +1496,16 @@ struct ShopBlocking {
 
 struct ShopSuspension {
     1: required ShopID shop_id
+    2: required domain.Suspension suspension
+}
+
+struct WalletBlocking {
+    1: required WalletID wallet_id
+    2: required domain.Blocking blocking
+}
+
+struct WalletSuspension {
+    1: required WalletID wallet_id
     2: required domain.Suspension suspension
 }
 
@@ -1477,6 +1561,8 @@ exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 union InvalidChangesetReason {
     1: InvalidContract invalid_contract
     2: InvalidShop invalid_shop
+    3: InvalidWallet invalid_wallet
+    4: InvalidContractor invalid_contractor
 }
 
 struct InvalidContract {
@@ -1489,6 +1575,16 @@ struct InvalidShop {
     2: required InvalidShopReason reason
 }
 
+struct InvalidWallet {
+    1: required WalletID id
+    2: required InvalidWalletReason reason
+}
+
+struct InvalidContractor {
+    1: required ContractorID id
+    2: required InvalidContractorReason reason
+}
+
 union InvalidContractReason {
     1: ContractID not_exists
     2: ContractID already_exists
@@ -1497,6 +1593,7 @@ union InvalidContractReason {
     5: domain.PayoutToolID payout_tool_not_exists
     6: domain.PayoutToolID payout_tool_already_exists
     7: InvalidObjectReference invalid_object_reference
+    8: ContractorNotExists contractor_not_exists
 }
 
 union InvalidShopReason {
@@ -1507,6 +1604,23 @@ union InvalidShopReason {
     5: ContractTermsViolated contract_terms_violated
     6: ShopPayoutToolInvalid payout_tool_invalid
     7: InvalidObjectReference invalid_object_reference
+}
+
+union InvalidWalletReason {
+    1: WalletID not_exists
+    2: WalletID already_exists
+    3: WalletID no_account
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+}
+
+union InvalidContractorReason {
+    1: ContractorID not_exists
+    2: ContractorID already_exists
+}
+
+struct ContractorNotExists {
+    1: optional ContractorID id
 }
 
 struct ContractTermsViolated {
@@ -1590,7 +1704,7 @@ service PartyManagement {
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
-     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+    void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
     void ActivateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
@@ -1604,6 +1718,26 @@ service PartyManagement {
 
     domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
+
+    /* Wallet */
+
+    domain.Wallet GetWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3)
+
+    void SuspendWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    void ActivateWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    void BlockWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    void UnblockWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: string reason)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
+
+    domain.TermSet ComputeWalletTerms (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: base.Timestamp timestamp)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: WalletNotFound ex4)
 
     /* Claim */
 

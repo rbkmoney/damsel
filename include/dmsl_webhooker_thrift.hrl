@@ -130,6 +130,20 @@
 %% struct 'CustomerBindingFailed'
 -record('webhooker_CustomerBindingFailed', {}).
 
+%% struct 'WalletEventFilter'
+-record('webhooker_WalletEventFilter', {
+    'types' :: ordsets:ordset(dmsl_webhooker_thrift:'WalletEventType'())
+}).
+
+%% struct 'WalletWithdrawalStarted'
+-record('webhooker_WalletWithdrawalStarted', {}).
+
+%% struct 'WalletWithdrawalSucceeded'
+-record('webhooker_WalletWithdrawalSucceeded', {}).
+
+%% struct 'WalletWithdrawalFailed'
+-record('webhooker_WalletWithdrawalFailed', {}).
+
 %% exception 'WebhookNotFound'
 -record('webhooker_WebhookNotFound', {}).
 

@@ -45,7 +45,9 @@
     'PartyID'/0,
     'ShopID'/0,
     'ContractID'/0,
+    'ContractorID'/0,
     'PayoutToolID'/0,
+    'WalletID'/0,
     'ContractTemplateRef'/0,
     'PaymentInstitutionRef'/0,
     'PartyChangeset'/0,
@@ -155,6 +157,9 @@
     'ContractParams'/0,
     'ContractAdjustmentParams'/0,
     'PartyModification'/0,
+    'ContractorModificationUnit'/0,
+    'ContractorModification'/0,
+    'ContractorIdentityDocumentsModification'/0,
     'ContractModificationUnit'/0,
     'ContractModification'/0,
     'ContractTermination'/0,
@@ -167,6 +172,10 @@
     'ShopContractModification'/0,
     'ScheduleModification'/0,
     'ProxyModification'/0,
+    'WalletModificationUnit'/0,
+    'WalletModification'/0,
+    'WalletParams'/0,
+    'WalletAccountParams'/0,
     'Claim'/0,
     'ClaimStatus'/0,
     'ClaimPending'/0,
@@ -180,12 +189,19 @@
     'ShopEffect'/0,
     'ShopContractChanged'/0,
     'ScheduleChanged'/0,
+    'ContractorEffectUnit'/0,
+    'ContractorEffect'/0,
+    'ContractorIdentityDocumentsChanged'/0,
+    'WalletEffectUnit'/0,
+    'WalletEffect'/0,
     'ShopProxyChanged'/0,
     'AccountState'/0,
     'PartyChange'/0,
     'PartyCreated'/0,
     'ShopBlocking'/0,
     'ShopSuspension'/0,
+    'WalletBlocking'/0,
+    'WalletSuspension'/0,
     'ClaimStatusChanged'/0,
     'ClaimUpdated'/0,
     'PartyMetaSet'/0,
@@ -195,8 +211,13 @@
     'InvalidChangesetReason'/0,
     'InvalidContract'/0,
     'InvalidShop'/0,
+    'InvalidWallet'/0,
+    'InvalidContractor'/0,
     'InvalidContractReason'/0,
     'InvalidShopReason'/0,
+    'InvalidWalletReason'/0,
+    'InvalidContractorReason'/0,
+    'ContractorNotExists'/0,
     'ContractTermsViolated'/0,
     'ShopPayoutToolInvalid'/0,
     'InvalidObjectReference'/0
@@ -206,8 +227,10 @@
     'PartyNotExistsYet'/0,
     'InvalidPartyRevision'/0,
     'ShopNotFound'/0,
+    'WalletNotFound'/0,
     'InvalidPartyStatus'/0,
     'InvalidShopStatus'/0,
+    'InvalidWalletStatus'/0,
     'InvalidContractStatus'/0,
     'InvalidUser'/0,
     'InvoiceNotFound'/0,
@@ -269,7 +292,9 @@
     'PartyID' |
     'ShopID' |
     'ContractID' |
+    'ContractorID' |
     'PayoutToolID' |
+    'WalletID' |
     'ContractTemplateRef' |
     'PaymentInstitutionRef' |
     'PartyChangeset' |
@@ -290,7 +315,9 @@
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
 -type 'ContractID'() :: dmsl_domain_thrift:'ContractID'().
+-type 'ContractorID'() :: dmsl_domain_thrift:'ContractorID'().
 -type 'PayoutToolID'() :: dmsl_domain_thrift:'PayoutToolID'().
+-type 'WalletID'() :: dmsl_domain_thrift:'WalletID'().
 -type 'ContractTemplateRef'() :: dmsl_domain_thrift:'ContractTemplateRef'().
 -type 'PaymentInstitutionRef'() :: dmsl_domain_thrift:'PaymentInstitutionRef'().
 -type 'PartyChangeset'() :: ['PartyModification'()].
@@ -408,6 +435,9 @@
     'ContractParams' |
     'ContractAdjustmentParams' |
     'PartyModification' |
+    'ContractorModificationUnit' |
+    'ContractorModification' |
+    'ContractorIdentityDocumentsModification' |
     'ContractModificationUnit' |
     'ContractModification' |
     'ContractTermination' |
@@ -420,6 +450,10 @@
     'ShopContractModification' |
     'ScheduleModification' |
     'ProxyModification' |
+    'WalletModificationUnit' |
+    'WalletModification' |
+    'WalletParams' |
+    'WalletAccountParams' |
     'Claim' |
     'ClaimStatus' |
     'ClaimPending' |
@@ -433,12 +467,19 @@
     'ShopEffect' |
     'ShopContractChanged' |
     'ScheduleChanged' |
+    'ContractorEffectUnit' |
+    'ContractorEffect' |
+    'ContractorIdentityDocumentsChanged' |
+    'WalletEffectUnit' |
+    'WalletEffect' |
     'ShopProxyChanged' |
     'AccountState' |
     'PartyChange' |
     'PartyCreated' |
     'ShopBlocking' |
     'ShopSuspension' |
+    'WalletBlocking' |
+    'WalletSuspension' |
     'ClaimStatusChanged' |
     'ClaimUpdated' |
     'PartyMetaSet' |
@@ -448,8 +489,13 @@
     'InvalidChangesetReason' |
     'InvalidContract' |
     'InvalidShop' |
+    'InvalidWallet' |
+    'InvalidContractor' |
     'InvalidContractReason' |
     'InvalidShopReason' |
+    'InvalidWalletReason' |
+    'InvalidContractorReason' |
+    'ContractorNotExists' |
     'ContractTermsViolated' |
     'ShopPayoutToolInvalid' |
     'InvalidObjectReference'.
@@ -459,8 +505,10 @@
     'PartyNotExistsYet' |
     'InvalidPartyRevision' |
     'ShopNotFound' |
+    'WalletNotFound' |
     'InvalidPartyStatus' |
     'InvalidShopStatus' |
+    'InvalidWalletStatus' |
     'InvalidContractStatus' |
     'InvalidUser' |
     'InvoiceNotFound' |
@@ -870,8 +918,22 @@
 
 %% union 'PartyModification'
 -type 'PartyModification'() ::
+    {'contractor_modification', 'ContractorModificationUnit'()} |
     {'contract_modification', 'ContractModificationUnit'()} |
-    {'shop_modification', 'ShopModificationUnit'()}.
+    {'shop_modification', 'ShopModificationUnit'()} |
+    {'wallet_modification', 'WalletModificationUnit'()}.
+
+%% struct 'ContractorModificationUnit'
+-type 'ContractorModificationUnit'() :: #'payproc_ContractorModificationUnit'{}.
+
+%% union 'ContractorModification'
+-type 'ContractorModification'() ::
+    {'creation', dmsl_domain_thrift:'Contractor'()} |
+    {'identification_level_modification', atom()} |
+    {'identity_documents_modification', 'ContractorIdentityDocumentsModification'()}.
+
+%% struct 'ContractorIdentityDocumentsModification'
+-type 'ContractorIdentityDocumentsModification'() :: #'payproc_ContractorIdentityDocumentsModification'{}.
 
 %% struct 'ContractModificationUnit'
 -type 'ContractModificationUnit'() :: #'payproc_ContractModificationUnit'{}.
@@ -883,7 +945,8 @@
     {'adjustment_modification', 'ContractAdjustmentModificationUnit'()} |
     {'payout_tool_modification', 'PayoutToolModificationUnit'()} |
     {'legal_agreement_binding', dmsl_domain_thrift:'LegalAgreement'()} |
-    {'report_preferences_modification', dmsl_domain_thrift:'ReportPreferences'()}.
+    {'report_preferences_modification', dmsl_domain_thrift:'ReportPreferences'()} |
+    {'contractor_modification', 'ContractorID'()}.
 
 %% struct 'ContractTermination'
 -type 'ContractTermination'() :: #'payproc_ContractTermination'{}.
@@ -926,6 +989,20 @@
 %% struct 'ProxyModification'
 -type 'ProxyModification'() :: #'payproc_ProxyModification'{}.
 
+%% struct 'WalletModificationUnit'
+-type 'WalletModificationUnit'() :: #'payproc_WalletModificationUnit'{}.
+
+%% union 'WalletModification'
+-type 'WalletModification'() ::
+    {'creation', 'WalletParams'()} |
+    {'account_creation', 'WalletAccountParams'()}.
+
+%% struct 'WalletParams'
+-type 'WalletParams'() :: #'payproc_WalletParams'{}.
+
+%% struct 'WalletAccountParams'
+-type 'WalletAccountParams'() :: #'payproc_WalletAccountParams'{}.
+
 %% struct 'Claim'
 -type 'Claim'() :: #'payproc_Claim'{}.
 
@@ -951,7 +1028,9 @@
 %% union 'ClaimEffect'
 -type 'ClaimEffect'() ::
     {'contract_effect', 'ContractEffectUnit'()} |
-    {'shop_effect', 'ShopEffectUnit'()}.
+    {'shop_effect', 'ShopEffectUnit'()} |
+    {'contractor_effect', 'ContractorEffectUnit'()} |
+    {'wallet_effect', 'WalletEffectUnit'()}.
 
 %% struct 'ContractEffectUnit'
 -type 'ContractEffectUnit'() :: #'payproc_ContractEffectUnit'{}.
@@ -961,9 +1040,10 @@
     {'created', dmsl_domain_thrift:'Contract'()} |
     {'status_changed', dmsl_domain_thrift:'ContractStatus'()} |
     {'adjustment_created', dmsl_domain_thrift:'ContractAdjustment'()} |
-    {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()} |
     {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()} |
-    {'report_preferences_changed', dmsl_domain_thrift:'ReportPreferences'()}.
+    {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()} |
+    {'report_preferences_changed', dmsl_domain_thrift:'ReportPreferences'()} |
+    {'contractor_changed', 'ContractorID'()}.
 
 %% struct 'ShopEffectUnit'
 -type 'ShopEffectUnit'() :: #'payproc_ShopEffectUnit'{}.
@@ -986,6 +1066,26 @@
 %% struct 'ScheduleChanged'
 -type 'ScheduleChanged'() :: #'payproc_ScheduleChanged'{}.
 
+%% struct 'ContractorEffectUnit'
+-type 'ContractorEffectUnit'() :: #'payproc_ContractorEffectUnit'{}.
+
+%% union 'ContractorEffect'
+-type 'ContractorEffect'() ::
+    {'created', dmsl_domain_thrift:'PartyContractor'()} |
+    {'identification_level_changed', atom()} |
+    {'identity_documents_changed', 'ContractorIdentityDocumentsChanged'()}.
+
+%% struct 'ContractorIdentityDocumentsChanged'
+-type 'ContractorIdentityDocumentsChanged'() :: #'payproc_ContractorIdentityDocumentsChanged'{}.
+
+%% struct 'WalletEffectUnit'
+-type 'WalletEffectUnit'() :: #'payproc_WalletEffectUnit'{}.
+
+%% union 'WalletEffect'
+-type 'WalletEffect'() ::
+    {'created', dmsl_domain_thrift:'Wallet'()} |
+    {'account_created', dmsl_domain_thrift:'WalletAccount'()}.
+
 %% struct 'ShopProxyChanged'
 -type 'ShopProxyChanged'() :: #'payproc_ShopProxyChanged'{}.
 
@@ -999,6 +1099,8 @@
     {'party_suspension', dmsl_domain_thrift:'Suspension'()} |
     {'shop_blocking', 'ShopBlocking'()} |
     {'shop_suspension', 'ShopSuspension'()} |
+    {'wallet_blocking', 'WalletBlocking'()} |
+    {'wallet_suspension', 'WalletSuspension'()} |
     {'claim_created', 'Claim'()} |
     {'claim_status_changed', 'ClaimStatusChanged'()} |
     {'claim_updated', 'ClaimUpdated'()} |
@@ -1014,6 +1116,12 @@
 
 %% struct 'ShopSuspension'
 -type 'ShopSuspension'() :: #'payproc_ShopSuspension'{}.
+
+%% struct 'WalletBlocking'
+-type 'WalletBlocking'() :: #'payproc_WalletBlocking'{}.
+
+%% struct 'WalletSuspension'
+-type 'WalletSuspension'() :: #'payproc_WalletSuspension'{}.
 
 %% struct 'ClaimStatusChanged'
 -type 'ClaimStatusChanged'() :: #'payproc_ClaimStatusChanged'{}.
@@ -1038,13 +1146,21 @@
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
     {'invalid_contract', 'InvalidContract'()} |
-    {'invalid_shop', 'InvalidShop'()}.
+    {'invalid_shop', 'InvalidShop'()} |
+    {'invalid_wallet', 'InvalidWallet'()} |
+    {'invalid_contractor', 'InvalidContractor'()}.
 
 %% struct 'InvalidContract'
 -type 'InvalidContract'() :: #'payproc_InvalidContract'{}.
 
 %% struct 'InvalidShop'
 -type 'InvalidShop'() :: #'payproc_InvalidShop'{}.
+
+%% struct 'InvalidWallet'
+-type 'InvalidWallet'() :: #'payproc_InvalidWallet'{}.
+
+%% struct 'InvalidContractor'
+-type 'InvalidContractor'() :: #'payproc_InvalidContractor'{}.
 
 %% union 'InvalidContractReason'
 -type 'InvalidContractReason'() ::
@@ -1054,7 +1170,8 @@
     {'contract_adjustment_already_exists', dmsl_domain_thrift:'ContractAdjustmentID'()} |
     {'payout_tool_not_exists', dmsl_domain_thrift:'PayoutToolID'()} |
     {'payout_tool_already_exists', dmsl_domain_thrift:'PayoutToolID'()} |
-    {'invalid_object_reference', 'InvalidObjectReference'()}.
+    {'invalid_object_reference', 'InvalidObjectReference'()} |
+    {'contractor_not_exists', 'ContractorNotExists'()}.
 
 %% union 'InvalidShopReason'
 -type 'InvalidShopReason'() ::
@@ -1065,6 +1182,22 @@
     {'contract_terms_violated', 'ContractTermsViolated'()} |
     {'payout_tool_invalid', 'ShopPayoutToolInvalid'()} |
     {'invalid_object_reference', 'InvalidObjectReference'()}.
+
+%% union 'InvalidWalletReason'
+-type 'InvalidWalletReason'() ::
+    {'not_exists', 'WalletID'()} |
+    {'already_exists', 'WalletID'()} |
+    {'no_account', 'WalletID'()} |
+    {'invalid_status', 'InvalidStatus'()} |
+    {'contract_terms_violated', 'ContractTermsViolated'()}.
+
+%% union 'InvalidContractorReason'
+-type 'InvalidContractorReason'() ::
+    {'not_exists', 'ContractorID'()} |
+    {'already_exists', 'ContractorID'()}.
+
+%% struct 'ContractorNotExists'
+-type 'ContractorNotExists'() :: #'payproc_ContractorNotExists'{}.
 
 %% struct 'ContractTermsViolated'
 -type 'ContractTermsViolated'() :: #'payproc_ContractTermsViolated'{}.
@@ -1087,11 +1220,17 @@
 %% exception 'ShopNotFound'
 -type 'ShopNotFound'() :: #'payproc_ShopNotFound'{}.
 
+%% exception 'WalletNotFound'
+-type 'WalletNotFound'() :: #'payproc_WalletNotFound'{}.
+
 %% exception 'InvalidPartyStatus'
 -type 'InvalidPartyStatus'() :: #'payproc_InvalidPartyStatus'{}.
 
 %% exception 'InvalidShopStatus'
 -type 'InvalidShopStatus'() :: #'payproc_InvalidShopStatus'{}.
+
+%% exception 'InvalidWalletStatus'
+-type 'InvalidWalletStatus'() :: #'payproc_InvalidWalletStatus'{}.
 
 %% exception 'InvalidContractStatus'
 -type 'InvalidContractStatus'() :: #'payproc_InvalidContractStatus'{}.
@@ -1309,6 +1448,12 @@
     'BlockShop' |
     'UnblockShop' |
     'ComputeShopTerms' |
+    'GetWallet' |
+    'SuspendWallet' |
+    'ActivateWallet' |
+    'BlockWallet' |
+    'UnblockWallet' |
+    'ComputeWalletTerms' |
     'CreateClaim' |
     'GetClaim' |
     'GetClaims' |
@@ -1374,7 +1519,9 @@ typedefs() ->
         'PartyID',
         'ShopID',
         'ContractID',
+        'ContractorID',
         'PayoutToolID',
+        'WalletID',
         'ContractTemplateRef',
         'PaymentInstitutionRef',
         'PartyChangeset',
@@ -1493,6 +1640,9 @@ structs() ->
         'ContractParams',
         'ContractAdjustmentParams',
         'PartyModification',
+        'ContractorModificationUnit',
+        'ContractorModification',
+        'ContractorIdentityDocumentsModification',
         'ContractModificationUnit',
         'ContractModification',
         'ContractTermination',
@@ -1505,6 +1655,10 @@ structs() ->
         'ShopContractModification',
         'ScheduleModification',
         'ProxyModification',
+        'WalletModificationUnit',
+        'WalletModification',
+        'WalletParams',
+        'WalletAccountParams',
         'Claim',
         'ClaimStatus',
         'ClaimPending',
@@ -1518,12 +1672,19 @@ structs() ->
         'ShopEffect',
         'ShopContractChanged',
         'ScheduleChanged',
+        'ContractorEffectUnit',
+        'ContractorEffect',
+        'ContractorIdentityDocumentsChanged',
+        'WalletEffectUnit',
+        'WalletEffect',
         'ShopProxyChanged',
         'AccountState',
         'PartyChange',
         'PartyCreated',
         'ShopBlocking',
         'ShopSuspension',
+        'WalletBlocking',
+        'WalletSuspension',
         'ClaimStatusChanged',
         'ClaimUpdated',
         'PartyMetaSet',
@@ -1533,8 +1694,13 @@ structs() ->
         'InvalidChangesetReason',
         'InvalidContract',
         'InvalidShop',
+        'InvalidWallet',
+        'InvalidContractor',
         'InvalidContractReason',
         'InvalidShopReason',
+        'InvalidWalletReason',
+        'InvalidContractorReason',
+        'ContractorNotExists',
         'ContractTermsViolated',
         'ShopPayoutToolInvalid',
         'InvalidObjectReference'
@@ -1599,7 +1765,13 @@ typedef_info('ShopID') ->
 typedef_info('ContractID') ->
     string;
 
+typedef_info('ContractorID') ->
+    string;
+
 typedef_info('PayoutToolID') ->
+    string;
+
+typedef_info('WalletID') ->
     string;
 
 typedef_info('ContractTemplateRef') ->
@@ -2214,9 +2386,10 @@ struct_info('ShopAccountParams') ->
 
 struct_info('ContractParams') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined},
+    {4, optional, string, 'contractor_id', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
 ]};
 
 struct_info('ContractAdjustmentParams') ->
@@ -2226,8 +2399,28 @@ struct_info('ContractAdjustmentParams') ->
 
 struct_info('PartyModification') ->
     {struct, union, [
+    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined}
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletModificationUnit'}}, 'wallet_modification', undefined}
+]};
+
+struct_info('ContractorModificationUnit') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractorModification'}}, 'modification', undefined}
+]};
+
+struct_info('ContractorModification') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'creation', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorIdentityDocumentsModification'}}, 'identity_documents_modification', undefined}
+]};
+
+struct_info('ContractorIdentityDocumentsModification') ->
+    {struct, struct, [
+    {1, required, {list, string}, 'identity_documents', undefined}
 ]};
 
 struct_info('ContractModificationUnit') ->
@@ -2243,7 +2436,8 @@ struct_info('ContractModification') ->
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractAdjustmentModificationUnit'}}, 'adjustment_modification', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolModificationUnit'}}, 'payout_tool_modification', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_binding', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined},
+    {7, optional, string, 'contractor_modification', undefined}
 ]};
 
 struct_info('ContractTermination') ->
@@ -2308,6 +2502,29 @@ struct_info('ProxyModification') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
 ]};
 
+struct_info('WalletModificationUnit') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'WalletModification'}}, 'modification', undefined}
+]};
+
+struct_info('WalletModification') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletParams'}}, 'creation', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletAccountParams'}}, 'account_creation', undefined}
+]};
+
+struct_info('WalletParams') ->
+    {struct, struct, [
+    {1, optional, string, 'name', undefined},
+    {2, required, string, 'contract_id', undefined}
+]};
+
+struct_info('WalletAccountParams') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+]};
+
 struct_info('Claim') ->
     {struct, struct, [
     {1, required, i64, 'id', undefined},
@@ -2347,7 +2564,9 @@ struct_info('ClaimRevoked') ->
 struct_info('ClaimEffect') ->
     {struct, union, [
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractEffectUnit'}}, 'contract_effect', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopEffectUnit'}}, 'shop_effect', undefined}
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopEffectUnit'}}, 'shop_effect', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorEffectUnit'}}, 'contractor_effect', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletEffectUnit'}}, 'wallet_effect', undefined}
 ]};
 
 struct_info('ContractEffectUnit') ->
@@ -2361,9 +2580,10 @@ struct_info('ContractEffect') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'created', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
+    {7, optional, string, 'contractor_changed', undefined}
 ]};
 
 struct_info('ShopEffectUnit') ->
@@ -2396,6 +2616,36 @@ struct_info('ScheduleChanged') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
 ]};
 
+struct_info('ContractorEffectUnit') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractorEffect'}}, 'effect', undefined}
+]};
+
+struct_info('ContractorEffect') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'created', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_changed', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorIdentityDocumentsChanged'}}, 'identity_documents_changed', undefined}
+]};
+
+struct_info('ContractorIdentityDocumentsChanged') ->
+    {struct, struct, [
+    {1, required, {list, string}, 'identity_documents', undefined}
+]};
+
+struct_info('WalletEffectUnit') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'WalletEffect'}}, 'effect', undefined}
+]};
+
+struct_info('WalletEffect') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}, 'created', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'WalletAccount'}}, 'account_created', undefined}
+]};
+
 struct_info('ShopProxyChanged') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
@@ -2416,6 +2666,8 @@ struct_info('PartyChange') ->
     {5, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'party_suspension', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopBlocking'}}, 'shop_blocking', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopSuspension'}}, 'shop_suspension', undefined},
+    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletBlocking'}}, 'wallet_blocking', undefined},
+    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletSuspension'}}, 'wallet_suspension', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}}, 'claim_created', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimStatusChanged'}}, 'claim_status_changed', undefined},
     {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimUpdated'}}, 'claim_updated', undefined},
@@ -2440,6 +2692,18 @@ struct_info('ShopBlocking') ->
 struct_info('ShopSuspension') ->
     {struct, struct, [
     {1, required, string, 'shop_id', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
+]};
+
+struct_info('WalletBlocking') ->
+    {struct, struct, [
+    {1, required, string, 'wallet_id', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined}
+]};
+
+struct_info('WalletSuspension') ->
+    {struct, struct, [
+    {1, required, string, 'wallet_id', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
 ]};
 
@@ -2487,7 +2751,9 @@ struct_info('PayoutParams') ->
 struct_info('InvalidChangesetReason') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContract'}}, 'invalid_contract', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidShop'}}, 'invalid_shop', undefined}
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidShop'}}, 'invalid_shop', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidWallet'}}, 'invalid_wallet', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContractor'}}, 'invalid_contractor', undefined}
 ]};
 
 struct_info('InvalidContract') ->
@@ -2502,6 +2768,18 @@ struct_info('InvalidShop') ->
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidShopReason'}}, 'reason', undefined}
 ]};
 
+struct_info('InvalidWallet') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidWalletReason'}}, 'reason', undefined}
+]};
+
+struct_info('InvalidContractor') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidContractorReason'}}, 'reason', undefined}
+]};
+
 struct_info('InvalidContractReason') ->
     {struct, union, [
     {1, optional, string, 'not_exists', undefined},
@@ -2510,7 +2788,8 @@ struct_info('InvalidContractReason') ->
     {4, optional, string, 'contract_adjustment_already_exists', undefined},
     {5, optional, string, 'payout_tool_not_exists', undefined},
     {6, optional, string, 'payout_tool_already_exists', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined},
+    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorNotExists'}}, 'contractor_not_exists', undefined}
 ]};
 
 struct_info('InvalidShopReason') ->
@@ -2522,6 +2801,26 @@ struct_info('InvalidShopReason') ->
     {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined},
     {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopPayoutToolInvalid'}}, 'payout_tool_invalid', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
+]};
+
+struct_info('InvalidWalletReason') ->
+    {struct, union, [
+    {1, optional, string, 'not_exists', undefined},
+    {2, optional, string, 'already_exists', undefined},
+    {3, optional, string, 'no_account', undefined},
+    {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined}
+]};
+
+struct_info('InvalidContractorReason') ->
+    {struct, union, [
+    {1, optional, string, 'not_exists', undefined},
+    {2, optional, string, 'already_exists', undefined}
+]};
+
+struct_info('ContractorNotExists') ->
+    {struct, struct, [
+    {1, optional, string, 'id', undefined}
 ]};
 
 struct_info('ContractTermsViolated') ->
@@ -2552,12 +2851,20 @@ struct_info('InvalidPartyRevision') ->
 struct_info('ShopNotFound') ->
     {struct, exception, []};
 
+struct_info('WalletNotFound') ->
+    {struct, exception, []};
+
 struct_info('InvalidPartyStatus') ->
     {struct, exception, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
 ]};
 
 struct_info('InvalidShopStatus') ->
+    {struct, exception, [
+    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
+]};
+
+struct_info('InvalidWalletStatus') ->
     {struct, exception, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
 ]};
@@ -2957,6 +3264,12 @@ record_name('InternalUser') ->
     record_name('ContractAdjustmentParams') ->
     'payproc_ContractAdjustmentParams';
 
+    record_name('ContractorModificationUnit') ->
+    'payproc_ContractorModificationUnit';
+
+    record_name('ContractorIdentityDocumentsModification') ->
+    'payproc_ContractorIdentityDocumentsModification';
+
     record_name('ContractModificationUnit') ->
     'payproc_ContractModificationUnit';
 
@@ -2980,6 +3293,15 @@ record_name('InternalUser') ->
 
     record_name('ProxyModification') ->
     'payproc_ProxyModification';
+
+    record_name('WalletModificationUnit') ->
+    'payproc_WalletModificationUnit';
+
+    record_name('WalletParams') ->
+    'payproc_WalletParams';
+
+    record_name('WalletAccountParams') ->
+    'payproc_WalletAccountParams';
 
     record_name('Claim') ->
     'payproc_Claim';
@@ -3008,6 +3330,15 @@ record_name('InternalUser') ->
     record_name('ScheduleChanged') ->
     'payproc_ScheduleChanged';
 
+    record_name('ContractorEffectUnit') ->
+    'payproc_ContractorEffectUnit';
+
+    record_name('ContractorIdentityDocumentsChanged') ->
+    'payproc_ContractorIdentityDocumentsChanged';
+
+    record_name('WalletEffectUnit') ->
+    'payproc_WalletEffectUnit';
+
     record_name('ShopProxyChanged') ->
     'payproc_ShopProxyChanged';
 
@@ -3022,6 +3353,12 @@ record_name('InternalUser') ->
 
     record_name('ShopSuspension') ->
     'payproc_ShopSuspension';
+
+    record_name('WalletBlocking') ->
+    'payproc_WalletBlocking';
+
+    record_name('WalletSuspension') ->
+    'payproc_WalletSuspension';
 
     record_name('ClaimStatusChanged') ->
     'payproc_ClaimStatusChanged';
@@ -3044,6 +3381,15 @@ record_name('InternalUser') ->
     record_name('InvalidShop') ->
     'payproc_InvalidShop';
 
+    record_name('InvalidWallet') ->
+    'payproc_InvalidWallet';
+
+    record_name('InvalidContractor') ->
+    'payproc_InvalidContractor';
+
+    record_name('ContractorNotExists') ->
+    'payproc_ContractorNotExists';
+
     record_name('ContractTermsViolated') ->
     'payproc_ContractTermsViolated';
 
@@ -3065,11 +3411,17 @@ record_name('InternalUser') ->
     record_name('ShopNotFound') ->
     'payproc_ShopNotFound';
 
+    record_name('WalletNotFound') ->
+    'payproc_WalletNotFound';
+
     record_name('InvalidPartyStatus') ->
     'payproc_InvalidPartyStatus';
 
     record_name('InvalidShopStatus') ->
     'payproc_InvalidShopStatus';
+
+    record_name('InvalidWalletStatus') ->
+    'payproc_InvalidWalletStatus';
 
     record_name('InvalidContractStatus') ->
     'payproc_InvalidContractStatus';
@@ -3271,6 +3623,12 @@ functions('PartyManagement') ->
         'BlockShop',
         'UnblockShop',
         'ComputeShopTerms',
+        'GetWallet',
+        'SuspendWallet',
+        'ActivateWallet',
+        'BlockWallet',
+        'UnblockWallet',
+        'ComputeWalletTerms',
         'CreateClaim',
         'GetClaim',
         'GetClaims',
@@ -4096,6 +4454,98 @@ function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'GetWallet', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined}
+]};
+function_info('PartyManagement', 'GetWallet', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'Wallet'}};
+    function_info('PartyManagement', 'GetWallet', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'WalletNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'SuspendWallet', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined}
+]};
+function_info('PartyManagement', 'SuspendWallet', reply_type) ->
+        {struct, struct, []};
+    function_info('PartyManagement', 'SuspendWallet', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'WalletNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidWalletStatus'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'ActivateWallet', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined}
+]};
+function_info('PartyManagement', 'ActivateWallet', reply_type) ->
+        {struct, struct, []};
+    function_info('PartyManagement', 'ActivateWallet', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'WalletNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidWalletStatus'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'BlockWallet', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined},
+    {4, undefined, string, 'reason', undefined}
+]};
+function_info('PartyManagement', 'BlockWallet', reply_type) ->
+        {struct, struct, []};
+    function_info('PartyManagement', 'BlockWallet', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'WalletNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidWalletStatus'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'UnblockWallet', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined},
+    {4, undefined, string, 'reason', undefined}
+]};
+function_info('PartyManagement', 'UnblockWallet', reply_type) ->
+        {struct, struct, []};
+    function_info('PartyManagement', 'UnblockWallet', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'WalletNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidWalletStatus'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeWalletTerms', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'id', undefined},
+    {4, undefined, string, 'timestamp', undefined}
+]};
+function_info('PartyManagement', 'ComputeWalletTerms', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('PartyManagement', 'ComputeWalletTerms', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'WalletNotFound'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'CreateClaim', params_type) ->
     {struct, struct, [

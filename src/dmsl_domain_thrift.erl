@@ -55,6 +55,9 @@
     'PartyMetaData'/0,
     'PartyMeta'/0,
     'ShopID'/0,
+    'WalletID'/0,
+    'ContractorID'/0,
+    'IdentityDocumentToken'/0,
     'PayoutToolID'/0,
     'ContractID'/0,
     'ContractAdjustmentID'/0,
@@ -75,7 +78,9 @@
 -export_type([
     'OnHoldExpiration'/0,
     'RiskScore'/0,
+    'ContractorIdentificationLevel'/0,
     'CategoryType'/0,
+    'CumulativeLimitPeriod'/0,
     'PayoutMethod'/0,
     'Residence'/0,
     'BankCardPaymentSystem'/0,
@@ -86,6 +91,7 @@
     'ProviderCashFlowAccount'/0,
     'SystemCashFlowAccount'/0,
     'ExternalCashFlowAccount'/0,
+    'WalletCashFlowAccount'/0,
     'CashFlowConstant'/0,
     'RoundingMethod'/0,
     'PaymentInstitutionRealm'/0
@@ -151,7 +157,9 @@
     'ShopAccount'/0,
     'ShopDetails'/0,
     'ShopLocation'/0,
-    'ContractorRef'/0,
+    'Wallet'/0,
+    'WalletAccount'/0,
+    'PartyContractor'/0,
     'Contractor'/0,
     'RegisteredUser'/0,
     'LegalEntity'/0,
@@ -159,6 +167,8 @@
     'InternationalLegalEntity'/0,
     'RussianBankAccount'/0,
     'InternationalBankAccount'/0,
+    'PrivateEntity'/0,
+    'RussianPrivateEntity'/0,
     'PayoutTool'/0,
     'PayoutToolInfo'/0,
     'Contract'/0,
@@ -192,6 +202,10 @@
     'RecurrentPaytoolsServiceTerms'/0,
     'PayoutsServiceTerms'/0,
     'PayoutCompilationPolicy'/0,
+    'WalletServiceTerms'/0,
+    'CumulativeLimitSelector'/0,
+    'CumulativeLimitDecision'/0,
+    'CumulativeLimit'/0,
     'PayoutMethodRef'/0,
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
@@ -308,7 +322,6 @@
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
     'BankCardBINRangeObject'/0,
-    'ContractorObject'/0,
     'ProviderObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
@@ -350,6 +363,9 @@
     'PartyMetaData' |
     'PartyMeta' |
     'ShopID' |
+    'WalletID' |
+    'ContractorID' |
+    'IdentityDocumentToken' |
     'PayoutToolID' |
     'ContractID' |
     'ContractAdjustmentID' |
@@ -390,6 +406,9 @@
 -type 'PartyMetaData'() :: dmsl_msgpack_thrift:'Value'().
 -type 'PartyMeta'() :: #{'PartyMetaNamespace'() => 'PartyMetaData'()}.
 -type 'ShopID'() :: dmsl_base_thrift:'ID'().
+-type 'WalletID'() :: dmsl_base_thrift:'ID'().
+-type 'ContractorID'() :: dmsl_base_thrift:'ID'().
+-type 'IdentityDocumentToken'() :: dmsl_base_thrift:'Opaque'().
 -type 'PayoutToolID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractAdjustmentID'() :: dmsl_base_thrift:'ID'().
@@ -413,7 +432,9 @@
 -type enum_name() ::
     'OnHoldExpiration' |
     'RiskScore' |
+    'ContractorIdentificationLevel' |
     'CategoryType' |
+    'CumulativeLimitPeriod' |
     'PayoutMethod' |
     'Residence' |
     'BankCardPaymentSystem' |
@@ -424,6 +445,7 @@
     'ProviderCashFlowAccount' |
     'SystemCashFlowAccount' |
     'ExternalCashFlowAccount' |
+    'WalletCashFlowAccount' |
     'CashFlowConstant' |
     'RoundingMethod' |
     'PaymentInstitutionRealm'.
@@ -439,10 +461,23 @@
     'high' |
     'fatal'.
 
+%% enum 'ContractorIdentificationLevel'
+-type 'ContractorIdentificationLevel'() ::
+    'none' |
+    'partial' |
+    'full'.
+
 %% enum 'CategoryType'
 -type 'CategoryType'() ::
     'test' |
     'live'.
+
+%% enum 'CumulativeLimitPeriod'
+-type 'CumulativeLimitPeriod'() ::
+    'today' |
+    'this_week' |
+    'this_month' |
+    'this_year'.
 
 %% enum 'PayoutMethod'
 -type 'PayoutMethod'() ::
@@ -730,7 +765,8 @@
 
 %% enum 'DigitalWalletProvider'
 -type 'DigitalWalletProvider'() ::
-    'qiwi'.
+    'qiwi' |
+    'rbkmoney'.
 
 %% enum 'MerchantCashFlowAccount'
 -type 'MerchantCashFlowAccount'() ::
@@ -750,6 +786,11 @@
 -type 'ExternalCashFlowAccount'() ::
     'income' |
     'outcome'.
+
+%% enum 'WalletCashFlowAccount'
+-type 'WalletCashFlowAccount'() ::
+    'settlement' |
+    'payout'.
 
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
@@ -829,7 +870,9 @@
     'ShopAccount' |
     'ShopDetails' |
     'ShopLocation' |
-    'ContractorRef' |
+    'Wallet' |
+    'WalletAccount' |
+    'PartyContractor' |
     'Contractor' |
     'RegisteredUser' |
     'LegalEntity' |
@@ -837,6 +880,8 @@
     'InternationalLegalEntity' |
     'RussianBankAccount' |
     'InternationalBankAccount' |
+    'PrivateEntity' |
+    'RussianPrivateEntity' |
     'PayoutTool' |
     'PayoutToolInfo' |
     'Contract' |
@@ -870,6 +915,10 @@
     'RecurrentPaytoolsServiceTerms' |
     'PayoutsServiceTerms' |
     'PayoutCompilationPolicy' |
+    'WalletServiceTerms' |
+    'CumulativeLimitSelector' |
+    'CumulativeLimitDecision' |
+    'CumulativeLimit' |
     'PayoutMethodRef' |
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
@@ -986,7 +1035,6 @@
     'PaymentMethodObject' |
     'PayoutMethodObject' |
     'BankCardBINRangeObject' |
-    'ContractorObject' |
     'ProviderObject' |
     'TerminalObject' |
     'InspectorObject' |
@@ -1216,13 +1264,20 @@
 -type 'ShopLocation'() ::
     {'url', binary()}.
 
-%% struct 'ContractorRef'
--type 'ContractorRef'() :: #'domain_ContractorRef'{}.
+%% struct 'Wallet'
+-type 'Wallet'() :: #'domain_Wallet'{}.
+
+%% struct 'WalletAccount'
+-type 'WalletAccount'() :: #'domain_WalletAccount'{}.
+
+%% struct 'PartyContractor'
+-type 'PartyContractor'() :: #'domain_PartyContractor'{}.
 
 %% union 'Contractor'
 -type 'Contractor'() ::
+    {'registered_user', 'RegisteredUser'()} |
     {'legal_entity', 'LegalEntity'()} |
-    {'registered_user', 'RegisteredUser'()}.
+    {'private_entity', 'PrivateEntity'()}.
 
 %% struct 'RegisteredUser'
 -type 'RegisteredUser'() :: #'domain_RegisteredUser'{}.
@@ -1243,6 +1298,13 @@
 
 %% struct 'InternationalBankAccount'
 -type 'InternationalBankAccount'() :: #'domain_InternationalBankAccount'{}.
+
+%% union 'PrivateEntity'
+-type 'PrivateEntity'() ::
+    {'russian_private_entity', 'RussianPrivateEntity'()}.
+
+%% struct 'RussianPrivateEntity'
+-type 'RussianPrivateEntity'() :: #'domain_RussianPrivateEntity'{}.
 
 %% struct 'PayoutTool'
 -type 'PayoutTool'() :: #'domain_PayoutTool'{}.
@@ -1353,6 +1415,20 @@
 
 %% struct 'PayoutCompilationPolicy'
 -type 'PayoutCompilationPolicy'() :: #'domain_PayoutCompilationPolicy'{}.
+
+%% struct 'WalletServiceTerms'
+-type 'WalletServiceTerms'() :: #'domain_WalletServiceTerms'{}.
+
+%% union 'CumulativeLimitSelector'
+-type 'CumulativeLimitSelector'() ::
+    {'decisions', ['CumulativeLimitDecision'()]} |
+    {'value', ordsets:ordset('CumulativeLimit'())}.
+
+%% struct 'CumulativeLimitDecision'
+-type 'CumulativeLimitDecision'() :: #'domain_CumulativeLimitDecision'{}.
+
+%% struct 'CumulativeLimit'
+-type 'CumulativeLimit'() :: #'domain_CumulativeLimit'{}.
 
 %% struct 'PayoutMethodRef'
 -type 'PayoutMethodRef'() :: #'domain_PayoutMethodRef'{}.
@@ -1507,7 +1583,8 @@
     {'merchant', 'MerchantCashFlowAccount'()} |
     {'provider', 'ProviderCashFlowAccount'()} |
     {'system', 'SystemCashFlowAccount'()} |
-    {'external', 'ExternalCashFlowAccount'()}.
+    {'external', 'ExternalCashFlowAccount'()} |
+    {'wallet', 'WalletCashFlowAccount'()}.
 
 %% struct 'CashFlowPosting'
 -type 'CashFlowPosting'() :: #'domain_CashFlowPosting'{}.
@@ -1627,7 +1704,8 @@
     {'payment_tool', 'PaymentToolCondition'()} |
     {'shop_location_is', 'ShopLocation'()} |
     {'party', 'PartyCondition'()} |
-    {'payout_method_is', 'PayoutMethodRef'()}.
+    {'payout_method_is', 'PayoutMethodRef'()} |
+    {'identification_level_is', atom()}.
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
@@ -1666,7 +1744,8 @@
 
 %% union 'PartyConditionDefinition'
 -type 'PartyConditionDefinition'() ::
-    {'shop_is', 'ShopID'()}.
+    {'shop_is', 'ShopID'()} |
+    {'wallet_is', 'WalletID'()}.
 
 %% struct 'ProxyRef'
 -type 'ProxyRef'() :: #'domain_ProxyRef'{}.
@@ -1771,9 +1850,6 @@
 %% struct 'BankCardBINRangeObject'
 -type 'BankCardBINRangeObject'() :: #'domain_BankCardBINRangeObject'{}.
 
-%% struct 'ContractorObject'
--type 'ContractorObject'() :: #'domain_ContractorObject'{}.
-
 %% struct 'ProviderObject'
 -type 'ProviderObject'() :: #'domain_ProviderObject'{}.
 
@@ -1806,7 +1882,6 @@
     {'calendar', 'CalendarRef'()} |
     {'payment_method', 'PaymentMethodRef'()} |
     {'payout_method', 'PayoutMethodRef'()} |
-    {'contractor', 'ContractorRef'()} |
     {'bank_card_bin_range', 'BankCardBINRangeRef'()} |
     {'contract_template', 'ContractTemplateRef'()} |
     {'term_set_hierarchy', 'TermSetHierarchyRef'()} |
@@ -1829,7 +1904,6 @@
     {'calendar', 'CalendarObject'()} |
     {'payment_method', 'PaymentMethodObject'()} |
     {'payout_method', 'PayoutMethodObject'()} |
-    {'contractor', 'ContractorObject'()} |
     {'bank_card_bin_range', 'BankCardBINRangeObject'()} |
     {'contract_template', 'ContractTemplateObject'()} |
     {'term_set_hierarchy', 'TermSetHierarchyObject'()} |
@@ -1874,7 +1948,9 @@
 -type enum_choice() ::
     'OnHoldExpiration'() |
     'RiskScore'() |
+    'ContractorIdentificationLevel'() |
     'CategoryType'() |
+    'CumulativeLimitPeriod'() |
     'PayoutMethod'() |
     'Residence'() |
     'BankCardPaymentSystem'() |
@@ -1885,6 +1961,7 @@
     'ProviderCashFlowAccount'() |
     'SystemCashFlowAccount'() |
     'ExternalCashFlowAccount'() |
+    'WalletCashFlowAccount'() |
     'CashFlowConstant'() |
     'RoundingMethod'() |
     'PaymentInstitutionRealm'().
@@ -1921,6 +1998,9 @@ typedefs() ->
         'PartyMetaData',
         'PartyMeta',
         'ShopID',
+        'WalletID',
+        'ContractorID',
+        'IdentityDocumentToken',
         'PayoutToolID',
         'ContractID',
         'ContractAdjustmentID',
@@ -1945,7 +2025,9 @@ enums() ->
     [
         'OnHoldExpiration',
         'RiskScore',
+        'ContractorIdentificationLevel',
         'CategoryType',
+        'CumulativeLimitPeriod',
         'PayoutMethod',
         'Residence',
         'BankCardPaymentSystem',
@@ -1956,6 +2038,7 @@ enums() ->
         'ProviderCashFlowAccount',
         'SystemCashFlowAccount',
         'ExternalCashFlowAccount',
+        'WalletCashFlowAccount',
         'CashFlowConstant',
         'RoundingMethod',
         'PaymentInstitutionRealm'
@@ -2025,7 +2108,9 @@ structs() ->
         'ShopAccount',
         'ShopDetails',
         'ShopLocation',
-        'ContractorRef',
+        'Wallet',
+        'WalletAccount',
+        'PartyContractor',
         'Contractor',
         'RegisteredUser',
         'LegalEntity',
@@ -2033,6 +2118,8 @@ structs() ->
         'InternationalLegalEntity',
         'RussianBankAccount',
         'InternationalBankAccount',
+        'PrivateEntity',
+        'RussianPrivateEntity',
         'PayoutTool',
         'PayoutToolInfo',
         'Contract',
@@ -2066,6 +2153,10 @@ structs() ->
         'RecurrentPaytoolsServiceTerms',
         'PayoutsServiceTerms',
         'PayoutCompilationPolicy',
+        'WalletServiceTerms',
+        'CumulativeLimitSelector',
+        'CumulativeLimitDecision',
+        'CumulativeLimit',
         'PayoutMethodRef',
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
@@ -2182,7 +2273,6 @@ structs() ->
         'PaymentMethodObject',
         'PayoutMethodObject',
         'BankCardBINRangeObject',
-        'ContractorObject',
         'ProviderObject',
         'TerminalObject',
         'InspectorObject',
@@ -2276,6 +2366,15 @@ typedef_info('PartyMeta') ->
 typedef_info('ShopID') ->
     string;
 
+typedef_info('WalletID') ->
+    string;
+
+typedef_info('ContractorID') ->
+    string;
+
+typedef_info('IdentityDocumentToken') ->
+    string;
+
 typedef_info('PayoutToolID') ->
     string;
 
@@ -2341,10 +2440,25 @@ enum_info('RiskScore') ->
         {'fatal', 9999}
     ]};
 
+enum_info('ContractorIdentificationLevel') ->
+    {enum, [
+        {'none', 100},
+        {'partial', 200},
+        {'full', 300}
+    ]};
+
 enum_info('CategoryType') ->
     {enum, [
         {'test', 0},
         {'live', 1}
+    ]};
+
+enum_info('CumulativeLimitPeriod') ->
+    {enum, [
+        {'today', 0},
+        {'this_week', 1},
+        {'this_month', 2},
+        {'this_year', 3}
     ]};
 
 enum_info('PayoutMethod') ->
@@ -2638,7 +2752,8 @@ enum_info('TerminalPaymentProvider') ->
 
 enum_info('DigitalWalletProvider') ->
     {enum, [
-        {'qiwi', 0}
+        {'qiwi', 0},
+        {'rbkmoney', 1}
     ]};
 
 enum_info('MerchantCashFlowAccount') ->
@@ -2662,6 +2777,12 @@ enum_info('ExternalCashFlowAccount') ->
     {enum, [
         {'income', 0},
         {'outcome', 1}
+    ]};
+
+enum_info('WalletCashFlowAccount') ->
+    {enum, [
+        {'settlement', 0},
+        {'payout', 1}
     ]};
 
 enum_info('CashFlowConstant') ->
@@ -3023,8 +3144,10 @@ struct_info('Party') ->
     {8, required, string, 'created_at', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
     {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+    {9, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}}, 'contractors', undefined},
     {4, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Contract'}}}, 'contracts', undefined},
     {5, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Shop'}}}, 'shops', undefined},
+    {10, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}}, 'wallets', undefined},
     {6, required, i64, 'revision', undefined}
 ]};
 
@@ -3067,15 +3190,37 @@ struct_info('ShopLocation') ->
     {1, optional, string, 'url', undefined}
 ]};
 
-struct_info('ContractorRef') ->
+struct_info('Wallet') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
+    {1, required, string, 'id', undefined},
+    {2, optional, string, 'name', undefined},
+    {3, required, string, 'created_at', undefined},
+    {4, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+    {5, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+    {6, required, string, 'contract', undefined},
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'WalletAccount'}}, 'account', undefined}
+]};
+
+struct_info('WalletAccount') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+    {2, required, i64, 'settlement', undefined},
+    {3, required, i64, 'payout', undefined}
+]};
+
+struct_info('PartyContractor') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined},
+    {3, required, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'status', undefined},
+    {4, required, {list, string}, 'identity_documents', undefined}
 ]};
 
 struct_info('Contractor') ->
     {struct, union, [
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'RegisteredUser'}}, 'registered_user', undefined},
     {1, optional, {struct, union, {dmsl_domain_thrift, 'LegalEntity'}}, 'legal_entity', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'RegisteredUser'}}, 'registered_user', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'PrivateEntity'}}, 'private_entity', undefined}
 ]};
 
 struct_info('RegisteredUser') ->
@@ -3129,6 +3274,19 @@ struct_info('InternationalBankAccount') ->
     {6, optional, string, 'local_bank_code', undefined}
 ]};
 
+struct_info('PrivateEntity') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianPrivateEntity'}}, 'russian_private_entity', undefined}
+]};
+
+struct_info('RussianPrivateEntity') ->
+    {struct, struct, [
+    {1, required, string, 'first_name', undefined},
+    {2, required, string, 'second_name', undefined},
+    {3, required, string, 'middle_name', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+]};
+
 struct_info('PayoutTool') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
@@ -3146,7 +3304,7 @@ struct_info('PayoutToolInfo') ->
 struct_info('Contract') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined},
+    {14, optional, string, 'contractor_id', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
     {11, required, string, 'created_at', undefined},
     {4, optional, string, 'valid_since', undefined},
@@ -3156,7 +3314,8 @@ struct_info('Contract') ->
     {8, required, {list, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}}, 'adjustments', undefined},
     {9, required, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}}, 'payout_tools', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
 ]};
 
 struct_info('LegalAgreement') ->
@@ -3276,7 +3435,8 @@ struct_info('TermSet') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined}
 ]};
 
 struct_info('TimedTermSet') ->
@@ -3344,6 +3504,31 @@ struct_info('PayoutsServiceTerms') ->
 struct_info('PayoutCompilationPolicy') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'assets_freeze_for', undefined}
+]};
+
+struct_info('WalletServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined}
+]};
+
+struct_info('CumulativeLimitSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimitDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimit'}}}, 'value', undefined}
+]};
+
+struct_info('CumulativeLimitDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'then_', undefined}
+]};
+
+struct_info('CumulativeLimit') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'CumulativeLimitPeriod'}}, 'period', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cash', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -3605,7 +3790,8 @@ struct_info('CashFlowAccount') ->
     {1, optional, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'merchant', undefined},
     {2, optional, {enum, {dmsl_domain_thrift, 'ProviderCashFlowAccount'}}, 'provider', undefined},
     {3, optional, {enum, {dmsl_domain_thrift, 'SystemCashFlowAccount'}}, 'system', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'ExternalCashFlowAccount'}}, 'external', undefined}
+    {4, optional, {enum, {dmsl_domain_thrift, 'ExternalCashFlowAccount'}}, 'external', undefined},
+    {5, optional, {enum, {dmsl_domain_thrift, 'WalletCashFlowAccount'}}, 'wallet', undefined}
 ]};
 
 struct_info('CashFlowPosting') ->
@@ -3814,7 +4000,8 @@ struct_info('Condition') ->
     {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'payment_tool', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'shop_location_is', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
+    {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined}
 ]};
 
 struct_info('PaymentToolCondition') ->
@@ -3870,7 +4057,8 @@ struct_info('PartyCondition') ->
 
 struct_info('PartyConditionDefinition') ->
     {struct, union, [
-    {1, optional, string, 'shop_is', undefined}
+    {1, optional, string, 'shop_is', undefined},
+    {2, optional, string, 'wallet_is', undefined}
 ]};
 
 struct_info('ProxyRef') ->
@@ -3963,6 +4151,7 @@ struct_info('PaymentInstitution') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
     {4, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_contract_template', undefined},
+    {10, optional, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_wallet_contract_template', undefined},
     {5, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
     {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
     {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
@@ -4069,12 +4258,6 @@ struct_info('BankCardBINRangeObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRange'}}, 'data', undefined}
 ]};
 
-struct_info('ContractorObject') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractorRef'}}, 'ref', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'data', undefined}
-]};
-
 struct_info('ProviderObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'ref', undefined},
@@ -4131,7 +4314,6 @@ struct_info('Reference') ->
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ContractorRef'}}, 'contractor', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bank_card_bin_range', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined},
     {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'term_set_hierarchy', undefined},
@@ -4155,7 +4337,6 @@ struct_info('DomainObject') ->
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ContractorObject'}}, 'contractor', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeObject'}}, 'bank_card_bin_range', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateObject'}}, 'contract_template', undefined},
     {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyObject'}}, 'term_set_hierarchy', undefined},
@@ -4316,8 +4497,14 @@ record_name('OperationTimeout') ->
     record_name('ShopDetails') ->
     'domain_ShopDetails';
 
-    record_name('ContractorRef') ->
-    'domain_ContractorRef';
+    record_name('Wallet') ->
+    'domain_Wallet';
+
+    record_name('WalletAccount') ->
+    'domain_WalletAccount';
+
+    record_name('PartyContractor') ->
+    'domain_PartyContractor';
 
     record_name('RegisteredUser') ->
     'domain_RegisteredUser';
@@ -4333,6 +4520,9 @@ record_name('OperationTimeout') ->
 
     record_name('InternationalBankAccount') ->
     'domain_InternationalBankAccount';
+
+    record_name('RussianPrivateEntity') ->
+    'domain_RussianPrivateEntity';
 
     record_name('PayoutTool') ->
     'domain_PayoutTool';
@@ -4417,6 +4607,15 @@ record_name('OperationTimeout') ->
 
     record_name('PayoutCompilationPolicy') ->
     'domain_PayoutCompilationPolicy';
+
+    record_name('WalletServiceTerms') ->
+    'domain_WalletServiceTerms';
+
+    record_name('CumulativeLimitDecision') ->
+    'domain_CumulativeLimitDecision';
+
+    record_name('CumulativeLimit') ->
+    'domain_CumulativeLimit';
 
     record_name('PayoutMethodRef') ->
     'domain_PayoutMethodRef';
@@ -4681,9 +4880,6 @@ record_name('OperationTimeout') ->
 
     record_name('BankCardBINRangeObject') ->
     'domain_BankCardBINRangeObject';
-
-    record_name('ContractorObject') ->
-    'domain_ContractorObject';
 
     record_name('ProviderObject') ->
     'domain_ProviderObject';

@@ -80,7 +80,13 @@
     'CustomerBindingEvent'/0,
     'CustomerBindingStarted'/0,
     'CustomerBindingSucceeded'/0,
-    'CustomerBindingFailed'/0
+    'CustomerBindingFailed'/0,
+    'WalletEventFilter'/0,
+    'WalletEventType'/0,
+    'WalletWithdrawalEventType'/0,
+    'WalletWithdrawalStarted'/0,
+    'WalletWithdrawalSucceeded'/0,
+    'WalletWithdrawalFailed'/0
 ]).
 -export_type([
     'WebhookNotFound'/0
@@ -152,7 +158,13 @@
     'CustomerBindingEvent' |
     'CustomerBindingStarted' |
     'CustomerBindingSucceeded' |
-    'CustomerBindingFailed'.
+    'CustomerBindingFailed' |
+    'WalletEventFilter' |
+    'WalletEventType' |
+    'WalletWithdrawalEventType' |
+    'WalletWithdrawalStarted' |
+    'WalletWithdrawalSucceeded' |
+    'WalletWithdrawalFailed'.
 
 -type exception_name() ::
     'WebhookNotFound'.
@@ -167,7 +179,8 @@
 -type 'EventFilter'() ::
     {'party', 'PartyEventFilter'()} |
     {'invoice', 'InvoiceEventFilter'()} |
-    {'customer', 'CustomerEventFilter'()}.
+    {'customer', 'CustomerEventFilter'()} |
+    {'wallet', 'WalletEventFilter'()}.
 
 %% struct 'PartyEventFilter'
 -type 'PartyEventFilter'() :: #'webhooker_PartyEventFilter'{}.
@@ -324,6 +337,28 @@
 %% struct 'CustomerBindingFailed'
 -type 'CustomerBindingFailed'() :: #'webhooker_CustomerBindingFailed'{}.
 
+%% struct 'WalletEventFilter'
+-type 'WalletEventFilter'() :: #'webhooker_WalletEventFilter'{}.
+
+%% union 'WalletEventType'
+-type 'WalletEventType'() ::
+    {'withdrawal', 'WalletWithdrawalEventType'()}.
+
+%% union 'WalletWithdrawalEventType'
+-type 'WalletWithdrawalEventType'() ::
+    {'started', 'WalletWithdrawalStarted'()} |
+    {'succeeded', 'WalletWithdrawalSucceeded'()} |
+    {'failed', 'WalletWithdrawalFailed'()}.
+
+%% struct 'WalletWithdrawalStarted'
+-type 'WalletWithdrawalStarted'() :: #'webhooker_WalletWithdrawalStarted'{}.
+
+%% struct 'WalletWithdrawalSucceeded'
+-type 'WalletWithdrawalSucceeded'() :: #'webhooker_WalletWithdrawalSucceeded'{}.
+
+%% struct 'WalletWithdrawalFailed'
+-type 'WalletWithdrawalFailed'() :: #'webhooker_WalletWithdrawalFailed'{}.
+
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
 
@@ -432,7 +467,13 @@ structs() ->
         'CustomerBindingEvent',
         'CustomerBindingStarted',
         'CustomerBindingSucceeded',
-        'CustomerBindingFailed'
+        'CustomerBindingFailed',
+        'WalletEventFilter',
+        'WalletEventType',
+        'WalletWithdrawalEventType',
+        'WalletWithdrawalStarted',
+        'WalletWithdrawalSucceeded',
+        'WalletWithdrawalFailed'
     ].
 
 -spec services() -> [service_name()].
@@ -487,7 +528,8 @@ struct_info('EventFilter') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'PartyEventFilter'}}, 'party', undefined},
     {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceEventFilter'}}, 'invoice', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined}
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined},
+    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletEventFilter'}}, 'wallet', undefined}
 ]};
 
 struct_info('PartyEventFilter') ->
@@ -669,6 +711,32 @@ struct_info('CustomerBindingSucceeded') ->
 struct_info('CustomerBindingFailed') ->
     {struct, struct, []};
 
+struct_info('WalletEventFilter') ->
+    {struct, struct, [
+    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'WalletEventType'}}}, 'types', undefined}
+]};
+
+struct_info('WalletEventType') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_webhooker_thrift, 'WalletWithdrawalEventType'}}, 'withdrawal', undefined}
+]};
+
+struct_info('WalletWithdrawalEventType') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalStarted'}}, 'started', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalFailed'}}, 'failed', undefined}
+]};
+
+struct_info('WalletWithdrawalStarted') ->
+    {struct, struct, []};
+
+struct_info('WalletWithdrawalSucceeded') ->
+    {struct, struct, []};
+
+struct_info('WalletWithdrawalFailed') ->
+    {struct, struct, []};
+
 struct_info('WebhookNotFound') ->
     {struct, exception, []};
 
@@ -774,6 +842,18 @@ record_name('WebhookParams') ->
 
     record_name('CustomerBindingFailed') ->
     'webhooker_CustomerBindingFailed';
+
+    record_name('WalletEventFilter') ->
+    'webhooker_WalletEventFilter';
+
+    record_name('WalletWithdrawalStarted') ->
+    'webhooker_WalletWithdrawalStarted';
+
+    record_name('WalletWithdrawalSucceeded') ->
+    'webhooker_WalletWithdrawalSucceeded';
+
+    record_name('WalletWithdrawalFailed') ->
+    'webhooker_WalletWithdrawalFailed';
 
     record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';

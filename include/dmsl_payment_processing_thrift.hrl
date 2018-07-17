@@ -451,14 +451,26 @@
 
 %% struct 'ContractParams'
 -record('payproc_ContractParams', {
-    'contractor' :: dmsl_domain_thrift:'Contractor'(),
+    'contractor_id' :: dmsl_payment_processing_thrift:'ContractorID'() | undefined,
     'template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'() | undefined,
-    'payment_institution' :: dmsl_payment_processing_thrift:'PaymentInstitutionRef'() | undefined
+    'payment_institution' :: dmsl_payment_processing_thrift:'PaymentInstitutionRef'() | undefined,
+    'contractor' :: dmsl_domain_thrift:'Contractor'() | undefined
 }).
 
 %% struct 'ContractAdjustmentParams'
 -record('payproc_ContractAdjustmentParams', {
     'template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'()
+}).
+
+%% struct 'ContractorModificationUnit'
+-record('payproc_ContractorModificationUnit', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'modification' :: dmsl_payment_processing_thrift:'ContractorModification'()
+}).
+
+%% struct 'ContractorIdentityDocumentsModification'
+-record('payproc_ContractorIdentityDocumentsModification', {
+    'identity_documents' :: [dmsl_domain_thrift:'IdentityDocumentToken'()]
 }).
 
 %% struct 'ContractModificationUnit'
@@ -504,6 +516,23 @@
 %% struct 'ProxyModification'
 -record('payproc_ProxyModification', {
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
+}).
+
+%% struct 'WalletModificationUnit'
+-record('payproc_WalletModificationUnit', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'modification' :: dmsl_payment_processing_thrift:'WalletModification'()
+}).
+
+%% struct 'WalletParams'
+-record('payproc_WalletParams', {
+    'name' :: binary() | undefined,
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'()
+}).
+
+%% struct 'WalletAccountParams'
+-record('payproc_WalletAccountParams', {
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'()
 }).
 
 %% struct 'Claim'
@@ -557,6 +586,23 @@
     'schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'() | undefined
 }).
 
+%% struct 'ContractorEffectUnit'
+-record('payproc_ContractorEffectUnit', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'effect' :: dmsl_payment_processing_thrift:'ContractorEffect'()
+}).
+
+%% struct 'ContractorIdentityDocumentsChanged'
+-record('payproc_ContractorIdentityDocumentsChanged', {
+    'identity_documents' :: [dmsl_domain_thrift:'IdentityDocumentToken'()]
+}).
+
+%% struct 'WalletEffectUnit'
+-record('payproc_WalletEffectUnit', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'effect' :: dmsl_payment_processing_thrift:'WalletEffect'()
+}).
+
 %% struct 'ShopProxyChanged'
 -record('payproc_ShopProxyChanged', {
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
@@ -586,6 +632,18 @@
 %% struct 'ShopSuspension'
 -record('payproc_ShopSuspension', {
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'suspension' :: dmsl_domain_thrift:'Suspension'()
+}).
+
+%% struct 'WalletBlocking'
+-record('payproc_WalletBlocking', {
+    'wallet_id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'blocking' :: dmsl_domain_thrift:'Blocking'()
+}).
+
+%% struct 'WalletSuspension'
+-record('payproc_WalletSuspension', {
+    'wallet_id' :: dmsl_payment_processing_thrift:'WalletID'(),
     'suspension' :: dmsl_domain_thrift:'Suspension'()
 }).
 
@@ -636,6 +694,23 @@
     'reason' :: dmsl_payment_processing_thrift:'InvalidShopReason'()
 }).
 
+%% struct 'InvalidWallet'
+-record('payproc_InvalidWallet', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidWalletReason'()
+}).
+
+%% struct 'InvalidContractor'
+-record('payproc_InvalidContractor', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidContractorReason'()
+}).
+
+%% struct 'ContractorNotExists'
+-record('payproc_ContractorNotExists', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'() | undefined
+}).
+
 %% struct 'ContractTermsViolated'
 -record('payproc_ContractTermsViolated', {
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
@@ -664,6 +739,9 @@
 %% exception 'ShopNotFound'
 -record('payproc_ShopNotFound', {}).
 
+%% exception 'WalletNotFound'
+-record('payproc_WalletNotFound', {}).
+
 %% exception 'InvalidPartyStatus'
 -record('payproc_InvalidPartyStatus', {
     'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
@@ -671,6 +749,11 @@
 
 %% exception 'InvalidShopStatus'
 -record('payproc_InvalidShopStatus', {
+    'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
+}).
+
+%% exception 'InvalidWalletStatus'
+-record('payproc_InvalidWalletStatus', {
     'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
 }).
 
