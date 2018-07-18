@@ -1040,6 +1040,20 @@
     'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
 }).
 
+%% struct 'PartyPrototypeRef'
+-record('domain_PartyPrototypeRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'PartyPrototype'
+-record('domain_PartyPrototype', {}).
+
+%% struct 'PartyPrototypeObject'
+-record('domain_PartyPrototypeObject', {
+    'ref' :: dmsl_domain_thrift:'PartyPrototypeRef'(),
+    'data' :: dmsl_domain_thrift:'PartyPrototype'()
+}).
+
 %% struct 'GlobalsRef'
 -record('domain_GlobalsRef', {}).
 

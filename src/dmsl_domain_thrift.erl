@@ -305,6 +305,9 @@
     'PaymentInstitutionRef'/0,
     'PaymentInstitution'/0,
     'ContractPaymentInstitutionDefaults'/0,
+    'PartyPrototypeRef'/0,
+    'PartyPrototype'/0,
+    'PartyPrototypeObject'/0,
     'GlobalsRef'/0,
     'Globals'/0,
     'Dummy'/0,
@@ -1018,6 +1021,9 @@
     'PaymentInstitutionRef' |
     'PaymentInstitution' |
     'ContractPaymentInstitutionDefaults' |
+    'PartyPrototypeRef' |
+    'PartyPrototype' |
+    'PartyPrototypeObject' |
     'GlobalsRef' |
     'Globals' |
     'Dummy' |
@@ -1799,6 +1805,15 @@
 %% struct 'ContractPaymentInstitutionDefaults'
 -type 'ContractPaymentInstitutionDefaults'() :: #'domain_ContractPaymentInstitutionDefaults'{}.
 
+%% struct 'PartyPrototypeRef'
+-type 'PartyPrototypeRef'() :: #'domain_PartyPrototypeRef'{}.
+
+%% struct 'PartyPrototype'
+-type 'PartyPrototype'() :: #'domain_PartyPrototype'{}.
+
+%% struct 'PartyPrototypeObject'
+-type 'PartyPrototypeObject'() :: #'domain_PartyPrototypeObject'{}.
+
 %% struct 'GlobalsRef'
 -type 'GlobalsRef'() :: #'domain_GlobalsRef'{}.
 
@@ -1894,7 +1909,8 @@
     {'proxy', 'ProxyRef'()} |
     {'globals', 'GlobalsRef'()} |
     {'dummy', 'DummyRef'()} |
-    {'dummy_link', 'DummyLinkRef'()}.
+    {'dummy_link', 'DummyLinkRef'()} |
+    {'party_prototype', 'PartyPrototypeRef'()}.
 
 %% union 'DomainObject'
 -type 'DomainObject'() ::
@@ -1916,7 +1932,8 @@
     {'proxy', 'ProxyObject'()} |
     {'globals', 'GlobalsObject'()} |
     {'dummy', 'DummyObject'()} |
-    {'dummy_link', 'DummyLinkObject'()}.
+    {'dummy_link', 'DummyLinkObject'()} |
+    {'party_prototype', 'PartyPrototypeObject'()}.
 
 %%
 %% services and functions
@@ -2256,6 +2273,9 @@ structs() ->
         'PaymentInstitutionRef',
         'PaymentInstitution',
         'ContractPaymentInstitutionDefaults',
+        'PartyPrototypeRef',
+        'PartyPrototype',
+        'PartyPrototypeObject',
         'GlobalsRef',
         'Globals',
         'Dummy',
@@ -4166,6 +4186,20 @@ struct_info('ContractPaymentInstitutionDefaults') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
 ]};
 
+struct_info('PartyPrototypeRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined}
+]};
+
+struct_info('PartyPrototype') ->
+    {struct, struct, []};
+
+struct_info('PartyPrototypeObject') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototype'}}, 'data', undefined}
+]};
+
 struct_info('GlobalsRef') ->
     {struct, struct, []};
 
@@ -4328,7 +4362,8 @@ struct_info('Reference') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
 ]};
 
 struct_info('DomainObject') ->
@@ -4351,7 +4386,8 @@ struct_info('DomainObject') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined}
+    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -4831,6 +4867,15 @@ record_name('OperationTimeout') ->
 
     record_name('ContractPaymentInstitutionDefaults') ->
     'domain_ContractPaymentInstitutionDefaults';
+
+    record_name('PartyPrototypeRef') ->
+    'domain_PartyPrototypeRef';
+
+    record_name('PartyPrototype') ->
+    'domain_PartyPrototype';
+
+    record_name('PartyPrototypeObject') ->
+    'domain_PartyPrototypeObject';
 
     record_name('GlobalsRef') ->
     'domain_GlobalsRef';
