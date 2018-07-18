@@ -350,6 +350,7 @@ struct PayoutSearchCriteria {
    3: optional list<PayoutID> payout_ids
    /* Диапазон суммы выплат */
    4: optional AmountRange amount_range
+   5: optional domain.CurrencyRef currency
 }
 
 enum PayoutSearchStatus {
