@@ -72,6 +72,7 @@
     'EventRange'/0,
     'Pay2CardParams'/0,
     'TimeRange'/0,
+    'AmountRange'/0,
     'ShopParams'/0,
     'GeneratePayoutParams'/0,
     'PayoutSearchCriteria'/0,
@@ -156,6 +157,7 @@
     'EventRange' |
     'Pay2CardParams' |
     'TimeRange' |
+    'AmountRange' |
     'ShopParams' |
     'GeneratePayoutParams' |
     'PayoutSearchCriteria' |
@@ -275,6 +277,9 @@
 
 %% struct 'TimeRange'
 -type 'TimeRange'() :: #'payout_processing_TimeRange'{}.
+
+%% struct 'AmountRange'
+-type 'AmountRange'() :: #'payout_processing_AmountRange'{}.
 
 %% struct 'ShopParams'
 -type 'ShopParams'() :: #'payout_processing_ShopParams'{}.
@@ -413,6 +418,7 @@ structs() ->
         'EventRange',
         'Pay2CardParams',
         'TimeRange',
+        'AmountRange',
         'ShopParams',
         'GeneratePayoutParams',
         'PayoutSearchCriteria',
@@ -652,6 +658,12 @@ struct_info('TimeRange') ->
     {2, required, string, 'to_time', undefined}
 ]};
 
+struct_info('AmountRange') ->
+    {struct, struct, [
+    {1, optional, i64, 'min', undefined},
+    {2, optional, i64, 'max', undefined}
+]};
+
 struct_info('ShopParams') ->
     {struct, struct, [
     {1, required, string, 'party_id', undefined},
@@ -668,7 +680,9 @@ struct_info('PayoutSearchCriteria') ->
     {struct, struct, [
     {1, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchStatus'}}, 'status', undefined},
     {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
-    {3, optional, {list, string}, 'payout_ids', undefined}
+    {3, optional, {list, string}, 'payout_ids', undefined},
+    {4, optional, {struct, struct, {dmsl_payout_processing_thrift, 'AmountRange'}}, 'amount_range', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
 ]};
 
 struct_info('PayoutSearchRequest') ->
@@ -780,6 +794,9 @@ record_name('InternalUser') ->
 
     record_name('TimeRange') ->
     'payout_processing_TimeRange';
+
+    record_name('AmountRange') ->
+    'payout_processing_AmountRange';
 
     record_name('ShopParams') ->
     'payout_processing_ShopParams';

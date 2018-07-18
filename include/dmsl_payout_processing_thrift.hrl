@@ -138,6 +138,12 @@
     'to_time' :: dmsl_base_thrift:'Timestamp'()
 }).
 
+%% struct 'AmountRange'
+-record('payout_processing_AmountRange', {
+    'min' :: dmsl_domain_thrift:'Amount'() | undefined,
+    'max' :: dmsl_domain_thrift:'Amount'() | undefined
+}).
+
 %% struct 'ShopParams'
 -record('payout_processing_ShopParams', {
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
@@ -154,7 +160,9 @@
 -record('payout_processing_PayoutSearchCriteria', {
     'status' :: dmsl_payout_processing_thrift:'PayoutSearchStatus'() | undefined,
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
-    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
+    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined,
+    'amount_range' :: dmsl_payout_processing_thrift:'AmountRange'() | undefined,
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined
 }).
 
 %% struct 'PayoutSearchRequest'
