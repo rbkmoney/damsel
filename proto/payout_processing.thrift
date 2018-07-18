@@ -354,9 +354,9 @@ struct PayoutSearchCriteria {
 }
 
 enum PayoutSearchStatus {
-    unpaid,
-    paid,
-    cancelled,
+    unpaid
+    paid
+    cancelled
     confirmed
 }
 
