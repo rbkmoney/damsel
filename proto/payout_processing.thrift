@@ -313,6 +313,17 @@ struct TimeRange {
     2: required base.Timestamp to_time
 }
 
+/**
+* Диапазон суммы
+* min - минимальная сумма.
+* max - максимальная сумма.
+* Если min > max - диапазон сумм считается некорректным.
+*/
+struct AmountRange {
+    1: optional domain.Amount min
+    2: optional domain.Amount max
+}
+
 struct ShopParams {
     1: required domain.PartyID party_id
     2: required domain.ShopID shop_id
@@ -337,12 +348,15 @@ struct PayoutSearchCriteria {
    /* Диапазон времени создания выплат */
    2: optional TimeRange time_range
    3: optional list<PayoutID> payout_ids
+   /* Диапазон суммы выплат */
+   4: optional AmountRange amount_range
+   5: optional domain.CurrencyRef currency
 }
 
 enum PayoutSearchStatus {
-    unpaid,
-    paid,
-    cancelled,
+    unpaid
+    paid
+    cancelled
     confirmed
 }
 
