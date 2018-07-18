@@ -1812,7 +1812,8 @@ struct ContractPaymentInstitutionDefaults {
     2: required PaymentInstitutionRef live
 }
 
-/* F**king legacy */
+/* legacy */
+/* TODO rework (de)serializer to handle those cases more politely and then remove */
 
 struct PartyPrototypeRef { 1: required ObjectID id }
 
