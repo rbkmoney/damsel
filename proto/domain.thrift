@@ -1812,6 +1812,18 @@ struct ContractPaymentInstitutionDefaults {
     2: required PaymentInstitutionRef live
 }
 
+/* legacy */
+/* TODO rework (de)serializer to handle those cases more politely and then remove */
+
+struct PartyPrototypeRef { 1: required ObjectID id }
+
+struct PartyPrototype {}
+
+struct PartyPrototypeObject {
+    1: required PartyPrototypeRef ref
+    2: required PartyPrototype data
+}
+
 /* Root config */
 
 struct GlobalsRef {}
@@ -1958,6 +1970,9 @@ union Reference {
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
+
+    /* legacy */
+    10 : PartyPrototypeRef       party_prototype
 }
 
 union DomainObject {
@@ -1982,6 +1997,9 @@ union DomainObject {
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
+
+    /* legacy */
+    10 : PartyPrototypeObject       party_prototype
 }
 
 /* Domain */
