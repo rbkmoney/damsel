@@ -2911,6 +2911,8 @@ struct_info('InvoicePayment') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
     {10, required, i64, 'domain_revision', undefined},
+    {16, optional, string, 'owner_id', undefined},
+    {17, optional, string, 'shop_id', undefined},
     {15, optional, i64, 'party_revision', undefined},
     {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
     {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},

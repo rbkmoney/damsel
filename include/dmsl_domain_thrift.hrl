@@ -98,6 +98,8 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'owner_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
+    'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
