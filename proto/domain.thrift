@@ -140,6 +140,8 @@ struct InvoicePayment {
     1:  required InvoicePaymentID id
     2:  required base.Timestamp created_at
     10: required DataRevision domain_revision
+    16: optional PartyID owner_id
+    17: optional ShopID shop_id
     15: optional PartyRevision party_revision
     3:  required InvoicePaymentStatus status
     14: required Payer payer
@@ -1810,6 +1812,18 @@ struct ContractPaymentInstitutionDefaults {
     2: required PaymentInstitutionRef live
 }
 
+/* legacy */
+/* TODO rework (de)serializer to handle those cases more politely and then remove */
+
+struct PartyPrototypeRef { 1: required ObjectID id }
+
+struct PartyPrototype {}
+
+struct PartyPrototypeObject {
+    1: required PartyPrototypeRef ref
+    2: required PartyPrototype data
+}
+
 /* Root config */
 
 struct GlobalsRef {}
@@ -1956,6 +1970,9 @@ union Reference {
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
+
+    /* legacy */
+    10 : PartyPrototypeRef       party_prototype
 }
 
 union DomainObject {
@@ -1980,6 +1997,9 @@ union DomainObject {
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
+
+    /* legacy */
+    10 : PartyPrototypeObject       party_prototype
 }
 
 /* Domain */
