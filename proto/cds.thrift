@@ -67,7 +67,9 @@ union UnlockStatus {
     2: i16 more_keys_needed
 }
 
-exception InvalidCardData {}
+exception InvalidCardData {
+    1: optional string reason
+}
 
 exception CardDataNotFound {}
 
