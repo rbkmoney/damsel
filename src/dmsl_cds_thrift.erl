@@ -306,7 +306,9 @@ struct_info('UnlockStatus') ->
 ]};
 
 struct_info('InvalidCardData') ->
-    {struct, exception, []};
+    {struct, exception, [
+    {1, optional, string, 'reason', undefined}
+]};
 
 struct_info('CardDataNotFound') ->
     {struct, exception, []};

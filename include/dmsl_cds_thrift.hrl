@@ -46,7 +46,9 @@
 -record('Unlocked', {}).
 
 %% exception 'InvalidCardData'
--record('InvalidCardData', {}).
+-record('InvalidCardData', {
+    'reason' :: binary() | undefined
+}).
 
 %% exception 'CardDataNotFound'
 -record('CardDataNotFound', {}).
