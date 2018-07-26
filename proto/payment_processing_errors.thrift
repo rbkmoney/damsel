@@ -91,8 +91,8 @@ union AuthorizationFailure {
 
 union PreAuthorizationFailure {
      1: GeneralFailure    unknown
-     2: GeneralFailure    risk_score_too_high
-     3: GeneralFailure    no_route_found
+     2: GeneralFailure    unacceptable_risk_score
+     3: GeneralFailure    no_suitable_route_found
 }
 
 union LimitExceeded {
