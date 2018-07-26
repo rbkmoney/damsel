@@ -12,13 +12,10 @@ namespace erlang binbase
 * card_type - тип карты
 */
 struct BinData {
-    1: required CardPaymentSystem payment_system
+    1: required domain.BankCardPaymentSystem payment_system
     2: optional string bank_name
     3: optional domain.Residence country
     4: optional CardType card_type
-    //TODO нужно ли вообще?
-    5: optional string url
-    6: optional string phone_number
 }
 
 enum CardType {
@@ -26,16 +23,6 @@ enum CardType {
     credit
     debit
     credit_or_debit
-}
-
-/**
-* Платежные системы, где:
-* available - платежные системы, описанные в домене
-* other - платежные системы, которых нет в домене (пр. SBERCARD, TROY и т.д.)
-*/
-union CardPaymentSystem {
-    1: domain.BankCardPaymentSystem available
-    2: string other
 }
 
 struct Last {}
