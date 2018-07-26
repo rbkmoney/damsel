@@ -68,9 +68,9 @@ namespace erlang payprocerr
   */
 
 union PaymentFailure {
-    1: GeneralFailure       rejected_by_inspector
-    2: GeneralFailure       preauthorization_failed
-    3: AuthorizationFailure authorization_failed
+    1: GeneralFailure           rejected_by_inspector
+    2: PreAuthorizationFailure  preauthorization_failed
+    3: AuthorizationFailure     authorization_failed
 }
 
 union AuthorizationFailure {
@@ -87,6 +87,12 @@ union AuthorizationFailure {
     11: GeneralFailure    security_policy_violated
     12: GeneralFailure    temporarily_unavailable
     13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
+}
+
+union PreAuthorizationFailure {
+     1: GeneralFailure    unknown
+     2: GeneralFailure    risk_score_too_high
+     2: GeneralFailure    no_route_found
 }
 
 union LimitExceeded {
