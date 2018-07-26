@@ -71,6 +71,7 @@ union PaymentFailure {
     1: GeneralFailure       rejected_by_inspector
     2: GeneralFailure       preauthorization_failed
     3: AuthorizationFailure authorization_failed
+    4: GeneralFailure       no_route_found
 }
 
 union AuthorizationFailure {
