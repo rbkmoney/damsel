@@ -92,7 +92,7 @@ union AuthorizationFailure {
 union PreAuthorizationFailure {
      1: GeneralFailure    unknown
      2: GeneralFailure    risk_score_too_high
-     2: GeneralFailure    no_route_found
+     3: GeneralFailure    no_route_found
 }
 
 union LimitExceeded {
