@@ -746,16 +746,15 @@ struct TermSetHierarchyRef { 1: required ObjectID id }
 struct PaymentsServiceTerms {
     /* Shop level */
     // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
-     1: optional CurrencySelector currencies
-     2: optional CategorySelector categories
-    10: optional RiskScoreSelector default_risk_score
+    1: optional CurrencySelector currencies
+    2: optional CategorySelector categories
     /* Invoice level*/
-     4: optional PaymentMethodSelector payment_methods
-     5: optional CashLimitSelector cash_limit
+    4: optional PaymentMethodSelector payment_methods
+    5: optional CashLimitSelector cash_limit
     /* Payment level */
-     6: optional CashFlowSelector fees
-     9: optional PaymentHoldsServiceTerms holds
-     8: optional PaymentRefundsServiceTerms refunds
+    6: optional CashFlowSelector fees
+    9: optional PaymentHoldsServiceTerms holds
+    8: optional PaymentRefundsServiceTerms refunds
 }
 
 struct PaymentHoldsServiceTerms {
@@ -1371,18 +1370,6 @@ struct TimeSpanDecision {
 
 // TODO
 
-/* Risk scoring */
-
-union RiskScoreSelector {
-    1: list<RiskScoreDecision> decisions
-    2: RiskScore value
-}
-
-struct RiskScoreDecision {
-    1: required Predicate if_
-    2: required RiskScoreSelector then_
-}
-
 /* Cash flows */
 
 /** Счёт в графе финансовых потоков. */
@@ -1627,6 +1614,7 @@ struct Inspector {
     1: required string name
     2: required string description
     3: required Proxy proxy
+    4: optional RiskScore fallback_risk_score
 }
 
 union InspectorSelector {
