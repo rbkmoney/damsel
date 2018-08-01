@@ -232,7 +232,9 @@ union SessionResult {
     2: SessionFailed    failed
 }
 
-struct SessionSucceeded {}
+struct SessionSucceeded {
+    1: optional domain.Token direct_recurrent_token
+}
 
 struct SessionFailed {
     1: required domain.OperationFailure failure
@@ -411,6 +413,7 @@ struct InvoiceTemplateUpdateParams {
 struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
+    3: optional domain.RecurrentIntention recurrent_intention
 }
 
 union PayerParams {
@@ -1044,9 +1047,19 @@ struct RecurrentPaymentTool {
 }
 
 struct RecurrentPaymentToolParams {
-    1: required PartyID                   party_id
-    2: required ShopID                    shop_id
-    3: required DisposablePaymentResource payment_resource
+    1: required PartyID                    party_id
+    2: required ShopID                     shop_id
+    3: required RecurrentPaymentToolSource source
+}
+
+union RecurrentPaymentToolSource {
+    1: DisposablePaymentResource disposable
+    2: InvoicePaymentSource      payment
+}
+
+struct InvoicePaymentSource {
+    1: required domain.InvoiceID        invoice_id
+    2: required domain.InvoicePaymentID payment_id
 }
 
 // Statuses

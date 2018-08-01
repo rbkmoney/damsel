@@ -42,6 +42,8 @@ union FinishStatus {
     1: Success success
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
     2: domain.Failure failure
+    /** Успешное завершение с получением токена для последующих взаимодействий. */
+    3: RecurrentTokenSuccess direct_recurrents_success
 }
 
 struct Success {}
@@ -186,12 +188,13 @@ struct RecurrentPaymentResource {
 }
 
 struct InvoicePayment {
-    1: required domain.InvoicePaymentID id
-    2: required base.Timestamp          created_at
-    3: optional domain.TransactionInfo  trx
-    6: required PaymentResource         payment_resource
-    5: required Cash                    cost
-    7: required domain.ContactInfo      contact_info
+    1: required domain.InvoicePaymentID     id
+    2: required base.Timestamp              created_at
+    3: optional domain.TransactionInfo      trx
+    6: required PaymentResource             payment_resource
+    5: required Cash                        cost
+    7: required domain.ContactInfo          contact_info
+    8: optional domain.RecurrentIntention   recurrent_intention
 }
 
 struct InvoicePaymentRefund {
