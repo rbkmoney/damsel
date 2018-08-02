@@ -1575,9 +1575,9 @@ struct PartialRefundsProvisionTerms {
 }
 
 struct RecurrentPaytoolsProvisionTerms {
-    1: required CashValueSelector               cash_value
-    2: required CategorySelector                categories
-    3: required PaymentMethodSelector           payment_methods
+    1: required CashValueSelector     cash_value
+    2: required CategorySelector      categories
+    3: required PaymentMethodSelector payment_methods
 }
 
 union CashValueSelector {
