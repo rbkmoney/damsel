@@ -898,7 +898,8 @@
 -record('domain_Inspector', {
     'name' :: binary(),
     'description' :: binary(),
-    'proxy' :: dmsl_domain_thrift:'Proxy'()
+    'proxy' :: dmsl_domain_thrift:'Proxy'(),
+    'fallback_risk_score' :: atom() | undefined
 }).
 
 %% struct 'InspectorDecision'

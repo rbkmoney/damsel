@@ -3969,7 +3969,8 @@ struct_info('Inspector') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, required, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+    {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'fallback_risk_score', undefined}
 ]};
 
 struct_info('InspectorSelector') ->
