@@ -779,6 +779,8 @@ struct RecurrentPaytoolsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
 }
 
+struct RecurrentIntention {}
+
 /* Payouts service terms */
 
 struct PayoutsServiceTerms {
