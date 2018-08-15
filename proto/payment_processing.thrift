@@ -1721,8 +1721,14 @@ service PartyManagement {
 
     /* Wallet */
 
-    domain.TermSet ComputeWalletTerms (1: UserInfo user, 2: PartyID party_id, 3: ContractID contract_id,
-                                       4: WalletID wallet_id, 5: CurrencyRef currency, 6: base.Timestamp timestamp)
+    domain.TermSet ComputeWalletTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: WalletID wallet_id,
+        5: base.CurrencyRef currency,
+        6: base.Timestamp timestamp
+    )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
     /* Claim */
