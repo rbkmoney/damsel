@@ -89,6 +89,7 @@ typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
 typedef string PaymentSessionID
+typedef string RecurrentSessionID
 typedef string Fingerprint
 typedef string IPAddress
 
@@ -147,6 +148,7 @@ struct InvoicePayment {
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
+    18: optional RecurrentIntention recurrent_intention
     6:  optional InvoicePaymentContext context
 }
 
@@ -755,6 +757,7 @@ struct PaymentsServiceTerms {
     6: optional CashFlowSelector fees
     9: optional PaymentHoldsServiceTerms holds
     8: optional PaymentRefundsServiceTerms refunds
+    10: optional bool direct_recurrents_available
 }
 
 struct PaymentHoldsServiceTerms {
@@ -778,6 +781,8 @@ struct PartialRefundsServiceTerms {
 struct RecurrentPaytoolsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
 }
+
+struct RecurrentIntention {}
 
 /* Payouts service terms */
 
@@ -1271,9 +1276,10 @@ union PaymentTool {
 }
 
 struct DisposablePaymentResource {
-    1: required PaymentTool      payment_tool
-    2: optional PaymentSessionID payment_session_id
-    3: required ClientInfo       client_info
+    1: required PaymentTool        payment_tool
+    2: optional PaymentSessionID   payment_session_id
+    3: required ClientInfo         client_info
+    4: optional RecurrentSessionID recurrent_session_id
 }
 
 typedef string Token
@@ -1576,6 +1582,11 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
+    4: optional DirectRecurrentsProvisionTerms  direct_recurrents
+}
+
+struct DirectRecurrentsProvisionTerms {
+    1: required bool token_required
 }
 
 union CashValueSelector {

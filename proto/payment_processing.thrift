@@ -411,6 +411,7 @@ struct InvoiceTemplateUpdateParams {
 struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
+    3: optional domain.RecurrentIntention recurrent_intention
 }
 
 union PayerParams {
@@ -432,7 +433,7 @@ union InvoicePaymentParamsFlow {
     2: InvoicePaymentParamsFlowHold hold
 }
 
-struct InvoicePaymentParamsFlowInstant   {}
+struct InvoicePaymentParamsFlowInstant {}
 
 struct InvoicePaymentParamsFlowHold {
     1: required domain.OnHoldExpiration on_hold_expiration
