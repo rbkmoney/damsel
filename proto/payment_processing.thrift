@@ -1721,23 +1721,15 @@ service PartyManagement {
 
     /* Wallet */
 
-    domain.Wallet GetWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3)
-
-    void SuspendWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
-
-    void ActivateWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
-
-    void BlockWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: string reason)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
-
-    void UnblockWallet (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: string reason)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: WalletNotFound ex3, 4: InvalidWalletStatus ex4)
-
-    domain.TermSet ComputeWalletTerms (1: UserInfo user, 2: PartyID party_id, 3: WalletID id, 4: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: WalletNotFound ex4)
+    domain.TermSet ComputeWalletTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: WalletID wallet_id,
+        5: domain.CurrencyRef currency,
+        6: base.Timestamp timestamp
+    )
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
     /* Claim */
 
