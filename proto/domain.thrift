@@ -757,7 +757,6 @@ struct PaymentsServiceTerms {
     6: optional CashFlowSelector fees
     9: optional PaymentHoldsServiceTerms holds
     8: optional PaymentRefundsServiceTerms refunds
-    10: optional bool direct_recurrents_available
 }
 
 struct PaymentHoldsServiceTerms {
@@ -1582,11 +1581,7 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
-    4: optional DirectRecurrentsProvisionTerms  direct_recurrents
-}
-
-struct DirectRecurrentsProvisionTerms {
-    1: required bool token_required
+    4: optional bool token_required
 }
 
 union CashValueSelector {

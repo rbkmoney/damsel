@@ -42,12 +42,12 @@ union FinishStatus {
     1: Success success
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
     2: domain.Failure failure
-    /** Успешное завершение с получением токена для последующих взаимодействий. */
-    3: RecurrentTokenSuccess direct_recurrents_success
-
 }
 
-struct Success {}
+struct Success {
+    /** Токен для последующих взаимодействий. */
+    1: optional domain.Token token
+}
 
 /**
  * Требование прервать на определённое время сессию взаимодействия, с намерением продолжить
