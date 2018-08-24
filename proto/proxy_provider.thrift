@@ -195,6 +195,7 @@ struct InvoicePayment {
     6: required PaymentResource         payment_resource
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
+    8: optional domain.RecurrentIntention recurrent_intention
 }
 
 struct InvoicePaymentRefund {
