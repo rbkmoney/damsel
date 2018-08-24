@@ -1582,7 +1582,9 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
-    4: optional bool token_required
+    // TODO maybe selector? They probably can depend on currency.
+    4: optional bool                  token_required
+    5: optional LifetimeInterval      token_lifetime
 }
 
 union CashValueSelector {
