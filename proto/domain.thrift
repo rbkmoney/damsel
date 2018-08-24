@@ -154,10 +154,7 @@ struct InvoicePayment {
 
 struct InvoicePaymentPending   {}
 struct InvoicePaymentProcessed {}
-struct InvoicePaymentCaptured  {
-    1: optional string reason
-    2: optional Token recurrent_token
-}
+struct InvoicePaymentCaptured  { 1: optional string reason }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }

@@ -144,6 +144,7 @@ union InvoicePaymentChangePayload {
     2: InvoicePaymentSessionChange         invoice_payment_session_change
     7: InvoicePaymentRefundChange          invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+    11: InvoicePaymentRecTokenAcquired     invoice_payment_rec_token_acquired
 }
 
 /**
@@ -343,6 +344,13 @@ struct InvoicePaymentAdjustmentCreated {
  */
 struct InvoicePaymentAdjustmentStatusChanged {
     1: required domain.InvoicePaymentAdjustmentStatus status
+}
+
+/**
+ * Событие о полуечнии рекуррентного токена
+ */
+struct InvoicePaymentRecTokenAcquired {
+    1: required domain.Token token
 }
 
 /**
