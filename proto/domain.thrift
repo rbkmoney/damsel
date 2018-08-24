@@ -89,7 +89,6 @@ typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
 typedef string PaymentSessionID
-typedef string RecurrentSessionID
 typedef string Fingerprint
 typedef string IPAddress
 
@@ -281,6 +280,11 @@ struct ClientInfo {
 struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
+}
+
+struct RecurrentIntention {
+    1: optional PaymentRoute route
+    2: optional Token recurrent_token
 }
 
 /* Adjustments */
@@ -781,8 +785,6 @@ struct RecurrentPaytoolsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
 }
 
-struct RecurrentIntention {}
-
 /* Payouts service terms */
 
 struct PayoutsServiceTerms {
@@ -1278,7 +1280,6 @@ struct DisposablePaymentResource {
     1: required PaymentTool        payment_tool
     2: optional PaymentSessionID   payment_session_id
     3: required ClientInfo         client_info
-    4: optional RecurrentSessionID recurrent_session_id
 }
 
 typedef string Token
