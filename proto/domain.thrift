@@ -559,6 +559,15 @@ struct InternationalBankAccount {
     3: required string bank_address
 }
 
+struct USABankAccount {
+    1: required string account
+    2: required string account_holder
+    3: required string bic      // Business Identifier Code (ISO 9362)
+    4: optional string aba_rtn  // ABA Routing Transit Number
+    5: required string bank_name
+    6: optional string bank_address
+}
+
 union PrivateEntity {
     1: RussianPrivateEntity russian_private_entity
 }
@@ -582,6 +591,7 @@ struct PayoutTool {
 union PayoutToolInfo {
     1: RussianBankAccount russian_bank_account
     2: InternationalBankAccount international_bank_account
+    3: USABankAccount usa_bank_account
 }
 
 typedef base.ID ContractID
