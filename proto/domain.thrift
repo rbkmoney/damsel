@@ -1623,6 +1623,7 @@ struct Inspector {
     1: required string name
     2: required string description
     3: required Proxy proxy
+    4: optional RiskScore fallback_risk_score
 }
 
 union InspectorSelector {
