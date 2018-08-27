@@ -147,6 +147,7 @@ struct InvoicePayment {
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
+    18: optional RecurrentIntention recurrent_intention
     6:  optional InvoicePaymentContext context
 }
 
@@ -279,6 +280,11 @@ struct ClientInfo {
 struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
+}
+
+struct RecurrentIntention {
+    1: optional PaymentRoute route
+    2: optional Token recurrent_token
 }
 
 /* Adjustments */
@@ -1271,9 +1277,9 @@ union PaymentTool {
 }
 
 struct DisposablePaymentResource {
-    1: required PaymentTool      payment_tool
-    2: optional PaymentSessionID payment_session_id
-    3: required ClientInfo       client_info
+    1: required PaymentTool        payment_tool
+    2: optional PaymentSessionID   payment_session_id
+    3: required ClientInfo         client_info
 }
 
 typedef string Token
@@ -1576,6 +1582,9 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
+    // TODO replace with selector if necessary
+    4: optional bool                  token_required
+    5: optional TimeSpanSelector      token_lifetime
 }
 
 union CashValueSelector {
