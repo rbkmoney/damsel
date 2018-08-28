@@ -14,6 +14,7 @@ namespace erl domain
 struct Head {}
 
 typedef i64 Version
+typedef i32 Limit
 
 /**
  * Референс может указывать либо на конкретную
@@ -36,7 +37,7 @@ struct Snapshot {
 /**
  * Возможные операции над набором объектов.
  */
- 
+
 struct Commit {
     1: required list<Operation> ops
 }
@@ -126,7 +127,7 @@ exception ObsoleteCommitVersion {}
  * Интерфейс сервиса конфигурации предметной области.
  */
 service RepositoryClient {
-    
+
     /**
      * Возвращает объект из домена определенной или последней версии
      */
@@ -143,7 +144,7 @@ service Repository {
      */
     Version Commit (1: Version version, 2: Commit commit)
         throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: ObsoleteCommitVersion ex3);
-        
+
     /**
      * Получить снэпшот конкретной версии
      */
@@ -153,6 +154,10 @@ service Repository {
     /**
      * Получить новые коммиты следующие за указанной версией
      */
+    History PullRange (1: Version version, 2: Limit limit)
+        throws (1: VersionNotFound ex1)
+
+    // Depricated
     History Pull (1: Version version)
         throws (1: VersionNotFound ex1)
 
