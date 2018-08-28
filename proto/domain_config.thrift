@@ -157,7 +157,7 @@ service Repository {
     History PullRange (1: Version version, 2: Limit limit)
         throws (1: VersionNotFound ex1)
 
-    // Depricated
+    // Deprecated
     History Pull (1: Version version)
         throws (1: VersionNotFound ex1)
 
