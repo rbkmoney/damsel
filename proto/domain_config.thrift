@@ -154,7 +154,7 @@ service Repository {
     /**
      * Получить новые коммиты следующие за указанной версией
      */
-    History PullRange (1: Version version, 2: Limit limit)
+    History PullRange (1: Version after, 2: Limit limit)
         throws (1: VersionNotFound ex1)
 
     // Deprecated
