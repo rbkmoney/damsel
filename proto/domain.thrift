@@ -552,20 +552,33 @@ struct RussianBankAccount {
 }
 
 struct InternationalBankAccount {
-    4: required string iban     // International Bank Account Number (ISO 13616)
-    1: required string account_holder
-    5: required string bic      // Business Identifier Code (ISO 9362)
-    2: required string bank_name
-    3: required string bank_address
+
+    // common
+    6: optional string                   number
+    7: optional InternationalBankDetails bank
+
+    // sources
+    4: optional string iban           // International Bank Account Number (ISO 13616)
+
+    // deprecated
+    1: optional string account_holder // we have `InternationalLegalEntity.legal_name` for that purpose
+    5: optional string bic            // moved to `InternationalBankDetails`
+    2: optional string bank_name      // moved to `InternationalBankDetails`
+    3: optional string bank_address   // moved to `InternationalBankDetails`
+
 }
 
-struct USABankAccount {
-    1: required string account
-    2: required string account_holder
-    3: required string bic      // Business Identifier Code (ISO 9362)
-    4: optional string aba_rtn  // ABA Routing Transit Number
-    5: required string bank_name
-    6: optional string bank_address
+struct InternationalBankDetails {
+
+    // common
+    1: optional string    bic         // Business Identifier Code (ISO 9362)
+    2: optional Residence country
+    3: optional string    name
+    4: optional string    address
+
+    // sources
+    5: optional string    aba_rtn     // ABA Routing Transit Number
+
 }
 
 union PrivateEntity {
@@ -591,7 +604,6 @@ struct PayoutTool {
 union PayoutToolInfo {
     1: RussianBankAccount russian_bank_account
     2: InternationalBankAccount international_bank_account
-    3: USABankAccount usa_bank_account
 }
 
 typedef base.ID ContractID
