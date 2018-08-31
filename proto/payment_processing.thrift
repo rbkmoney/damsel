@@ -1281,6 +1281,7 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
+    2: domain.PayoutToolInfo info_modification
 }
 
 typedef list<PartyModification> PartyChangeset
