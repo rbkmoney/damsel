@@ -167,6 +167,7 @@
     'InternationalLegalEntity'/0,
     'RussianBankAccount'/0,
     'InternationalBankAccount'/0,
+    'InternationalBankDetails'/0,
     'PrivateEntity'/0,
     'RussianPrivateEntity'/0,
     'PayoutTool'/0,
@@ -883,6 +884,7 @@
     'InternationalLegalEntity' |
     'RussianBankAccount' |
     'InternationalBankAccount' |
+    'InternationalBankDetails' |
     'PrivateEntity' |
     'RussianPrivateEntity' |
     'PayoutTool' |
@@ -1304,6 +1306,9 @@
 
 %% struct 'InternationalBankAccount'
 -type 'InternationalBankAccount'() :: #'domain_InternationalBankAccount'{}.
+
+%% struct 'InternationalBankDetails'
+-type 'InternationalBankDetails'() :: #'domain_InternationalBankDetails'{}.
 
 %% union 'PrivateEntity'
 -type 'PrivateEntity'() ::
@@ -2135,6 +2140,7 @@ structs() ->
         'InternationalLegalEntity',
         'RussianBankAccount',
         'InternationalBankAccount',
+        'InternationalBankDetails',
         'PrivateEntity',
         'RussianPrivateEntity',
         'PayoutTool',
@@ -3288,12 +3294,23 @@ struct_info('RussianBankAccount') ->
 
 struct_info('InternationalBankAccount') ->
     {struct, struct, [
-    {1, required, string, 'account_holder', undefined},
-    {2, required, string, 'bank_name', undefined},
-    {3, required, string, 'bank_address', undefined},
-    {4, required, string, 'iban', undefined},
-    {5, required, string, 'bic', undefined},
-    {6, optional, string, 'local_bank_code', undefined}
+    {6, optional, string, 'number', undefined},
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
+    {4, optional, string, 'iban', undefined},
+    {1, optional, string, 'account_holder', undefined},
+    {5, optional, string, 'bic', undefined},
+    {2, optional, string, 'bank_name', undefined},
+    {3, optional, string, 'bank_address', undefined}
+]};
+
+struct_info('InternationalBankDetails') ->
+    {struct, struct, [
+    {1, optional, string, 'bic', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+    {3, optional, string, 'name', undefined},
+    {4, optional, string, 'address', undefined},
+    {5, optional, string, 'aba_rtn', undefined}
 ]};
 
 struct_info('PrivateEntity') ->
@@ -4559,6 +4576,9 @@ record_name('OperationTimeout') ->
 
     record_name('InternationalBankAccount') ->
     'domain_InternationalBankAccount';
+
+    record_name('InternationalBankDetails') ->
+    'domain_InternationalBankDetails';
 
     record_name('RussianPrivateEntity') ->
     'domain_RussianPrivateEntity';

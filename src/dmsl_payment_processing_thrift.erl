@@ -963,7 +963,8 @@
 
 %% union 'PayoutToolModification'
 -type 'PayoutToolModification'() ::
-    {'creation', 'PayoutToolParams'()}.
+    {'creation', 'PayoutToolParams'()} |
+    {'info_modification', dmsl_domain_thrift:'PayoutToolInfo'()}.
 
 %% struct 'ShopModificationUnit'
 -type 'ShopModificationUnit'() :: #'payproc_ShopModificationUnit'{}.
@@ -2459,7 +2460,8 @@ struct_info('PayoutToolModificationUnit') ->
 
 struct_info('PayoutToolModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined}
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info_modification', undefined}
 ]};
 
 struct_info('ShopModificationUnit') ->

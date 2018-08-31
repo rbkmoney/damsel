@@ -368,12 +368,23 @@
 
 %% struct 'InternationalBankAccount'
 -record('domain_InternationalBankAccount', {
-    'account_holder' :: binary(),
-    'bank_name' :: binary(),
-    'bank_address' :: binary(),
-    'iban' :: binary(),
-    'bic' :: binary(),
-    'local_bank_code' :: binary() | undefined
+    'number' :: binary() | undefined,
+    'bank' :: dmsl_domain_thrift:'InternationalBankDetails'() | undefined,
+    'correspondent_account' :: dmsl_domain_thrift:'InternationalBankAccount'() | undefined,
+    'iban' :: binary() | undefined,
+    'account_holder' :: binary() | undefined,
+    'bic' :: binary() | undefined,
+    'bank_name' :: binary() | undefined,
+    'bank_address' :: binary() | undefined
+}).
+
+%% struct 'InternationalBankDetails'
+-record('domain_InternationalBankDetails', {
+    'bic' :: binary() | undefined,
+    'country' :: dmsl_domain_thrift:'Residence'() | undefined,
+    'name' :: binary() | undefined,
+    'address' :: binary() | undefined,
+    'aba_rtn' :: binary() | undefined
 }).
 
 %% struct 'RussianPrivateEntity'
