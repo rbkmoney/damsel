@@ -556,6 +556,7 @@ struct InternationalBankAccount {
     // common
     6: optional string                   number
     7: optional InternationalBankDetails bank
+    8: optional InternationalBankAccount correspondent_account
 
     // sources
     4: optional string iban           // International Bank Account Number (ISO 13616)
