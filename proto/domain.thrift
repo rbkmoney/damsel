@@ -284,11 +284,16 @@ struct PaymentRoute {
 }
 
 struct RecurrentIntention {
-    1: optional RecurrentTokenSource token_source
+    1: required RecurrentTokenSource token_source
 }
 
 union RecurrentTokenSource {
-    1: InvoicePaymentID payment
+    1: PaymentRecurrentTokenSource payment
+}
+
+struct PaymentRecurrentTokenSource {
+    1: required InvoiceID invoice_id
+    2: required InvoicePaymentID payment_id
 }
 
 /* Adjustments */
