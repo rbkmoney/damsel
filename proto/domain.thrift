@@ -283,8 +283,7 @@ struct PaymentRoute {
 }
 
 struct RecurrentIntention {
-    1: optional PaymentRoute route
-    2: optional Token recurrent_token
+    1: optional Token recurrent_token
 }
 
 /* Adjustments */
