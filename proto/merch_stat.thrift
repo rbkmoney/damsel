@@ -27,6 +27,19 @@ struct StatPayment {
     13: optional geo_ip.LocationInfo location_info
     14: required InvoicePaymentFlow flow
     15: optional string short_id
+    16: optional bool is_recurring
+    17: optional RecurrentIntention recurrent_intention
+}
+
+struct RecurrentIntention {
+    1: required RecurrentTokenSource token_source
+}
+union RecurrentTokenSource {
+    1: PaymentRecurrentTokenSource payment
+}
+struct PaymentRecurrentTokenSource {
+    1: required domain.InvoiceID invoice_id
+    2: required domain.InvoicePaymentID payment_id
 }
 
 union Payer {
