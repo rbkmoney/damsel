@@ -147,7 +147,8 @@ struct InvoicePayment {
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
-    18: optional RecurrentIntention recurrent_intention
+    18: optional bool is_recurring
+    19: optional RecurrentIntention recurrent_intention
     6:  optional InvoicePaymentContext context
 }
 
@@ -283,8 +284,16 @@ struct PaymentRoute {
 }
 
 struct RecurrentIntention {
-    1: optional PaymentRoute route
-    2: optional Token recurrent_token
+    1: required RecurrentTokenSource token_source
+}
+
+union RecurrentTokenSource {
+    1: PaymentRecurrentTokenSource payment
+}
+
+struct PaymentRecurrentTokenSource {
+    1: required InvoiceID invoice_id
+    2: required InvoicePaymentID payment_id
 }
 
 /* Adjustments */
