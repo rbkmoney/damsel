@@ -605,7 +605,9 @@ service Invoicing {
             5: base.InvalidRequest ex5,
             6: InvalidPartyStatus ex6,
             7: InvalidShopStatus ex7,
-            8: InvalidContractStatus ex8
+            8: InvalidContractStatus ex8,
+            9: InvoicePaymentNotFound ex9,
+            10: OperationNotPermitted ex10
         )
 
     InvoicePayment GetPayment (
