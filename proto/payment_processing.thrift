@@ -511,6 +511,9 @@ exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
 exception InsufficientAccountBalance {}
+exception InvalidRecurrentIntention {
+    1: required domain.Failure failure
+}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -606,7 +609,7 @@ service Invoicing {
             6: InvalidPartyStatus ex6,
             7: InvalidShopStatus ex7,
             8: InvalidContractStatus ex8,
-            9: InvoicePaymentNotFound ex9,
+            9: InvalidRecurrentIntention ex9,
             10: OperationNotPermitted ex10
         )
 
