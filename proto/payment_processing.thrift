@@ -512,7 +512,7 @@ exception EventNotFound {}
 exception OperationNotPermitted {}
 exception InsufficientAccountBalance {}
 exception InvalidRecurrentIntention {
-    1: required domain.Failure failure
+    1: optional string details
 }
 
 exception InvoicePaymentPending {
