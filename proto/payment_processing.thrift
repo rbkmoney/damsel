@@ -419,8 +419,8 @@ struct InvoiceTemplateUpdateParams {
 struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
-    3: optional bool is_recurring
-    4: optional domain.RecurrentIntention recurrent_intention
+    3: optional bool make_recurrent
+    4: optional domain.RecurrentSource recurrent_source
 }
 
 union PayerParams {

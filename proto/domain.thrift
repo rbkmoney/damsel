@@ -147,8 +147,8 @@ struct InvoicePayment {
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
-    18: optional RecurrentTokenSource generated_recurrent_token_source
-    19: optional RecurrentIntention recurrent_intention
+    18: optional bool make_recurrent
+    19: optional RecurrentSource recurrent_source
     6:  optional InvoicePaymentContext context
 }
 
@@ -283,16 +283,7 @@ struct PaymentRoute {
     2: required TerminalRef terminal
 }
 
-struct RecurrentIntention {
-    1: required bool generate_new_token
-    2: optional RecurrentTokenSource token_source
-}
-
-union RecurrentTokenSource {
-    1: PaymentRecurrentTokenSource payment
-}
-
-struct PaymentRecurrentTokenSource {
+struct RecurrentSource {
     1: required InvoiceID invoice_id
     2: required InvoicePaymentID payment_id
 }
