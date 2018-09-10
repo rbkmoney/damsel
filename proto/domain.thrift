@@ -147,7 +147,7 @@ struct InvoicePayment {
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
-    18: optional RecurrentTokenSource generated_recurrent_token
+    18: optional RecurrentTokenSource generated_recurrent_token_source
     19: optional RecurrentIntention recurrent_intention
     6:  optional InvoicePaymentContext context
 }
