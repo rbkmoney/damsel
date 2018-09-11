@@ -32,8 +32,8 @@ struct StatPayment {
 }
 
 struct RecurrentParentPayment {
-    1: required InvoiceID invoice_id
-    2: required InvoicePaymentID payment_id
+    1: required domain.InvoiceID invoice_id
+    2: required domain.InvoicePaymentID payment_id
 }
 
 union Payer {
