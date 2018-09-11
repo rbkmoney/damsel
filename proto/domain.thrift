@@ -1280,7 +1280,7 @@ union PaymentTool {
 struct DisposablePaymentResource {
     1: required PaymentTool        payment_tool
     2: optional PaymentSessionID   payment_session_id
-    3: required ClientInfo         client_info
+    3: optional ClientInfo         client_info
 }
 
 typedef string Token
