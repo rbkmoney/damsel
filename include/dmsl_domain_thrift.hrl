@@ -372,10 +372,7 @@
     'bank' :: dmsl_domain_thrift:'InternationalBankDetails'() | undefined,
     'correspondent_account' :: dmsl_domain_thrift:'InternationalBankAccount'() | undefined,
     'iban' :: binary() | undefined,
-    'account_holder' :: binary() | undefined,
-    'bic' :: binary() | undefined,
-    'bank_name' :: binary() | undefined,
-    'bank_address' :: binary() | undefined
+    'account_holder' :: binary() | undefined
 }).
 
 %% struct 'InternationalBankDetails'
