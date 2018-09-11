@@ -511,7 +511,7 @@ exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
 exception InsufficientAccountBalance {}
-exception InvalidRecurrentIntention {
+exception InvalidRecurrentSource {
     1: optional string details
 }
 
@@ -609,7 +609,7 @@ service Invoicing {
             6: InvalidPartyStatus ex6,
             7: InvalidShopStatus ex7,
             8: InvalidContractStatus ex8,
-            9: InvalidRecurrentIntention ex9,
+            9: InvalidRecurrentSource ex9,
             10: OperationNotPermitted ex10
         )
 
