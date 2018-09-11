@@ -148,7 +148,7 @@ struct InvoicePayment {
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
     18: optional bool make_recurrent
-    19: optional RecurrentParrentPayment recurrent_parrent
+    19: optional RecurrentParentPayment recurrent_parent
     6:  optional InvoicePaymentContext context
 }
 
@@ -283,7 +283,7 @@ struct PaymentRoute {
     2: required TerminalRef terminal
 }
 
-struct RecurrentParrentPayment {
+struct RecurrentParentPayment {
     1: required InvoiceID invoice_id
     2: required InvoicePaymentID payment_id
 }

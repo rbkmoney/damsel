@@ -420,7 +420,7 @@ struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
-    4: optional domain.RecurrentParrentPayment recurrent_parrent
+    4: optional domain.RecurrentParentPayment recurrent_parent
 }
 
 union PayerParams {
@@ -511,7 +511,7 @@ exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
 exception InsufficientAccountBalance {}
-exception InvalidRecurrentParrentPayment {
+exception InvalidRecurrentParentPayment {
     1: optional string details
 }
 
@@ -609,7 +609,7 @@ service Invoicing {
             6: InvalidPartyStatus ex6,
             7: InvalidShopStatus ex7,
             8: InvalidContractStatus ex8,
-            9: InvalidRecurrentParrentPayment ex9,
+            9: InvalidRecurrentParentPayment ex9,
             10: OperationNotPermitted ex10
         )
 
