@@ -1583,9 +1583,9 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
-    // TODO replace with selector if necessary
-    4: optional bool                  token_required
-    5: optional TimeSpanSelector      token_lifetime
+    // Ипользуется в рекуррентах по первому платежу.
+    // Допустимое время с последнего платежа в серии платежей.
+    4: optional TimeSpanSelector      parent_lifetime
 }
 
 union CashValueSelector {
