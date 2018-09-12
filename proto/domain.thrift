@@ -1583,6 +1583,8 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
+    // Ипользуется в рекуррентах по первому платежу.
+    // Допустимое время с последнего платежа в серии платежей.
     4: optional TimeSpanSelector      parent_lifetime
 }
 
