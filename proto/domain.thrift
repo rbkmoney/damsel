@@ -565,10 +565,6 @@ struct InternationalBankAccount {
 
     // deprecated
     1: optional string account_holder // we have `InternationalLegalEntity.legal_name` for that purpose
-    5: optional string bic            // moved to `InternationalBankDetails`
-    2: optional string bank_name      // moved to `InternationalBankDetails`
-    3: optional string bank_address   // moved to `InternationalBankDetails`
-
 }
 
 struct InternationalBankDetails {

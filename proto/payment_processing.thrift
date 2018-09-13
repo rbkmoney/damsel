@@ -1398,6 +1398,7 @@ union ContractEffect {
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
     4: domain.PayoutTool payout_tool_created
+    8: PayoutToolInfoChanged payout_tool_info_changed
     5: domain.LegalAgreement legal_agreement_bound
     6: domain.ReportPreferences report_preferences_changed
     7: ContractorID contractor_changed
@@ -1444,6 +1445,11 @@ union ContractorEffect {
 
 struct ContractorIdentityDocumentsChanged {
     1: required list<domain.IdentityDocumentToken> identity_documents
+}
+
+struct PayoutToolInfoChanged {
+    1: required domain.PayoutToolID payout_tool_id
+    2: required domain.PayoutToolInfo info
 }
 
 struct WalletEffectUnit {
