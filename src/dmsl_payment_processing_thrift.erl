@@ -192,6 +192,7 @@
     'ContractorEffectUnit'/0,
     'ContractorEffect'/0,
     'ContractorIdentityDocumentsChanged'/0,
+    'PayoutToolInfoChanged'/0,
     'WalletEffectUnit'/0,
     'WalletEffect'/0,
     'ShopProxyChanged'/0,
@@ -470,6 +471,7 @@
     'ContractorEffectUnit' |
     'ContractorEffect' |
     'ContractorIdentityDocumentsChanged' |
+    'PayoutToolInfoChanged' |
     'WalletEffectUnit' |
     'WalletEffect' |
     'ShopProxyChanged' |
@@ -1042,6 +1044,7 @@
     {'status_changed', dmsl_domain_thrift:'ContractStatus'()} |
     {'adjustment_created', dmsl_domain_thrift:'ContractAdjustment'()} |
     {'payout_tool_created', dmsl_domain_thrift:'PayoutTool'()} |
+    {'payout_tool_info_changed', 'PayoutToolInfoChanged'()} |
     {'legal_agreement_bound', dmsl_domain_thrift:'LegalAgreement'()} |
     {'report_preferences_changed', dmsl_domain_thrift:'ReportPreferences'()} |
     {'contractor_changed', 'ContractorID'()}.
@@ -1078,6 +1081,9 @@
 
 %% struct 'ContractorIdentityDocumentsChanged'
 -type 'ContractorIdentityDocumentsChanged'() :: #'payproc_ContractorIdentityDocumentsChanged'{}.
+
+%% struct 'PayoutToolInfoChanged'
+-type 'PayoutToolInfoChanged'() :: #'payproc_PayoutToolInfoChanged'{}.
 
 %% struct 'WalletEffectUnit'
 -type 'WalletEffectUnit'() :: #'payproc_WalletEffectUnit'{}.
@@ -1671,6 +1677,7 @@ structs() ->
         'ContractorEffectUnit',
         'ContractorEffect',
         'ContractorIdentityDocumentsChanged',
+        'PayoutToolInfoChanged',
         'WalletEffectUnit',
         'WalletEffect',
         'ShopProxyChanged',
@@ -2578,6 +2585,7 @@ struct_info('ContractEffect') ->
     {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
+    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolInfoChanged'}}, 'payout_tool_info_changed', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
     {7, optional, string, 'contractor_changed', undefined}
@@ -2629,6 +2637,12 @@ struct_info('ContractorEffect') ->
 struct_info('ContractorIdentityDocumentsChanged') ->
     {struct, struct, [
     {1, required, {list, string}, 'identity_documents', undefined}
+]};
+
+struct_info('PayoutToolInfoChanged') ->
+    {struct, struct, [
+    {1, required, string, 'payout_tool_id', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info', undefined}
 ]};
 
 struct_info('WalletEffectUnit') ->
@@ -3332,6 +3346,9 @@ record_name('InternalUser') ->
 
     record_name('ContractorIdentityDocumentsChanged') ->
     'payproc_ContractorIdentityDocumentsChanged';
+
+    record_name('PayoutToolInfoChanged') ->
+    'payproc_PayoutToolInfoChanged';
 
     record_name('WalletEffectUnit') ->
     'payproc_WalletEffectUnit';

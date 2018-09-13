@@ -3298,10 +3298,7 @@ struct_info('InternationalBankAccount') ->
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
     {4, optional, string, 'iban', undefined},
-    {1, optional, string, 'account_holder', undefined},
-    {5, optional, string, 'bic', undefined},
-    {2, optional, string, 'bank_name', undefined},
-    {3, optional, string, 'bank_address', undefined}
+    {1, optional, string, 'account_holder', undefined}
 ]};
 
 struct_info('InternationalBankDetails') ->

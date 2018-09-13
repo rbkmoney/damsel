@@ -597,6 +597,12 @@
     'identity_documents' :: [dmsl_domain_thrift:'IdentityDocumentToken'()]
 }).
 
+%% struct 'PayoutToolInfoChanged'
+-record('payproc_PayoutToolInfoChanged', {
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
+    'info' :: dmsl_domain_thrift:'PayoutToolInfo'()
+}).
+
 %% struct 'WalletEffectUnit'
 -record('payproc_WalletEffectUnit', {
     'id' :: dmsl_payment_processing_thrift:'WalletID'(),
