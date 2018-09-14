@@ -420,12 +420,12 @@ struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
-    4: optional domain.RecurrentParentPayment recurrent_parent
 }
 
 union PayerParams {
     1: PaymentResourcePayerParams payment_resource
     2: CustomerPayerParams        customer
+    3: RecurrentPayerParams       recurrent
 }
 
 struct PaymentResourcePayerParams {
@@ -435,6 +435,12 @@ struct PaymentResourcePayerParams {
 
 struct CustomerPayerParams {
     1: required domain.CustomerID customer_id
+}
+
+struct RecurrentPayer {
+    1: required PaymentTool            payment_tool
+    2: required RecurrentParentPayment recurrent_parent
+    2: required ContactInfo            contact_info
 }
 
 union InvoicePaymentParamsFlow {

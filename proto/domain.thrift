@@ -148,7 +148,6 @@ struct InvoicePayment {
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
     18: optional bool make_recurrent
-    19: optional RecurrentParentPayment recurrent_parent
     6:  optional InvoicePaymentContext context
 }
 
@@ -258,6 +257,7 @@ union TargetInvoicePaymentStatus {
 union Payer {
     1: PaymentResourcePayer payment_resource
     2: CustomerPayer        customer
+    3: RecurrentPayer       recurrent
 }
 
 struct PaymentResourcePayer {
@@ -271,6 +271,12 @@ struct CustomerPayer {
     3: required RecurrentPaymentToolID rec_payment_tool_id
     4: required PaymentTool            payment_tool
     5: required ContactInfo            contact_info
+}
+
+struct RecurrentPayer {
+    1: required PaymentTool            payment_tool
+    2: required RecurrentParentPayment recurrent_parent
+    2: required ContactInfo            contact_info
 }
 
 struct ClientInfo {
