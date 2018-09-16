@@ -131,12 +131,19 @@ struct RussianBankAccount {
 }
 
 struct InternationalBankAccount {
-    1: required string account_holder
-    2: required string bank_name
-    3: required string bank_address
-    4: required string iban
-    5: required string bic
-    6: optional string local_bank_code
+    1: optional string                   number
+    2: optional InternationalBankDetails bank
+    3: optional InternationalBankAccount correspondent_account
+    4: optional string iban           // International Bank Account Number (ISO 13616)
+    5: optional string account_holder
+}
+
+struct InternationalBankDetails {
+    1: optional string           bic         // Business Identifier Code (ISO 9362)
+    2: optional domain.Residence country
+    3: optional string           name
+    4: optional string           address
+    5: optional string           aba_rtn     // ABA Routing Transit Number
 }
 
 /**

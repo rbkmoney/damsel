@@ -111,12 +111,20 @@
 
 %% struct 'InternationalBankAccount'
 -record('merchstat_InternationalBankAccount', {
-    'account_holder' :: binary(),
-    'bank_name' :: binary(),
-    'bank_address' :: binary(),
-    'iban' :: binary(),
-    'bic' :: binary(),
-    'local_bank_code' :: binary() | undefined
+    'number' :: binary() | undefined,
+    'bank' :: dmsl_merch_stat_thrift:'InternationalBankDetails'() | undefined,
+    'correspondent_account' :: dmsl_merch_stat_thrift:'InternationalBankAccount'() | undefined,
+    'iban' :: binary() | undefined,
+    'account_holder' :: binary() | undefined
+}).
+
+%% struct 'InternationalBankDetails'
+-record('merchstat_InternationalBankDetails', {
+    'bic' :: binary() | undefined,
+    'country' :: atom() | undefined,
+    'name' :: binary() | undefined,
+    'address' :: binary() | undefined,
+    'aba_rtn' :: binary() | undefined
 }).
 
 %% struct 'StatInvoice'

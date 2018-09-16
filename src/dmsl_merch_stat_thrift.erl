@@ -67,6 +67,7 @@
     'DigitalWallet'/0,
     'RussianBankAccount'/0,
     'InternationalBankAccount'/0,
+    'InternationalBankDetails'/0,
     'StatInvoice'/0,
     'InvoiceUnpaid'/0,
     'InvoicePaid'/0,
@@ -170,6 +171,7 @@
     'DigitalWallet' |
     'RussianBankAccount' |
     'InternationalBankAccount' |
+    'InternationalBankDetails' |
     'StatInvoice' |
     'InvoiceUnpaid' |
     'InvoicePaid' |
@@ -281,6 +283,9 @@
 
 %% struct 'InternationalBankAccount'
 -type 'InternationalBankAccount'() :: #'merchstat_InternationalBankAccount'{}.
+
+%% struct 'InternationalBankDetails'
+-type 'InternationalBankDetails'() :: #'merchstat_InternationalBankDetails'{}.
 
 %% struct 'StatInvoice'
 -type 'StatInvoice'() :: #'merchstat_StatInvoice'{}.
@@ -483,6 +488,7 @@ structs() ->
         'DigitalWallet',
         'RussianBankAccount',
         'InternationalBankAccount',
+        'InternationalBankDetails',
         'StatInvoice',
         'InvoiceUnpaid',
         'InvoicePaid',
@@ -710,12 +716,20 @@ struct_info('RussianBankAccount') ->
 
 struct_info('InternationalBankAccount') ->
     {struct, struct, [
-    {1, required, string, 'account_holder', undefined},
-    {2, required, string, 'bank_name', undefined},
-    {3, required, string, 'bank_address', undefined},
-    {4, required, string, 'iban', undefined},
-    {5, required, string, 'bic', undefined},
-    {6, optional, string, 'local_bank_code', undefined}
+    {1, optional, string, 'number', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
+    {4, optional, string, 'iban', undefined},
+    {5, optional, string, 'account_holder', undefined}
+]};
+
+struct_info('InternationalBankDetails') ->
+    {struct, struct, [
+    {1, optional, string, 'bic', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+    {3, optional, string, 'name', undefined},
+    {4, optional, string, 'address', undefined},
+    {5, optional, string, 'aba_rtn', undefined}
 ]};
 
 struct_info('StatInvoice') ->
@@ -963,6 +977,9 @@ record_name('PaymentResourcePayer') ->
 
     record_name('InternationalBankAccount') ->
     'merchstat_InternationalBankAccount';
+
+    record_name('InternationalBankDetails') ->
+    'merchstat_InternationalBankDetails';
 
     record_name('StatInvoice') ->
     'merchstat_StatInvoice';
