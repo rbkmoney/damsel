@@ -335,7 +335,8 @@
 
 %% struct 'CustomerBindingStarted'
 -record('payproc_CustomerBindingStarted', {
-    'binding' :: dmsl_payment_processing_thrift:'CustomerBinding'()
+    'binding' :: dmsl_payment_processing_thrift:'CustomerBinding'(),
+    'timestamp' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'CustomerBindingStatusChanged'

@@ -2263,7 +2263,8 @@ struct_info('CustomerBindingChangePayload') ->
 
 struct_info('CustomerBindingStarted') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}, 'binding', undefined}
+    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}, 'binding', undefined},
+    {2, optional, string, 'timestamp', undefined}
 ]};
 
 struct_info('CustomerBindingStatusChanged') ->

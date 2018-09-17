@@ -952,6 +952,7 @@ union CustomerBindingChangePayload {
  */
 struct CustomerBindingStarted {
     1: required CustomerBinding binding
+    2: optional base.Timestamp  timestamp
 }
 
 /**
