@@ -291,6 +291,7 @@ struct InvoicePaymentAdjustment {
     5: required string reason
     6: required FinalCashFlow new_cash_flow
     7: required FinalCashFlow old_cash_flow_inverse
+    8: optional PartyRevision party_revision
 }
 
 struct InvoicePaymentAdjustmentPending   {}
@@ -330,6 +331,7 @@ struct InvoicePaymentRefund {
     2: required InvoicePaymentRefundStatus status
     3: required base.Timestamp created_at
     4: required DataRevision domain_revision
+    7: optional PartyRevision party_revision
     6: optional Cash cash
     5: optional string reason
 }
