@@ -189,7 +189,8 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'reason' :: binary(),
     'new_cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'old_cash_flow_inverse' :: dmsl_domain_thrift:'FinalCashFlow'()
+    'old_cash_flow_inverse' :: dmsl_domain_thrift:'FinalCashFlow'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentPending'
@@ -220,6 +221,7 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentRefundStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'reason' :: binary() | undefined
 }).

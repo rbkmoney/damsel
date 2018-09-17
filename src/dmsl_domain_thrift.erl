@@ -3065,7 +3065,8 @@ struct_info('InvoicePaymentAdjustment') ->
     {4, required, i64, 'domain_revision', undefined},
     {5, required, string, 'reason', undefined},
     {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'new_cash_flow', undefined},
-    {7, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'old_cash_flow_inverse', undefined}
+    {7, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'old_cash_flow_inverse', undefined},
+    {8, optional, i64, 'party_revision', undefined}
 ]};
 
 struct_info('InvoicePaymentAdjustmentPending') ->
@@ -3109,6 +3110,7 @@ struct_info('InvoicePaymentRefund') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
     {4, required, i64, 'domain_revision', undefined},
+    {7, optional, i64, 'party_revision', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {5, optional, string, 'reason', undefined}
 ]};

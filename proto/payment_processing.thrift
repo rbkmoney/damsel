@@ -1035,6 +1035,7 @@ struct RecurrentPaymentTool {
     1:  required RecurrentPaymentToolID     id
     2:  required ShopID                     shop_id
     3:  required PartyID                    party_id
+    11: optional PartyRevision              party_revision
     4:  required domain.DataRevision        domain_revision
     6:  required RecurrentPaymentToolStatus status
     7:  required base.Timestamp             created_at
@@ -1045,6 +1046,7 @@ struct RecurrentPaymentTool {
 
 struct RecurrentPaymentToolParams {
     1: required PartyID                   party_id
+    4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
     3: required DisposablePaymentResource payment_resource
 }
@@ -1174,6 +1176,7 @@ service RecurrentPaymentToolEventSink {
 // Types
 
 typedef domain.PartyID PartyID
+typedef domain.PartyRevision PartyRevision
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
 typedef domain.ContractorID ContractorID

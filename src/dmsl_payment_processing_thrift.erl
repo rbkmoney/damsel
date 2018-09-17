@@ -43,6 +43,7 @@
     'RecurrentPaymentToolID'/0,
     'RecurrentPaymentToolEvents'/0,
     'PartyID'/0,
+    'PartyRevision'/0,
     'ShopID'/0,
     'ContractID'/0,
     'ContractorID'/0,
@@ -291,6 +292,7 @@
     'RecurrentPaymentToolID' |
     'RecurrentPaymentToolEvents' |
     'PartyID' |
+    'PartyRevision' |
     'ShopID' |
     'ContractID' |
     'ContractorID' |
@@ -314,6 +316,7 @@
 -type 'RecurrentPaymentToolID'() :: dmsl_domain_thrift:'RecurrentPaymentToolID'().
 -type 'RecurrentPaymentToolEvents'() :: ['RecurrentPaymentToolEvent'()].
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
+-type 'PartyRevision'() :: dmsl_domain_thrift:'PartyRevision'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
 -type 'ContractID'() :: dmsl_domain_thrift:'ContractID'().
 -type 'ContractorID'() :: dmsl_domain_thrift:'ContractorID'().
@@ -1519,6 +1522,7 @@ typedefs() ->
         'RecurrentPaymentToolID',
         'RecurrentPaymentToolEvents',
         'PartyID',
+        'PartyRevision',
         'ShopID',
         'ContractID',
         'ContractorID',
@@ -1761,6 +1765,9 @@ typedef_info('RecurrentPaymentToolEvents') ->
 
 typedef_info('PartyID') ->
     string;
+
+typedef_info('PartyRevision') ->
+    i64;
 
 typedef_info('ShopID') ->
     string;
@@ -2274,6 +2281,7 @@ struct_info('RecurrentPaymentTool') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'shop_id', undefined},
     {3, required, string, 'party_id', undefined},
+    {11, optional, i64, 'party_revision', undefined},
     {4, required, i64, 'domain_revision', undefined},
     {6, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
     {7, required, string, 'created_at', undefined},
@@ -2285,6 +2293,7 @@ struct_info('RecurrentPaymentTool') ->
 struct_info('RecurrentPaymentToolParams') ->
     {struct, struct, [
     {1, required, string, 'party_id', undefined},
+    {4, optional, i64, 'party_revision', undefined},
     {2, required, string, 'shop_id', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
 ]};

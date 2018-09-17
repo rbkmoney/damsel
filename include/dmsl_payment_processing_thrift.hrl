@@ -353,6 +353,7 @@
     'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
@@ -364,6 +365,7 @@
 %% struct 'RecurrentPaymentToolParams'
 -record('payproc_RecurrentPaymentToolParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
