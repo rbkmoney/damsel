@@ -972,6 +972,7 @@ union CustomerBindingChangePayload {
  */
 struct CustomerBindingStarted {
     1: required CustomerBinding binding
+    2: optional base.Timestamp  timestamp
 }
 
 /**
@@ -1055,6 +1056,7 @@ struct RecurrentPaymentTool {
     1:  required RecurrentPaymentToolID     id
     2:  required ShopID                     shop_id
     3:  required PartyID                    party_id
+    11: optional PartyRevision              party_revision
     4:  required domain.DataRevision        domain_revision
     6:  required RecurrentPaymentToolStatus status
     7:  required base.Timestamp             created_at
@@ -1065,6 +1067,7 @@ struct RecurrentPaymentTool {
 
 struct RecurrentPaymentToolParams {
     1: required PartyID                   party_id
+    4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
     3: required DisposablePaymentResource payment_resource
 }
@@ -1194,6 +1197,7 @@ service RecurrentPaymentToolEventSink {
 // Types
 
 typedef domain.PartyID PartyID
+typedef domain.PartyRevision PartyRevision
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
 typedef domain.ContractorID ContractorID
@@ -1301,6 +1305,7 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
+    2: domain.PayoutToolInfo info_modification
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -1414,6 +1419,7 @@ union ContractEffect {
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
     4: domain.PayoutTool payout_tool_created
+    8: PayoutToolInfoChanged payout_tool_info_changed
     5: domain.LegalAgreement legal_agreement_bound
     6: domain.ReportPreferences report_preferences_changed
     7: ContractorID contractor_changed
@@ -1460,6 +1466,11 @@ union ContractorEffect {
 
 struct ContractorIdentityDocumentsChanged {
     1: required list<domain.IdentityDocumentToken> identity_documents
+}
+
+struct PayoutToolInfoChanged {
+    1: required domain.PayoutToolID payout_tool_id
+    2: required domain.PayoutToolInfo info
 }
 
 struct WalletEffectUnit {
