@@ -1669,6 +1669,9 @@ service PartyManagement {
     domain.Party Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
+    PartyRevision GetRevision (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
     domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: PartyRevisionParam revision)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyRevision ex3)
 
