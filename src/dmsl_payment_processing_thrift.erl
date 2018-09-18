@@ -1441,6 +1441,7 @@
 -type 'PartyManagement_service_functions'() ::
     'Create' |
     'Get' |
+    'GetRevision' |
     'Checkout' |
     'Suspend' |
     'Activate' |
@@ -3630,6 +3631,7 @@ functions('PartyManagement') ->
     [
         'Create',
         'Get',
+        'GetRevision',
         'Checkout',
         'Suspend',
         'Activate',
@@ -4226,6 +4228,18 @@ function_info('PartyManagement', 'Get', params_type) ->
 function_info('PartyManagement', 'Get', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'Party'}};
     function_info('PartyManagement', 'Get', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
+    ]};
+function_info('PartyManagement', 'GetRevision', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined}
+]};
+function_info('PartyManagement', 'GetRevision', reply_type) ->
+        i64;
+    function_info('PartyManagement', 'GetRevision', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
