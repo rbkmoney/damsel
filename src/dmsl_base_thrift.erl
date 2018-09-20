@@ -33,7 +33,6 @@
 
 -export_type([
     'ID'/0,
-    'Namespace'/0,
     'EventID'/0,
     'Opaque'/0,
     'Timestamp'/0,
@@ -74,7 +73,6 @@
 %%
 -type typedef_name() ::
     'ID' |
-    'Namespace' |
     'EventID' |
     'Opaque' |
     'Timestamp' |
@@ -86,7 +84,6 @@
     'Tag'.
 
 -type 'ID'() :: binary().
--type 'Namespace'() :: binary().
 -type 'EventID'() :: integer().
 -type 'Opaque'() :: binary().
 -type 'Timestamp'() :: binary().
@@ -246,7 +243,6 @@
 typedefs() ->
     [
         'ID',
-        'Namespace',
         'EventID',
         'Opaque',
         'Timestamp',
@@ -298,9 +294,6 @@ namespace() ->
 -spec typedef_info(typedef_name()) -> field_type() | no_return().
 
 typedef_info('ID') ->
-    string;
-
-typedef_info('Namespace') ->
     string;
 
 typedef_info('EventID') ->
