@@ -165,6 +165,11 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentStatus'()
 }).
 
+%% struct 'InvoicePaymentRecTokenAcquired'
+-record('payproc_InvoicePaymentRecTokenAcquired', {
+    'token' :: dmsl_domain_thrift:'Token'()
+}).
+
 %% struct 'EventRange'
 -record('payproc_EventRange', {
     'after' :: dmsl_base_thrift:'EventID'() | undefined,
@@ -211,7 +216,8 @@
 %% struct 'InvoicePaymentParams'
 -record('payproc_InvoicePaymentParams', {
     'payer' :: dmsl_payment_processing_thrift:'PayerParams'(),
-    'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'()
+    'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'(),
+    'make_recurrent' :: boolean() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'
@@ -223,6 +229,12 @@
 %% struct 'CustomerPayerParams'
 -record('payproc_CustomerPayerParams', {
     'customer_id' :: dmsl_domain_thrift:'CustomerID'()
+}).
+
+%% struct 'RecurrentPayerParams'
+-record('payproc_RecurrentPayerParams', {
+    'recurrent_parent' :: dmsl_domain_thrift:'RecurrentParentPayment'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
 }).
 
 %% struct 'InvoicePaymentParamsFlowInstant'
@@ -794,6 +806,11 @@
 
 %% exception 'InsufficientAccountBalance'
 -record('payproc_InsufficientAccountBalance', {}).
+
+%% exception 'InvalidRecurrentParentPayment'
+-record('payproc_InvalidRecurrentParentPayment', {
+    'details' :: binary() | undefined
+}).
 
 %% exception 'InvoicePaymentPending'
 -record('payproc_InvoicePaymentPending', {

@@ -130,8 +130,10 @@
     'Payer'/0,
     'PaymentResourcePayer'/0,
     'CustomerPayer'/0,
+    'RecurrentPayer'/0,
     'ClientInfo'/0,
     'PaymentRoute'/0,
+    'RecurrentParentPayment'/0,
     'InvoicePaymentAdjustment'/0,
     'InvoicePaymentAdjustmentPending'/0,
     'InvoicePaymentAdjustmentCaptured'/0,
@@ -847,8 +849,10 @@
     'Payer' |
     'PaymentResourcePayer' |
     'CustomerPayer' |
+    'RecurrentPayer' |
     'ClientInfo' |
     'PaymentRoute' |
+    'RecurrentParentPayment' |
     'InvoicePaymentAdjustment' |
     'InvoicePaymentAdjustmentPending' |
     'InvoicePaymentAdjustmentCaptured' |
@@ -1170,7 +1174,8 @@
 %% union 'Payer'
 -type 'Payer'() ::
     {'payment_resource', 'PaymentResourcePayer'()} |
-    {'customer', 'CustomerPayer'()}.
+    {'customer', 'CustomerPayer'()} |
+    {'recurrent', 'RecurrentPayer'()}.
 
 %% struct 'PaymentResourcePayer'
 -type 'PaymentResourcePayer'() :: #'domain_PaymentResourcePayer'{}.
@@ -1178,11 +1183,17 @@
 %% struct 'CustomerPayer'
 -type 'CustomerPayer'() :: #'domain_CustomerPayer'{}.
 
+%% struct 'RecurrentPayer'
+-type 'RecurrentPayer'() :: #'domain_RecurrentPayer'{}.
+
 %% struct 'ClientInfo'
 -type 'ClientInfo'() :: #'domain_ClientInfo'{}.
 
 %% struct 'PaymentRoute'
 -type 'PaymentRoute'() :: #'domain_PaymentRoute'{}.
+
+%% struct 'RecurrentParentPayment'
+-type 'RecurrentParentPayment'() :: #'domain_RecurrentParentPayment'{}.
 
 %% struct 'InvoicePaymentAdjustment'
 -type 'InvoicePaymentAdjustment'() :: #'domain_InvoicePaymentAdjustment'{}.
@@ -2103,8 +2114,10 @@ structs() ->
         'Payer',
         'PaymentResourcePayer',
         'CustomerPayer',
+        'RecurrentPayer',
         'ClientInfo',
         'PaymentRoute',
+        'RecurrentParentPayment',
         'InvoicePaymentAdjustment',
         'InvoicePaymentAdjustmentPending',
         'InvoicePaymentAdjustmentCaptured',
@@ -2944,6 +2957,7 @@ struct_info('InvoicePayment') ->
     {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
+    {18, optional, bool, 'make_recurrent', undefined},
     {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 
@@ -3027,7 +3041,8 @@ struct_info('TargetInvoicePaymentStatus') ->
 struct_info('Payer') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CustomerPayer'}}, 'customer', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CustomerPayer'}}, 'customer', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
 ]};
 
 struct_info('PaymentResourcePayer') ->
@@ -3045,6 +3060,13 @@ struct_info('CustomerPayer') ->
     {5, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
 ]};
 
+struct_info('RecurrentPayer') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+]};
+
 struct_info('ClientInfo') ->
     {struct, struct, [
     {1, optional, string, 'ip_address', undefined},
@@ -3055,6 +3077,12 @@ struct_info('PaymentRoute') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
     {2, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined}
+]};
+
+struct_info('RecurrentParentPayment') ->
+    {struct, struct, [
+    {1, required, string, 'invoice_id', undefined},
+    {2, required, string, 'payment_id', undefined}
 ]};
 
 struct_info('InvoicePaymentAdjustment') ->
@@ -3736,7 +3764,7 @@ struct_info('DisposablePaymentResource') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
     {2, optional, string, 'payment_session_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined}
 ]};
 
 struct_info('BankCard') ->
@@ -4489,11 +4517,17 @@ record_name('OperationTimeout') ->
     record_name('CustomerPayer') ->
     'domain_CustomerPayer';
 
+    record_name('RecurrentPayer') ->
+    'domain_RecurrentPayer';
+
     record_name('ClientInfo') ->
     'domain_ClientInfo';
 
     record_name('PaymentRoute') ->
     'domain_PaymentRoute';
+
+    record_name('RecurrentParentPayment') ->
+    'domain_RecurrentParentPayment';
 
     record_name('InvoicePaymentAdjustment') ->
     'domain_InvoicePaymentAdjustment';

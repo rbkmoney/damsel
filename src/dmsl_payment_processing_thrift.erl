@@ -99,6 +99,7 @@
     'InvoicePaymentAdjustmentChangePayload'/0,
     'InvoicePaymentAdjustmentCreated'/0,
     'InvoicePaymentAdjustmentStatusChanged'/0,
+    'InvoicePaymentRecTokenAcquired'/0,
     'EventRange'/0,
     'InvoiceParams'/0,
     'InvoiceWithTemplateParams'/0,
@@ -108,6 +109,7 @@
     'PayerParams'/0,
     'PaymentResourcePayerParams'/0,
     'CustomerPayerParams'/0,
+    'RecurrentPayerParams'/0,
     'InvoicePaymentParamsFlow'/0,
     'InvoicePaymentParamsFlowInstant'/0,
     'InvoicePaymentParamsFlowHold'/0,
@@ -242,6 +244,7 @@
     'EventNotFound'/0,
     'OperationNotPermitted'/0,
     'InsufficientAccountBalance'/0,
+    'InvalidRecurrentParentPayment'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentRefundPending'/0,
     'InvoicePaymentAdjustmentPending'/0,
@@ -380,6 +383,7 @@
     'InvoicePaymentAdjustmentChangePayload' |
     'InvoicePaymentAdjustmentCreated' |
     'InvoicePaymentAdjustmentStatusChanged' |
+    'InvoicePaymentRecTokenAcquired' |
     'EventRange' |
     'InvoiceParams' |
     'InvoiceWithTemplateParams' |
@@ -389,6 +393,7 @@
     'PayerParams' |
     'PaymentResourcePayerParams' |
     'CustomerPayerParams' |
+    'RecurrentPayerParams' |
     'InvoicePaymentParamsFlow' |
     'InvoicePaymentParamsFlowInstant' |
     'InvoicePaymentParamsFlowHold' |
@@ -523,6 +528,7 @@
     'EventNotFound' |
     'OperationNotPermitted' |
     'InsufficientAccountBalance' |
+    'InvalidRecurrentParentPayment' |
     'InvoicePaymentPending' |
     'InvoicePaymentRefundPending' |
     'InvoicePaymentAdjustmentPending' |
@@ -620,7 +626,8 @@
     {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
     {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
-    {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()}.
+    {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()} |
+    {'invoice_payment_rec_token_acquired', 'InvoicePaymentRecTokenAcquired'()}.
 
 %% struct 'InvoicePaymentStarted'
 -type 'InvoicePaymentStarted'() :: #'payproc_InvoicePaymentStarted'{}.
@@ -720,6 +727,9 @@
 %% struct 'InvoicePaymentAdjustmentStatusChanged'
 -type 'InvoicePaymentAdjustmentStatusChanged'() :: #'payproc_InvoicePaymentAdjustmentStatusChanged'{}.
 
+%% struct 'InvoicePaymentRecTokenAcquired'
+-type 'InvoicePaymentRecTokenAcquired'() :: #'payproc_InvoicePaymentRecTokenAcquired'{}.
+
 %% struct 'EventRange'
 -type 'EventRange'() :: #'payproc_EventRange'{}.
 
@@ -741,13 +751,17 @@
 %% union 'PayerParams'
 -type 'PayerParams'() ::
     {'payment_resource', 'PaymentResourcePayerParams'()} |
-    {'customer', 'CustomerPayerParams'()}.
+    {'customer', 'CustomerPayerParams'()} |
+    {'recurrent', 'RecurrentPayerParams'()}.
 
 %% struct 'PaymentResourcePayerParams'
 -type 'PaymentResourcePayerParams'() :: #'payproc_PaymentResourcePayerParams'{}.
 
 %% struct 'CustomerPayerParams'
 -type 'CustomerPayerParams'() :: #'payproc_CustomerPayerParams'{}.
+
+%% struct 'RecurrentPayerParams'
+-type 'RecurrentPayerParams'() :: #'payproc_RecurrentPayerParams'{}.
 
 %% union 'InvoicePaymentParamsFlow'
 -type 'InvoicePaymentParamsFlow'() ::
@@ -1269,6 +1283,9 @@
 %% exception 'InsufficientAccountBalance'
 -type 'InsufficientAccountBalance'() :: #'payproc_InsufficientAccountBalance'{}.
 
+%% exception 'InvalidRecurrentParentPayment'
+-type 'InvalidRecurrentParentPayment'() :: #'payproc_InvalidRecurrentParentPayment'{}.
+
 %% exception 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'payproc_InvoicePaymentPending'{}.
 
@@ -1588,6 +1605,7 @@ structs() ->
         'InvoicePaymentAdjustmentChangePayload',
         'InvoicePaymentAdjustmentCreated',
         'InvoicePaymentAdjustmentStatusChanged',
+        'InvoicePaymentRecTokenAcquired',
         'EventRange',
         'InvoiceParams',
         'InvoiceWithTemplateParams',
@@ -1597,6 +1615,7 @@ structs() ->
         'PayerParams',
         'PaymentResourcePayerParams',
         'CustomerPayerParams',
+        'RecurrentPayerParams',
         'InvoicePaymentParamsFlow',
         'InvoicePaymentParamsFlowInstant',
         'InvoicePaymentParamsFlowHold',
@@ -1896,7 +1915,8 @@ struct_info('InvoicePaymentChangePayload') ->
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined}
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
+    {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined}
 ]};
 
 struct_info('InvoicePaymentStarted') ->
@@ -2048,6 +2068,11 @@ struct_info('InvoicePaymentAdjustmentStatusChanged') ->
     {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
 ]};
 
+struct_info('InvoicePaymentRecTokenAcquired') ->
+    {struct, struct, [
+    {1, required, string, 'token', undefined}
+]};
+
 struct_info('EventRange') ->
     {struct, struct, [
     {1, optional, i64, 'after', undefined},
@@ -2094,13 +2119,15 @@ struct_info('InvoiceTemplateUpdateParams') ->
 struct_info('InvoicePaymentParams') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined}
+    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined},
+    {3, optional, bool, 'make_recurrent', undefined}
 ]};
 
 struct_info('PayerParams') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PaymentResourcePayerParams'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerPayerParams'}}, 'customer', undefined}
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerPayerParams'}}, 'customer', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPayerParams'}}, 'recurrent', undefined}
 ]};
 
 struct_info('PaymentResourcePayerParams') ->
@@ -2112,6 +2139,12 @@ struct_info('PaymentResourcePayerParams') ->
 struct_info('CustomerPayerParams') ->
     {struct, struct, [
     {1, required, string, 'customer_id', undefined}
+]};
+
+struct_info('RecurrentPayerParams') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
 ]};
 
 struct_info('InvoicePaymentParamsFlow') ->
@@ -2920,6 +2953,11 @@ struct_info('OperationNotPermitted') ->
 struct_info('InsufficientAccountBalance') ->
     {struct, exception, []};
 
+struct_info('InvalidRecurrentParentPayment') ->
+    {struct, exception, [
+    {1, optional, string, 'details', undefined}
+]};
+
 struct_info('InvoicePaymentPending') ->
     {struct, exception, [
     {1, required, string, 'id', undefined}
@@ -3139,6 +3177,9 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentAdjustmentStatusChanged') ->
     'payproc_InvoicePaymentAdjustmentStatusChanged';
 
+    record_name('InvoicePaymentRecTokenAcquired') ->
+    'payproc_InvoicePaymentRecTokenAcquired';
+
     record_name('EventRange') ->
     'payproc_EventRange';
 
@@ -3162,6 +3203,9 @@ record_name('InternalUser') ->
 
     record_name('CustomerPayerParams') ->
     'payproc_CustomerPayerParams';
+
+    record_name('RecurrentPayerParams') ->
+    'payproc_RecurrentPayerParams';
 
     record_name('InvoicePaymentParamsFlowInstant') ->
     'payproc_InvoicePaymentParamsFlowInstant';
@@ -3475,6 +3519,9 @@ record_name('InternalUser') ->
     record_name('InsufficientAccountBalance') ->
     'payproc_InsufficientAccountBalance';
 
+    record_name('InvalidRecurrentParentPayment') ->
+    'payproc_InvalidRecurrentParentPayment';
+
     record_name('InvoicePaymentPending') ->
     'payproc_InvoicePaymentPending';
 
@@ -3765,7 +3812,9 @@ function_info('Invoicing', 'StartPayment', reply_type) ->
         {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex7', undefined},
-        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex8', undefined}
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidRecurrentParentPayment'}}, 'ex9', undefined},
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex10', undefined}
     ]};
 function_info('Invoicing', 'GetPayment', params_type) ->
     {struct, struct, [

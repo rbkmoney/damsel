@@ -147,6 +147,7 @@ struct InvoicePayment {
     14: required Payer payer
     8:  required Cash cost
     13: required InvoicePaymentFlow flow
+    18: optional bool make_recurrent
     6:  optional InvoicePaymentContext context
 }
 
@@ -256,6 +257,7 @@ union TargetInvoicePaymentStatus {
 union Payer {
     1: PaymentResourcePayer payment_resource
     2: CustomerPayer        customer
+    3: RecurrentPayer       recurrent
 }
 
 struct PaymentResourcePayer {
@@ -271,6 +273,12 @@ struct CustomerPayer {
     5: required ContactInfo            contact_info
 }
 
+struct RecurrentPayer {
+    1: required PaymentTool            payment_tool
+    2: required RecurrentParentPayment recurrent_parent
+    3: required ContactInfo            contact_info
+}
+
 struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
@@ -279,6 +287,11 @@ struct ClientInfo {
 struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
+}
+
+struct RecurrentParentPayment {
+    1: required InvoiceID invoice_id
+    2: required InvoicePaymentID payment_id
 }
 
 /* Adjustments */
@@ -1291,9 +1304,9 @@ union PaymentTool {
 }
 
 struct DisposablePaymentResource {
-    1: required PaymentTool      payment_tool
-    2: optional PaymentSessionID payment_session_id
-    3: required ClientInfo       client_info
+    1: required PaymentTool        payment_tool
+    2: optional PaymentSessionID   payment_session_id
+    3: optional ClientInfo         client_info
 }
 
 typedef string Token

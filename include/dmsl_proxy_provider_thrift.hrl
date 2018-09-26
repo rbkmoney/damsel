@@ -13,7 +13,9 @@
 }).
 
 %% struct 'Success'
--record('prxprv_Success', {}).
+-record('prxprv_Success', {
+    'token' :: dmsl_domain_thrift:'Token'() | undefined
+}).
 
 %% struct 'SleepIntent'
 -record('prxprv_SleepIntent', {
@@ -115,7 +117,8 @@
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
-    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
+    'make_recurrent' :: boolean() | undefined
 }).
 
 %% struct 'InvoicePaymentRefund'

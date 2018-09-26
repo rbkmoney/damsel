@@ -389,7 +389,9 @@ struct_info('FinishStatus') ->
 ]};
 
 struct_info('Success') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'token', undefined}
+]};
 
 struct_info('SleepIntent') ->
     {struct, struct, [
@@ -510,7 +512,8 @@ struct_info('InvoicePayment') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
     {6, required, {struct, union, {dmsl_proxy_provider_thrift, 'PaymentResource'}}, 'payment_resource', undefined},
     {5, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+    {8, optional, bool, 'make_recurrent', undefined}
 ]};
 
 struct_info('InvoicePaymentRefund') ->

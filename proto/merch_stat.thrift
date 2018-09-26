@@ -27,11 +27,25 @@ struct StatPayment {
     13: optional geo_ip.LocationInfo location_info
     14: required InvoicePaymentFlow flow
     15: optional string short_id
+    16: optional bool make_recurrent
 }
 
 union Payer {
     1: PaymentResourcePayer payment_resource
     2: CustomerPayer        customer
+    3: RecurrentPayer       recurrent
+}
+
+struct RecurrentParentPayment {
+    1: required domain.InvoiceID invoice_id
+    2: required domain.InvoicePaymentID payment_id
+}
+
+struct RecurrentPayer {
+    1: required PaymentTool payment_tool
+    2: required RecurrentParentPayment recurrent_parent
+    3: optional string phone_number
+    4: optional string email
 }
 
 struct PaymentResourcePayer {

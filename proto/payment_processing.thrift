@@ -144,6 +144,7 @@ union InvoicePaymentChangePayload {
     2: InvoicePaymentSessionChange         invoice_payment_session_change
     7: InvoicePaymentRefundChange          invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+    11: InvoicePaymentRecTokenAcquired     invoice_payment_rec_token_acquired
 }
 
 /**
@@ -346,6 +347,13 @@ struct InvoicePaymentAdjustmentStatusChanged {
 }
 
 /**
+ * Событие о полуечнии рекуррентного токена
+ */
+struct InvoicePaymentRecTokenAcquired {
+    1: required domain.Token token
+}
+
+/**
  * Диапазон для выборки событий.
  */
 struct EventRange {
@@ -411,11 +419,13 @@ struct InvoiceTemplateUpdateParams {
 struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
+    3: optional bool make_recurrent
 }
 
 union PayerParams {
     1: PaymentResourcePayerParams payment_resource
     2: CustomerPayerParams        customer
+    3: RecurrentPayerParams       recurrent
 }
 
 struct PaymentResourcePayerParams {
@@ -427,12 +437,17 @@ struct CustomerPayerParams {
     1: required domain.CustomerID customer_id
 }
 
+struct RecurrentPayerParams{
+    1: required domain.RecurrentParentPayment recurrent_parent
+    2: required domain.ContactInfo            contact_info
+}
+
 union InvoicePaymentParamsFlow {
     1: InvoicePaymentParamsFlowInstant instant
     2: InvoicePaymentParamsFlowHold hold
 }
 
-struct InvoicePaymentParamsFlowInstant   {}
+struct InvoicePaymentParamsFlowInstant {}
 
 struct InvoicePaymentParamsFlowHold {
     1: required domain.OnHoldExpiration on_hold_expiration
@@ -501,6 +516,9 @@ exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
 exception InsufficientAccountBalance {}
+exception InvalidRecurrentParentPayment {
+    1: optional string details
+}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -595,7 +613,9 @@ service Invoicing {
             5: base.InvalidRequest ex5,
             6: InvalidPartyStatus ex6,
             7: InvalidShopStatus ex7,
-            8: InvalidContractStatus ex8
+            8: InvalidContractStatus ex8,
+            9: InvalidRecurrentParentPayment ex9,
+            10: OperationNotPermitted ex10
         )
 
     InvoicePayment GetPayment (

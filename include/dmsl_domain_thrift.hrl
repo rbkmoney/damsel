@@ -105,6 +105,7 @@
     'payer' :: dmsl_domain_thrift:'Payer'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
+    'make_recurrent' :: boolean() | undefined,
     'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined
 }).
 
@@ -169,6 +170,13 @@
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
 }).
 
+%% struct 'RecurrentPayer'
+-record('domain_RecurrentPayer', {
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
+    'recurrent_parent' :: dmsl_domain_thrift:'RecurrentParentPayment'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
+}).
+
 %% struct 'ClientInfo'
 -record('domain_ClientInfo', {
     'ip_address' :: dmsl_domain_thrift:'IPAddress'() | undefined,
@@ -179,6 +187,12 @@
 -record('domain_PaymentRoute', {
     'provider' :: dmsl_domain_thrift:'ProviderRef'(),
     'terminal' :: dmsl_domain_thrift:'TerminalRef'()
+}).
+
+%% struct 'RecurrentParentPayment'
+-record('domain_RecurrentParentPayment', {
+    'invoice_id' :: dmsl_domain_thrift:'InvoiceID'(),
+    'payment_id' :: dmsl_domain_thrift:'InvoicePaymentID'()
 }).
 
 %% struct 'InvoicePaymentAdjustment'
@@ -717,7 +731,7 @@
 -record('domain_DisposablePaymentResource', {
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
     'payment_session_id' :: dmsl_domain_thrift:'PaymentSessionID'() | undefined,
-    'client_info' :: dmsl_domain_thrift:'ClientInfo'()
+    'client_info' :: dmsl_domain_thrift:'ClientInfo'() | undefined
 }).
 
 %% struct 'BankCard'

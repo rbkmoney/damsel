@@ -22,7 +22,22 @@
     'context' :: dmsl_base_thrift:'Content'() | undefined,
     'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
     'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'(),
-    'short_id' :: binary() | undefined
+    'short_id' :: binary() | undefined,
+    'make_recurrent' :: boolean() | undefined
+}).
+
+%% struct 'RecurrentParentPayment'
+-record('merchstat_RecurrentParentPayment', {
+    'invoice_id' :: dmsl_domain_thrift:'InvoiceID'(),
+    'payment_id' :: dmsl_domain_thrift:'InvoicePaymentID'()
+}).
+
+%% struct 'RecurrentPayer'
+-record('merchstat_RecurrentPayer', {
+    'payment_tool' :: dmsl_merch_stat_thrift:'PaymentTool'(),
+    'recurrent_parent' :: dmsl_merch_stat_thrift:'RecurrentParentPayment'(),
+    'phone_number' :: binary() | undefined,
+    'email' :: binary() | undefined
 }).
 
 %% struct 'PaymentResourcePayer'

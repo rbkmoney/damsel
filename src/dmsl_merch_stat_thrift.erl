@@ -47,6 +47,8 @@
 -export_type([
     'StatPayment'/0,
     'Payer'/0,
+    'RecurrentParentPayment'/0,
+    'RecurrentPayer'/0,
     'PaymentResourcePayer'/0,
     'CustomerPayer'/0,
     'InvoicePaymentFlow'/0,
@@ -151,6 +153,8 @@
 -type struct_name() ::
     'StatPayment' |
     'Payer' |
+    'RecurrentParentPayment' |
+    'RecurrentPayer' |
     'PaymentResourcePayer' |
     'CustomerPayer' |
     'InvoicePaymentFlow' |
@@ -209,7 +213,14 @@
 %% union 'Payer'
 -type 'Payer'() ::
     {'payment_resource', 'PaymentResourcePayer'()} |
-    {'customer', 'CustomerPayer'()}.
+    {'customer', 'CustomerPayer'()} |
+    {'recurrent', 'RecurrentPayer'()}.
+
+%% struct 'RecurrentParentPayment'
+-type 'RecurrentParentPayment'() :: #'merchstat_RecurrentParentPayment'{}.
+
+%% struct 'RecurrentPayer'
+-type 'RecurrentPayer'() :: #'merchstat_RecurrentPayer'{}.
 
 %% struct 'PaymentResourcePayer'
 -type 'PaymentResourcePayer'() :: #'merchstat_PaymentResourcePayer'{}.
@@ -468,6 +479,8 @@ structs() ->
     [
         'StatPayment',
         'Payer',
+        'RecurrentParentPayment',
+        'RecurrentPayer',
         'PaymentResourcePayer',
         'CustomerPayer',
         'InvoicePaymentFlow',
@@ -592,13 +605,29 @@ struct_info('StatPayment') ->
     {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
     {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
     {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
-    {15, optional, string, 'short_id', undefined}
+    {15, optional, string, 'short_id', undefined},
+    {16, optional, bool, 'make_recurrent', undefined}
 ]};
 
 struct_info('Payer') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined}
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
+]};
+
+struct_info('RecurrentParentPayment') ->
+    {struct, struct, [
+    {1, required, string, 'invoice_id', undefined},
+    {2, required, string, 'payment_id', undefined}
+]};
+
+struct_info('RecurrentPayer') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+    {3, optional, string, 'phone_number', undefined},
+    {4, optional, string, 'email', undefined}
 ]};
 
 struct_info('PaymentResourcePayer') ->
@@ -930,7 +959,13 @@ struct_info(_) -> erlang:error(badarg).
 record_name('StatPayment') ->
     'merchstat_StatPayment';
 
-record_name('PaymentResourcePayer') ->
+record_name('RecurrentParentPayment') ->
+    'merchstat_RecurrentParentPayment';
+
+    record_name('RecurrentPayer') ->
+    'merchstat_RecurrentPayer';
+
+    record_name('PaymentResourcePayer') ->
     'merchstat_PaymentResourcePayer';
 
     record_name('CustomerPayer') ->

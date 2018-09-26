@@ -44,7 +44,10 @@ union FinishStatus {
     2: domain.Failure failure
 }
 
-struct Success {}
+struct Success {
+    /** Токен для последующих взаимодействий. */
+    1: optional domain.Token token
+}
 
 /**
  * Требование прервать на определённое время сессию взаимодействия, с намерением продолжить
@@ -192,6 +195,7 @@ struct InvoicePayment {
     6: required PaymentResource         payment_resource
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
+    8: optional bool                    make_recurrent
 }
 
 struct InvoicePaymentRefund {
