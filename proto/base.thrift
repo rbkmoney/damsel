@@ -7,9 +7,6 @@ namespace java com.rbkmoney.damsel.base
 /** Идентификатор */
 typedef string ID
 
-/** Пространство имён */
-typedef string Namespace
-
 /** Идентификатор некоторого события */
 typedef i64 EventID
 
