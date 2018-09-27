@@ -740,7 +740,9 @@
     'payment_system' :: atom(),
     'bin' :: binary(),
     'masked_pan' :: binary(),
-    'token_provider' :: atom() | undefined
+    'token_provider' :: atom() | undefined,
+    'issuer_country' :: atom() | undefined,
+    'bank_name' :: binary() | undefined
 }).
 
 %% struct 'PaymentTerminal'

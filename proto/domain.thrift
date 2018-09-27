@@ -1317,6 +1317,8 @@ struct BankCard {
     3: required string bin
     4: required string masked_pan
     5: optional BankCardTokenProvider token_provider
+    6: optional Residence issuer_country
+    7: optional string bank_name
 }
 
 /** Платеж через терминал **/
