@@ -1319,6 +1319,7 @@ struct BankCard {
     5: optional BankCardTokenProvider token_provider
     6: optional Residence issuer_country
     7: optional string bank_name
+    8: optional map<string, msgpack.Value> metadata
 }
 
 /** Платеж через терминал **/

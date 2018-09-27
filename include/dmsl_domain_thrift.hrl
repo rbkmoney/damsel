@@ -742,7 +742,8 @@
     'masked_pan' :: binary(),
     'token_provider' :: atom() | undefined,
     'issuer_country' :: atom() | undefined,
-    'bank_name' :: binary() | undefined
+    'bank_name' :: binary() | undefined,
+    'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()} | undefined
 }).
 
 %% struct 'PaymentTerminal'

@@ -3775,7 +3775,8 @@ struct_info('BankCard') ->
     {4, required, string, 'masked_pan', undefined},
     {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
     {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
-    {7, optional, string, 'bank_name', undefined}
+    {7, optional, string, 'bank_name', undefined},
+    {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
