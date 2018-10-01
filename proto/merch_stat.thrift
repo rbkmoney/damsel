@@ -54,11 +54,14 @@ struct PaymentResourcePayer {
     3: optional domain.Fingerprint fingerprint
     4: optional string phone_number
     5: optional string email
-    6: required domain.PaymentSessionID session_id
+    6: optional domain.PaymentSessionID session_id
 }
 
 struct CustomerPayer {
     1: required domain.CustomerID customer_id
+    2: required PaymentTool payment_tool
+    3: optional string phone_number
+    4: optional string email
 }
 
 union InvoicePaymentFlow {
