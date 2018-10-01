@@ -54,7 +54,7 @@ struct PaymentResourcePayer {
     3: optional domain.Fingerprint fingerprint
     4: optional string phone_number
     5: optional string email
-    6: required domain.PaymentSessionID session_id
+    6: optional domain.PaymentSessionID session_id
 }
 
 struct CustomerPayer {
