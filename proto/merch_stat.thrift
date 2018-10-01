@@ -59,6 +59,9 @@ struct PaymentResourcePayer {
 
 struct CustomerPayer {
     1: required domain.CustomerID customer_id
+    2: required PaymentTool payment_tool
+    3: optional string phone_number
+    4: optional string email
 }
 
 union InvoicePaymentFlow {
