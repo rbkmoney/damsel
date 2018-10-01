@@ -637,12 +637,15 @@ struct_info('PaymentResourcePayer') ->
     {3, optional, string, 'fingerprint', undefined},
     {4, optional, string, 'phone_number', undefined},
     {5, optional, string, 'email', undefined},
-    {6, required, string, 'session_id', undefined}
+    {6, optional, string, 'session_id', undefined}
 ]};
 
 struct_info('CustomerPayer') ->
     {struct, struct, [
-    {1, required, string, 'customer_id', undefined}
+    {1, required, string, 'customer_id', undefined},
+    {2, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {3, optional, string, 'phone_number', undefined},
+    {4, optional, string, 'email', undefined}
 ]};
 
 struct_info('InvoicePaymentFlow') ->

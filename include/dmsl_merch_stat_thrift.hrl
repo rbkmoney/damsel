@@ -47,12 +47,15 @@
     'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined,
     'phone_number' :: binary() | undefined,
     'email' :: binary() | undefined,
-    'session_id' :: dmsl_domain_thrift:'PaymentSessionID'()
+    'session_id' :: dmsl_domain_thrift:'PaymentSessionID'() | undefined
 }).
 
 %% struct 'CustomerPayer'
 -record('merchstat_CustomerPayer', {
-    'customer_id' :: dmsl_domain_thrift:'CustomerID'()
+    'customer_id' :: dmsl_domain_thrift:'CustomerID'(),
+    'payment_tool' :: dmsl_merch_stat_thrift:'PaymentTool'(),
+    'phone_number' :: binary() | undefined,
+    'email' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentFlowInstant'
