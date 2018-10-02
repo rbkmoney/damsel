@@ -3956,7 +3956,10 @@ function_info('Invoicing', 'RefundPayment', reply_type) ->
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InsufficientAccountBalance'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex8', undefined},
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex9', undefined},
-        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentRefundCurrency'}}, 'ex10', undefined}
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentRefundCurrency'}}, 'ex10', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex12', undefined},
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex13', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [
