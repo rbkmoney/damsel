@@ -1731,6 +1731,7 @@ union BankCardConditionDefinition {
     1: BankCardPaymentSystem payment_system_is // deprecated
     2: BankCardBINRangeRef bin_in
     3: PaymentSystemCondition payment_system
+    4: Residence issuer_country_is
 }
 
 struct PaymentSystemCondition {
