@@ -209,6 +209,7 @@
     'CumulativeLimitSelector'/0,
     'CumulativeLimitDecision'/0,
     'CumulativeLimit'/0,
+    'WithdrawalServiceTerms'/0,
     'PayoutMethodRef'/0,
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
@@ -928,6 +929,7 @@
     'CumulativeLimitSelector' |
     'CumulativeLimitDecision' |
     'CumulativeLimit' |
+    'WithdrawalServiceTerms' |
     'PayoutMethodRef' |
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
@@ -1451,6 +1453,9 @@
 
 %% struct 'CumulativeLimit'
 -type 'CumulativeLimit'() :: #'domain_CumulativeLimit'{}.
+
+%% struct 'WithdrawalServiceTerms'
+-type 'WithdrawalServiceTerms'() :: #'domain_WithdrawalServiceTerms'{}.
 
 %% struct 'PayoutMethodRef'
 -type 'PayoutMethodRef'() :: #'domain_PayoutMethodRef'{}.
@@ -2194,6 +2199,7 @@ structs() ->
         'CumulativeLimitSelector',
         'CumulativeLimitDecision',
         'CumulativeLimit',
+        'WithdrawalServiceTerms',
         'PayoutMethodRef',
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
@@ -3576,8 +3582,9 @@ struct_info('PayoutCompilationPolicy') ->
 struct_info('WalletServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined}
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'wallet_limit', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalServiceTerms'}}, 'withdrawals', undefined}
 ]};
 
 struct_info('CumulativeLimitSelector') ->
@@ -3596,6 +3603,13 @@ struct_info('CumulativeLimit') ->
     {struct, struct, [
     {1, required, {enum, {dmsl_domain_thrift, 'CumulativeLimitPeriod'}}, 'period', undefined},
     {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cash', undefined}
+]};
+
+struct_info('WithdrawalServiceTerms') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -4713,6 +4727,9 @@ record_name('OperationTimeout') ->
 
     record_name('CumulativeLimit') ->
     'domain_CumulativeLimit';
+
+    record_name('WithdrawalServiceTerms') ->
+    'domain_WithdrawalServiceTerms';
 
     record_name('PayoutMethodRef') ->
     'domain_PayoutMethodRef';

@@ -599,8 +599,9 @@
 %% struct 'WalletServiceTerms'
 -record('domain_WalletServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'turnover_limit' :: dmsl_domain_thrift:'CumulativeLimitSelector'() | undefined
+    'wallet_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'turnover_limit' :: dmsl_domain_thrift:'CumulativeLimitSelector'() | undefined,
+    'withdrawals' :: dmsl_domain_thrift:'WithdrawalServiceTerms'() | undefined
 }).
 
 %% struct 'CumulativeLimitDecision'
@@ -613,6 +614,13 @@
 -record('domain_CumulativeLimit', {
     'period' :: dmsl_domain_thrift:'CumulativeLimitPeriod'(),
     'cash' :: dmsl_domain_thrift:'CashRange'()
+}).
+
+%% struct 'WithdrawalServiceTerms'
+-record('domain_WithdrawalServiceTerms', {
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
