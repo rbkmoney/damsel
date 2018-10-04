@@ -833,8 +833,9 @@ struct PayoutCompilationPolicy {
 
 struct WalletServiceTerms {
     1: optional CurrencySelector currencies
-    2: optional CashLimitSelector cash_limit
+    2: optional CashLimitSelector wallet_limit
     3: optional CumulativeLimitSelector turnover_limit
+    4: optional WithdrawalServiceTerms withdrawals
 }
 
 union CumulativeLimitSelector {
@@ -858,6 +859,14 @@ enum CumulativeLimitPeriod {
     this_week
     this_month
     this_year
+}
+
+/** Withdrawal service terms **/
+
+struct WithdrawalServiceTerms {
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional CashFlowSelector cash_flow
 }
 
 /* Payout methods */
