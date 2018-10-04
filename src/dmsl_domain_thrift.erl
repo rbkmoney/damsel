@@ -1742,7 +1742,8 @@
 -type 'BankCardConditionDefinition'() ::
     {'payment_system_is', atom()} |
     {'bin_in', 'BankCardBINRangeRef'()} |
-    {'payment_system', 'PaymentSystemCondition'()}.
+    {'payment_system', 'PaymentSystemCondition'()} |
+    {'issuer_country_is', atom()}.
 
 %% struct 'PaymentSystemCondition'
 -type 'PaymentSystemCondition'() :: #'domain_PaymentSystemCondition'{}.
@@ -4090,7 +4091,8 @@ struct_info('BankCardConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
+    {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined}
 ]};
 
 struct_info('PaymentSystemCondition') ->
