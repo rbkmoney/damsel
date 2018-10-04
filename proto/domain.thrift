@@ -866,7 +866,7 @@ enum CumulativeLimitPeriod {
 struct WithdrawalServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
-    3: optional CashFlowSelector fees
+    3: optional CashFlowSelector cash_flow
 }
 
 /* Payout methods */
