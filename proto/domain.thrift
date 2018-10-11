@@ -1737,7 +1737,7 @@ struct BankCardCondition {
 
 union BankCardConditionDefinition {
     1: BankCardPaymentSystem payment_system_is // deprecated
-    2: BankCardBINRangeRef bin_in
+    2: BankCardBINRangeRef bin_in // deprecated
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
     5: BankRef issuer_bank_is
@@ -2017,7 +2017,6 @@ union Reference {
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
-    5  : BankCardBINRangeRef     bank_card_bin_range
     22 : BankRef                 bank
     6  : ContractTemplateRef     contract_template
     17 : TermSetHierarchyRef     term_set_hierarchy
@@ -2035,6 +2034,7 @@ union Reference {
 
     /* legacy */
     10 : PartyPrototypeRef       party_prototype
+    5  : BankCardBINRangeRef     bank_card_bin_range //deprecated
 }
 
 union DomainObject {
@@ -2045,7 +2045,6 @@ union DomainObject {
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method
-    5  : BankCardBINRangeObject     bank_card_bin_range
     22 : BankObject                 bank
     6  : ContractTemplateObject     contract_template
     17 : TermSetHierarchyObject     term_set_hierarchy
@@ -2063,6 +2062,7 @@ union DomainObject {
 
     /* legacy */
     10 : PartyPrototypeObject       party_prototype
+    5  : BankCardBINRangeObject     bank_card_bin_range //deprecated
 }
 
 /* Domain */
