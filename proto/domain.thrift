@@ -1365,6 +1365,14 @@ struct BankCardBINRange {
     3: required set<string> bins
 }
 
+struct BankRef { 1: required ObjectID id }
+
+struct Bank {
+    1: required string name
+    2: required string description
+    3: required set<string> binbase_id_patterns
+}
+
 struct PaymentMethodRef { 1: required PaymentMethod id }
 
 /** Способ платежа, категория платёжного средства. */
@@ -1729,9 +1737,10 @@ struct BankCardCondition {
 
 union BankCardConditionDefinition {
     1: BankCardPaymentSystem payment_system_is // deprecated
-    2: BankCardBINRangeRef bin_in
+    2: BankCardBINRangeRef bin_in // deprecated
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
+    5: BankRef issuer_bank_is
 }
 
 struct PaymentSystemCondition {
@@ -1955,6 +1964,11 @@ struct BankCardBINRangeObject {
     2: required BankCardBINRange data
 }
 
+struct BankObject {
+    1: required BankRef ref
+    2: required Bank data
+}
+
 struct ProviderObject {
     1: required ProviderRef ref
     2: required Provider data
@@ -2003,7 +2017,7 @@ union Reference {
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
-    5  : BankCardBINRangeRef     bank_card_bin_range
+    22 : BankRef                 bank
     6  : ContractTemplateRef     contract_template
     17 : TermSetHierarchyRef     term_set_hierarchy
     18 : PaymentInstitutionRef   payment_institution
@@ -2020,6 +2034,7 @@ union Reference {
 
     /* legacy */
     10 : PartyPrototypeRef       party_prototype
+    5  : BankCardBINRangeRef     bank_card_bin_range //deprecated
 }
 
 union DomainObject {
@@ -2030,7 +2045,7 @@ union DomainObject {
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method
-    5  : BankCardBINRangeObject     bank_card_bin_range
+    22 : BankObject                 bank
     6  : ContractTemplateObject     contract_template
     17 : TermSetHierarchyObject     term_set_hierarchy
     18 : PaymentInstitutionObject   payment_institution
@@ -2047,6 +2062,7 @@ union DomainObject {
 
     /* legacy */
     10 : PartyPrototypeObject       party_prototype
+    5  : BankCardBINRangeObject     bank_card_bin_range //deprecated
 }
 
 /* Domain */
