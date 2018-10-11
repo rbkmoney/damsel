@@ -777,6 +777,18 @@
     'bins' :: ordsets:ordset(binary())
 }).
 
+%% struct 'BankRef'
+-record('domain_BankRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'Bank'
+-record('domain_Bank', {
+    'name' :: binary(),
+    'description' :: binary(),
+    'binbase_id_patterns' :: ordsets:ordset(binary())
+}).
+
 %% struct 'PaymentMethodRef'
 -record('domain_PaymentMethodRef', {
     'id' :: dmsl_domain_thrift:'PaymentMethod'()
@@ -1182,6 +1194,12 @@
 -record('domain_BankCardBINRangeObject', {
     'ref' :: dmsl_domain_thrift:'BankCardBINRangeRef'(),
     'data' :: dmsl_domain_thrift:'BankCardBINRange'()
+}).
+
+%% struct 'BankObject'
+-record('domain_BankObject', {
+    'ref' :: dmsl_domain_thrift:'BankRef'(),
+    'data' :: dmsl_domain_thrift:'Bank'()
 }).
 
 %% struct 'ProviderObject'
