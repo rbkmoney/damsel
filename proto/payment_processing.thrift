@@ -360,7 +360,7 @@ struct InvoicePaymentRecTokenAcquired {
  */
 
 struct InvoicePaymentRepair {
-    1: required list<InvoiceRepairScenario> Scenarios
+    1: required list<InvoiceRepairScenario> scenarios
 }
 
 /**
