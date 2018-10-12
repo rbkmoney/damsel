@@ -500,41 +500,35 @@ struct InvoicePaymentAdjustmentParams {
     2: required string reason
 }
 
-/**
- * Варианты сценариев для починки инвойса
- */
-
-enum InvoiceRepairType {
-    fail_pre_processing = 1
-    skip_inspector = 2
-    fail_adapter = 3
-}
-
 /* Завершение платежа до похода к провайдеру с заданной ошибкой */
 
 struct InvoiceRepairFailPreProcessing {
-    1:  required InvoiceRepairType type
-    2:  required domain.Failure failure
+    1:  required domain.Failure failure
 }
 
 /* Пропуск инспектора платежа с заданным риском */
 
 struct InvoiceRepairSkipInspector {
-    1:  required InvoiceRepairType type
-    2:  required domain.RiskScore risk_score
+    1:  required domain.RiskScore risk_score
 }
 
 /* Вызов провайдера с заданным результатом */
 
 struct InvoiceRepairFailAdapter {
-    1:  required InvoiceRepairType type
-    2:  required proxy_provider.PaymentProxyResult payment_proxy_result
+    1:  required proxy_provider.PaymentProxyResult payment_proxy_result
+}
+
+/* Комбинированная структура */
+
+struct InvoiceRepairComplex {
+    1:  required list<InvoiceRepairScenario> scenarios
 }
 
 union InvoiceRepairScenario{
-    1: InvoiceRepairFailPreProcessing fail_pre_processing
-    2: InvoiceRepairSkipInspector skip_inspector
-    3: InvoiceRepairFailAdapter fail_adapter
+    1: InvoiceRepairComplex complex
+    2: InvoiceRepairFailPreProcessing fail_pre_processing
+    3: InvoiceRepairSkipInspector skip_inspector
+    4: InvoiceRepairFailAdapter fail_adapter
 }
 
 // Exceptions
