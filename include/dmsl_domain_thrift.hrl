@@ -765,18 +765,6 @@
     'id' :: dmsl_domain_thrift:'DigitalWalletID'()
 }).
 
-%% struct 'BankCardBINRangeRef'
--record('domain_BankCardBINRangeRef', {
-    'id' :: dmsl_domain_thrift:'ObjectID'()
-}).
-
-%% struct 'BankCardBINRange'
--record('domain_BankCardBINRange', {
-    'name' :: binary(),
-    'description' :: binary(),
-    'bins' :: ordsets:ordset(binary())
-}).
-
 %% struct 'BankRef'
 -record('domain_BankRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -786,7 +774,8 @@
 -record('domain_Bank', {
     'name' :: binary(),
     'description' :: binary(),
-    'binbase_id_patterns' :: ordsets:ordset(binary())
+    'binbase_id_patterns' :: ordsets:ordset(binary()) | undefined,
+    'bins' :: ordsets:ordset(binary())
 }).
 
 %% struct 'PaymentMethodRef'
@@ -1188,12 +1177,6 @@
 -record('domain_PayoutMethodObject', {
     'ref' :: dmsl_domain_thrift:'PayoutMethodRef'(),
     'data' :: dmsl_domain_thrift:'PayoutMethodDefinition'()
-}).
-
-%% struct 'BankCardBINRangeObject'
--record('domain_BankCardBINRangeObject', {
-    'ref' :: dmsl_domain_thrift:'BankCardBINRangeRef'(),
-    'data' :: dmsl_domain_thrift:'BankCardBINRange'()
 }).
 
 %% struct 'BankObject'

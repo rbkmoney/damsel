@@ -240,8 +240,6 @@
     'BankCard'/0,
     'PaymentTerminal'/0,
     'DigitalWallet'/0,
-    'BankCardBINRangeRef'/0,
-    'BankCardBINRange'/0,
     'BankRef'/0,
     'Bank'/0,
     'PaymentMethodRef'/0,
@@ -330,7 +328,6 @@
     'CalendarObject'/0,
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
-    'BankCardBINRangeObject'/0,
     'BankObject'/0,
     'ProviderObject'/0,
     'TerminalObject'/0,
@@ -963,8 +960,6 @@
     'BankCard' |
     'PaymentTerminal' |
     'DigitalWallet' |
-    'BankCardBINRangeRef' |
-    'BankCardBINRange' |
     'BankRef' |
     'Bank' |
     'PaymentMethodRef' |
@@ -1053,7 +1048,6 @@
     'CalendarObject' |
     'PaymentMethodObject' |
     'PayoutMethodObject' |
-    'BankCardBINRangeObject' |
     'BankObject' |
     'ProviderObject' |
     'TerminalObject' |
@@ -1572,12 +1566,6 @@
 %% struct 'DigitalWallet'
 -type 'DigitalWallet'() :: #'domain_DigitalWallet'{}.
 
-%% struct 'BankCardBINRangeRef'
--type 'BankCardBINRangeRef'() :: #'domain_BankCardBINRangeRef'{}.
-
-%% struct 'BankCardBINRange'
--type 'BankCardBINRange'() :: #'domain_BankCardBINRange'{}.
-
 %% struct 'BankRef'
 -type 'BankRef'() :: #'domain_BankRef'{}.
 
@@ -1758,10 +1746,9 @@
 %% union 'BankCardConditionDefinition'
 -type 'BankCardConditionDefinition'() ::
     {'payment_system_is', atom()} |
-    {'bin_in', 'BankCardBINRangeRef'()} |
+    {'issuer_bank_is', 'BankRef'()} |
     {'payment_system', 'PaymentSystemCondition'()} |
-    {'issuer_country_is', atom()} |
-    {'issuer_bank_is', 'BankRef'()}.
+    {'issuer_country_is', atom()}.
 
 %% struct 'PaymentSystemCondition'
 -type 'PaymentSystemCondition'() :: #'domain_PaymentSystemCondition'{}.
@@ -1897,9 +1884,6 @@
 %% struct 'PayoutMethodObject'
 -type 'PayoutMethodObject'() :: #'domain_PayoutMethodObject'{}.
 
-%% struct 'BankCardBINRangeObject'
--type 'BankCardBINRangeObject'() :: #'domain_BankCardBINRangeObject'{}.
-
 %% struct 'BankObject'
 -type 'BankObject'() :: #'domain_BankObject'{}.
 
@@ -1948,8 +1932,7 @@
     {'globals', 'GlobalsRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
-    {'party_prototype', 'PartyPrototypeRef'()} |
-    {'bank_card_bin_range', 'BankCardBINRangeRef'()}.
+    {'party_prototype', 'PartyPrototypeRef'()}.
 
 %% union 'DomainObject'
 -type 'DomainObject'() ::
@@ -1972,8 +1955,7 @@
     {'globals', 'GlobalsObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
-    {'party_prototype', 'PartyPrototypeObject'()} |
-    {'bank_card_bin_range', 'BankCardBINRangeObject'()}.
+    {'party_prototype', 'PartyPrototypeObject'()}.
 
 %%
 %% services and functions
@@ -2248,8 +2230,6 @@ structs() ->
         'BankCard',
         'PaymentTerminal',
         'DigitalWallet',
-        'BankCardBINRangeRef',
-        'BankCardBINRange',
         'BankRef',
         'Bank',
         'PaymentMethodRef',
@@ -2338,7 +2318,6 @@ structs() ->
         'CalendarObject',
         'PaymentMethodObject',
         'PayoutMethodObject',
-        'BankCardBINRangeObject',
         'BankObject',
         'ProviderObject',
         'TerminalObject',
@@ -3826,18 +3805,6 @@ struct_info('DigitalWallet') ->
     {2, required, string, 'id', undefined}
 ]};
 
-struct_info('BankCardBINRangeRef') ->
-    {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
-
-struct_info('BankCardBINRange') ->
-    {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {set, string}, 'bins', undefined}
-]};
-
 struct_info('BankRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
@@ -3847,7 +3814,8 @@ struct_info('Bank') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, required, string, 'description', undefined},
-    {3, required, {set, string}, 'binbase_id_patterns', undefined}
+    {4, optional, {set, string}, 'binbase_id_patterns', undefined},
+    {3, required, {set, string}, 'bins', undefined}
 ]};
 
 struct_info('PaymentMethodRef') ->
@@ -4137,10 +4105,9 @@ struct_info('BankCardCondition') ->
 struct_info('BankCardConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined}
+    {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined}
 ]};
 
 struct_info('PaymentSystemCondition') ->
@@ -4386,12 +4353,6 @@ struct_info('PayoutMethodObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodDefinition'}}, 'data', undefined}
 ]};
 
-struct_info('BankCardBINRangeObject') ->
-    {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRange'}}, 'data', undefined}
-]};
-
 struct_info('BankObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'ref', undefined},
@@ -4454,7 +4415,7 @@ struct_info('Reference') ->
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {22, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'bank', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'bank', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined},
     {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'term_set_hierarchy', undefined},
     {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
@@ -4467,8 +4428,7 @@ struct_info('Reference') ->
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bank_card_bin_range', undefined}
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
 ]};
 
 struct_info('DomainObject') ->
@@ -4479,7 +4439,7 @@ struct_info('DomainObject') ->
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
-    {22, optional, {struct, struct, {dmsl_domain_thrift, 'BankObject'}}, 'bank', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankObject'}}, 'bank', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateObject'}}, 'contract_template', undefined},
     {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyObject'}}, 'term_set_hierarchy', undefined},
     {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionObject'}}, 'payment_institution', undefined},
@@ -4492,8 +4452,7 @@ struct_info('DomainObject') ->
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeObject'}}, 'bank_card_bin_range', undefined}
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -4839,12 +4798,6 @@ record_name('OperationTimeout') ->
     record_name('DigitalWallet') ->
     'domain_DigitalWallet';
 
-    record_name('BankCardBINRangeRef') ->
-    'domain_BankCardBINRangeRef';
-
-    record_name('BankCardBINRange') ->
-    'domain_BankCardBINRange';
-
     record_name('BankRef') ->
     'domain_BankRef';
 
@@ -5048,9 +5001,6 @@ record_name('OperationTimeout') ->
 
     record_name('PayoutMethodObject') ->
     'domain_PayoutMethodObject';
-
-    record_name('BankCardBINRangeObject') ->
-    'domain_BankCardBINRangeObject';
 
     record_name('BankObject') ->
     'domain_BankObject';
