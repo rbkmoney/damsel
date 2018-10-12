@@ -5,6 +5,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
+include "proxy_provider.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -359,7 +360,7 @@ struct InvoicePaymentRecTokenAcquired {
  */
 
 struct InvoicePaymentRepair {
-    1: required list<domain.InvoiceRepairScenario> Scenarios
+    1: required list<InvoiceRepairScenario> Scenarios
 }
 
 /**
@@ -497,6 +498,43 @@ struct InvoicePaymentAdjustmentParams {
     1: optional domain.DataRevision domain_revision
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
+}
+
+/**
+ * Варианты сценариев для починки инвойса
+ */
+
+enum InvoiceRepairType {
+    fail_pre_processing = 1
+    skip_inspector = 2
+    fail_adapter = 3
+}
+
+/* Завершение платежа до похода к провайдеру с заданной ошибкой */
+
+struct InvoiceRepairFailPreProcessing {
+    1:  required InvoiceRepairType type
+    2:  required domain.Failure failure
+}
+
+/* Пропуск инспектора платежа с заданным риском */
+
+struct InvoiceRepairSkipInspector {
+    1:  required InvoiceRepairType type
+    2:  required domain.RiskScore risk_score
+}
+
+/* Вызов провайдера с заданным результатом */
+
+struct InvoiceRepairFailAdapter {
+    1:  required InvoiceRepairType type
+    2:  required proxy_provider.PaymentProxyResult payment_proxy_result
+}
+
+union InvoiceRepairScenario{
+    1: InvoiceRepairFailPreProcessing fail_pre_processing
+    2: InvoiceRepairSkipInspector skip_inspector
+    3: InvoiceRepairFailAdapter fail_adapter
 }
 
 // Exceptions
@@ -804,7 +842,7 @@ service Invoicing {
 
     /* Invoice payments repairs */
 
-    void RepairScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: list<domain.InvoiceRepairScenario> Scenarios)
+    void RepairScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: list<InvoiceRepairScenario> Scenarios)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
