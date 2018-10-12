@@ -217,7 +217,7 @@ enum InvoiceRepairType {
     fail_adapter        = 3
 }
 
-/* Завершение платежа до похода к провайдера с заданной ошибкой */
+/* Завершение платежа до похода к провайдеру с заданной ошибкой */
 
 struct InvoiceRepairFailPreProcessing {
     1:  required InvoiceRepairType type
@@ -231,7 +231,7 @@ struct InvoiceRepairSkipInspector {
     2:  required RiskScore risk_score
 }
 
-/* Вызов провайдера с заданным результатом провайдера */
+/* Вызов провайдера с заданным результатом */
 
 struct InvoiceRepairFailAdapter {
     1:  required InvoiceRepairType type
