@@ -512,10 +512,10 @@ struct InvoiceRepairSkipInspector {
     1:  required domain.RiskScore risk_score
 }
 
-/* Вызов провайдера с заданным результатом */
+/* Вызов провайдера с заданной ошибкой */
 
 struct InvoiceRepairFailAdapter {
-    1:  required proxy_provider.PaymentProxyResult payment_proxy_result
+    1:  required domain.Failure failure
 }
 
 /* Комбинированная структура */
