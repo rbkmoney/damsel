@@ -5,7 +5,6 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
-include "proxy_provider.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -500,19 +499,21 @@ struct InvoicePaymentAdjustmentParams {
     2: required string reason
 }
 
-/* Завершение платежа до похода к провайдеру с заданной ошибкой */
+/* Сценарий, проверяющий состояние упавшей машины и, в случае если
+   платеж упал раньше похода к провайдеру, начинает процедуру корректного
+   завершения, используя заданную ошибку*/
 
 struct InvoiceRepairFailPreProcessing {
     1:  required domain.Failure failure
 }
 
-/* Пропуск инспектора платежа с заданным риском */
+/* Сценарий, позволяющий пропустить испекцию платежа, подменив ее результат заданым. */
 
 struct InvoiceRepairSkipInspector {
     1:  required domain.RiskScore risk_score
 }
 
-/* Вызов провайдера с заданной ошибкой */
+/* Сценарий, использующий заданную ошибку, чтобы сконструировать результат похода к адаптеру */
 
 struct InvoiceRepairFailAdapter {
     1:  required domain.Failure failure
