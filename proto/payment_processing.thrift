@@ -145,6 +145,7 @@ union InvoicePaymentChangePayload {
     7: InvoicePaymentRefundChange          invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
     11: InvoicePaymentRecTokenAcquired     invoice_payment_rec_token_acquired
+    12: InvoicePaymentRepair               invoice_payment_repair
 }
 
 /**
@@ -351,6 +352,14 @@ struct InvoicePaymentAdjustmentStatusChanged {
  */
 struct InvoicePaymentRecTokenAcquired {
     1: required domain.Token token
+}
+
+/**
+ * Событие описывающее процесс починки платежа
+ */
+
+struct InvoicePaymentRepair {
+    1: required list<domain.InvoiceRepairScenario> Scenarios
 }
 
 /**
@@ -793,6 +802,14 @@ service Invoicing {
             3: base.InvalidRequest ex3
         )
 
+    /* Invoice payments repairs */
+
+    void RepairScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: list<domain.InvoiceRepairScenario> Scenarios)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: base.InvalidRequest ex3
+        )
 }
 
 service InvoiceTemplating {
