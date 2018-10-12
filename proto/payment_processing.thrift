@@ -360,7 +360,7 @@ struct InvoicePaymentRecTokenAcquired {
  */
 
 struct InvoicePaymentRepair {
-    1: required list<InvoiceRepairScenario> scenarios
+    1: required InvoiceRepairScenario scenario
 }
 
 /**
@@ -836,7 +836,7 @@ service Invoicing {
 
     /* Invoice payments repairs */
 
-    void RepairScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: list<InvoiceRepairScenario> Scenarios)
+    void RepairScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: InvoiceRepairScenario Scenario)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
