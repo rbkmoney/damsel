@@ -1499,10 +1499,6 @@ enum WalletCashFlowAccount {
     sender_settlement
     receiver_settlement
     receiver_destination
-
-    /* deprecated */
-    // settlement
-    // payout
 }
 
 enum CashFlowConstant {
