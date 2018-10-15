@@ -1357,20 +1357,15 @@ enum DigitalWalletProvider {
     rbkmoney
 }
 
-struct BankCardBINRangeRef { 1: required ObjectID id }
-
-struct BankCardBINRange {
-    1: required string name
-    2: required string description
-    3: required set<string> bins
-}
-
 struct BankRef { 1: required ObjectID id }
 
 struct Bank {
     1: required string name
     2: required string description
-    3: required set<string> binbase_id_patterns
+    4: optional set<string> binbase_id_patterns
+
+    /* legacy */
+    3: required set<string> bins
 }
 
 struct PaymentMethodRef { 1: required PaymentMethod id }
@@ -1739,10 +1734,9 @@ struct BankCardCondition {
 
 union BankCardConditionDefinition {
     1: BankCardPaymentSystem payment_system_is // deprecated
-    2: BankCardBINRangeRef bin_in // deprecated
+    2: BankRef issuer_bank_is
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
-    5: BankRef issuer_bank_is
 }
 
 struct PaymentSystemCondition {
@@ -1961,11 +1955,6 @@ struct PayoutMethodObject {
     2: required PayoutMethodDefinition data
 }
 
-struct BankCardBINRangeObject {
-    1: required BankCardBINRangeRef ref
-    2: required BankCardBINRange data
-}
-
 struct BankObject {
     1: required BankRef ref
     2: required Bank data
@@ -2019,7 +2008,7 @@ union Reference {
     20 : CalendarRef             calendar
     3  : PaymentMethodRef        payment_method
     21 : PayoutMethodRef         payout_method
-    22 : BankRef                 bank
+    5  : BankRef                 bank
     6  : ContractTemplateRef     contract_template
     17 : TermSetHierarchyRef     term_set_hierarchy
     18 : PaymentInstitutionRef   payment_institution
@@ -2036,7 +2025,6 @@ union Reference {
 
     /* legacy */
     10 : PartyPrototypeRef       party_prototype
-    5  : BankCardBINRangeRef     bank_card_bin_range //deprecated
 }
 
 union DomainObject {
@@ -2047,7 +2035,7 @@ union DomainObject {
     20 : CalendarObject             calendar
     3  : PaymentMethodObject        payment_method
     21 : PayoutMethodObject         payout_method
-    22 : BankObject                 bank
+    5  : BankObject                 bank
     6  : ContractTemplateObject     contract_template
     17 : TermSetHierarchyObject     term_set_hierarchy
     18 : PaymentInstitutionObject   payment_institution
@@ -2064,7 +2052,6 @@ union DomainObject {
 
     /* legacy */
     10 : PartyPrototypeObject       party_prototype
-    5  : BankCardBINRangeObject     bank_card_bin_range //deprecated
 }
 
 /* Domain */
