@@ -1490,8 +1490,10 @@ enum ExternalCashFlowAccount {
 }
 
 enum WalletCashFlowAccount {
-    settlement
-    payout
+    sender_source
+    sender_settlement
+    receiver_settlement
+    receiver_destination
 }
 
 enum CashFlowConstant {

@@ -436,7 +436,8 @@
     'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
     'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
-    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined
 }).
 
 %% struct 'PartyParams'

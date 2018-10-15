@@ -796,8 +796,10 @@
 
 %% enum 'WalletCashFlowAccount'
 -type 'WalletCashFlowAccount'() ::
-    'settlement' |
-    'payout'.
+    'sender_source' |
+    'sender_settlement' |
+    'receiver_settlement' |
+    'receiver_destination'.
 
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
@@ -2827,8 +2829,10 @@ enum_info('ExternalCashFlowAccount') ->
 
 enum_info('WalletCashFlowAccount') ->
     {enum, [
-        {'settlement', 0},
-        {'payout', 1}
+        {'sender_source', 0},
+        {'sender_settlement', 1},
+        {'receiver_settlement', 2},
+        {'receiver_destination', 3}
     ]};
 
 enum_info('CashFlowConstant') ->
