@@ -520,7 +520,7 @@ union InvoiceRepairScenario{
     1: InvoiceRepairComplex complex
     2: InvoiceRepairFailPreProcessing fail_pre_processing
     3: InvoiceRepairSkipInspector skip_inspector
-    4: InvoiceRepairFailSession fail_adapter
+    4: InvoiceRepairFailSession fail_session
 }
 
 // Exceptions
