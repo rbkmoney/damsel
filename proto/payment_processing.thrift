@@ -1256,6 +1256,7 @@ struct Varset {
     3: optional domain.Cash amount
     4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
+    6: optional domain.WalletID wallet_id
 }
 
 struct PartyParams {
@@ -1799,6 +1800,18 @@ service PartyManagement {
 
     /* Wallet */
 
+    // temporary method for transfer period
+    // do not use
+    domain.TermSet ComputeWalletTermsNew (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: base.Timestamp timestamp
+        5: Varset varset
+    )
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
+
+    // deprecated
     domain.TermSet ComputeWalletTerms (
         1: UserInfo user,
         2: PartyID party_id,
