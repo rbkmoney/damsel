@@ -506,7 +506,7 @@ struct InvoiceRepairSkipInspector {
 
 /* Сценарий, использующий заданную ошибку, чтобы сконструировать результат похода к адаптеру */
 
-struct InvoiceRepairFailAdapter {
+struct InvoiceRepairFailSession {
     1:  required domain.Failure failure
 }
 
@@ -520,7 +520,7 @@ union InvoiceRepairScenario{
     1: InvoiceRepairComplex complex
     2: InvoiceRepairFailPreProcessing fail_pre_processing
     3: InvoiceRepairSkipInspector skip_inspector
-    4: InvoiceRepairFailAdapter fail_adapter
+    4: InvoiceRepairFailSession fail_adapter
 }
 
 // Exceptions
