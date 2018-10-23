@@ -28,6 +28,7 @@ struct StatPayment {
     14: required InvoicePaymentFlow flow
     15: optional string short_id
     16: optional bool make_recurrent
+    17: required domain.DataRevision domain_revision
 }
 
 union Payer {
