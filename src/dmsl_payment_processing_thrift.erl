@@ -117,6 +117,11 @@
     'InvoicePayment'/0,
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
+    'InvoiceRepairFailPreProcessing'/0,
+    'InvoiceRepairSkipInspector'/0,
+    'InvoiceRepairFailSession'/0,
+    'InvoiceRepairComplex'/0,
+    'InvoiceRepairScenario'/0,
     'InvalidStatus'/0,
     'CustomerParams'/0,
     'Customer'/0,
@@ -401,6 +406,11 @@
     'InvoicePayment' |
     'InvoicePaymentRefundParams' |
     'InvoicePaymentAdjustmentParams' |
+    'InvoiceRepairFailPreProcessing' |
+    'InvoiceRepairSkipInspector' |
+    'InvoiceRepairFailSession' |
+    'InvoiceRepairComplex' |
+    'InvoiceRepairScenario' |
     'InvalidStatus' |
     'CustomerParams' |
     'Customer' |
@@ -785,6 +795,25 @@
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -type 'InvoicePaymentAdjustmentParams'() :: #'payproc_InvoicePaymentAdjustmentParams'{}.
+
+%% struct 'InvoiceRepairFailPreProcessing'
+-type 'InvoiceRepairFailPreProcessing'() :: #'payproc_InvoiceRepairFailPreProcessing'{}.
+
+%% struct 'InvoiceRepairSkipInspector'
+-type 'InvoiceRepairSkipInspector'() :: #'payproc_InvoiceRepairSkipInspector'{}.
+
+%% struct 'InvoiceRepairFailSession'
+-type 'InvoiceRepairFailSession'() :: #'payproc_InvoiceRepairFailSession'{}.
+
+%% struct 'InvoiceRepairComplex'
+-type 'InvoiceRepairComplex'() :: #'payproc_InvoiceRepairComplex'{}.
+
+%% union 'InvoiceRepairScenario'
+-type 'InvoiceRepairScenario'() ::
+    {'complex', 'InvoiceRepairComplex'()} |
+    {'fail_pre_processing', 'InvoiceRepairFailPreProcessing'()} |
+    {'skip_inspector', 'InvoiceRepairSkipInspector'()} |
+    {'fail_session', 'InvoiceRepairFailSession'()}.
 
 %% union 'InvalidStatus'
 -type 'InvalidStatus'() ::
@@ -1418,7 +1447,8 @@
     'GetPaymentRefund' |
     'Fulfill' |
     'Rescind' |
-    'Repair'.
+    'Repair' |
+    'RepairWithScenario'.
 
 -export_type(['Invoicing_service_functions'/0]).
 
@@ -1476,6 +1506,7 @@
     'BlockShop' |
     'UnblockShop' |
     'ComputeShopTerms' |
+    'ComputeWalletTermsNew' |
     'ComputeWalletTerms' |
     'CreateClaim' |
     'GetClaim' |
@@ -1623,6 +1654,11 @@ structs() ->
         'InvoicePayment',
         'InvoicePaymentRefundParams',
         'InvoicePaymentAdjustmentParams',
+        'InvoiceRepairFailPreProcessing',
+        'InvoiceRepairSkipInspector',
+        'InvoiceRepairFailSession',
+        'InvoiceRepairComplex',
+        'InvoiceRepairScenario',
         'InvalidStatus',
         'CustomerParams',
         'Customer',
@@ -2186,6 +2222,34 @@ struct_info('InvoicePaymentAdjustmentParams') ->
     {2, required, string, 'reason', undefined}
 ]};
 
+struct_info('InvoiceRepairFailPreProcessing') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+]};
+
+struct_info('InvoiceRepairSkipInspector') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+]};
+
+struct_info('InvoiceRepairFailSession') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+]};
+
+struct_info('InvoiceRepairComplex') ->
+    {struct, struct, [
+    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceRepairScenario'}}}, 'scenarios', undefined}
+]};
+
+struct_info('InvoiceRepairScenario') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairComplex'}}, 'complex', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailPreProcessing'}}, 'fail_pre_processing', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairSkipInspector'}}, 'skip_inspector', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailSession'}}, 'fail_session', undefined}
+]};
+
 struct_info('InvalidStatus') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
@@ -2403,7 +2467,8 @@ struct_info('Varset') ->
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
+    {6, optional, string, 'wallet_id', undefined}
 ]};
 
 struct_info('PartyParams') ->
@@ -3225,6 +3290,18 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentAdjustmentParams') ->
     'payproc_InvoicePaymentAdjustmentParams';
 
+    record_name('InvoiceRepairFailPreProcessing') ->
+    'payproc_InvoiceRepairFailPreProcessing';
+
+    record_name('InvoiceRepairSkipInspector') ->
+    'payproc_InvoiceRepairSkipInspector';
+
+    record_name('InvoiceRepairFailSession') ->
+    'payproc_InvoiceRepairFailSession';
+
+    record_name('InvoiceRepairComplex') ->
+    'payproc_InvoiceRepairComplex';
+
     record_name('CustomerParams') ->
     'payproc_CustomerParams';
 
@@ -3638,7 +3715,8 @@ functions('Invoicing') ->
         'GetPaymentRefund',
         'Fulfill',
         'Rescind',
-        'Repair'
+        'Repair',
+        'RepairWithScenario'
     ];
 
 functions('InvoiceTemplating') ->
@@ -3696,6 +3774,7 @@ functions('PartyManagement') ->
         'BlockShop',
         'UnblockShop',
         'ComputeShopTerms',
+        'ComputeWalletTermsNew',
         'ComputeWalletTerms',
         'CreateClaim',
         'GetClaim',
@@ -4021,6 +4100,20 @@ function_info('Invoicing', 'Repair', params_type) ->
 function_info('Invoicing', 'Repair', reply_type) ->
         {struct, struct, []};
     function_info('Invoicing', 'Repair', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
+    ]};
+function_info('Invoicing', 'RepairWithScenario', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceRepairScenario'}}, 'Scenario', undefined}
+]};
+function_info('Invoicing', 'RepairWithScenario', reply_type) ->
+        {struct, struct, []};
+    function_info('Invoicing', 'RepairWithScenario', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
@@ -4539,6 +4632,22 @@ function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeWalletTermsNew', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined},
+    {3, undefined, string, 'contract_id', undefined},
+    {4, undefined, string, 'timestamp', undefined},
+    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+]};
+function_info('PartyManagement', 'ComputeWalletTermsNew', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+    function_info('PartyManagement', 'ComputeWalletTermsNew', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'ComputeWalletTerms', params_type) ->
     {struct, struct, [

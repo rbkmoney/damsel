@@ -270,6 +270,26 @@
     'reason' :: binary()
 }).
 
+%% struct 'InvoiceRepairFailPreProcessing'
+-record('payproc_InvoiceRepairFailPreProcessing', {
+    'failure' :: dmsl_domain_thrift:'Failure'()
+}).
+
+%% struct 'InvoiceRepairSkipInspector'
+-record('payproc_InvoiceRepairSkipInspector', {
+    'risk_score' :: atom()
+}).
+
+%% struct 'InvoiceRepairFailSession'
+-record('payproc_InvoiceRepairFailSession', {
+    'failure' :: dmsl_domain_thrift:'Failure'()
+}).
+
+%% struct 'InvoiceRepairComplex'
+-record('payproc_InvoiceRepairComplex', {
+    'scenarios' :: [dmsl_payment_processing_thrift:'InvoiceRepairScenario'()]
+}).
+
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
@@ -436,7 +456,8 @@
     'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
     'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
-    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined
 }).
 
 %% struct 'PartyParams'

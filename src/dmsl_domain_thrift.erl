@@ -240,8 +240,8 @@
     'BankCard'/0,
     'PaymentTerminal'/0,
     'DigitalWallet'/0,
-    'BankCardBINRangeRef'/0,
-    'BankCardBINRange'/0,
+    'BankRef'/0,
+    'Bank'/0,
     'PaymentMethodRef'/0,
     'PaymentMethodDefinition'/0,
     'PaymentMethodSelector'/0,
@@ -328,7 +328,7 @@
     'CalendarObject'/0,
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
-    'BankCardBINRangeObject'/0,
+    'BankObject'/0,
     'ProviderObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
@@ -796,8 +796,10 @@
 
 %% enum 'WalletCashFlowAccount'
 -type 'WalletCashFlowAccount'() ::
-    'settlement' |
-    'payout'.
+    'sender_source' |
+    'sender_settlement' |
+    'receiver_settlement' |
+    'receiver_destination'.
 
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
@@ -960,8 +962,8 @@
     'BankCard' |
     'PaymentTerminal' |
     'DigitalWallet' |
-    'BankCardBINRangeRef' |
-    'BankCardBINRange' |
+    'BankRef' |
+    'Bank' |
     'PaymentMethodRef' |
     'PaymentMethodDefinition' |
     'PaymentMethodSelector' |
@@ -1048,7 +1050,7 @@
     'CalendarObject' |
     'PaymentMethodObject' |
     'PayoutMethodObject' |
-    'BankCardBINRangeObject' |
+    'BankObject' |
     'ProviderObject' |
     'TerminalObject' |
     'InspectorObject' |
@@ -1566,11 +1568,11 @@
 %% struct 'DigitalWallet'
 -type 'DigitalWallet'() :: #'domain_DigitalWallet'{}.
 
-%% struct 'BankCardBINRangeRef'
--type 'BankCardBINRangeRef'() :: #'domain_BankCardBINRangeRef'{}.
+%% struct 'BankRef'
+-type 'BankRef'() :: #'domain_BankRef'{}.
 
-%% struct 'BankCardBINRange'
--type 'BankCardBINRange'() :: #'domain_BankCardBINRange'{}.
+%% struct 'Bank'
+-type 'Bank'() :: #'domain_Bank'{}.
 
 %% struct 'PaymentMethodRef'
 -type 'PaymentMethodRef'() :: #'domain_PaymentMethodRef'{}.
@@ -1746,7 +1748,7 @@
 %% union 'BankCardConditionDefinition'
 -type 'BankCardConditionDefinition'() ::
     {'payment_system_is', atom()} |
-    {'bin_in', 'BankCardBINRangeRef'()} |
+    {'issuer_bank_is', 'BankRef'()} |
     {'payment_system', 'PaymentSystemCondition'()} |
     {'issuer_country_is', atom()}.
 
@@ -1884,8 +1886,8 @@
 %% struct 'PayoutMethodObject'
 -type 'PayoutMethodObject'() :: #'domain_PayoutMethodObject'{}.
 
-%% struct 'BankCardBINRangeObject'
--type 'BankCardBINRangeObject'() :: #'domain_BankCardBINRangeObject'{}.
+%% struct 'BankObject'
+-type 'BankObject'() :: #'domain_BankObject'{}.
 
 %% struct 'ProviderObject'
 -type 'ProviderObject'() :: #'domain_ProviderObject'{}.
@@ -1919,7 +1921,7 @@
     {'calendar', 'CalendarRef'()} |
     {'payment_method', 'PaymentMethodRef'()} |
     {'payout_method', 'PayoutMethodRef'()} |
-    {'bank_card_bin_range', 'BankCardBINRangeRef'()} |
+    {'bank', 'BankRef'()} |
     {'contract_template', 'ContractTemplateRef'()} |
     {'term_set_hierarchy', 'TermSetHierarchyRef'()} |
     {'payment_institution', 'PaymentInstitutionRef'()} |
@@ -1942,7 +1944,7 @@
     {'calendar', 'CalendarObject'()} |
     {'payment_method', 'PaymentMethodObject'()} |
     {'payout_method', 'PayoutMethodObject'()} |
-    {'bank_card_bin_range', 'BankCardBINRangeObject'()} |
+    {'bank', 'BankObject'()} |
     {'contract_template', 'ContractTemplateObject'()} |
     {'term_set_hierarchy', 'TermSetHierarchyObject'()} |
     {'payment_institution', 'PaymentInstitutionObject'()} |
@@ -2230,8 +2232,8 @@ structs() ->
         'BankCard',
         'PaymentTerminal',
         'DigitalWallet',
-        'BankCardBINRangeRef',
-        'BankCardBINRange',
+        'BankRef',
+        'Bank',
         'PaymentMethodRef',
         'PaymentMethodDefinition',
         'PaymentMethodSelector',
@@ -2318,7 +2320,7 @@ structs() ->
         'CalendarObject',
         'PaymentMethodObject',
         'PayoutMethodObject',
-        'BankCardBINRangeObject',
+        'BankObject',
         'ProviderObject',
         'TerminalObject',
         'InspectorObject',
@@ -2827,8 +2829,10 @@ enum_info('ExternalCashFlowAccount') ->
 
 enum_info('WalletCashFlowAccount') ->
     {enum, [
-        {'settlement', 0},
-        {'payout', 1}
+        {'sender_source', 0},
+        {'sender_settlement', 1},
+        {'receiver_settlement', 2},
+        {'receiver_destination', 3}
     ]};
 
 enum_info('CashFlowConstant') ->
@@ -3805,15 +3809,16 @@ struct_info('DigitalWallet') ->
     {2, required, string, 'id', undefined}
 ]};
 
-struct_info('BankCardBINRangeRef') ->
+struct_info('BankRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
 ]};
 
-struct_info('BankCardBINRange') ->
+struct_info('Bank') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
     {2, required, string, 'description', undefined},
+    {4, optional, {set, string}, 'binbase_id_patterns', undefined},
     {3, required, {set, string}, 'bins', undefined}
 ]};
 
@@ -4104,7 +4109,7 @@ struct_info('BankCardCondition') ->
 struct_info('BankCardConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bin_in', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
     {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined}
 ]};
@@ -4352,10 +4357,10 @@ struct_info('PayoutMethodObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodDefinition'}}, 'data', undefined}
 ]};
 
-struct_info('BankCardBINRangeObject') ->
+struct_info('BankObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRange'}}, 'data', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'Bank'}}, 'data', undefined}
 ]};
 
 struct_info('ProviderObject') ->
@@ -4414,7 +4419,7 @@ struct_info('Reference') ->
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeRef'}}, 'bank_card_bin_range', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'bank', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined},
     {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'term_set_hierarchy', undefined},
     {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
@@ -4438,7 +4443,7 @@ struct_info('DomainObject') ->
     {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
     {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardBINRangeObject'}}, 'bank_card_bin_range', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankObject'}}, 'bank', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateObject'}}, 'contract_template', undefined},
     {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyObject'}}, 'term_set_hierarchy', undefined},
     {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionObject'}}, 'payment_institution', undefined},
@@ -4797,11 +4802,11 @@ record_name('OperationTimeout') ->
     record_name('DigitalWallet') ->
     'domain_DigitalWallet';
 
-    record_name('BankCardBINRangeRef') ->
-    'domain_BankCardBINRangeRef';
+    record_name('BankRef') ->
+    'domain_BankRef';
 
-    record_name('BankCardBINRange') ->
-    'domain_BankCardBINRange';
+    record_name('Bank') ->
+    'domain_Bank';
 
     record_name('PaymentMethodRef') ->
     'domain_PaymentMethodRef';
@@ -5001,8 +5006,8 @@ record_name('OperationTimeout') ->
     record_name('PayoutMethodObject') ->
     'domain_PayoutMethodObject';
 
-    record_name('BankCardBINRangeObject') ->
-    'domain_BankCardBINRangeObject';
+    record_name('BankObject') ->
+    'domain_BankObject';
 
     record_name('ProviderObject') ->
     'domain_ProviderObject';
