@@ -490,6 +490,39 @@ struct InvoicePaymentAdjustmentParams {
     2: required string reason
 }
 
+/* Сценарий, проверяющий состояние упавшей машины и, в случае если
+   платеж упал раньше похода к провайдеру, начинает процедуру корректного
+   завершения, используя заданную ошибку*/
+
+struct InvoiceRepairFailPreProcessing {
+    1:  required domain.Failure failure
+}
+
+/* Сценарий, позволяющий пропустить испекцию платежа, подменив ее результат заданым. */
+
+struct InvoiceRepairSkipInspector {
+    1:  required domain.RiskScore risk_score
+}
+
+/* Сценарий, использующий заданную ошибку, чтобы сконструировать результат похода к адаптеру */
+
+struct InvoiceRepairFailSession {
+    1:  required domain.Failure failure
+}
+
+/* Комбинированная структура */
+
+struct InvoiceRepairComplex {
+    1:  required list<InvoiceRepairScenario> scenarios
+}
+
+union InvoiceRepairScenario{
+    1: InvoiceRepairComplex complex
+    2: InvoiceRepairFailPreProcessing fail_pre_processing
+    3: InvoiceRepairSkipInspector skip_inspector
+    4: InvoiceRepairFailSession fail_session
+}
+
 // Exceptions
 
 // forward-declared
@@ -793,6 +826,14 @@ service Invoicing {
             3: base.InvalidRequest ex3
         )
 
+    /* Invoice payments repairs */
+
+    void RepairWithScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: InvoiceRepairScenario Scenario)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: base.InvalidRequest ex3
+        )
 }
 
 service InvoiceTemplating {
@@ -1215,6 +1256,7 @@ struct Varset {
     3: optional domain.Cash amount
     4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
+    6: optional domain.WalletID wallet_id
 }
 
 struct PartyParams {
@@ -1758,6 +1800,18 @@ service PartyManagement {
 
     /* Wallet */
 
+    // temporary method for transfer period
+    // do not use
+    domain.TermSet ComputeWalletTermsNew (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: base.Timestamp timestamp
+        5: Varset varset
+    )
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
+
+    // deprecated
     domain.TermSet ComputeWalletTerms (
         1: UserInfo user,
         2: PartyID party_id,
