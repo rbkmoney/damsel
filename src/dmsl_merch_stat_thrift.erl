@@ -606,7 +606,8 @@ struct_info('StatPayment') ->
     {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
     {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {15, optional, string, 'short_id', undefined},
-    {16, optional, bool, 'make_recurrent', undefined}
+    {16, optional, bool, 'make_recurrent', undefined},
+    {17, required, i64, 'domain_revision', undefined}
 ]};
 
 struct_info('Payer') ->

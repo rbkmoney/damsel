@@ -23,7 +23,8 @@
     'location_info' :: dmsl_geo_ip_thrift:'LocationInfo'() | undefined,
     'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'(),
     'short_id' :: binary() | undefined,
-    'make_recurrent' :: boolean() | undefined
+    'make_recurrent' :: boolean() | undefined,
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'()
 }).
 
 %% struct 'RecurrentParentPayment'
