@@ -1893,7 +1893,8 @@ struct_info('Event') ->
     {1, required, i64, 'id', undefined},
     {2, required, string, 'created_at', undefined},
     {3, required, {struct, union, {dmsl_payment_processing_thrift, 'EventSource'}}, 'source', undefined},
-    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'EventPayload'}}, 'payload', undefined}
+    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'EventPayload'}}, 'payload', undefined},
+    {5, optional, i32, 'sequence', undefined}
 ]};
 
 struct_info('EventSource') ->

@@ -34,6 +34,7 @@
 -export_type([
     'ID'/0,
     'EventID'/0,
+    'SequenceID'/0,
     'Opaque'/0,
     'Timestamp'/0,
     'Year'/0,
@@ -74,6 +75,7 @@
 -type typedef_name() ::
     'ID' |
     'EventID' |
+    'SequenceID' |
     'Opaque' |
     'Timestamp' |
     'Year' |
@@ -85,6 +87,7 @@
 
 -type 'ID'() :: binary().
 -type 'EventID'() :: integer().
+-type 'SequenceID'() :: integer().
 -type 'Opaque'() :: binary().
 -type 'Timestamp'() :: binary().
 -type 'Year'() :: integer().
@@ -244,6 +247,7 @@ typedefs() ->
     [
         'ID',
         'EventID',
+        'SequenceID',
         'Opaque',
         'Timestamp',
         'Year',
@@ -298,6 +302,9 @@ typedef_info('ID') ->
 
 typedef_info('EventID') ->
     i64;
+
+typedef_info('SequenceID') ->
+    i32;
 
 typedef_info('Opaque') ->
     string;

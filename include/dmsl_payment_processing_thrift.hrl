@@ -27,7 +27,8 @@
     'id' :: dmsl_base_thrift:'EventID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'source' :: dmsl_payment_processing_thrift:'EventSource'(),
-    'payload' :: dmsl_payment_processing_thrift:'EventPayload'()
+    'payload' :: dmsl_payment_processing_thrift:'EventPayload'(),
+    'sequence' :: dmsl_base_thrift:'SequenceID'() | undefined
 }).
 
 %% struct 'InvoiceCreated'
