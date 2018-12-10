@@ -400,6 +400,11 @@
     'aba_rtn' :: binary() | undefined
 }).
 
+%% struct 'WalletInfo'
+-record('domain_WalletInfo', {
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'()
+}).
+
 %% struct 'RussianPrivateEntity'
 -record('domain_RussianPrivateEntity', {
     'first_name' :: binary(),

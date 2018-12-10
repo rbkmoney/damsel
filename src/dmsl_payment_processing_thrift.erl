@@ -248,6 +248,7 @@
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
     'OperationNotPermitted'/0,
+    'PayoutToolNotFound'/0,
     'InsufficientAccountBalance'/0,
     'InvalidRecurrentParentPayment'/0,
     'InvoicePaymentPending'/0,
@@ -537,6 +538,7 @@
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
     'OperationNotPermitted' |
+    'PayoutToolNotFound' |
     'InsufficientAccountBalance' |
     'InvalidRecurrentParentPayment' |
     'InvoicePaymentPending' |
@@ -1308,6 +1310,9 @@
 
 %% exception 'OperationNotPermitted'
 -type 'OperationNotPermitted'() :: #'payproc_OperationNotPermitted'{}.
+
+%% exception 'PayoutToolNotFound'
+-type 'PayoutToolNotFound'() :: #'payproc_PayoutToolNotFound'{}.
 
 %% exception 'InsufficientAccountBalance'
 -type 'InsufficientAccountBalance'() :: #'payproc_InsufficientAccountBalance'{}.
@@ -2866,7 +2871,8 @@ struct_info('PayoutParams') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
-    {3, required, string, 'timestamp', undefined}
+    {3, required, string, 'timestamp', undefined},
+    {4, optional, string, 'payout_tool_id', undefined}
 ]};
 
 struct_info('InvalidChangesetReason') ->
@@ -3014,6 +3020,9 @@ struct_info('EventNotFound') ->
     {struct, exception, []};
 
 struct_info('OperationNotPermitted') ->
+    {struct, exception, []};
+
+struct_info('PayoutToolNotFound') ->
     {struct, exception, []};
 
 struct_info('InsufficientAccountBalance') ->
@@ -3593,6 +3602,9 @@ record_name('InternalUser') ->
 
     record_name('OperationNotPermitted') ->
     'payproc_OperationNotPermitted';
+
+    record_name('PayoutToolNotFound') ->
+    'payproc_PayoutToolNotFound';
 
     record_name('InsufficientAccountBalance') ->
     'payproc_InsufficientAccountBalance';
@@ -4860,7 +4872,8 @@ function_info('PartyManagement', 'ComputePayoutCashFlow', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex5', undefined}
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PayoutToolNotFound'}}, 'ex6', undefined}
     ]};
 
 function_info('EventSink', 'GetEvents', params_type) ->

@@ -722,7 +722,8 @@
 -record('payproc_PayoutParams', {
     'id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'amount' :: dmsl_domain_thrift:'Cash'(),
-    'timestamp' :: dmsl_base_thrift:'Timestamp'()
+    'timestamp' :: dmsl_base_thrift:'Timestamp'(),
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
 }).
 
 %% struct 'InvalidContract'
@@ -825,6 +826,9 @@
 
 %% exception 'OperationNotPermitted'
 -record('payproc_OperationNotPermitted', {}).
+
+%% exception 'PayoutToolNotFound'
+-record('payproc_PayoutToolNotFound', {}).
 
 %% exception 'InsufficientAccountBalance'
 -record('payproc_InsufficientAccountBalance', {}).

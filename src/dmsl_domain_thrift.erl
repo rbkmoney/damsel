@@ -170,6 +170,7 @@
     'RussianBankAccount'/0,
     'InternationalBankAccount'/0,
     'InternationalBankDetails'/0,
+    'WalletInfo'/0,
     'PrivateEntity'/0,
     'RussianPrivateEntity'/0,
     'PayoutTool'/0,
@@ -489,7 +490,8 @@
 %% enum 'PayoutMethod'
 -type 'PayoutMethod'() ::
     'russian_bank_account' |
-    'international_bank_account'.
+    'international_bank_account' |
+    'wallet_info'.
 
 %% enum 'Residence'
 -type 'Residence'() ::
@@ -892,6 +894,7 @@
     'RussianBankAccount' |
     'InternationalBankAccount' |
     'InternationalBankDetails' |
+    'WalletInfo' |
     'PrivateEntity' |
     'RussianPrivateEntity' |
     'PayoutTool' |
@@ -1325,6 +1328,9 @@
 %% struct 'InternationalBankDetails'
 -type 'InternationalBankDetails'() :: #'domain_InternationalBankDetails'{}.
 
+%% struct 'WalletInfo'
+-type 'WalletInfo'() :: #'domain_WalletInfo'{}.
+
 %% union 'PrivateEntity'
 -type 'PrivateEntity'() ::
     {'russian_private_entity', 'RussianPrivateEntity'()}.
@@ -1338,7 +1344,8 @@
 %% union 'PayoutToolInfo'
 -type 'PayoutToolInfo'() ::
     {'russian_bank_account', 'RussianBankAccount'()} |
-    {'international_bank_account', 'InternationalBankAccount'()}.
+    {'international_bank_account', 'InternationalBankAccount'()} |
+    {'wallet_info', 'WalletInfo'()}.
 
 %% struct 'Contract'
 -type 'Contract'() :: #'domain_Contract'{}.
@@ -2162,6 +2169,7 @@ structs() ->
         'RussianBankAccount',
         'InternationalBankAccount',
         'InternationalBankDetails',
+        'WalletInfo',
         'PrivateEntity',
         'RussianPrivateEntity',
         'PayoutTool',
@@ -2512,7 +2520,8 @@ enum_info('CumulativeLimitPeriod') ->
 enum_info('PayoutMethod') ->
     {enum, [
         {'russian_bank_account', 0},
-        {'international_bank_account', 1}
+        {'international_bank_account', 1},
+        {'wallet_info', 2}
     ]};
 
 enum_info('Residence') ->
@@ -3351,6 +3360,11 @@ struct_info('InternationalBankDetails') ->
     {5, optional, string, 'aba_rtn', undefined}
 ]};
 
+struct_info('WalletInfo') ->
+    {struct, struct, [
+    {1, required, string, 'wallet_id', undefined}
+]};
+
 struct_info('PrivateEntity') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianPrivateEntity'}}, 'russian_private_entity', undefined}
@@ -3375,7 +3389,8 @@ struct_info('PayoutTool') ->
 struct_info('PayoutToolInfo') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'international_bank_account', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'international_bank_account', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'WalletInfo'}}, 'wallet_info', undefined}
 ]};
 
 struct_info('Contract') ->
@@ -4636,6 +4651,9 @@ record_name('OperationTimeout') ->
 
     record_name('InternationalBankDetails') ->
     'domain_InternationalBankDetails';
+
+    record_name('WalletInfo') ->
+    'domain_WalletInfo';
 
     record_name('RussianPrivateEntity') ->
     'domain_RussianPrivateEntity';
