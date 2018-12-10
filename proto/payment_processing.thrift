@@ -554,6 +554,7 @@ exception InvoicePaymentRefundNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
+exception PayoutToolNotFound {}
 exception InsufficientAccountBalance {}
 exception InvalidRecurrentParentPayment {
     1: optional string details
@@ -1624,6 +1625,7 @@ struct PayoutParams {
     1: required ShopID id
     2: required domain.Cash amount
     3: required base.Timestamp timestamp
+    4: optional domain.PayoutToolID payout_tool_id
 }
 
 // Exceptions
@@ -1914,7 +1916,14 @@ service PartyManagement {
     /* Payouts */
     /* TODO looks like adhoc. Rework after feedback. Or not. */
     domain.FinalCashFlow ComputePayoutCashFlow (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4, 5: OperationNotPermitted ex5)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3,
+            4: ShopNotFound ex4,
+            5: OperationNotPermitted ex5,
+            6: PayoutToolNotFound ex6
+        )
 }
 
 /* Event sink service definitions */

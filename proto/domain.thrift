@@ -593,6 +593,10 @@ struct InternationalBankDetails {
 
 }
 
+struct WalletInfo {
+    1: required WalletID wallet_id
+}
+
 union PrivateEntity {
     1: RussianPrivateEntity russian_private_entity
 }
@@ -616,6 +620,7 @@ struct PayoutTool {
 union PayoutToolInfo {
     1: RussianBankAccount russian_bank_account
     2: InternationalBankAccount international_bank_account
+    3: WalletInfo wallet_info
 }
 
 typedef base.ID ContractID
@@ -874,6 +879,7 @@ struct WithdrawalServiceTerms {
 enum PayoutMethod {
     russian_bank_account
     international_bank_account
+    wallet_info
 }
 
 struct PayoutMethodRef { 1: required PayoutMethod id }
