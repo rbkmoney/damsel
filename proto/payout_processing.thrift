@@ -159,26 +159,7 @@ union PayoutStatus {
 struct PayoutUnpaid {}
 
 /* Помечается статусом paid, когда удалось отправить в банк */
-struct PayoutPaid {
-    1: required PaidDetails details
-}
-
-/* Детали выплаты, которые появляются после того, как выплата успешно отправлена */
-union PaidDetails {
-    1: CardPaidDetails card_details
-    2: AccountPaidDetails account_details
-}
-
-struct CardPaidDetails {
-    1: required ProviderDetails provider_details
-}
-
-struct ProviderDetails {
-    1: required string name
-    2: required string transaction_id
-}
-
-struct AccountPaidDetails {}
+struct PayoutPaid {}
 
 /**
  * Помечается статусом cancelled, когда не удалось отправить в банк,
