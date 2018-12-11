@@ -335,9 +335,10 @@ struct ShopParams {
 * amount - сумма выплаты
 **/
 struct PayoutParams {
-    1: required ShopParams shop
-    2: required domain.PayoutToolID payout_tool_id
-    3: required domain.Cash amount
+    1: required PayoutID payout_id
+    2: required ShopParams shop
+    3: required domain.PayoutToolID payout_tool_id
+    4: required domain.Cash amount
 }
 
 /**
@@ -416,7 +417,7 @@ service PayoutManagement {
     /**
      * Создать выплату на определенную сумму и платежный инструмент
      */
-    PayoutID CreatePayout(1: PayoutParams payoutParams) throws (1: base.InvalidRequest ex1)
+    PayoutID CreatePayout(1: PayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /********************* Вывод на счет ************************/
     /**
