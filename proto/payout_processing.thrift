@@ -266,6 +266,7 @@ struct EventRange {
 
 exception NoLastEvent {}
 exception EventNotFound {}
+exception InvalidPayoutTool {}
 
 service EventSink {
 
@@ -422,7 +423,7 @@ service PayoutManagement {
     /**
      * Создать выплату на определенную сумму и платежный инструмент
      */
-    PayoutID CreatePayout(1: PayoutParams params) throws (1: base.InvalidRequest ex1)
+    PayoutID CreatePayout(1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: base.InvalidRequest ex2)
 
     /********************* Вывод на счет ************************/
     /**
