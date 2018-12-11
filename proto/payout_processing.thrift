@@ -196,13 +196,12 @@ struct PayoutConfirmed {
 
 /* Типы выплаты */
 union PayoutType {
-    1: PayoutCard bank_card
     2: PayoutAccount bank_account
+    3: Wallet wallet
 }
 
-/* Выплата на карту */
-struct PayoutCard {
-    1: required domain.BankCard card
+struct Wallet {
+    1: required domain.WalletID wallet_id
 }
 
 /* Вывод на расчетный счет */
@@ -330,6 +329,18 @@ struct ShopParams {
 }
 
 /**
+* Параметры для создания выплаты
+* shop - параметры магазина
+* payout_tool_id - идентификатор платежного инструмента
+* amount - сумма выплаты
+**/
+struct PayoutParams {
+    1: required ShopParams shop
+    2: required domain.PayoutToolID payout_tool_id
+    3: required domain.Cash amount
+}
+
+/**
 * Параметры для генерации выплаты
 * time_range - диапазон времени, за который будет сформированы выплаты
 * shop - параметры магазина. Если не указан, то генерируются выплаты за все магазины,
@@ -401,6 +412,12 @@ struct PayoutInfo {
 }
 
 service PayoutManagement {
+
+    /**
+     * Создать выплату на определенную сумму и платежный инструмент
+     */
+    PayoutID CreatePayout(1: PayoutParams payoutParams) throws (1: base.InvalidRequest ex1)
+
     /********************* Вывод на счет ************************/
     /**
      * Сгенерировать выводы за указанный промежуток времени
