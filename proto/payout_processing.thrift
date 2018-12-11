@@ -1,5 +1,6 @@
 include "base.thrift"
 include "domain.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.payout_processing
 namespace erlang payout_processing
@@ -8,6 +9,8 @@ typedef base.ID PayoutID
 typedef list<Event> Events
 
 typedef base.ID UserID
+
+typedef map<string, msgpack.Value> Metadata
 
 struct UserInfo {
     1: required UserID id
@@ -120,16 +123,17 @@ struct PayoutSummaryItem {
 typedef list<PayoutSummaryItem> PayoutSummary
 
 struct Payout {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    9: required domain.ContractID contract_id
+    1 : required PayoutID id
+    2 : required domain.PartyID party_id
+    3 : required domain.ShopID shop_id
+    9 : required domain.ContractID contract_id
     /* Время формирования платежного поручения, либо выплаты на карту  */
-    4: required base.Timestamp created_at
-    5: required PayoutStatus status
-    6: required domain.FinalCashFlow payout_flow
-    7: required PayoutType type
-    8: optional PayoutSummary summary
+    4 : required base.Timestamp created_at
+    5 : required PayoutStatus status
+    6 : required domain.FinalCashFlow payout_flow
+    7 : required PayoutType type
+    8 : optional PayoutSummary summary
+    10: optional Metadata metadata
 }
 
 /**
@@ -339,6 +343,7 @@ struct PayoutParams {
     2: required ShopParams shop
     3: required domain.PayoutToolID payout_tool_id
     4: required domain.Cash amount
+    5: optional Metadata metadata
 }
 
 /**
