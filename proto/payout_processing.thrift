@@ -1,5 +1,6 @@
 include "base.thrift"
 include "domain.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.payout_processing
 namespace erlang payout_processing
@@ -8,6 +9,8 @@ typedef base.ID PayoutID
 typedef list<Event> Events
 
 typedef base.ID UserID
+
+typedef map<string, msgpack.Value> Metadata
 
 struct UserInfo {
     1: required UserID id
@@ -120,16 +123,17 @@ struct PayoutSummaryItem {
 typedef list<PayoutSummaryItem> PayoutSummary
 
 struct Payout {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    9: required domain.ContractID contract_id
+    1 : required PayoutID id
+    2 : required domain.PartyID party_id
+    3 : required domain.ShopID shop_id
+    9 : required domain.ContractID contract_id
     /* Время формирования платежного поручения, либо выплаты на карту  */
-    4: required base.Timestamp created_at
-    5: required PayoutStatus status
-    6: required domain.FinalCashFlow payout_flow
-    7: required PayoutType type
-    8: optional PayoutSummary summary
+    4 : required base.Timestamp created_at
+    5 : required PayoutStatus status
+    6 : required domain.FinalCashFlow payout_flow
+    7 : required PayoutType type
+    8 : optional PayoutSummary summary
+    10: optional Metadata metadata
 }
 
 /**
@@ -155,26 +159,7 @@ union PayoutStatus {
 struct PayoutUnpaid {}
 
 /* Помечается статусом paid, когда удалось отправить в банк */
-struct PayoutPaid {
-    1: required PaidDetails details
-}
-
-/* Детали выплаты, которые появляются после того, как выплата успешно отправлена */
-union PaidDetails {
-    1: CardPaidDetails card_details
-    2: AccountPaidDetails account_details
-}
-
-struct CardPaidDetails {
-    1: required ProviderDetails provider_details
-}
-
-struct ProviderDetails {
-    1: required string name
-    2: required string transaction_id
-}
-
-struct AccountPaidDetails {}
+struct PayoutPaid {}
 
 /**
  * Помечается статусом cancelled, когда не удалось отправить в банк,
@@ -196,13 +181,12 @@ struct PayoutConfirmed {
 
 /* Типы выплаты */
 union PayoutType {
-    1: PayoutCard bank_card
     2: PayoutAccount bank_account
+    3: Wallet wallet
 }
 
-/* Выплата на карту */
-struct PayoutCard {
-    1: required domain.BankCard card
+struct Wallet {
+    1: required domain.WalletID wallet_id
 }
 
 /* Вывод на расчетный счет */
@@ -263,6 +247,8 @@ struct EventRange {
 
 exception NoLastEvent {}
 exception EventNotFound {}
+exception InvalidPayoutTool {}
+exception PayoutNotFound {}
 
 service EventSink {
 
@@ -327,6 +313,20 @@ struct AmountRange {
 struct ShopParams {
     1: required domain.PartyID party_id
     2: required domain.ShopID shop_id
+}
+
+/**
+* Параметры для создания выплаты
+* shop - параметры магазина
+* payout_tool_id - идентификатор платежного инструмента
+* amount - сумма выплаты
+**/
+struct PayoutParams {
+    1: required PayoutID payout_id
+    2: required ShopParams shop
+    3: required domain.PayoutToolID payout_tool_id
+    4: required domain.Cash amount
+    5: optional Metadata metadata
 }
 
 /**
@@ -401,6 +401,17 @@ struct PayoutInfo {
 }
 
 service PayoutManagement {
+
+    /**
+     * Создать выплату на определенную сумму и платежный инструмент
+     */
+    PayoutID CreatePayout (1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: InsufficientFunds ex2, 3: base.InvalidRequest ex3)
+
+    /**
+    * Получить выплату по идентификатору
+    */
+    Payout Get (1: PayoutID payout_id) throws (1: PayoutNotFound ex1)
+
     /********************* Вывод на счет ************************/
     /**
      * Сгенерировать выводы за указанный промежуток времени

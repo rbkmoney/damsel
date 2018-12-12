@@ -3,6 +3,7 @@
 
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
+-include("dmsl_msgpack_thrift.hrl").
 
 
 
@@ -56,30 +57,15 @@
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
     'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
-    'summary' :: dmsl_payout_processing_thrift:'PayoutSummary'() | undefined
+    'summary' :: dmsl_payout_processing_thrift:'PayoutSummary'() | undefined,
+    'metadata' :: dmsl_payout_processing_thrift:'Metadata'() | undefined
 }).
 
 %% struct 'PayoutUnpaid'
 -record('payout_processing_PayoutUnpaid', {}).
 
 %% struct 'PayoutPaid'
--record('payout_processing_PayoutPaid', {
-    'details' :: dmsl_payout_processing_thrift:'PaidDetails'()
-}).
-
-%% struct 'CardPaidDetails'
--record('payout_processing_CardPaidDetails', {
-    'provider_details' :: dmsl_payout_processing_thrift:'ProviderDetails'()
-}).
-
-%% struct 'ProviderDetails'
--record('payout_processing_ProviderDetails', {
-    'name' :: binary(),
-    'transaction_id' :: binary()
-}).
-
-%% struct 'AccountPaidDetails'
--record('payout_processing_AccountPaidDetails', {}).
+-record('payout_processing_PayoutPaid', {}).
 
 %% struct 'PayoutCancelled'
 -record('payout_processing_PayoutCancelled', {
@@ -92,9 +78,9 @@
     'user_info' :: dmsl_payout_processing_thrift:'UserInfo'()
 }).
 
-%% struct 'PayoutCard'
--record('payout_processing_PayoutCard', {
-    'card' :: dmsl_domain_thrift:'BankCard'()
+%% struct 'Wallet'
+-record('payout_processing_Wallet', {
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'()
 }).
 
 %% struct 'RussianPayoutAccount'
@@ -150,6 +136,15 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'()
 }).
 
+%% struct 'PayoutParams'
+-record('payout_processing_PayoutParams', {
+    'payout_id' :: dmsl_payout_processing_thrift:'PayoutID'(),
+    'shop' :: dmsl_payout_processing_thrift:'ShopParams'(),
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'metadata' :: dmsl_payout_processing_thrift:'Metadata'() | undefined
+}).
+
 %% struct 'GeneratePayoutParams'
 -record('payout_processing_GeneratePayoutParams', {
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
@@ -198,6 +193,12 @@
 
 %% exception 'EventNotFound'
 -record('payout_processing_EventNotFound', {}).
+
+%% exception 'InvalidPayoutTool'
+-record('payout_processing_InvalidPayoutTool', {}).
+
+%% exception 'PayoutNotFound'
+-record('payout_processing_PayoutNotFound', {}).
 
 %% exception 'InsufficientFunds'
 -record('payout_processing_InsufficientFunds', {}).
