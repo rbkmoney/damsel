@@ -92,9 +92,11 @@ struct Signature {
 */
 enum ReportType {
     // Акт об оказании услуг
-    provision_of_service,
+    provision_of_service
     // Реестр платежей
     payment_registry
+    // Реестр выводов
+    withdrawal_registry
 }
 
 service Reporting {
@@ -131,7 +133,7 @@ service Reporting {
   *
   * ReportNotFound, если отчет не найден
   */
-  void cancelReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
+  void CancelReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
   * Сгенерировать ссылку на файл
