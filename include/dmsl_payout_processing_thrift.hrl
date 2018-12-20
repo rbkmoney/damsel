@@ -121,7 +121,7 @@
 %% struct 'GeneratePayoutParams'
 -record('payout_processing_GeneratePayoutParams', {
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
-    'params' :: dmsl_payout_processing_thrift:'ShopParams'()
+    'shop_params' :: dmsl_payout_processing_thrift:'ShopParams'()
 }).
 
 %% struct 'PayoutSearchCriteria'

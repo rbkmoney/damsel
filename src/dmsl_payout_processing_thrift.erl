@@ -581,7 +581,7 @@ struct_info('PayoutParams') ->
 struct_info('GeneratePayoutParams') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
-    {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'params', undefined}
+    {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop_params', undefined}
 ]};
 
 struct_info('PayoutSearchCriteria') ->

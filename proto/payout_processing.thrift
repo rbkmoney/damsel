@@ -306,7 +306,7 @@ struct PayoutParams {
 **/
 struct GeneratePayoutParams {
     1: required TimeRange time_range
-    2: required ShopParams params
+    2: required ShopParams shop_params
 }
 
 /**
