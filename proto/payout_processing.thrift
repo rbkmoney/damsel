@@ -12,22 +12,6 @@ typedef base.ID UserID
 
 typedef map<string, msgpack.Value> Metadata
 
-struct UserInfo {
-    1: required UserID id
-    2: required UserType type
-}
-
-/* Временная замена ролям пользователей для разграничения доступа и лога аудита */
-union UserType {
-    1: InternalUser internal_user
-    2: ExternalUser external_user
-    3: ServiceUser  service_user
-}
-
-struct InternalUser {}
-struct ExternalUser {}
-struct ServiceUser {}
-
 /**
  * Событие, атомарный фрагмент истории бизнес-объекта, например выплаты
  */
@@ -89,8 +73,6 @@ union PayoutChange {
 struct PayoutCreated {
     /* Данные созданной выплаты */
     1: required Payout payout
-    /* Кто инициировал выплату */
-    2: required UserInfo initiator
 }
 
 /**
@@ -130,6 +112,9 @@ struct Payout {
     /* Время формирования платежного поручения, либо выплаты на карту  */
     4 : required base.Timestamp created_at
     5 : required PayoutStatus status
+    11: required domain.Amount amount
+    12: required domain.Amount fee
+    13: required domain.CurrencyRef currency
     6 : required domain.FinalCashFlow payout_flow
     7 : required PayoutType type
     8 : optional PayoutSummary summary
@@ -167,7 +152,6 @@ struct PayoutPaid {}
  * балансов на счетах
  */
 struct PayoutCancelled {
-    1: required UserInfo user_info
     2: required string details
 }
 
@@ -175,9 +159,7 @@ struct PayoutCancelled {
  * Помечается статусом confirmed, когда можно менять балансы на счетах,
  * то есть если выплата confirmed, то балансы уже изменены
  */
-struct PayoutConfirmed {
-    1: required UserInfo user_info
-}
+struct PayoutConfirmed {}
 
 /* Типы выплаты */
 union PayoutType {
@@ -273,16 +255,6 @@ service EventSink {
 
 }
 
-/**
- * Выплаты на карту
- */
-struct Pay2CardParams {
-    1: required domain.BankCard bank_card
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    4: required domain.Cash sum
-}
-
 /* Когда на счете для вывода недостаточно средств */
 exception InsufficientFunds {}
 /* Когда превышен лимит */
@@ -337,7 +309,7 @@ struct PayoutParams {
 **/
 struct GeneratePayoutParams {
     1: required TimeRange time_range
-    2: required ShopParams shop
+    2: required ShopParams shop_params
 }
 
 /**
@@ -379,25 +351,8 @@ struct PayoutSearchRequest {
 * last_id (inclusive) - уникальный идентификатор, соответствующий последнему элементу выборки
 **/
 struct PayoutSearchResponse {
-   1: required list<PayoutInfo> payouts
+   1: required list<Payout> payouts
    2: required i64 last_id
-}
-
-/**
-* Info по выплате для отображения в админке
-**/
-struct PayoutInfo {
-     1: required PayoutID id
-     2: required domain.PartyID party_id
-     3: required domain.ShopID shop_id
-    11: required domain.ContractID contract_id
-     4: required domain.Cash amount
-     5: required PayoutType type
-     6: required PayoutSearchStatus status
-     7: required base.Timestamp from_time
-     8: required base.Timestamp to_time
-     9: required base.Timestamp created_at
-    10: optional PayoutSummary summary
 }
 
 service PayoutManagement {
@@ -405,7 +360,7 @@ service PayoutManagement {
     /**
      * Создать выплату на определенную сумму и платежный инструмент
      */
-    PayoutID CreatePayout (1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: InsufficientFunds ex2, 3: base.InvalidRequest ex3)
+    Payout CreatePayout (1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: InsufficientFunds ex2, 3: base.InvalidRequest ex3)
 
     /**
     * Получить выплату по идентификатору
@@ -419,14 +374,14 @@ service PayoutManagement {
     list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Подтвердить выплаты. Вернуть список подтвержденных выплат
+     * Подтвердить выплату.
      */
-    set<PayoutID> ConfirmPayouts (1: set<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    void ConfirmPayout (1: PayoutID payout_id) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Отменить движения по выплатам. Вернуть список отмененных выплат
+     * Отменить движения по выплате.
      */
-    set<PayoutID> CancelPayouts (1: set<PayoutID> payout_ids, 2: string details) throws (1: base.InvalidRequest ex1)
+    void CancelPayout (1: PayoutID payout_id, 2: string details) throws (1: base.InvalidRequest ex1)
 
     /**
     * Возвращает список Payout-ов согласно запросу поиска
