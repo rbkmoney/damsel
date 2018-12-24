@@ -113,6 +113,7 @@ struct Payout {
     4 : required base.Timestamp created_at
     5 : required PayoutStatus status
     11: required domain.Cash amount
+    12: required domain.Cash fee
     6 : required domain.FinalCashFlow payout_flow
     7 : required PayoutType type
     8 : optional PayoutSummary summary
