@@ -213,6 +213,11 @@
     'count' :: integer()
 }).
 
+%% struct 'Wallet'
+-record('merchstat_Wallet', {
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'()
+}).
+
 %% struct 'PayoutCard'
 -record('merchstat_PayoutCard', {
     'card' :: dmsl_merch_stat_thrift:'BankCard'()

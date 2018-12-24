@@ -246,6 +246,11 @@ typedef list<PayoutSummaryItem> PayoutSummary
 union PayoutType {
     1: PayoutCard bank_card
     2: PayoutAccount bank_account
+    3: Wallet wallet
+}
+
+struct Wallet {
+    1: required domain.WalletID wallet_id
 }
 
 struct PayoutCard {

@@ -80,6 +80,7 @@
     'StatPayout'/0,
     'PayoutSummaryItem'/0,
     'PayoutType'/0,
+    'Wallet'/0,
     'PayoutCard'/0,
     'PayoutAccount'/0,
     'RussianPayoutAccount'/0,
@@ -186,6 +187,7 @@
     'StatPayout' |
     'PayoutSummaryItem' |
     'PayoutType' |
+    'Wallet' |
     'PayoutCard' |
     'PayoutAccount' |
     'RussianPayoutAccount' |
@@ -332,7 +334,11 @@
 %% union 'PayoutType'
 -type 'PayoutType'() ::
     {'bank_card', 'PayoutCard'()} |
-    {'bank_account', 'PayoutAccount'()}.
+    {'bank_account', 'PayoutAccount'()} |
+    {'wallet', 'Wallet'()}.
+
+%% struct 'Wallet'
+-type 'Wallet'() :: #'merchstat_Wallet'{}.
 
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'merchstat_PayoutCard'{}.
@@ -512,6 +518,7 @@ structs() ->
         'StatPayout',
         'PayoutSummaryItem',
         'PayoutType',
+        'Wallet',
         'PayoutCard',
         'PayoutAccount',
         'RussianPayoutAccount',
@@ -843,7 +850,13 @@ struct_info('PayoutSummaryItem') ->
 struct_info('PayoutType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, union, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
+    {2, optional, {struct, union, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'Wallet'}}, 'wallet', undefined}
+]};
+
+struct_info('Wallet') ->
+    {struct, struct, [
+    {1, required, string, 'wallet_id', undefined}
 ]};
 
 struct_info('PayoutCard') ->
@@ -1043,6 +1056,9 @@ record_name('RecurrentParentPayment') ->
 
     record_name('PayoutSummaryItem') ->
     'merchstat_PayoutSummaryItem';
+
+    record_name('Wallet') ->
+    'merchstat_Wallet';
 
     record_name('PayoutCard') ->
     'merchstat_PayoutCard';
