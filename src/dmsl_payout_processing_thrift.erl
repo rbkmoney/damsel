@@ -763,7 +763,7 @@ function_info('PayoutManagement', 'CreatePayout', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutParams'}}, 'params', undefined}
 ]};
 function_info('PayoutManagement', 'CreatePayout', reply_type) ->
-        string;
+        {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}};
     function_info('PayoutManagement', 'CreatePayout', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'InvalidPayoutTool'}}, 'ex1', undefined},
