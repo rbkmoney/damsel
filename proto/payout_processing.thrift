@@ -360,7 +360,7 @@ service PayoutManagement {
     /**
      * Создать выплату на определенную сумму и платежный инструмент
      */
-    PayoutID CreatePayout (1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: InsufficientFunds ex2, 3: base.InvalidRequest ex3)
+    Payout CreatePayout (1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: InsufficientFunds ex2, 3: base.InvalidRequest ex3)
 
     /**
     * Получить выплату по идентификатору
