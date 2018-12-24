@@ -39,6 +39,8 @@
     'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'fee' :: dmsl_domain_thrift:'Cash'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
     'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
     'summary' :: dmsl_payout_processing_thrift:'PayoutSummary'() | undefined,
