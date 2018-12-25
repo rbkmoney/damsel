@@ -1602,6 +1602,17 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 }
 
+struct PayoutsProviderRef { 1: required ObjectID id }
+
+struct PayoutsProvider {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+    4: optional string identity
+    5: optional PayoutsProvisionTerms payout_terms
+    6: optional ProviderAccountSet accounts = {}
+}
+
 struct PaymentsProvisionTerms {
     1: required CurrencySelector currencies
     2: required CategorySelector categories
@@ -1634,6 +1645,13 @@ struct RecurrentPaytoolsProvisionTerms {
     3: required PaymentMethodSelector payment_methods
 }
 
+struct PayoutsProvisionTerms {
+    1: required CurrencySelector currencies
+    2: required PayoutMethodSelector payout_methods
+    3: required CashLimitSelector cash_limit
+    4: required CashFlowSelector cash_flow
+}
+
 union CashValueSelector {
     1: list<CashValueDecision> decisions
     2: Cash value
@@ -1658,6 +1676,16 @@ union ProviderSelector {
 struct ProviderDecision {
     1: required Predicate if_
     2: required ProviderSelector then_
+}
+
+union PayoutsProviderSelector {
+    1: list<PayoutsProviderDecision> decisions
+    2: set<PayoutsProviderRef> value
+}
+
+struct PayoutsProviderDecision {
+    1: required Predicate if_
+    2: required PayoutsProviderSelector then_
 }
 
 struct TerminalRef { 1: required ObjectID id }
@@ -1858,6 +1886,9 @@ struct PaymentInstitution {
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
     8: required set<Residence> residences
+    /* TODO: separated system accounts for wallets look weird */
+    11: optional SystemAccountSetSelector wallet_system_account_set
+    12: optional PayoutsProviderSelector payout_providers
 }
 
 enum PaymentInstitutionRealm {
@@ -1971,6 +2002,11 @@ struct ProviderObject {
     2: required Provider data
 }
 
+struct PayoutsProviderObject {
+    1: required PayoutsProviderRef ref
+    2: required PayoutsProvider data
+}
+
 struct TerminalObject {
     1: required TerminalRef ref
     2: required Terminal data
@@ -2025,6 +2061,7 @@ union Reference {
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
+    22 : PayoutsProviderRef      payouts_provider
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2052,6 +2089,7 @@ union DomainObject {
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
+    22 : PayoutsProviderObject      payouts_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
