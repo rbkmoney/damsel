@@ -1606,7 +1606,7 @@ struct PayoutsProviderRef { 1: required ObjectID id }
 
 struct PayoutsProvider {
     1: required string name
-    2: required string description
+    2: optional string description
     3: required Proxy proxy
     4: optional string identity
     5: optional PayoutsProvisionTerms payout_terms
@@ -1888,7 +1888,8 @@ struct PaymentInstitution {
     8: required set<Residence> residences
     /* TODO: separated system accounts for wallets look weird */
     11: optional SystemAccountSetSelector wallet_system_account_set
-    12: optional PayoutsProviderSelector payout_providers
+    12: optional string identity
+    13: optional PayoutsProviderSelector payout_providers
 }
 
 enum PaymentInstitutionRealm {
