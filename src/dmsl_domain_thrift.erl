@@ -264,16 +264,21 @@
     'CashFlowDecision'/0,
     'ProviderRef'/0,
     'Provider'/0,
+    'PayoutsProviderRef'/0,
+    'PayoutsProvider'/0,
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
     'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
+    'PayoutsProvisionTerms'/0,
     'CashValueSelector'/0,
     'CashValueDecision'/0,
     'ProviderAccount'/0,
     'ProviderSelector'/0,
     'ProviderDecision'/0,
+    'PayoutsProviderSelector'/0,
+    'PayoutsProviderDecision'/0,
     'TerminalRef'/0,
     'InspectorRef'/0,
     'Inspector'/0,
@@ -331,6 +336,7 @@
     'PayoutMethodObject'/0,
     'BankObject'/0,
     'ProviderObject'/0,
+    'PayoutsProviderObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
     'PaymentInstitutionObject'/0,
@@ -988,16 +994,21 @@
     'CashFlowDecision' |
     'ProviderRef' |
     'Provider' |
+    'PayoutsProviderRef' |
+    'PayoutsProvider' |
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
     'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
+    'PayoutsProvisionTerms' |
     'CashValueSelector' |
     'CashValueDecision' |
     'ProviderAccount' |
     'ProviderSelector' |
     'ProviderDecision' |
+    'PayoutsProviderSelector' |
+    'PayoutsProviderDecision' |
     'TerminalRef' |
     'InspectorRef' |
     'Inspector' |
@@ -1055,6 +1066,7 @@
     'PayoutMethodObject' |
     'BankObject' |
     'ProviderObject' |
+    'PayoutsProviderObject' |
     'TerminalObject' |
     'InspectorObject' |
     'PaymentInstitutionObject' |
@@ -1662,6 +1674,12 @@
 %% struct 'Provider'
 -type 'Provider'() :: #'domain_Provider'{}.
 
+%% struct 'PayoutsProviderRef'
+-type 'PayoutsProviderRef'() :: #'domain_PayoutsProviderRef'{}.
+
+%% struct 'PayoutsProvider'
+-type 'PayoutsProvider'() :: #'domain_PayoutsProvider'{}.
+
 %% struct 'PaymentsProvisionTerms'
 -type 'PaymentsProvisionTerms'() :: #'domain_PaymentsProvisionTerms'{}.
 
@@ -1676,6 +1694,9 @@
 
 %% struct 'RecurrentPaytoolsProvisionTerms'
 -type 'RecurrentPaytoolsProvisionTerms'() :: #'domain_RecurrentPaytoolsProvisionTerms'{}.
+
+%% struct 'PayoutsProvisionTerms'
+-type 'PayoutsProvisionTerms'() :: #'domain_PayoutsProvisionTerms'{}.
 
 %% union 'CashValueSelector'
 -type 'CashValueSelector'() ::
@@ -1695,6 +1716,14 @@
 
 %% struct 'ProviderDecision'
 -type 'ProviderDecision'() :: #'domain_ProviderDecision'{}.
+
+%% union 'PayoutsProviderSelector'
+-type 'PayoutsProviderSelector'() ::
+    {'decisions', ['PayoutsProviderDecision'()]} |
+    {'value', ordsets:ordset('PayoutsProviderRef'())}.
+
+%% struct 'PayoutsProviderDecision'
+-type 'PayoutsProviderDecision'() :: #'domain_PayoutsProviderDecision'{}.
 
 %% struct 'TerminalRef'
 -type 'TerminalRef'() :: #'domain_TerminalRef'{}.
@@ -1899,6 +1928,9 @@
 %% struct 'ProviderObject'
 -type 'ProviderObject'() :: #'domain_ProviderObject'{}.
 
+%% struct 'PayoutsProviderObject'
+-type 'PayoutsProviderObject'() :: #'domain_PayoutsProviderObject'{}.
+
 %% struct 'TerminalObject'
 -type 'TerminalObject'() :: #'domain_TerminalObject'{}.
 
@@ -1939,6 +1971,7 @@
     {'external_account_set', 'ExternalAccountSetRef'()} |
     {'proxy', 'ProxyRef'()} |
     {'globals', 'GlobalsRef'()} |
+    {'payouts_provider', 'PayoutsProviderRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -1962,6 +1995,7 @@
     {'external_account_set', 'ExternalAccountSetObject'()} |
     {'proxy', 'ProxyObject'()} |
     {'globals', 'GlobalsObject'()} |
+    {'payouts_provider', 'PayoutsProviderObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2263,16 +2297,21 @@ structs() ->
         'CashFlowDecision',
         'ProviderRef',
         'Provider',
+        'PayoutsProviderRef',
+        'PayoutsProvider',
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PaymentRefundsProvisionTerms',
         'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
+        'PayoutsProvisionTerms',
         'CashValueSelector',
         'CashValueDecision',
         'ProviderAccount',
         'ProviderSelector',
         'ProviderDecision',
+        'PayoutsProviderSelector',
+        'PayoutsProviderDecision',
         'TerminalRef',
         'InspectorRef',
         'Inspector',
@@ -2330,6 +2369,7 @@ structs() ->
         'PayoutMethodObject',
         'BankObject',
         'ProviderObject',
+        'PayoutsProviderObject',
         'TerminalObject',
         'InspectorObject',
         'PaymentInstitutionObject',
@@ -3974,6 +4014,21 @@ struct_info('Provider') ->
     {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
 ]};
 
+struct_info('PayoutsProviderRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined}
+]};
+
+struct_info('PayoutsProvider') ->
+    {struct, struct, [
+    {1, required, string, 'name', undefined},
+    {2, optional, string, 'description', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+    {4, optional, string, 'identity', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsProvisionTerms'}}, 'payout_terms', undefined},
+    {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+]};
+
 struct_info('PaymentsProvisionTerms') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
@@ -4008,6 +4063,14 @@ struct_info('RecurrentPaytoolsProvisionTerms') ->
     {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
 ]};
 
+struct_info('PayoutsProvisionTerms') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {4, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+]};
+
 struct_info('CashValueSelector') ->
     {struct, union, [
     {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashValueDecision'}}}, 'decisions', undefined},
@@ -4035,6 +4098,18 @@ struct_info('ProviderDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'then_', undefined}
+]};
+
+struct_info('PayoutsProviderSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutsProviderDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PayoutsProviderRef'}}}, 'value', undefined}
+]};
+
+struct_info('PayoutsProviderDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutsProviderSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('TerminalRef') ->
@@ -4261,7 +4336,10 @@ struct_info('PaymentInstitution') ->
     {5, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
     {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
     {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
-    {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined}
+    {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
+    {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
+    {12, optional, string, 'identity', undefined},
+    {13, optional, {struct, union, {dmsl_domain_thrift, 'PayoutsProviderSelector'}}, 'payout_providers', undefined}
 ]};
 
 struct_info('ContractPaymentInstitutionDefaults') ->
@@ -4384,6 +4462,12 @@ struct_info('ProviderObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Provider'}}, 'data', undefined}
 ]};
 
+struct_info('PayoutsProviderObject') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'PayoutsProviderRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutsProvider'}}, 'data', undefined}
+]};
+
 struct_info('TerminalObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'ref', undefined},
@@ -4445,6 +4529,7 @@ struct_info('Reference') ->
     {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'external_account_set', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
+    {22, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsProviderRef'}}, 'payouts_provider', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -4469,6 +4554,7 @@ struct_info('DomainObject') ->
     {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetObject'}}, 'external_account_set', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
+    {22, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsProviderObject'}}, 'payouts_provider', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -4868,6 +4954,12 @@ record_name('OperationTimeout') ->
     record_name('Provider') ->
     'domain_Provider';
 
+    record_name('PayoutsProviderRef') ->
+    'domain_PayoutsProviderRef';
+
+    record_name('PayoutsProvider') ->
+    'domain_PayoutsProvider';
+
     record_name('PaymentsProvisionTerms') ->
     'domain_PaymentsProvisionTerms';
 
@@ -4883,6 +4975,9 @@ record_name('OperationTimeout') ->
     record_name('RecurrentPaytoolsProvisionTerms') ->
     'domain_RecurrentPaytoolsProvisionTerms';
 
+    record_name('PayoutsProvisionTerms') ->
+    'domain_PayoutsProvisionTerms';
+
     record_name('CashValueDecision') ->
     'domain_CashValueDecision';
 
@@ -4891,6 +4986,9 @@ record_name('OperationTimeout') ->
 
     record_name('ProviderDecision') ->
     'domain_ProviderDecision';
+
+    record_name('PayoutsProviderDecision') ->
+    'domain_PayoutsProviderDecision';
 
     record_name('TerminalRef') ->
     'domain_TerminalRef';
@@ -5029,6 +5127,9 @@ record_name('OperationTimeout') ->
 
     record_name('ProviderObject') ->
     'domain_ProviderObject';
+
+    record_name('PayoutsProviderObject') ->
+    'domain_PayoutsProviderObject';
 
     record_name('TerminalObject') ->
     'domain_TerminalObject';

@@ -874,6 +874,21 @@
     'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
 }).
 
+%% struct 'PayoutsProviderRef'
+-record('domain_PayoutsProviderRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'PayoutsProvider'
+-record('domain_PayoutsProvider', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'proxy' :: dmsl_domain_thrift:'Proxy'(),
+    'identity' :: binary() | undefined,
+    'payout_terms' :: dmsl_domain_thrift:'PayoutsProvisionTerms'() | undefined,
+    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
+}).
+
 %% struct 'PaymentsProvisionTerms'
 -record('domain_PaymentsProvisionTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'(),
@@ -908,6 +923,14 @@
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'()
 }).
 
+%% struct 'PayoutsProvisionTerms'
+-record('domain_PayoutsProvisionTerms', {
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'(),
+    'payout_methods' :: dmsl_domain_thrift:'PayoutMethodSelector'(),
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'(),
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
+}).
+
 %% struct 'CashValueDecision'
 -record('domain_CashValueDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
@@ -923,6 +946,12 @@
 -record('domain_ProviderDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'ProviderSelector'()
+}).
+
+%% struct 'PayoutsProviderDecision'
+-record('domain_PayoutsProviderDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'PayoutsProviderSelector'()
 }).
 
 %% struct 'TerminalRef'
@@ -1073,7 +1102,10 @@
     'providers' :: dmsl_domain_thrift:'ProviderSelector'(),
     'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
     'realm' :: dmsl_domain_thrift:'PaymentInstitutionRealm'(),
-    'residences' :: ordsets:ordset(atom())
+    'residences' :: ordsets:ordset(atom()),
+    'wallet_system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
+    'identity' :: binary() | undefined,
+    'payout_providers' :: dmsl_domain_thrift:'PayoutsProviderSelector'() | undefined
 }).
 
 %% struct 'ContractPaymentInstitutionDefaults'
@@ -1194,6 +1226,12 @@
 -record('domain_ProviderObject', {
     'ref' :: dmsl_domain_thrift:'ProviderRef'(),
     'data' :: dmsl_domain_thrift:'Provider'()
+}).
+
+%% struct 'PayoutsProviderObject'
+-record('domain_PayoutsProviderObject', {
+    'ref' :: dmsl_domain_thrift:'PayoutsProviderRef'(),
+    'data' :: dmsl_domain_thrift:'PayoutsProvider'()
 }).
 
 %% struct 'TerminalObject'
