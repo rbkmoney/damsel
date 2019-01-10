@@ -9,7 +9,13 @@ namespace erlang geo_ip
 **/
 typedef i32 GeoID
 
+/**
+* Iso code страны по базе http://www.geonames.org/
+**/
+typedef string GeoIsoCode
+
 const GeoID GEO_ID_UNKNOWN = -1
+const GeoIsoCode UNKNOWN = "UNKNOWN"
 
 struct LocationInfo {
     // GeoID города
@@ -63,14 +69,20 @@ service GeoIpService {
     **/
     map <GeoID, GeoIDInfo> GetLocationInfo (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
-     /**
-     * Возвращает наименование географического объекта по указанному geoID.
-     * При передаче geoID страны - название страны
-     * При передаче geoID региона - название региона
-     * При передаче geoID города - название города
-     * и т.д.
-     * Если передан неизвестный geoID, он не попадет в возвращаемый результат
-     **/
-     map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
+    /**
+    * Возвращает наименование географического объекта по указанному geoID.
+    * При передаче geoID страны - название страны
+    * При передаче geoID региона - название региона
+    * При передаче geoID города - название города
+    * и т.д.
+    * Если передан неизвестный geoID, он не попадет в возвращаемый результат
+    **/
+    map <GeoID, string> GetLocationName (1: set<GeoID> geo_ids, 2: string lang) throws (1: base.InvalidRequest ex1)
 
+    /**
+    * Возвращает iso code страны местоположения по IP
+    * если IP некоректный то кидается InvalidRequest с этим IP
+    * если для IP не найдена iso code будет равен UNKNOWN
+    **/
+    GeoIsoCode GetLocationIsoCode (1: domain.IPAddress ip) throws (1: base.InvalidRequest ex1)
 }
