@@ -10,7 +10,7 @@ namespace erlang geo_ip
 typedef i32 GeoID
 
 /**
-* Iso code страны по базе http://www.geonames.org/
+* GeoIsoCode - страна в формате ISO3166-1 Alpha 3
 **/
 typedef string GeoIsoCode
 
