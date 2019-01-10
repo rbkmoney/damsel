@@ -32,7 +32,8 @@
 -export_type([struct_info/0]).
 
 -export_type([
-    'GeoID'/0
+    'GeoID'/0,
+    'GeoIsoCode'/0
 ]).
 -export_type([
     'LocationInfo'/0,
@@ -46,9 +47,11 @@
 %% typedefs
 %%
 -type typedef_name() ::
-    'GeoID'.
+    'GeoID' |
+    'GeoIsoCode'.
 
 -type 'GeoID'() :: integer().
+-type 'GeoIsoCode'() :: binary().
 
 %%
 %% enums
@@ -87,7 +90,8 @@
     'GetLocation' |
     'GetLocations' |
     'GetLocationInfo' |
-    'GetLocationName'.
+    'GetLocationName' |
+    'GetLocationIsoCode'.
 
 -export_type(['GeoIpService_service_functions'/0]).
 
@@ -122,7 +126,8 @@
 
 typedefs() ->
     [
-        'GeoID'
+        'GeoID',
+        'GeoIsoCode'
     ].
 
 -spec enums() -> [].
@@ -155,6 +160,9 @@ namespace() ->
 
 typedef_info('GeoID') ->
     i32;
+
+typedef_info('GeoIsoCode') ->
+    string;
 
 typedef_info(_) -> erlang:error(badarg).
 
@@ -206,7 +214,8 @@ functions('GeoIpService') ->
         'GetLocation',
         'GetLocations',
         'GetLocationInfo',
-        'GetLocationName'
+        'GetLocationName',
+        'GetLocationIsoCode'
     ];
 
 functions(_) -> error(badarg).
@@ -253,6 +262,16 @@ function_info('GeoIpService', 'GetLocationName', params_type) ->
 function_info('GeoIpService', 'GetLocationName', reply_type) ->
         {map, i32, string};
     function_info('GeoIpService', 'GetLocationName', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
+    ]};
+function_info('GeoIpService', 'GetLocationIsoCode', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'ip', undefined}
+]};
+function_info('GeoIpService', 'GetLocationIsoCode', reply_type) ->
+        string;
+    function_info('GeoIpService', 'GetLocationIsoCode', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
