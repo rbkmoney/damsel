@@ -609,11 +609,13 @@ exception InconsistentRefundCurrency {
 }
 
 exception InconsistentCaptureCurrency {
-    1: required domain.CurrencySymbolicCode currency
+    1: required domain.CurrencySymbolicCode paymentCurrency
+    2: optional domain.CurrencySymbolicCode passedCurrency
 }
 
 exception AmountExceededCaptureBalance {
-    1: required domain.Amount amount
+    1: required domain.Amount paymentAmount
+    2: optional domain.Amount passedAmount
 }
 
 service Invoicing {
@@ -708,6 +710,23 @@ service Invoicing {
         )
 
     void CapturePayment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: string reason
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: base.InvalidRequest ex5,
+            6: OperationNotPermitted ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8
+        )
+
+    void CapturePaymentNew (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
