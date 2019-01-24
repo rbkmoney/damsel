@@ -609,13 +609,13 @@ exception InconsistentRefundCurrency {
 }
 
 exception InconsistentCaptureCurrency {
-    1: required domain.CurrencySymbolicCode paymentCurrency
-    2: optional domain.CurrencySymbolicCode passedCurrency
+    1: required domain.CurrencySymbolicCode payment_currency
+    2: optional domain.CurrencySymbolicCode passed_currency
 }
 
 exception AmountExceededCaptureBalance {
-    1: required domain.Amount paymentAmount
-    2: optional domain.Amount passedAmount
+    1: required domain.Amount payment_amount
+    2: optional domain.Amount passed_amount
 }
 
 service Invoicing {
