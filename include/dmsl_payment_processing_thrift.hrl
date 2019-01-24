@@ -265,6 +265,12 @@
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
+%% struct 'InvoicePaymentCaptureParams'
+-record('payproc_InvoicePaymentCaptureParams', {
+    'reason' :: binary(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
+}).
+
 %% struct 'InvoicePaymentAdjustmentParams'
 -record('payproc_InvoicePaymentAdjustmentParams', {
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
@@ -882,6 +888,18 @@
 %% exception 'InconsistentRefundCurrency'
 -record('payproc_InconsistentRefundCurrency', {
     'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
+}).
+
+%% exception 'InconsistentCaptureCurrency'
+-record('payproc_InconsistentCaptureCurrency', {
+    'payment_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
+    'passed_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'() | undefined
+}).
+
+%% exception 'AmountExceededCaptureBalance'
+-record('payproc_AmountExceededCaptureBalance', {
+    'payment_amount' :: dmsl_domain_thrift:'Amount'(),
+    'passed_amount' :: dmsl_domain_thrift:'Amount'() | undefined
 }).
 
 %% exception 'InvalidCustomerStatus'

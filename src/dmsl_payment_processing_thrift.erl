@@ -116,6 +116,7 @@
     'Invoice'/0,
     'InvoicePayment'/0,
     'InvoicePaymentRefundParams'/0,
+    'InvoicePaymentCaptureParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
     'InvoiceRepairFailPreProcessing'/0,
     'InvoiceRepairSkipInspector'/0,
@@ -261,6 +262,8 @@
     'InvoiceTemplateRemoved'/0,
     'InvoicePaymentAmountExceeded'/0,
     'InconsistentRefundCurrency'/0,
+    'InconsistentCaptureCurrency'/0,
+    'AmountExceededCaptureBalance'/0,
     'InvalidCustomerStatus'/0,
     'CustomerNotFound'/0,
     'InvalidPaymentTool'/0,
@@ -406,6 +409,7 @@
     'Invoice' |
     'InvoicePayment' |
     'InvoicePaymentRefundParams' |
+    'InvoicePaymentCaptureParams' |
     'InvoicePaymentAdjustmentParams' |
     'InvoiceRepairFailPreProcessing' |
     'InvoiceRepairSkipInspector' |
@@ -551,6 +555,8 @@
     'InvoiceTemplateRemoved' |
     'InvoicePaymentAmountExceeded' |
     'InconsistentRefundCurrency' |
+    'InconsistentCaptureCurrency' |
+    'AmountExceededCaptureBalance' |
     'InvalidCustomerStatus' |
     'CustomerNotFound' |
     'InvalidPaymentTool' |
@@ -794,6 +800,9 @@
 
 %% struct 'InvoicePaymentRefundParams'
 -type 'InvoicePaymentRefundParams'() :: #'payproc_InvoicePaymentRefundParams'{}.
+
+%% struct 'InvoicePaymentCaptureParams'
+-type 'InvoicePaymentCaptureParams'() :: #'payproc_InvoicePaymentCaptureParams'{}.
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -type 'InvoicePaymentAdjustmentParams'() :: #'payproc_InvoicePaymentAdjustmentParams'{}.
@@ -1350,6 +1359,12 @@
 %% exception 'InconsistentRefundCurrency'
 -type 'InconsistentRefundCurrency'() :: #'payproc_InconsistentRefundCurrency'{}.
 
+%% exception 'InconsistentCaptureCurrency'
+-type 'InconsistentCaptureCurrency'() :: #'payproc_InconsistentCaptureCurrency'{}.
+
+%% exception 'AmountExceededCaptureBalance'
+-type 'AmountExceededCaptureBalance'() :: #'payproc_AmountExceededCaptureBalance'{}.
+
 %% exception 'InvalidCustomerStatus'
 -type 'InvalidCustomerStatus'() :: #'payproc_InvalidCustomerStatus'{}.
 
@@ -1444,6 +1459,7 @@
     'GetPayment' |
     'CancelPayment' |
     'CapturePayment' |
+    'CapturePaymentNew' |
     'CreatePaymentAdjustment' |
     'GetPaymentAdjustment' |
     'CapturePaymentAdjustment' |
@@ -1658,6 +1674,7 @@ structs() ->
         'Invoice',
         'InvoicePayment',
         'InvoicePaymentRefundParams',
+        'InvoicePaymentCaptureParams',
         'InvoicePaymentAdjustmentParams',
         'InvoiceRepairFailPreProcessing',
         'InvoiceRepairSkipInspector',
@@ -2219,6 +2236,12 @@ struct_info('InvoicePayment') ->
 struct_info('InvoicePaymentRefundParams') ->
     {struct, struct, [
     {1, optional, string, 'reason', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+]};
+
+struct_info('InvoicePaymentCaptureParams') ->
+    {struct, struct, [
+    {1, required, string, 'reason', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
 ]};
 
@@ -3079,6 +3102,18 @@ struct_info('InconsistentRefundCurrency') ->
     {1, required, string, 'currency', undefined}
 ]};
 
+struct_info('InconsistentCaptureCurrency') ->
+    {struct, exception, [
+    {1, required, string, 'payment_currency', undefined},
+    {2, optional, string, 'passed_currency', undefined}
+]};
+
+struct_info('AmountExceededCaptureBalance') ->
+    {struct, exception, [
+    {1, required, i64, 'payment_amount', undefined},
+    {2, optional, i64, 'passed_amount', undefined}
+]};
+
 struct_info('InvalidCustomerStatus') ->
     {struct, exception, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
@@ -3296,6 +3331,9 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentRefundParams') ->
     'payproc_InvoicePaymentRefundParams';
+
+    record_name('InvoicePaymentCaptureParams') ->
+    'payproc_InvoicePaymentCaptureParams';
 
     record_name('InvoicePaymentAdjustmentParams') ->
     'payproc_InvoicePaymentAdjustmentParams';
@@ -3642,6 +3680,12 @@ record_name('InternalUser') ->
     record_name('InconsistentRefundCurrency') ->
     'payproc_InconsistentRefundCurrency';
 
+    record_name('InconsistentCaptureCurrency') ->
+    'payproc_InconsistentCaptureCurrency';
+
+    record_name('AmountExceededCaptureBalance') ->
+    'payproc_AmountExceededCaptureBalance';
+
     record_name('InvalidCustomerStatus') ->
     'payproc_InvalidCustomerStatus';
 
@@ -3720,6 +3764,7 @@ functions('Invoicing') ->
         'GetPayment',
         'CancelPayment',
         'CapturePayment',
+        'CapturePaymentNew',
         'CreatePaymentAdjustment',
         'GetPaymentAdjustment',
         'CapturePaymentAdjustment',
@@ -3961,6 +4006,28 @@ function_info('Invoicing', 'CapturePayment', reply_type) ->
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined}
+    ]};
+function_info('Invoicing', 'CapturePaymentNew', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'payment_id', undefined},
+    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
+]};
+function_info('Invoicing', 'CapturePaymentNew', reply_type) ->
+        {struct, struct, []};
+    function_info('Invoicing', 'CapturePaymentNew', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentCaptureCurrency'}}, 'ex9', undefined},
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AmountExceededCaptureBalance'}}, 'ex10', undefined}
     ]};
 function_info('Invoicing', 'CreatePaymentAdjustment', params_type) ->
     {struct, struct, [
