@@ -196,7 +196,7 @@ struct InvoicePayment {
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
-    9: optional domain.Amount           partial_amount
+    9: optional Cash                    partial_cost
 }
 
 struct InvoicePaymentRefund {
