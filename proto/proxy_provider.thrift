@@ -193,9 +193,17 @@ struct InvoicePayment {
     2: required base.Timestamp          created_at
     3: optional domain.TransactionInfo  trx
     6: required PaymentResource         payment_resource
+    /**
+     * Полная стоимость платежа.
+     */
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
+    /**
+     * Частичная стоимость платежа.
+     * Необходима для частичного подтверждения или частичной отмены.
+     */
+    9: optional Cash                    partial_cost
 }
 
 struct InvoicePaymentRefund {
