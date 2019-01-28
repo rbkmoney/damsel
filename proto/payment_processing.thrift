@@ -487,6 +487,19 @@ struct InvoicePaymentRefundParams {
 }
 
 /**
+ * Параметры подтверждаемого платежа.
+ */
+struct InvoicePaymentCaptureParams {
+    /** Причина совершения операции. */
+    1: required string reason
+    /**
+     * Подтверждаемая сумма.
+     * Если сумма не указана, то считаем, что подтверждаем полную сумму платежа.
+     */
+    2: optional domain.Cash cash
+}
+
+/**
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
@@ -595,6 +608,16 @@ exception InconsistentRefundCurrency {
     1: required domain.CurrencySymbolicCode currency
 }
 
+exception InconsistentCaptureCurrency {
+    1: required domain.CurrencySymbolicCode payment_currency
+    2: optional domain.CurrencySymbolicCode passed_currency
+}
+
+exception AmountExceededCaptureBalance {
+    1: required domain.Amount payment_amount
+    2: optional domain.Amount passed_amount
+}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -701,6 +724,25 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8
+        )
+
+    void CapturePaymentNew (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: InvoicePaymentCaptureParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: base.InvalidRequest ex5,
+            6: OperationNotPermitted ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8,
+            9: InconsistentCaptureCurrency ex9,
+            10: AmountExceededCaptureBalance ex10
         )
     /**
      * Создать поправку к платежу.
