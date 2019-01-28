@@ -3029,7 +3029,8 @@ struct_info('InvoicePaymentProcessed') ->
 
 struct_info('InvoicePaymentCaptured') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
+    {1, optional, string, 'reason', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
 ]};
 
 struct_info('InvoicePaymentCancelled') ->

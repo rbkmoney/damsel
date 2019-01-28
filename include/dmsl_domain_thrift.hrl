@@ -117,7 +117,8 @@
 
 %% struct 'InvoicePaymentCaptured'
 -record('domain_InvoicePaymentCaptured', {
-    'reason' :: binary() | undefined
+    'reason' :: binary() | undefined,
+    'cost' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'InvoicePaymentCancelled'
