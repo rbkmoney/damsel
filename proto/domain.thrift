@@ -1481,7 +1481,8 @@ enum SystemCashFlowAccount {
     settlement
 
     /**
-     *
+     * Расчётный счёт:
+     * - проводки между внутренними участниками взаиморасчётов.
      */
     subagent
 
@@ -1842,7 +1843,7 @@ struct SystemAccountSet {
 
 struct SystemAccount {
     1: required AccountID settlement
-    2: AccountID subagent
+    2: optional AccountID subagent
 }
 
 union SystemAccountSetSelector {
