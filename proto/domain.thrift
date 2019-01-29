@@ -1480,6 +1480,12 @@ enum SystemCashFlowAccount {
      */
     settlement
 
+    /**
+     * Расчётный счёт:
+     * - проводки между внутренними участниками взаиморасчётов.
+     */
+    subagent
+
 }
 
 enum ExternalCashFlowAccount {
@@ -1837,6 +1843,7 @@ struct SystemAccountSet {
 
 struct SystemAccount {
     1: required AccountID settlement
+    2: optional AccountID subagent
 }
 
 union SystemAccountSetSelector {
