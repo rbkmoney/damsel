@@ -1054,7 +1054,8 @@
 
 %% struct 'SystemAccount'
 -record('domain_SystemAccount', {
-    'settlement' :: dmsl_domain_thrift:'AccountID'()
+    'settlement' :: dmsl_domain_thrift:'AccountID'(),
+    'subagent' :: dmsl_domain_thrift:'AccountID'() | undefined
 }).
 
 %% struct 'SystemAccountSetDecision'

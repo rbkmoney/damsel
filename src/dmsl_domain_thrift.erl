@@ -795,7 +795,8 @@
 
 %% enum 'SystemCashFlowAccount'
 -type 'SystemCashFlowAccount'() ::
-    'settlement'.
+    'settlement' |
+    'subagent'.
 
 %% enum 'ExternalCashFlowAccount'
 -type 'ExternalCashFlowAccount'() ::
@@ -2867,7 +2868,8 @@ enum_info('ProviderCashFlowAccount') ->
 
 enum_info('SystemCashFlowAccount') ->
     {enum, [
-        {'settlement', 0}
+        {'settlement', 0},
+        {'subagent', 1}
     ]};
 
 enum_info('ExternalCashFlowAccount') ->
@@ -4276,7 +4278,8 @@ struct_info('SystemAccountSet') ->
 
 struct_info('SystemAccount') ->
     {struct, struct, [
-    {1, required, i64, 'settlement', undefined}
+    {1, required, i64, 'settlement', undefined},
+    {2, optional, i64, 'subagent', undefined}
 ]};
 
 struct_info('SystemAccountSetSelector') ->
