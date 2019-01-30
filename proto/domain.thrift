@@ -1611,14 +1611,14 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 }
 
-struct PayoutsProviderRef { 1: required ObjectID id }
+struct WithdrawalProviderRef { 1: required ObjectID id }
 
-struct PayoutsProvider {
+struct WithdrawalProvider {
     1: required string name
     2: optional string description
     3: required Proxy proxy
     4: optional string identity
-    5: optional PayoutsProvisionTerms payout_terms
+    5: optional WithdrawalProvisionTerms withdrawal_terms
     6: optional ProviderAccountSet accounts = {}
 }
 
@@ -1654,7 +1654,7 @@ struct RecurrentPaytoolsProvisionTerms {
     3: required PaymentMethodSelector payment_methods
 }
 
-struct PayoutsProvisionTerms {
+struct WithdrawalProvisionTerms {
     1: required CurrencySelector currencies
     2: required PayoutMethodSelector payout_methods
     3: required CashLimitSelector cash_limit
@@ -1687,14 +1687,14 @@ struct ProviderDecision {
     2: required ProviderSelector then_
 }
 
-union PayoutsProviderSelector {
-    1: list<PayoutsProviderDecision> decisions
-    2: set<PayoutsProviderRef> value
+union WithdrawalProviderSelector {
+    1: list<WithdrawalProviderDecision> decisions
+    2: set<WithdrawalProviderRef> value
 }
 
-struct PayoutsProviderDecision {
+struct WithdrawalProviderDecision {
     1: required Predicate if_
-    2: required PayoutsProviderSelector then_
+    2: required WithdrawalProviderSelector then_
 }
 
 struct TerminalRef { 1: required ObjectID id }
@@ -1899,7 +1899,7 @@ struct PaymentInstitution {
     /* TODO: separated system accounts for wallets look weird */
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
-    13: optional PayoutsProviderSelector payout_providers
+    13: optional WithdrawalProviderSelector withdrawal_providers
 }
 
 enum PaymentInstitutionRealm {
@@ -2013,9 +2013,9 @@ struct ProviderObject {
     2: required Provider data
 }
 
-struct PayoutsProviderObject {
-    1: required PayoutsProviderRef ref
-    2: required PayoutsProvider data
+struct WithdrawalProviderObject {
+    1: required WithdrawalProviderRef ref
+    2: required WithdrawalProvider data
 }
 
 struct TerminalObject {
@@ -2072,7 +2072,7 @@ union Reference {
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
-    22 : PayoutsProviderRef      payouts_provider
+    22 : WithdrawalProviderRef   withdrawal_provider
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2100,7 +2100,7 @@ union DomainObject {
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
-    22 : PayoutsProviderObject      payouts_provider
+    22 : WithdrawalProviderObject   withdrawal_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
