@@ -84,7 +84,8 @@
     'shop' :: dmsl_proxy_provider_thrift:'Shop'(),
     'invoice' :: dmsl_proxy_provider_thrift:'Invoice'(),
     'payment' :: dmsl_proxy_provider_thrift:'InvoicePayment'(),
-    'refund' :: dmsl_proxy_provider_thrift:'InvoicePaymentRefund'() | undefined
+    'refund' :: dmsl_proxy_provider_thrift:'InvoicePaymentRefund'() | undefined,
+    'capture' :: dmsl_proxy_provider_thrift:'InvoicePaymentCapture'() | undefined
 }).
 
 %% struct 'Shop'
@@ -118,8 +119,7 @@
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
-    'make_recurrent' :: boolean() | undefined,
-    'partial_cost' :: dmsl_proxy_provider_thrift:'Cash'() | undefined
+    'make_recurrent' :: boolean() | undefined
 }).
 
 %% struct 'InvoicePaymentRefund'
@@ -128,6 +128,11 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'cash' :: dmsl_proxy_provider_thrift:'Cash'(),
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'InvoicePaymentCapture'
+-record('prxprv_InvoicePaymentCapture', {
+    'cost' :: dmsl_proxy_provider_thrift:'Cash'()
 }).
 
 %% struct 'Cash'

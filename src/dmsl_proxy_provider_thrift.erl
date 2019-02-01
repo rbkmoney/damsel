@@ -61,6 +61,7 @@
     'RecurrentPaymentResource'/0,
     'InvoicePayment'/0,
     'InvoicePaymentRefund'/0,
+    'InvoicePaymentCapture'/0,
     'Cash'/0,
     'Session'/0,
     'PaymentContext'/0,
@@ -120,6 +121,7 @@
     'RecurrentPaymentResource' |
     'InvoicePayment' |
     'InvoicePaymentRefund' |
+    'InvoicePaymentCapture' |
     'Cash' |
     'Session' |
     'PaymentContext' |
@@ -210,6 +212,9 @@
 
 %% struct 'InvoicePaymentRefund'
 -type 'InvoicePaymentRefund'() :: #'prxprv_InvoicePaymentRefund'{}.
+
+%% struct 'InvoicePaymentCapture'
+-type 'InvoicePaymentCapture'() :: #'prxprv_InvoicePaymentCapture'{}.
 
 %% struct 'Cash'
 -type 'Cash'() :: #'prxprv_Cash'{}.
@@ -327,6 +332,7 @@ structs() ->
         'RecurrentPaymentResource',
         'InvoicePayment',
         'InvoicePaymentRefund',
+        'InvoicePaymentCapture',
         'Cash',
         'Session',
         'PaymentContext',
@@ -473,7 +479,8 @@ struct_info('PaymentInfo') ->
     {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Shop'}}, 'shop', undefined},
     {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Invoice'}}, 'invoice', undefined},
     {3, required, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {4, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined}
+    {4, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+    {5, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentCapture'}}, 'capture', undefined}
 ]};
 
 struct_info('Shop') ->
@@ -513,8 +520,7 @@ struct_info('InvoicePayment') ->
     {6, required, {struct, union, {dmsl_proxy_provider_thrift, 'PaymentResource'}}, 'payment_resource', undefined},
     {5, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined},
     {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
-    {8, optional, bool, 'make_recurrent', undefined},
-    {9, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'partial_cost', undefined}
+    {8, optional, bool, 'make_recurrent', undefined}
 ]};
 
 struct_info('InvoicePaymentRefund') ->
@@ -523,6 +529,11 @@ struct_info('InvoicePaymentRefund') ->
     {2, required, string, 'created_at', undefined},
     {4, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cash', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+]};
+
+struct_info('InvoicePaymentCapture') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined}
 ]};
 
 struct_info('Cash') ->
@@ -624,6 +635,9 @@ record_name('Success') ->
 
     record_name('InvoicePaymentRefund') ->
     'prxprv_InvoicePaymentRefund';
+
+    record_name('InvoicePaymentCapture') ->
+    'prxprv_InvoicePaymentCapture';
 
     record_name('Cash') ->
     'prxprv_Cash';
