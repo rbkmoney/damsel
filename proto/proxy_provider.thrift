@@ -157,10 +157,11 @@ struct RecurrentTokenCallbackResult {
  * Данные платежа, необходимые для обращения к провайдеру.
  */
 struct PaymentInfo {
-    1: required Shop                 shop
-    2: required Invoice              invoice
-    3: required InvoicePayment       payment
-    4: optional InvoicePaymentRefund refund
+    1: required Shop                  shop
+    2: required Invoice               invoice
+    3: required InvoicePayment        payment
+    4: optional InvoicePaymentRefund  refund
+    5: optional InvoicePaymentCapture capture
 }
 
 struct Shop {
@@ -193,17 +194,9 @@ struct InvoicePayment {
     2: required base.Timestamp          created_at
     3: optional domain.TransactionInfo  trx
     6: required PaymentResource         payment_resource
-    /**
-     * Полная стоимость платежа.
-     */
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
-    /**
-     * Частичная стоимость платежа.
-     * Необходима для частичного подтверждения или частичной отмены.
-     */
-    9: optional Cash                    partial_cost
 }
 
 struct InvoicePaymentRefund {
@@ -211,6 +204,10 @@ struct InvoicePaymentRefund {
     2: required base.Timestamp                created_at
     4: required Cash                          cash
     3: optional domain.TransactionInfo        trx
+}
+
+struct InvoicePaymentCapture {
+    1: required Cash cost
 }
 
 struct Cash {
