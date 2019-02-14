@@ -1281,11 +1281,16 @@ union PaymentMethod {
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
+    5: EmptyCVVBankCard empty_cvv_bank_card
 }
 
 struct TokenizedBankCard {
     1: required BankCardPaymentSystem payment_system
     2: required BankCardTokenProvider token_provider
+}
+
+struct EmptyCVVBankCard {
+    1: required BankCardPaymentSystem payment_system
 }
 
 enum BankCardPaymentSystem {
@@ -1338,6 +1343,7 @@ struct BankCard {
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
+    9: optional bool isCVVEmpty
 }
 
 /** Платеж через терминал **/
