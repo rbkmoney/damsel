@@ -1786,12 +1786,12 @@ union BankCardConditionDefinition {
     2: BankRef issuer_bank_is
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
+    5: bool empty_cvv_is
 }
 
 struct PaymentSystemCondition {
     1: required BankCardPaymentSystem payment_system_is
     2: optional BankCardTokenProvider token_provider_is
-    3: optional bool empty_cvv_is
 }
 
 struct PaymentTerminalCondition {
