@@ -1343,7 +1343,7 @@ struct BankCard {
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
-    9: optional bool isCVVEmpty
+    9: optional bool is_cvv_empty
 }
 
 /** Платеж через терминал **/
@@ -1791,6 +1791,7 @@ union BankCardConditionDefinition {
 struct PaymentSystemCondition {
     1: required BankCardPaymentSystem payment_system_is
     2: optional BankCardTokenProvider token_provider_is
+    3: optional bool empty_cvv_is
 }
 
 struct PaymentTerminalCondition {
