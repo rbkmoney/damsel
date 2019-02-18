@@ -7,13 +7,6 @@ namespace erlang subs
 
 /**
  * Generic
- *
- * @TODO:
- * 1. Sort out ownership
- * 2. Various metadata issues in subscriptions
- * 3. Subscription plans: one change per field vs one change per plan update
- * 4. Disscuss subscription events
- * 5. Exception types
  */
 
 typedef i64 Revision
@@ -54,7 +47,7 @@ struct EventRange {
 }
 
 union EventPayload {
-    1: SubscriptionEventPayload subscription_changes
+    1: SubscriptionEventPayload     subscription_changes
     2: SubscriptionPlanEventPayload plan_changes
 }
 
@@ -67,14 +60,12 @@ union EventPayload {
 
 //Events
 
-//@TODO (2) planId and revision are still changeable on swag
-//@TODO (3) also maybe consider adapting the same event layout as with plans
+//@TODO planId and revision are still changeable on swag
 union SubscriptionChangeEvent {
-    1: SubscriptionCreated             subscription_created
-    2: SubscriptionInvoiceCreated      subscription_invoice_created
-    3: SubscriptionPayerChanged        subscription_payer_changed
-    4: SubscriptionStatusChanged       subscription_status_changed
-    5: SubscriptionCustomerInfoChanged subscription_customer_info_changed
+    1: SubscriptionCreated        subscription_created
+    2: SubscriptionInvoiceCreated subscription_invoice_created
+    3: SubscriptionPayerChanged   subscription_payer_changed
+    4: SubscriptionStatusChanged  subscription_status_changed
 }
 
 struct SubscriptionCreated {
@@ -93,10 +84,6 @@ struct SubscriptionStatusChanged {
     1: required SubscriptionStatus status
 }
 
-struct SubscriptionCustomerInfoChanged {
-    1: required CustomerInfo customer_info
-}
-
 //Structs
 
 struct PlanRef {
@@ -106,7 +93,7 @@ struct PlanRef {
 
 struct CustomerInfo {
     1: required string        email
-    2: optional msgpack.Value metadata //@TODO (2) TODO TODD sort this out on swag
+    2: optional msgpack.Value metadata
 }
 
 enum SubscriptionStatusType {
@@ -122,18 +109,20 @@ struct SubscriptionStatus {
 
 struct Subscription {
     1: required SubscriptionID     id
-    2: required PlanRef            plan_ref
-    3: required SubscriptionStatus status
-    4: optional domain.Payer       payer
-    5: required CustomerInfo       customer_info
-    6: optional msgpack.Value      metadata //@TODO (2) TODO TODO sort this out on swag
+    2: required domain.PartyID     owner_id
+    3: required PlanRef            plan_ref
+    4: required SubscriptionStatus status
+    5: optional domain.Payer       payer
+    6: required CustomerInfo       customer_info
+    7: optional msgpack.Value      metadata
 }
 
 struct SubscriptionCreationArgs {
     1: required SubscriptionID     id
-    2: required PlanRef            plan_ref
-    3: required CustomerInfo       customer_info
-    4: optional msgpack.Value      metadata //@TODO (2) TODO TODO sort this out on swag
+    2: required domain.PartyID     owner_id
+    3: required PlanRef            plan_ref
+    4: required CustomerInfo       customer_info
+    5: optional msgpack.Value      metadata
 }
 
 //Exceptions
@@ -167,39 +156,29 @@ service Subscriptions {
             1: base.InvalidRequest ex1
         )
 
-    /*
-    Subscription Update (1: SubscriptionID id, 2: Subscription updated_sub)
-        throws (
-            1: SubscriptionNotFound ex1
-            2: base.InvalidRequest ex2
-        )
-    */
-
     Subscription AddPaymentMethod(1: SubscriptionID id, 2: domain.Payer payer)
         throws (
-            1: SubscriptionNotFound ex1
-            2: base.InvalidRequest ex2
+            1: SubscriptionNotFound      ex1
+            2: base.InvalidRequest       ex2
             3: PaymentMethodLimitReached ex3
         )
 
     Subscription Activate(1: SubscriptionID id)
         throws (
-            1: SubscriptionNotFound ex1
-            2: base.InvalidRequest ex2
-            3: InvalidSubscriptionStatus ex3
+            1: SubscriptionNotFound      ex1
+            2: InvalidSubscriptionStatus ex2
         )
 
     Subscription Suspend(1: SubscriptionID id)
         throws (
-            1: SubscriptionNotFound ex1
-            2: base.InvalidRequest ex2
-            3: InvalidSubscriptionStatus ex3
+            1: SubscriptionNotFound      ex1
+            2: InvalidSubscriptionStatus ex2
         )
 
     Events GetEvents (1: SubscriptionID id, 2: EventRange range)
         throws (
             1: SubscriptionNotFound ex1
-            2: base.InvalidRequest ex2
+            2: base.InvalidRequest  ex2
         )
 }
 
@@ -218,7 +197,6 @@ union SubscriptionPlanChange {
     3: SubscriptionPlanDeleted plan_deleted
 }
 
-//@TODO (3) discuss this scheme vs storing complete plan objects each update
 union SubscriptionPlanChanged {
     1:  SubscriptionPlanNameChanged         name_changed
     2:  SubscriptionPlanAmountChanged       amount_changed
@@ -281,17 +259,18 @@ struct SubscriptionPlanDeleted {}
 //Structs
 
 struct SubscriptionPlan {
-    1:  required PlanID                       id                //?
-    2:  required string                       name
-    3:  required domain.Amount                amount
-    4:  required domain.CurrencyRef           currency
-    5:  optional string                       description
-    6:  optional SubscriptionPlanPresentation presentation
-    7:  required SubscriptionPlanStatus       status
-    8:  required TimePeriod                   schedule
-    9:  required Lifetime                     lifetime
-    10: optional SubscriptionPlanActivation   activation_params
-    11: optional SubscriptionPlanTrial        trial_params
+    1:  required PlanID                       id
+    2:  required domain.PartyID               owner_id
+    3:  required string                       name
+    4:  required domain.Amount                amount
+    5:  required domain.CurrencyRef           currency
+    6:  optional string                       description
+    7:  optional SubscriptionPlanPresentation presentation
+    8:  required SubscriptionPlanStatus       status
+    9:  required TimePeriod                   schedule
+    10: required Lifetime                     lifetime
+    11: optional SubscriptionPlanActivation   activation_params
+    12: optional SubscriptionPlanTrial        trial_params
 }
 
 struct SubscriptionPlanPresentation {
@@ -330,7 +309,7 @@ service SubscriptionPlans {
 
     SubscriptionPlan Get (1: PlanID id, 2: Revision revision)
         throws (
-            1: PlanNotFound ex1
+            1: PlanNotFound     ex1
             2: RevisionNotFound ex2
         )
 
