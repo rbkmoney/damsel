@@ -1285,6 +1285,7 @@ union PaymentMethod {
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
+    5: BankCardPaymentSystem empty_cvv_bank_card
 }
 
 struct TokenizedBankCard {
@@ -1342,6 +1343,7 @@ struct BankCard {
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
+    9: optional bool is_cvv_empty
 }
 
 /** Платеж через терминал **/
@@ -1788,6 +1790,7 @@ union BankCardConditionDefinition {
     2: BankRef issuer_bank_is
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
+    5: bool empty_cvv_is
 }
 
 struct PaymentSystemCondition {
