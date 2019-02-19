@@ -1835,7 +1835,8 @@ struct ProxyDefinition {
 }
 
 struct Proxy {
-    1: required ProxyRef `    2: required ProxyOptions additional
+    1: required ProxyRef ref
+    2: required ProxyOptions additional
 }
 
 /* System accounts */
