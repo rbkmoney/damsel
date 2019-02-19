@@ -1565,7 +1565,8 @@
     {'bank_card', 'BankCardPaymentSystem'()} |
     {'payment_terminal', 'TerminalPaymentProvider'()} |
     {'digital_wallet', 'DigitalWalletProvider'()} |
-    {'tokenized_bank_card', 'TokenizedBankCard'()}.
+    {'tokenized_bank_card', 'TokenizedBankCard'()} |
+    {'empty_cvv_bank_card', 'BankCardPaymentSystem'()}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
@@ -1787,7 +1788,8 @@
     {'payment_system_is', atom()} |
     {'issuer_bank_is', 'BankRef'()} |
     {'payment_system', 'PaymentSystemCondition'()} |
-    {'issuer_country_is', atom()}.
+    {'issuer_country_is', atom()} |
+    {'empty_cvv_is', boolean()}.
 
 %% struct 'PaymentSystemCondition'
 -type 'PaymentSystemCondition'() :: #'domain_PaymentSystemCondition'{}.
@@ -3821,7 +3823,8 @@ struct_info('PaymentMethod') ->
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
     {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
     {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
+    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined}
 ]};
 
 struct_info('TokenizedBankCard') ->
@@ -3853,7 +3856,8 @@ struct_info('BankCard') ->
     {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
     {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
     {7, optional, string, 'bank_name', undefined},
-    {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
+    {9, optional, bool, 'is_cvv_empty', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
@@ -4204,7 +4208,8 @@ struct_info('BankCardConditionDefinition') ->
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined}
+    {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
+    {5, optional, bool, 'empty_cvv_is', undefined}
 ]};
 
 struct_info('PaymentSystemCondition') ->
