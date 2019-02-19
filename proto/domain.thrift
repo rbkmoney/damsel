@@ -1638,7 +1638,11 @@ struct PaymentsProvisionTerms {
 
 struct PaymentHoldsProvisionTerms {
     1: required HoldLifetimeSelector lifetime
+    /* Allow partial capture if this undefined, otherwise throw exception */
+    2: optional PartialCaptureProvisionTerms partial_captures
 }
+
+struct PartialCaptureProvisionTerms {}
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
@@ -1831,8 +1835,7 @@ struct ProxyDefinition {
 }
 
 struct Proxy {
-    1: required ProxyRef ref
-    2: required ProxyOptions additional
+    1: required ProxyRef `    2: required ProxyOptions additional
 }
 
 /* System accounts */
