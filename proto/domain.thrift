@@ -802,7 +802,7 @@ struct PaymentHoldsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional HoldLifetimeSelector lifetime
     /* Allow partial capture if this undefined, otherwise throw exception */
-    3: optional PartialRefundsServiceTerms partial_captures
+    3: optional PartialCaptureServiceTerms partial_captures
 }
 
 struct PartialCaptureServiceTerms {}
