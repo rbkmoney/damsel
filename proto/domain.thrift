@@ -801,6 +801,7 @@ struct PaymentsServiceTerms {
 struct PaymentHoldsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional HoldLifetimeSelector lifetime
+    3: optional bool partial_capture_limited
 }
 
 struct PaymentRefundsServiceTerms {
