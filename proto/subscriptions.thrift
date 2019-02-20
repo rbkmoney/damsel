@@ -12,6 +12,8 @@ namespace erlang subs
 typedef i64 Revision
 typedef i64 Duration
 
+typedef base.ID OwnerID
+
 struct Range {
     1: optional i64 offset
     2: required i16 limit
@@ -109,7 +111,7 @@ struct SubscriptionStatus {
 
 struct Subscription {
     1: required SubscriptionID     id
-    2: required domain.PartyID     owner_id
+    2: required OwnerID            owner_id
     3: required PlanRef            plan_ref
     4: required SubscriptionStatus status
     5: optional domain.Payer       payer
@@ -119,7 +121,7 @@ struct Subscription {
 
 struct SubscriptionCreationArgs {
     1: required SubscriptionID     id
-    2: required domain.PartyID     owner_id
+    2: required OwnerID            owner_id
     3: required PlanRef            plan_ref
     4: required CustomerInfo       customer_info
     5: optional msgpack.Value      metadata
@@ -260,7 +262,7 @@ struct SubscriptionPlanDeleted {}
 
 struct SubscriptionPlan {
     1:  required PlanID                       id
-    2:  required domain.PartyID               owner_id
+    2:  required OwnerID                      owner_id
     3:  required string                       name
     4:  required domain.Amount                amount
     5:  required domain.CurrencyRef           currency
