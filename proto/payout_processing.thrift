@@ -323,6 +323,7 @@ struct PayoutSearchCriteria {
    /* Диапазон суммы выплат */
    4: optional AmountRange amount_range
    5: optional domain.CurrencyRef currency
+   6: optional PayoutTypeStatus type
 }
 
 enum PayoutSearchStatus {
@@ -330,6 +331,11 @@ enum PayoutSearchStatus {
     paid
     cancelled
     confirmed
+}
+
+enum PayoutTypeStatus {
+    bank_account
+    wallet
 }
 
 /**
