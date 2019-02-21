@@ -333,7 +333,7 @@ enum PayoutSearchStatus {
     confirmed
 }
 
-enum PayoutTypeStatus {
+enum PayoutSearchType {
     bank_account
     wallet
 }
