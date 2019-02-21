@@ -40,7 +40,8 @@
 ]).
 -export_type([
     'OperationType'/0,
-    'PayoutSearchStatus'/0
+    'PayoutSearchStatus'/0,
+    'PayoutSearchType'/0
 ]).
 -export_type([
     'Event'/0,
@@ -103,7 +104,8 @@
 %%
 -type enum_name() ::
     'OperationType' |
-    'PayoutSearchStatus'.
+    'PayoutSearchStatus' |
+    'PayoutSearchType'.
 
 %% enum 'OperationType'
 -type 'OperationType'() ::
@@ -117,6 +119,11 @@
     'paid' |
     'cancelled' |
     'confirmed'.
+
+%% enum 'PayoutSearchType'
+-type 'PayoutSearchType'() ::
+    'bank_account' |
+    'wallet'.
 
 %%
 %% structs, unions and exceptions
@@ -319,7 +326,8 @@
 
 -type enum_choice() ::
     'OperationType'() |
-    'PayoutSearchStatus'().
+    'PayoutSearchStatus'() |
+    'PayoutSearchType'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -342,7 +350,8 @@ typedefs() ->
 enums() ->
     [
         'OperationType',
-        'PayoutSearchStatus'
+        'PayoutSearchStatus',
+        'PayoutSearchType'
     ].
 
 -spec structs() -> [struct_name()].
@@ -425,6 +434,12 @@ enum_info('PayoutSearchStatus') ->
         {'paid', 1},
         {'cancelled', 2},
         {'confirmed', 3}
+    ]};
+
+enum_info('PayoutSearchType') ->
+    {enum, [
+        {'bank_account', 0},
+        {'wallet', 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -593,7 +608,8 @@ struct_info('PayoutSearchCriteria') ->
     {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
     {3, optional, {list, string}, 'payout_ids', undefined},
     {4, optional, {struct, struct, {dmsl_payout_processing_thrift, 'AmountRange'}}, 'amount_range', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+    {6, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchType'}}, 'type', undefined}
 ]};
 
 struct_info('PayoutSearchRequest') ->

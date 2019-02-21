@@ -133,7 +133,8 @@
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
     'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined,
     'amount_range' :: dmsl_payout_processing_thrift:'AmountRange'() | undefined,
-    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
+    'type' :: dmsl_payout_processing_thrift:'PayoutSearchType'() | undefined
 }).
 
 %% struct 'PayoutSearchRequest'
