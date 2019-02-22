@@ -801,7 +801,11 @@ struct PaymentsServiceTerms {
 struct PaymentHoldsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional HoldLifetimeSelector lifetime
+    /* Allow partial capture if this undefined, otherwise throw exception */
+    3: optional PartialCaptureServiceTerms partial_captures
 }
+
+struct PartialCaptureServiceTerms {}
 
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
@@ -1636,7 +1640,11 @@ struct PaymentsProvisionTerms {
 
 struct PaymentHoldsProvisionTerms {
     1: required HoldLifetimeSelector lifetime
+    /* Allow partial capture if this undefined, otherwise throw exception */
+    2: optional PartialCaptureProvisionTerms partial_captures
 }
+
+struct PartialCaptureProvisionTerms {}
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow

@@ -201,6 +201,7 @@
     'TermSetHierarchyRef'/0,
     'PaymentsServiceTerms'/0,
     'PaymentHoldsServiceTerms'/0,
+    'PartialCaptureServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
     'PartialRefundsServiceTerms'/0,
     'RecurrentPaytoolsServiceTerms'/0,
@@ -268,6 +269,7 @@
     'WithdrawalProvider'/0,
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
+    'PartialCaptureProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
     'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
@@ -932,6 +934,7 @@
     'TermSetHierarchyRef' |
     'PaymentsServiceTerms' |
     'PaymentHoldsServiceTerms' |
+    'PartialCaptureServiceTerms' |
     'PaymentRefundsServiceTerms' |
     'PartialRefundsServiceTerms' |
     'RecurrentPaytoolsServiceTerms' |
@@ -999,6 +1002,7 @@
     'WithdrawalProvider' |
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
+    'PartialCaptureProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
     'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
@@ -1447,6 +1451,9 @@
 %% struct 'PaymentHoldsServiceTerms'
 -type 'PaymentHoldsServiceTerms'() :: #'domain_PaymentHoldsServiceTerms'{}.
 
+%% struct 'PartialCaptureServiceTerms'
+-type 'PartialCaptureServiceTerms'() :: #'domain_PartialCaptureServiceTerms'{}.
+
 %% struct 'PaymentRefundsServiceTerms'
 -type 'PaymentRefundsServiceTerms'() :: #'domain_PaymentRefundsServiceTerms'{}.
 
@@ -1687,6 +1694,9 @@
 
 %% struct 'PaymentHoldsProvisionTerms'
 -type 'PaymentHoldsProvisionTerms'() :: #'domain_PaymentHoldsProvisionTerms'{}.
+
+%% struct 'PartialCaptureProvisionTerms'
+-type 'PartialCaptureProvisionTerms'() :: #'domain_PartialCaptureProvisionTerms'{}.
 
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
@@ -2237,6 +2247,7 @@ structs() ->
         'TermSetHierarchyRef',
         'PaymentsServiceTerms',
         'PaymentHoldsServiceTerms',
+        'PartialCaptureServiceTerms',
         'PaymentRefundsServiceTerms',
         'PartialRefundsServiceTerms',
         'RecurrentPaytoolsServiceTerms',
@@ -2304,6 +2315,7 @@ structs() ->
         'WithdrawalProvider',
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
+        'PartialCaptureProvisionTerms',
         'PaymentRefundsProvisionTerms',
         'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
@@ -3609,8 +3621,12 @@ struct_info('PaymentsServiceTerms') ->
 struct_info('PaymentHoldsServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined}
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PartialCaptureServiceTerms'}}, 'partial_captures', undefined}
 ]};
+
+struct_info('PartialCaptureServiceTerms') ->
+    {struct, struct, []};
 
 struct_info('PaymentRefundsServiceTerms') ->
     {struct, struct, [
@@ -4049,8 +4065,12 @@ struct_info('PaymentsProvisionTerms') ->
 
 struct_info('PaymentHoldsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialCaptureProvisionTerms'}}, 'partial_captures', undefined}
 ]};
+
+struct_info('PartialCaptureProvisionTerms') ->
+    {struct, struct, []};
 
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
@@ -4822,6 +4842,9 @@ record_name('OperationTimeout') ->
     record_name('PaymentHoldsServiceTerms') ->
     'domain_PaymentHoldsServiceTerms';
 
+    record_name('PartialCaptureServiceTerms') ->
+    'domain_PartialCaptureServiceTerms';
+
     record_name('PaymentRefundsServiceTerms') ->
     'domain_PaymentRefundsServiceTerms';
 
@@ -4974,6 +4997,9 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentHoldsProvisionTerms') ->
     'domain_PaymentHoldsProvisionTerms';
+
+    record_name('PartialCaptureProvisionTerms') ->
+    'domain_PartialCaptureProvisionTerms';
 
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';

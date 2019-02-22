@@ -568,8 +568,12 @@
 %% struct 'PaymentHoldsServiceTerms'
 -record('domain_PaymentHoldsServiceTerms', {
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
-    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'() | undefined
+    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'() | undefined,
+    'partial_captures' :: dmsl_domain_thrift:'PartialCaptureServiceTerms'() | undefined
 }).
+
+%% struct 'PartialCaptureServiceTerms'
+-record('domain_PartialCaptureServiceTerms', {}).
 
 %% struct 'PaymentRefundsServiceTerms'
 -record('domain_PaymentRefundsServiceTerms', {
@@ -904,8 +908,12 @@
 
 %% struct 'PaymentHoldsProvisionTerms'
 -record('domain_PaymentHoldsProvisionTerms', {
-    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'()
+    'lifetime' :: dmsl_domain_thrift:'HoldLifetimeSelector'(),
+    'partial_captures' :: dmsl_domain_thrift:'PartialCaptureProvisionTerms'() | undefined
 }).
+
+%% struct 'PartialCaptureProvisionTerms'
+-record('domain_PartialCaptureProvisionTerms', {}).
 
 %% struct 'PaymentRefundsProvisionTerms'
 -record('domain_PaymentRefundsProvisionTerms', {
