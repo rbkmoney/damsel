@@ -4,6 +4,7 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
 -include("dmsl_user_interaction_thrift.hrl").
+-include("dmsl_repairing_thrift.hrl").
 
 
 

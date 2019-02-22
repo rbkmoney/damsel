@@ -4175,7 +4175,8 @@ function_info('Invoicing', 'Repair', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'id', undefined},
-    {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined}
+    {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined},
+    {4, undefined, {struct, struct, {dmsl_repairing_thrift, 'ComplexAction'}}, 'action', undefined}
 ]};
 function_info('Invoicing', 'Repair', reply_type) ->
         {struct, struct, []};
