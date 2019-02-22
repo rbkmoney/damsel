@@ -801,7 +801,11 @@ struct PaymentsServiceTerms {
 struct PaymentHoldsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional HoldLifetimeSelector lifetime
+    /* Allow partial capture if this undefined, otherwise throw exception */
+    3: optional PartialCaptureServiceTerms partial_captures
 }
+
+struct PartialCaptureServiceTerms {}
 
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
@@ -1281,6 +1285,7 @@ union PaymentMethod {
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
+    5: BankCardPaymentSystem empty_cvv_bank_card
 }
 
 struct TokenizedBankCard {
@@ -1338,6 +1343,7 @@ struct BankCard {
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
+    9: optional bool is_cvv_empty
 }
 
 /** Платеж через терминал **/
@@ -1634,7 +1640,11 @@ struct PaymentsProvisionTerms {
 
 struct PaymentHoldsProvisionTerms {
     1: required HoldLifetimeSelector lifetime
+    /* Allow partial capture if this undefined, otherwise throw exception */
+    2: optional PartialCaptureProvisionTerms partial_captures
 }
+
+struct PartialCaptureProvisionTerms {}
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
@@ -1780,6 +1790,7 @@ union BankCardConditionDefinition {
     2: BankRef issuer_bank_is
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
+    5: bool empty_cvv_is
 }
 
 struct PaymentSystemCondition {
