@@ -852,12 +852,11 @@ service Invoicing {
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
-            8: base.InvalidRequest ex8
-            9: InvoicePaymentAmountExceeded ex9
-            10: InconsistentRefundCurrency ex10
-            11: InvalidPartyStatus ex11
-            12: InvalidShopStatus ex12
-            13: InvalidContractStatus ex13
+            8: InvoicePaymentAmountExceeded ex8
+            9: InconsistentRefundCurrency ex9
+            10: InvalidPartyStatus ex10
+            11: InvalidShopStatus ex11
+            12: InvalidContractStatus ex12
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
