@@ -5,6 +5,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
+include "repairing.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -895,7 +896,12 @@ service Invoicing {
 
     /* Ad-hoc repairs */
 
-    void Repair (1: UserInfo user, 2: domain.InvoiceID id, 3: list<InvoiceChange> changes)
+    void Repair (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: list<InvoiceChange> changes,
+        4: repairing.ComplexAction action
+    )
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
