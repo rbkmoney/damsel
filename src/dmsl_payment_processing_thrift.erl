@@ -1465,6 +1465,7 @@
     'CapturePaymentAdjustment' |
     'CancelPaymentAdjustment' |
     'RefundPayment' |
+    'CreateManualRefund' |
     'GetPaymentRefund' |
     'Fulfill' |
     'Rescind' |
@@ -2236,7 +2237,8 @@ struct_info('InvoicePayment') ->
 struct_info('InvoicePaymentRefundParams') ->
     {struct, struct, [
     {1, optional, string, 'reason', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
 ]};
 
 struct_info('InvoicePaymentCaptureParams') ->
@@ -3770,6 +3772,7 @@ functions('Invoicing') ->
         'CapturePaymentAdjustment',
         'CancelPaymentAdjustment',
         'RefundPayment',
+        'CreateManualRefund',
         'GetPaymentRefund',
         'Fulfill',
         'Rescind',
@@ -4119,6 +4122,29 @@ function_info('Invoicing', 'RefundPayment', reply_type) ->
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex12', undefined},
         {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex13', undefined}
+    ]};
+function_info('Invoicing', 'CreateManualRefund', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, string, 'payment_id', undefined},
+    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundParams'}}, 'params', undefined}
+]};
+function_info('Invoicing', 'CreateManualRefund', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
+    function_info('Invoicing', 'CreateManualRefund', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InsufficientAccountBalance'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentRefundCurrency'}}, 'ex9', undefined},
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex10', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [

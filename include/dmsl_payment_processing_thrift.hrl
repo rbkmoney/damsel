@@ -263,7 +263,8 @@
 %% struct 'InvoicePaymentRefundParams'
 -record('payproc_InvoicePaymentRefundParams', {
     'reason' :: binary() | undefined,
-    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'InvoicePaymentCaptureParams'

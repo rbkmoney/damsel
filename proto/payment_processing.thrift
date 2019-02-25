@@ -485,6 +485,10 @@ struct InvoicePaymentRefundParams {
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
      */
     2: optional domain.Cash cash
+    /**
+     * Данные проведённой вручную транзакции
+     */
+    3: optional domain.TransactionInfo transaction_info
 }
 
 /**
@@ -831,6 +835,29 @@ service Invoicing {
             11: InvalidPartyStatus ex11
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
+        )
+
+    /**
+     * Сделать ручной возврат.
+     */
+    domain.InvoicePaymentRefund CreateManualRefund (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: InvoicePaymentRefundParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            6: OperationNotPermitted ex6,
+            7: InsufficientAccountBalance ex7,
+            8: InvoicePaymentAmountExceeded ex8
+            9: InconsistentRefundCurrency ex9
+            10: InvalidPartyStatus ex10
+            11: InvalidShopStatus ex11
+            12: InvalidContractStatus ex12
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
