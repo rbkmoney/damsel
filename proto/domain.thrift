@@ -1370,6 +1370,7 @@ struct DigitalWallet {
 enum DigitalWalletProvider {
     qiwi
     rbkmoney
+    freelanceme
 }
 
 struct BankRef { 1: required ObjectID id }

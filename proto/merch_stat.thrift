@@ -139,6 +139,7 @@ struct DigitalWallet {
 
 enum DigitalWalletProvider {
     qiwi
+    freelanceme
 }
 
 struct RussianBankAccount {
