@@ -58,6 +58,9 @@
     'InvoicePaymentEventType'/0,
     'InvoicePaymentCreated'/0,
     'InvoicePaymentStatusChanged'/0,
+    'InvoicePaymentRefundChange'/0,
+    'InvoicePaymentRefundCreated'/0,
+    'InvoicePaymentRefundStatusChanged'/0,
     'InvoicePaymentStatus'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentProcessed'/0,
@@ -65,6 +68,10 @@
     'InvoicePaymentCancelled'/0,
     'InvoicePaymentFailed'/0,
     'InvoicePaymentRefunded'/0,
+    'InvoicePaymentRefundStatus'/0,
+    'InvoicePaymentRefundPending'/0,
+    'InvoicePaymentRefundSucceeded'/0,
+    'InvoicePaymentRefundFailed'/0,
     'CustomerEventFilter'/0,
     'CustomerEventType'/0,
     'CustomerCreated'/0,
@@ -73,7 +80,13 @@
     'CustomerBindingEvent'/0,
     'CustomerBindingStarted'/0,
     'CustomerBindingSucceeded'/0,
-    'CustomerBindingFailed'/0
+    'CustomerBindingFailed'/0,
+    'WalletEventFilter'/0,
+    'WalletEventType'/0,
+    'WalletWithdrawalEventType'/0,
+    'WalletWithdrawalStarted'/0,
+    'WalletWithdrawalSucceeded'/0,
+    'WalletWithdrawalFailed'/0
 ]).
 -export_type([
     'WebhookNotFound'/0
@@ -123,6 +136,9 @@
     'InvoicePaymentEventType' |
     'InvoicePaymentCreated' |
     'InvoicePaymentStatusChanged' |
+    'InvoicePaymentRefundChange' |
+    'InvoicePaymentRefundCreated' |
+    'InvoicePaymentRefundStatusChanged' |
     'InvoicePaymentStatus' |
     'InvoicePaymentPending' |
     'InvoicePaymentProcessed' |
@@ -130,6 +146,10 @@
     'InvoicePaymentCancelled' |
     'InvoicePaymentFailed' |
     'InvoicePaymentRefunded' |
+    'InvoicePaymentRefundStatus' |
+    'InvoicePaymentRefundPending' |
+    'InvoicePaymentRefundSucceeded' |
+    'InvoicePaymentRefundFailed' |
     'CustomerEventFilter' |
     'CustomerEventType' |
     'CustomerCreated' |
@@ -138,7 +158,13 @@
     'CustomerBindingEvent' |
     'CustomerBindingStarted' |
     'CustomerBindingSucceeded' |
-    'CustomerBindingFailed'.
+    'CustomerBindingFailed' |
+    'WalletEventFilter' |
+    'WalletEventType' |
+    'WalletWithdrawalEventType' |
+    'WalletWithdrawalStarted' |
+    'WalletWithdrawalSucceeded' |
+    'WalletWithdrawalFailed'.
 
 -type exception_name() ::
     'WebhookNotFound'.
@@ -153,7 +179,8 @@
 -type 'EventFilter'() ::
     {'party', 'PartyEventFilter'()} |
     {'invoice', 'InvoiceEventFilter'()} |
-    {'customer', 'CustomerEventFilter'()}.
+    {'customer', 'CustomerEventFilter'()} |
+    {'wallet', 'WalletEventFilter'()}.
 
 %% struct 'PartyEventFilter'
 -type 'PartyEventFilter'() :: #'webhooker_PartyEventFilter'{}.
@@ -214,13 +241,25 @@
 %% union 'InvoicePaymentEventType'
 -type 'InvoicePaymentEventType'() ::
     {'created', 'InvoicePaymentCreated'()} |
-    {'status_changed', 'InvoicePaymentStatusChanged'()}.
+    {'status_changed', 'InvoicePaymentStatusChanged'()} |
+    {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()}.
 
 %% struct 'InvoicePaymentCreated'
 -type 'InvoicePaymentCreated'() :: #'webhooker_InvoicePaymentCreated'{}.
 
 %% struct 'InvoicePaymentStatusChanged'
 -type 'InvoicePaymentStatusChanged'() :: #'webhooker_InvoicePaymentStatusChanged'{}.
+
+%% union 'InvoicePaymentRefundChange'
+-type 'InvoicePaymentRefundChange'() ::
+    {'invoice_payment_refund_created', 'InvoicePaymentRefundCreated'()} |
+    {'invoice_payment_refund_status_changed', 'InvoicePaymentRefundStatusChanged'()}.
+
+%% struct 'InvoicePaymentRefundCreated'
+-type 'InvoicePaymentRefundCreated'() :: #'webhooker_InvoicePaymentRefundCreated'{}.
+
+%% struct 'InvoicePaymentRefundStatusChanged'
+-type 'InvoicePaymentRefundStatusChanged'() :: #'webhooker_InvoicePaymentRefundStatusChanged'{}.
 
 %% union 'InvoicePaymentStatus'
 -type 'InvoicePaymentStatus'() ::
@@ -248,6 +287,21 @@
 
 %% struct 'InvoicePaymentRefunded'
 -type 'InvoicePaymentRefunded'() :: #'webhooker_InvoicePaymentRefunded'{}.
+
+%% union 'InvoicePaymentRefundStatus'
+-type 'InvoicePaymentRefundStatus'() ::
+    {'pending', 'InvoicePaymentRefundPending'()} |
+    {'succeeded', 'InvoicePaymentRefundSucceeded'()} |
+    {'failed', 'InvoicePaymentRefundFailed'()}.
+
+%% struct 'InvoicePaymentRefundPending'
+-type 'InvoicePaymentRefundPending'() :: #'webhooker_InvoicePaymentRefundPending'{}.
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-type 'InvoicePaymentRefundSucceeded'() :: #'webhooker_InvoicePaymentRefundSucceeded'{}.
+
+%% struct 'InvoicePaymentRefundFailed'
+-type 'InvoicePaymentRefundFailed'() :: #'webhooker_InvoicePaymentRefundFailed'{}.
 
 %% struct 'CustomerEventFilter'
 -type 'CustomerEventFilter'() :: #'webhooker_CustomerEventFilter'{}.
@@ -282,6 +336,28 @@
 
 %% struct 'CustomerBindingFailed'
 -type 'CustomerBindingFailed'() :: #'webhooker_CustomerBindingFailed'{}.
+
+%% struct 'WalletEventFilter'
+-type 'WalletEventFilter'() :: #'webhooker_WalletEventFilter'{}.
+
+%% union 'WalletEventType'
+-type 'WalletEventType'() ::
+    {'withdrawal', 'WalletWithdrawalEventType'()}.
+
+%% union 'WalletWithdrawalEventType'
+-type 'WalletWithdrawalEventType'() ::
+    {'started', 'WalletWithdrawalStarted'()} |
+    {'succeeded', 'WalletWithdrawalSucceeded'()} |
+    {'failed', 'WalletWithdrawalFailed'()}.
+
+%% struct 'WalletWithdrawalStarted'
+-type 'WalletWithdrawalStarted'() :: #'webhooker_WalletWithdrawalStarted'{}.
+
+%% struct 'WalletWithdrawalSucceeded'
+-type 'WalletWithdrawalSucceeded'() :: #'webhooker_WalletWithdrawalSucceeded'{}.
+
+%% struct 'WalletWithdrawalFailed'
+-type 'WalletWithdrawalFailed'() :: #'webhooker_WalletWithdrawalFailed'{}.
 
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
@@ -369,6 +445,9 @@ structs() ->
         'InvoicePaymentEventType',
         'InvoicePaymentCreated',
         'InvoicePaymentStatusChanged',
+        'InvoicePaymentRefundChange',
+        'InvoicePaymentRefundCreated',
+        'InvoicePaymentRefundStatusChanged',
         'InvoicePaymentStatus',
         'InvoicePaymentPending',
         'InvoicePaymentProcessed',
@@ -376,6 +455,10 @@ structs() ->
         'InvoicePaymentCancelled',
         'InvoicePaymentFailed',
         'InvoicePaymentRefunded',
+        'InvoicePaymentRefundStatus',
+        'InvoicePaymentRefundPending',
+        'InvoicePaymentRefundSucceeded',
+        'InvoicePaymentRefundFailed',
         'CustomerEventFilter',
         'CustomerEventType',
         'CustomerCreated',
@@ -384,7 +467,13 @@ structs() ->
         'CustomerBindingEvent',
         'CustomerBindingStarted',
         'CustomerBindingSucceeded',
-        'CustomerBindingFailed'
+        'CustomerBindingFailed',
+        'WalletEventFilter',
+        'WalletEventType',
+        'WalletWithdrawalEventType',
+        'WalletWithdrawalStarted',
+        'WalletWithdrawalSucceeded',
+        'WalletWithdrawalFailed'
     ].
 
 -spec services() -> [service_name()].
@@ -439,7 +528,8 @@ struct_info('EventFilter') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'PartyEventFilter'}}, 'party', undefined},
     {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceEventFilter'}}, 'invoice', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined}
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined},
+    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletEventFilter'}}, 'wallet', undefined}
 ]};
 
 struct_info('PartyEventFilter') ->
@@ -512,7 +602,8 @@ struct_info('InvoiceFulfilled') ->
 struct_info('InvoicePaymentEventType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined}
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined},
+    {3, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined}
 ]};
 
 struct_info('InvoicePaymentCreated') ->
@@ -521,6 +612,20 @@ struct_info('InvoicePaymentCreated') ->
 struct_info('InvoicePaymentStatusChanged') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentStatus'}}, 'value', undefined}
+]};
+
+struct_info('InvoicePaymentRefundChange') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined}
+]};
+
+struct_info('InvoicePaymentRefundCreated') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundStatusChanged') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatus'}}, 'value', undefined}
 ]};
 
 struct_info('InvoicePaymentStatus') ->
@@ -549,6 +654,22 @@ struct_info('InvoicePaymentFailed') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentRefunded') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+]};
+
+struct_info('InvoicePaymentRefundPending') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundSucceeded') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundFailed') ->
     {struct, struct, []};
 
 struct_info('CustomerEventFilter') ->
@@ -588,6 +709,32 @@ struct_info('CustomerBindingSucceeded') ->
     {struct, struct, []};
 
 struct_info('CustomerBindingFailed') ->
+    {struct, struct, []};
+
+struct_info('WalletEventFilter') ->
+    {struct, struct, [
+    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'WalletEventType'}}}, 'types', undefined}
+]};
+
+struct_info('WalletEventType') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_webhooker_thrift, 'WalletWithdrawalEventType'}}, 'withdrawal', undefined}
+]};
+
+struct_info('WalletWithdrawalEventType') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalStarted'}}, 'started', undefined},
+    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalFailed'}}, 'failed', undefined}
+]};
+
+struct_info('WalletWithdrawalStarted') ->
+    {struct, struct, []};
+
+struct_info('WalletWithdrawalSucceeded') ->
+    {struct, struct, []};
+
+struct_info('WalletWithdrawalFailed') ->
     {struct, struct, []};
 
 struct_info('WebhookNotFound') ->
@@ -642,6 +789,12 @@ record_name('WebhookParams') ->
     record_name('InvoicePaymentStatusChanged') ->
     'webhooker_InvoicePaymentStatusChanged';
 
+    record_name('InvoicePaymentRefundCreated') ->
+    'webhooker_InvoicePaymentRefundCreated';
+
+    record_name('InvoicePaymentRefundStatusChanged') ->
+    'webhooker_InvoicePaymentRefundStatusChanged';
+
     record_name('InvoicePaymentPending') ->
     'webhooker_InvoicePaymentPending';
 
@@ -659,6 +812,15 @@ record_name('WebhookParams') ->
 
     record_name('InvoicePaymentRefunded') ->
     'webhooker_InvoicePaymentRefunded';
+
+    record_name('InvoicePaymentRefundPending') ->
+    'webhooker_InvoicePaymentRefundPending';
+
+    record_name('InvoicePaymentRefundSucceeded') ->
+    'webhooker_InvoicePaymentRefundSucceeded';
+
+    record_name('InvoicePaymentRefundFailed') ->
+    'webhooker_InvoicePaymentRefundFailed';
 
     record_name('CustomerEventFilter') ->
     'webhooker_CustomerEventFilter';
@@ -680,6 +842,18 @@ record_name('WebhookParams') ->
 
     record_name('CustomerBindingFailed') ->
     'webhooker_CustomerBindingFailed';
+
+    record_name('WalletEventFilter') ->
+    'webhooker_WalletEventFilter';
+
+    record_name('WalletWithdrawalStarted') ->
+    'webhooker_WalletWithdrawalStarted';
+
+    record_name('WalletWithdrawalSucceeded') ->
+    'webhooker_WalletWithdrawalSucceeded';
+
+    record_name('WalletWithdrawalFailed') ->
+    'webhooker_WalletWithdrawalFailed';
 
     record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';

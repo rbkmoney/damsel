@@ -17,7 +17,7 @@
     'pan' :: binary(),
     'exp_date' :: dmsl_cds_thrift:'ExpDate'(),
     'cardholder_name' :: binary() | undefined,
-    'cvv' :: binary()
+    'cvv' :: binary() | undefined
 }).
 
 %% struct 'PutCardDataResult'
@@ -26,14 +26,35 @@
     'session_id' :: dmsl_domain_thrift:'PaymentSessionID'()
 }).
 
+%% struct 'CardSecurityCode'
+-record('CardSecurityCode', {
+    'value' :: binary()
+}).
+
+%% struct 'Auth3DS'
+-record('Auth3DS', {
+    'cryptogram' :: binary(),
+    'eci' :: binary() | undefined
+}).
+
+%% struct 'SessionData'
+-record('SessionData', {
+    'auth_data' :: dmsl_cds_thrift:'AuthData'()
+}).
+
 %% struct 'Unlocked'
 -record('Unlocked', {}).
 
 %% exception 'InvalidCardData'
--record('InvalidCardData', {}).
+-record('InvalidCardData', {
+    'reason' :: binary() | undefined
+}).
 
 %% exception 'CardDataNotFound'
 -record('CardDataNotFound', {}).
+
+%% exception 'SessionDataNotFound'
+-record('SessionDataNotFound', {}).
 
 %% exception 'NoKeyring'
 -record('NoKeyring', {}).

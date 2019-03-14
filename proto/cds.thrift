@@ -23,13 +23,39 @@ struct CardData {
     2: required ExpDate exp_date
     /** Имя держателя */
     3: optional string cardholder_name
+    /** Deprecated */
     /** Код верификации [0-9]{3,4} */
-    4: required string cvv
+    4: optional string cvv
 }
 
 struct PutCardDataResult {
     1: required domain.BankCard bank_card
     2: required domain.PaymentSessionID session_id
+}
+
+/** Код проверки подлинности банковской карты */
+struct CardSecurityCode {
+    /** Код верификации [0-9]{3,4} */
+    1: required string value
+}
+
+/** Данные, необходимые для авторизации по 3DS протоколу */
+struct Auth3DS {
+    /** Криптограмма для проверки подлинности */
+    1: required string cryptogram
+    /** Тип транзакции */
+    2: optional string eci
+}
+
+/** Данные, необходимые для проверки подлинности банковской карты */
+union AuthData {
+    1: CardSecurityCode card_security_code
+    2: Auth3DS auth_3ds
+}
+
+/** Данные сессии */
+struct SessionData {
+    1: required AuthData auth_data
 }
 
 struct Unlocked {}
@@ -41,9 +67,13 @@ union UnlockStatus {
     2: i16 more_keys_needed
 }
 
-exception InvalidCardData {}
+exception InvalidCardData {
+    1: optional string reason
+}
 
 exception CardDataNotFound {}
+
+exception SessionDataNotFound {}
 
 exception NoKeyring {}
 
@@ -67,26 +97,35 @@ service Keyring {
     UnlockStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
 
     /** Зашифровать кейринг */
-    void Lock () throws ()
+    void Lock () throws (1: NoKeyring no_keyring)
 
     /** Добавить новый ключ в кейринг */
-    void Rotate () throws (1: KeyringLocked locked)
+    void Rotate () throws (1: KeyringLocked locked, 2: NoKeyring no_keyring)
 
 }
 
-/** Интерфейс для приложений */
+/**
+ * Интерфейс для приложений
+ *
+ * При недоступности (отсутствии или залоченности) кейринга сервис сигнализирует об этом с помощью
+ * woody-ошибки `Resource Unavailable`.
+ */
 service Storage {
 
     /** Получить карточные данные без CVV */
     CardData GetCardData (1: domain.Token token)
-        throws (1: CardDataNotFound not_found, 2: KeyringLocked locked)
+        throws (1: CardDataNotFound not_found)
 
     /** Получить карточные данные c CVV */
     CardData GetSessionCardData (1: domain.Token token, 2: domain.PaymentSessionID session_id)
-        throws (1: CardDataNotFound not_found, 2: KeyringLocked locked)
+        throws (1: CardDataNotFound not_found)
+
+    /** Получить данные сессии */
+    SessionData GetSessionData (1: domain.PaymentSessionID session_id)
+        throws (1: SessionDataNotFound not_found)
 
     /** Сохранить карточные данные */
-    PutCardDataResult PutCardData (1: CardData card_data)
-        throws (1: InvalidCardData invalid, 2: KeyringLocked locked)
+    PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data)
+        throws (1: InvalidCardData invalid)
 
 }

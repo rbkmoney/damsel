@@ -7,6 +7,8 @@
 
 -define(GEO_IP_GEO_ID_UNKNOWN, -1).
 
+-define(GEO_IP_UNKNOWN, <<"UNKNOWN">>).
+
 
 %% struct 'LocationInfo'
 -record('geo_ip_LocationInfo', {

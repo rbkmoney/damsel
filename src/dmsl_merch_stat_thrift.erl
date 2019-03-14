@@ -32,17 +32,23 @@
 -export_type([struct_info/0]).
 
 -export_type([
+    'DigitalWalletID'/0,
     'PayoutID'/0,
+    'PayoutSummary'/0,
     'StatInfo'/0,
     'InvalidRequest'/0
 ]).
 -export_type([
     'OnHoldExpiration'/0,
-    'TerminalPaymentProvider'/0
+    'TerminalPaymentProvider'/0,
+    'DigitalWalletProvider'/0,
+    'OperationType'/0
 ]).
 -export_type([
     'StatPayment'/0,
     'Payer'/0,
+    'RecurrentParentPayment'/0,
+    'RecurrentPayer'/0,
     'PaymentResourcePayer'/0,
     'CustomerPayer'/0,
     'InvoicePaymentFlow'/0,
@@ -50,7 +56,6 @@
     'InvoicePaymentFlowHold'/0,
     'OperationFailure'/0,
     'OperationTimeout'/0,
-    'ExternalFailure'/0,
     'InvoicePaymentPending'/0,
     'InvoicePaymentProcessed'/0,
     'InvoicePaymentCaptured'/0,
@@ -61,7 +66,10 @@
     'PaymentTool'/0,
     'BankCard'/0,
     'PaymentTerminal'/0,
-    'BankAccount'/0,
+    'DigitalWallet'/0,
+    'RussianBankAccount'/0,
+    'InternationalBankAccount'/0,
+    'InternationalBankDetails'/0,
     'StatInvoice'/0,
     'InvoiceUnpaid'/0,
     'InvoicePaid'/0,
@@ -70,20 +78,29 @@
     'InvoiceStatus'/0,
     'StatCustomer'/0,
     'StatPayout'/0,
+    'PayoutSummaryItem'/0,
     'PayoutType'/0,
+    'Wallet'/0,
     'PayoutCard'/0,
     'PayoutAccount'/0,
+    'RussianPayoutAccount'/0,
+    'InternationalPayoutAccount'/0,
     'PayoutStatus'/0,
     'PayoutUnpaid'/0,
     'PayoutPaid'/0,
     'PayoutCancelled'/0,
     'PayoutConfirmed'/0,
+    'StatRefund'/0,
+    'InvoicePaymentRefundStatus'/0,
+    'InvoicePaymentRefundPending'/0,
+    'InvoicePaymentRefundSucceeded'/0,
+    'InvoicePaymentRefundFailed'/0,
     'StatRequest'/0,
     'StatResponse'/0,
     'StatResponseData'/0
 ]).
 -export_type([
-    'DatasetTooBig'/0
+    'BadToken'/0
 ]).
 
 -type namespace() :: 'merchstat'.
@@ -92,11 +109,15 @@
 %% typedefs
 %%
 -type typedef_name() ::
+    'DigitalWalletID' |
     'PayoutID' |
+    'PayoutSummary' |
     'StatInfo' |
     'InvalidRequest'.
 
+-type 'DigitalWalletID'() :: binary().
 -type 'PayoutID'() :: dmsl_base_thrift:'ID'().
+-type 'PayoutSummary'() :: ['PayoutSummaryItem'()].
 -type 'StatInfo'() :: #{binary() => binary()}.
 -type 'InvalidRequest'() :: dmsl_base_thrift:'InvalidRequest'().
 
@@ -105,16 +126,27 @@
 %%
 -type enum_name() ::
     'OnHoldExpiration' |
-    'TerminalPaymentProvider'.
+    'TerminalPaymentProvider' |
+    'DigitalWalletProvider' |
+    'OperationType'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
-    cancel |
-    capture.
+    'cancel' |
+    'capture'.
 
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
-    euroset.
+    'euroset'.
+
+%% enum 'DigitalWalletProvider'
+-type 'DigitalWalletProvider'() ::
+    'qiwi'.
+
+%% enum 'OperationType'
+-type 'OperationType'() ::
+    'payment' |
+    'refund'.
 
 %%
 %% structs, unions and exceptions
@@ -122,6 +154,8 @@
 -type struct_name() ::
     'StatPayment' |
     'Payer' |
+    'RecurrentParentPayment' |
+    'RecurrentPayer' |
     'PaymentResourcePayer' |
     'CustomerPayer' |
     'InvoicePaymentFlow' |
@@ -129,7 +163,6 @@
     'InvoicePaymentFlowHold' |
     'OperationFailure' |
     'OperationTimeout' |
-    'ExternalFailure' |
     'InvoicePaymentPending' |
     'InvoicePaymentProcessed' |
     'InvoicePaymentCaptured' |
@@ -140,7 +173,10 @@
     'PaymentTool' |
     'BankCard' |
     'PaymentTerminal' |
-    'BankAccount' |
+    'DigitalWallet' |
+    'RussianBankAccount' |
+    'InternationalBankAccount' |
+    'InternationalBankDetails' |
     'StatInvoice' |
     'InvoiceUnpaid' |
     'InvoicePaid' |
@@ -149,20 +185,29 @@
     'InvoiceStatus' |
     'StatCustomer' |
     'StatPayout' |
+    'PayoutSummaryItem' |
     'PayoutType' |
+    'Wallet' |
     'PayoutCard' |
     'PayoutAccount' |
+    'RussianPayoutAccount' |
+    'InternationalPayoutAccount' |
     'PayoutStatus' |
     'PayoutUnpaid' |
     'PayoutPaid' |
     'PayoutCancelled' |
     'PayoutConfirmed' |
+    'StatRefund' |
+    'InvoicePaymentRefundStatus' |
+    'InvoicePaymentRefundPending' |
+    'InvoicePaymentRefundSucceeded' |
+    'InvoicePaymentRefundFailed' |
     'StatRequest' |
     'StatResponse' |
     'StatResponseData'.
 
 -type exception_name() ::
-    'DatasetTooBig'.
+    'BadToken'.
 
 %% struct 'StatPayment'
 -type 'StatPayment'() :: #'merchstat_StatPayment'{}.
@@ -170,7 +215,14 @@
 %% union 'Payer'
 -type 'Payer'() ::
     {'payment_resource', 'PaymentResourcePayer'()} |
-    {'customer', 'CustomerPayer'()}.
+    {'customer', 'CustomerPayer'()} |
+    {'recurrent', 'RecurrentPayer'()}.
+
+%% struct 'RecurrentParentPayment'
+-type 'RecurrentParentPayment'() :: #'merchstat_RecurrentParentPayment'{}.
+
+%% struct 'RecurrentPayer'
+-type 'RecurrentPayer'() :: #'merchstat_RecurrentPayer'{}.
 
 %% struct 'PaymentResourcePayer'
 -type 'PaymentResourcePayer'() :: #'merchstat_PaymentResourcePayer'{}.
@@ -192,13 +244,10 @@
 %% union 'OperationFailure'
 -type 'OperationFailure'() ::
     {'operation_timeout', 'OperationTimeout'()} |
-    {'external_failure', 'ExternalFailure'()}.
+    {'failure', dmsl_domain_thrift:'Failure'()}.
 
 %% struct 'OperationTimeout'
 -type 'OperationTimeout'() :: #'merchstat_OperationTimeout'{}.
-
-%% struct 'ExternalFailure'
--type 'ExternalFailure'() :: #'merchstat_ExternalFailure'{}.
 
 %% struct 'InvoicePaymentPending'
 -type 'InvoicePaymentPending'() :: #'merchstat_InvoicePaymentPending'{}.
@@ -230,7 +279,8 @@
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
     {'bank_card', 'BankCard'()} |
-    {'payment_terminal', 'PaymentTerminal'()}.
+    {'payment_terminal', 'PaymentTerminal'()} |
+    {'digital_wallet', 'DigitalWallet'()}.
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'merchstat_BankCard'{}.
@@ -238,8 +288,17 @@
 %% struct 'PaymentTerminal'
 -type 'PaymentTerminal'() :: #'merchstat_PaymentTerminal'{}.
 
-%% struct 'BankAccount'
--type 'BankAccount'() :: #'merchstat_BankAccount'{}.
+%% struct 'DigitalWallet'
+-type 'DigitalWallet'() :: #'merchstat_DigitalWallet'{}.
+
+%% struct 'RussianBankAccount'
+-type 'RussianBankAccount'() :: #'merchstat_RussianBankAccount'{}.
+
+%% struct 'InternationalBankAccount'
+-type 'InternationalBankAccount'() :: #'merchstat_InternationalBankAccount'{}.
+
+%% struct 'InternationalBankDetails'
+-type 'InternationalBankDetails'() :: #'merchstat_InternationalBankDetails'{}.
 
 %% struct 'StatInvoice'
 -type 'StatInvoice'() :: #'merchstat_StatInvoice'{}.
@@ -269,16 +328,31 @@
 %% struct 'StatPayout'
 -type 'StatPayout'() :: #'merchstat_StatPayout'{}.
 
+%% struct 'PayoutSummaryItem'
+-type 'PayoutSummaryItem'() :: #'merchstat_PayoutSummaryItem'{}.
+
 %% union 'PayoutType'
 -type 'PayoutType'() ::
     {'bank_card', 'PayoutCard'()} |
-    {'bank_account', 'PayoutAccount'()}.
+    {'bank_account', 'PayoutAccount'()} |
+    {'wallet', 'Wallet'()}.
+
+%% struct 'Wallet'
+-type 'Wallet'() :: #'merchstat_Wallet'{}.
 
 %% struct 'PayoutCard'
 -type 'PayoutCard'() :: #'merchstat_PayoutCard'{}.
 
-%% struct 'PayoutAccount'
--type 'PayoutAccount'() :: #'merchstat_PayoutAccount'{}.
+%% union 'PayoutAccount'
+-type 'PayoutAccount'() ::
+    {'russian_payout_account', 'RussianPayoutAccount'()} |
+    {'international_payout_account', 'InternationalPayoutAccount'()}.
+
+%% struct 'RussianPayoutAccount'
+-type 'RussianPayoutAccount'() :: #'merchstat_RussianPayoutAccount'{}.
+
+%% struct 'InternationalPayoutAccount'
+-type 'InternationalPayoutAccount'() :: #'merchstat_InternationalPayoutAccount'{}.
 
 %% union 'PayoutStatus'
 -type 'PayoutStatus'() ::
@@ -299,6 +373,24 @@
 %% struct 'PayoutConfirmed'
 -type 'PayoutConfirmed'() :: #'merchstat_PayoutConfirmed'{}.
 
+%% struct 'StatRefund'
+-type 'StatRefund'() :: #'merchstat_StatRefund'{}.
+
+%% union 'InvoicePaymentRefundStatus'
+-type 'InvoicePaymentRefundStatus'() ::
+    {'pending', 'InvoicePaymentRefundPending'()} |
+    {'succeeded', 'InvoicePaymentRefundSucceeded'()} |
+    {'failed', 'InvoicePaymentRefundFailed'()}.
+
+%% struct 'InvoicePaymentRefundPending'
+-type 'InvoicePaymentRefundPending'() :: #'merchstat_InvoicePaymentRefundPending'{}.
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-type 'InvoicePaymentRefundSucceeded'() :: #'merchstat_InvoicePaymentRefundSucceeded'{}.
+
+%% struct 'InvoicePaymentRefundFailed'
+-type 'InvoicePaymentRefundFailed'() :: #'merchstat_InvoicePaymentRefundFailed'{}.
+
 %% struct 'StatRequest'
 -type 'StatRequest'() :: #'merchstat_StatRequest'{}.
 
@@ -311,10 +403,11 @@
     {'invoices', ['StatInvoice'()]} |
     {'customers', ['StatCustomer'()]} |
     {'records', ['StatInfo'()]} |
-    {'payouts', ['StatPayout'()]}.
+    {'payouts', ['StatPayout'()]} |
+    {'refunds', ['StatRefund'()]}.
 
-%% exception 'DatasetTooBig'
--type 'DatasetTooBig'() :: #'merchstat_DatasetTooBig'{}.
+%% exception 'BadToken'
+-type 'BadToken'() :: #'merchstat_BadToken'{}.
 
 %%
 %% services and functions
@@ -356,7 +449,9 @@
 
 -type enum_choice() ::
     'OnHoldExpiration'() |
-    'TerminalPaymentProvider'().
+    'TerminalPaymentProvider'() |
+    'DigitalWalletProvider'() |
+    'OperationType'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -367,7 +462,9 @@
 
 typedefs() ->
     [
+        'DigitalWalletID',
         'PayoutID',
+        'PayoutSummary',
         'StatInfo',
         'InvalidRequest'
     ].
@@ -377,7 +474,9 @@ typedefs() ->
 enums() ->
     [
         'OnHoldExpiration',
-        'TerminalPaymentProvider'
+        'TerminalPaymentProvider',
+        'DigitalWalletProvider',
+        'OperationType'
     ].
 
 -spec structs() -> [struct_name()].
@@ -386,6 +485,8 @@ structs() ->
     [
         'StatPayment',
         'Payer',
+        'RecurrentParentPayment',
+        'RecurrentPayer',
         'PaymentResourcePayer',
         'CustomerPayer',
         'InvoicePaymentFlow',
@@ -393,7 +494,6 @@ structs() ->
         'InvoicePaymentFlowHold',
         'OperationFailure',
         'OperationTimeout',
-        'ExternalFailure',
         'InvoicePaymentPending',
         'InvoicePaymentProcessed',
         'InvoicePaymentCaptured',
@@ -404,7 +504,10 @@ structs() ->
         'PaymentTool',
         'BankCard',
         'PaymentTerminal',
-        'BankAccount',
+        'DigitalWallet',
+        'RussianBankAccount',
+        'InternationalBankAccount',
+        'InternationalBankDetails',
         'StatInvoice',
         'InvoiceUnpaid',
         'InvoicePaid',
@@ -413,14 +516,23 @@ structs() ->
         'InvoiceStatus',
         'StatCustomer',
         'StatPayout',
+        'PayoutSummaryItem',
         'PayoutType',
+        'Wallet',
         'PayoutCard',
         'PayoutAccount',
+        'RussianPayoutAccount',
+        'InternationalPayoutAccount',
         'PayoutStatus',
         'PayoutUnpaid',
         'PayoutPaid',
         'PayoutCancelled',
         'PayoutConfirmed',
+        'StatRefund',
+        'InvoicePaymentRefundStatus',
+        'InvoicePaymentRefundPending',
+        'InvoicePaymentRefundSucceeded',
+        'InvoicePaymentRefundFailed',
         'StatRequest',
         'StatResponse',
         'StatResponseData'
@@ -440,8 +552,14 @@ namespace() ->
 
 -spec typedef_info(typedef_name()) -> field_type() | no_return().
 
+typedef_info('DigitalWalletID') ->
+    string;
+
 typedef_info('PayoutID') ->
     string;
+
+typedef_info('PayoutSummary') ->
+    {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}};
 
 typedef_info('StatInfo') ->
     {map, string, string};
@@ -455,13 +573,24 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('OnHoldExpiration') ->
     {enum, [
-        {cancel, 0},
-        {capture, 1}
+        {'cancel', 0},
+        {'capture', 1}
     ]};
 
 enum_info('TerminalPaymentProvider') ->
     {enum, [
-        {euroset, 0}
+        {'euroset', 0}
+    ]};
+
+enum_info('DigitalWalletProvider') ->
+    {enum, [
+        {'qiwi', 0}
+    ]};
+
+enum_info('OperationType') ->
+    {enum, [
+        {'payment', 0},
+        {'refund', 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -482,13 +611,31 @@ struct_info('StatPayment') ->
     {10, required, {struct, union, {dmsl_merch_stat_thrift, 'Payer'}}, 'payer', undefined},
     {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
     {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
-    {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined}
+    {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
+    {15, optional, string, 'short_id', undefined},
+    {16, optional, bool, 'make_recurrent', undefined},
+    {17, required, i64, 'domain_revision', undefined}
 ]};
 
 struct_info('Payer') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined}
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
+]};
+
+struct_info('RecurrentParentPayment') ->
+    {struct, struct, [
+    {1, required, string, 'invoice_id', undefined},
+    {2, required, string, 'payment_id', undefined}
+]};
+
+struct_info('RecurrentPayer') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+    {3, optional, string, 'phone_number', undefined},
+    {4, optional, string, 'email', undefined}
 ]};
 
 struct_info('PaymentResourcePayer') ->
@@ -498,12 +645,15 @@ struct_info('PaymentResourcePayer') ->
     {3, optional, string, 'fingerprint', undefined},
     {4, optional, string, 'phone_number', undefined},
     {5, optional, string, 'email', undefined},
-    {6, required, string, 'session_id', undefined}
+    {6, optional, string, 'session_id', undefined}
 ]};
 
 struct_info('CustomerPayer') ->
     {struct, struct, [
-    {1, required, string, 'customer_id', undefined}
+    {1, required, string, 'customer_id', undefined},
+    {2, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+    {3, optional, string, 'phone_number', undefined},
+    {4, optional, string, 'email', undefined}
 ]};
 
 struct_info('InvoicePaymentFlow') ->
@@ -524,36 +674,39 @@ struct_info('InvoicePaymentFlowHold') ->
 struct_info('OperationFailure') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'ExternalFailure'}}, 'external_failure', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
 ]};
 
 struct_info('OperationTimeout') ->
     {struct, struct, []};
 
-struct_info('ExternalFailure') ->
-    {struct, struct, [
-    {1, required, string, 'code', undefined},
-    {2, optional, string, 'description', undefined}
-]};
-
 struct_info('InvoicePaymentPending') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentProcessed') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentCaptured') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentCancelled') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentRefunded') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined}
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+    {2, optional, string, 'at', undefined}
 ]};
 
 struct_info('InvoicePaymentStatus') ->
@@ -569,7 +722,8 @@ struct_info('InvoicePaymentStatus') ->
 struct_info('PaymentTool') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined}
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
 ]};
 
 struct_info('BankCard') ->
@@ -577,7 +731,8 @@ struct_info('BankCard') ->
     {1, required, string, 'token', undefined},
     {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
     {3, required, string, 'bin', undefined},
-    {4, required, string, 'masked_pan', undefined}
+    {4, required, string, 'masked_pan', undefined},
+    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
@@ -585,12 +740,36 @@ struct_info('PaymentTerminal') ->
     {1, required, {enum, {dmsl_merch_stat_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
 ]};
 
-struct_info('BankAccount') ->
+struct_info('DigitalWallet') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_merch_stat_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
+    {2, required, string, 'id', undefined}
+]};
+
+struct_info('RussianBankAccount') ->
     {struct, struct, [
     {1, required, string, 'account', undefined},
     {2, required, string, 'bank_name', undefined},
     {3, required, string, 'bank_post_account', undefined},
     {4, required, string, 'bank_bik', undefined}
+]};
+
+struct_info('InternationalBankAccount') ->
+    {struct, struct, [
+    {1, optional, string, 'number', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
+    {4, optional, string, 'iban', undefined},
+    {5, optional, string, 'account_holder', undefined}
+]};
+
+struct_info('InternationalBankDetails') ->
+    {struct, struct, [
+    {1, optional, string, 'bic', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+    {3, optional, string, 'name', undefined},
+    {4, optional, string, 'address', undefined},
+    {5, optional, string, 'aba_rtn', undefined}
 ]};
 
 struct_info('StatInvoice') ->
@@ -613,16 +792,20 @@ struct_info('InvoiceUnpaid') ->
     {struct, struct, []};
 
 struct_info('InvoicePaid') ->
-    {struct, struct, []};
+    {struct, struct, [
+    {1, optional, string, 'at', undefined}
+]};
 
 struct_info('InvoiceCancelled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
+    {1, required, string, 'details', undefined},
+    {2, optional, string, 'at', undefined}
 ]};
 
 struct_info('InvoiceFulfilled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
+    {1, required, string, 'details', undefined},
+    {2, optional, string, 'at', undefined}
 ]};
 
 struct_info('InvoiceStatus') ->
@@ -649,13 +832,31 @@ struct_info('StatPayout') ->
     {6, required, i64, 'amount', undefined},
     {7, required, i64, 'fee', undefined},
     {8, required, string, 'currency_symbolic_code', undefined},
-    {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'type', undefined}
+    {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'type', undefined},
+    {10, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined}
+]};
+
+struct_info('PayoutSummaryItem') ->
+    {struct, struct, [
+    {1, required, i64, 'amount', undefined},
+    {2, required, i64, 'fee', undefined},
+    {3, required, string, 'currency_symbolic_code', undefined},
+    {4, required, string, 'from_time', undefined},
+    {5, required, string, 'to_time', undefined},
+    {6, required, {enum, {dmsl_merch_stat_thrift, 'OperationType'}}, 'operation_type', undefined},
+    {7, required, i32, 'count', undefined}
 ]};
 
 struct_info('PayoutType') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined}
+    {2, optional, {struct, union, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'Wallet'}}, 'wallet', undefined}
+]};
+
+struct_info('Wallet') ->
+    {struct, struct, [
+    {1, required, string, 'wallet_id', undefined}
 ]};
 
 struct_info('PayoutCard') ->
@@ -664,10 +865,22 @@ struct_info('PayoutCard') ->
 ]};
 
 struct_info('PayoutAccount') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
+]};
+
+struct_info('RussianPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'BankAccount'}}, 'account', undefined},
-    {4, required, string, 'inn', undefined},
-    {5, required, string, 'purpose', undefined}
+    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
+    {2, required, string, 'inn', undefined},
+    {3, required, string, 'purpose', undefined}
+]};
+
+struct_info('InternationalPayoutAccount') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
+    {2, required, string, 'purpose', undefined}
 ]};
 
 struct_info('PayoutStatus') ->
@@ -692,15 +905,53 @@ struct_info('PayoutCancelled') ->
 struct_info('PayoutConfirmed') ->
     {struct, struct, []};
 
+struct_info('StatRefund') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'payment_id', undefined},
+    {3, required, string, 'invoice_id', undefined},
+    {4, required, string, 'owner_id', undefined},
+    {5, required, string, 'shop_id', undefined},
+    {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
+    {7, required, string, 'created_at', undefined},
+    {8, required, i64, 'amount', undefined},
+    {9, required, i64, 'fee', undefined},
+    {10, required, string, 'currency_symbolic_code', undefined},
+    {11, optional, string, 'reason', undefined}
+]};
+
+struct_info('InvoicePaymentRefundStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+]};
+
+struct_info('InvoicePaymentRefundPending') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentRefundSucceeded') ->
+    {struct, struct, [
+    {1, required, string, 'at', undefined}
+]};
+
+struct_info('InvoicePaymentRefundFailed') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+    {2, required, string, 'at', undefined}
+]};
+
 struct_info('StatRequest') ->
     {struct, struct, [
-    {1, required, string, 'dsl', undefined}
+    {1, required, string, 'dsl', undefined},
+    {2, optional, string, 'continuation_token', undefined}
 ]};
 
 struct_info('StatResponse') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_merch_stat_thrift, 'StatResponseData'}}, 'data', undefined},
-    {2, optional, i32, 'total_count', undefined}
+    {2, optional, i32, 'total_count', undefined},
+    {3, optional, string, 'continuation_token', undefined}
 ]};
 
 struct_info('StatResponseData') ->
@@ -709,12 +960,13 @@ struct_info('StatResponseData') ->
     {2, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}}, 'invoices', undefined},
     {3, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatCustomer'}}}, 'customers', undefined},
     {4, optional, {list, {map, string, string}}, 'records', undefined},
-    {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined}
+    {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
+    {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
 ]};
 
-struct_info('DatasetTooBig') ->
+struct_info('BadToken') ->
     {struct, exception, [
-    {1, undefined, i32, 'limit', undefined}
+    {1, undefined, string, 'reason', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -724,7 +976,13 @@ struct_info(_) -> erlang:error(badarg).
 record_name('StatPayment') ->
     'merchstat_StatPayment';
 
-record_name('PaymentResourcePayer') ->
+record_name('RecurrentParentPayment') ->
+    'merchstat_RecurrentParentPayment';
+
+    record_name('RecurrentPayer') ->
+    'merchstat_RecurrentPayer';
+
+    record_name('PaymentResourcePayer') ->
     'merchstat_PaymentResourcePayer';
 
     record_name('CustomerPayer') ->
@@ -738,9 +996,6 @@ record_name('PaymentResourcePayer') ->
 
     record_name('OperationTimeout') ->
     'merchstat_OperationTimeout';
-
-    record_name('ExternalFailure') ->
-    'merchstat_ExternalFailure';
 
     record_name('InvoicePaymentPending') ->
     'merchstat_InvoicePaymentPending';
@@ -766,8 +1021,17 @@ record_name('PaymentResourcePayer') ->
     record_name('PaymentTerminal') ->
     'merchstat_PaymentTerminal';
 
-    record_name('BankAccount') ->
-    'merchstat_BankAccount';
+    record_name('DigitalWallet') ->
+    'merchstat_DigitalWallet';
+
+    record_name('RussianBankAccount') ->
+    'merchstat_RussianBankAccount';
+
+    record_name('InternationalBankAccount') ->
+    'merchstat_InternationalBankAccount';
+
+    record_name('InternationalBankDetails') ->
+    'merchstat_InternationalBankDetails';
 
     record_name('StatInvoice') ->
     'merchstat_StatInvoice';
@@ -790,11 +1054,20 @@ record_name('PaymentResourcePayer') ->
     record_name('StatPayout') ->
     'merchstat_StatPayout';
 
+    record_name('PayoutSummaryItem') ->
+    'merchstat_PayoutSummaryItem';
+
+    record_name('Wallet') ->
+    'merchstat_Wallet';
+
     record_name('PayoutCard') ->
     'merchstat_PayoutCard';
 
-    record_name('PayoutAccount') ->
-    'merchstat_PayoutAccount';
+    record_name('RussianPayoutAccount') ->
+    'merchstat_RussianPayoutAccount';
+
+    record_name('InternationalPayoutAccount') ->
+    'merchstat_InternationalPayoutAccount';
 
     record_name('PayoutUnpaid') ->
     'merchstat_PayoutUnpaid';
@@ -808,14 +1081,26 @@ record_name('PaymentResourcePayer') ->
     record_name('PayoutConfirmed') ->
     'merchstat_PayoutConfirmed';
 
+    record_name('StatRefund') ->
+    'merchstat_StatRefund';
+
+    record_name('InvoicePaymentRefundPending') ->
+    'merchstat_InvoicePaymentRefundPending';
+
+    record_name('InvoicePaymentRefundSucceeded') ->
+    'merchstat_InvoicePaymentRefundSucceeded';
+
+    record_name('InvoicePaymentRefundFailed') ->
+    'merchstat_InvoicePaymentRefundFailed';
+
     record_name('StatRequest') ->
     'merchstat_StatRequest';
 
     record_name('StatResponse') ->
     'merchstat_StatResponse';
 
-    record_name('DatasetTooBig') ->
-    'merchstat_DatasetTooBig';
+    record_name('BadToken') ->
+    'merchstat_BadToken';
 
     record_name(_) -> error(badarg).
     
@@ -844,7 +1129,7 @@ function_info('MerchantStatistics', 'GetPayments', reply_type) ->
     function_info('MerchantStatistics', 'GetPayments', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetInvoices', params_type) ->
     {struct, struct, [
@@ -855,7 +1140,7 @@ function_info('MerchantStatistics', 'GetInvoices', reply_type) ->
     function_info('MerchantStatistics', 'GetInvoices', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetCustomers', params_type) ->
     {struct, struct, [
@@ -866,7 +1151,7 @@ function_info('MerchantStatistics', 'GetCustomers', reply_type) ->
     function_info('MerchantStatistics', 'GetCustomers', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetPayouts', params_type) ->
     {struct, struct, [
@@ -877,7 +1162,7 @@ function_info('MerchantStatistics', 'GetPayouts', reply_type) ->
     function_info('MerchantStatistics', 'GetPayouts', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetStatistics', params_type) ->
     {struct, struct, [
@@ -888,7 +1173,7 @@ function_info('MerchantStatistics', 'GetStatistics', reply_type) ->
     function_info('MerchantStatistics', 'GetStatistics', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

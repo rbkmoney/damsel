@@ -1,5 +1,6 @@
 include "base.thrift"
 include "domain.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.payout_processing
 namespace erlang payout_processing
@@ -9,21 +10,7 @@ typedef list<Event> Events
 
 typedef base.ID UserID
 
-struct UserInfo {
-    1: required UserID id
-    2: required UserType type
-}
-
-/* Временная замена ролям пользователей для разграничения доступа и лога аудита */
-union UserType {
-    1: InternalUser internal_user
-    2: ExternalUser external_user
-    3: ServiceUser  service_user
-}
-
-struct InternalUser {}
-struct ExternalUser {}
-struct ServiceUser {}
+typedef map<string, msgpack.Value> Metadata
 
 /**
  * Событие, атомарный фрагмент истории бизнес-объекта, например выплаты
@@ -86,19 +73,52 @@ union PayoutChange {
 struct PayoutCreated {
     /* Данные созданной выплаты */
     1: required Payout payout
-    /* Кто инициировал выплату */
-    2: required UserInfo initiator
 }
 
+/**
+  * Виды операций над денежными средствами
+  */
+enum OperationType {
+    payment
+    refund
+    adjustment
+}
+
+/**
+* Расшифровка части суммы вывода
+* Описание части суммы вывода, сгруппированное по виду движения денежных средств
+*/
+struct PayoutSummaryItem {
+    1: required domain.Amount amount
+    2: required domain.Amount fee
+    3: required string currency_symbolic_code
+    4: required base.Timestamp from_time
+    5: required base.Timestamp to_time
+    6: required OperationType operation_type
+    /* Количество движений данного вида в выводе */
+    7: required i32 count
+}
+
+/**
+* Список описаний денежных сумм, из которых состоит сумма вывода
+*/
+typedef list<PayoutSummaryItem> PayoutSummary
+
 struct Payout {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
+    1 : required PayoutID id
+    2 : required domain.PartyID party_id
+    3 : required domain.ShopID shop_id
+    9 : required domain.ContractID contract_id
     /* Время формирования платежного поручения, либо выплаты на карту  */
-    4: required base.Timestamp created_at
-    5: required PayoutStatus status
-    6: required domain.FinalCashFlow payout_flow
-    7: required PayoutType type
+    4 : required base.Timestamp created_at
+    5 : required PayoutStatus status
+    11: required domain.Amount amount
+    12: required domain.Amount fee
+    13: required domain.CurrencyRef currency
+    6 : required domain.FinalCashFlow payout_flow
+    7 : required PayoutType type
+    8 : optional PayoutSummary summary
+    10: optional Metadata metadata
 }
 
 /**
@@ -124,26 +144,7 @@ union PayoutStatus {
 struct PayoutUnpaid {}
 
 /* Помечается статусом paid, когда удалось отправить в банк */
-struct PayoutPaid {
-    1: required PaidDetails details
-}
-
-/* Детали выплаты, которые появляются после того, как выплата успешно отправлена */
-union PaidDetails {
-    1: CardPaidDetails card_details
-    2: AccountPaidDetails account_details
-}
-
-struct CardPaidDetails {
-    1: required ProviderDetails provider_details
-}
-
-struct ProviderDetails {
-    1: required string name
-    2: required string transaction_id
-}
-
-struct AccountPaidDetails {}
+struct PayoutPaid {}
 
 /**
  * Помечается статусом cancelled, когда не удалось отправить в банк,
@@ -151,7 +152,6 @@ struct AccountPaidDetails {}
  * балансов на счетах
  */
 struct PayoutCancelled {
-    1: required UserInfo user_info
     2: required string details
 }
 
@@ -159,27 +159,36 @@ struct PayoutCancelled {
  * Помечается статусом confirmed, когда можно менять балансы на счетах,
  * то есть если выплата confirmed, то балансы уже изменены
  */
-struct PayoutConfirmed {
-    1: required UserInfo user_info
-}
+struct PayoutConfirmed {}
 
 /* Типы выплаты */
 union PayoutType {
-    1: PayoutCard bank_card
     2: PayoutAccount bank_account
+    3: Wallet wallet
 }
 
-/* Выплата на карту */
-struct PayoutCard {
-    1: required domain.BankCard card
+struct Wallet {
+    1: required domain.WalletID wallet_id
 }
 
 /* Вывод на расчетный счет */
-struct PayoutAccount {
-    1: required domain.BankAccount account
+union PayoutAccount {
+    1: RussianPayoutAccount       russian_payout_account
+    2: InternationalPayoutAccount international_payout_account
+}
+
+struct RussianPayoutAccount {
+    1: required domain.RussianBankAccount bank_account
     2: required string inn
     3: required string purpose
     4: required domain.LegalAgreement legal_agreement
+}
+
+struct InternationalPayoutAccount {
+   1: required domain.InternationalBankAccount bank_account
+   2: required domain.InternationalLegalEntity legal_entity
+   3: required string purpose
+   4: required domain.LegalAgreement legal_agreement
 }
 
 /**
@@ -220,6 +229,8 @@ struct EventRange {
 
 exception NoLastEvent {}
 exception EventNotFound {}
+exception InvalidPayoutTool {}
+exception PayoutNotFound {}
 
 service EventSink {
 
@@ -244,16 +255,6 @@ service EventSink {
 
 }
 
-/**
- * Выплаты на карту
- */
-struct Pay2CardParams {
-    1: required domain.BankCard bank_card
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    4: required domain.Cash sum
-}
-
 /* Когда на счете для вывода недостаточно средств */
 exception InsufficientFunds {}
 /* Когда превышен лимит */
@@ -262,18 +263,53 @@ exception LimitExceeded {}
 /**
 * Диапазон времени
 * from_time - начальное время.
-* to_time - конечное время. Если не задано - запрашиваются все данные от from_time.
+* to_time - конечное время.
 * Если from > to  - диапазон считается некорректным.
 */
 struct TimeRange {
     1: required base.Timestamp from_time
-    2: optional base.Timestamp to_time
+    2: required base.Timestamp to_time
 }
 
+/**
+* Диапазон суммы
+* min - минимальная сумма.
+* max - максимальная сумма.
+* Если min > max - диапазон сумм считается некорректным.
+*/
+struct AmountRange {
+    1: optional domain.Amount min
+    2: optional domain.Amount max
+}
+
+struct ShopParams {
+    1: required domain.PartyID party_id
+    2: required domain.ShopID shop_id
+}
+
+/**
+* Параметры для создания выплаты
+* shop - параметры магазина
+* payout_tool_id - идентификатор платежного инструмента
+* amount - сумма выплаты
+**/
+struct PayoutParams {
+    1: required PayoutID payout_id
+    2: required ShopParams shop
+    3: required domain.PayoutToolID payout_tool_id
+    4: required domain.Cash amount
+    5: optional Metadata metadata
+}
+
+/**
+* Параметры для генерации выплаты
+* time_range - диапазон времени, за который будет сформированы выплаты
+* shop - параметры магазина. Если не указан, то генерируются выплаты за все магазины,
+* имеющие платежи/возвраты/корректировки за указанный time_range
+**/
 struct GeneratePayoutParams {
     1: required TimeRange time_range
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
+    2: required ShopParams shop_params
 }
 
 /**
@@ -284,49 +320,76 @@ struct PayoutSearchCriteria {
    /* Диапазон времени создания выплат */
    2: optional TimeRange time_range
    3: optional list<PayoutID> payout_ids
+   /* Диапазон суммы выплат */
+   4: optional AmountRange amount_range
+   5: optional domain.CurrencyRef currency
 }
 
 enum PayoutSearchStatus {
-    unpaid,
-    paid,
-    cancelled,
+    unpaid
+    paid
+    cancelled
     confirmed
 }
 
 /**
-* Info по выплате для отображения в админке
+* Поисковый запрос по выплатам
+* search_criteria - атрибуты поиска выплат
+* from_id (exclusive) - начальный идентификатор, после которого будет формироваться выборка
+* size - размер выборки. Не может быть отрицательным и больше 1000, в случае если не указан,
+* то значение будет равно 1000.
 **/
-struct PayoutInfo {
-    1: required PayoutID id
-    2: required domain.PartyID party_id
-    3: required domain.ShopID shop_id
-    4: required domain.Amount amount
-    5: required PayoutType type
-    6: required PayoutStatus status
-    7: required base.Timestamp from_time
-    8: required base.Timestamp to_time
-    9: required base.Timestamp created_at
+struct PayoutSearchRequest {
+   1: required PayoutSearchCriteria search_criteria
+   2: optional i64 from_id
+   3: optional i32 size
+}
+
+/**
+* Поисковый ответ по выплатам
+* payouts - информация по выплатам
+* last_id (inclusive) - уникальный идентификатор, соответствующий последнему элементу выборки
+**/
+struct PayoutSearchResponse {
+   1: required list<Payout> payouts
+   2: required i64 last_id
 }
 
 service PayoutManagement {
+
+    /**
+     * Создать выплату на определенную сумму и платежный инструмент
+     */
+    Payout CreatePayout (1: PayoutParams params) throws (1: InvalidPayoutTool ex1, 2: InsufficientFunds ex2, 3: base.InvalidRequest ex3)
+
+    /**
+    * Получить выплату по идентификатору
+    */
+    Payout Get (1: PayoutID payout_id) throws (1: PayoutNotFound ex1)
+
     /********************* Вывод на счет ************************/
     /**
-     * Сгенерировать и отправить по почте выводы за указанный промежуток времени
+     * Сгенерировать выводы за указанный промежуток времени
      */
-    PayoutID GeneratePayout (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
+    list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Подтвердить выплаты. Вернуть список подтвержденных выплат
+     * Подтвердить выплату.
      */
-    list<PayoutID> ConfirmPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    void ConfirmPayout (1: PayoutID payout_id) throws (1: base.InvalidRequest ex1)
 
     /**
-     * Отменить движения по выплатам. Вернуть список отмененных выплат
+     * Отменить движения по выплате.
      */
-    list<PayoutID> CancelPayouts (1: list<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
+    void CancelPayout (1: PayoutID payout_id, 2: string details) throws (1: base.InvalidRequest ex1)
 
     /**
     * Возвращает список Payout-ов согласно запросу поиска
     **/
-    list<PayoutInfo> GetPayoutsInfo (1: PayoutSearchCriteria search_criteria) throws (1: base.InvalidRequest ex1)
+    PayoutSearchResponse GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
+
+    /**
+     * Сгенерировать отчет по выплатам
+     */
+    void GenerateReport(1: set<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 }

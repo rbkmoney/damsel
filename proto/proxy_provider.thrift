@@ -1,9 +1,95 @@
 include "base.thrift"
-include "proxy.thrift"
 include "domain.thrift"
+include "user_interaction.thrift"
 
 namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
+
+/**
+ * Непрозрачное для процессинга состояние прокси, связанное с определённой сессией взаимодействия
+ * с третьей стороной.
+ */
+typedef base.Opaque ProxyState
+
+/**
+ * Запрос/ответ прокси при обработке обратного вызова в рамках сессии.
+ */
+typedef base.Opaque Callback
+typedef base.Opaque CallbackResponse
+
+/**
+ * Требование прокси к процессингу, отражающее дальнейший прогресс сессии взаимодействия
+ * с третьей стороной.
+ */
+union Intent {
+    1: FinishIntent finish
+    2: SleepIntent sleep
+    3: SuspendIntent suspend
+}
+
+/**
+ * Требование завершить сессию взаимодействия с третьей стороной.
+ */
+struct FinishIntent {
+    1: required FinishStatus status
+}
+
+/**
+ * Статус, c которым завершилась сессия взаимодействия с третьей стороной.
+ */
+union FinishStatus {
+    /** Успешное завершение взаимодействия. */
+    1: Success success
+    /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
+    2: domain.Failure failure
+}
+
+struct Success {
+    /** Токен для последующих взаимодействий. */
+    1: optional domain.Token token
+}
+
+/**
+ * Требование прервать на определённое время сессию взаимодействия, с намерением продолжить
+ * её потом.
+ */
+struct SleepIntent {
+    /** Таймер, определяющий когда следует продолжить взаимодействие. */
+    1: required base.Timer timer
+
+    /**
+     * Взаимодействие с пользователем, в случае если таковое необходимо для продолжения прогресса
+     * в рамках сессии взаимодействия.
+     */
+    2: optional user_interaction.UserInteraction user_interaction
+}
+
+typedef base.Tag CallbackTag
+
+/**
+ * Требование приостановить сессию взаимодействия, с продолжением по факту прихода обратного
+ * запроса (callback), либо с неуспешным завершением по факту истечения заданного времени
+ * ожидания.
+ */
+struct SuspendIntent {
+    /**
+     * Ассоциация, по которой обработчик обратного запроса сможет идентифицировать сессию
+     * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
+     */
+    1: required CallbackTag tag
+
+    /**
+     * Таймер, определяющий время, в течение которого процессинг ожидает обратный запрос.
+     */
+    2: required base.Timer timeout
+
+    /**
+     * Взаимодействие с пользователем, в случае если таковое необходимо для продолжения прогресса
+     * в рамках сессии взаимодействия.
+     */
+    3: optional user_interaction.UserInteraction user_interaction
+}
+
 
 struct RecurrentPaymentTool {
     1: required base.ID                          id
@@ -24,7 +110,7 @@ struct RecurrentTokenInfo {
  * Данные сессии взаимодействия с провайдерским прокси в рамках генерации многоразового токена.
  */
 struct RecurrentTokenSession {
-    1: optional proxy.ProxyState state
+    1: optional ProxyState state
 }
 
 /**
@@ -39,15 +125,14 @@ struct RecurrentTokenContext {
 
 struct RecurrentTokenProxyResult {
     1: required RecurrentTokenIntent   intent
-    2: optional proxy.ProxyState       next_state
-    3: optional domain.Token           token
+    2: optional ProxyState             next_state
     4: optional domain.TransactionInfo trx
 }
 
 union RecurrentTokenIntent {
     1: RecurrentTokenFinishIntent finish
-    2: proxy.SleepIntent          sleep
-    3: proxy.SuspendIntent        suspend
+    2: SleepIntent                sleep
+    3: SuspendIntent              suspend
 }
 
 struct RecurrentTokenFinishIntent {
@@ -56,7 +141,7 @@ struct RecurrentTokenFinishIntent {
 
 union RecurrentTokenFinishStatus {
     1: RecurrentTokenSuccess success
-    2: proxy.Failure         failure
+    2: domain.Failure        failure
 }
 
 struct RecurrentTokenSuccess {
@@ -64,7 +149,7 @@ struct RecurrentTokenSuccess {
 }
 
 struct RecurrentTokenCallbackResult {
-    1: required proxy.CallbackResponse    response
+    1: required CallbackResponse          response
     2: required RecurrentTokenProxyResult result
 }
 
@@ -72,25 +157,26 @@ struct RecurrentTokenCallbackResult {
  * Данные платежа, необходимые для обращения к провайдеру.
  */
 struct PaymentInfo {
-    1: required Shop shop
-    2: required Invoice invoice
-    3: required InvoicePayment payment
-    4: optional InvoicePaymentRefund refund
+    1: required Shop                  shop
+    2: required Invoice               invoice
+    3: required InvoicePayment        payment
+    4: optional InvoicePaymentRefund  refund
+    5: optional InvoicePaymentCapture capture
 }
 
 struct Shop {
-    1: required domain.ShopID id
-    2: required domain.Category category
-    3: required domain.ShopDetails details
+    1: required domain.ShopID       id
+    2: required domain.Category     category
+    3: required domain.ShopDetails  details
     4: required domain.ShopLocation location
 }
 
 struct Invoice {
-    1: required domain.InvoiceID id
-    2: required base.Timestamp created_at
-    3: required base.Timestamp due
+    1: required domain.InvoiceID      id
+    2: required base.Timestamp        created_at
+    3: required base.Timestamp        due
     7: required domain.InvoiceDetails details
-    6: required Cash cost
+    6: required Cash                  cost
 }
 
 union PaymentResource {
@@ -105,22 +191,27 @@ struct RecurrentPaymentResource {
 
 struct InvoicePayment {
     1: required domain.InvoicePaymentID id
-    2: required base.Timestamp created_at
-    3: optional domain.TransactionInfo trx
-    4: required domain.LegacyPayerDetails payer_details
-    6: required PaymentResource payment_resource
-    5: required Cash cost
-    7: required domain.ContactInfo contact_info
+    2: required base.Timestamp          created_at
+    3: optional domain.TransactionInfo  trx
+    6: required PaymentResource         payment_resource
+    5: required Cash                    cost
+    7: required domain.ContactInfo      contact_info
+    8: optional bool                    make_recurrent
 }
 
 struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefundID id
-    2: required base.Timestamp created_at
-    3: optional domain.TransactionInfo trx
+    2: required base.Timestamp                created_at
+    4: required Cash                          cash
+    3: optional domain.TransactionInfo        trx
+}
+
+struct InvoicePaymentCapture {
+    1: required Cash cost
 }
 
 struct Cash {
-    1: required domain.Amount amount
+    1: required domain.Amount   amount
     2: required domain.Currency currency
 }
 
@@ -132,16 +223,16 @@ struct Cash {
  */
 struct Session {
     1: required domain.TargetInvoicePaymentStatus target
-    2: optional proxy.ProxyState state
+    2: optional ProxyState                        state
 }
 
 /**
  * Набор данных для взаимодействия с провайдерским прокси в рамках платежа.
  */
 struct PaymentContext {
-    1: required Session session
-    2: required PaymentInfo payment_info
-    3: optional domain.ProxyOptions options = {}
+    1: required Session             session
+    2: required PaymentInfo         payment_info
+    3: optional domain.ProxyOptions options      = {}
 }
 
 /**
@@ -162,8 +253,8 @@ struct PaymentContext {
  *    по текущему платежу.
  */
 struct PaymentProxyResult {
-    1: required proxy.Intent intent
-    2: optional proxy.ProxyState next_state
+    1: required Intent                 intent
+    2: optional ProxyState             next_state
     3: optional domain.TransactionInfo trx
 }
 
@@ -171,15 +262,15 @@ struct PaymentProxyResult {
  * Результат обработки провайдерским прокси обратного вызова в рамках сессии.
  */
 struct PaymentCallbackResult {
-    1: required proxy.CallbackResponse response
+    1: required CallbackResponse           response
     2: required PaymentCallbackProxyResult result
 }
 
 struct PaymentCallbackProxyResult {
     // TODO temporary crutch, remove it as soon as possible
     // An `undefined` means that the suspend will be kept untouched
-    1: optional proxy.Intent intent
-    2: optional proxy.ProxyState next_state
+    1: optional Intent                 intent
+    2: optional ProxyState             next_state
     3: optional domain.TransactionInfo trx
 }
 
@@ -197,7 +288,7 @@ service ProviderProxy {
      * многоразового токена.
      */
     RecurrentTokenCallbackResult HandleRecurrentTokenCallback (
-        1: proxy.Callback        callback
+        1: Callback              callback
         2: RecurrentTokenContext context
     )
 
@@ -209,7 +300,7 @@ service ProviderProxy {
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках платежной сессии.
      */
-    PaymentCallbackResult HandlePaymentCallback (1: proxy.Callback callback, 2: PaymentContext context)
+    PaymentCallbackResult HandlePaymentCallback (1: Callback callback, 2: PaymentContext context)
 
 }
 
@@ -221,20 +312,20 @@ service ProviderProxyHost {
      * Запрос к процессингу на обработку обратного вызова от провайдера
      * в рамках взаимодействия по платежу.
      */
-    proxy.CallbackResponse ProcessPaymentCallback (1: proxy.CallbackTag tag, 2: proxy.Callback callback)
+    CallbackResponse ProcessPaymentCallback (1: CallbackTag tag, 2: Callback callback)
         throws (1: base.InvalidRequest ex1)
 
     /**
      * Запрос к процессингу на обработку обратного вызова от провайдера
      * в рамках взаимодействия по получению многоразового токена.
      */
-    proxy.CallbackResponse ProcessRecurrentTokenCallback (1: proxy.CallbackTag tag, 2: proxy.Callback callback)
+    CallbackResponse ProcessRecurrentTokenCallback (1: CallbackTag tag, 2: Callback callback)
         throws (1: base.InvalidRequest ex1)
 
     /**
      * Запрос-костыль к процессингу для получения актуального состояния платежа.
      */
-    PaymentInfo GetPayment (1: proxy.CallbackTag tag)
+    PaymentInfo GetPayment (1: CallbackTag tag)
         throws (1: PaymentNotFound ex1)
 
 }

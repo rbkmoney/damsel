@@ -28,6 +28,7 @@ union EventFilter {
     1: PartyEventFilter party
     2: InvoiceEventFilter invoice
     3: CustomerEventFilter customer
+    4: WalletEventFilter wallet
 }
 
 struct PartyEventFilter {
@@ -79,11 +80,22 @@ struct InvoiceFulfilled {}
 union InvoicePaymentEventType {
     1: InvoicePaymentCreated created
     2: InvoicePaymentStatusChanged status_changed
+    3: InvoicePaymentRefundChange invoice_payment_refund_change
 }
 
 struct InvoicePaymentCreated {}
 struct InvoicePaymentStatusChanged {
     1: optional InvoicePaymentStatus value
+}
+
+union InvoicePaymentRefundChange {
+    1: InvoicePaymentRefundCreated invoice_payment_refund_created
+    2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
+}
+
+struct InvoicePaymentRefundCreated {}
+struct InvoicePaymentRefundStatusChanged {
+    1: required InvoicePaymentRefundStatus value
 }
 
 union InvoicePaymentStatus {
@@ -101,6 +113,16 @@ struct InvoicePaymentCaptured  {}
 struct InvoicePaymentCancelled {}
 struct InvoicePaymentFailed    {}
 struct InvoicePaymentRefunded  {}
+
+union InvoicePaymentRefundStatus {
+    1: InvoicePaymentRefundPending pending
+    2: InvoicePaymentRefundSucceeded succeeded
+    3: InvoicePaymentRefundFailed failed
+}
+
+struct InvoicePaymentRefundPending {}
+struct InvoicePaymentRefundSucceeded {}
+struct InvoicePaymentRefundFailed {}
 
 struct CustomerEventFilter {
     1: required set<CustomerEventType> types
@@ -127,6 +149,24 @@ union CustomerBindingEvent {
 struct CustomerBindingStarted {}
 struct CustomerBindingSucceeded {}
 struct CustomerBindingFailed {}
+
+struct WalletEventFilter {
+    1: required set<WalletEventType> types
+}
+
+union WalletEventType {
+    1: WalletWithdrawalEventType withdrawal
+}
+
+union WalletWithdrawalEventType {
+    1: WalletWithdrawalStarted started
+    2: WalletWithdrawalSucceeded succeeded
+    3: WalletWithdrawalFailed failed
+}
+
+struct WalletWithdrawalStarted {}
+struct WalletWithdrawalSucceeded {}
+struct WalletWithdrawalFailed {}
 
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)

@@ -33,6 +33,7 @@
 
 -export_type([
     'Version'/0,
+    'Limit'/0,
     'History'/0
 ]).
 -export_type([
@@ -66,9 +67,11 @@
 %%
 -type typedef_name() ::
     'Version' |
+    'Limit' |
     'History'.
 
 -type 'Version'() :: integer().
+-type 'Limit'() :: integer().
 -type 'History'() :: #{'Version'() => 'Commit'()}.
 
 %%
@@ -187,6 +190,7 @@
 -type 'Repository_service_functions'() ::
     'Commit' |
     'Checkout' |
+    'PullRange' |
     'Pull'.
 
 -export_type(['Repository_service_functions'/0]).
@@ -223,6 +227,7 @@
 typedefs() ->
     [
         'Version',
+        'Limit',
         'History'
     ].
 
@@ -269,6 +274,9 @@ namespace() ->
 
 typedef_info('Version') ->
     i64;
+
+typedef_info('Limit') ->
+    i32;
 
 typedef_info('History') ->
     {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}};
@@ -443,6 +451,7 @@ functions('Repository') ->
     [
         'Commit',
         'Checkout',
+        'PullRange',
         'Pull'
     ];
 
@@ -484,6 +493,17 @@ function_info('Repository', 'Checkout', params_type) ->
 function_info('Repository', 'Checkout', reply_type) ->
         {struct, struct, {dmsl_domain_config_thrift, 'Snapshot'}};
     function_info('Repository', 'Checkout', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined}
+    ]};
+function_info('Repository', 'PullRange', params_type) ->
+    {struct, struct, [
+    {1, undefined, i64, 'after', undefined},
+    {2, undefined, i32, 'limit', undefined}
+]};
+function_info('Repository', 'PullRange', reply_type) ->
+        {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}};
+    function_info('Repository', 'PullRange', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined}
     ]};

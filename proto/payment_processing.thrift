@@ -62,6 +62,12 @@ struct Event {
      * изменений состояния бизнес-объекта, источника события.
      */
     4: required EventPayload payload
+
+    /**
+     * Идентификатор события в рамках одной машины.
+     * Монотонно возрастающее целочисленное значение.
+     */
+    5: optional base.SequenceID sequence
 }
 
 /**
@@ -76,7 +82,7 @@ union EventSource {
     /** Идентификатор шаблона инвойса, который породил событие. */
     3: domain.InvoiceTemplateID invoice_template_id
     /** Идентификатор плательщика, который породил событие. */
-    4: domain.CustomerID customer_id
+    4: domain.CustomerID        customer_id
 }
 
 /**
@@ -137,10 +143,14 @@ struct InvoicePaymentChange {
  */
 union InvoicePaymentChangePayload {
     1: InvoicePaymentStarted               invoice_payment_started
+    8: InvoicePaymentRiskScoreChanged      invoice_payment_risk_score_changed
+    9: InvoicePaymentRouteChanged          invoice_payment_route_changed
+    10: InvoicePaymentCashFlowChanged      invoice_payment_cash_flow_changed
     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
     2: InvoicePaymentSessionChange         invoice_payment_session_change
     7: InvoicePaymentRefundChange          invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+    11: InvoicePaymentRecTokenAcquired     invoice_payment_rec_token_acquired
 }
 
 /**
@@ -149,12 +159,38 @@ union InvoicePaymentChangePayload {
 struct InvoicePaymentStarted {
     /** Данные запущенного платежа. */
     1: required domain.InvoicePayment payment
+
+    /** deprecated */
     /** Оценка риска платежа. */
-    4: required domain.RiskScore risk_score
+    4: optional domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
-    2: required domain.PaymentRoute route
+    2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
-    3: required domain.FinalCashFlow cash_flow
+    3: optional domain.FinalCashFlow cash_flow
+}
+
+/**
+ * Событие об изменении оценки риска платежа.
+ */
+struct InvoicePaymentRiskScoreChanged {
+    /** Оценка риска платежа. */
+    1: required domain.RiskScore risk_score
+}
+
+/**
+ * Событие об изменении маршрута обработки платежа.
+ */
+struct InvoicePaymentRouteChanged {
+    /** Выбранный маршрут обработки платежа. */
+    1: required domain.PaymentRoute route
+}
+
+/**
+ * Событие об изменении данных финансового взаимодействия.
+ */
+struct InvoicePaymentCashFlowChanged {
+    /** Данные финансового взаимодействия. */
+    1: required domain.FinalCashFlow cash_flow
 }
 
 /**
@@ -317,6 +353,13 @@ struct InvoicePaymentAdjustmentStatusChanged {
 }
 
 /**
+ * Событие о полуечнии рекуррентного токена
+ */
+struct InvoicePaymentRecTokenAcquired {
+    1: required domain.Token token
+}
+
+/**
  * Диапазон для выборки событий.
  */
 struct EventRange {
@@ -364,27 +407,31 @@ struct InvoiceWithTemplateParams {
 struct InvoiceTemplateCreateParams {
     1: required PartyID party_id
     2: required ShopID shop_id
-    3: required domain.InvoiceDetails details
     4: required domain.LifetimeInterval invoice_lifetime
-    5: required domain.InvoiceTemplateCost cost
+    7: required string product # for backward compatibility
+    8: optional string description
+    9: required domain.InvoiceTemplateDetails details
     6: required domain.InvoiceContext context
 }
 
 struct InvoiceTemplateUpdateParams {
-    1: optional domain.InvoiceDetails details
     2: optional domain.LifetimeInterval invoice_lifetime
-    3: optional domain.InvoiceTemplateCost cost
+    5: optional string product # for backward compatibility
+    6: optional string description
+    7: optional domain.InvoiceTemplateDetails details
     4: optional domain.InvoiceContext context
 }
 
 struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
+    3: optional bool make_recurrent
 }
 
 union PayerParams {
     1: PaymentResourcePayerParams payment_resource
     2: CustomerPayerParams        customer
+    3: RecurrentPayerParams       recurrent
 }
 
 struct PaymentResourcePayerParams {
@@ -396,12 +443,17 @@ struct CustomerPayerParams {
     1: required domain.CustomerID customer_id
 }
 
+struct RecurrentPayerParams{
+    1: required domain.RecurrentParentPayment recurrent_parent
+    2: required domain.ContactInfo            contact_info
+}
+
 union InvoicePaymentParamsFlow {
     1: InvoicePaymentParamsFlowInstant instant
     2: InvoicePaymentParamsFlowHold hold
 }
 
-struct InvoicePaymentParamsFlowInstant   {}
+struct InvoicePaymentParamsFlowInstant {}
 
 struct InvoicePaymentParamsFlowHold {
     1: required domain.OnHoldExpiration on_hold_expiration
@@ -427,6 +479,24 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentRefundParams {
     /** Причина, на основании которой производится возврат. */
     1: optional string reason
+    /**
+     * Сумма возврата.
+     * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
+     */
+    2: optional domain.Cash cash
+}
+
+/**
+ * Параметры подтверждаемого платежа.
+ */
+struct InvoicePaymentCaptureParams {
+    /** Причина совершения операции. */
+    1: required string reason
+    /**
+     * Подтверждаемая сумма.
+     * Если сумма не указана, то считаем, что подтверждаем полную сумму платежа.
+     */
+    2: optional domain.Cash cash
 }
 
 /**
@@ -439,14 +509,50 @@ struct InvoicePaymentAdjustmentParams {
     2: required string reason
 }
 
+/* Сценарий, проверяющий состояние упавшей машины и, в случае если
+   платеж упал раньше похода к провайдеру, начинает процедуру корректного
+   завершения, используя заданную ошибку*/
+
+struct InvoiceRepairFailPreProcessing {
+    1:  required domain.Failure failure
+}
+
+/* Сценарий, позволяющий пропустить испекцию платежа, подменив ее результат заданым. */
+
+struct InvoiceRepairSkipInspector {
+    1:  required domain.RiskScore risk_score
+}
+
+/* Сценарий, использующий заданную ошибку, чтобы сконструировать результат похода к адаптеру */
+
+struct InvoiceRepairFailSession {
+    1:  required domain.Failure failure
+}
+
+/* Комбинированная структура */
+
+struct InvoiceRepairComplex {
+    1:  required list<InvoiceRepairScenario> scenarios
+}
+
+union InvoiceRepairScenario{
+    1: InvoiceRepairComplex complex
+    2: InvoiceRepairFailPreProcessing fail_pre_processing
+    3: InvoiceRepairSkipInspector skip_inspector
+    4: InvoiceRepairFailSession fail_session
+}
+
 // Exceptions
 
 // forward-declared
 exception PartyNotFound {}
 exception PartyNotExistsYet {}
+exception InvalidPartyRevision {}
 exception ShopNotFound {}
+exception WalletNotFound {}
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
+exception InvalidWalletStatus { 1: required InvalidStatus status }
 exception InvalidContractStatus { 1: required domain.ContractStatus status }
 
 union InvalidStatus {
@@ -461,7 +567,11 @@ exception InvoicePaymentRefundNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
+exception PayoutToolNotFound {}
 exception InsufficientAccountBalance {}
+exception InvalidRecurrentParentPayment {
+    1: optional string details
+}
 
 exception InvoicePaymentPending {
     1: required domain.InvoicePaymentID id
@@ -489,6 +599,24 @@ exception InvalidPaymentAdjustmentStatus {
 
 exception InvoiceTemplateNotFound {}
 exception InvoiceTemplateRemoved {}
+
+exception InvoicePaymentAmountExceeded {
+    1: required domain.Cash maximum
+}
+
+exception InconsistentRefundCurrency {
+    1: required domain.CurrencySymbolicCode currency
+}
+
+exception InconsistentCaptureCurrency {
+    1: required domain.CurrencySymbolicCode payment_currency
+    2: optional domain.CurrencySymbolicCode passed_currency
+}
+
+exception AmountExceededCaptureBalance {
+    1: required domain.Amount payment_amount
+    2: optional domain.Amount passed_amount
+}
 
 service Invoicing {
 
@@ -548,7 +676,9 @@ service Invoicing {
             5: base.InvalidRequest ex5,
             6: InvalidPartyStatus ex6,
             7: InvalidShopStatus ex7,
-            8: InvalidContractStatus ex8
+            8: InvalidContractStatus ex8,
+            9: InvalidRecurrentParentPayment ex9,
+            10: OperationNotPermitted ex10
         )
 
     InvoicePayment GetPayment (
@@ -594,6 +724,25 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8
+        )
+
+    void CapturePaymentNew (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: InvoicePaymentCaptureParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: base.InvalidRequest ex5,
+            6: OperationNotPermitted ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8,
+            9: InconsistentCaptureCurrency ex9,
+            10: AmountExceededCaptureBalance ex10
         )
     /**
      * Создать поправку к платежу.
@@ -673,10 +822,14 @@ service Invoicing {
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
-            5: InvoicePaymentRefundPending ex5,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
+            9: InvoicePaymentAmountExceeded ex9
+            10: InconsistentRefundCurrency ex10
+            11: InvalidPartyStatus ex11
+            12: InvalidShopStatus ex12
+            13: InvalidContractStatus ex13
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
@@ -712,7 +865,25 @@ service Invoicing {
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7
         )
-    }
+
+    /* Ad-hoc repairs */
+
+    void Repair (1: UserInfo user, 2: domain.InvoiceID id, 3: list<InvoiceChange> changes)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: base.InvalidRequest ex3
+        )
+
+    /* Invoice payments repairs */
+
+    void RepairWithScenario (1: UserInfo user, 2: domain.InvoiceID id, 3: InvoiceRepairScenario Scenario)
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: base.InvalidRequest ex3
+        )
+}
 
 service InvoiceTemplating {
 
@@ -783,10 +954,10 @@ struct Customer {
     3: required ShopID                shop_id
     4: required CustomerStatus        status
     5: required base.Timestamp        created_at
-    /* Список всех привязок */
     6: required list<CustomerBinding> bindings
     7: required domain.ContactInfo    contact_info
     8: required Metadata              metadata
+    9: optional CustomerBindingID     active_binding_id
 }
 
 /**
@@ -803,7 +974,7 @@ union CustomerStatus {
 struct CustomerUnready {}
 struct CustomerReady   {}
 
-// Events
+// События
 union CustomerChange {
     1: CustomerCreated        customer_created
     2: CustomerDeleted        customer_deleted
@@ -815,7 +986,12 @@ union CustomerChange {
  * Событие о создании нового плательщика.
  */
 struct CustomerCreated {
-    1: required Customer customer
+    2: required CustomerID         customer_id
+    3: required PartyID            owner_id
+    4: required ShopID             shop_id
+    5: required Metadata           metadata
+    6: required domain.ContactInfo contact_info
+    7: required base.Timestamp     created_at
 }
 
 /**
@@ -889,6 +1065,7 @@ union CustomerBindingChangePayload {
  */
 struct CustomerBindingStarted {
     1: required CustomerBinding binding
+    2: optional base.Timestamp  timestamp
 }
 
 /**
@@ -920,6 +1097,7 @@ service CustomerManagement {
             3: InvalidShopStatus     invalid_shop_status
             4: ShopNotFound          shop_not_found
             5: PartyNotFound         party_not_found
+            6: OperationNotPermitted operation_not_permitted
         )
 
     Customer Get (1: CustomerID id)
@@ -971,8 +1149,8 @@ struct RecurrentPaymentTool {
     1:  required RecurrentPaymentToolID     id
     2:  required ShopID                     shop_id
     3:  required PartyID                    party_id
+    11: optional PartyRevision              party_revision
     4:  required domain.DataRevision        domain_revision
-    5:  required domain.Cash                minimal_payment_cost
     6:  required RecurrentPaymentToolStatus status
     7:  required base.Timestamp             created_at
     8:  required DisposablePaymentResource  payment_resource
@@ -982,6 +1160,7 @@ struct RecurrentPaymentTool {
 
 struct RecurrentPaymentToolParams {
     1: required PartyID                   party_id
+    4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
     3: required DisposablePaymentResource payment_resource
 }
@@ -1072,6 +1251,7 @@ service RecurrentPaymentTools {
             5: PartyNotFound         party_not_found
             6: InvalidContractStatus invalid_contract_status
             7: OperationNotPermitted operation_not_permitted
+            8: InvalidPaymentMethod  invalid_payment_method
         )
 
     RecurrentPaymentTool Abandon (1: RecurrentPaymentToolID id)
@@ -1110,8 +1290,23 @@ service RecurrentPaymentToolEventSink {
 // Types
 
 typedef domain.PartyID PartyID
+typedef domain.PartyRevision PartyRevision
 typedef domain.ShopID  ShopID
 typedef domain.ContractID  ContractID
+typedef domain.ContractorID ContractorID
+typedef domain.PayoutToolID PayoutToolID
+typedef domain.WalletID WalletID
+typedef domain.ContractTemplateRef ContractTemplateRef
+typedef domain.PaymentInstitutionRef PaymentInstitutionRef
+
+struct Varset {
+    1: optional domain.CategoryRef category
+    2: optional domain.CurrencyRef currency
+    3: optional domain.Cash amount
+    4: optional domain.PaymentMethodRef payment_method
+    5: optional domain.PayoutMethodRef payout_method
+    6: optional domain.WalletID wallet_id
+}
 
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
@@ -1135,17 +1330,38 @@ struct ShopAccountParams {
 }
 
 struct ContractParams {
-    1: required domain.Contractor contractor
-    2: optional domain.ContractTemplateRef template
+    4: optional ContractorID contractor_id
+    2: optional ContractTemplateRef template
+    3: optional PaymentInstitutionRef payment_institution
+
+    // depricated
+    1: optional domain.Contractor contractor
 }
 
 struct ContractAdjustmentParams {
-    1: required domain.ContractTemplateRef template
+    1: required ContractTemplateRef template
 }
 
 union PartyModification {
+    8: ContractorModificationUnit contractor_modification
     4: ContractModificationUnit contract_modification
     6: ShopModificationUnit shop_modification
+    7: WalletModificationUnit wallet_modification
+}
+
+struct ContractorModificationUnit {
+    1: required ContractorID id
+    2: required ContractorModification modification
+}
+
+union ContractorModification {
+    1: domain.Contractor creation
+    2: domain.ContractorIdentificationLevel identification_level_modification
+    3: ContractorIdentityDocumentsModification identity_documents_modification
+}
+
+struct ContractorIdentityDocumentsModification {
+    1: required list<domain.IdentityDocumentToken> identity_documents
 }
 
 struct ContractModificationUnit {
@@ -1159,6 +1375,8 @@ union ContractModification {
     3: ContractAdjustmentModificationUnit adjustment_modification
     4: PayoutToolModificationUnit payout_tool_modification
     5: domain.LegalAgreement legal_agreement_binding
+    6: domain.ReportPreferences report_preferences_modification
+    7: ContractorID contractor_modification
 }
 
 struct ContractTermination {
@@ -1181,6 +1399,7 @@ struct PayoutToolModificationUnit {
 
 union PayoutToolModification {
     1: PayoutToolParams creation
+    2: domain.PayoutToolInfo info_modification
 }
 
 typedef list<PartyModification> PartyChangeset
@@ -1196,9 +1415,12 @@ union ShopModification {
     7: domain.ShopDetails details_modification
     8: ShopContractModification contract_modification
     9: domain.PayoutToolID payout_tool_modification
-    10: ProxyModification proxy_modification
     11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
+    13: ScheduleModification payout_schedule_modification
+
+    /* deprecated */
+    10: ProxyModification proxy_modification
 }
 
 struct ShopContractModification {
@@ -1206,8 +1428,32 @@ struct ShopContractModification {
     2: required domain.PayoutToolID payout_tool_id
 }
 
+struct ScheduleModification {
+    1: optional domain.BusinessScheduleRef schedule
+}
+
+/* deprecated */
 struct ProxyModification {
     1: optional domain.Proxy proxy
+}
+
+struct WalletModificationUnit {
+    1: required WalletID id
+    2: required WalletModification modification
+}
+
+union WalletModification {
+    1: WalletParams creation
+    2: WalletAccountParams account_creation
+}
+
+struct WalletParams {
+    1: optional string name
+    2: required ContractID contract_id
+}
+
+struct WalletAccountParams {
+    1: required domain.CurrencyRef currency
 }
 
 // Claims
@@ -1253,6 +1499,8 @@ union ClaimEffect {
     /* 1: PartyEffect Reserved for future */
     2: ContractEffectUnit contract_effect
     3: ShopEffectUnit shop_effect
+    4: ContractorEffectUnit contractor_effect
+    5: WalletEffectUnit wallet_effect
 }
 
 struct ContractEffectUnit {
@@ -1265,7 +1513,10 @@ union ContractEffect {
     2: domain.ContractStatus status_changed
     3: domain.ContractAdjustment adjustment_created
     4: domain.PayoutTool payout_tool_created
+    8: PayoutToolInfoChanged payout_tool_info_changed
     5: domain.LegalAgreement legal_agreement_bound
+    6: domain.ReportPreferences report_preferences_changed
+    7: ContractorID contractor_changed
 }
 
 struct ShopEffectUnit {
@@ -1279,9 +1530,12 @@ union ShopEffect {
     3: domain.ShopDetails details_changed
     4: ShopContractChanged contract_changed
     5: domain.PayoutToolID payout_tool_changed
-    6: ShopProxyChanged proxy_changed
     7: domain.ShopLocation location_changed
     8: domain.ShopAccount account_created
+    9: ScheduleChanged payout_schedule_changed
+
+    /* deprecated */
+    6: ShopProxyChanged proxy_changed
 }
 
 struct ShopContractChanged {
@@ -1289,6 +1543,41 @@ struct ShopContractChanged {
     2: required domain.PayoutToolID payout_tool_id
 }
 
+struct ScheduleChanged {
+    1: optional domain.BusinessScheduleRef schedule
+}
+
+struct ContractorEffectUnit {
+    1: required ContractorID id
+    2: required ContractorEffect effect
+}
+
+union ContractorEffect {
+    1: domain.PartyContractor created
+    2: domain.ContractorIdentificationLevel identification_level_changed
+    3: ContractorIdentityDocumentsChanged identity_documents_changed
+}
+
+struct ContractorIdentityDocumentsChanged {
+    1: required list<domain.IdentityDocumentToken> identity_documents
+}
+
+struct PayoutToolInfoChanged {
+    1: required domain.PayoutToolID payout_tool_id
+    2: required domain.PayoutToolInfo info
+}
+
+struct WalletEffectUnit {
+    1: required WalletID id
+    2: required WalletEffect effect
+}
+
+union WalletEffect {
+    1: domain.Wallet created
+    2: domain.WalletAccount account_created
+}
+
+/* deprecated */
 struct ShopProxyChanged {
     1: optional domain.Proxy proxy
 }
@@ -1301,18 +1590,28 @@ struct AccountState {
 }
 
 // Events
+// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
 
 union PartyChange {
-    1: domain.Party         party_created
-    4: domain.Blocking      party_blocking
-    5: domain.Suspension    party_suspension
-    6: ShopBlocking         shop_blocking
-    7: ShopSuspension       shop_suspension
+    1: PartyCreated         party_created           // #
+    4: domain.Blocking      party_blocking          // #
+    5: domain.Suspension    party_suspension        // #
+    6: ShopBlocking         shop_blocking           // #
+    7: ShopSuspension       shop_suspension         // #
+    12: WalletBlocking      wallet_blocking         // #
+    13: WalletSuspension    wallet_suspension       // #
     2: Claim                claim_created
-    3: ClaimStatusChanged   claim_status_changed
+    3: ClaimStatusChanged   claim_status_changed    // #
     8: ClaimUpdated         claim_updated
     9: PartyMetaSet         party_meta_set
     10: domain.PartyMetaNamespace party_meta_removed
+    11: PartyRevisionChanged revision_changed
+}
+
+struct PartyCreated {
+    1: required PartyID id
+    7: required domain.PartyContactInfo contact_info
+    8: required base.Timestamp created_at
 }
 
 struct ShopBlocking {
@@ -1322,6 +1621,16 @@ struct ShopBlocking {
 
 struct ShopSuspension {
     1: required ShopID shop_id
+    2: required domain.Suspension suspension
+}
+
+struct WalletBlocking {
+    1: required WalletID wallet_id
+    2: required domain.Blocking blocking
+}
+
+struct WalletSuspension {
+    1: required WalletID wallet_id
     2: required domain.Suspension suspension
 }
 
@@ -1344,6 +1653,23 @@ struct PartyMetaSet {
     2: required domain.PartyMetaData data
 }
 
+struct PartyRevisionChanged {
+    1: required base.Timestamp timestamp
+    2: required domain.PartyRevision revision
+}
+
+union PartyRevisionParam {
+    1: base.Timestamp timestamp
+    2: domain.PartyRevision revision
+}
+
+struct PayoutParams {
+    1: required ShopID id
+    2: required domain.Cash amount
+    3: required base.Timestamp timestamp
+    4: optional domain.PayoutToolID payout_tool_id
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -1359,32 +1685,81 @@ exception ChangesetConflict { 1: required ClaimID conflicted_id }
 exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
-    1: ContractID contract_not_exists
-    2: ContractID contract_already_exists
-    3: ContractStatusInvalid contract_status_invalid
+    1: InvalidContract invalid_contract
+    2: InvalidShop invalid_shop
+    3: InvalidWallet invalid_wallet
+    4: InvalidContractor invalid_contractor
+}
+
+struct InvalidContract {
+    1: required ContractID id
+    2: required InvalidContractReason reason
+}
+
+struct InvalidShop {
+    1: required ShopID id
+    2: required InvalidShopReason reason
+}
+
+struct InvalidWallet {
+    1: required WalletID id
+    2: required InvalidWalletReason reason
+}
+
+struct InvalidContractor {
+    1: required ContractorID id
+    2: required InvalidContractorReason reason
+}
+
+union InvalidContractReason {
+    1: ContractID not_exists
+    2: ContractID already_exists
+    3: domain.ContractStatus invalid_status
     4: domain.ContractAdjustmentID contract_adjustment_already_exists
     5: domain.PayoutToolID payout_tool_not_exists
     6: domain.PayoutToolID payout_tool_already_exists
-    7: ShopID shop_not_exists
-    8: ShopID shop_already_exists
-    9: ShopStatusInvalid shop_status_invalid
-    10: ContractTermsViolated contract_terms_violated
+    7: InvalidObjectReference invalid_object_reference
+    8: ContractorNotExists contractor_not_exists
 }
 
-struct ContractStatusInvalid {
-    1: required ContractID contract_id
-    2: required domain.ContractStatus status
+union InvalidShopReason {
+    1: ShopID not_exists
+    2: ShopID already_exists
+    3: ShopID no_account
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+    6: ShopPayoutToolInvalid payout_tool_invalid
+    7: InvalidObjectReference invalid_object_reference
 }
 
-struct ShopStatusInvalid {
-    1: required ShopID shop_id
-    2: required InvalidStatus status
+union InvalidWalletReason {
+    1: WalletID not_exists
+    2: WalletID already_exists
+    3: WalletID no_account
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+}
+
+union InvalidContractorReason {
+    1: ContractorID not_exists
+    2: ContractorID already_exists
+}
+
+struct ContractorNotExists {
+    1: optional ContractorID id
 }
 
 struct ContractTermsViolated {
-    1: required ShopID shop_id
-    2: required ContractID contract_id
-    3: required domain.TermSet terms
+    1: required ContractID contract_id
+    2: required domain.TermSet terms
+}
+
+struct ShopPayoutToolInvalid {
+    1: optional domain.PayoutToolID payout_tool_id
+}
+
+struct InvalidObjectReference {
+    1: optional domain.Reference ref
 }
 
 exception AccountNotFound {}
@@ -1392,6 +1767,10 @@ exception AccountNotFound {}
 exception ShopAccountNotFound {}
 
 exception PartyMetaNamespaceNotFound {}
+
+exception PaymentInstitutionNotFound {}
+
+exception ContractTemplateNotFound {}
 
 // Service
 
@@ -1405,8 +1784,11 @@ service PartyManagement {
     domain.Party Get (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
-    domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
+    PartyRevision GetRevision (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
+    domain.Party Checkout (1: UserInfo user, 2: PartyID party_id, 3: PartyRevisionParam revision)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyRevision ex3)
 
     void Suspend (1: UserInfo user, 2: PartyID party_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
@@ -1451,7 +1833,7 @@ service PartyManagement {
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
-     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+    void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
     void ActivateShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
@@ -1465,6 +1847,30 @@ service PartyManagement {
 
     domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
+
+    /* Wallet */
+
+    // temporary method for transfer period
+    // do not use
+    domain.TermSet ComputeWalletTermsNew (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: base.Timestamp timestamp
+        5: Varset varset
+    )
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
+
+    // deprecated
+    domain.TermSet ComputeWalletTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: WalletID wallet_id,
+        5: domain.CurrencyRef currency,
+        6: base.Timestamp timestamp
+    )
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
     /* Claim */
 
@@ -1543,6 +1949,23 @@ service PartyManagement {
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    /* Payment institutions */
+
+    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
+
+    /* Payouts */
+    /* TODO looks like adhoc. Rework after feedback. Or not. */
+    domain.FinalCashFlow ComputePayoutCashFlow (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3,
+            4: ShopNotFound ex4,
+            5: OperationNotPermitted ex5,
+            6: PayoutToolNotFound ex6
+        )
 }
 
 /* Event sink service definitions */

@@ -27,7 +27,8 @@
     'id' :: dmsl_base_thrift:'EventID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'source' :: dmsl_payment_processing_thrift:'EventSource'(),
-    'payload' :: dmsl_payment_processing_thrift:'EventPayload'()
+    'payload' :: dmsl_payment_processing_thrift:'EventPayload'(),
+    'sequence' :: dmsl_base_thrift:'SequenceID'() | undefined
 }).
 
 %% struct 'InvoiceCreated'
@@ -49,8 +50,23 @@
 %% struct 'InvoicePaymentStarted'
 -record('payproc_InvoicePaymentStarted', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
-    'risk_score' :: atom(),
-    'route' :: dmsl_domain_thrift:'PaymentRoute'(),
+    'risk_score' :: atom() | undefined,
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'() | undefined
+}).
+
+%% struct 'InvoicePaymentRiskScoreChanged'
+-record('payproc_InvoicePaymentRiskScoreChanged', {
+    'risk_score' :: atom()
+}).
+
+%% struct 'InvoicePaymentRouteChanged'
+-record('payproc_InvoicePaymentRouteChanged', {
+    'route' :: dmsl_domain_thrift:'PaymentRoute'()
+}).
+
+%% struct 'InvoicePaymentCashFlowChanged'
+-record('payproc_InvoicePaymentCashFlowChanged', {
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
@@ -150,6 +166,11 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentStatus'()
 }).
 
+%% struct 'InvoicePaymentRecTokenAcquired'
+-record('payproc_InvoicePaymentRecTokenAcquired', {
+    'token' :: dmsl_domain_thrift:'Token'()
+}).
+
 %% struct 'EventRange'
 -record('payproc_EventRange', {
     'after' :: dmsl_base_thrift:'EventID'() | undefined,
@@ -177,24 +198,27 @@
 -record('payproc_InvoiceTemplateCreateParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'details' :: dmsl_domain_thrift:'InvoiceDetails'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
-    'cost' :: dmsl_domain_thrift:'InvoiceTemplateCost'(),
+    'product' :: binary(),
+    'description' :: binary() | undefined,
+    'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'()
 }).
 
 %% struct 'InvoiceTemplateUpdateParams'
 -record('payproc_InvoiceTemplateUpdateParams', {
-    'details' :: dmsl_domain_thrift:'InvoiceDetails'() | undefined,
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'() | undefined,
-    'cost' :: dmsl_domain_thrift:'InvoiceTemplateCost'() | undefined,
+    'product' :: binary() | undefined,
+    'description' :: binary() | undefined,
+    'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'() | undefined,
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
 }).
 
 %% struct 'InvoicePaymentParams'
 -record('payproc_InvoicePaymentParams', {
     'payer' :: dmsl_payment_processing_thrift:'PayerParams'(),
-    'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'()
+    'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'(),
+    'make_recurrent' :: boolean() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'
@@ -206,6 +230,12 @@
 %% struct 'CustomerPayerParams'
 -record('payproc_CustomerPayerParams', {
     'customer_id' :: dmsl_domain_thrift:'CustomerID'()
+}).
+
+%% struct 'RecurrentPayerParams'
+-record('payproc_RecurrentPayerParams', {
+    'recurrent_parent' :: dmsl_domain_thrift:'RecurrentParentPayment'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'()
 }).
 
 %% struct 'InvoicePaymentParamsFlowInstant'
@@ -231,13 +261,40 @@
 
 %% struct 'InvoicePaymentRefundParams'
 -record('payproc_InvoicePaymentRefundParams', {
-    'reason' :: binary() | undefined
+    'reason' :: binary() | undefined,
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
+}).
+
+%% struct 'InvoicePaymentCaptureParams'
+-record('payproc_InvoicePaymentCaptureParams', {
+    'reason' :: binary(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -record('payproc_InvoicePaymentAdjustmentParams', {
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
     'reason' :: binary()
+}).
+
+%% struct 'InvoiceRepairFailPreProcessing'
+-record('payproc_InvoiceRepairFailPreProcessing', {
+    'failure' :: dmsl_domain_thrift:'Failure'()
+}).
+
+%% struct 'InvoiceRepairSkipInspector'
+-record('payproc_InvoiceRepairSkipInspector', {
+    'risk_score' :: atom()
+}).
+
+%% struct 'InvoiceRepairFailSession'
+-record('payproc_InvoiceRepairFailSession', {
+    'failure' :: dmsl_domain_thrift:'Failure'()
+}).
+
+%% struct 'InvoiceRepairComplex'
+-record('payproc_InvoiceRepairComplex', {
+    'scenarios' :: [dmsl_payment_processing_thrift:'InvoiceRepairScenario'()]
 }).
 
 %% struct 'CustomerParams'
@@ -257,7 +314,8 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'bindings' :: [dmsl_payment_processing_thrift:'CustomerBinding'()],
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
-    'metadata' :: dmsl_payment_processing_thrift:'Metadata'()
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'(),
+    'active_binding_id' :: dmsl_payment_processing_thrift:'CustomerBindingID'() | undefined
 }).
 
 %% struct 'CustomerUnready'
@@ -268,7 +326,12 @@
 
 %% struct 'CustomerCreated'
 -record('payproc_CustomerCreated', {
-    'customer' :: dmsl_payment_processing_thrift:'Customer'()
+    'customer_id' :: dmsl_payment_processing_thrift:'CustomerID'(),
+    'owner_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'metadata' :: dmsl_payment_processing_thrift:'Metadata'(),
+    'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
 }).
 
 %% struct 'CustomerDeleted'
@@ -311,7 +374,8 @@
 
 %% struct 'CustomerBindingStarted'
 -record('payproc_CustomerBindingStarted', {
-    'binding' :: dmsl_payment_processing_thrift:'CustomerBinding'()
+    'binding' :: dmsl_payment_processing_thrift:'CustomerBinding'(),
+    'timestamp' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'CustomerBindingStatusChanged'
@@ -329,8 +393,8 @@
     'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
-    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'(),
     'status' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
@@ -341,6 +405,7 @@
 %% struct 'RecurrentPaymentToolParams'
 -record('payproc_RecurrentPaymentToolParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
@@ -392,6 +457,16 @@
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
+%% struct 'Varset'
+-record('payproc_Varset', {
+    'category' :: dmsl_domain_thrift:'CategoryRef'() | undefined,
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
+    'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined
+}).
+
 %% struct 'PartyParams'
 -record('payproc_PartyParams', {
     'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'()
@@ -419,13 +494,26 @@
 
 %% struct 'ContractParams'
 -record('payproc_ContractParams', {
-    'contractor' :: dmsl_domain_thrift:'Contractor'(),
-    'template' :: dmsl_domain_thrift:'ContractTemplateRef'() | undefined
+    'contractor_id' :: dmsl_payment_processing_thrift:'ContractorID'() | undefined,
+    'template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'() | undefined,
+    'payment_institution' :: dmsl_payment_processing_thrift:'PaymentInstitutionRef'() | undefined,
+    'contractor' :: dmsl_domain_thrift:'Contractor'() | undefined
 }).
 
 %% struct 'ContractAdjustmentParams'
 -record('payproc_ContractAdjustmentParams', {
-    'template' :: dmsl_domain_thrift:'ContractTemplateRef'()
+    'template' :: dmsl_payment_processing_thrift:'ContractTemplateRef'()
+}).
+
+%% struct 'ContractorModificationUnit'
+-record('payproc_ContractorModificationUnit', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'modification' :: dmsl_payment_processing_thrift:'ContractorModification'()
+}).
+
+%% struct 'ContractorIdentityDocumentsModification'
+-record('payproc_ContractorIdentityDocumentsModification', {
+    'identity_documents' :: [dmsl_domain_thrift:'IdentityDocumentToken'()]
 }).
 
 %% struct 'ContractModificationUnit'
@@ -463,9 +551,31 @@
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
+%% struct 'ScheduleModification'
+-record('payproc_ScheduleModification', {
+    'schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'() | undefined
+}).
+
 %% struct 'ProxyModification'
 -record('payproc_ProxyModification', {
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
+}).
+
+%% struct 'WalletModificationUnit'
+-record('payproc_WalletModificationUnit', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'modification' :: dmsl_payment_processing_thrift:'WalletModification'()
+}).
+
+%% struct 'WalletParams'
+-record('payproc_WalletParams', {
+    'name' :: binary() | undefined,
+    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'()
+}).
+
+%% struct 'WalletAccountParams'
+-record('payproc_WalletAccountParams', {
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'()
 }).
 
 %% struct 'Claim'
@@ -514,6 +624,34 @@
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
+%% struct 'ScheduleChanged'
+-record('payproc_ScheduleChanged', {
+    'schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'() | undefined
+}).
+
+%% struct 'ContractorEffectUnit'
+-record('payproc_ContractorEffectUnit', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'effect' :: dmsl_payment_processing_thrift:'ContractorEffect'()
+}).
+
+%% struct 'ContractorIdentityDocumentsChanged'
+-record('payproc_ContractorIdentityDocumentsChanged', {
+    'identity_documents' :: [dmsl_domain_thrift:'IdentityDocumentToken'()]
+}).
+
+%% struct 'PayoutToolInfoChanged'
+-record('payproc_PayoutToolInfoChanged', {
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
+    'info' :: dmsl_domain_thrift:'PayoutToolInfo'()
+}).
+
+%% struct 'WalletEffectUnit'
+-record('payproc_WalletEffectUnit', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'effect' :: dmsl_payment_processing_thrift:'WalletEffect'()
+}).
+
 %% struct 'ShopProxyChanged'
 -record('payproc_ShopProxyChanged', {
     'proxy' :: dmsl_domain_thrift:'Proxy'() | undefined
@@ -527,6 +665,13 @@
     'currency' :: dmsl_domain_thrift:'Currency'()
 }).
 
+%% struct 'PartyCreated'
+-record('payproc_PartyCreated', {
+    'id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
 %% struct 'ShopBlocking'
 -record('payproc_ShopBlocking', {
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
@@ -536,6 +681,18 @@
 %% struct 'ShopSuspension'
 -record('payproc_ShopSuspension', {
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'suspension' :: dmsl_domain_thrift:'Suspension'()
+}).
+
+%% struct 'WalletBlocking'
+-record('payproc_WalletBlocking', {
+    'wallet_id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'blocking' :: dmsl_domain_thrift:'Blocking'()
+}).
+
+%% struct 'WalletSuspension'
+-record('payproc_WalletSuspension', {
+    'wallet_id' :: dmsl_payment_processing_thrift:'WalletID'(),
     'suspension' :: dmsl_domain_thrift:'Suspension'()
 }).
 
@@ -561,23 +718,63 @@
     'data' :: dmsl_domain_thrift:'PartyMetaData'()
 }).
 
-%% struct 'ContractStatusInvalid'
--record('payproc_ContractStatusInvalid', {
-    'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
-    'status' :: dmsl_domain_thrift:'ContractStatus'()
+%% struct 'PartyRevisionChanged'
+-record('payproc_PartyRevisionChanged', {
+    'timestamp' :: dmsl_base_thrift:'Timestamp'(),
+    'revision' :: dmsl_domain_thrift:'PartyRevision'()
 }).
 
-%% struct 'ShopStatusInvalid'
--record('payproc_ShopStatusInvalid', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
-    'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
+%% struct 'PayoutParams'
+-record('payproc_PayoutParams', {
+    'id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'timestamp' :: dmsl_base_thrift:'Timestamp'(),
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
+}).
+
+%% struct 'InvalidContract'
+-record('payproc_InvalidContract', {
+    'id' :: dmsl_payment_processing_thrift:'ContractID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidContractReason'()
+}).
+
+%% struct 'InvalidShop'
+-record('payproc_InvalidShop', {
+    'id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidShopReason'()
+}).
+
+%% struct 'InvalidWallet'
+-record('payproc_InvalidWallet', {
+    'id' :: dmsl_payment_processing_thrift:'WalletID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidWalletReason'()
+}).
+
+%% struct 'InvalidContractor'
+-record('payproc_InvalidContractor', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'(),
+    'reason' :: dmsl_payment_processing_thrift:'InvalidContractorReason'()
+}).
+
+%% struct 'ContractorNotExists'
+-record('payproc_ContractorNotExists', {
+    'id' :: dmsl_payment_processing_thrift:'ContractorID'() | undefined
 }).
 
 %% struct 'ContractTermsViolated'
 -record('payproc_ContractTermsViolated', {
-    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'contract_id' :: dmsl_payment_processing_thrift:'ContractID'(),
     'terms' :: dmsl_domain_thrift:'TermSet'()
+}).
+
+%% struct 'ShopPayoutToolInvalid'
+-record('payproc_ShopPayoutToolInvalid', {
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
+}).
+
+%% struct 'InvalidObjectReference'
+-record('payproc_InvalidObjectReference', {
+    'ref' :: dmsl_domain_thrift:'Reference'() | undefined
 }).
 
 %% exception 'PartyNotFound'
@@ -586,8 +783,14 @@
 %% exception 'PartyNotExistsYet'
 -record('payproc_PartyNotExistsYet', {}).
 
+%% exception 'InvalidPartyRevision'
+-record('payproc_InvalidPartyRevision', {}).
+
 %% exception 'ShopNotFound'
 -record('payproc_ShopNotFound', {}).
+
+%% exception 'WalletNotFound'
+-record('payproc_WalletNotFound', {}).
 
 %% exception 'InvalidPartyStatus'
 -record('payproc_InvalidPartyStatus', {
@@ -596,6 +799,11 @@
 
 %% exception 'InvalidShopStatus'
 -record('payproc_InvalidShopStatus', {
+    'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
+}).
+
+%% exception 'InvalidWalletStatus'
+-record('payproc_InvalidWalletStatus', {
     'status' :: dmsl_payment_processing_thrift:'InvalidStatus'()
 }).
 
@@ -625,8 +833,16 @@
 %% exception 'OperationNotPermitted'
 -record('payproc_OperationNotPermitted', {}).
 
+%% exception 'PayoutToolNotFound'
+-record('payproc_PayoutToolNotFound', {}).
+
 %% exception 'InsufficientAccountBalance'
 -record('payproc_InsufficientAccountBalance', {}).
+
+%% exception 'InvalidRecurrentParentPayment'
+-record('payproc_InvalidRecurrentParentPayment', {
+    'details' :: binary() | undefined
+}).
 
 %% exception 'InvoicePaymentPending'
 -record('payproc_InvoicePaymentPending', {
@@ -663,6 +879,28 @@
 
 %% exception 'InvoiceTemplateRemoved'
 -record('payproc_InvoiceTemplateRemoved', {}).
+
+%% exception 'InvoicePaymentAmountExceeded'
+-record('payproc_InvoicePaymentAmountExceeded', {
+    'maximum' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% exception 'InconsistentRefundCurrency'
+-record('payproc_InconsistentRefundCurrency', {
+    'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
+}).
+
+%% exception 'InconsistentCaptureCurrency'
+-record('payproc_InconsistentCaptureCurrency', {
+    'payment_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
+    'passed_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'() | undefined
+}).
+
+%% exception 'AmountExceededCaptureBalance'
+-record('payproc_AmountExceededCaptureBalance', {
+    'payment_amount' :: dmsl_domain_thrift:'Amount'(),
+    'passed_amount' :: dmsl_domain_thrift:'Amount'() | undefined
+}).
 
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {
@@ -730,5 +968,11 @@
 
 %% exception 'PartyMetaNamespaceNotFound'
 -record('payproc_PartyMetaNamespaceNotFound', {}).
+
+%% exception 'PaymentInstitutionNotFound'
+-record('payproc_PaymentInstitutionNotFound', {}).
+
+%% exception 'ContractTemplateNotFound'
+-record('payproc_ContractTemplateNotFound', {}).
 
 -endif.

@@ -71,6 +71,14 @@
     'value' :: dmsl_webhooker_thrift:'InvoicePaymentStatus'() | undefined
 }).
 
+%% struct 'InvoicePaymentRefundCreated'
+-record('webhooker_InvoicePaymentRefundCreated', {}).
+
+%% struct 'InvoicePaymentRefundStatusChanged'
+-record('webhooker_InvoicePaymentRefundStatusChanged', {
+    'value' :: dmsl_webhooker_thrift:'InvoicePaymentRefundStatus'()
+}).
+
 %% struct 'InvoicePaymentPending'
 -record('webhooker_InvoicePaymentPending', {}).
 
@@ -88,6 +96,15 @@
 
 %% struct 'InvoicePaymentRefunded'
 -record('webhooker_InvoicePaymentRefunded', {}).
+
+%% struct 'InvoicePaymentRefundPending'
+-record('webhooker_InvoicePaymentRefundPending', {}).
+
+%% struct 'InvoicePaymentRefundSucceeded'
+-record('webhooker_InvoicePaymentRefundSucceeded', {}).
+
+%% struct 'InvoicePaymentRefundFailed'
+-record('webhooker_InvoicePaymentRefundFailed', {}).
 
 %% struct 'CustomerEventFilter'
 -record('webhooker_CustomerEventFilter', {
@@ -112,6 +129,20 @@
 
 %% struct 'CustomerBindingFailed'
 -record('webhooker_CustomerBindingFailed', {}).
+
+%% struct 'WalletEventFilter'
+-record('webhooker_WalletEventFilter', {
+    'types' :: ordsets:ordset(dmsl_webhooker_thrift:'WalletEventType'())
+}).
+
+%% struct 'WalletWithdrawalStarted'
+-record('webhooker_WalletWithdrawalStarted', {}).
+
+%% struct 'WalletWithdrawalSucceeded'
+-record('webhooker_WalletWithdrawalSucceeded', {}).
+
+%% struct 'WalletWithdrawalFailed'
+-record('webhooker_WalletWithdrawalFailed', {}).
 
 %% exception 'WebhookNotFound'
 -record('webhooker_WebhookNotFound', {}).

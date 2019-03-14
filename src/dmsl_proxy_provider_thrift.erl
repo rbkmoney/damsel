@@ -32,6 +32,18 @@
 -export_type([struct_info/0]).
 
 -export_type([
+    'ProxyState'/0,
+    'Callback'/0,
+    'CallbackResponse'/0,
+    'CallbackTag'/0
+]).
+-export_type([
+    'Intent'/0,
+    'FinishIntent'/0,
+    'FinishStatus'/0,
+    'Success'/0,
+    'SleepIntent'/0,
+    'SuspendIntent'/0,
     'RecurrentPaymentTool'/0,
     'RecurrentTokenInfo'/0,
     'RecurrentTokenSession'/0,
@@ -49,6 +61,7 @@
     'RecurrentPaymentResource'/0,
     'InvoicePayment'/0,
     'InvoicePaymentRefund'/0,
+    'InvoicePaymentCapture'/0,
     'Cash'/0,
     'Session'/0,
     'PaymentContext'/0,
@@ -65,8 +78,16 @@
 %%
 %% typedefs
 %%
--type typedef_name() :: none().
+-type typedef_name() ::
+    'ProxyState' |
+    'Callback' |
+    'CallbackResponse' |
+    'CallbackTag'.
 
+-type 'ProxyState'() :: dmsl_base_thrift:'Opaque'().
+-type 'Callback'() :: dmsl_base_thrift:'Opaque'().
+-type 'CallbackResponse'() :: dmsl_base_thrift:'Opaque'().
+-type 'CallbackTag'() :: dmsl_base_thrift:'Tag'().
 
 %%
 %% enums
@@ -77,6 +98,12 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
+    'Intent' |
+    'FinishIntent' |
+    'FinishStatus' |
+    'Success' |
+    'SleepIntent' |
+    'SuspendIntent' |
     'RecurrentPaymentTool' |
     'RecurrentTokenInfo' |
     'RecurrentTokenSession' |
@@ -94,6 +121,7 @@
     'RecurrentPaymentResource' |
     'InvoicePayment' |
     'InvoicePaymentRefund' |
+    'InvoicePaymentCapture' |
     'Cash' |
     'Session' |
     'PaymentContext' |
@@ -103,6 +131,29 @@
 
 -type exception_name() ::
     'PaymentNotFound'.
+
+%% union 'Intent'
+-type 'Intent'() ::
+    {'finish', 'FinishIntent'()} |
+    {'sleep', 'SleepIntent'()} |
+    {'suspend', 'SuspendIntent'()}.
+
+%% struct 'FinishIntent'
+-type 'FinishIntent'() :: #'prxprv_FinishIntent'{}.
+
+%% union 'FinishStatus'
+-type 'FinishStatus'() ::
+    {'success', 'Success'()} |
+    {'failure', dmsl_domain_thrift:'Failure'()}.
+
+%% struct 'Success'
+-type 'Success'() :: #'prxprv_Success'{}.
+
+%% struct 'SleepIntent'
+-type 'SleepIntent'() :: #'prxprv_SleepIntent'{}.
+
+%% struct 'SuspendIntent'
+-type 'SuspendIntent'() :: #'prxprv_SuspendIntent'{}.
 
 %% struct 'RecurrentPaymentTool'
 -type 'RecurrentPaymentTool'() :: #'prxprv_RecurrentPaymentTool'{}.
@@ -122,8 +173,8 @@
 %% union 'RecurrentTokenIntent'
 -type 'RecurrentTokenIntent'() ::
     {'finish', 'RecurrentTokenFinishIntent'()} |
-    {'sleep', dmsl_proxy_thrift:'SleepIntent'()} |
-    {'suspend', dmsl_proxy_thrift:'SuspendIntent'()}.
+    {'sleep', 'SleepIntent'()} |
+    {'suspend', 'SuspendIntent'()}.
 
 %% struct 'RecurrentTokenFinishIntent'
 -type 'RecurrentTokenFinishIntent'() :: #'prxprv_RecurrentTokenFinishIntent'{}.
@@ -131,7 +182,7 @@
 %% union 'RecurrentTokenFinishStatus'
 -type 'RecurrentTokenFinishStatus'() ::
     {'success', 'RecurrentTokenSuccess'()} |
-    {'failure', dmsl_proxy_thrift:'Failure'()}.
+    {'failure', dmsl_domain_thrift:'Failure'()}.
 
 %% struct 'RecurrentTokenSuccess'
 -type 'RecurrentTokenSuccess'() :: #'prxprv_RecurrentTokenSuccess'{}.
@@ -161,6 +212,9 @@
 
 %% struct 'InvoicePaymentRefund'
 -type 'InvoicePaymentRefund'() :: #'prxprv_InvoicePaymentRefund'{}.
+
+%% struct 'InvoicePaymentCapture'
+-type 'InvoicePaymentCapture'() :: #'prxprv_InvoicePaymentCapture'{}.
 
 %% struct 'Cash'
 -type 'Cash'() :: #'prxprv_Cash'{}.
@@ -236,10 +290,15 @@
 -type enum_info() ::
     {enum, [enum_field_info()]}.
 
--spec typedefs() -> [].
+-spec typedefs() -> [typedef_name()].
 
 typedefs() ->
-    [].
+    [
+        'ProxyState',
+        'Callback',
+        'CallbackResponse',
+        'CallbackTag'
+    ].
 
 -spec enums() -> [].
 
@@ -250,6 +309,12 @@ enums() ->
 
 structs() ->
     [
+        'Intent',
+        'FinishIntent',
+        'FinishStatus',
+        'Success',
+        'SleepIntent',
+        'SuspendIntent',
         'RecurrentPaymentTool',
         'RecurrentTokenInfo',
         'RecurrentTokenSession',
@@ -267,6 +332,7 @@ structs() ->
         'RecurrentPaymentResource',
         'InvoicePayment',
         'InvoicePaymentRefund',
+        'InvoicePaymentCapture',
         'Cash',
         'Session',
         'PaymentContext',
@@ -288,7 +354,19 @@ services() ->
 namespace() ->
     'prxprv'.
 
--spec typedef_info(_) -> no_return().
+-spec typedef_info(typedef_name()) -> field_type() | no_return().
+
+typedef_info('ProxyState') ->
+    string;
+
+typedef_info('Callback') ->
+    string;
+
+typedef_info('CallbackResponse') ->
+    string;
+
+typedef_info('CallbackTag') ->
+    string;
 
 typedef_info(_) -> erlang:error(badarg).
 
@@ -297,6 +375,42 @@ typedef_info(_) -> erlang:error(badarg).
 enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
+
+struct_info('Intent') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'FinishIntent'}}, 'finish', undefined},
+    {2, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'SleepIntent'}}, 'sleep', undefined},
+    {3, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'SuspendIntent'}}, 'suspend', undefined}
+]};
+
+struct_info('FinishIntent') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_proxy_provider_thrift, 'FinishStatus'}}, 'status', undefined}
+]};
+
+struct_info('FinishStatus') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'Success'}}, 'success', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+]};
+
+struct_info('Success') ->
+    {struct, struct, [
+    {1, optional, string, 'token', undefined}
+]};
+
+struct_info('SleepIntent') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined},
+    {2, optional, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'user_interaction', undefined}
+]};
+
+struct_info('SuspendIntent') ->
+    {struct, struct, [
+    {1, required, string, 'tag', undefined},
+    {2, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timeout', undefined},
+    {3, optional, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'user_interaction', undefined}
+]};
 
 struct_info('RecurrentPaymentTool') ->
     {struct, struct, [
@@ -328,15 +442,14 @@ struct_info('RecurrentTokenProxyResult') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_proxy_provider_thrift, 'RecurrentTokenIntent'}}, 'intent', undefined},
     {2, optional, string, 'next_state', undefined},
-    {3, optional, string, 'token', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
 
 struct_info('RecurrentTokenIntent') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenFinishIntent'}}, 'finish', undefined},
-    {2, optional, {struct, struct, {dmsl_proxy_thrift, 'SleepIntent'}}, 'sleep', undefined},
-    {3, optional, {struct, struct, {dmsl_proxy_thrift, 'SuspendIntent'}}, 'suspend', undefined}
+    {2, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'SleepIntent'}}, 'sleep', undefined},
+    {3, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'SuspendIntent'}}, 'suspend', undefined}
 ]};
 
 struct_info('RecurrentTokenFinishIntent') ->
@@ -347,7 +460,7 @@ struct_info('RecurrentTokenFinishIntent') ->
 struct_info('RecurrentTokenFinishStatus') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentTokenSuccess'}}, 'success', undefined},
-    {2, optional, {struct, struct, {dmsl_proxy_thrift, 'Failure'}}, 'failure', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
 ]};
 
 struct_info('RecurrentTokenSuccess') ->
@@ -366,7 +479,8 @@ struct_info('PaymentInfo') ->
     {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Shop'}}, 'shop', undefined},
     {2, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Invoice'}}, 'invoice', undefined},
     {3, required, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {4, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined}
+    {4, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+    {5, optional, {struct, struct, {dmsl_proxy_provider_thrift, 'InvoicePaymentCapture'}}, 'capture', undefined}
 ]};
 
 struct_info('Shop') ->
@@ -403,17 +517,23 @@ struct_info('InvoicePayment') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegacyPayerDetails'}}, 'payer_details', undefined},
     {6, required, {struct, union, {dmsl_proxy_provider_thrift, 'PaymentResource'}}, 'payment_resource', undefined},
     {5, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+    {8, optional, bool, 'make_recurrent', undefined}
 ]};
 
 struct_info('InvoicePaymentRefund') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
+    {4, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cash', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+]};
+
+struct_info('InvoicePaymentCapture') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined}
 ]};
 
 struct_info('Cash') ->
@@ -437,7 +557,7 @@ struct_info('PaymentContext') ->
 
 struct_info('PaymentProxyResult') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_proxy_thrift, 'Intent'}}, 'intent', undefined},
+    {1, required, {struct, union, {dmsl_proxy_provider_thrift, 'Intent'}}, 'intent', undefined},
     {2, optional, string, 'next_state', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
@@ -450,7 +570,7 @@ struct_info('PaymentCallbackResult') ->
 
 struct_info('PaymentCallbackProxyResult') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_proxy_thrift, 'Intent'}}, 'intent', undefined},
+    {1, optional, {struct, union, {dmsl_proxy_provider_thrift, 'Intent'}}, 'intent', undefined},
     {2, optional, string, 'next_state', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
 ]};
@@ -462,10 +582,22 @@ struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
 
-record_name('RecurrentPaymentTool') ->
+record_name('FinishIntent') ->
+    'prxprv_FinishIntent';
+
+record_name('Success') ->
+    'prxprv_Success';
+
+    record_name('SleepIntent') ->
+    'prxprv_SleepIntent';
+
+    record_name('SuspendIntent') ->
+    'prxprv_SuspendIntent';
+
+    record_name('RecurrentPaymentTool') ->
     'prxprv_RecurrentPaymentTool';
 
-record_name('RecurrentTokenInfo') ->
+    record_name('RecurrentTokenInfo') ->
     'prxprv_RecurrentTokenInfo';
 
     record_name('RecurrentTokenSession') ->
@@ -503,6 +635,9 @@ record_name('RecurrentTokenInfo') ->
 
     record_name('InvoicePaymentRefund') ->
     'prxprv_InvoicePaymentRefund';
+
+    record_name('InvoicePaymentCapture') ->
+    'prxprv_InvoicePaymentCapture';
 
     record_name('Cash') ->
     'prxprv_Cash';

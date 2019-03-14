@@ -40,6 +40,7 @@
 -export_type([
     'SourceEvent'/0,
     'StockEvent'/0,
+    'RawEvent'/0,
     'EventIDBound'/0,
     'EventIDRange'/0,
     'EventTimeBound'/0,
@@ -79,6 +80,7 @@
 -type struct_name() ::
     'SourceEvent' |
     'StockEvent' |
+    'RawEvent' |
     'EventIDBound' |
     'EventIDRange' |
     'EventTimeBound' |
@@ -93,10 +95,14 @@
 %% union 'SourceEvent'
 -type 'SourceEvent'() ::
     {'processing_event', dmsl_payment_processing_thrift:'Event'()} |
-    {'payout_event', dmsl_payout_processing_thrift:'Event'()}.
+    {'payout_event', dmsl_payout_processing_thrift:'Event'()} |
+    {'raw_event', 'RawEvent'()}.
 
 %% struct 'StockEvent'
 -type 'StockEvent'() :: #'event_stock_StockEvent'{}.
+
+%% struct 'RawEvent'
+-type 'RawEvent'() :: #'event_stock_RawEvent'{}.
 
 %% union 'EventIDBound'
 -type 'EventIDBound'() ::
@@ -192,6 +198,7 @@ structs() ->
     [
         'SourceEvent',
         'StockEvent',
+        'RawEvent',
         'EventIDBound',
         'EventIDRange',
         'EventTimeBound',
@@ -237,12 +244,21 @@ enum_info(_) -> erlang:error(badarg).
 struct_info('SourceEvent') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}, 'processing_event', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}, 'payout_event', undefined}
+    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}, 'payout_event', undefined},
+    {100, optional, {struct, struct, {dmsl_event_stock_thrift, 'RawEvent'}}, 'raw_event', undefined}
 ]};
 
 struct_info('StockEvent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_event_stock_thrift, 'SourceEvent'}}, 'source_event', undefined}
+    {1, required, {struct, union, {dmsl_event_stock_thrift, 'SourceEvent'}}, 'source_event', undefined},
+    {2, optional, i64, 'id', undefined},
+    {3, optional, string, 'time', undefined},
+    {4, optional, string, 'version', undefined}
+]};
+
+struct_info('RawEvent') ->
+    {struct, struct, [
+    {4, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'content', undefined}
 ]};
 
 struct_info('EventIDBound') ->
@@ -296,7 +312,10 @@ struct_info(_) -> erlang:error(badarg).
 record_name('StockEvent') ->
     'event_stock_StockEvent';
 
-record_name('EventIDRange') ->
+record_name('RawEvent') ->
+    'event_stock_RawEvent';
+
+    record_name('EventIDRange') ->
     'event_stock_EventIDRange';
 
     record_name('EventTimeRange') ->

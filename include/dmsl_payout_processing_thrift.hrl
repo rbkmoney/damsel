@@ -3,23 +3,9 @@
 
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
+-include("dmsl_msgpack_thrift.hrl").
 
 
-
-%% struct 'UserInfo'
--record('payout_processing_UserInfo', {
-    'id' :: dmsl_payout_processing_thrift:'UserID'(),
-    'type' :: dmsl_payout_processing_thrift:'UserType'()
-}).
-
-%% struct 'InternalUser'
--record('payout_processing_InternalUser', {}).
-
-%% struct 'ExternalUser'
--record('payout_processing_ExternalUser', {}).
-
-%% struct 'ServiceUser'
--record('payout_processing_ServiceUser', {}).
 
 %% struct 'Event'
 -record('payout_processing_Event', {
@@ -31,8 +17,18 @@
 
 %% struct 'PayoutCreated'
 -record('payout_processing_PayoutCreated', {
-    'payout' :: dmsl_payout_processing_thrift:'Payout'(),
-    'initiator' :: dmsl_payout_processing_thrift:'UserInfo'()
+    'payout' :: dmsl_payout_processing_thrift:'Payout'()
+}).
+
+%% struct 'PayoutSummaryItem'
+-record('payout_processing_PayoutSummaryItem', {
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency_symbolic_code' :: binary(),
+    'from_time' :: dmsl_base_thrift:'Timestamp'(),
+    'to_time' :: dmsl_base_thrift:'Timestamp'(),
+    'operation_type' :: atom(),
+    'count' :: integer()
 }).
 
 %% struct 'Payout'
@@ -40,54 +36,49 @@
     'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'fee' :: dmsl_domain_thrift:'Amount'(),
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'(),
     'payout_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'type' :: dmsl_payout_processing_thrift:'PayoutType'()
+    'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
+    'summary' :: dmsl_payout_processing_thrift:'PayoutSummary'() | undefined,
+    'metadata' :: dmsl_payout_processing_thrift:'Metadata'() | undefined
 }).
 
 %% struct 'PayoutUnpaid'
 -record('payout_processing_PayoutUnpaid', {}).
 
 %% struct 'PayoutPaid'
--record('payout_processing_PayoutPaid', {
-    'details' :: dmsl_payout_processing_thrift:'PaidDetails'()
-}).
-
-%% struct 'CardPaidDetails'
--record('payout_processing_CardPaidDetails', {
-    'provider_details' :: dmsl_payout_processing_thrift:'ProviderDetails'()
-}).
-
-%% struct 'ProviderDetails'
--record('payout_processing_ProviderDetails', {
-    'name' :: binary(),
-    'transaction_id' :: binary()
-}).
-
-%% struct 'AccountPaidDetails'
--record('payout_processing_AccountPaidDetails', {}).
+-record('payout_processing_PayoutPaid', {}).
 
 %% struct 'PayoutCancelled'
 -record('payout_processing_PayoutCancelled', {
-    'user_info' :: dmsl_payout_processing_thrift:'UserInfo'(),
     'details' :: binary()
 }).
 
 %% struct 'PayoutConfirmed'
--record('payout_processing_PayoutConfirmed', {
-    'user_info' :: dmsl_payout_processing_thrift:'UserInfo'()
+-record('payout_processing_PayoutConfirmed', {}).
+
+%% struct 'Wallet'
+-record('payout_processing_Wallet', {
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'()
 }).
 
-%% struct 'PayoutCard'
--record('payout_processing_PayoutCard', {
-    'card' :: dmsl_domain_thrift:'BankCard'()
-}).
-
-%% struct 'PayoutAccount'
--record('payout_processing_PayoutAccount', {
-    'account' :: dmsl_domain_thrift:'BankAccount'(),
+%% struct 'RussianPayoutAccount'
+-record('payout_processing_RussianPayoutAccount', {
+    'bank_account' :: dmsl_domain_thrift:'RussianBankAccount'(),
     'inn' :: binary(),
+    'purpose' :: binary(),
+    'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
+}).
+
+%% struct 'InternationalPayoutAccount'
+-record('payout_processing_InternationalPayoutAccount', {
+    'bank_account' :: dmsl_domain_thrift:'InternationalBankAccount'(),
+    'legal_entity' :: dmsl_domain_thrift:'InternationalLegalEntity'(),
     'purpose' :: binary(),
     'legal_agreement' :: dmsl_domain_thrift:'LegalAgreement'()
 }).
@@ -103,45 +94,59 @@
     'limit' :: integer()
 }).
 
-%% struct 'Pay2CardParams'
--record('payout_processing_Pay2CardParams', {
-    'bank_card' :: dmsl_domain_thrift:'BankCard'(),
-    'party_id' :: dmsl_domain_thrift:'PartyID'(),
-    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
-    'sum' :: dmsl_domain_thrift:'Cash'()
-}).
-
 %% struct 'TimeRange'
 -record('payout_processing_TimeRange', {
     'from_time' :: dmsl_base_thrift:'Timestamp'(),
-    'to_time' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'to_time' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'AmountRange'
+-record('payout_processing_AmountRange', {
+    'min' :: dmsl_domain_thrift:'Amount'() | undefined,
+    'max' :: dmsl_domain_thrift:'Amount'() | undefined
+}).
+
+%% struct 'ShopParams'
+-record('payout_processing_ShopParams', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'()
+}).
+
+%% struct 'PayoutParams'
+-record('payout_processing_PayoutParams', {
+    'payout_id' :: dmsl_payout_processing_thrift:'PayoutID'(),
+    'shop' :: dmsl_payout_processing_thrift:'ShopParams'(),
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'metadata' :: dmsl_payout_processing_thrift:'Metadata'() | undefined
 }).
 
 %% struct 'GeneratePayoutParams'
 -record('payout_processing_GeneratePayoutParams', {
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'(),
-    'party_id' :: dmsl_domain_thrift:'PartyID'(),
-    'shop_id' :: dmsl_domain_thrift:'ShopID'()
+    'shop_params' :: dmsl_payout_processing_thrift:'ShopParams'()
 }).
 
 %% struct 'PayoutSearchCriteria'
 -record('payout_processing_PayoutSearchCriteria', {
     'status' :: dmsl_payout_processing_thrift:'PayoutSearchStatus'() | undefined,
     'time_range' :: dmsl_payout_processing_thrift:'TimeRange'() | undefined,
-    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined
+    'payout_ids' :: [dmsl_payout_processing_thrift:'PayoutID'()] | undefined,
+    'amount_range' :: dmsl_payout_processing_thrift:'AmountRange'() | undefined,
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined
 }).
 
-%% struct 'PayoutInfo'
--record('payout_processing_PayoutInfo', {
-    'id' :: dmsl_payout_processing_thrift:'PayoutID'(),
-    'party_id' :: dmsl_domain_thrift:'PartyID'(),
-    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
-    'amount' :: dmsl_domain_thrift:'Amount'(),
-    'type' :: dmsl_payout_processing_thrift:'PayoutType'(),
-    'status' :: dmsl_payout_processing_thrift:'PayoutStatus'(),
-    'from_time' :: dmsl_base_thrift:'Timestamp'(),
-    'to_time' :: dmsl_base_thrift:'Timestamp'(),
-    'created_at' :: dmsl_base_thrift:'Timestamp'()
+%% struct 'PayoutSearchRequest'
+-record('payout_processing_PayoutSearchRequest', {
+    'search_criteria' :: dmsl_payout_processing_thrift:'PayoutSearchCriteria'(),
+    'from_id' :: integer() | undefined,
+    'size' :: integer() | undefined
+}).
+
+%% struct 'PayoutSearchResponse'
+-record('payout_processing_PayoutSearchResponse', {
+    'payouts' :: [dmsl_payout_processing_thrift:'Payout'()],
+    'last_id' :: integer()
 }).
 
 %% exception 'NoLastEvent'
@@ -149,6 +154,12 @@
 
 %% exception 'EventNotFound'
 -record('payout_processing_EventNotFound', {}).
+
+%% exception 'InvalidPayoutTool'
+-record('payout_processing_InvalidPayoutTool', {}).
+
+%% exception 'PayoutNotFound'
+-record('payout_processing_PayoutNotFound', {}).
 
 %% exception 'InsufficientFunds'
 -record('payout_processing_InsufficientFunds', {}).

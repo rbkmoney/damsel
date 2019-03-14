@@ -34,7 +34,15 @@
 -export_type([
     'ClaimID'/0,
     'PartyID'/0,
-    'ShopID'/0
+    'ShopID'/0,
+    'InvalidUser'/0,
+    'InvalidChangeset'/0,
+    'PartyNotFound'/0,
+    'InvalidPartyStatus'/0,
+    'ClaimNotFound'/0,
+    'InvalidClaimRevision'/0,
+    'ChangesetConflict'/0,
+    'InvalidClaimStatus'/0
 ]).
 -export_type([
     'ActionType'/0
@@ -47,12 +55,6 @@
     'Action'/0,
     'UserInformation'/0
 ]).
--export_type([
-    'ClaimNotFound'/0,
-    'InvalidClaimRevision'/0,
-    'ChangesetConflict'/0,
-    'InvalidClaimStatus'/0
-]).
 
 -type namespace() :: 'walker'.
 
@@ -62,11 +64,27 @@
 -type typedef_name() ::
     'ClaimID' |
     'PartyID' |
-    'ShopID'.
+    'ShopID' |
+    'InvalidUser' |
+    'InvalidChangeset' |
+    'PartyNotFound' |
+    'InvalidPartyStatus' |
+    'ClaimNotFound' |
+    'InvalidClaimRevision' |
+    'ChangesetConflict' |
+    'InvalidClaimStatus'.
 
 -type 'ClaimID'() :: integer().
 -type 'PartyID'() :: dmsl_domain_thrift:'PartyID'().
 -type 'ShopID'() :: dmsl_domain_thrift:'ShopID'().
+-type 'InvalidUser'() :: dmsl_payment_processing_thrift:'InvalidUser'().
+-type 'InvalidChangeset'() :: dmsl_payment_processing_thrift:'InvalidChangeset'().
+-type 'PartyNotFound'() :: dmsl_payment_processing_thrift:'PartyNotFound'().
+-type 'InvalidPartyStatus'() :: dmsl_payment_processing_thrift:'InvalidPartyStatus'().
+-type 'ClaimNotFound'() :: dmsl_payment_processing_thrift:'ClaimNotFound'().
+-type 'InvalidClaimRevision'() :: dmsl_payment_processing_thrift:'InvalidClaimRevision'().
+-type 'ChangesetConflict'() :: dmsl_payment_processing_thrift:'ChangesetConflict'().
+-type 'InvalidClaimStatus'() :: dmsl_payment_processing_thrift:'InvalidClaimStatus'().
 
 %%
 %% enums
@@ -76,10 +94,10 @@
 
 %% enum 'ActionType'
 -type 'ActionType'() ::
-    assigned |
-    comment |
-    status_changed |
-    claim_changed.
+    'assigned' |
+    'comment' |
+    'status_changed' |
+    'claim_changed'.
 
 %%
 %% structs, unions and exceptions
@@ -92,11 +110,7 @@
     'Action' |
     'UserInformation'.
 
--type exception_name() ::
-    'ClaimNotFound' |
-    'InvalidClaimRevision' |
-    'ChangesetConflict' |
-    'InvalidClaimStatus'.
+-type exception_name() :: none().
 
 %% struct 'PartyModificationUnit'
 -type 'PartyModificationUnit'() :: #'walker_PartyModificationUnit'{}.
@@ -115,18 +129,6 @@
 
 %% struct 'UserInformation'
 -type 'UserInformation'() :: #'walker_UserInformation'{}.
-
-%% exception 'ClaimNotFound'
--type 'ClaimNotFound'() :: #'walker_ClaimNotFound'{}.
-
-%% exception 'InvalidClaimRevision'
--type 'InvalidClaimRevision'() :: #'walker_InvalidClaimRevision'{}.
-
-%% exception 'ChangesetConflict'
--type 'ChangesetConflict'() :: #'walker_ChangesetConflict'{}.
-
-%% exception 'InvalidClaimStatus'
--type 'InvalidClaimStatus'() :: #'walker_InvalidClaimStatus'{}.
 
 %%
 %% services and functions
@@ -184,7 +186,15 @@ typedefs() ->
     [
         'ClaimID',
         'PartyID',
-        'ShopID'
+        'ShopID',
+        'InvalidUser',
+        'InvalidChangeset',
+        'PartyNotFound',
+        'InvalidPartyStatus',
+        'ClaimNotFound',
+        'InvalidClaimRevision',
+        'ChangesetConflict',
+        'InvalidClaimStatus'
     ].
 
 -spec enums() -> [enum_name()].
@@ -229,16 +239,40 @@ typedef_info('PartyID') ->
 typedef_info('ShopID') ->
     string;
 
+typedef_info('InvalidUser') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}};
+
+typedef_info('InvalidChangeset') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'InvalidChangeset'}};
+
+typedef_info('PartyNotFound') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}};
+
+typedef_info('InvalidPartyStatus') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}};
+
+typedef_info('ClaimNotFound') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}};
+
+typedef_info('InvalidClaimRevision') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimRevision'}};
+
+typedef_info('ChangesetConflict') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'ChangesetConflict'}};
+
+typedef_info('InvalidClaimStatus') ->
+    {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimStatus'}};
+
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
 
 enum_info('ActionType') ->
     {enum, [
-        {assigned, 0},
-        {comment, 1},
-        {status_changed, 2},
-        {claim_changed, 3}
+        {'assigned', 0},
+        {'comment', 1},
+        {'status_changed', 2},
+        {'claim_changed', 3}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -296,20 +330,6 @@ struct_info('UserInformation') ->
     {3, optional, string, 'email', undefined}
 ]};
 
-struct_info('ClaimNotFound') ->
-    {struct, exception, []};
-
-struct_info('InvalidClaimRevision') ->
-    {struct, exception, []};
-
-struct_info('ChangesetConflict') ->
-    {struct, exception, []};
-
-struct_info('InvalidClaimStatus') ->
-    {struct, exception, [
-    {1, required, string, 'status', undefined}
-]};
-
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -331,18 +351,6 @@ record_name('ClaimInfo') ->
 
     record_name('UserInformation') ->
     'walker_UserInformation';
-
-    record_name('ClaimNotFound') ->
-    'walker_ClaimNotFound';
-
-    record_name('InvalidClaimRevision') ->
-    'walker_InvalidClaimRevision';
-
-    record_name('ChangesetConflict') ->
-    'walker_ChangesetConflict';
-
-    record_name('InvalidClaimStatus') ->
-    'walker_InvalidClaimStatus';
 
     record_name(_) -> error(badarg).
     
@@ -377,9 +385,12 @@ function_info('Walker', 'AcceptClaim', reply_type) ->
         {struct, struct, []};
     function_info('Walker', 'AcceptClaim', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_walker_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_walker_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_walker_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimStatus'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimRevision'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidChangeset'}}, 'ex6', undefined}
     ]};
 function_info('Walker', 'DenyClaim', params_type) ->
     {struct, struct, [
@@ -393,9 +404,11 @@ function_info('Walker', 'DenyClaim', reply_type) ->
         {struct, struct, []};
     function_info('Walker', 'DenyClaim', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_walker_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_walker_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_walker_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimStatus'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimRevision'}}, 'ex5', undefined}
     ]};
 function_info('Walker', 'GetClaim', params_type) ->
     {struct, struct, [
@@ -406,7 +419,7 @@ function_info('Walker', 'GetClaim', reply_type) ->
         {struct, struct, {dmsl_walker_thrift, 'ClaimInfo'}};
     function_info('Walker', 'GetClaim', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_walker_thrift, 'ClaimNotFound'}}, 'ex1', undefined}
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Walker', 'CreateClaim', params_type) ->
     {struct, struct, [
@@ -418,8 +431,12 @@ function_info('Walker', 'CreateClaim', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
     function_info('Walker', 'CreateClaim', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_walker_thrift, 'ChangesetConflict'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ChangesetConflict'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidChangeset'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex6', undefined}
     ]};
 function_info('Walker', 'UpdateClaim', params_type) ->
     {struct, struct, [
@@ -433,11 +450,15 @@ function_info('Walker', 'UpdateClaim', reply_type) ->
         {struct, struct, []};
     function_info('Walker', 'UpdateClaim', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_walker_thrift, 'ClaimNotFound'}}, 'ex4', undefined},
-        {2, undefined, {struct, exception, {dmsl_walker_thrift, 'InvalidClaimStatus'}}, 'ex5', undefined},
-        {3, undefined, {struct, exception, {dmsl_walker_thrift, 'InvalidClaimRevision'}}, 'ex6', undefined},
-        {4, undefined, {struct, exception, {dmsl_walker_thrift, 'ChangesetConflict'}}, 'ex7', undefined},
-        {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex9', undefined}
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimStatus'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidClaimRevision'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ChangesetConflict'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidChangeset'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex9', undefined}
     ]};
 function_info('Walker', 'SearchClaims', params_type) ->
     {struct, struct, [

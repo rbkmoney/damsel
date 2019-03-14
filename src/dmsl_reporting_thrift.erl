@@ -90,13 +90,13 @@
 
 %% enum 'ReportStatus'
 -type 'ReportStatus'() ::
-    pending |
-    created.
+    'pending' |
+    'created'.
 
 %% enum 'ReportType'
 -type 'ReportType'() ::
-    provision_of_service |
-    payment_registry.
+    'provision_of_service' |
+    'payment_registry'.
 
 %%
 %% structs, unions and exceptions
@@ -158,6 +158,7 @@
     'GetReports' |
     'GenerateReport' |
     'GetReport' |
+    'cancelReport' |
     'GeneratePresignedUrl'.
 
 -export_type(['Reporting_service_functions'/0]).
@@ -264,14 +265,14 @@ typedef_info(_) -> erlang:error(badarg).
 
 enum_info('ReportStatus') ->
     {enum, [
-        {pending, 0},
-        {created, 1}
+        {'pending', 0},
+        {'created', 1}
     ]};
 
 enum_info('ReportType') ->
     {enum, [
-        {provision_of_service, 0},
-        {payment_registry, 1}
+        {'provision_of_service', 0},
+        {'payment_registry', 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -374,6 +375,7 @@ functions('Reporting') ->
         'GetReports',
         'GenerateReport',
         'GetReport',
+        'cancelReport',
         'GeneratePresignedUrl'
     ];
 
@@ -416,6 +418,18 @@ function_info('Reporting', 'GetReport', params_type) ->
 function_info('Reporting', 'GetReport', reply_type) ->
         {struct, struct, {dmsl_reporting_thrift, 'Report'}};
     function_info('Reporting', 'GetReport', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'ReportNotFound'}}, 'ex1', undefined}
+    ]};
+function_info('Reporting', 'cancelReport', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'party_id', undefined},
+    {2, undefined, string, 'shop_id', undefined},
+    {3, undefined, i64, 'report_id', undefined}
+]};
+function_info('Reporting', 'cancelReport', reply_type) ->
+        {struct, struct, []};
+    function_info('Reporting', 'cancelReport', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'ReportNotFound'}}, 'ex1', undefined}
     ]};

@@ -39,12 +39,17 @@
     'ExpDate'/0,
     'CardData'/0,
     'PutCardDataResult'/0,
+    'CardSecurityCode'/0,
+    'Auth3DS'/0,
+    'AuthData'/0,
+    'SessionData'/0,
     'Unlocked'/0,
     'UnlockStatus'/0
 ]).
 -export_type([
     'InvalidCardData'/0,
     'CardDataNotFound'/0,
+    'SessionDataNotFound'/0,
     'NoKeyring'/0,
     'KeyringLocked'/0,
     'KeyringExists'/0
@@ -74,12 +79,17 @@
     'ExpDate' |
     'CardData' |
     'PutCardDataResult' |
+    'CardSecurityCode' |
+    'Auth3DS' |
+    'AuthData' |
+    'SessionData' |
     'Unlocked' |
     'UnlockStatus'.
 
 -type exception_name() ::
     'InvalidCardData' |
     'CardDataNotFound' |
+    'SessionDataNotFound' |
     'NoKeyring' |
     'KeyringLocked' |
     'KeyringExists'.
@@ -92,6 +102,20 @@
 
 %% struct 'PutCardDataResult'
 -type 'PutCardDataResult'() :: #'PutCardDataResult'{}.
+
+%% struct 'CardSecurityCode'
+-type 'CardSecurityCode'() :: #'CardSecurityCode'{}.
+
+%% struct 'Auth3DS'
+-type 'Auth3DS'() :: #'Auth3DS'{}.
+
+%% union 'AuthData'
+-type 'AuthData'() ::
+    {'card_security_code', 'CardSecurityCode'()} |
+    {'auth_3ds', 'Auth3DS'()}.
+
+%% struct 'SessionData'
+-type 'SessionData'() :: #'SessionData'{}.
 
 %% struct 'Unlocked'
 -type 'Unlocked'() :: #'Unlocked'{}.
@@ -106,6 +130,9 @@
 
 %% exception 'CardDataNotFound'
 -type 'CardDataNotFound'() :: #'CardDataNotFound'{}.
+
+%% exception 'SessionDataNotFound'
+-type 'SessionDataNotFound'() :: #'SessionDataNotFound'{}.
 
 %% exception 'NoKeyring'
 -type 'NoKeyring'() :: #'NoKeyring'{}.
@@ -138,6 +165,7 @@
 -type 'Storage_service_functions'() ::
     'GetCardData' |
     'GetSessionCardData' |
+    'GetSessionData' |
     'PutCardData'.
 
 -export_type(['Storage_service_functions'/0]).
@@ -189,6 +217,10 @@ structs() ->
         'ExpDate',
         'CardData',
         'PutCardDataResult',
+        'CardSecurityCode',
+        'Auth3DS',
+        'AuthData',
+        'SessionData',
         'Unlocked',
         'UnlockStatus'
     ].
@@ -233,13 +265,35 @@ struct_info('CardData') ->
     {1, required, string, 'pan', undefined},
     {2, required, {struct, struct, {dmsl_cds_thrift, 'ExpDate'}}, 'exp_date', undefined},
     {3, optional, string, 'cardholder_name', undefined},
-    {4, required, string, 'cvv', undefined}
+    {4, optional, string, 'cvv', undefined}
 ]};
 
 struct_info('PutCardDataResult') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
     {2, required, string, 'session_id', undefined}
+]};
+
+struct_info('CardSecurityCode') ->
+    {struct, struct, [
+    {1, required, string, 'value', undefined}
+]};
+
+struct_info('Auth3DS') ->
+    {struct, struct, [
+    {1, required, string, 'cryptogram', undefined},
+    {2, optional, string, 'eci', undefined}
+]};
+
+struct_info('AuthData') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_cds_thrift, 'CardSecurityCode'}}, 'card_security_code', undefined},
+    {2, optional, {struct, struct, {dmsl_cds_thrift, 'Auth3DS'}}, 'auth_3ds', undefined}
+]};
+
+struct_info('SessionData') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_cds_thrift, 'AuthData'}}, 'auth_data', undefined}
 ]};
 
 struct_info('Unlocked') ->
@@ -252,9 +306,14 @@ struct_info('UnlockStatus') ->
 ]};
 
 struct_info('InvalidCardData') ->
-    {struct, exception, []};
+    {struct, exception, [
+    {1, optional, string, 'reason', undefined}
+]};
 
 struct_info('CardDataNotFound') ->
+    {struct, exception, []};
+
+struct_info('SessionDataNotFound') ->
     {struct, exception, []};
 
 struct_info('NoKeyring') ->
@@ -279,6 +338,15 @@ record_name('CardData') ->
     record_name('PutCardDataResult') ->
     'PutCardDataResult';
 
+    record_name('CardSecurityCode') ->
+    'CardSecurityCode';
+
+    record_name('Auth3DS') ->
+    'Auth3DS';
+
+    record_name('SessionData') ->
+    'SessionData';
+
     record_name('Unlocked') ->
     'Unlocked';
 
@@ -287,6 +355,9 @@ record_name('CardData') ->
 
     record_name('CardDataNotFound') ->
     'CardDataNotFound';
+
+    record_name('SessionDataNotFound') ->
+    'SessionDataNotFound';
 
     record_name('NoKeyring') ->
     'NoKeyring';
@@ -313,6 +384,7 @@ functions('Storage') ->
     [
         'GetCardData',
         'GetSessionCardData',
+        'GetSessionData',
         'PutCardData'
     ];
 
@@ -347,14 +419,17 @@ function_info('Keyring', 'Lock', params_type) ->
 function_info('Keyring', 'Lock', reply_type) ->
         {struct, struct, []};
     function_info('Keyring', 'Lock', exceptions) ->
-        {struct, struct, []};
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'NoKeyring'}}, 'no_keyring', undefined}
+    ]};
 function_info('Keyring', 'Rotate', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'Rotate', reply_type) ->
         {struct, struct, []};
     function_info('Keyring', 'Rotate', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined},
+        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'NoKeyring'}}, 'no_keyring', undefined}
     ]};
 
 function_info('Storage', 'GetCardData', params_type) ->
@@ -365,8 +440,7 @@ function_info('Storage', 'GetCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'CardData'}};
     function_info('Storage', 'GetCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'GetSessionCardData', params_type) ->
     {struct, struct, [
@@ -377,19 +451,28 @@ function_info('Storage', 'GetSessionCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'CardData'}};
     function_info('Storage', 'GetSessionCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined}
+    ]};
+function_info('Storage', 'GetSessionData', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'session_id', undefined}
+]};
+function_info('Storage', 'GetSessionData', reply_type) ->
+        {struct, struct, {dmsl_cds_thrift, 'SessionData'}};
+    function_info('Storage', 'GetSessionData', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'SessionDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'PutCardData', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined}
+    {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined},
+    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
 ]};
 function_info('Storage', 'PutCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
     function_info('Storage', 'PutCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'KeyringLocked'}}, 'locked', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
