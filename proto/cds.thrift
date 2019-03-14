@@ -60,7 +60,7 @@ struct SessionData {
 
 struct Success {}
 
-union KeyringStatus {
+union KeyringOperationStatus {
     /** Успешно. */
     1: Success success
     /** Сколько частей ключа нужно еще ввести, чтобы провести манипуляцию над Keyring. */
@@ -94,7 +94,7 @@ service Keyring {
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
      *  параметра threshold при создании кейринга
      */
-    KeyringStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
+    KeyringOperationStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
 
     /** Зашифровать кейринг */
     void Lock () throws (1: NoKeyring no_keyring)
@@ -103,7 +103,7 @@ service Keyring {
      *  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
      *  См. `Unlock`
      */
-    KeyringStatus Rotate (1: MasterKeyShare key_share) throws (1: KeyringLocked locked, 2: NoKeyring no_keyring)
+    KeyringOperationStatus Rotate (1: MasterKeyShare key_share) throws (1: KeyringLocked locked, 2: NoKeyring no_keyring)
 
 }
 
