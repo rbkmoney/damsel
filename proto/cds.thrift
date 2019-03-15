@@ -81,6 +81,10 @@ exception KeyringLocked {}
 
 exception KeyringExists {}
 
+exception WrongMasterKey {}
+
+exception FailedMasterKeyRecovery {}
+
 /** Интерфейс для администраторов */
 service Keyring {
 
@@ -103,7 +107,11 @@ service Keyring {
      *  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
      *  См. `Unlock`
      */
-    KeyringOperationStatus Rotate (1: MasterKeyShare key_share) throws (1: KeyringLocked locked, 2: NoKeyring no_keyring)
+    KeyringOperationStatus Rotate (1: MasterKeyShare key_share)
+        throws (1: KeyringLocked locked,
+                2: NoKeyring no_keyring,
+                3: WrongMasterKey wrong_masterkey,
+                4: FailedMasterKeyRecovery failed_to_recover)
 
 }
 
