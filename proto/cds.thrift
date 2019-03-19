@@ -93,6 +93,8 @@ exception KeyringLocked {}
 
 exception KeyringExists {}
 
+exception NothingToValidate {}
+
 exception WrongMasterKey {}
 
 exception FailedMasterKeyRecovery {}
@@ -108,7 +110,7 @@ service Keyring {
 
     /** Валидирует и завершает операцию над Keyring
      *  Вызывается после Init и Rekey (CDS-25)
-     *  key_share - фрагмент MasterKey в расшифрованном виде
+     *  key_share - MasterKeyShare в расшифрованном виде
      */
     KeyringOperationStatus Validate (1: MasterKeyShare key_share)
         throws (1: NoKeyring no_keyring,
