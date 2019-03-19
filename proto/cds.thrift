@@ -8,6 +8,18 @@ typedef binary MasterKeyShare;
 
 typedef list<MasterKeyShare> MasterKeyShares;
 
+/** Публичный ключ и кому он принадлежит */
+struct PublicKey {
+    /** Уникальный идентификатор */
+    1: required string id
+    /** Владелец ключа */
+    2: required string owner
+    /** Публичный ключ */
+    3: required string key
+}
+
+typedef list<PublicKey> PublicKeys
+
 /** Дата экспирации */
 struct ExpDate {
     /** Месяц 1..12 */
@@ -90,9 +102,19 @@ service Keyring {
 
     /** Создать новый кейринг
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
-     *  num_shares - общее количество частей, на которое нужно разбить мастер-ключ
+     *  public_keys - публичные ключи которыми будут подписываться MasterKeyShare
      */
-    MasterKeyShares Init (1: i16 threshold, 2: i16 num_shares) throws (1: KeyringExists exists)
+    MasterKeyShares Init (1: i16 threshold, 2: PublicKeys public_keys) throws (1: KeyringExists exists)
+
+    /** Валидирует и завершает операцию над Keyring
+     *  Вызывается после Init и Rekey (CDS-25)
+     *  key_share - фрагмент MasterKey в расшифрованном виде
+     */
+    KeyringOperationStatus Validate (1: MasterKeyShare key_share)
+        throws (1: NoKeyring no_keyring,
+                2: NothingToValidate no_validate,
+                3: WrongMasterKey wrong_masterkey,
+                4: FailedMasterKeyRecovery failed_to_recover)
 
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
