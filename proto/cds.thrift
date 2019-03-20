@@ -74,19 +74,26 @@ union KeyringOperationStatus {
     2: i16 more_keys_needed
 }
 
+struct Uninitialized {}
+
+struct Unlocked {}
+
+struct Locked {}
+
 enum Initialization {
     validation
 }
 
-struct Idling {}
-
 struct Rotation {}
 
 union Status {
-    1: Initialization initialization
-    2: Uninitialized uninitialized
-    3: Idling idling
-    4: Rotation rotation
+    // Global machine status
+    1: Uninitialized uninitialized
+    2: Unlocked unlocked
+    3: Locked locked
+    // Submachine status
+    4: Initialization initialization
+    5: Rotation rotation
 }
 
 exception InvalidStatus {
@@ -110,6 +117,10 @@ exception WrongMasterKey {}
 exception FailedMasterKeyRecovery {}
 
 exception InvalidArguments {
+    1: optional string reason
+}
+
+exception OperationAborted {
     1: optional string reason
 }
 
