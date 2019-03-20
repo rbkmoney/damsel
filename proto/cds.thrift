@@ -141,8 +141,7 @@ service Keyring {
     KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 // Исключения ниже переводят машину в состояние `uninitialized`
-                2: WrongMasterKey wrong_masterkey,
-                3: FailedMasterKeyRecovery failed_to_recover)
+                2: OperationAborted operation_aborted)
 
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
     void CancelInit () throws (1: InvalidStatus invalid_status)
@@ -162,9 +161,7 @@ service Keyring {
      */
     KeyringOperationStatus Rotate (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
-                2: NoKeyring no_keyring,
-                3: WrongMasterKey wrong_masterkey,
-                4: FailedMasterKeyRecovery failed_to_recover)
+                2: OperationAborted operation_aborted)
 
 }
 
