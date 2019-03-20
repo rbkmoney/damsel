@@ -7,7 +7,7 @@ namespace java com.rbkmoney.damsel.cds
 typedef binary MasterKeyShare;
 
 /** Зашиврованная часть мастер-ключа и кому он предназначается */
-struct EcryptedMasterKeyShare {
+struct EncryptedMasterKeyShare {
     1: required string id
     2: required string owner
     3: required binary encrypted_share
@@ -119,7 +119,7 @@ service Keyring {
     /** Создать новый кейринг при начальном состоянии
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
      */
-    EcryptedMasterKeyShares StartInit (1: i16 threshold)
+    EncryptedMasterKeyShares StartInit (1: i16 threshold)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidArguments invalid_args)
 
@@ -129,6 +129,7 @@ service Keyring {
      */
     KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
+                // Исключения ниже переводят машину в состояние `uninitialized`
                 2: WrongMasterKey wrong_masterkey,
                 3: FailedMasterKeyRecovery failed_to_recover)
 
