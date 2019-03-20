@@ -99,24 +99,34 @@ exception WrongMasterKey {}
 
 exception FailedMasterKeyRecovery {}
 
+exception AwaitsValidation {}
+
+exception IsNotDuringInit {}
+
 /** Интерфейс для администраторов */
 service Keyring {
 
-    /** Создать новый кейринг
+    /** Создать новый кейринг при начальном состоянии
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
      *  public_keys - публичные ключи которыми будут подписываться MasterKeyShare
      */
-    MasterKeyShares Init (1: i16 threshold, 2: PublicKeys public_keys) throws (1: KeyringExists exists)
+    MasterKeyShares Init (1: i16 threshold, 2: PublicKeys public_keys)
+        throws (1: KeyringExists exists
+                2: AwaitsValidation await_validation)
 
     /** Валидирует и завершает операцию над Keyring
      *  Вызывается после Init и Rekey (CDS-25)
      *  key_share - MasterKeyShare в расшифрованном виде
      */
-    KeyringOperationStatus Validate (1: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
         throws (1: NoKeyring no_keyring,
                 2: NothingToValidate no_validate,
                 3: WrongMasterKey wrong_masterkey,
                 4: FailedMasterKeyRecovery failed_to_recover)
+
+    /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
+    Success CancelInit ()
+        throws (1: IsNotDuringInit not_during_init)
 
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
