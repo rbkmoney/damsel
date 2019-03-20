@@ -150,10 +150,12 @@ service Keyring {
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
      *  параметра threshold при создании кейринга
      */
-    KeyringOperationStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
+    KeyringOperationStatus Unlock (1: MasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: OperationAborted operation_aborted)
 
     /** Зашифровать кейринг */
-    void Lock () throws (1: NoKeyring no_keyring)
+    void Lock () throws (1: InvalidStatus invalid_status)
 
     /** Добавить новый ключ в кейринг
      *  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
