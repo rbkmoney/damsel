@@ -134,7 +134,7 @@ service Keyring {
                 3: FailedMasterKeyRecovery failed_to_recover)
 
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
-    Success CancelInit () throws (1: InvalidStatus invalid_status)
+    void CancelInit () throws (1: InvalidStatus invalid_status)
 
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
