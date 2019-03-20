@@ -397,6 +397,7 @@ struct InvoiceParams {
     4: required base.Timestamp due
     5: required domain.Cash cost
     6: required domain.InvoiceContext context
+    7: optional string external_id
 }
 
 struct InvoiceWithTemplateParams {
