@@ -110,7 +110,7 @@ service Keyring {
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
      *  public_keys - публичные ключи которыми будут подписываться MasterKeyShare
      */
-    MasterKeyShares Init (1: i16 threshold, 2: PublicKeys public_keys)
+    MasterKeyShares StartInit (1: i16 threshold, 2: PublicKeys public_keys)
         throws (1: KeyringExists exists
                 2: AwaitsValidation await_validation)
 
