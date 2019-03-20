@@ -6,19 +6,14 @@ namespace java com.rbkmoney.damsel.cds
 /** Часть мастер-ключа */
 typedef binary MasterKeyShare;
 
-typedef list<MasterKeyShare> MasterKeyShares;
-
-/** Публичный ключ и кому он принадлежит */
-struct PublicKey {
-    /** Уникальный идентификатор */
+/** Зашиврованная часть мастер-ключа и кому он предназначается */
+struct EcryptedMasterKeyShare {
     1: required string id
-    /** Владелец ключа */
     2: required string owner
-    /** Публичный ключ */
-    3: required string key
+    3: required binary encrypted_share
 }
 
-typedef list<PublicKey> PublicKeys
+typedef list<EncryptedMasterKeyShare> EncryptedMasterKeyShares;
 
 /** Дата экспирации */
 struct ExpDate {
@@ -79,6 +74,25 @@ union KeyringOperationStatus {
     2: i16 more_keys_needed
 }
 
+enum Initialization {
+    validation
+}
+
+struct Idling {}
+
+struct Rotation {}
+
+union Status {
+    1: Initialization initialization
+    2: Uninitialized uninitialized
+    3: Idling idling
+    4: Rotation rotation
+}
+
+exception InvalidStatus {
+    1: required Status status
+}
+
 exception InvalidCardData {
     1: optional string reason
 }
@@ -91,42 +105,35 @@ exception NoKeyring {}
 
 exception KeyringLocked {}
 
-exception KeyringExists {}
-
-exception NothingToValidate {}
-
 exception WrongMasterKey {}
 
 exception FailedMasterKeyRecovery {}
 
-exception AwaitsValidation {}
-
-exception IsNotDuringInit {}
+exception InvalidArguments {
+    1: optional string reason
+}
 
 /** Интерфейс для администраторов */
 service Keyring {
 
     /** Создать новый кейринг при начальном состоянии
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
-     *  public_keys - публичные ключи которыми будут подписываться MasterKeyShare
      */
-    MasterKeyShares StartInit (1: i16 threshold, 2: PublicKeys public_keys)
-        throws (1: KeyringExists exists
-                2: AwaitsValidation await_validation)
+    EcryptedMasterKeyShares StartInit (1: i16 threshold)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidArguments invalid_args)
 
     /** Валидирует и завершает операцию над Keyring
      *  Вызывается после Init и Rekey (CDS-25)
      *  key_share - MasterKeyShare в расшифрованном виде
      */
     KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
-        throws (1: NoKeyring no_keyring,
-                2: NothingToValidate no_validate,
-                3: WrongMasterKey wrong_masterkey,
-                4: FailedMasterKeyRecovery failed_to_recover)
+        throws (1: InvalidStatus invalid_status,
+                2: WrongMasterKey wrong_masterkey,
+                3: FailedMasterKeyRecovery failed_to_recover)
 
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
-    Success CancelInit ()
-        throws (1: IsNotDuringInit not_during_init)
+    Success CancelInit () throws (1: InvalidStatus invalid_status)
 
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
@@ -142,7 +149,7 @@ service Keyring {
      *  См. `Unlock`
      */
     KeyringOperationStatus Rotate (1: MasterKeyShare key_share)
-        throws (1: KeyringLocked locked,
+        throws (1: InvalidStatus invalid_status,
                 2: NoKeyring no_keyring,
                 3: WrongMasterKey wrong_masterkey,
                 4: FailedMasterKeyRecovery failed_to_recover)
