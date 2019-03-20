@@ -429,6 +429,7 @@ struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
+    4: optional string external_id
 }
 
 union PayerParams {
