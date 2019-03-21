@@ -94,13 +94,19 @@ union Status {
     1: Uninitialized uninitialized
     2: Unlocked unlocked
     3: Locked locked
-    // Submachine status
-    4: Initialization initialization
-    5: Rotation rotation
+}
+
+union Activity {
+    1: Initialization initialization
+    2: Rotation rotation
 }
 
 exception InvalidStatus {
     1: required Status status
+}
+
+exception InvalidActivity {
+    1: required Activity activity
 }
 
 exception InvalidCardData {
@@ -135,7 +141,8 @@ service Keyring {
      */
     EncryptedMasterKeyShares StartInit (1: i16 threshold)
         throws (1: InvalidStatus invalid_status,
-                2: InvalidArguments invalid_args)
+                2: InvalidActivity invalid_activity,
+                3: InvalidArguments invalid_args)
 
     /** Валидирует и завершает операцию над Keyring
      *  Вызывается после Init и Rekey (CDS-25)
