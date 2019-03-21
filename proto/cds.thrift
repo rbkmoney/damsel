@@ -8,8 +8,11 @@ typedef binary MasterKeyShare;
 
 /** Зашиврованная часть мастер-ключа и кому он предназначается */
 struct EncryptedMasterKeyShare {
+    // Уникальный ID, для однозначного определения владения
     1: required string id
+    // Неуникальный идентификатор с ФИО/email/etc владельца
     2: required string owner
+    // Зашиврованный MasterKeyShare
     3: required binary encrypted_share
 }
 
