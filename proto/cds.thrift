@@ -6,7 +6,17 @@ namespace java com.rbkmoney.damsel.cds
 /** Часть мастер-ключа */
 typedef binary MasterKeyShare;
 
-typedef list<MasterKeyShare> MasterKeyShares;
+/** Зашиврованная часть мастер-ключа и кому он предназначается */
+struct EncryptedMasterKeyShare {
+    // Уникальный ID, для однозначного определения владения
+    1: required string id
+    // Неуникальный идентификатор с ФИО/email/etc владельца
+    2: required string owner
+    // Зашиврованный MasterKeyShare
+    3: required binary encrypted_share
+}
+
+typedef list<EncryptedMasterKeyShare> EncryptedMasterKeyShares;
 
 /** Дата экспирации */
 struct ExpDate {
@@ -67,6 +77,35 @@ union KeyringOperationStatus {
     2: i16 more_keys_needed
 }
 
+enum Initialization {
+    uninitialized
+    validation
+}
+
+enum Rotation {
+    rotating
+}
+
+enum Status {
+    // Global machine status
+    uninitialized
+    unlocked
+    locked
+}
+
+union Activity {
+    1: Initialization initialization
+    2: Rotation rotation
+}
+
+exception InvalidStatus {
+    1: required Status status
+}
+
+exception InvalidActivity {
+    1: required Activity activity
+}
+
 exception InvalidCardData {
     1: optional string reason
 }
@@ -75,43 +114,55 @@ exception CardDataNotFound {}
 
 exception SessionDataNotFound {}
 
-exception NoKeyring {}
+exception InvalidArguments {
+    1: optional string reason
+}
 
-exception KeyringLocked {}
-
-exception KeyringExists {}
-
-exception WrongMasterKey {}
-
-exception FailedMasterKeyRecovery {}
+exception OperationAborted {
+    1: optional string reason
+}
 
 /** Интерфейс для администраторов */
 service Keyring {
 
-    /** Создать новый кейринг
+    /** Создать новый кейринг при начальном состоянии
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
-     *  num_shares - общее количество частей, на которое нужно разбить мастер-ключ
      */
-    MasterKeyShares Init (1: i16 threshold, 2: i16 num_shares) throws (1: KeyringExists exists)
+    EncryptedMasterKeyShares StartInit (1: i16 threshold)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: InvalidArguments invalid_args)
+
+    /** Валидирует и завершает операцию над Keyring
+     *  Вызывается после Init и Rekey (CDS-25)
+     *  key_share - MasterKeyShare в расшифрованном виде
+     */
+    KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                // Исключения ниже переводят машину в состояние `uninitialized`
+                2: OperationAborted operation_aborted)
+
+    /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
+    void CancelInit () throws (1: InvalidStatus invalid_status)
 
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
      *  параметра threshold при создании кейринга
      */
-    KeyringOperationStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
+    KeyringOperationStatus Unlock (1: MasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: OperationAborted operation_aborted)
 
     /** Зашифровать кейринг */
-    void Lock () throws (1: NoKeyring no_keyring)
+    void Lock () throws (1: InvalidStatus invalid_status)
 
     /** Добавить новый ключ в кейринг
      *  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
      *  См. `Unlock`
      */
     KeyringOperationStatus Rotate (1: MasterKeyShare key_share)
-        throws (1: KeyringLocked locked,
-                2: NoKeyring no_keyring,
-                3: WrongMasterKey wrong_masterkey,
-                4: FailedMasterKeyRecovery failed_to_recover)
+        throws (1: InvalidStatus invalid_status,
+                2: OperationAborted operation_aborted)
 
 }
 
