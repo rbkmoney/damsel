@@ -77,23 +77,20 @@ union KeyringOperationStatus {
     2: i16 more_keys_needed
 }
 
-struct Uninitialized {}
-
-struct Unlocked {}
-
-struct Locked {}
-
 enum Initialization {
+    uninitialized
     validation
 }
 
-struct Rotation {}
+enum Rotation {
+    rotating
+}
 
-union Status {
+enum Status {
     // Global machine status
-    1: Uninitialized uninitialized
-    2: Unlocked unlocked
-    3: Locked locked
+    uninitialized
+    unlocked
+    locked
 }
 
 union Activity {
@@ -116,14 +113,6 @@ exception InvalidCardData {
 exception CardDataNotFound {}
 
 exception SessionDataNotFound {}
-
-exception NoKeyring {}
-
-exception KeyringLocked {}
-
-exception WrongMasterKey {}
-
-exception FailedMasterKeyRecovery {}
 
 exception InvalidArguments {
     1: optional string reason
