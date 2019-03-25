@@ -88,7 +88,7 @@ enum Rotation {
 
 enum Status {
     // Global machine status
-    uninitialized
+    not_initialized
     unlocked
     locked
 }
