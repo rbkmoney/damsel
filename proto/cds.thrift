@@ -139,8 +139,9 @@ service Keyring {
      */
     KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
                 // Исключения ниже переводят машину в состояние `uninitialized`
-                2: OperationAborted operation_aborted)
+                3: OperationAborted operation_aborted)
 
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
     void CancelInit () throws (1: InvalidStatus invalid_status)
