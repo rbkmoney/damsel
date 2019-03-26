@@ -84,6 +84,13 @@ enum Initialization {
     validation
 }
 
+enum ReInitialization {
+    uninitialized
+    confirmation
+    postconfirmation
+    validation
+}
+
 enum Rotation {
     uninitialized
     validation
@@ -103,8 +110,9 @@ enum Status {
 
 union Activity {
     1: Initialization initialization
-    2: Rotation rotation
-    3: Unlock unlock
+    2: ReInitialization reinitialization
+    3: Rotation rotation
+    4: Unlock unlock
 }
 
 exception InvalidStatus {
@@ -158,6 +166,29 @@ service Keyring {
 
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
     void CancelInit () throws (1: InvalidStatus invalid_status)
+
+    void StartReInit (1: i16 threshold)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: InvalidArguments invalid_args)
+
+    KeyringOperationStatus ConfirmReInit (1: MasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: OperationAborted operation_aborted)
+
+    EncryptedMasterKeyShares StartReInitValidation ()
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity)
+
+    KeyringOperationStatus ValidateReInit (1: MasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: OperationAborted operation_aborted)
+
+    void CancelReInit () throws (1: InvalidStatus invalid_status)
+
+    ReInitialization GetReInitState ()
 
     /** Начинает процесс блокировки */
     void StartUnlock ()
