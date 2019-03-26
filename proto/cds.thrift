@@ -167,27 +167,39 @@ service Keyring {
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
     void CancelInit () throws (1: InvalidStatus invalid_status)
 
+    /** Создать новый masterkey при наличии уже имеющегося
+     *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
+     */
     void StartReInit (1: i16 threshold)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: InvalidArguments invalid_args)
 
+    /** Подтвердить операцию создания нового masterkey
+     *  key_share - старый masterkey share в количестве threshold
+     */
     KeyringOperationStatus ConfirmReInit (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: OperationAborted operation_aborted)
 
+    /** Начать валидацию операции и получить зашиврованные masterkey share */
     EncryptedMasterKeyShares StartReInitValidation ()
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity)
 
+    /** Провалидировать расшифрованными фрагментами нового ключа
+     *  key_share - новый masterkey share в количестве num
+     */
     KeyringOperationStatus ValidateReInit (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: OperationAborted operation_aborted)
 
+    /** Отменить операцию создания нового masterkey */
     void CancelReInit () throws (1: InvalidStatus invalid_status)
 
+    /** Получить состояние операции создания нового masterkey */
     ReInitialization GetReInitState ()
 
     /** Начинает процесс блокировки */
