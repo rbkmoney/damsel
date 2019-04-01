@@ -84,7 +84,7 @@ enum Initialization {
     validation
 }
 
-enum ReInitialization {
+enum ReKeying {
     uninitialized
     confirmation
     postconfirmation
@@ -108,9 +108,15 @@ enum Status {
     locked
 }
 
+enum ActivityType {
+    initialization
+    rekeying
+    rotation
+}
+
 union Activity {
     1: Initialization initialization
-    2: ReInitialization reinitialization
+    2: ReKeying rekeying
     3: Rotation rotation
     4: Unlock unlock
 }
@@ -170,7 +176,7 @@ service Keyring {
     /** Создать новый masterkey при наличии уже имеющегося
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
      */
-    void StartReInit (1: i16 threshold)
+    void StartReKey (1: i16 threshold)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: InvalidArguments invalid_args)
@@ -178,29 +184,29 @@ service Keyring {
     /** Подтвердить операцию создания нового masterkey
      *  key_share - старый masterkey share в количестве threshold
      */
-    KeyringOperationStatus ConfirmReInit (1: MasterKeyShare key_share)
+    KeyringOperationStatus ConfirmReKey (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: OperationAborted operation_aborted)
 
     /** Начать валидацию операции и получить зашиврованные masterkey share */
-    EncryptedMasterKeyShares StartReInitValidation ()
+    EncryptedMasterKeyShares StartReKeyValidation ()
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity)
 
     /** Провалидировать расшифрованными фрагментами нового ключа
      *  key_share - новый masterkey share в количестве num
      */
-    KeyringOperationStatus ValidateReInit (1: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateReKey (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: OperationAborted operation_aborted)
 
     /** Отменить операцию создания нового masterkey */
-    void CancelReInit () throws (1: InvalidStatus invalid_status)
+    void CancelReKey () throws (1: InvalidStatus invalid_status)
 
-    /** Получить состояние операции создания нового masterkey */
-    ReInitialization GetReInitState ()
+    /** Получить состояние операции */
+    Activity GetState (1: ActivityType activity_type)
 
     /** Начинает процесс блокировки */
     void StartUnlock ()
