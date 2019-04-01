@@ -176,7 +176,7 @@ service Keyring {
     /** Создать новый masterkey при наличии уже имеющегося
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
      */
-    void StartReKey (1: i16 threshold)
+    void StartRekey (1: i16 threshold)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: InvalidArguments invalid_args)
