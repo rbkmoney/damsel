@@ -104,6 +104,7 @@ struct Invoice {
     10: required Cash cost
     11: optional InvoiceContext context
     12: optional InvoiceTemplateID template_id
+    14: optional string external_id
 }
 
 struct InvoiceDetails {
