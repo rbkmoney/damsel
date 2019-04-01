@@ -150,6 +150,7 @@ struct InvoicePayment {
     13: required InvoicePaymentFlow flow
     18: optional bool make_recurrent
     6:  optional InvoicePaymentContext context
+    19: optional string external_id
 }
 
 struct InvoicePaymentPending   {}
