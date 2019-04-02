@@ -108,18 +108,14 @@ enum Status {
     locked
 }
 
-enum ActivityType {
-    initialization
-    rekeying
-    rotation
-}
-
 union Activity {
     1: Initialization initialization
     2: ReKeying rekeying
     3: Rotation rotation
     4: Unlock unlock
 }
+
+typedef list<Activity> Activities;
 
 exception InvalidStatus {
     1: required Status status
@@ -205,8 +201,8 @@ service Keyring {
     /** Отменить операцию создания нового masterkey */
     void CancelReKey () throws (1: InvalidStatus invalid_status)
 
-    /** Получить состояние операции */
-    Activity GetState (1: ActivityType activity_type)
+    /** Получить состояние операций */
+    Activities GetStates ()
 
     /** Начинает процесс блокировки */
     void StartUnlock ()
