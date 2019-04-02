@@ -397,12 +397,16 @@ struct InvoiceParams {
     4: required base.Timestamp due
     5: required domain.Cash cost
     6: required domain.InvoiceContext context
+    7: optional domain.InvoiceID id
+    8: optional string external_id
 }
 
 struct InvoiceWithTemplateParams {
     1: required domain.InvoiceTemplateID template_id
     2: optional domain.Cash cost
     3: optional domain.InvoiceContext context
+    4: optional domain.InvoiceID id
+    5: optional string external_id
 }
 
 struct InvoiceTemplateCreateParams {
@@ -427,6 +431,8 @@ struct InvoicePaymentParams {
     1: required PayerParams payer
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
+    4: optional domain.InvoicePaymentID id
+    5: optional string external_id
 }
 
 union PayerParams {

@@ -2146,14 +2146,18 @@ struct_info('InvoiceParams') ->
     {3, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
     {4, required, string, 'due', undefined},
     {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {7, optional, string, 'id', undefined},
+    {8, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoiceWithTemplateParams') ->
     {struct, struct, [
     {1, required, string, 'template_id', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {3, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    {3, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {4, optional, string, 'id', undefined},
+    {5, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoiceTemplateCreateParams') ->
@@ -2180,7 +2184,9 @@ struct_info('InvoicePaymentParams') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined},
-    {3, optional, bool, 'make_recurrent', undefined}
+    {3, optional, bool, 'make_recurrent', undefined},
+    {4, optional, string, 'id', undefined},
+    {5, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('PayerParams') ->

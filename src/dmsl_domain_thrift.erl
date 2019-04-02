@@ -2974,7 +2974,8 @@ struct_info('Invoice') ->
     {8, required, string, 'due', undefined},
     {10, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {12, optional, string, 'template_id', undefined}
+    {12, optional, string, 'template_id', undefined},
+    {14, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoiceDetails') ->
@@ -3034,7 +3035,8 @@ struct_info('InvoicePayment') ->
     {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {18, optional, bool, 'make_recurrent', undefined},
-    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {19, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoicePaymentPending') ->

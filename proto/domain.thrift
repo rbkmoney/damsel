@@ -104,6 +104,7 @@ struct Invoice {
     10: required Cash cost
     11: optional InvoiceContext context
     12: optional InvoiceTemplateID template_id
+    14: optional string external_id
 }
 
 struct InvoiceDetails {
@@ -149,6 +150,7 @@ struct InvoicePayment {
     13: required InvoicePaymentFlow flow
     18: optional bool make_recurrent
     6:  optional InvoicePaymentContext context
+    19: optional string external_id
 }
 
 struct InvoicePaymentPending   {}

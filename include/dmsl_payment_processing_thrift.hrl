@@ -185,14 +185,18 @@
     'details' :: dmsl_domain_thrift:'InvoiceDetails'(),
     'due' :: dmsl_base_thrift:'Timestamp'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
-    'context' :: dmsl_domain_thrift:'InvoiceContext'()
+    'context' :: dmsl_domain_thrift:'InvoiceContext'(),
+    'id' :: dmsl_domain_thrift:'InvoiceID'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoiceWithTemplateParams'
 -record('payproc_InvoiceWithTemplateParams', {
     'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'(),
     'cost' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
+    'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoiceID'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoiceTemplateCreateParams'
@@ -219,7 +223,9 @@
 -record('payproc_InvoicePaymentParams', {
     'payer' :: dmsl_payment_processing_thrift:'PayerParams'(),
     'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'(),
-    'make_recurrent' :: boolean() | undefined
+    'make_recurrent' :: boolean() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoicePaymentID'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'

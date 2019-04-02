@@ -54,7 +54,8 @@
     'due' :: dmsl_base_thrift:'Timestamp'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined,
-    'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'() | undefined
+    'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoiceDetails'
@@ -106,7 +107,8 @@
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
     'make_recurrent' :: boolean() | undefined,
-    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined
+    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentPending'
