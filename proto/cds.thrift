@@ -139,7 +139,8 @@ service Keyring {
      *  Вызывается после Init и Rekey (CDS-25)
      *  key_share - MasterKeyShare в расшифрованном виде
      */
-    KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateInit (1: ShareholderId shareholder_id,
+                                         2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 // Исключения ниже переводят машину в состояние `uninitialized`
