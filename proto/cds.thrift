@@ -6,10 +6,12 @@ namespace java com.rbkmoney.damsel.cds
 /** Часть мастер-ключа */
 typedef binary MasterKeyShare;
 
+typedef string ShareholderId;
+
 /** Зашиврованная часть мастер-ключа и кому он предназначается */
 struct EncryptedMasterKeyShare {
     // Уникальный ID, для однозначного определения владения
-    1: required string id
+    1: required ShareholderId id
     // Неуникальный идентификатор с ФИО/email/etc владельца
     2: required string owner
     // Зашиврованный MasterKeyShare
@@ -137,7 +139,8 @@ service Keyring {
      *  Вызывается после Init и Rekey (CDS-25)
      *  key_share - MasterKeyShare в расшифрованном виде
      */
-    KeyringOperationStatus ValidateInit (1: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateInit (1: ShareholderId shareholder_id,
+                                         2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 // Исключения ниже переводят машину в состояние `uninitialized`
@@ -150,7 +153,8 @@ service Keyring {
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
      *  параметра threshold при создании кейринга
      */
-    KeyringOperationStatus Unlock (1: MasterKeyShare key_share)
+    KeyringOperationStatus Unlock (1: ShareholderId shareholder_id,
+                                   2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: OperationAborted operation_aborted)
 
@@ -161,7 +165,8 @@ service Keyring {
      *  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
      *  См. `Unlock`
      */
-    KeyringOperationStatus Rotate (1: MasterKeyShare key_share)
+    KeyringOperationStatus Rotate (1: ShareholderId shareholder_id,
+                                   2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: OperationAborted operation_aborted)
 
