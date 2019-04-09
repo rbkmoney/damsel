@@ -124,6 +124,8 @@ exception OperationAborted {
     1: optional string reason
 }
 
+exception VerificationFailed {}
+
 /** Интерфейс для администраторов */
 service Keyring {
 
@@ -143,8 +145,9 @@ service Keyring {
                                          2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
                 // Исключения ниже переводят машину в состояние `uninitialized`
-                3: OperationAborted operation_aborted)
+                4: OperationAborted operation_aborted)
 
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
     void CancelInit () throws (1: InvalidStatus invalid_status)
@@ -156,7 +159,8 @@ service Keyring {
     KeyringOperationStatus Unlock (1: ShareholderId shareholder_id,
                                    2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
-                2: OperationAborted operation_aborted)
+                2: VerificationFailed verification_failed,
+                3: OperationAborted operation_aborted)
 
     /** Зашифровать кейринг */
     void Lock () throws (1: InvalidStatus invalid_status)
@@ -168,7 +172,8 @@ service Keyring {
     KeyringOperationStatus Rotate (1: ShareholderId shareholder_id,
                                    2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
-                2: OperationAborted operation_aborted)
+                2: VerificationFailed verification_failed,
+                3: OperationAborted operation_aborted)
 
 }
 
