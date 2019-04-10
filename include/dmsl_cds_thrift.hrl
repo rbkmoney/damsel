@@ -55,6 +55,9 @@
     'reason' :: binary() | undefined
 }).
 
+%% exception 'IdempotencyKeyConflict'
+-record('IdempotencyKeyConflict', {}).
+
 %% exception 'CardDataNotFound'
 -record('CardDataNotFound', {}).
 

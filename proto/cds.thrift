@@ -77,6 +77,8 @@ exception InvalidCardData {
     1: optional string reason
 }
 
+exception IdempotencyKeyConflict {}
+
 exception CardDataNotFound {}
 
 exception SessionDataNotFound {}
@@ -132,6 +134,9 @@ service Storage {
 
     /** Сохранить карточные данные */
     PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data, 3: PutCardDataParams params)
-        throws (1: InvalidCardData invalid)
+        throws (
+            1: InvalidCardData invalid
+            2: IdempotencyKeyConflict conflict
+        )
 
 }

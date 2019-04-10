@@ -49,6 +49,7 @@
 ]).
 -export_type([
     'InvalidCardData'/0,
+    'IdempotencyKeyConflict'/0,
     'CardDataNotFound'/0,
     'SessionDataNotFound'/0,
     'NoKeyring'/0,
@@ -90,6 +91,7 @@
 
 -type exception_name() ::
     'InvalidCardData' |
+    'IdempotencyKeyConflict' |
     'CardDataNotFound' |
     'SessionDataNotFound' |
     'NoKeyring' |
@@ -132,6 +134,9 @@
 
 %% exception 'InvalidCardData'
 -type 'InvalidCardData'() :: #'InvalidCardData'{}.
+
+%% exception 'IdempotencyKeyConflict'
+-type 'IdempotencyKeyConflict'() :: #'IdempotencyKeyConflict'{}.
 
 %% exception 'CardDataNotFound'
 -type 'CardDataNotFound'() :: #'CardDataNotFound'{}.
@@ -321,6 +326,9 @@ struct_info('InvalidCardData') ->
     {1, optional, string, 'reason', undefined}
 ]};
 
+struct_info('IdempotencyKeyConflict') ->
+    {struct, exception, []};
+
 struct_info('CardDataNotFound') ->
     {struct, exception, []};
 
@@ -366,6 +374,9 @@ record_name('CardData') ->
 
     record_name('InvalidCardData') ->
     'InvalidCardData';
+
+    record_name('IdempotencyKeyConflict') ->
+    'IdempotencyKeyConflict';
 
     record_name('CardDataNotFound') ->
     'CardDataNotFound';
@@ -487,7 +498,8 @@ function_info('Storage', 'PutCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
     function_info('Storage', 'PutCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined},
+        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'IdempotencyKeyConflict'}}, 'conflict', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
