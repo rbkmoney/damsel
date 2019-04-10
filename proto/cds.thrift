@@ -58,6 +58,12 @@ struct SessionData {
     1: required AuthData auth_data
 }
 
+/** Дополнительные параметры метода PutCardData */
+struct PutCardDataParams {
+    /** Ключ идемпотентности */
+    1: optional string idempotency_key
+}
+
 struct Unlocked {}
 
 union UnlockStatus {
@@ -125,7 +131,7 @@ service Storage {
         throws (1: SessionDataNotFound not_found)
 
     /** Сохранить карточные данные */
-    PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data)
+    PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data, 3: PutCardDataParams params)
         throws (1: InvalidCardData invalid)
 
 }
