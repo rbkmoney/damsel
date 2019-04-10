@@ -152,29 +152,45 @@ service Keyring {
     /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
     void CancelInit () throws (1: InvalidStatus invalid_status)
 
+    /** Начинает процесс блокировки */
+    void StartUnlock ()
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity)
+
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
      *  параметра threshold при создании кейринга
      */
-    KeyringOperationStatus Unlock (1: ShareholderId shareholder_id,
-                                   2: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateUnlock (1: ShareholderId shareholder_id,
+                                           2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
-                2: VerificationFailed verification_failed,
-                3: OperationAborted operation_aborted)
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
+
+    /** Отменяет процесс блокировки */
+    void CancelUnlock () throws (1: InvalidStatus invalid_status)
 
     /** Зашифровать кейринг */
     void Lock () throws (1: InvalidStatus invalid_status)
 
-    /** Добавить новый ключ в кейринг
-     *  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
-     *  См. `Unlock`
-     */
-    KeyringOperationStatus Rotate (1: ShareholderId shareholder_id,
-                                   2: MasterKeyShare key_share)
+    /** Начать процесс добавления нового ключа в кейринг */
+    void StartRotate ()
         throws (1: InvalidStatus invalid_status,
-                2: VerificationFailed verification_failed,
-                3: OperationAborted operation_aborted)
+                2: InvalidActivity invalid_activity)
 
+    /*  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
+     *  См. `Unlock`
+     */    
+    KeyringOperationStatus ValidateRotate (1: ShareholderId shareholder_id,
+                                           2: MasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
+
+    /** Отменяет процесс добавления нового ключа в кейринг */
+    void CancelRotate () throws (1: InvalidStatus invalid_status)
 }
 
 /**
