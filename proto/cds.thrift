@@ -85,7 +85,13 @@ enum Initialization {
 }
 
 enum Rotation {
-    rotating
+    uninitialized
+    validation
+}
+
+enum Unlock {
+    uninitialized
+    validation
 }
 
 enum Status {
@@ -98,6 +104,7 @@ enum Status {
 union Activity {
     1: Initialization initialization
     2: Rotation rotation
+    3: Unlock unlock
 }
 
 exception InvalidStatus {
