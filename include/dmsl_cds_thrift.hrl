@@ -42,6 +42,11 @@
     'auth_data' :: dmsl_cds_thrift:'AuthData'()
 }).
 
+%% struct 'PutCardDataParams'
+-record('PutCardDataParams', {
+    'idempotency_key' :: binary() | undefined
+}).
+
 %% struct 'Unlocked'
 -record('Unlocked', {}).
 

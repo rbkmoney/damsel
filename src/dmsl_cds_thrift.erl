@@ -43,6 +43,7 @@
     'Auth3DS'/0,
     'AuthData'/0,
     'SessionData'/0,
+    'PutCardDataParams'/0,
     'Unlocked'/0,
     'UnlockStatus'/0
 ]).
@@ -83,6 +84,7 @@
     'Auth3DS' |
     'AuthData' |
     'SessionData' |
+    'PutCardDataParams' |
     'Unlocked' |
     'UnlockStatus'.
 
@@ -116,6 +118,9 @@
 
 %% struct 'SessionData'
 -type 'SessionData'() :: #'SessionData'{}.
+
+%% struct 'PutCardDataParams'
+-type 'PutCardDataParams'() :: #'PutCardDataParams'{}.
 
 %% struct 'Unlocked'
 -type 'Unlocked'() :: #'Unlocked'{}.
@@ -221,6 +226,7 @@ structs() ->
         'Auth3DS',
         'AuthData',
         'SessionData',
+        'PutCardDataParams',
         'Unlocked',
         'UnlockStatus'
     ].
@@ -296,6 +302,11 @@ struct_info('SessionData') ->
     {1, required, {struct, union, {dmsl_cds_thrift, 'AuthData'}}, 'auth_data', undefined}
 ]};
 
+struct_info('PutCardDataParams') ->
+    {struct, struct, [
+    {1, optional, string, 'idempotency_key', undefined}
+]};
+
 struct_info('Unlocked') ->
     {struct, struct, []};
 
@@ -346,6 +357,9 @@ record_name('CardData') ->
 
     record_name('SessionData') ->
     'SessionData';
+
+    record_name('PutCardDataParams') ->
+    'PutCardDataParams';
 
     record_name('Unlocked') ->
     'Unlocked';
@@ -466,7 +480,8 @@ function_info('Storage', 'GetSessionData', reply_type) ->
 function_info('Storage', 'PutCardData', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined},
-    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
+    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined},
+    {3, undefined, {struct, struct, {dmsl_cds_thrift, 'PutCardDataParams'}}, 'params', undefined}
 ]};
 function_info('Storage', 'PutCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
