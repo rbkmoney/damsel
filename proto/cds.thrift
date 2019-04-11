@@ -117,6 +117,44 @@ union Activity {
 
 typedef list<Activity> Activities;
 
+typedef list<string> ShareSubmitters;
+
+struct RotationStatus {
+    1: Rotation phase
+    2: i32 lifetime
+    3: ShareSubmitters submitted_shares
+}
+
+struct InitializationStatus {
+    1: Initialization phase
+    2: i32 lifetime
+    3: ShareSubmitters submitted_shares
+}
+
+struct UnlockStatus {
+    1: Unlock phase
+    2: i32 lifetime
+    3: ShareSubmitters submitted_shares
+}
+
+struct RekeyStatus {
+    1: Rekey phase
+    2: i32 lifetime
+    3: ShareSubmitters confirm_shares
+    4: ShareSubmitters validation_shares
+}
+
+struct ActivitiesState {
+    1: InitializationStatus initialization
+    2: RotationStatus rotation
+    3: UnlockStatus unlock
+}
+
+struct KeyringState {
+    1: Status status
+    2: ActivitiesState activities
+}
+
 exception InvalidStatus {
     1: required Status status
 }
@@ -202,7 +240,7 @@ service Keyring {
     void CancelReKey () throws (1: InvalidStatus invalid_status)
 
     /** Получить состояние операций */
-    Activities GetStates ()
+    KeyringState GetStates ()
 
     /** Начинает процесс блокировки */
     void StartUnlock ()
