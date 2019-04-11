@@ -241,7 +241,7 @@ service Keyring {
     void CancelReKey () throws (1: InvalidStatus invalid_status)
 
     /** Получить состояние операций */
-    KeyringState GetStates ()
+    KeyringState GetState ()
 
     /** Начинает процесс блокировки */
     void StartUnlock ()
