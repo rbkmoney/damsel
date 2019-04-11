@@ -39,17 +39,16 @@
     'ExpDate'/0,
     'CardData'/0,
     'PutCardDataResult'/0,
+    'PutCardResult'/0,
     'CardSecurityCode'/0,
     'Auth3DS'/0,
     'AuthData'/0,
     'SessionData'/0,
-    'PutCardDataParams'/0,
     'Unlocked'/0,
     'UnlockStatus'/0
 ]).
 -export_type([
     'InvalidCardData'/0,
-    'IdempotencyKeyConflict'/0,
     'CardDataNotFound'/0,
     'SessionDataNotFound'/0,
     'NoKeyring'/0,
@@ -81,17 +80,16 @@
     'ExpDate' |
     'CardData' |
     'PutCardDataResult' |
+    'PutCardResult' |
     'CardSecurityCode' |
     'Auth3DS' |
     'AuthData' |
     'SessionData' |
-    'PutCardDataParams' |
     'Unlocked' |
     'UnlockStatus'.
 
 -type exception_name() ::
     'InvalidCardData' |
-    'IdempotencyKeyConflict' |
     'CardDataNotFound' |
     'SessionDataNotFound' |
     'NoKeyring' |
@@ -107,6 +105,9 @@
 %% struct 'PutCardDataResult'
 -type 'PutCardDataResult'() :: #'PutCardDataResult'{}.
 
+%% struct 'PutCardResult'
+-type 'PutCardResult'() :: #'PutCardResult'{}.
+
 %% struct 'CardSecurityCode'
 -type 'CardSecurityCode'() :: #'CardSecurityCode'{}.
 
@@ -121,9 +122,6 @@
 %% struct 'SessionData'
 -type 'SessionData'() :: #'SessionData'{}.
 
-%% struct 'PutCardDataParams'
--type 'PutCardDataParams'() :: #'PutCardDataParams'{}.
-
 %% struct 'Unlocked'
 -type 'Unlocked'() :: #'Unlocked'{}.
 
@@ -134,9 +132,6 @@
 
 %% exception 'InvalidCardData'
 -type 'InvalidCardData'() :: #'InvalidCardData'{}.
-
-%% exception 'IdempotencyKeyConflict'
--type 'IdempotencyKeyConflict'() :: #'IdempotencyKeyConflict'{}.
 
 %% exception 'CardDataNotFound'
 -type 'CardDataNotFound'() :: #'CardDataNotFound'{}.
@@ -176,7 +171,9 @@
     'GetCardData' |
     'GetSessionCardData' |
     'GetSessionData' |
-    'PutCardData'.
+    'PutCardData' |
+    'PutCard' |
+    'PutSession'.
 
 -export_type(['Storage_service_functions'/0]).
 
@@ -227,11 +224,11 @@ structs() ->
         'ExpDate',
         'CardData',
         'PutCardDataResult',
+        'PutCardResult',
         'CardSecurityCode',
         'Auth3DS',
         'AuthData',
         'SessionData',
-        'PutCardDataParams',
         'Unlocked',
         'UnlockStatus'
     ].
@@ -285,6 +282,11 @@ struct_info('PutCardDataResult') ->
     {2, required, string, 'session_id', undefined}
 ]};
 
+struct_info('PutCardResult') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined}
+]};
+
 struct_info('CardSecurityCode') ->
     {struct, struct, [
     {1, required, string, 'value', undefined}
@@ -307,11 +309,6 @@ struct_info('SessionData') ->
     {1, required, {struct, union, {dmsl_cds_thrift, 'AuthData'}}, 'auth_data', undefined}
 ]};
 
-struct_info('PutCardDataParams') ->
-    {struct, struct, [
-    {1, optional, string, 'idempotency_key', undefined}
-]};
-
 struct_info('Unlocked') ->
     {struct, struct, []};
 
@@ -325,9 +322,6 @@ struct_info('InvalidCardData') ->
     {struct, exception, [
     {1, optional, string, 'reason', undefined}
 ]};
-
-struct_info('IdempotencyKeyConflict') ->
-    {struct, exception, []};
 
 struct_info('CardDataNotFound') ->
     {struct, exception, []};
@@ -357,6 +351,9 @@ record_name('CardData') ->
     record_name('PutCardDataResult') ->
     'PutCardDataResult';
 
+    record_name('PutCardResult') ->
+    'PutCardResult';
+
     record_name('CardSecurityCode') ->
     'CardSecurityCode';
 
@@ -366,17 +363,11 @@ record_name('CardData') ->
     record_name('SessionData') ->
     'SessionData';
 
-    record_name('PutCardDataParams') ->
-    'PutCardDataParams';
-
     record_name('Unlocked') ->
     'Unlocked';
 
     record_name('InvalidCardData') ->
     'InvalidCardData';
-
-    record_name('IdempotencyKeyConflict') ->
-    'IdempotencyKeyConflict';
 
     record_name('CardDataNotFound') ->
     'CardDataNotFound';
@@ -410,7 +401,9 @@ functions('Storage') ->
         'GetCardData',
         'GetSessionCardData',
         'GetSessionData',
-        'PutCardData'
+        'PutCardData',
+        'PutCard',
+        'PutSession'
     ];
 
 functions(_) -> error(badarg).
@@ -491,15 +484,32 @@ function_info('Storage', 'GetSessionData', reply_type) ->
 function_info('Storage', 'PutCardData', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined},
-    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined},
-    {3, undefined, {struct, struct, {dmsl_cds_thrift, 'PutCardDataParams'}}, 'params', undefined}
+    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
 ]};
 function_info('Storage', 'PutCardData', reply_type) ->
         {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
     function_info('Storage', 'PutCardData', exceptions) ->
         {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined},
-        {2, undefined, {struct, exception, {dmsl_cds_thrift, 'IdempotencyKeyConflict'}}, 'conflict', undefined}
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
     ]};
+function_info('Storage', 'PutCard', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined}
+]};
+function_info('Storage', 'PutCard', reply_type) ->
+        {struct, struct, {dmsl_cds_thrift, 'PutCardResult'}};
+    function_info('Storage', 'PutCard', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
+    ]};
+function_info('Storage', 'PutSession', params_type) ->
+    {struct, struct, [
+    {1, undefined, string, 'session_id', undefined},
+    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
+]};
+function_info('Storage', 'PutSession', reply_type) ->
+        {struct, struct, []};
+    function_info('Storage', 'PutSession', exceptions) ->
+        {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

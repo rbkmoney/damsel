@@ -26,6 +26,11 @@
     'session_id' :: dmsl_domain_thrift:'PaymentSessionID'()
 }).
 
+%% struct 'PutCardResult'
+-record('PutCardResult', {
+    'bank_card' :: dmsl_domain_thrift:'BankCard'()
+}).
+
 %% struct 'CardSecurityCode'
 -record('CardSecurityCode', {
     'value' :: binary()
@@ -42,11 +47,6 @@
     'auth_data' :: dmsl_cds_thrift:'AuthData'()
 }).
 
-%% struct 'PutCardDataParams'
--record('PutCardDataParams', {
-    'idempotency_key' :: binary() | undefined
-}).
-
 %% struct 'Unlocked'
 -record('Unlocked', {}).
 
@@ -54,9 +54,6 @@
 -record('InvalidCardData', {
     'reason' :: binary() | undefined
 }).
-
-%% exception 'IdempotencyKeyConflict'
--record('IdempotencyKeyConflict', {}).
 
 %% exception 'CardDataNotFound'
 -record('CardDataNotFound', {}).
