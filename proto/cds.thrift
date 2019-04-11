@@ -117,7 +117,7 @@ union Activity {
 
 typedef list<Activity> Activities;
 
-typedef list<string> ShareSubmitters;
+typedef list<ShareholderId> ShareSubmitters;
 
 struct RotationStatus {
     1: Rotation phase
