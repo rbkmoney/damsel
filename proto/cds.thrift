@@ -137,8 +137,8 @@ struct UnlockStatus {
     3: ShareSubmitters submitted_shares
 }
 
-struct RekeyStatus {
-    1: Rekey phase
+struct RekeyingStatus {
+    1: ReKeying phase
     2: i32 lifetime
     3: ShareSubmitters confirm_shares
     4: ShareSubmitters validation_shares
@@ -148,6 +148,7 @@ struct ActivitiesState {
     1: InitializationStatus initialization
     2: RotationStatus rotation
     3: UnlockStatus unlock
+    4: RekeyingStatus rekeying
 }
 
 struct KeyringState {
