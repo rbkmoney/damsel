@@ -84,7 +84,7 @@ enum Initialization {
     validation
 }
 
-enum ReKeying {
+enum Rekeying {
     uninitialized
     confirmation
     postconfirmation
@@ -110,7 +110,7 @@ enum Status {
 
 union Activity {
     1: Initialization initialization
-    2: ReKeying rekeying
+    2: Rekeying rekeying
     3: Rotation rotation
     4: Unlock unlock
 }
@@ -119,36 +119,38 @@ typedef list<Activity> Activities;
 
 typedef list<ShareholderId> ShareSubmitters;
 
-struct RotationStatus {
+typedef i32 Seconds;
+
+struct RotationState {
     1: Rotation phase
-    2: i32 lifetime
-    3: ShareSubmitters submitted_shares
+    2: Seconds lifetime
+    3: ShareSubmitters validation_shares
 }
 
-struct InitializationStatus {
+struct InitializationState {
     1: Initialization phase
-    2: i32 lifetime
-    3: ShareSubmitters submitted_shares
+    2: Seconds lifetime
+    3: ShareSubmitters validation_shares
 }
 
-struct UnlockStatus {
+struct UnlockState {
     1: Unlock phase
-    2: i32 lifetime
-    3: ShareSubmitters submitted_shares
+    2: Seconds lifetime
+    3: ShareSubmitters validation_shares
 }
 
-struct RekeyingStatus {
-    1: ReKeying phase
-    2: i32 lifetime
-    3: ShareSubmitters confirm_shares
+struct RekeyingState {
+    1: Rekeying phase
+    2: Seconds lifetime
+    3: ShareSubmitters confirmation_shares
     4: ShareSubmitters validation_shares
 }
 
 struct ActivitiesState {
-    1: InitializationStatus initialization
-    2: RotationStatus rotation
-    3: UnlockStatus unlock
-    4: RekeyingStatus rekeying
+    1: InitializationState initialization
+    2: RotationState rotation
+    3: UnlockState unlock
+    4: RekeyingState rekeying
 }
 
 struct KeyringState {
@@ -219,26 +221,26 @@ service Keyring {
     /** Подтвердить операцию создания нового masterkey
      *  key_share - старый masterkey share в количестве threshold
      */
-    KeyringOperationStatus ConfirmReKey (1: MasterKeyShare key_share)
+    KeyringOperationStatus ConfirmRekey (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: OperationAborted operation_aborted)
 
     /** Начать валидацию операции и получить зашиврованные masterkey share */
-    EncryptedMasterKeyShares StartReKeyValidation ()
+    EncryptedMasterKeyShares StartRekeyValidation ()
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity)
 
     /** Провалидировать расшифрованными фрагментами нового ключа
      *  key_share - новый masterkey share в количестве num
      */
-    KeyringOperationStatus ValidateReKey (1: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateRekey (1: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
                 3: OperationAborted operation_aborted)
 
     /** Отменить операцию создания нового masterkey */
-    void CancelReKey () throws (1: InvalidStatus invalid_status)
+    void CancelRekey () throws (1: InvalidStatus invalid_status)
 
     /** Получить состояние операций */
     KeyringState GetState ()
