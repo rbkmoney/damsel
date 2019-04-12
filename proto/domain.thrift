@@ -151,6 +151,7 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     6:  optional InvoicePaymentContext context
     19: optional string external_id
+    20: optional InvoiceCart cart
 }
 
 struct InvoicePaymentPending   {}
@@ -158,6 +159,7 @@ struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {
     1: optional string reason
     2: optional Cash cost
+    3: optional InvoiceCart cart
 }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
@@ -352,6 +354,7 @@ struct InvoicePaymentRefund {
     7: optional PartyRevision party_revision
     6: optional Cash cash
     5: optional string reason
+    8: optional InvoiceCart cart
 }
 
 union InvoicePaymentRefundStatus {

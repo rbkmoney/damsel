@@ -495,6 +495,11 @@ struct InvoicePaymentRefundParams {
      * Данные проведённой вручную транзакции
      */
     3: optional domain.TransactionInfo transaction_info
+    /**
+     * Корзина возврата.
+     * Используется для частичного возврата, содержит возвращаемые позиции
+     */
+    4: optional domain.InvoiceCart cart
 }
 
 /**
@@ -508,6 +513,7 @@ struct InvoicePaymentCaptureParams {
      * Если сумма не указана, то считаем, что подтверждаем полную сумму платежа.
      */
     2: optional domain.Cash cash
+    3: optional domain.InvoiceCart cart
 }
 
 /**
