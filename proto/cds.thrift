@@ -117,45 +117,47 @@ union Activity {
 
 typedef list<Activity> Activities;
 
-typedef list<ShareholderId> ShareSubmitters;
+typedef i16 ShareId
+
+typedef map<ShareId, ShareholderId> ShareSubmitters;
 
 typedef i32 Seconds;
 
 struct RotationState {
-    1: Rotation phase
-    2: Seconds lifetime
-    3: ShareSubmitters validation_shares
+    1: required Rotation phase
+    2: required Seconds lifetime
+    3: required ShareSubmitters validation_shares
 }
 
 struct InitializationState {
-    1: Initialization phase
-    2: Seconds lifetime
-    3: ShareSubmitters validation_shares
+    1: required Initialization phase
+    2: required Seconds lifetime
+    3: required ShareSubmitters validation_shares
 }
 
 struct UnlockState {
-    1: Unlock phase
-    2: Seconds lifetime
-    3: ShareSubmitters validation_shares
+    1: required Unlock phase
+    2: required Seconds lifetime
+    3: required ShareSubmitters validation_shares
 }
 
 struct RekeyingState {
-    1: Rekeying phase
-    2: Seconds lifetime
-    3: ShareSubmitters confirmation_shares
-    4: ShareSubmitters validation_shares
+    1: required Rekeying phase
+    2: required Seconds lifetime
+    3: required ShareSubmitters confirmation_shares
+    4: required ShareSubmitters validation_shares
 }
 
 struct ActivitiesState {
-    1: InitializationState initialization
-    2: RotationState rotation
-    3: UnlockState unlock
-    4: RekeyingState rekeying
+    1: required InitializationState initialization
+    2: required RotationState rotation
+    3: required UnlockState unlock
+    4: required RekeyingState rekeying
 }
 
 struct KeyringState {
-    1: Status status
-    2: ActivitiesState activities
+    1: required Status status
+    2: required ActivitiesState activities
 }
 
 exception InvalidStatus {
