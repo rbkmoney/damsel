@@ -29,6 +29,7 @@ struct StatPayment {
     15: optional string short_id
     16: optional bool make_recurrent
     17: required domain.DataRevision domain_revision
+    18: optional domain.InvoiceCart cart
 }
 
 union Payer {
@@ -300,6 +301,7 @@ struct StatRefund {
     9 : required domain.Amount fee
     10: required string currency_symbolic_code
     11: optional string reason
+    12: optional domain.InvoiceCart cart
 }
 
 union InvoicePaymentRefundStatus {
