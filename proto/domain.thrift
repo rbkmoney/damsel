@@ -1744,6 +1744,7 @@ struct Terminal {
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
     12: optional PaymentsProvisionTerms terms
+    13: optional double priority
 }
 
 union TerminalSelector {
