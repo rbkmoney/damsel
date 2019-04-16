@@ -76,6 +76,7 @@
     'Domain'/0
 ]).
 -export_type([
+    'ThreeDsVerificaion'/0,
     'OnHoldExpiration'/0,
     'RiskScore'/0,
     'ContractorIdentificationLevel'/0,
@@ -104,6 +105,7 @@
     'SubFailure'/0,
     'Cash'/0,
     'TransactionInfo'/0,
+    'AdditionalTransactionInfo'/0,
     'Invoice'/0,
     'InvoiceDetails'/0,
     'InvoiceCart'/0,
@@ -446,6 +448,7 @@
 %% enums
 %%
 -type enum_name() ::
+    'ThreeDsVerificaion' |
     'OnHoldExpiration' |
     'RiskScore' |
     'ContractorIdentificationLevel' |
@@ -465,6 +468,13 @@
     'CashFlowConstant' |
     'RoundingMethod' |
     'PaymentInstitutionRealm'.
+
+%% enum 'ThreeDsVerificaion'
+-type 'ThreeDsVerificaion'() ::
+    'authentication_successful' |
+    'attempts_processing_performed' |
+    'authentication_failed' |
+    'authentication_could_not_be_performed'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
@@ -837,6 +847,7 @@
     'SubFailure' |
     'Cash' |
     'TransactionInfo' |
+    'AdditionalTransactionInfo' |
     'Invoice' |
     'InvoiceDetails' |
     'InvoiceCart' |
@@ -1106,6 +1117,9 @@
 
 %% struct 'TransactionInfo'
 -type 'TransactionInfo'() :: #'domain_TransactionInfo'{}.
+
+%% struct 'AdditionalTransactionInfo'
+-type 'AdditionalTransactionInfo'() :: #'domain_AdditionalTransactionInfo'{}.
 
 %% struct 'Invoice'
 -type 'Invoice'() :: #'domain_Invoice'{}.
@@ -2041,6 +2055,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
+    'ThreeDsVerificaion'() |
     'OnHoldExpiration'() |
     'RiskScore'() |
     'ContractorIdentificationLevel'() |
@@ -2118,6 +2133,7 @@ typedefs() ->
 
 enums() ->
     [
+        'ThreeDsVerificaion',
         'OnHoldExpiration',
         'RiskScore',
         'ContractorIdentificationLevel',
@@ -2150,6 +2166,7 @@ structs() ->
         'SubFailure',
         'Cash',
         'TransactionInfo',
+        'AdditionalTransactionInfo',
         'Invoice',
         'InvoiceDetails',
         'InvoiceCart',
@@ -2537,6 +2554,14 @@ typedef_info('Domain') ->
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('ThreeDsVerificaion') ->
+    {enum, [
+        {'authentication_successful', 0},
+        {'attempts_processing_performed', 1},
+        {'authentication_failed', 2},
+        {'authentication_could_not_be_performed', 3}
+    ]};
 
 enum_info('OnHoldExpiration') ->
     {enum, [
@@ -2959,7 +2984,24 @@ struct_info('TransactionInfo') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
     {2, optional, string, 'timestamp', undefined},
-    {3, required, {map, string, string}, 'extra', undefined}
+    {3, required, {map, string, string}, 'extra', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_info', undefined}
+]};
+
+struct_info('AdditionalTransactionInfo') ->
+    {struct, struct, [
+    {1, optional, string, 'rrn', undefined},
+    {2, optional, string, 'approval_code', undefined},
+    {3, optional, string, 'acs_url', undefined},
+    {4, optional, string, 'pareq', undefined},
+    {5, optional, string, 'md', undefined},
+    {6, optional, string, 'term_url', undefined},
+    {7, optional, string, 'pares', undefined},
+    {8, optional, string, 'eci', undefined},
+    {9, optional, string, 'cavv', undefined},
+    {10, optional, string, 'xid', undefined},
+    {11, optional, string, 'cavv_algorithm', undefined},
+    {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerificaion'}}, 'three_ds_verificaion', undefined}
 ]};
 
 struct_info('Invoice') ->
@@ -4612,6 +4654,9 @@ record_name('OperationTimeout') ->
 
     record_name('TransactionInfo') ->
     'domain_TransactionInfo';
+
+    record_name('AdditionalTransactionInfo') ->
+    'domain_AdditionalTransactionInfo';
 
     record_name('Invoice') ->
     'domain_Invoice';

@@ -39,7 +39,24 @@
 -record('domain_TransactionInfo', {
     'id' :: binary(),
     'timestamp' :: dmsl_base_thrift:'Timestamp'() | undefined,
-    'extra' :: dmsl_base_thrift:'StringMap'()
+    'extra' :: dmsl_base_thrift:'StringMap'(),
+    'additional_info' :: dmsl_domain_thrift:'AdditionalTransactionInfo'() | undefined
+}).
+
+%% struct 'AdditionalTransactionInfo'
+-record('domain_AdditionalTransactionInfo', {
+    'rrn' :: binary() | undefined,
+    'approval_code' :: binary() | undefined,
+    'acs_url' :: binary() | undefined,
+    'pareq' :: binary() | undefined,
+    'md' :: binary() | undefined,
+    'term_url' :: binary() | undefined,
+    'pares' :: binary() | undefined,
+    'eci' :: binary() | undefined,
+    'cavv' :: binary() | undefined,
+    'xid' :: binary() | undefined,
+    'cavv_algorithm' :: binary() | undefined,
+    'three_ds_verificaion' :: dmsl_domain_thrift:'ThreeDsVerificaion'() | undefined
 }).
 
 %% struct 'Invoice'
