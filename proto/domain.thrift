@@ -78,6 +78,32 @@ struct TransactionInfo {
     1: required string id
     2: optional base.Timestamp timestamp
     3: required base.StringMap extra
+    4: optional AdditionalTransactionInfo additional_info
+}
+
+struct AdditionalTransactionInfo {
+    1: optional string rrn // Retrieval Reference Number
+    2: optional string approval_code // Authorization Approval Code
+    3: optional string acs_url // Issuer Access Control Server (ACS)
+    4: optional string pareq // Payer Authentication Request (PAReq)
+    5: optional string md // Merchant Data
+    6: optional string term_url // Upon success term_url callback is called with following form encoded params
+    7: optional string pares // Payer Authentication Response (PARes)
+    8: optional string eci // Electronic Commerce Indicator
+    9: optional string cavv // Cardholder Authentication Verification Value
+    10: optional string xid // 3D Secure transaction identifier
+    11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
+    12: optional ThreeDsVerificaion three_ds_verificaion
+}
+
+/**
+* Issuer Authentication Results Values
+**/
+enum ThreeDsVerificaion {
+    authentication_successful // Y
+    attempts_processing_performed // A
+    authentication_failed // N
+    authentication_could_not_be_performed // U
 }
 
 /* Invoices */
