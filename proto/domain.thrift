@@ -82,26 +82,26 @@ struct TransactionInfo {
 }
 
 struct AdditionalTransactionInfo {
-    1: optional string rrn
-    2: optional string approval_code
-    3: optional string acs_url
-    4: optional string pareq
-    5: optional string merchant_data // MD
-    6: optional string term_url
-    7: optional string pares
-    8: optional string eci
-    9: optional string cavv
-    10: optional string xid
-    11: optional string cavv_algorithm
+    1: optional string rrn // Retrieval Reference Number
+    2: optional string approval_code // Authorization Approval Code
+    3: optional string acs_url // Issuer Access Control Server (ACS)
+    4: optional string pareq // Payer Authentication Request (PAReq)
+    5: optional string md // Merchant Data
+    6: optional string term_url // Upon success term_url callback is called with following form encoded params
+    7: optional string pares // Payer Authentication Response (PARes)
+    8: optional string eci // Electronic Commerce Indicator
+    9: optional string cavv // Cardholder Authentication Verification Value
+    10: optional string xid // Include the 3D Secure transaction identifier
+    11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
 
     /**
-    * Result 3ds verification: Y, N, U, A, ""
-    * Y - auth_successful
-    * A - attempts_performed
-    * N - auth_failed
-    * U - auth_error
+    * Issuer Authentication Results Values:
+    * Y - Authentication Successful
+    * A - Attempts Processing Performed
+    * N - Authentication Failed
+    * U - Authentication Could Not Be Performed
     **/
-    12: optional string three_ds_verificaion //
+    12: optional string three_ds_verificaion
 }
 
 /* Invoices */
