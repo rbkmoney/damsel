@@ -84,15 +84,24 @@ struct TransactionInfo {
 struct AdditionalTransactionInfo {
     1: optional string rrn
     2: optional string approval_code
-    3: optional string acs
+    3: optional string acs_url
     4: optional string pareq
-    5: optional string md
+    5: optional string merchant_data // MD
     6: optional string term_url
     7: optional string pares
     8: optional string eci
     9: optional string cavv
     10: optional string xid
-    11: optional string cavvAlgorithm
+    11: optional string cavv_algorithm
+
+    /**
+    * Result 3ds verification: Y, N, U, A, ""
+    * Y - auth_successful
+    * A - attempts_performed
+    * N - auth_failed
+    * U - auth_error
+    **/
+    12: optional string three_ds_verificaion //
 }
 
 /* Invoices */
