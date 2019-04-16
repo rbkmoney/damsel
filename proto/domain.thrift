@@ -91,17 +91,19 @@ struct AdditionalTransactionInfo {
     7: optional string pares // Payer Authentication Response (PARes)
     8: optional string eci // Electronic Commerce Indicator
     9: optional string cavv // Cardholder Authentication Verification Value
-    10: optional string xid // Include the 3D Secure transaction identifier
+    10: optional string xid // 3D Secure transaction identifier
     11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
+    12: optional ThreeDsVerificaion three_ds_verificaion
+}
 
-    /**
-    * Issuer Authentication Results Values:
-    * Y - Authentication Successful
-    * A - Attempts Processing Performed
-    * N - Authentication Failed
-    * U - Authentication Could Not Be Performed
-    **/
-    12: optional string three_ds_verificaion
+/**
+* Issuer Authentication Results Values
+**/
+enum ThreeDsVerificaion {
+    authentication_successful // Y
+    attempts_processing_performed // A
+    authentication_failed // N
+    authentication_could_not_be_performed // U
 }
 
 /* Invoices */
