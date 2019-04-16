@@ -78,6 +78,21 @@ struct TransactionInfo {
     1: required string id
     2: optional base.Timestamp timestamp
     3: required base.StringMap extra
+    4: optional AdditionalTransactionInfo additional_info
+}
+
+struct AdditionalTransactionInfo {
+    1: optional string rrn
+    2: optional string approval_code
+    3: optional string acs
+    4: optional string pareq
+    5: optional string md
+    6: optional string term_url
+    7: optional string pares
+    8: optional string eci
+    9: optional string cavv
+    10: optional string xid
+    11: optional string cavvAlgorithm
 }
 
 /* Invoices */
