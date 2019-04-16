@@ -223,10 +223,12 @@ service Keyring {
     /** Подтвердить операцию создания нового masterkey
      *  key_share - старый masterkey share в количестве threshold
      */
-    KeyringOperationStatus ConfirmRekey (1: MasterKeyShare key_share)
+    KeyringOperationStatus ConfirmRekey (1: ShareholderId shareholder_id,
+                                         2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
-                3: OperationAborted operation_aborted)
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
 
     /** Начать валидацию операции и получить зашиврованные masterkey share */
     EncryptedMasterKeyShares StartRekeyValidation ()
@@ -236,10 +238,12 @@ service Keyring {
     /** Провалидировать расшифрованными фрагментами нового ключа
      *  key_share - новый masterkey share в количестве num
      */
-    KeyringOperationStatus ValidateRekey (1: MasterKeyShare key_share)
+    KeyringOperationStatus ValidateRekey (1: ShareholderId shareholder_id,
+                                          2: MasterKeyShare key_share)
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity,
-                3: OperationAborted operation_aborted)
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
 
     /** Отменить операцию создания нового masterkey */
     void CancelRekey () throws (1: InvalidStatus invalid_status)
