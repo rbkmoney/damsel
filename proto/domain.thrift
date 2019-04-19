@@ -93,13 +93,13 @@ struct AdditionalTransactionInfo {
     9: optional string cavv // Cardholder Authentication Verification Value
     10: optional string xid // 3D Secure transaction identifier
     11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
-    12: optional ThreeDsVerificaion three_ds_verificaion
+    12: optional ThreeDsVerification three_ds_verification
 }
 
 /**
 * Issuer Authentication Results Values
 **/
-enum ThreeDsVerificaion {
+enum ThreeDsVerification {
     authentication_successful // Y
     attempts_processing_performed // A
     authentication_failed // N
