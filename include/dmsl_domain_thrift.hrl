@@ -56,7 +56,7 @@
     'cavv' :: binary() | undefined,
     'xid' :: binary() | undefined,
     'cavv_algorithm' :: binary() | undefined,
-    'three_ds_verificaion' :: dmsl_domain_thrift:'ThreeDsVerificaion'() | undefined
+    'three_ds_verification' :: dmsl_domain_thrift:'ThreeDsVerification'() | undefined
 }).
 
 %% struct 'Invoice'

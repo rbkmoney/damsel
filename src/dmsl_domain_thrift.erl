@@ -76,7 +76,7 @@
     'Domain'/0
 ]).
 -export_type([
-    'ThreeDsVerificaion'/0,
+    'ThreeDsVerification'/0,
     'OnHoldExpiration'/0,
     'RiskScore'/0,
     'ContractorIdentificationLevel'/0,
@@ -448,7 +448,7 @@
 %% enums
 %%
 -type enum_name() ::
-    'ThreeDsVerificaion' |
+    'ThreeDsVerification' |
     'OnHoldExpiration' |
     'RiskScore' |
     'ContractorIdentificationLevel' |
@@ -469,8 +469,8 @@
     'RoundingMethod' |
     'PaymentInstitutionRealm'.
 
-%% enum 'ThreeDsVerificaion'
--type 'ThreeDsVerificaion'() ::
+%% enum 'ThreeDsVerification'
+-type 'ThreeDsVerification'() ::
     'authentication_successful' |
     'attempts_processing_performed' |
     'authentication_failed' |
@@ -2055,7 +2055,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
-    'ThreeDsVerificaion'() |
+    'ThreeDsVerification'() |
     'OnHoldExpiration'() |
     'RiskScore'() |
     'ContractorIdentificationLevel'() |
@@ -2133,7 +2133,7 @@ typedefs() ->
 
 enums() ->
     [
-        'ThreeDsVerificaion',
+        'ThreeDsVerification',
         'OnHoldExpiration',
         'RiskScore',
         'ContractorIdentificationLevel',
@@ -2555,7 +2555,7 @@ typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
 
-enum_info('ThreeDsVerificaion') ->
+enum_info('ThreeDsVerification') ->
     {enum, [
         {'authentication_successful', 0},
         {'attempts_processing_performed', 1},
@@ -3001,7 +3001,7 @@ struct_info('AdditionalTransactionInfo') ->
     {9, optional, string, 'cavv', undefined},
     {10, optional, string, 'xid', undefined},
     {11, optional, string, 'cavv_algorithm', undefined},
-    {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerificaion'}}, 'three_ds_verificaion', undefined}
+    {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerification'}}, 'three_ds_verification', undefined}
 ]};
 
 struct_info('Invoice') ->
