@@ -730,7 +730,7 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        4: string reason
+        4: InvoicePaymentCaptureParams params
     )
         throws (
             1: InvalidUser ex1,
@@ -740,7 +740,9 @@ service Invoicing {
             5: base.InvalidRequest ex5,
             6: OperationNotPermitted ex6,
             7: InvalidPartyStatus ex7,
-            8: InvalidShopStatus ex8
+            8: InvalidShopStatus ex8,
+            9: InconsistentCaptureCurrency ex9,
+            10: AmountExceededCaptureBalance ex10
         )
 
     void CapturePaymentNew (
