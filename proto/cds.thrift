@@ -125,25 +125,25 @@ typedef i32 Seconds;
 
 struct RotationState {
     1: required Rotation phase
-    2: required Seconds lifetime
+    2: optional Seconds lifetime
     3: required ShareSubmitters validation_shares
 }
 
 struct InitializationState {
     1: required Initialization phase
-    2: required Seconds lifetime
+    2: optional Seconds lifetime
     3: required ShareSubmitters validation_shares
 }
 
 struct UnlockState {
     1: required Unlock phase
-    2: required Seconds lifetime
+    2: optional Seconds lifetime
     3: required ShareSubmitters validation_shares
 }
 
 struct RekeyingState {
     1: required Rekeying phase
-    2: required Seconds lifetime
+    2: optional Seconds lifetime
     3: required ShareSubmitters confirmation_shares
     4: required ShareSubmitters validation_shares
 }
