@@ -8,13 +8,13 @@ typedef binary MasterKeyShare;
 
 typedef string ShareholderId;
 
-/** Зашиврованная часть мастер-ключа и кому он предназначается */
+/** Зашифрованная часть мастер-ключа и кому он предназначается */
 struct EncryptedMasterKeyShare {
     // Уникальный ID, для однозначного определения владения
     1: required ShareholderId id
     // Неуникальный идентификатор с ФИО/email/etc владельца
     2: required string owner
-    // Зашиврованный MasterKeyShare
+    // Зашифрованный MasterKeyShare
     3: required binary encrypted_share
 }
 
@@ -230,7 +230,7 @@ service Keyring {
                 3: VerificationFailed verification_failed,
                 4: OperationAborted operation_aborted)
 
-    /** Начать валидацию операции и получить зашиврованные masterkey share */
+    /** Начать валидацию операции и получить Зашифрованные masterkey share */
     EncryptedMasterKeyShares StartRekeyValidation ()
         throws (1: InvalidStatus invalid_status,
                 2: InvalidActivity invalid_activity)
