@@ -37,6 +37,7 @@
     'LimitExceeded'/0,
     'PaymentToolReject'/0,
     'BankCardReject'/0,
+    'NoRouteFoundFailure'/0,
     'GeneralFailure'/0
 ]).
 
@@ -62,6 +63,7 @@
     'LimitExceeded' |
     'PaymentToolReject' |
     'BankCardReject' |
+    'NoRouteFoundFailure' |
     'GeneralFailure'.
 
 -type exception_name() :: none().
@@ -71,7 +73,7 @@
     {'rejected_by_inspector', 'GeneralFailure'()} |
     {'preauthorization_failed', 'GeneralFailure'()} |
     {'authorization_failed', 'AuthorizationFailure'()} |
-    {'no_route_found', 'GeneralFailure'()}.
+    {'no_route_found', 'NoRouteFoundFailure'()}.
 
 %% union 'AuthorizationFailure'
 -type 'AuthorizationFailure'() ::
@@ -108,6 +110,11 @@
     {'card_holder_invalid', 'GeneralFailure'()} |
     {'cvv_invalid', 'GeneralFailure'()} |
     {'issuer_not_found', 'GeneralFailure'()}.
+
+%% union 'NoRouteFoundFailure'
+-type 'NoRouteFoundFailure'() ::
+    {'unknown', 'GeneralFailure'()} |
+    {'risk_score_is_too_high', 'GeneralFailure'()}.
 
 %% struct 'GeneralFailure'
 -type 'GeneralFailure'() :: #'payprocerr_GeneralFailure'{}.
@@ -165,6 +172,7 @@ structs() ->
         'LimitExceeded',
         'PaymentToolReject',
         'BankCardReject',
+        'NoRouteFoundFailure',
         'GeneralFailure'
     ].
 
@@ -193,7 +201,7 @@ struct_info('PaymentFailure') ->
     {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'rejected_by_inspector', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'preauthorization_failed', undefined},
     {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'no_route_found', undefined}
+    {4, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'NoRouteFoundFailure'}}, 'no_route_found', undefined}
 ]};
 
 struct_info('AuthorizationFailure') ->
@@ -234,6 +242,12 @@ struct_info('BankCardReject') ->
     {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'card_holder_invalid', undefined},
     {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'cvv_invalid', undefined},
     {7, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'issuer_not_found', undefined}
+]};
+
+struct_info('NoRouteFoundFailure') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'risk_score_is_too_high', undefined}
 ]};
 
 struct_info('GeneralFailure') ->
