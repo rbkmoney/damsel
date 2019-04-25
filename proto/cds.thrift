@@ -45,6 +45,10 @@ struct PutCardDataResult {
     2: required domain.PaymentSessionID session_id
 }
 
+struct PutCardResult {
+    1: required domain.BankCard bank_card
+}
+
 /** Код проверки подлинности банковской карты */
 struct CardSecurityCode {
     /** Код верификации [0-9]{3,4} */
@@ -312,8 +316,19 @@ service Storage {
     SessionData GetSessionData (1: domain.PaymentSessionID session_id)
         throws (1: SessionDataNotFound not_found)
 
-    /** Сохранить карточные данные */
+    /** Сохранить карточные и сессионные данные */
     PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data)
-        throws (1: InvalidCardData invalid)
+        throws (
+            1: InvalidCardData invalid
+        )
+
+    /** Сохранить карточные данные */
+    PutCardResult PutCard (1: CardData card_data)
+        throws (
+            1: InvalidCardData invalid
+        )
+
+    /** Сохранить сессионные данные */
+    void PutSession (1: domain.PaymentSessionID session_id, 2: SessionData session_data)
 
 }
