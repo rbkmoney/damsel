@@ -6,6 +6,13 @@
 
 
 
+%% struct 'EncryptedMasterKeyShare'
+-record('EncryptedMasterKeyShare', {
+    'id' :: dmsl_cds_thrift:'ShareholderId'(),
+    'owner' :: binary(),
+    'encrypted_share' :: binary()
+}).
+
 %% struct 'ExpDate'
 -record('ExpDate', {
     'month' :: integer(),
@@ -47,8 +54,61 @@
     'auth_data' :: dmsl_cds_thrift:'AuthData'()
 }).
 
-%% struct 'Unlocked'
--record('Unlocked', {}).
+%% struct 'Success'
+-record('Success', {}).
+
+%% struct 'RotationState'
+-record('RotationState', {
+    'phase' :: atom(),
+    'lifetime' :: dmsl_cds_thrift:'Seconds'() | undefined,
+    'confirmation_shares' :: dmsl_cds_thrift:'ShareSubmitters'()
+}).
+
+%% struct 'InitializationState'
+-record('InitializationState', {
+    'phase' :: atom(),
+    'lifetime' :: dmsl_cds_thrift:'Seconds'() | undefined,
+    'validation_shares' :: dmsl_cds_thrift:'ShareSubmitters'()
+}).
+
+%% struct 'UnlockState'
+-record('UnlockState', {
+    'phase' :: atom(),
+    'lifetime' :: dmsl_cds_thrift:'Seconds'() | undefined,
+    'confirmation_shares' :: dmsl_cds_thrift:'ShareSubmitters'()
+}).
+
+%% struct 'RekeyingState'
+-record('RekeyingState', {
+    'phase' :: atom(),
+    'lifetime' :: dmsl_cds_thrift:'Seconds'() | undefined,
+    'confirmation_shares' :: dmsl_cds_thrift:'ShareSubmitters'(),
+    'validation_shares' :: dmsl_cds_thrift:'ShareSubmitters'()
+}).
+
+%% struct 'ActivitiesState'
+-record('ActivitiesState', {
+    'initialization' :: dmsl_cds_thrift:'InitializationState'(),
+    'rotation' :: dmsl_cds_thrift:'RotationState'(),
+    'unlock' :: dmsl_cds_thrift:'UnlockState'(),
+    'rekeying' :: dmsl_cds_thrift:'RekeyingState'()
+}).
+
+%% struct 'KeyringState'
+-record('KeyringState', {
+    'status' :: atom(),
+    'activities' :: dmsl_cds_thrift:'ActivitiesState'()
+}).
+
+%% exception 'InvalidStatus'
+-record('InvalidStatus', {
+    'status' :: atom()
+}).
+
+%% exception 'InvalidActivity'
+-record('InvalidActivity', {
+    'activity' :: dmsl_cds_thrift:'Activity'()
+}).
 
 %% exception 'InvalidCardData'
 -record('InvalidCardData', {
@@ -61,13 +121,17 @@
 %% exception 'SessionDataNotFound'
 -record('SessionDataNotFound', {}).
 
-%% exception 'NoKeyring'
--record('NoKeyring', {}).
+%% exception 'InvalidArguments'
+-record('InvalidArguments', {
+    'reason' :: binary() | undefined
+}).
 
-%% exception 'KeyringLocked'
--record('KeyringLocked', {}).
+%% exception 'OperationAborted'
+-record('OperationAborted', {
+    'reason' :: binary() | undefined
+}).
 
-%% exception 'KeyringExists'
--record('KeyringExists', {}).
+%% exception 'VerificationFailed'
+-record('VerificationFailed', {}).
 
 -endif.
