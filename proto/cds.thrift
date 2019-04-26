@@ -3,7 +3,7 @@ include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.cds
 
-/** Часть мастер-ключа */
+/** Часть мастер-ключа в виде JWS */
 typedef binary SignedMasterKeyShare;
 
 typedef string ShareholderId;
@@ -203,7 +203,7 @@ service Keyring {
 
     /** Валидирует и завершает операцию над Keyring
      *  Вызывается после Init и Rekey (CDS-25)
-     *  key_share - SignedMasterKeyShare в расшифрованном виде
+     *  key_share - SignedMasterKeyShare в виде JWS
      */
     KeyringOperationStatus ValidateInit (1: ShareholderId shareholder_id,
                                          2: SignedMasterKeyShare key_share)
