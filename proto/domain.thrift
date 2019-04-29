@@ -1314,7 +1314,7 @@ union PaymentMethod {
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
-    6: WalletCryptoProvider wallet_crypto_provider
+    6: CryptoWalletProvider crypto_wallet_provider
 }
 
 struct TokenizedBankCard {
@@ -1353,6 +1353,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: CryptoWallet crypto_wallet
 }
 
 struct DisposablePaymentResource {
@@ -1430,7 +1431,11 @@ struct PaymentMethodDecision {
     2: required PaymentMethodSelector then_
 }
 
-enum WalletCryptoProvider {
+struct CryptoWallet {
+    1: required CryptoWalletProvider crypto_wallet_provider
+}
+
+enum CryptoWalletProvider {
     bitcoin
     litecoin
     bitcoin_cash

@@ -14,7 +14,7 @@ typedef map<string, Template> Form
 
 typedef base.ID WalletID
 typedef domain.Amount Amount
-typedef domain.WalletCryptoProvider WalletCryptoProvider
+typedef domain.CryptoWalletProvider CryptoWalletProvider
 typedef domain.CurrencySymbolicCode CurrencySymbolicCode
 typedef i64 OrderID
 /**
@@ -50,9 +50,8 @@ struct CryptoCurrencyInvoiceResult {
     1: required WalletID wallet_id
     2: required double crypto_currency_amount
     3: required Amount amount
-    4: required WalletCryptoProvider wallet_crypto_provider
+    4: required CryptoWalletProvider crypto_wallet_provider
     5: required CurrencySymbolicCode currency_symbolic_code
-    6: optional string sci_name
     7: optional OrderID order_id
     8: optional string note
 }
