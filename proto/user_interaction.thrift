@@ -1,5 +1,6 @@
 namespace java com.rbkmoney.damsel.user_interaction
 include "base.thrift"
+include "domain.thrift"
 
 /**
  * Строковый шаблон согласно [RFC6570](https://tools.ietf.org/html/rfc6570) Level 4.
@@ -11,6 +12,11 @@ typedef string Template
  */
 typedef map<string, Template> Form
 
+typedef base.ID WalletID
+typedef domain.Amount Amount
+typedef domain.WalletCryptoProvider WalletCryptoProvider
+typedef domain.CurrencySymbolicCode CurrencySymbolicCode
+typedef i64 OrderID
 /**
  * Запрос HTTP, пригодный для отправки средствами браузера.
  */
@@ -38,8 +44,18 @@ struct PaymentTerminalReceipt  {
     // Дата истечения срока платежа
     // после этой даты платеж будет отклонен
     2: required base.Timestamp due
-   }
+}
 
+struct CryptoCurrencyInvoiceResult {
+    1: required WalletID wallet_id
+    2: required double crypto_currency_amount
+    3: required Amount amount
+    4: required WalletCryptoProvider wallet_crypto_provider
+    5: required CurrencySymbolicCode currency_symbolic_code
+    6: optional string sci_name
+    7: optional OrderID order_id
+    8: optional string note
+}
 
 union UserInteraction {
     /**
@@ -56,4 +72,6 @@ union UserInteraction {
     * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
     **/
     2: PaymentTerminalReceipt payment_terminal_reciept
+
+    3: CryptoCurrencyInvoiceResult crypto_currency_invoice_result
 }
