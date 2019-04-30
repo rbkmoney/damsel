@@ -2186,7 +2186,8 @@ struct_info('InvoicePaymentParams') ->
     {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined},
     {3, optional, bool, 'make_recurrent', undefined},
     {4, optional, string, 'id', undefined},
-    {5, optional, string, 'external_id', undefined}
+    {5, optional, string, 'external_id', undefined},
+    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
 ]};
 
 struct_info('PayerParams') ->

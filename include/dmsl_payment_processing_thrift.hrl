@@ -225,7 +225,8 @@
     'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'(),
     'make_recurrent' :: boolean() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'
