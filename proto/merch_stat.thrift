@@ -182,6 +182,16 @@ struct StatInvoice {
     12: optional domain.InvoiceCart cart
 }
 
+struct StatInvoiceWithPayments {
+    1: required StatInvoice invoice
+    2: required list<StatPayment> payments
+}
+
+struct StatPaymentWithRefunds {
+    1: required StatPayment payment
+    2: required list<StatRefund> refunds
+}
+
 struct InvoiceUnpaid    {}
 struct InvoicePaid      { 1: optional base.Timestamp at }
 struct InvoiceCancelled {
@@ -354,6 +364,8 @@ union StatResponseData {
     4: list<StatInfo> records
     5: list<StatPayout> payouts
     6: list<StatRefund> refunds
+    7: list<StatInvoiceWithPayments> invoices_with_payments
+    8: list<StatPaymentWithRefunds> payments_with_refunds
 }
 
 /**
