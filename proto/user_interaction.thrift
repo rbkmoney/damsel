@@ -49,9 +49,9 @@ struct PaymentTerminalReceipt  {
 
 struct CryptoCurrencyInvoiceResult {
     1: required WalletID wallet_id
-    2: required double crypto_currency_amount
+    2: required Rational crypto_currency_amount
     3: required CryptoWalletProvider crypto_wallet_provider
-    4: required Rational amount
+    4: required Amount amount
     5: required CurrencySymbolicCode currency_symbolic_code
     7: optional OrderID order_id
     8: optional string note
