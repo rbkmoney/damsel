@@ -1374,6 +1374,25 @@ struct BankCard {
     9: optional bool is_cvv_empty
 }
 
+struct EWallet {
+    1: required string receiver
+    2: required string ecurrency
+    3: required string description
+    4: required EWalletSystem ewallets_ystem
+}
+
+enum EWalletSystem {
+    BITCOIN_BTC
+    LITECOIN_LTC
+    BITCOIN_CASH_BCH
+    RIPPLE_XRP
+    ETHEREUM_ETH
+    ZCASH_ZEC
+    QIWI_PAYMENT_SYSTEM
+    YANDEX_MONEY_SYSTEM
+}
+
+
 /** Платеж через терминал **/
 struct PaymentTerminal {
     1: required TerminalPaymentProvider terminal_type
