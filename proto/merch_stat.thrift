@@ -182,7 +182,7 @@ struct StatInvoice {
     12: optional domain.InvoiceCart cart
 }
 
-struct StatInvoiceWithPaymentsAndRefunds {
+struct EntrichedStatInvoice {
     1: required StatInvoice invoice
     2: required list<StatPayment> payments
     3: required list<StatRefund> refunds
@@ -360,7 +360,7 @@ union StatResponseData {
     4: list<StatInfo> records
     5: list<StatPayout> payouts
     6: list<StatRefund> refunds
-    7: list<StatInvoiceWithPaymentsAndRefunds> invoices_payments_refunds
+    7: list<EntrichedStatInvoice> enriched_invoices
 }
 
 /**
