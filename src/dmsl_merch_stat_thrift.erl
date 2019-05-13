@@ -71,6 +71,7 @@
     'InternationalBankAccount'/0,
     'InternationalBankDetails'/0,
     'StatInvoice'/0,
+    'EnrichedStatInvoice'/0,
     'InvoiceUnpaid'/0,
     'InvoicePaid'/0,
     'InvoiceCancelled'/0,
@@ -178,6 +179,7 @@
     'InternationalBankAccount' |
     'InternationalBankDetails' |
     'StatInvoice' |
+    'EnrichedStatInvoice' |
     'InvoiceUnpaid' |
     'InvoicePaid' |
     'InvoiceCancelled' |
@@ -303,6 +305,9 @@
 %% struct 'StatInvoice'
 -type 'StatInvoice'() :: #'merchstat_StatInvoice'{}.
 
+%% struct 'EnrichedStatInvoice'
+-type 'EnrichedStatInvoice'() :: #'merchstat_EnrichedStatInvoice'{}.
+
 %% struct 'InvoiceUnpaid'
 -type 'InvoiceUnpaid'() :: #'merchstat_InvoiceUnpaid'{}.
 
@@ -404,7 +409,8 @@
     {'customers', ['StatCustomer'()]} |
     {'records', ['StatInfo'()]} |
     {'payouts', ['StatPayout'()]} |
-    {'refunds', ['StatRefund'()]}.
+    {'refunds', ['StatRefund'()]} |
+    {'enriched_invoices', ['EnrichedStatInvoice'()]}.
 
 %% exception 'BadToken'
 -type 'BadToken'() :: #'merchstat_BadToken'{}.
@@ -509,6 +515,7 @@ structs() ->
         'InternationalBankAccount',
         'InternationalBankDetails',
         'StatInvoice',
+        'EnrichedStatInvoice',
         'InvoiceUnpaid',
         'InvoicePaid',
         'InvoiceCancelled',
@@ -788,6 +795,13 @@ struct_info('StatInvoice') ->
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
+struct_info('EnrichedStatInvoice') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}, 'invoice', undefined},
+    {2, required, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayment'}}}, 'payments', undefined},
+    {3, required, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
+]};
+
 struct_info('InvoiceUnpaid') ->
     {struct, struct, []};
 
@@ -961,7 +975,8 @@ struct_info('StatResponseData') ->
     {3, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatCustomer'}}}, 'customers', undefined},
     {4, optional, {list, {map, string, string}}, 'records', undefined},
     {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
-    {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
+    {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined},
+    {7, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'EnrichedStatInvoice'}}}, 'enriched_invoices', undefined}
 ]};
 
 struct_info('BadToken') ->
@@ -1035,6 +1050,9 @@ record_name('RecurrentParentPayment') ->
 
     record_name('StatInvoice') ->
     'merchstat_StatInvoice';
+
+    record_name('EnrichedStatInvoice') ->
+    'merchstat_EnrichedStatInvoice';
 
     record_name('InvoiceUnpaid') ->
     'merchstat_InvoiceUnpaid';

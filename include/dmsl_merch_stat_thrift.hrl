@@ -162,6 +162,13 @@
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
+%% struct 'EnrichedStatInvoice'
+-record('merchstat_EnrichedStatInvoice', {
+    'invoice' :: dmsl_merch_stat_thrift:'StatInvoice'(),
+    'payments' :: [dmsl_merch_stat_thrift:'StatPayment'()],
+    'refunds' :: [dmsl_merch_stat_thrift:'StatRefund'()]
+}).
+
 %% struct 'InvoiceUnpaid'
 -record('merchstat_InvoiceUnpaid', {}).
 
