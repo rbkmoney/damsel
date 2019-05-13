@@ -1735,8 +1735,6 @@ struct WithdrawalProviderDecision {
     2: required WithdrawalProviderSelector then_
 }
 
-struct TerminalRef { 1: required ObjectID id }
-
 /** Inspectors */
 
 struct InspectorRef { 1: required ObjectID id }
@@ -1774,12 +1772,21 @@ struct Terminal {
 
 union TerminalSelector {
     1: list<TerminalDecision> decisions
-    2: set<TerminalRef> value
+    2: set<ProviderTerminalRef> value
 }
 
 struct TerminalDecision {
     1: required Predicate if_
     2: required TerminalSelector then_
+}
+
+struct ProviderTerminalRef {
+    1: required ObjectID id
+    2: optional double priority
+}
+
+struct TerminalRef {
+    1: required ObjectID id
 }
 
 /* Predicates / conditions */
