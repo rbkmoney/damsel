@@ -496,8 +496,8 @@ struct InvoicePaymentRefundParams {
      */
     3: optional domain.TransactionInfo transaction_info
     /**
-     * Корзина возврата.
-     * Используется для частичного возврата, содержит возвращаемые позиции
+     * Итоговая корзина товаров.
+     * Используется для частичного возврата, содержит позиции, которые остались после возврата.
      */
     4: optional domain.InvoiceCart cart
 }
