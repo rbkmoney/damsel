@@ -433,6 +433,7 @@ struct InvoicePaymentParams {
     3: optional bool make_recurrent
     4: optional domain.InvoicePaymentID id
     5: optional string external_id
+    6: optional domain.InvoicePaymentContext context
 }
 
 union PayerParams {

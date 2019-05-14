@@ -3,10 +3,22 @@ include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.cds
 
-/** Часть мастер-ключа */
-typedef binary MasterKeyShare;
+/** Часть мастер-ключа в виде JWS */
+typedef binary SignedMasterKeyShare;
 
-typedef list<MasterKeyShare> MasterKeyShares;
+typedef string ShareholderId;
+
+/** Зашифрованная часть мастер-ключа и кому он предназначается */
+struct EncryptedMasterKeyShare {
+    // Уникальный ID, для однозначного определения владения
+    1: required ShareholderId id
+    // Неуникальный идентификатор с ФИО/email/etc владельца
+    2: required string owner
+    // Зашифрованный MasterKeyShare
+    3: required binary encrypted_share
+}
+
+typedef list<EncryptedMasterKeyShare> EncryptedMasterKeyShares;
 
 /** Дата экспирации */
 struct ExpDate {
@@ -62,13 +74,102 @@ struct SessionData {
     1: required AuthData auth_data
 }
 
-struct Unlocked {}
+struct Success {}
 
-union UnlockStatus {
+union KeyringOperationStatus {
     /** Успешно. */
-    1: Unlocked unlocked
-    /** Сколько частей ключа нужно еще ввести, чтобы расшифровать хранилище. */
+    1: Success success
+    /** Сколько частей ключа нужно еще ввести, чтобы провести манипуляцию над Keyring. */
     2: i16 more_keys_needed
+}
+
+enum Initialization {
+    uninitialized
+    validation
+}
+
+enum Rekeying {
+    uninitialized
+    confirmation
+    postconfirmation
+    validation
+}
+
+enum Rotation {
+    uninitialized
+    validation
+}
+
+enum Unlock {
+    uninitialized
+    validation
+}
+
+enum Status {
+    // Global machine status
+    not_initialized
+    unlocked
+    locked
+}
+
+union Activity {
+    1: Initialization initialization
+    2: Rekeying rekeying
+    3: Rotation rotation
+    4: Unlock unlock
+}
+
+typedef list<Activity> Activities;
+
+typedef i16 ShareId
+
+typedef map<ShareId, ShareholderId> ShareSubmitters;
+
+typedef i32 Seconds;
+
+struct RotationState {
+    1: required Rotation phase
+    2: optional Seconds lifetime
+    3: required ShareSubmitters confirmation_shares
+}
+
+struct InitializationState {
+    1: required Initialization phase
+    2: optional Seconds lifetime
+    3: required ShareSubmitters validation_shares
+}
+
+struct UnlockState {
+    1: required Unlock phase
+    2: optional Seconds lifetime
+    3: required ShareSubmitters confirmation_shares
+}
+
+struct RekeyingState {
+    1: required Rekeying phase
+    2: optional Seconds lifetime
+    3: required ShareSubmitters confirmation_shares
+    4: required ShareSubmitters validation_shares
+}
+
+struct ActivitiesState {
+    1: required InitializationState initialization
+    2: required RotationState rotation
+    3: required UnlockState unlock
+    4: required RekeyingState rekeying
+}
+
+struct KeyringState {
+    1: required Status status
+    2: required ActivitiesState activities
+}
+
+exception InvalidStatus {
+    1: required Status status
+}
+
+exception InvalidActivity {
+    1: required Activity activity
 }
 
 exception InvalidCardData {
@@ -79,33 +180,120 @@ exception CardDataNotFound {}
 
 exception SessionDataNotFound {}
 
-exception NoKeyring {}
+exception InvalidArguments {
+    1: optional string reason
+}
 
-exception KeyringLocked {}
+exception OperationAborted {
+    1: optional string reason
+}
 
-exception KeyringExists {}
+exception VerificationFailed {}
 
 /** Интерфейс для администраторов */
 service Keyring {
 
-    /** Создать новый кейринг
+    /** Создать новый кейринг при начальном состоянии
      *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
-     *  num_shares - общее количество частей, на которое нужно разбить мастер-ключ
      */
-    MasterKeyShares Init (1: i16 threshold, 2: i16 num_shares) throws (1: KeyringExists exists)
+    EncryptedMasterKeyShares StartInit (1: i16 threshold)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: InvalidArguments invalid_args)
+
+    /** Валидирует и завершает операцию над Keyring
+     *  Вызывается после Init и Rekey (CDS-25)
+     *  key_share - SignedMasterKeyShare в виде JWS
+     */
+    KeyringOperationStatus ValidateInit (1: ShareholderId shareholder_id,
+                                         2: SignedMasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                // Исключения ниже переводят машину в состояние `uninitialized`
+                4: OperationAborted operation_aborted)
+
+    /** Отменяет Init не прошедший валидацию и дает возможность запустить его заново */
+    void CancelInit () throws (1: InvalidStatus invalid_status)
+
+    /** Создать новый masterkey при наличии уже имеющегося
+     *  threshold - минимально необходимое количество ключей для восстановления мастер ключа
+     */
+    void StartRekey (1: i16 threshold)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: InvalidArguments invalid_args)
+
+    /** Подтвердить операцию создания нового masterkey
+     *  key_share - старый masterkey share в количестве threshold
+     */
+    KeyringOperationStatus ConfirmRekey (1: ShareholderId shareholder_id,
+                                         2: SignedMasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
+
+    /** Начать валидацию операции и получить Зашифрованные masterkey share */
+    EncryptedMasterKeyShares StartRekeyValidation ()
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity)
+
+    /** Провалидировать расшифрованными фрагментами нового ключа
+     *  key_share - новый masterkey share в количестве num
+     */
+    KeyringOperationStatus ValidateRekey (1: ShareholderId shareholder_id,
+                                          2: SignedMasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
+
+    /** Отменить операцию создания нового masterkey */
+    void CancelRekey () throws (1: InvalidStatus invalid_status)
+
+    /** Получить состояние операций */
+    KeyringState GetState ()
+
+    /** Начинает процесс блокировки */
+    void StartUnlock ()
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity)
 
     /** Предоставить часть мастер-ключа для расшифровки кейринга.
      *  Необходимо вызвать с разными частами мастер столько раз, сколько было указано в качестве
      *  параметра threshold при создании кейринга
      */
-    UnlockStatus Unlock (1: MasterKeyShare key_share) throws (1: NoKeyring no_keyring)
+    KeyringOperationStatus ConfirmUnlock (1: ShareholderId shareholder_id,
+                                          2: SignedMasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
+
+    /** Отменяет процесс блокировки */
+    void CancelUnlock () throws (1: InvalidStatus invalid_status)
 
     /** Зашифровать кейринг */
-    void Lock () throws (1: NoKeyring no_keyring)
+    void Lock () throws (1: InvalidStatus invalid_status)
 
-    /** Добавить новый ключ в кейринг */
-    void Rotate () throws (1: KeyringLocked locked, 2: NoKeyring no_keyring)
+    /** Начать процесс добавления нового ключа в кейринг */
+    void StartRotate ()
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity)
 
+    /*  Предоставить часть мастер-ключа для зашифровки нового инстанса кейринга.
+     *  См. `Unlock`
+     */    
+    KeyringOperationStatus ConfirmRotate (1: ShareholderId shareholder_id,
+                                          2: SignedMasterKeyShare key_share)
+        throws (1: InvalidStatus invalid_status,
+                2: InvalidActivity invalid_activity,
+                3: VerificationFailed verification_failed,
+                4: OperationAborted operation_aborted)
+
+    /** Отменяет процесс добавления нового ключа в кейринг */
+    void CancelRotate () throws (1: InvalidStatus invalid_status)
 }
 
 /**
