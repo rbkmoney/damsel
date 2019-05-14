@@ -16,7 +16,7 @@ struct Withdrawal {
 
 union Destination {
     1: domain.BankCard bank_card
-    2: domain.EWallet ewallet
+    2: domain.CryptoWallet crypto_wallet
 }
 
 struct Identity {

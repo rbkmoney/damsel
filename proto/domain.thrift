@@ -1374,22 +1374,19 @@ struct BankCard {
     9: optional bool is_cvv_empty
 }
 
-struct EWallet {
-    1: required string receiver
-    2: required string ecurrency
-    3: required string description
-    4: required EWalletSystem ewallets_ystem
+struct CryptoWallet {
+    1: required string receiver // ID or wallet of the recipient in the third-party payment system
+    2: required string description
+    3: required CryptoWalletSystem crypto_wallet_system
 }
 
-enum EWalletSystem {
-    BITCOIN_BTC
-    LITECOIN_LTC
-    BITCOIN_CASH_BCH
-    RIPPLE_XRP
-    ETHEREUM_ETH
-    ZCASH_ZEC
-    QIWI_PAYMENT_SYSTEM
-    YANDEX_MONEY_SYSTEM
+enum CryptoWalletSystem {
+    bitcoin
+    litecoin
+    bitcoin_cash
+    ripple
+    ethereum
+    zcash
 }
 
 
@@ -1417,6 +1414,7 @@ struct DigitalWallet {
 enum DigitalWalletProvider {
     qiwi
     rbkmoney
+    yandex_money
 }
 
 struct BankRef { 1: required ObjectID id }
