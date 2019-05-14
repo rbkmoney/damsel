@@ -1436,12 +1436,17 @@ struct CryptoWallet {
 }
 
 enum CryptoWalletProvider {
-    bitcoin
-    litecoin
-    bitcoin_cash
-    ripple
-    ethereum
-    zcash
+    BTC
+    ETH
+    XRP
+    BCH
+    LTC
+    BTG
+    DOGE
+    ZEC
+    DASH
+    XLM
+    USDT
 }
 
 /* Holds */
