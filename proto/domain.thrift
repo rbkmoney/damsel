@@ -1375,12 +1375,11 @@ struct BankCard {
 }
 
 struct CryptoWallet {
-    1: required string receiver // ID or wallet of the recipient in the third-party payment system
-    2: required string description
-    3: required CryptoWalletSystem crypto_wallet_system
+    1: required string id // ID or wallet of the recipient in the third-party payment system
+    2: required CryptoCurrency Crypto_Currency
 }
 
-enum CryptoWalletSystem {
+enum CryptoCurrency {
     bitcoin
     litecoin
     bitcoin_cash
