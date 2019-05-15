@@ -1378,16 +1378,32 @@ struct BankCard {
 
 struct CryptoWallet {
     1: required string id // ID or wallet of the recipient in the third-party payment system
-    2: required CryptoCurrency crypto_currency
+    2: required CryptoWalletProvider crypto_wallet_provider
+    3: optional CoinName coin_name
 }
 
-enum CryptoCurrency {
+enum CryptoWalletProvider {
     bitcoin
-    litecoin
-    bitcoin_cash
-    ripple
+    ecoin
     ethereum
+    bitcoin_cash
+    litecoin
+    ripple
     zcash
+}
+
+enum CoinName {
+    btc
+    eth
+    xrp
+    bch
+    ltc
+    btg
+    doge
+    zec
+    dash
+    xlm
+    usdt
 }
 
 
@@ -1416,6 +1432,14 @@ enum DigitalWalletProvider {
     qiwi
     rbkmoney
     yandex_money
+    capitalist
+    okpay
+    paxum
+    payeer
+    payza
+    perfect_money
+    web_money
+    epese
 }
 
 struct BankRef { 1: required ObjectID id }
@@ -1445,24 +1469,6 @@ union PaymentMethodSelector {
 struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
-}
-
-struct CryptoWallet {
-    1: required CryptoWalletProvider crypto_wallet_provider
-}
-
-enum CryptoWalletProvider {
-    BTC
-    ETH
-    XRP
-    BCH
-    LTC
-    BTG
-    DOGE
-    ZEC
-    DASH
-    XLM
-    USDT
 }
 
 /* Holds */

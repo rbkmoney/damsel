@@ -15,7 +15,7 @@ typedef map<string, Template> Form
 typedef base.ID WalletID
 typedef base.Rational Rational
 typedef domain.Amount Amount
-typedef domain.CryptoWalletProvider CryptoWalletProvider
+typedef domain.CoinName CoinName
 typedef domain.CurrencySymbolicCode CurrencySymbolicCode
 typedef string OrderID
 /**
@@ -50,7 +50,7 @@ struct PaymentTerminalReceipt  {
 struct CryptoCurrencyInvoiceResult {
     1: required WalletID wallet_id
     2: required Rational crypto_currency_amount
-    3: required CryptoWalletProvider crypto_wallet_provider
+    3: required CoinName coin_name
     4: required Amount amount
     5: required CurrencySymbolicCode currency_symbolic_code
     7: optional OrderID order_id
