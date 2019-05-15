@@ -86,6 +86,7 @@
     'Residence'/0,
     'BankCardPaymentSystem'/0,
     'BankCardTokenProvider'/0,
+    'CryptoCurrency'/0,
     'TerminalPaymentProvider'/0,
     'DigitalWalletProvider'/0,
     'MerchantCashFlowAccount'/0,
@@ -242,6 +243,7 @@
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
     'BankCard'/0,
+    'CryptoWallet'/0,
     'PaymentTerminal'/0,
     'DigitalWallet'/0,
     'BankRef'/0,
@@ -458,6 +460,7 @@
     'Residence' |
     'BankCardPaymentSystem' |
     'BankCardTokenProvider' |
+    'CryptoCurrency' |
     'TerminalPaymentProvider' |
     'DigitalWalletProvider' |
     'MerchantCashFlowAccount' |
@@ -786,6 +789,15 @@
     'googlepay' |
     'samsungpay'.
 
+%% enum 'CryptoCurrency'
+-type 'CryptoCurrency'() ::
+    'bitcoin' |
+    'litecoin' |
+    'bitcoin_cash' |
+    'ripple' |
+    'ethereum' |
+    'zcash'.
+
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
     'euroset'.
@@ -793,7 +805,8 @@
 %% enum 'DigitalWalletProvider'
 -type 'DigitalWalletProvider'() ::
     'qiwi' |
-    'rbkmoney'.
+    'rbkmoney' |
+    'yandex_money'.
 
 %% enum 'MerchantCashFlowAccount'
 -type 'MerchantCashFlowAccount'() ::
@@ -984,6 +997,7 @@
     'PaymentTool' |
     'DisposablePaymentResource' |
     'BankCard' |
+    'CryptoWallet' |
     'PaymentTerminal' |
     'DigitalWallet' |
     'BankRef' |
@@ -1604,6 +1618,9 @@
 %% struct 'BankCard'
 -type 'BankCard'() :: #'domain_BankCard'{}.
 
+%% struct 'CryptoWallet'
+-type 'CryptoWallet'() :: #'domain_CryptoWallet'{}.
+
 %% struct 'PaymentTerminal'
 -type 'PaymentTerminal'() :: #'domain_PaymentTerminal'{}.
 
@@ -2065,6 +2082,7 @@
     'Residence'() |
     'BankCardPaymentSystem'() |
     'BankCardTokenProvider'() |
+    'CryptoCurrency'() |
     'TerminalPaymentProvider'() |
     'DigitalWalletProvider'() |
     'MerchantCashFlowAccount'() |
@@ -2143,6 +2161,7 @@ enums() ->
         'Residence',
         'BankCardPaymentSystem',
         'BankCardTokenProvider',
+        'CryptoCurrency',
         'TerminalPaymentProvider',
         'DigitalWalletProvider',
         'MerchantCashFlowAccount',
@@ -2303,6 +2322,7 @@ structs() ->
         'PaymentTool',
         'DisposablePaymentResource',
         'BankCard',
+        'CryptoWallet',
         'PaymentTerminal',
         'DigitalWallet',
         'BankRef',
@@ -2882,6 +2902,16 @@ enum_info('BankCardTokenProvider') ->
         {'samsungpay', 2}
     ]};
 
+enum_info('CryptoCurrency') ->
+    {enum, [
+        {'bitcoin', 0},
+        {'litecoin', 1},
+        {'bitcoin_cash', 2},
+        {'ripple', 3},
+        {'ethereum', 4},
+        {'zcash', 5}
+    ]};
+
 enum_info('TerminalPaymentProvider') ->
     {enum, [
         {'euroset', 0}
@@ -2890,7 +2920,8 @@ enum_info('TerminalPaymentProvider') ->
 enum_info('DigitalWalletProvider') ->
     {enum, [
         {'qiwi', 0},
-        {'rbkmoney', 1}
+        {'rbkmoney', 1},
+        {'yandex_money', 2}
     ]};
 
 enum_info('MerchantCashFlowAccount') ->
@@ -3918,6 +3949,12 @@ struct_info('BankCard') ->
     {7, optional, string, 'bank_name', undefined},
     {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
     {9, optional, bool, 'is_cvv_empty', undefined}
+]};
+
+struct_info('CryptoWallet') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
@@ -4978,6 +5015,9 @@ record_name('OperationTimeout') ->
 
     record_name('BankCard') ->
     'domain_BankCard';
+
+    record_name('CryptoWallet') ->
+    'domain_CryptoWallet';
 
     record_name('PaymentTerminal') ->
     'domain_PaymentTerminal';

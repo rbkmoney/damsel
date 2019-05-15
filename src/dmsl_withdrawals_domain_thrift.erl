@@ -71,7 +71,9 @@
 
 %% union 'Destination'
 -type 'Destination'() ::
-    {'bank_card', dmsl_domain_thrift:'BankCard'()}.
+    {'bank_card', dmsl_domain_thrift:'BankCard'()} |
+    {'crypto_wallet', dmsl_domain_thrift:'CryptoWallet'()} |
+    {'digital_wallet', dmsl_domain_thrift:'DigitalWallet'()}.
 
 %% struct 'Identity'
 -type 'Identity'() :: #'wthdm_Identity'{}.
@@ -174,7 +176,9 @@ struct_info('Withdrawal') ->
 
 struct_info('Destination') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined}
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoWallet'}}, 'crypto_wallet', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
 ]};
 
 struct_info('Identity') ->

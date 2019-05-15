@@ -784,6 +784,12 @@
     'is_cvv_empty' :: boolean() | undefined
 }).
 
+%% struct 'CryptoWallet'
+-record('domain_CryptoWallet', {
+    'id' :: binary(),
+    'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrency'()
+}).
+
 %% struct 'PaymentTerminal'
 -record('domain_PaymentTerminal', {
     'terminal_type' :: dmsl_domain_thrift:'TerminalPaymentProvider'()
