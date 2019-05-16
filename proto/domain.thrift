@@ -1801,6 +1801,7 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
+    9: TerminalRef terminal_is
 }
 
 union PaymentToolCondition {
