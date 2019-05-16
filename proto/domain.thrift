@@ -1374,6 +1374,21 @@ struct BankCard {
     9: optional bool is_cvv_empty
 }
 
+struct CryptoWallet {
+    1: required string id // ID or wallet of the recipient in the third-party payment system
+    2: required CryptoCurrency crypto_currency
+}
+
+enum CryptoCurrency {
+    bitcoin
+    litecoin
+    bitcoin_cash
+    ripple
+    ethereum
+    zcash
+}
+
+
 /** Платеж через терминал **/
 struct PaymentTerminal {
     1: required TerminalPaymentProvider terminal_type
@@ -1398,6 +1413,7 @@ struct DigitalWallet {
 enum DigitalWalletProvider {
     qiwi
     rbkmoney
+    yandex_money
 }
 
 struct BankRef { 1: required ObjectID id }
