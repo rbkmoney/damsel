@@ -44,7 +44,6 @@ struct PaymentTerminalReceipt  {
 struct CryptoCurrencyTransferRequest {
     1: required CryptoAddress crypto_address
     2: required domain.CryptoCash crypto_cash
-    4: required domain.Cash origin_cash
 }
 
 union UserInteraction {
