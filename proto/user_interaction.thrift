@@ -63,5 +63,5 @@ union UserInteraction {
     **/
     2: PaymentTerminalReceipt payment_terminal_reciept
 
-    3: CryptoCurrencyTransferRequest crypto_currency_invoice_result
+    3: CryptoCurrencyTransferRequest crypto_currency_transfer_request
 }
