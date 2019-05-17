@@ -1314,7 +1314,7 @@ union PaymentMethod {
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
-    6: CryptoWalletProvider crypto_wallet_provider
+    6: CryptoCurrency crypto_currency
 }
 
 struct TokenizedBankCard {
@@ -1353,7 +1353,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
-    4: CryptoWalletProvider crypto_wallet_provider
+    4: CryptoCurrency crypto_currency
 }
 
 struct DisposablePaymentResource {
@@ -1378,10 +1378,10 @@ struct BankCard {
 
 struct CryptoWallet {
     1: required string id // ID or wallet of the recipient in the third-party payment system
-    2: required CryptoWalletProvider crypto_wallet_provider
+    2: required CryptoCurrency crypto_currency
 }
 
-enum CryptoWalletProvider {
+enum CryptoCurrency {
     bitcoin
     litecoin
     bitcoin_cash
