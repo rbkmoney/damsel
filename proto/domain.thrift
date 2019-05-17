@@ -72,11 +72,6 @@ struct Cash {
     2: required CurrencyRef currency
 }
 
-struct CryptoCash {
-    1: required base.Rational crypto_amount
-    2: required CryptoCurrencyRef crypto_currency
-}
-
 /* Contractor transactions */
 
 struct TransactionInfo {
@@ -955,11 +950,7 @@ struct ServiceAcceptanceActsTerms {
 /** Символьный код, уникально идентифицирующий валюту. */
 typedef string CurrencySymbolicCode
 
-typedef string CryptoCurrencySymbolicCode
-
 struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
-
-struct CryptoCurrencyRef { 1: required CryptoCurrencySymbolicCode crypto_symbolic_code }
 
 /** Валюта. */
 struct Currency {

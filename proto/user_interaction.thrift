@@ -1,6 +1,5 @@
 namespace java com.rbkmoney.damsel.user_interaction
 include "base.thrift"
-include "domain.thrift"
 
 /**
  * Строковый шаблон согласно [RFC6570](https://tools.ietf.org/html/rfc6570) Level 4.
@@ -12,6 +11,16 @@ typedef string Template
  */
 typedef map<string, Template> Form
 typedef string CryptoAddress
+
+typedef string CryptoCurrencySymbolicCode
+
+struct CryptoCurrencyRef { 1: required CryptoCurrencySymbolicCode crypto_symbolic_code }
+
+struct CryptoCash {
+    1: required base.Rational crypto_amount
+    2: required CryptoCurrencyRef crypto_currency
+}
+
 /**
  * Запрос HTTP, пригодный для отправки средствами браузера.
  */
@@ -43,7 +52,7 @@ struct PaymentTerminalReceipt  {
 
 struct CryptoCurrencyTransferRequest {
     1: required CryptoAddress crypto_address
-    2: required domain.CryptoCash crypto_cash
+    2: required CryptoCash crypto_cash
 }
 
 union UserInteraction {
