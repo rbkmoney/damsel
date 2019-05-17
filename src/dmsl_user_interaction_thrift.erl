@@ -33,13 +33,17 @@
 
 -export_type([
     'Template'/0,
-    'Form'/0
+    'Form'/0,
+    'CryptoAddress'/0,
+    'CryptoCurrencySymbolicCode'/0
 ]).
 -export_type([
+    'CryptoCash'/0,
     'BrowserHTTPRequest'/0,
     'BrowserGetRequest'/0,
     'BrowserPostRequest'/0,
     'PaymentTerminalReceipt'/0,
+    'CryptoCurrencyTransferRequest'/0,
     'UserInteraction'/0
 ]).
 
@@ -50,10 +54,14 @@
 %%
 -type typedef_name() ::
     'Template' |
-    'Form'.
+    'Form' |
+    'CryptoAddress' |
+    'CryptoCurrencySymbolicCode'.
 
 -type 'Template'() :: binary().
 -type 'Form'() :: #{binary() => 'Template'()}.
+-type 'CryptoAddress'() :: binary().
+-type 'CryptoCurrencySymbolicCode'() :: binary().
 
 %%
 %% enums
@@ -64,13 +72,18 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
+    'CryptoCash' |
     'BrowserHTTPRequest' |
     'BrowserGetRequest' |
     'BrowserPostRequest' |
     'PaymentTerminalReceipt' |
+    'CryptoCurrencyTransferRequest' |
     'UserInteraction'.
 
 -type exception_name() :: none().
+
+%% struct 'CryptoCash'
+-type 'CryptoCash'() :: #'CryptoCash'{}.
 
 %% union 'BrowserHTTPRequest'
 -type 'BrowserHTTPRequest'() ::
@@ -86,10 +99,14 @@
 %% struct 'PaymentTerminalReceipt'
 -type 'PaymentTerminalReceipt'() :: #'PaymentTerminalReceipt'{}.
 
+%% struct 'CryptoCurrencyTransferRequest'
+-type 'CryptoCurrencyTransferRequest'() :: #'CryptoCurrencyTransferRequest'{}.
+
 %% union 'UserInteraction'
 -type 'UserInteraction'() ::
     {'redirect', 'BrowserHTTPRequest'()} |
-    {'payment_terminal_reciept', 'PaymentTerminalReceipt'()}.
+    {'payment_terminal_reciept', 'PaymentTerminalReceipt'()} |
+    {'crypto_currency_transfer_request', 'CryptoCurrencyTransferRequest'()}.
 
 %%
 %% services and functions
@@ -130,7 +147,9 @@
 typedefs() ->
     [
         'Template',
-        'Form'
+        'Form',
+        'CryptoAddress',
+        'CryptoCurrencySymbolicCode'
     ].
 
 -spec enums() -> [].
@@ -142,10 +161,12 @@ enums() ->
 
 structs() ->
     [
+        'CryptoCash',
         'BrowserHTTPRequest',
         'BrowserGetRequest',
         'BrowserPostRequest',
         'PaymentTerminalReceipt',
+        'CryptoCurrencyTransferRequest',
         'UserInteraction'
     ].
 
@@ -167,6 +188,12 @@ typedef_info('Template') ->
 typedef_info('Form') ->
     {map, string, string};
 
+typedef_info('CryptoAddress') ->
+    string;
+
+typedef_info('CryptoCurrencySymbolicCode') ->
+    string;
+
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(_) -> no_return().
@@ -174,6 +201,12 @@ typedef_info(_) -> erlang:error(badarg).
 enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
+
+struct_info('CryptoCash') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'crypto_amount', undefined},
+    {2, required, string, 'crypto_symbolic_code', undefined}
+]};
 
 struct_info('BrowserHTTPRequest') ->
     {struct, union, [
@@ -198,24 +231,37 @@ struct_info('PaymentTerminalReceipt') ->
     {2, required, string, 'due', undefined}
 ]};
 
+struct_info('CryptoCurrencyTransferRequest') ->
+    {struct, struct, [
+    {1, required, string, 'crypto_address', undefined},
+    {2, required, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCash'}}, 'crypto_cash', undefined}
+]};
+
 struct_info('UserInteraction') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_user_interaction_thrift, 'BrowserHTTPRequest'}}, 'redirect', undefined},
-    {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'PaymentTerminalReceipt'}}, 'payment_terminal_reciept', undefined}
+    {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'PaymentTerminalReceipt'}}, 'payment_terminal_reciept', undefined},
+    {3, optional, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCurrencyTransferRequest'}}, 'crypto_currency_transfer_request', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
 
+record_name('CryptoCash') ->
+    'CryptoCash';
+
 record_name('BrowserGetRequest') ->
     'BrowserGetRequest';
 
-record_name('BrowserPostRequest') ->
+    record_name('BrowserPostRequest') ->
     'BrowserPostRequest';
 
     record_name('PaymentTerminalReceipt') ->
     'PaymentTerminalReceipt';
+
+    record_name('CryptoCurrencyTransferRequest') ->
+    'CryptoCurrencyTransferRequest';
 
     record_name(_) -> error(badarg).
     

@@ -5,6 +5,12 @@
 
 
 
+%% struct 'CryptoCash'
+-record('CryptoCash', {
+    'crypto_amount' :: dmsl_base_thrift:'Rational'(),
+    'crypto_symbolic_code' :: dmsl_user_interaction_thrift:'CryptoCurrencySymbolicCode'()
+}).
+
 %% struct 'BrowserGetRequest'
 -record('BrowserGetRequest', {
     'uri' :: dmsl_user_interaction_thrift:'Template'()
@@ -20,6 +26,12 @@
 -record('PaymentTerminalReceipt', {
     'short_payment_id' :: binary(),
     'due' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'CryptoCurrencyTransferRequest'
+-record('CryptoCurrencyTransferRequest', {
+    'crypto_address' :: dmsl_user_interaction_thrift:'CryptoAddress'(),
+    'crypto_cash' :: dmsl_user_interaction_thrift:'CryptoCash'()
 }).
 
 -endif.

@@ -1316,6 +1316,7 @@ union PaymentMethod {
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
+    6: CryptoCurrency crypto_currency
 }
 
 struct TokenizedBankCard {
@@ -1354,6 +1355,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: CryptoCurrency crypto_currency
 }
 
 struct DisposablePaymentResource {

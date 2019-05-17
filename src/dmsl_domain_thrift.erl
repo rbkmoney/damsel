@@ -1601,7 +1601,8 @@
     {'payment_terminal', 'TerminalPaymentProvider'()} |
     {'digital_wallet', 'DigitalWalletProvider'()} |
     {'tokenized_bank_card', 'TokenizedBankCard'()} |
-    {'empty_cvv_bank_card', 'BankCardPaymentSystem'()}.
+    {'empty_cvv_bank_card', 'BankCardPaymentSystem'()} |
+    {'crypto_currency', 'CryptoCurrency'()}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
@@ -1610,7 +1611,8 @@
 -type 'PaymentTool'() ::
     {'bank_card', 'BankCard'()} |
     {'payment_terminal', 'PaymentTerminal'()} |
-    {'digital_wallet', 'DigitalWallet'()}.
+    {'digital_wallet', 'DigitalWallet'()} |
+    {'crypto_currency', 'CryptoCurrency'()}.
 
 %% struct 'DisposablePaymentResource'
 -type 'DisposablePaymentResource'() :: #'domain_DisposablePaymentResource'{}.
@@ -3917,7 +3919,8 @@ struct_info('PaymentMethod') ->
     {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
     {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
-    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined}
+    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
+    {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
 ]};
 
 struct_info('TokenizedBankCard') ->
@@ -3930,7 +3933,8 @@ struct_info('PaymentTool') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
+    {4, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
 ]};
 
 struct_info('DisposablePaymentResource') ->
