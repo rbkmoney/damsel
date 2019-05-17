@@ -271,13 +271,15 @@
 -record('payproc_InvoicePaymentRefundParams', {
     'reason' :: binary() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoicePaymentCaptureParams'
 -record('payproc_InvoicePaymentCaptureParams', {
     'reason' :: binary(),
-    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentParams'

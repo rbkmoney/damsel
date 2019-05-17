@@ -2245,13 +2245,15 @@ struct_info('InvoicePaymentRefundParams') ->
     {struct, struct, [
     {1, optional, string, 'reason', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoicePaymentCaptureParams') ->
     {struct, struct, [
     {1, required, string, 'reason', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoicePaymentAdjustmentParams') ->
@@ -4002,7 +4004,7 @@ function_info('Invoicing', 'CapturePayment', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'id', undefined},
     {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'reason', undefined}
+    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
 ]};
 function_info('Invoicing', 'CapturePayment', reply_type) ->
         {struct, struct, []};
@@ -4015,7 +4017,9 @@ function_info('Invoicing', 'CapturePayment', reply_type) ->
         {5, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
-        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined}
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentCaptureCurrency'}}, 'ex9', undefined},
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AmountExceededCaptureBalance'}}, 'ex10', undefined}
     ]};
 function_info('Invoicing', 'CapturePaymentNew', params_type) ->
     {struct, struct, [

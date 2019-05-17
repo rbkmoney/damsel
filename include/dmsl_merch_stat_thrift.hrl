@@ -24,7 +24,8 @@
     'flow' :: dmsl_merch_stat_thrift:'InvoicePaymentFlow'(),
     'short_id' :: binary() | undefined,
     'make_recurrent' :: boolean() | undefined,
-    'domain_revision' :: dmsl_domain_thrift:'DataRevision'()
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'RecurrentParentPayment'
@@ -269,7 +270,8 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'reason' :: binary() | undefined
+    'reason' :: binary() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundPending'

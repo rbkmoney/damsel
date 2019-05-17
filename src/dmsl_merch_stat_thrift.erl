@@ -621,7 +621,8 @@ struct_info('StatPayment') ->
     {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {15, optional, string, 'short_id', undefined},
     {16, optional, bool, 'make_recurrent', undefined},
-    {17, required, i64, 'domain_revision', undefined}
+    {17, required, i64, 'domain_revision', undefined},
+    {18, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('Payer') ->
@@ -931,7 +932,8 @@ struct_info('StatRefund') ->
     {8, required, i64, 'amount', undefined},
     {9, required, i64, 'fee', undefined},
     {10, required, string, 'currency_symbolic_code', undefined},
-    {11, optional, string, 'reason', undefined}
+    {11, optional, string, 'reason', undefined},
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundStatus') ->

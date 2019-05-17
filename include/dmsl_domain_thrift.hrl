@@ -137,7 +137,8 @@
 %% struct 'InvoicePaymentCaptured'
 -record('domain_InvoicePaymentCaptured', {
     'reason' :: binary() | undefined,
-    'cost' :: dmsl_domain_thrift:'Cash'() | undefined
+    'cost' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoicePaymentCancelled'
@@ -257,7 +258,8 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'reason' :: binary() | undefined
+    'reason' :: binary() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundPending'

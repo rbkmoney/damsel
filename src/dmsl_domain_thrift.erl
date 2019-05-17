@@ -3121,7 +3121,8 @@ struct_info('InvoicePaymentProcessed') ->
 struct_info('InvoicePaymentCaptured') ->
     {struct, struct, [
     {1, optional, string, 'reason', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoicePaymentCancelled') ->
@@ -3292,7 +3293,8 @@ struct_info('InvoicePaymentRefund') ->
     {4, required, i64, 'domain_revision', undefined},
     {7, optional, i64, 'party_revision', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {5, optional, string, 'reason', undefined}
+    {5, optional, string, 'reason', undefined},
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundStatus') ->
