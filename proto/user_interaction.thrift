@@ -11,7 +11,7 @@ typedef string Template
  * Форма, представленная набором полей и их значений в виде строковых шаблонов.
  */
 typedef map<string, Template> Form
-typedef base.ID WalletID
+typedef string CryptoAddress
 /**
  * Запрос HTTP, пригодный для отправки средствами браузера.
  */
@@ -41,12 +41,10 @@ struct PaymentTerminalReceipt  {
     2: required base.Timestamp due
 }
 
-struct CryptoCurrencyInvoiceResult {
-    1: required WalletID wallet_id
-    2: required base.Rational crypto_currency_amount
-    3: required domain.CoinName coin_name
-    4: required domain.Amount amount
-    5: required domain.CurrencySymbolicCode currency_symbolic_code
+struct CryptoCurrencyTransferRequest {
+    1: required CryptoAddress crypto_address
+    2: required domain.CryptoCash crypto_cash
+    4: required domain.Cash cash
 }
 
 union UserInteraction {
@@ -65,5 +63,5 @@ union UserInteraction {
     **/
     2: PaymentTerminalReceipt payment_terminal_reciept
 
-    3: CryptoCurrencyInvoiceResult crypto_currency_invoice_result
+    3: CryptoCurrencyTransferRequest crypto_currency_invoice_result
 }

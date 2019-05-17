@@ -72,6 +72,11 @@ struct Cash {
     2: required CurrencyRef currency
 }
 
+struct CryptoCash {
+    1: required base.Rational crypto_amount
+    2: required CryptoCurrencyRef crypto_currency
+}
+
 /* Contractor transactions */
 
 struct TransactionInfo {
@@ -950,7 +955,11 @@ struct ServiceAcceptanceActsTerms {
 /** Символьный код, уникально идентифицирующий валюту. */
 typedef string CurrencySymbolicCode
 
+typedef string CryptoCurrencySymbolicCode
+
 struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
+
+struct CryptoCurrencyRef { 1: required CryptoCurrencySymbolicCode crypto_symbolic_code }
 
 /** Валюта. */
 struct Currency {
@@ -1353,7 +1362,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
-    4: CryptoWallet crypto_wallet
+    4: CryptoWalletProvider crypto_wallet_provider
 }
 
 struct DisposablePaymentResource {
@@ -1379,7 +1388,6 @@ struct BankCard {
 struct CryptoWallet {
     1: required string id // ID or wallet of the recipient in the third-party payment system
     2: required CryptoWalletProvider crypto_wallet_provider
-    3: optional CoinName coin_name
 }
 
 enum CryptoWalletProvider {
@@ -1390,20 +1398,6 @@ enum CryptoWalletProvider {
     litecoin
     ripple
     zcash
-}
-
-enum CoinName {
-    btc
-    eth
-    xrp
-    bch
-    ltc
-    btg
-    doge
-    zec
-    dash
-    xlm
-    usdt
 }
 
 
@@ -1432,14 +1426,6 @@ enum DigitalWalletProvider {
     qiwi
     rbkmoney
     yandex_money
-    capitalist
-    okpay
-    paxum
-    payeer
-    payza
-    perfect_money
-    web_money
-    epese
 }
 
 struct BankRef { 1: required ObjectID id }
