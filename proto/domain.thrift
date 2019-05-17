@@ -1392,11 +1392,10 @@ struct CryptoWallet {
 
 enum CryptoWalletProvider {
     bitcoin
-    ecoin
-    ethereum
-    bitcoin_cash
     litecoin
+    bitcoin_cash
     ripple
+    ethereum
     zcash
 }
 
