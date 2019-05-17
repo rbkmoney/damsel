@@ -14,11 +14,9 @@ typedef string CryptoAddress
 
 typedef string CryptoCurrencySymbolicCode
 
-struct CryptoCurrencyRef { 1: required CryptoCurrencySymbolicCode crypto_symbolic_code }
-
 struct CryptoCash {
     1: required base.Rational crypto_amount
-    2: required CryptoCurrencyRef crypto_currency
+    2: required CryptoCurrencySymbolicCode crypto_symbolic_code
 }
 
 /**
