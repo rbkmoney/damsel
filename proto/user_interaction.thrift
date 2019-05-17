@@ -62,5 +62,8 @@ union UserInteraction {
     **/
     2: PaymentTerminalReceipt payment_terminal_reciept
 
+    /**
+    * Запрос на перевод криптовалюты
+    **/
     3: CryptoCurrencyTransferRequest crypto_currency_transfer_request
 }
