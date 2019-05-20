@@ -1020,8 +1020,7 @@
     'name' :: binary(),
     'description' :: binary(),
     'options' :: dmsl_domain_thrift:'ProxyOptions'() | undefined,
-    'risk_coverage' :: atom(),
-    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
+    'risk_coverage' :: atom()
 }).
 
 %% struct 'TerminalDecision'

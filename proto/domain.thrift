@@ -1789,7 +1789,6 @@ struct Terminal {
     2: required string description
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
-    12: optional PaymentsProvisionTerms terms
 }
 
 union TerminalSelector {
@@ -1821,6 +1820,7 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
+    9: TerminalRef terminal_is
 }
 
 union PaymentToolCondition {

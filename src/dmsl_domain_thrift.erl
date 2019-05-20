@@ -1815,7 +1815,8 @@
     {'shop_location_is', 'ShopLocation'()} |
     {'party', 'PartyCondition'()} |
     {'payout_method_is', 'PayoutMethodRef'()} |
-    {'identification_level_is', atom()}.
+    {'identification_level_is', atom()} |
+    {'terminal_is', 'TerminalRef'()}.
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
@@ -4261,8 +4262,7 @@ struct_info('Terminal') ->
     {1, required, string, 'name', undefined},
     {2, required, string, 'description', undefined},
     {9, optional, {map, string, string}, 'options', undefined},
-    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
+    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined}
 ]};
 
 struct_info('TerminalSelector') ->
@@ -4295,7 +4295,8 @@ struct_info('Condition') ->
     {5, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'shop_location_is', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
-    {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined}
+    {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
+    {9, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_is', undefined}
 ]};
 
 struct_info('PaymentToolCondition') ->
