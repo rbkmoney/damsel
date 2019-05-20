@@ -123,6 +123,7 @@
     'InvoiceRepairFailSession'/0,
     'InvoiceRepairComplex'/0,
     'InvoiceRepairScenario'/0,
+    'InvoiceRepairParams'/0,
     'InvalidStatus'/0,
     'CustomerParams'/0,
     'Customer'/0,
@@ -416,6 +417,7 @@
     'InvoiceRepairFailSession' |
     'InvoiceRepairComplex' |
     'InvoiceRepairScenario' |
+    'InvoiceRepairParams' |
     'InvalidStatus' |
     'CustomerParams' |
     'Customer' |
@@ -825,6 +827,9 @@
     {'fail_pre_processing', 'InvoiceRepairFailPreProcessing'()} |
     {'skip_inspector', 'InvoiceRepairSkipInspector'()} |
     {'fail_session', 'InvoiceRepairFailSession'()}.
+
+%% struct 'InvoiceRepairParams'
+-type 'InvoiceRepairParams'() :: #'payproc_InvoiceRepairParams'{}.
 
 %% union 'InvalidStatus'
 -type 'InvalidStatus'() ::
@@ -1682,6 +1687,7 @@ structs() ->
         'InvoiceRepairFailSession',
         'InvoiceRepairComplex',
         'InvoiceRepairScenario',
+        'InvoiceRepairParams',
         'InvalidStatus',
         'CustomerParams',
         'Customer',
@@ -2288,6 +2294,11 @@ struct_info('InvoiceRepairScenario') ->
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailPreProcessing'}}, 'fail_pre_processing', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairSkipInspector'}}, 'skip_inspector', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailSession'}}, 'fail_session', undefined}
+]};
+
+struct_info('InvoiceRepairParams') ->
+    {struct, struct, [
+    {1, optional, bool, 'validate_transitions', true}
 ]};
 
 struct_info('InvalidStatus') ->
@@ -3361,6 +3372,9 @@ record_name('InternalUser') ->
     record_name('InvoiceRepairComplex') ->
     'payproc_InvoiceRepairComplex';
 
+    record_name('InvoiceRepairParams') ->
+    'payproc_InvoiceRepairParams';
+
     record_name('CustomerParams') ->
     'payproc_CustomerParams';
 
@@ -4213,7 +4227,8 @@ function_info('Invoicing', 'Repair', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'id', undefined},
     {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined},
-    {4, undefined, {struct, struct, {dmsl_repairing_thrift, 'ComplexAction'}}, 'action', undefined}
+    {4, undefined, {struct, struct, {dmsl_repairing_thrift, 'ComplexAction'}}, 'action', undefined},
+    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairParams'}}, 'params', undefined}
 ]};
 function_info('Invoicing', 'Repair', reply_type) ->
         {struct, struct, []};

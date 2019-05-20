@@ -308,6 +308,11 @@
     'scenarios' :: [dmsl_payment_processing_thrift:'InvoiceRepairScenario'()]
 }).
 
+%% struct 'InvoiceRepairParams'
+-record('payproc_InvoiceRepairParams', {
+    'validate_transitions' = true :: boolean() | undefined
+}).
+
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
