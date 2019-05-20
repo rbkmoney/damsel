@@ -560,6 +560,11 @@ union InvoiceRepairScenario{
     4: InvoiceRepairFailSession fail_session
 }
 
+/* Параметры adhoc починки упавшей машины. */
+struct InvoiceRepairParams {
+    1: optional bool validate_transitions = true
+}
+
 // Exceptions
 
 // forward-declared
@@ -915,7 +920,8 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: list<InvoiceChange> changes,
-        4: repairing.ComplexAction action
+        4: repairing.ComplexAction action,
+        5: InvoiceRepairParams params
     )
         throws (
             1: InvalidUser ex1,
