@@ -184,6 +184,7 @@ struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {
     1: optional string reason
     2: optional Cash cost
+    3: optional InvoiceCart cart
 }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
@@ -378,6 +379,7 @@ struct InvoicePaymentRefund {
     7: optional PartyRevision party_revision
     6: optional Cash cash
     5: optional string reason
+    8: optional InvoiceCart cart
 }
 
 union InvoicePaymentRefundStatus {
@@ -1314,6 +1316,7 @@ union PaymentMethod {
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
+    6: CryptoCurrency crypto_currency
 }
 
 struct TokenizedBankCard {
@@ -1352,6 +1355,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: CryptoCurrency crypto_currency
 }
 
 struct DisposablePaymentResource {
