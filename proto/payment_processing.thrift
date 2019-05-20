@@ -515,8 +515,26 @@ struct InvoicePaymentCaptureParams {
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
-    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    /**
+    * Ревизия домена, относительно которой необходимо пересчитать граф финансовых потоков.
+    * Если не задана, будет использована _самая актуальная_ ревизия.
+    */
     1: optional domain.DataRevision domain_revision
+    /**
+    * Ревизия участника, относительно которой необходимо пересчитать граф финансовых потоков.
+    * Если не задана, будет использована _самая актуальная_ ревизия.
+    */
+    3: optional domain.PartyRevision party_revision
+    /**
+    * Дата и время платежа, относительно которой нужно пересчитать условия контракта.
+    * Если не заданы, будут использованы _текущие дата и время_.
+    */
+    4: optional base.Timestamp as_if_created_at
+    /**
+    * Сумма платежа, относительно которой нужно произвести поправку.
+    * Если не задана, сумма платежа корректироваться не будет.
+    */
+    5: optional domain.Cash cost
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
 }
@@ -777,6 +795,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: InvoicePaymentAdjustmentPending ex5
+            // TODO
         )
 
     InvoicePaymentAdjustment GetPaymentAdjustment (
