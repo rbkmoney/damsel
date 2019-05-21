@@ -1827,7 +1827,7 @@ union PaymentToolCondition {
     1: BankCardCondition bank_card
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
-    4: CryptoCurrency crypto_currency
+    4: CryptoCurrencyCondition crypto_currency
 }
 
 struct BankCardCondition {
@@ -1861,6 +1861,14 @@ struct DigitalWalletCondition {
 
 union DigitalWalletConditionDefinition {
     1: DigitalWalletProvider provider_is
+}
+
+struct CryptoCurrencyCondition {
+    1: optional CryptoCurrencyConditionDefinition definition
+}
+
+union CryptoCurrencyConditionDefinition {
+    1: CryptoCurrency crypto_currency_is
 }
 
 struct PartyCondition {
