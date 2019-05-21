@@ -1050,6 +1050,11 @@
     'definition' :: dmsl_domain_thrift:'DigitalWalletConditionDefinition'() | undefined
 }).
 
+%% struct 'CryptoCurrencyCondition'
+-record('domain_CryptoCurrencyCondition', {
+    'definition' :: dmsl_domain_thrift:'CryptoCurrencyConditionDefinition'() | undefined
+}).
+
 %% struct 'PartyCondition'
 -record('domain_PartyCondition', {
     'id' :: dmsl_domain_thrift:'PartyID'(),

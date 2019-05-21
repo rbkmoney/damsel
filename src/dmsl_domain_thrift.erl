@@ -303,6 +303,8 @@
     'PaymentTerminalConditionDefinition'/0,
     'DigitalWalletCondition'/0,
     'DigitalWalletConditionDefinition'/0,
+    'CryptoCurrencyCondition'/0,
+    'CryptoCurrencyConditionDefinition'/0,
     'PartyCondition'/0,
     'PartyConditionDefinition'/0,
     'ProxyRef'/0,
@@ -1057,6 +1059,8 @@
     'PaymentTerminalConditionDefinition' |
     'DigitalWalletCondition' |
     'DigitalWalletConditionDefinition' |
+    'CryptoCurrencyCondition' |
+    'CryptoCurrencyConditionDefinition' |
     'PartyCondition' |
     'PartyConditionDefinition' |
     'ProxyRef' |
@@ -1822,7 +1826,8 @@
 -type 'PaymentToolCondition'() ::
     {'bank_card', 'BankCardCondition'()} |
     {'payment_terminal', 'PaymentTerminalCondition'()} |
-    {'digital_wallet', 'DigitalWalletCondition'()}.
+    {'digital_wallet', 'DigitalWalletCondition'()} |
+    {'crypto_currency', 'CryptoCurrencyCondition'()}.
 
 %% struct 'BankCardCondition'
 -type 'BankCardCondition'() :: #'domain_BankCardCondition'{}.
@@ -1851,6 +1856,13 @@
 %% union 'DigitalWalletConditionDefinition'
 -type 'DigitalWalletConditionDefinition'() ::
     {'provider_is', atom()}.
+
+%% struct 'CryptoCurrencyCondition'
+-type 'CryptoCurrencyCondition'() :: #'domain_CryptoCurrencyCondition'{}.
+
+%% union 'CryptoCurrencyConditionDefinition'
+-type 'CryptoCurrencyConditionDefinition'() ::
+    {'crypto_currency_is', atom()}.
 
 %% struct 'PartyCondition'
 -type 'PartyCondition'() :: #'domain_PartyCondition'{}.
@@ -2385,6 +2397,8 @@ structs() ->
         'PaymentTerminalConditionDefinition',
         'DigitalWalletCondition',
         'DigitalWalletConditionDefinition',
+        'CryptoCurrencyCondition',
+        'CryptoCurrencyConditionDefinition',
         'PartyCondition',
         'PartyConditionDefinition',
         'ProxyRef',
@@ -4303,7 +4317,8 @@ struct_info('PaymentToolCondition') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyCondition'}}, 'crypto_currency', undefined}
 ]};
 
 struct_info('BankCardCondition') ->
@@ -4344,6 +4359,16 @@ struct_info('DigitalWalletCondition') ->
 struct_info('DigitalWalletConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider_is', undefined}
+]};
+
+struct_info('CryptoCurrencyCondition') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CryptoCurrencyConditionDefinition'}}, 'definition', undefined}
+]};
+
+struct_info('CryptoCurrencyConditionDefinition') ->
+    {struct, union, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency_is', undefined}
 ]};
 
 struct_info('PartyCondition') ->
@@ -5148,6 +5173,9 @@ record_name('OperationTimeout') ->
 
     record_name('DigitalWalletCondition') ->
     'domain_DigitalWalletCondition';
+
+    record_name('CryptoCurrencyCondition') ->
+    'domain_CryptoCurrencyCondition';
 
     record_name('PartyCondition') ->
     'domain_PartyCondition';
