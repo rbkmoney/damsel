@@ -1827,6 +1827,7 @@ union PaymentToolCondition {
     1: BankCardCondition bank_card
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
+    4: CryptoCurrency crypto_currency
 }
 
 struct BankCardCondition {
