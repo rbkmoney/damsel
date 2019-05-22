@@ -18,7 +18,6 @@ Systemwide protocol collection.
 	
 # Java development
 
-
 Собрать дамзель и инсталировать новый jar в локальный мавен репозиторий:
 
 * make wc_compile
