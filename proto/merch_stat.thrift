@@ -402,9 +402,9 @@ service MerchantStatistics {
 service DarkMessiahStatistics {
 
     /**
-     * Возвращает набор данных о выплатах
+     * Возвращает набор данных
      */
-    StatResponse GetEnrichedInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+    StatResponse GetByQuery(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
 }
 
