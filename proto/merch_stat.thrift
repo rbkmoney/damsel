@@ -399,3 +399,12 @@ service MerchantStatistics {
     StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 }
 
+service DarkMessiahStatistics {
+
+    /**
+     * Возвращает набор данных
+     */
+    StatResponse GetByQuery(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+}
+

@@ -419,10 +419,12 @@
 %% services and functions
 %%
 -type service_name() ::
-    'MerchantStatistics'.
+    'MerchantStatistics' |
+    'DarkMessiahStatistics'.
 
 -type function_name() ::
-    'MerchantStatistics_service_functions'().
+    'MerchantStatistics_service_functions'() |
+    'DarkMessiahStatistics_service_functions'().
 
 -type 'MerchantStatistics_service_functions'() ::
     'GetPayments' |
@@ -432,6 +434,11 @@
     'GetStatistics'.
 
 -export_type(['MerchantStatistics_service_functions'/0]).
+
+-type 'DarkMessiahStatistics_service_functions'() ::
+    'GetByQuery'.
+
+-export_type(['DarkMessiahStatistics_service_functions'/0]).
 
 
 -type struct_flavour() :: struct | exception | union.
@@ -549,7 +556,8 @@ structs() ->
 
 services() ->
     [
-        'MerchantStatistics'
+        'MerchantStatistics',
+        'DarkMessiahStatistics'
     ].
 
 -spec namespace() -> namespace().
@@ -1135,6 +1143,11 @@ functions('MerchantStatistics') ->
         'GetStatistics'
     ];
 
+functions('DarkMessiahStatistics') ->
+    [
+        'GetByQuery'
+    ];
+
 functions(_) -> error(badarg).
 
 -spec function_info(service_name(), function_name(), params_type | reply_type | exceptions) ->
@@ -1191,6 +1204,18 @@ function_info('MerchantStatistics', 'GetStatistics', params_type) ->
 function_info('MerchantStatistics', 'GetStatistics', reply_type) ->
         {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
     function_info('MerchantStatistics', 'GetStatistics', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
+    ]};
+
+function_info('DarkMessiahStatistics', 'GetByQuery', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+]};
+function_info('DarkMessiahStatistics', 'GetByQuery', reply_type) ->
+        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+    function_info('DarkMessiahStatistics', 'GetByQuery', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
