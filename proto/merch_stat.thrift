@@ -399,7 +399,7 @@ service MerchantStatistics {
     StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 }
 
-service DarkMerchantStatistics {
+service DarkMessiahStatistics {
 
     /**
      * Возвращает набор данных о выплатах
