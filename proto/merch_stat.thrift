@@ -399,3 +399,12 @@ service MerchantStatistics {
     StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 }
 
+service DarkMerchantStatistics {
+
+    /**
+     * Возвращает набор данных о выплатах
+     */
+    StatResponse GetEnrichedInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+}
+
