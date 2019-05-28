@@ -1802,7 +1802,7 @@ struct TerminalDecision {
 
 struct ProviderTerminalRef {
     1: required ObjectID id
-    2: optional double priority
+    2: optional i64 priority
 }
 
 struct TerminalRef {
