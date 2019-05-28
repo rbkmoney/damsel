@@ -184,6 +184,7 @@ struct InvoicePaymentProcessed {}
 struct InvoicePaymentCaptured  {
     1: optional string reason
     2: optional Cash cost
+    3: optional InvoiceCart cart
 }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
@@ -378,6 +379,7 @@ struct InvoicePaymentRefund {
     7: optional PartyRevision party_revision
     6: optional Cash cash
     5: optional string reason
+    8: optional InvoiceCart cart
 }
 
 union InvoicePaymentRefundStatus {
@@ -1314,6 +1316,7 @@ union PaymentMethod {
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
+    6: CryptoCurrency crypto_currency
 }
 
 struct TokenizedBankCard {
@@ -1352,6 +1355,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: CryptoCurrency crypto_currency
 }
 
 struct DisposablePaymentResource {
@@ -1373,6 +1377,21 @@ struct BankCard {
     8: optional map<string, msgpack.Value> metadata
     9: optional bool is_cvv_empty
 }
+
+struct CryptoWallet {
+    1: required string id // ID or wallet of the recipient in the third-party payment system
+    2: required CryptoCurrency crypto_currency
+}
+
+enum CryptoCurrency {
+    bitcoin
+    litecoin
+    bitcoin_cash
+    ripple
+    ethereum
+    zcash
+}
+
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
@@ -1398,6 +1417,7 @@ struct DigitalWallet {
 enum DigitalWalletProvider {
     qiwi
     rbkmoney
+    yandex_money
 }
 
 struct BankRef { 1: required ObjectID id }
@@ -1814,6 +1834,7 @@ union PaymentToolCondition {
     1: BankCardCondition bank_card
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
+    4: CryptoCurrencyCondition crypto_currency
 }
 
 struct BankCardCondition {
@@ -1847,6 +1868,14 @@ struct DigitalWalletCondition {
 
 union DigitalWalletConditionDefinition {
     1: DigitalWalletProvider provider_is
+}
+
+struct CryptoCurrencyCondition {
+    1: optional CryptoCurrencyConditionDefinition definition
+}
+
+union CryptoCurrencyConditionDefinition {
+    1: CryptoCurrency crypto_currency_is
 }
 
 struct PartyCondition {

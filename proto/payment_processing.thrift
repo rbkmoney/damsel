@@ -496,6 +496,11 @@ struct InvoicePaymentRefundParams {
      * Данные проведённой вручную транзакции
      */
     3: optional domain.TransactionInfo transaction_info
+    /**
+     * Итоговая корзина товаров.
+     * Используется для частичного возврата, содержит позиции, которые остались после возврата.
+     */
+    4: optional domain.InvoiceCart cart
 }
 
 /**
@@ -509,6 +514,7 @@ struct InvoicePaymentCaptureParams {
      * Если сумма не указана, то считаем, что подтверждаем полную сумму платежа.
      */
     2: optional domain.Cash cash
+    3: optional domain.InvoiceCart cart
 }
 
 /**
@@ -552,6 +558,11 @@ union InvoiceRepairScenario{
     2: InvoiceRepairFailPreProcessing fail_pre_processing
     3: InvoiceRepairSkipInspector skip_inspector
     4: InvoiceRepairFailSession fail_session
+}
+
+/* Параметры adhoc починки упавшей машины. */
+struct InvoiceRepairParams {
+    1: optional bool validate_transitions = true
 }
 
 // Exceptions
@@ -725,7 +736,7 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        4: string reason
+        4: InvoicePaymentCaptureParams params
     )
         throws (
             1: InvalidUser ex1,
@@ -735,7 +746,9 @@ service Invoicing {
             5: base.InvalidRequest ex5,
             6: OperationNotPermitted ex6,
             7: InvalidPartyStatus ex7,
-            8: InvalidShopStatus ex8
+            8: InvalidShopStatus ex8,
+            9: InconsistentCaptureCurrency ex9,
+            10: AmountExceededCaptureBalance ex10
         )
 
     void CapturePaymentNew (
@@ -907,7 +920,8 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: list<InvoiceChange> changes,
-        4: repairing.ComplexAction action
+        4: repairing.ComplexAction action,
+        5: InvoiceRepairParams params
     )
         throws (
             1: InvalidUser ex1,

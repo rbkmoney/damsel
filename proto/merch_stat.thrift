@@ -29,6 +29,7 @@ struct StatPayment {
     15: optional string short_id
     16: optional bool make_recurrent
     17: required domain.DataRevision domain_revision
+    18: optional domain.InvoiceCart cart
 }
 
 union Payer {
@@ -182,6 +183,12 @@ struct StatInvoice {
     12: optional domain.InvoiceCart cart
 }
 
+struct EnrichedStatInvoice {
+    1: required StatInvoice invoice
+    2: required list<StatPayment> payments
+    3: required list<StatRefund> refunds
+}
+
 struct InvoiceUnpaid    {}
 struct InvoicePaid      { 1: optional base.Timestamp at }
 struct InvoiceCancelled {
@@ -300,6 +307,7 @@ struct StatRefund {
     9 : required domain.Amount fee
     10: required string currency_symbolic_code
     11: optional string reason
+    12: optional domain.InvoiceCart cart
 }
 
 union InvoicePaymentRefundStatus {
@@ -354,6 +362,7 @@ union StatResponseData {
     4: list<StatInfo> records
     5: list<StatPayout> payouts
     6: list<StatRefund> refunds
+    7: list<EnrichedStatInvoice> enriched_invoices
 }
 
 /**
@@ -388,5 +397,14 @@ service MerchantStatistics {
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
      */
     StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+}
+
+service DarkMessiahStatistics {
+
+    /**
+     * Возвращает набор данных
+     */
+    StatResponse GetByQuery(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
 }
 
