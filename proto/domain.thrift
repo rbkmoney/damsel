@@ -1789,6 +1789,9 @@ struct Terminal {
     2: required string description
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
+    
+    /* deprecated */
+    12: optional PaymentsProvisionTerms terms
 }
 
 union TerminalSelector {
