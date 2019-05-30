@@ -924,11 +924,11 @@
 
 %% struct 'PaymentsProvisionTerms'
 -record('domain_PaymentsProvisionTerms', {
-    'currencies' :: dmsl_domain_thrift:'CurrencySelector'(),
-    'categories' :: dmsl_domain_thrift:'CategorySelector'(),
-    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'(),
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'(),
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'categories' :: dmsl_domain_thrift:'CategorySelector'() | undefined,
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
 }).

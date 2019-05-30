@@ -4155,11 +4155,11 @@ struct_info('WithdrawalProvider') ->
 
 struct_info('PaymentsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+    {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
 ]};
