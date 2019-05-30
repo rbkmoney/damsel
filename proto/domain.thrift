@@ -1677,11 +1677,11 @@ struct WithdrawalProvider {
 }
 
 struct PaymentsProvisionTerms {
-    1: required CurrencySelector currencies
-    2: required CategorySelector categories
-    3: required PaymentMethodSelector payment_methods
-    6: required CashLimitSelector cash_limit
-    4: required CashFlowSelector cash_flow
+    1: optional CurrencySelector currencies
+    2: optional CategorySelector categories
+    3: optional PaymentMethodSelector payment_methods
+    6: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
 }
@@ -1789,8 +1789,6 @@ struct Terminal {
     2: required string description
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
-    
-    /* deprecated */
     12: optional PaymentsProvisionTerms terms
 }
 
@@ -1823,7 +1821,6 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
-    9: TerminalRef terminal_is
 }
 
 union PaymentToolCondition {
