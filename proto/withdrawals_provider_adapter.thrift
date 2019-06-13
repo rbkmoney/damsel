@@ -101,11 +101,15 @@ struct ProcessResult {
  * для валидации при подтверждении создания выплаты.
  */
 struct HoldResult {
-    1: required ID             order_id
+    1: required base.ID        order_id
     2: required Cash           hold_exchanged_cash
     3: required Cash           hold_cash
     4: required Destination    destination
 }
+
+exception HoldNotFound{}
+exception HoldTimeout{}
+
 
 service Adapter {
 
@@ -135,10 +139,12 @@ service Adapter {
      * Запрос к адаптеру c подтверждением создания выплаты по ранее полученному обязательству.
      */
     ProcessResult captureWithdrawal (
-        1: ID order_id
+        1: base.ID order_id
         2: InternalState state
         3: Options opts
     )
     throws (
+        1: HoldNotFound ex1,
+        2: HoldTimeout ex2,
     )
 }
