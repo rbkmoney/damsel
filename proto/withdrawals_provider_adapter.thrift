@@ -63,7 +63,7 @@ struct SleepIntent {
  * Данные вывода, необходимые для обращения к провайдеру.
  */
 struct Withdrawal {
-    1: required base.ID id
+    1: optional base.ID id
     2: required Cash body
     3: required Destination destination
     4: optional Identity sender
@@ -93,6 +93,20 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
+/**
+ * Результат холдирования.
+ *
+ * В результате обращения адаптер получаем идентификатор обязательства,
+ * сумму в оригинальной и сконвертированной валюте и назначение вывода
+ * для валидации при подтверждении создания выплаты.
+ */
+struct HoldResult {
+    1: required ID             order_id
+    2: required Cash           hold_exchanged_cash
+    3: required Cash           hold_cash
+    4: required Destination    destination
+}
+
 service Adapter {
 
     /**
@@ -106,4 +120,25 @@ service Adapter {
     throws (
     )
 
+    /**
+     * Запрос к адаптеру на холдирование суммы выплаты.
+     */
+    HoldResult holdWithdrawal (
+        1: Withdrawal withdrawal
+        2: InternalState state
+        3: Options opts
+    )
+    throws (
+    )
+
+    /**
+     * Запрос к адаптеру c подтверждением создания выплаты по ранее полученному обязательству.
+     */
+    ProcessResult captureWithdrawal (
+        1: ID order_id
+        2: InternalState state
+        3: Options opts
+    )
+    throws (
+    )
 }
