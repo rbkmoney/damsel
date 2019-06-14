@@ -63,7 +63,7 @@ struct SleepIntent {
  * Данные вывода, необходимые для обращения к провайдеру.
  */
 struct Withdrawal {
-    1: optional base.ID id
+    1: required base.ID id
     2: required Cash body
     3: required Destination destination
     4: optional Identity sender
@@ -76,6 +76,30 @@ typedef withdrawals_domain.Identity    Identity
 struct Cash {
     1: required domain.Amount   amount
     2: required domain.Currency currency
+}
+
+struct CryptoCash {
+    1: required domain.Amount   amount
+    2: required domain.CryptoCurrency currency
+}
+
+
+/**
+ * Данные вывода, необходимые для обращения к провайдеру.
+ */
+struct HoldWithdrawal {
+    1: optional base.ID id
+    2: required Cash cash
+    3: required CryptoCash exchange_cash
+}
+
+/**
+ * Данные вывода, необходимые для обращения к провайдеру.
+ */
+struct CaptureWithdrawal {
+    1: required base.ID id
+    2: required base.ID order_id
+    3: required Destination destination
 }
 
 ///
@@ -97,19 +121,49 @@ struct ProcessResult {
  * Результат холдирования.
  *
  * В результате обращения адаптер получаем идентификатор обязательства,
- * сумму в оригинальной и сконвертированной валюте и назначение вывода
- * для валидации при подтверждении создания выплаты.
+ * сумму в оригинальной и сконвертированной валюте, время создания и действия обязательства.
  */
 struct HoldResult {
-    1: required base.ID        order_id
-    2: required Cash           hold_exchanged_cash
-    3: required Cash           hold_cash
-    4: required Destination    destination
+    1: optional base.ID         id
+    2: required base.ID         order_id
+    3: required HoldStatus      status
+    4: required CryptoCash      exchanged_cash
+    5: required Cash            cash
+    7: required base.Timestamp  create_at
+    8: required base.Timestamp  expires_on
 }
 
-exception HoldNotFound{}
-exception HoldTimeout{}
+union HoldStatus {
+    1: HoldNew hold_new
+    2: HoldCompleted hold_completed
+    3: HoldExpired hold_expired
+}
 
+struct HoldNew {}
+struct HoldCompleted {}
+struct HoldExpired {}
+
+/**
+ * Вариант с таблицей курсов.
+ */
+
+struct HoldTable {
+    1: required list<HoldLine> lines
+}
+
+struct HoldLine {
+    1: required domain.CashRange range
+    2: required list<CryptoCash> exchange_rates
+    3: required list<base.ID> order_ids
+    4: required base.Timestamp  create_at
+    5: required base.Timestamp  expires_on
+}
+
+struct HoldResultTable {
+    1: optional base.ID         id
+    2: required HoldStatus      status
+    3: required HoldTable       data
+}
 
 service Adapter {
 
@@ -128,7 +182,7 @@ service Adapter {
      * Запрос к адаптеру на холдирование суммы выплаты.
      */
     HoldResult holdWithdrawal (
-        1: Withdrawal withdrawal
+        1: HoldWithdrawal hold
         2: InternalState state
         3: Options opts
     )
@@ -136,15 +190,13 @@ service Adapter {
     )
 
     /**
-     * Запрос к адаптеру c подтверждением создания выплаты по ранее полученному обязательству.
+     * Запрос к адаптеру c подтверждением проведения выплаты по ранее полученному обязательству.
      */
     ProcessResult captureWithdrawal (
-        1: base.ID order_id
+        1: CaptureWithdrawal capture
         2: InternalState state
         3: Options opts
     )
     throws (
-        1: HoldNotFound ex1,
-        2: HoldTimeout ex2,
     )
 }
