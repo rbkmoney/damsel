@@ -25,7 +25,8 @@
     'short_id' :: binary() | undefined,
     'make_recurrent' :: boolean() | undefined,
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'RecurrentParentPayment'

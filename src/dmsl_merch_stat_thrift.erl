@@ -630,7 +630,8 @@ struct_info('StatPayment') ->
     {15, optional, string, 'short_id', undefined},
     {16, optional, bool, 'make_recurrent', undefined},
     {17, required, i64, 'domain_revision', undefined},
-    {18, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    {18, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+    {19, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
 ]};
 
 struct_info('Payer') ->
