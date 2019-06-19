@@ -1408,12 +1408,11 @@ enum TerminalPaymentProvider {
 }
 
 typedef string DigitalWalletID
-typedef string AccessToken
 
 struct DigitalWallet {
     1: required DigitalWalletProvider provider
     2: required DigitalWalletID       id
-    3: optional AccessToken           access_token
+    3: optional Token                 token
 }
 
 enum DigitalWalletProvider {
