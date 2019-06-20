@@ -74,7 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
-    6: optional RateData rate_data
+    6: optional ExchangeAgree exchange_contract
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -85,19 +85,9 @@ struct Cash {
     2: required domain.Currency currency
 }
 
-struct CryptoCash {
-    1: required domain.Amount   amount
-    2: required domain.CryptoCurrency currency
-}
-
 struct ExchangeCash {
     1: optional domain.Amount   amount
     2: required domain.Currency currency
-}
-
-struct ExchangeCryptoCash {
-    1: optional domain.Amount   amount
-    2: required domain.CryptoCurrency currency
 }
 
 /**
@@ -105,10 +95,8 @@ struct ExchangeCryptoCash {
  */
 struct GetExchangeRatesParams {
     1: optional base.ID id
-    // From
-    2: required ExchangeCash cash
-    // To
-    3: required ExchangeCryptoCash exchange_cash
+    2: required ExchangeCash cash_from
+    3: required ExchangeCash cash_to
 }
 
 ///
@@ -126,13 +114,20 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
+struct ExchangeAgree {
+    1: required base.ID             id
+    2: required list<ExchangeRate>  rates
+    3: required base.Timestamp      create_at
+    4: required base.Timestamp      expires_on
+    5: optional RateData            rate_data
+}
+
 struct ExchangeRate {
-    1: required base.ID         id
-    2: required Cash            cash
-    3: required CryptoCash      exchange_cash
-    4: required base.Timestamp  create_at
-    5: required base.Timestamp  expires_on
-    6: optional RateData        rate_data
+    1: required domain.Currency currency_from
+    2: required domain.Currency currency_to
+    3: required base.Rational rate
+    4: required domain.CashRange cash_range_from
+    5: required domain.RoundingMethod rounding_method
 }
 
 service Adapter {
@@ -151,7 +146,7 @@ service Adapter {
     /**
      * Запрос к адаптеру на получение курсов конвертации.
      */
-    list<ExchangeRate> GetExchangeRates (
+    ExchangeAgree GetExchangeRates (
         1: GetExchangeRatesParams params
         2: InternalState state
         3: Options opts
