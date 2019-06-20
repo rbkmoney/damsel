@@ -74,7 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
-    6: optional ExchangeAgree exchange_contract
+    6: optional ExchangeAgree exchange_agree
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -94,7 +94,7 @@ struct ExchangeCash {
  * Данные для получения курсов конвертации по выбранным валютам.
  */
 struct GetExchangeRatesParams {
-    1: optional base.ID id
+    1: optional base.ID idempotency_id
     2: required ExchangeCash cash_from
     3: required ExchangeCash cash_to
 }
@@ -115,7 +115,7 @@ struct ProcessResult {
 }
 
 struct ExchangeAgree {
-    1: required base.ID             id
+    1: required base.ID             idempotency_id
     2: required list<ExchangeRate>  rates
     3: required base.Timestamp      create_at
     4: required base.Timestamp      expires_on
