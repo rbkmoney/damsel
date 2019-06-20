@@ -20,6 +20,12 @@ typedef domain.ProxyOptions Options
 typedef msgpack.Value InternalState
 
 /**
+ * Непрозрачные для процессинга данные конвертации валют, связанные с особенностями взаимодействия с
+ * третьей стороной.
+ */
+typedef msgpack.Value RateData
+
+/**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
  * стороной.
  */
@@ -68,6 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
+    6: optional RateData rate_data
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -83,23 +90,25 @@ struct CryptoCash {
     2: required domain.CryptoCurrency currency
 }
 
+struct ExchangeCash {
+    1: optional domain.Amount   amount
+    2: required domain.Currency currency
+}
 
-/**
- * Данные вывода, необходимые для обращения к провайдеру.
- */
-struct HoldWithdrawal {
-    1: optional base.ID id
-    2: required Cash cash
-    3: required CryptoCash exchange_cash
+struct ExchangeCryptoCash {
+    1: optional domain.Amount   amount
+    2: required domain.CryptoCurrency currency
 }
 
 /**
- * Данные вывода, необходимые для обращения к провайдеру.
+ * Данные для получения курсов конвертации по выбранным валютам.
  */
-struct CaptureWithdrawal {
-    1: required base.ID id
-    2: required base.ID order_id
-    3: required Destination destination
+struct GetExchangeRatesParams {
+    1: optional base.ID id
+    // From
+    2: required ExchangeCash cash
+    // To
+    3: required ExchangeCryptoCash exchange_cash
 }
 
 ///
@@ -117,52 +126,13 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
-/**
- * Результат холдирования.
- *
- * В результате обращения адаптер получаем идентификатор обязательства,
- * сумму в оригинальной и сконвертированной валюте, время создания и действия обязательства.
- */
-struct HoldResult {
-    1: optional base.ID         id
-    2: required base.ID         order_id
-    3: required HoldStatus      status
-    4: required CryptoCash      exchanged_cash
-    5: required Cash            cash
-    7: required base.Timestamp  create_at
-    8: required base.Timestamp  expires_on
-}
-
-union HoldStatus {
-    1: HoldNew hold_new
-    2: HoldCompleted hold_completed
-    3: HoldExpired hold_expired
-}
-
-struct HoldNew {}
-struct HoldCompleted {}
-struct HoldExpired {}
-
-/**
- * Вариант с таблицей курсов.
- */
-
-struct HoldTable {
-    1: required list<HoldLine> lines
-}
-
-struct HoldLine {
-    1: required domain.CashRange range
-    2: required list<CryptoCash> exchange_rates
-    3: required list<base.ID> order_ids
+struct ExchangeRate {
+    1: required base.ID         id
+    2: required Cash            cash
+    3: required CryptoCash      exchange_cash
     4: required base.Timestamp  create_at
     5: required base.Timestamp  expires_on
-}
-
-struct HoldResultTable {
-    1: optional base.ID         id
-    2: required HoldStatus      status
-    3: required HoldTable       data
+    6: optional RateData        rate_data
 }
 
 service Adapter {
@@ -179,21 +149,10 @@ service Adapter {
     )
 
     /**
-     * Запрос к адаптеру на холдирование суммы выплаты.
+     * Запрос к адаптеру на получение курсов конвертации.
      */
-    HoldResult holdWithdrawal (
-        1: HoldWithdrawal hold
-        2: InternalState state
-        3: Options opts
-    )
-    throws (
-    )
-
-    /**
-     * Запрос к адаптеру c подтверждением проведения выплаты по ранее полученному обязательству.
-     */
-    ProcessResult captureWithdrawal (
-        1: CaptureWithdrawal capture
+    list<ExchangeRate> GetExchangeRates (
+        1: GetExchangeRatesParams params
         2: InternalState state
         3: Options opts
     )
