@@ -3985,7 +3985,8 @@ struct_info('PaymentTerminal') ->
 struct_info('DigitalWallet') ->
     {struct, struct, [
     {1, required, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
-    {2, required, string, 'id', undefined}
+    {2, required, string, 'id', undefined},
+    {3, optional, string, 'token', undefined}
 ]};
 
 struct_info('BankRef') ->

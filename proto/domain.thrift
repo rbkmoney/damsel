@@ -1412,6 +1412,7 @@ typedef string DigitalWalletID
 struct DigitalWallet {
     1: required DigitalWalletProvider provider
     2: required DigitalWalletID       id
+    3: optional Token                 token
 }
 
 enum DigitalWalletProvider {

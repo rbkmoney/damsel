@@ -800,7 +800,8 @@
 %% struct 'DigitalWallet'
 -record('domain_DigitalWallet', {
     'provider' :: dmsl_domain_thrift:'DigitalWalletProvider'(),
-    'id' :: dmsl_domain_thrift:'DigitalWalletID'()
+    'id' :: dmsl_domain_thrift:'DigitalWalletID'(),
+    'token' :: dmsl_domain_thrift:'Token'() | undefined
 }).
 
 %% struct 'BankRef'
