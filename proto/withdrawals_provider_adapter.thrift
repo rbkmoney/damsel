@@ -85,18 +85,19 @@ struct Cash {
     2: required domain.Currency currency
 }
 
-struct ExchangeCash {
-    1: optional domain.Amount   amount
-    2: required domain.Currency currency
-}
-
 /**
  * Данные для получения курсов конвертации по выбранным валютам.
  */
 struct GetExchangeRatesParams {
     1: optional base.ID idempotency_id
-    2: required ExchangeCash cash_from
-    3: required ExchangeCash cash_to
+    2: required domain.Currency currency_from
+    3: required domain.Currency currency_to
+    4: required ExchangeCash exchange_cash
+}
+
+union ExchangeCash {
+    1: Cash cash_from
+    2: Cash cash_to
 }
 
 ///
@@ -117,7 +118,7 @@ struct ProcessResult {
 struct ExchangeAgree {
     1: required base.ID             idempotency_id
     2: required list<ExchangeRate>  rates
-    3: required base.Timestamp      create_at
+    3: required base.Timestamp      created_at
     4: required base.Timestamp      expires_on
     5: optional RateData            rate_data
 }
