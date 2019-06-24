@@ -127,7 +127,7 @@ struct ExchangeRate {
     1: required domain.Currency currency_from
     2: required domain.Currency currency_to
     3: required base.Rational rate
-    4: required domain.CashRange cash_range_from
+    4: required domain.CashRange cash_range
     5: required domain.RoundingMethod rounding_method
 }
 
@@ -149,8 +149,7 @@ service Adapter {
      */
     ExchangeAgree GetExchangeRates (
         1: GetExchangeRatesParams params
-        2: InternalState state
-        3: Options opts
+        2: Options opts
     )
     throws (
     )
