@@ -339,6 +339,7 @@ struct InvoicePaymentAdjustment {
     8: optional PartyRevision party_revision
 }
 
+struct InvoicePaymentAdjustmentCreated   {}
 struct InvoicePaymentAdjustmentPending   {}
 struct InvoicePaymentAdjustmentCaptured  { 1: required base.Timestamp at }
 struct InvoicePaymentAdjustmentCancelled { 1: required base.Timestamp at }

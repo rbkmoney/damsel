@@ -74,6 +74,10 @@ union PaymentFailure {
     4: NoRouteFoundFailure  no_route_found
 }
 
+union RefundFailure {
+     1: GeneralFailure    insufficient_account_balance
+}
+
 union AuthorizationFailure {
      1: GeneralFailure    unknown
      2: GeneralFailure    merchant_blocked
