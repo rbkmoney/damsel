@@ -348,6 +348,7 @@ union InvoicePaymentAdjustmentStatus {
     1: InvoicePaymentAdjustmentPending pending
     2: InvoicePaymentAdjustmentCaptured captured
     3: InvoicePaymentAdjustmentCancelled cancelled
+    4: InvoicePaymentAdjustmentCreated created
 }
 
 /**
