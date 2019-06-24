@@ -285,7 +285,6 @@
     'ProviderDecision'/0,
     'WithdrawalProviderSelector'/0,
     'WithdrawalProviderDecision'/0,
-    'TerminalRef'/0,
     'InspectorRef'/0,
     'Inspector'/0,
     'InspectorSelector'/0,
@@ -293,6 +292,8 @@
     'Terminal'/0,
     'TerminalSelector'/0,
     'TerminalDecision'/0,
+    'ProviderTerminalRef'/0,
+    'TerminalRef'/0,
     'Predicate'/0,
     'Condition'/0,
     'PaymentToolCondition'/0,
@@ -1041,7 +1042,6 @@
     'ProviderDecision' |
     'WithdrawalProviderSelector' |
     'WithdrawalProviderDecision' |
-    'TerminalRef' |
     'InspectorRef' |
     'Inspector' |
     'InspectorSelector' |
@@ -1049,6 +1049,8 @@
     'Terminal' |
     'TerminalSelector' |
     'TerminalDecision' |
+    'ProviderTerminalRef' |
+    'TerminalRef' |
     'Predicate' |
     'Condition' |
     'PaymentToolCondition' |
@@ -1774,9 +1776,6 @@
 %% struct 'WithdrawalProviderDecision'
 -type 'WithdrawalProviderDecision'() :: #'domain_WithdrawalProviderDecision'{}.
 
-%% struct 'TerminalRef'
--type 'TerminalRef'() :: #'domain_TerminalRef'{}.
-
 %% struct 'InspectorRef'
 -type 'InspectorRef'() :: #'domain_InspectorRef'{}.
 
@@ -1797,10 +1796,16 @@
 %% union 'TerminalSelector'
 -type 'TerminalSelector'() ::
     {'decisions', ['TerminalDecision'()]} |
-    {'value', ordsets:ordset('TerminalRef'())}.
+    {'value', ordsets:ordset('ProviderTerminalRef'())}.
 
 %% struct 'TerminalDecision'
 -type 'TerminalDecision'() :: #'domain_TerminalDecision'{}.
+
+%% struct 'ProviderTerminalRef'
+-type 'ProviderTerminalRef'() :: #'domain_ProviderTerminalRef'{}.
+
+%% struct 'TerminalRef'
+-type 'TerminalRef'() :: #'domain_TerminalRef'{}.
 
 %% union 'Predicate'
 -type 'Predicate'() ::
@@ -2378,7 +2383,6 @@ structs() ->
         'ProviderDecision',
         'WithdrawalProviderSelector',
         'WithdrawalProviderDecision',
-        'TerminalRef',
         'InspectorRef',
         'Inspector',
         'InspectorSelector',
@@ -2386,6 +2390,8 @@ structs() ->
         'Terminal',
         'TerminalSelector',
         'TerminalDecision',
+        'ProviderTerminalRef',
+        'TerminalRef',
         'Predicate',
         'Condition',
         'PaymentToolCondition',
@@ -4241,11 +4247,6 @@ struct_info('WithdrawalProviderDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'then_', undefined}
 ]};
 
-struct_info('TerminalRef') ->
-    {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
-
 struct_info('InspectorRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined}
@@ -4283,13 +4284,24 @@ struct_info('Terminal') ->
 struct_info('TerminalSelector') ->
     {struct, union, [
     {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TerminalDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}}, 'value', undefined}
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'ProviderTerminalRef'}}}, 'value', undefined}
 ]};
 
 struct_info('TerminalDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'then_', undefined}
+]};
+
+struct_info('ProviderTerminalRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined},
+    {2, optional, i64, 'priority', 1000}
+]};
+
+struct_info('TerminalRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined}
 ]};
 
 struct_info('Predicate') ->
@@ -5144,9 +5156,6 @@ record_name('OperationTimeout') ->
     record_name('WithdrawalProviderDecision') ->
     'domain_WithdrawalProviderDecision';
 
-    record_name('TerminalRef') ->
-    'domain_TerminalRef';
-
     record_name('InspectorRef') ->
     'domain_InspectorRef';
 
@@ -5161,6 +5170,12 @@ record_name('OperationTimeout') ->
 
     record_name('TerminalDecision') ->
     'domain_TerminalDecision';
+
+    record_name('ProviderTerminalRef') ->
+    'domain_ProviderTerminalRef';
+
+    record_name('TerminalRef') ->
+    'domain_TerminalRef';
 
     record_name('BankCardCondition') ->
     'domain_BankCardCondition';

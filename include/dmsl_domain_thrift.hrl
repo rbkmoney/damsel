@@ -992,11 +992,6 @@
     'then_' :: dmsl_domain_thrift:'WithdrawalProviderSelector'()
 }).
 
-%% struct 'TerminalRef'
--record('domain_TerminalRef', {
-    'id' :: dmsl_domain_thrift:'ObjectID'()
-}).
-
 %% struct 'InspectorRef'
 -record('domain_InspectorRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -1029,6 +1024,17 @@
 -record('domain_TerminalDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'TerminalSelector'()
+}).
+
+%% struct 'ProviderTerminalRef'
+-record('domain_ProviderTerminalRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'(),
+    'priority' = 1000 :: integer() | undefined
+}).
+
+%% struct 'TerminalRef'
+-record('domain_TerminalRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
 }).
 
 %% struct 'BankCardCondition'
