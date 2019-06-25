@@ -90,16 +90,18 @@ struct SuspendIntent {
     3: optional user_interaction.UserInteraction user_interaction
 
     /**
-    * Взаимодействие с прокси, в случае timeout
+    * Один из возможных вариантов поведения обработчика в случае истечения заданного timeout
     */
-    4: optional ProxyInteraction proxy_interaction
+    4: optional TimeoutBehaviour timeout_behaviour
 }
 
-struct RetryIntent {}
+enum RetryRequest {
+    process_payment
+}
 
-union ProxyInteraction {
-    1: FinishIntent finish
-    2: RetryIntent  retry_intent
+union TimeoutBehaviour {
+    1: FinishIntent  finish           // Завершение взаимодействия с указаным статусом
+    2: RetryRequest  retry_request    // Повторное обращение к прокси
 }
 
 struct RecurrentPaymentTool {

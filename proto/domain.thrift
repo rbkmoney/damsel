@@ -1394,15 +1394,28 @@ enum CryptoCurrency {
     zcash
 }
 
-typedef string MobilePhone
-
 struct MobileCommerce {
-    1: required MobileProvider provider
+    1: required MobileOperator operator
     2: required MobilePhone    phone
 }
 
-enum MobileProvider {
-    union_telecom
+enum MobileOperator {
+    mts
+    beeline
+    megafone
+    tele2
+    yota
+}
+
+/**
+* Телефонный номер согласно (E.164 — рекомендация ITU-T)
+* +79114363738
+* cc = 7 - код страны(1-3 цифры)
+* ctn = 9114363738 - 10-ти значный номер абонента(макс 12)
+*/
+struct MobilePhone {
+    1: required string cc
+    2: required string ctn
 }
 
 /** Платеж через терминал **/
