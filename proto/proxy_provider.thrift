@@ -95,7 +95,7 @@ struct SuspendIntent {
     4: optional ProxyInteraction proxy_interaction
 }
 
-struct RetryRequest {}
+struct RetryIntent {}
 
 union ProxyInteraction {
     1: FinishIntent finish
