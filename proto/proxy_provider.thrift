@@ -95,11 +95,11 @@ struct SuspendIntent {
     4: optional ProxyInteraction proxy_interaction
 }
 
-struct RetryIntent {}
+struct RetryRequest {}
 
 union ProxyInteraction {
     1: FinishIntent finish
-    2: RetryIntent   retry
+    2: RetryIntent  retry_intent
 }
 
 struct RecurrentPaymentTool {
