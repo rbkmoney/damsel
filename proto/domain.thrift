@@ -1356,6 +1356,7 @@ union PaymentTool {
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
     4: CryptoCurrency crypto_currency
+    5: MobileCommerce mobile_commerce
 }
 
 struct DisposablePaymentResource {
@@ -1392,6 +1393,16 @@ enum CryptoCurrency {
     zcash
 }
 
+typedef string MobilePhone
+
+struct MobileCommerce {
+    1: required MobileProvider provider
+    2: required MobilePhone    phone
+}
+
+enum MobileProvider {
+    union_telecom
+}
 
 /** Платеж через терминал **/
 struct PaymentTerminal {

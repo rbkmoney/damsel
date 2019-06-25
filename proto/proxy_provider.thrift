@@ -88,8 +88,19 @@ struct SuspendIntent {
      * в рамках сессии взаимодействия.
      */
     3: optional user_interaction.UserInteraction user_interaction
+
+    /**
+    * Взаимодействие с прокси, в случае timeout
+    */
+    4: optional ProxyInteraction proxy_interaction
 }
 
+struct RetryIntent {}
+
+union ProxyInteraction {
+    1: FinishIntent finish
+    2: RetryIntent   retry
+}
 
 struct RecurrentPaymentTool {
     1: required base.ID                          id
