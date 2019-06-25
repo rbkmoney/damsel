@@ -309,6 +309,7 @@ struct StatRefund {
     10: required string currency_symbolic_code
     11: optional string reason
     12: optional domain.InvoiceCart cart
+    13: optional domain.TransactionInfo transaction_info
 }
 
 union InvoicePaymentRefundStatus {
