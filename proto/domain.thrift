@@ -1317,6 +1317,7 @@ union PaymentMethod {
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
+    7: MobileCommerce mobile
 }
 
 struct TokenizedBankCard {
