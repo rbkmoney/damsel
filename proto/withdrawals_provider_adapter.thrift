@@ -20,6 +20,12 @@ typedef domain.ProxyOptions Options
 typedef msgpack.Value InternalState
 
 /**
+ * Непрозрачные для процессинга данные конвертации валют, связанные с особенностями взаимодействия с
+ * третьей стороной.
+ */
+typedef msgpack.Value RateData
+
+/**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
  * стороной.
  */
@@ -68,6 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
+    6: optional ExchangeAgree exchange_agree
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -76,6 +83,21 @@ typedef withdrawals_domain.Identity    Identity
 struct Cash {
     1: required domain.Amount   amount
     2: required domain.Currency currency
+}
+
+/**
+ * Данные для получения курсов конвертации по выбранным валютам.
+ */
+struct GetExchangeRatesParams {
+    1: optional base.ID idempotency_id
+    2: required domain.Currency currency_from
+    3: required domain.Currency currency_to
+    4: required ExchangeCash exchange_cash
+}
+
+union ExchangeCash {
+    1: Cash cash_from
+    2: Cash cash_to
 }
 
 ///
@@ -93,6 +115,22 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
+struct ExchangeAgree {
+    1: required base.ID             idempotency_id
+    2: required list<ExchangeRate>  rates
+    3: required base.Timestamp      created_at
+    4: required base.Timestamp      expires_on
+    5: optional RateData            rate_data
+}
+
+struct ExchangeRate {
+    1: required domain.Currency currency_from
+    2: required domain.Currency currency_to
+    3: required base.Rational rate
+    4: required domain.CashRange cash_range
+    5: required domain.RoundingMethod rounding_method
+}
+
 service Adapter {
 
     /**
@@ -106,4 +144,13 @@ service Adapter {
     throws (
     )
 
+    /**
+     * Запрос к адаптеру на получение курсов конвертации.
+     */
+    ExchangeAgree GetExchangeRates (
+        1: GetExchangeRatesParams params
+        2: Options opts
+    )
+    throws (
+    )
 }
