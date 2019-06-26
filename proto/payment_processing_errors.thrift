@@ -75,7 +75,7 @@ union PaymentFailure {
 }
 
 union RefundFailure {
-     1: GeneralFailure    insufficient_account_balance
+    1: TermsViolated  terms_violated
 }
 
 union AuthorizationFailure {
@@ -118,6 +118,10 @@ union BankCardReject {
 union NoRouteFoundFailure {
     1: GeneralFailure unknown
     2: GeneralFailure risk_score_is_too_high
+}
+
+union TermsViolated {
+    1: GeneralFailure insufficient_merchant_funds
 }
 
 struct GeneralFailure {}
