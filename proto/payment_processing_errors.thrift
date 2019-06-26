@@ -75,7 +75,8 @@ union PaymentFailure {
 }
 
 union RefundFailure {
-    1: TermsViolated  terms_violated
+    1: TermsViolated        terms_violated
+    2: AuthorizationFailure authorization_failed
 }
 
 union AuthorizationFailure {
