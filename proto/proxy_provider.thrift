@@ -96,9 +96,14 @@ struct SuspendIntent {
     4: optional TimeoutBehaviour timeout_behaviour
 }
 
+struct SuspendHandlerParams {
+    1: Callback Callback
+    2: PaymentContext context
+}
+
 union TimeoutBehaviour {
     1: FinishIntent finish                  // Завершение взаимодействия с указаным статусом
-    2: Callback     call_handler            // Вызов прокси для обработки события истечения таймаута
+    2: SuspendHandlerParams handle          // Вызов прокси для обработки события истечения таймаута
 }
 
 struct RecurrentPaymentTool {
@@ -310,7 +315,7 @@ service ProviderProxy {
     /**
      * Запрос к прокси на обработку вызова от процессинга при истечение 'SuspendIntent' таймаута.
      */
-    PaymentProxyResult HandleSuspendTimeout (1: Callback callback, 2: PaymentContext context)
+    PaymentProxyResult HandleSuspendTimeout (1: SuspendHandlerParams params)
 
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках платежной сессии.
