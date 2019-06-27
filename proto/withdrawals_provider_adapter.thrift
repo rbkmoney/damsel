@@ -74,7 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
-    6: optional ExchangeAgree exchange_agree
+    6: optional ExchangeRate exchange_rate
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -86,18 +86,16 @@ struct Cash {
 }
 
 /**
- * Данные для получения курсов конвертации по выбранным валютам.
+ * Данные для получения курса конвертации заданной суммы по выбранным валютам.
  */
-struct GetExchangeRatesParams {
+struct GetExchangeRateParams {
     1: optional base.ID idempotency_id
     2: required domain.Currency currency_from
     3: required domain.Currency currency_to
-    4: required ExchangeCash exchange_cash
-}
-
-union ExchangeCash {
-    1: Cash cash_from
-    2: Cash cash_to
+    /**
+     * Сумма в одной из валют обмена
+     */
+    4: required Cash exchange_cash
 }
 
 ///
@@ -115,20 +113,13 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
-struct ExchangeAgree {
-    1: required base.ID             idempotency_id
-    2: required list<ExchangeRate>  rates
-    3: required base.Timestamp      created_at
-    4: required base.Timestamp      expires_on
-    5: optional RateData            rate_data
-}
-
 struct ExchangeRate {
-    1: required domain.Currency currency_from
-    2: required domain.Currency currency_to
-    3: required base.Rational rate
-    4: required domain.CashRange cash_range
-    5: required domain.RoundingMethod rounding_method
+    1: required base.ID             idempotency_id
+    2: required Cash                cash_from
+    3: required Cash                cash_to
+    4: required base.Timestamp      created_at
+    5: required base.Timestamp      expires_on
+    6: optional RateData            rate_data
 }
 
 service Adapter {
@@ -147,8 +138,8 @@ service Adapter {
     /**
      * Запрос к адаптеру на получение курсов конвертации.
      */
-    ExchangeAgree GetExchangeRates (
-        1: GetExchangeRatesParams params
+    ExchangeRate GetExchangeRate (
+        1: GetExchangeRateParams params
         2: Options opts
     )
     throws (
