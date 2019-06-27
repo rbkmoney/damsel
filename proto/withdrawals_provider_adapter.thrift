@@ -114,12 +114,11 @@ struct ProcessResult {
 }
 
 struct ExchangeRate {
-    1: required base.ID             idempotency_id
-    2: required Cash                cash_from
-    3: required Cash                cash_to
-    4: required base.Timestamp      created_at
-    5: required base.Timestamp      expires_on
-    6: optional RateData            rate_data
+    1: required Cash                cash_from
+    2: required Cash                cash_to
+    3: required base.Timestamp      created_at
+    4: required base.Timestamp      expires_on
+    5: optional RateData            rate_data
 }
 
 service Adapter {
