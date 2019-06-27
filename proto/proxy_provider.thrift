@@ -97,8 +97,7 @@ struct SuspendIntent {
 }
 
 struct SuspendHandlerParams {
-    1: Callback Callback
-    2: PaymentContext context
+    1: PaymentContext context
 }
 
 union TimeoutBehaviour {
