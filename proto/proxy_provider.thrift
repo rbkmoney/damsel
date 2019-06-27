@@ -68,8 +68,9 @@ typedef base.Tag CallbackTag
 
 /**
  * Требование приостановить сессию взаимодействия, с продолжением по факту прихода обратного
- * запроса (callback), либо с неуспешным завершением по факту истечения заданного времени
- * ожидания.
+ * запроса (callback), либо выполняет один из указаных вариантов timeout_behaviour.
+ * Если не указан timeout_behaviour, сессия завершается с неуспешным завершением
+ * по факту истечения заданного времени ожидания.
  */
 struct SuspendIntent {
     /**
@@ -90,18 +91,14 @@ struct SuspendIntent {
     3: optional user_interaction.UserInteraction user_interaction
 
     /**
-    * Один из возможных вариантов поведения обработчика в случае истечения заданного timeout
+    * Поведения процессинга в случае истечения заданного timeout
     */
     4: optional TimeoutBehaviour timeout_behaviour
 }
 
-enum RetryRequest {
-    process_payment
-}
-
 union TimeoutBehaviour {
-    1: FinishIntent  finish           // Завершение взаимодействия с указаным статусом
-    2: RetryRequest  retry_request    // Повторное обращение к прокси
+    1: FinishIntent finish                  // Завершение взаимодействия с указаным статусом
+    2: Callback     call_handler            // Вызов прокси для обработки события истечения таймаута
 }
 
 struct RecurrentPaymentTool {
@@ -309,6 +306,11 @@ service ProviderProxy {
      * Запрос к прокси на проведение взаимодействия с провайдером в рамках платежной сессии.
      */
     PaymentProxyResult ProcessPayment (1: PaymentContext context)
+
+    /**
+     * Запрос к прокси на обработку вызова от процессинга при истечение 'SuspendIntent' таймаута.
+     */
+    PaymentProxyResult HandleSuspendTimeout (1: Callback callback, 2: PaymentContext context)
 
     /**
      * Запрос к прокси на обработку обратного вызова от провайдера в рамках платежной сессии.

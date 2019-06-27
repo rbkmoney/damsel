@@ -1400,11 +1400,11 @@ struct MobileCommerce {
 }
 
 enum MobileOperator {
-    mts
-    beeline
-    megafone
-    tele2
-    yota
+    mts      = 1
+    beeline  = 2
+    megafone = 3
+    tele2    = 4
+    yota     = 5
 }
 
 /**
@@ -1861,6 +1861,7 @@ union PaymentToolCondition {
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
     4: CryptoCurrencyCondition crypto_currency
+    5: MobileCommerceCondition mobile_commerce
 }
 
 struct BankCardCondition {
@@ -1902,6 +1903,14 @@ struct CryptoCurrencyCondition {
 
 union CryptoCurrencyConditionDefinition {
     1: CryptoCurrency crypto_currency_is
+}
+
+struct MobileCommerceCondition {
+    1: optional MobileCommerceConditionDefinition definition
+}
+
+union MobileCommerceConditionDefinition {
+    1: MobileOperator operator_is
 }
 
 struct PartyCondition {
