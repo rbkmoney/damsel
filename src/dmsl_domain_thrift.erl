@@ -139,6 +139,7 @@
     'RecurrentParentPayment'/0,
     'InvoicePaymentAdjustment'/0,
     'InvoicePaymentAdjustmentPending'/0,
+    'InvoicePaymentAdjustmentProcessed'/0,
     'InvoicePaymentAdjustmentCaptured'/0,
     'InvoicePaymentAdjustmentCancelled'/0,
     'InvoicePaymentAdjustmentStatus'/0,
@@ -896,6 +897,7 @@
     'RecurrentParentPayment' |
     'InvoicePaymentAdjustment' |
     'InvoicePaymentAdjustmentPending' |
+    'InvoicePaymentAdjustmentProcessed' |
     'InvoicePaymentAdjustmentCaptured' |
     'InvoicePaymentAdjustmentCancelled' |
     'InvoicePaymentAdjustmentStatus' |
@@ -1259,6 +1261,9 @@
 %% struct 'InvoicePaymentAdjustmentPending'
 -type 'InvoicePaymentAdjustmentPending'() :: #'domain_InvoicePaymentAdjustmentPending'{}.
 
+%% struct 'InvoicePaymentAdjustmentProcessed'
+-type 'InvoicePaymentAdjustmentProcessed'() :: #'domain_InvoicePaymentAdjustmentProcessed'{}.
+
 %% struct 'InvoicePaymentAdjustmentCaptured'
 -type 'InvoicePaymentAdjustmentCaptured'() :: #'domain_InvoicePaymentAdjustmentCaptured'{}.
 
@@ -1269,7 +1274,8 @@
 -type 'InvoicePaymentAdjustmentStatus'() ::
     {'pending', 'InvoicePaymentAdjustmentPending'()} |
     {'captured', 'InvoicePaymentAdjustmentCaptured'()} |
-    {'cancelled', 'InvoicePaymentAdjustmentCancelled'()}.
+    {'cancelled', 'InvoicePaymentAdjustmentCancelled'()} |
+    {'processed', 'InvoicePaymentAdjustmentProcessed'()}.
 
 %% union 'InvoicePaymentFlow'
 -type 'InvoicePaymentFlow'() ::
@@ -2237,6 +2243,7 @@ structs() ->
         'RecurrentParentPayment',
         'InvoicePaymentAdjustment',
         'InvoicePaymentAdjustmentPending',
+        'InvoicePaymentAdjustmentProcessed',
         'InvoicePaymentAdjustmentCaptured',
         'InvoicePaymentAdjustmentCancelled',
         'InvoicePaymentAdjustmentStatus',
@@ -3275,6 +3282,9 @@ struct_info('InvoicePaymentAdjustment') ->
 struct_info('InvoicePaymentAdjustmentPending') ->
     {struct, struct, []};
 
+struct_info('InvoicePaymentAdjustmentProcessed') ->
+    {struct, struct, []};
+
 struct_info('InvoicePaymentAdjustmentCaptured') ->
     {struct, struct, [
     {1, required, string, 'at', undefined}
@@ -3289,7 +3299,8 @@ struct_info('InvoicePaymentAdjustmentStatus') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCaptured'}}, 'captured', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentProcessed'}}, 'processed', undefined}
 ]};
 
 struct_info('InvoicePaymentFlow') ->
@@ -4816,6 +4827,9 @@ record_name('OperationTimeout') ->
 
     record_name('InvoicePaymentAdjustmentPending') ->
     'domain_InvoicePaymentAdjustmentPending';
+
+    record_name('InvoicePaymentAdjustmentProcessed') ->
+    'domain_InvoicePaymentAdjustmentProcessed';
 
     record_name('InvoicePaymentAdjustmentCaptured') ->
     'domain_InvoicePaymentAdjustmentCaptured';

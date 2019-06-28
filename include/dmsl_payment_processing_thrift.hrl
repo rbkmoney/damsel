@@ -143,7 +143,8 @@
 %% struct 'InvoicePaymentRefundCreated'
 -record('payproc_InvoicePaymentRefundCreated', {
     'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
-    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundStatusChanged'

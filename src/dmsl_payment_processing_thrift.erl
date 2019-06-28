@@ -2104,7 +2104,8 @@ struct_info('InvoicePaymentRefundChangePayload') ->
 struct_info('InvoicePaymentRefundCreated') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
-    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundStatusChanged') ->

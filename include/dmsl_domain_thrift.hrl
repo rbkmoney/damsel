@@ -231,6 +231,9 @@
 %% struct 'InvoicePaymentAdjustmentPending'
 -record('domain_InvoicePaymentAdjustmentPending', {}).
 
+%% struct 'InvoicePaymentAdjustmentProcessed'
+-record('domain_InvoicePaymentAdjustmentProcessed', {}).
+
 %% struct 'InvoicePaymentAdjustmentCaptured'
 -record('domain_InvoicePaymentAdjustmentCaptured', {
     'at' :: dmsl_base_thrift:'Timestamp'()

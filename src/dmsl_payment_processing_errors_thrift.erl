@@ -33,11 +33,13 @@
 
 -export_type([
     'PaymentFailure'/0,
+    'RefundFailure'/0,
     'AuthorizationFailure'/0,
     'LimitExceeded'/0,
     'PaymentToolReject'/0,
     'BankCardReject'/0,
     'NoRouteFoundFailure'/0,
+    'TermsViolated'/0,
     'GeneralFailure'/0
 ]).
 
@@ -59,11 +61,13 @@
 %%
 -type struct_name() ::
     'PaymentFailure' |
+    'RefundFailure' |
     'AuthorizationFailure' |
     'LimitExceeded' |
     'PaymentToolReject' |
     'BankCardReject' |
     'NoRouteFoundFailure' |
+    'TermsViolated' |
     'GeneralFailure'.
 
 -type exception_name() :: none().
@@ -74,6 +78,11 @@
     {'preauthorization_failed', 'GeneralFailure'()} |
     {'authorization_failed', 'AuthorizationFailure'()} |
     {'no_route_found', 'NoRouteFoundFailure'()}.
+
+%% union 'RefundFailure'
+-type 'RefundFailure'() ::
+    {'terms_violated', 'TermsViolated'()} |
+    {'authorization_failed', 'AuthorizationFailure'()}.
 
 %% union 'AuthorizationFailure'
 -type 'AuthorizationFailure'() ::
@@ -115,6 +124,10 @@
 -type 'NoRouteFoundFailure'() ::
     {'unknown', 'GeneralFailure'()} |
     {'risk_score_is_too_high', 'GeneralFailure'()}.
+
+%% union 'TermsViolated'
+-type 'TermsViolated'() ::
+    {'insufficient_merchant_funds', 'GeneralFailure'()}.
 
 %% struct 'GeneralFailure'
 -type 'GeneralFailure'() :: #'payprocerr_GeneralFailure'{}.
@@ -168,11 +181,13 @@ enums() ->
 structs() ->
     [
         'PaymentFailure',
+        'RefundFailure',
         'AuthorizationFailure',
         'LimitExceeded',
         'PaymentToolReject',
         'BankCardReject',
         'NoRouteFoundFailure',
+        'TermsViolated',
         'GeneralFailure'
     ].
 
@@ -202,6 +217,12 @@ struct_info('PaymentFailure') ->
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'preauthorization_failed', undefined},
     {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined},
     {4, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'NoRouteFoundFailure'}}, 'no_route_found', undefined}
+]};
+
+struct_info('RefundFailure') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'TermsViolated'}}, 'terms_violated', undefined},
+    {2, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined}
 ]};
 
 struct_info('AuthorizationFailure') ->
@@ -248,6 +269,11 @@ struct_info('NoRouteFoundFailure') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'risk_score_is_too_high', undefined}
+]};
+
+struct_info('TermsViolated') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'insufficient_merchant_funds', undefined}
 ]};
 
 struct_info('GeneralFailure') ->
