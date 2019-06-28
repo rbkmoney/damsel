@@ -96,12 +96,11 @@ struct SuspendIntent {
     4: optional TimeoutBehaviour timeout_behaviour
 }
 
-union TimeoutBehaviour {
-    // Завершение взаимодействия с указаным статусом
-    1: FinishIntent finish
-    2: RecurrentTokenFinishIntent recurrent_finish
-    // Вызов прокси для обработки события истечения таймаута
-    3: Callback     call_proxy
+struct TimeoutBehaviour {
+    /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
+    1: domain.Failure failure
+    /** Вызов прокси для обработки события истечения таймаута. */
+    2: Callback callback
 }
 
 struct RecurrentPaymentTool {
