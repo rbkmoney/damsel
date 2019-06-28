@@ -314,6 +314,13 @@ union InvoicePaymentRefundChangePayload {
 struct InvoicePaymentRefundCreated {
     1: required domain.InvoicePaymentRefund refund
     2: required domain.FinalCashFlow cash_flow
+
+    /**
+    * Данные проведённой вручную транзакции.
+    * В случае присутствия при обработке возврата этап обращения к адаптеру будет пропущен,
+    * а эти данные будут использованы в качестве результата
+    */
+    3: optional domain.TransactionInfo transaction_info
 }
 
 /**

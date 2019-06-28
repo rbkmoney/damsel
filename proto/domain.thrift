@@ -340,13 +340,15 @@ struct InvoicePaymentAdjustment {
 }
 
 struct InvoicePaymentAdjustmentPending   {}
+struct InvoicePaymentAdjustmentProcessed {}
 struct InvoicePaymentAdjustmentCaptured  { 1: required base.Timestamp at }
 struct InvoicePaymentAdjustmentCancelled { 1: required base.Timestamp at }
 
 union InvoicePaymentAdjustmentStatus {
-    1: InvoicePaymentAdjustmentPending pending
-    2: InvoicePaymentAdjustmentCaptured captured
+    1: InvoicePaymentAdjustmentPending     pending
+    2: InvoicePaymentAdjustmentCaptured   captured
     3: InvoicePaymentAdjustmentCancelled cancelled
+    4: InvoicePaymentAdjustmentProcessed processed
 }
 
 /**
