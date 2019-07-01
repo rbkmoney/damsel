@@ -795,6 +795,18 @@
     'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrency'()
 }).
 
+%% struct 'MobileCommerce'
+-record('domain_MobileCommerce', {
+    'operator' :: dmsl_domain_thrift:'MobileOperator'(),
+    'phone' :: dmsl_domain_thrift:'MobilePhone'()
+}).
+
+%% struct 'MobilePhone'
+-record('domain_MobilePhone', {
+    'cc' :: binary(),
+    'ctn' :: binary()
+}).
+
 %% struct 'PaymentTerminal'
 -record('domain_PaymentTerminal', {
     'terminal_type' :: dmsl_domain_thrift:'TerminalPaymentProvider'()
@@ -1064,6 +1076,11 @@
 %% struct 'CryptoCurrencyCondition'
 -record('domain_CryptoCurrencyCondition', {
     'definition' :: dmsl_domain_thrift:'CryptoCurrencyConditionDefinition'() | undefined
+}).
+
+%% struct 'MobileCommerceCondition'
+-record('domain_MobileCommerceCondition', {
+    'definition' :: dmsl_domain_thrift:'MobileCommerceConditionDefinition'() | undefined
 }).
 
 %% struct 'PartyCondition'

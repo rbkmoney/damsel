@@ -27,7 +27,14 @@
 -record('prxprv_SuspendIntent', {
     'tag' :: dmsl_proxy_provider_thrift:'CallbackTag'(),
     'timeout' :: dmsl_base_thrift:'Timer'(),
-    'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined
+    'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined,
+    'timeout_behaviour' :: dmsl_proxy_provider_thrift:'TimeoutBehaviour'() | undefined
+}).
+
+%% struct 'TimeoutBehaviour'
+-record('prxprv_TimeoutBehaviour', {
+    'failure' :: dmsl_domain_thrift:'Failure'(),
+    'callback' :: dmsl_proxy_provider_thrift:'Callback'()
 }).
 
 %% struct 'RecurrentPaymentTool'

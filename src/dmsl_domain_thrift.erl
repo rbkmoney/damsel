@@ -87,6 +87,7 @@
     'BankCardPaymentSystem'/0,
     'BankCardTokenProvider'/0,
     'CryptoCurrency'/0,
+    'MobileOperator'/0,
     'TerminalPaymentProvider'/0,
     'DigitalWalletProvider'/0,
     'MerchantCashFlowAccount'/0,
@@ -245,6 +246,8 @@
     'DisposablePaymentResource'/0,
     'BankCard'/0,
     'CryptoWallet'/0,
+    'MobileCommerce'/0,
+    'MobilePhone'/0,
     'PaymentTerminal'/0,
     'DigitalWallet'/0,
     'BankRef'/0,
@@ -307,6 +310,8 @@
     'DigitalWalletConditionDefinition'/0,
     'CryptoCurrencyCondition'/0,
     'CryptoCurrencyConditionDefinition'/0,
+    'MobileCommerceCondition'/0,
+    'MobileCommerceConditionDefinition'/0,
     'PartyCondition'/0,
     'PartyConditionDefinition'/0,
     'ProxyRef'/0,
@@ -465,6 +470,7 @@
     'BankCardPaymentSystem' |
     'BankCardTokenProvider' |
     'CryptoCurrency' |
+    'MobileOperator' |
     'TerminalPaymentProvider' |
     'DigitalWalletProvider' |
     'MerchantCashFlowAccount' |
@@ -802,6 +808,14 @@
     'ethereum' |
     'zcash'.
 
+%% enum 'MobileOperator'
+-type 'MobileOperator'() ::
+    'mts' |
+    'beeline' |
+    'megafone' |
+    'tele2' |
+    'yota'.
+
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
     'euroset'.
@@ -1003,6 +1017,8 @@
     'DisposablePaymentResource' |
     'BankCard' |
     'CryptoWallet' |
+    'MobileCommerce' |
+    'MobilePhone' |
     'PaymentTerminal' |
     'DigitalWallet' |
     'BankRef' |
@@ -1065,6 +1081,8 @@
     'DigitalWalletConditionDefinition' |
     'CryptoCurrencyCondition' |
     'CryptoCurrencyConditionDefinition' |
+    'MobileCommerceCondition' |
+    'MobileCommerceConditionDefinition' |
     'PartyCondition' |
     'PartyConditionDefinition' |
     'ProxyRef' |
@@ -1614,7 +1632,8 @@
     {'digital_wallet', 'DigitalWalletProvider'()} |
     {'tokenized_bank_card', 'TokenizedBankCard'()} |
     {'empty_cvv_bank_card', 'BankCardPaymentSystem'()} |
-    {'crypto_currency', 'CryptoCurrency'()}.
+    {'crypto_currency', 'CryptoCurrency'()} |
+    {'mobile', 'MobileCommerce'()}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
@@ -1624,7 +1643,8 @@
     {'bank_card', 'BankCard'()} |
     {'payment_terminal', 'PaymentTerminal'()} |
     {'digital_wallet', 'DigitalWallet'()} |
-    {'crypto_currency', 'CryptoCurrency'()}.
+    {'crypto_currency', 'CryptoCurrency'()} |
+    {'mobile_commerce', 'MobileCommerce'()}.
 
 %% struct 'DisposablePaymentResource'
 -type 'DisposablePaymentResource'() :: #'domain_DisposablePaymentResource'{}.
@@ -1634,6 +1654,12 @@
 
 %% struct 'CryptoWallet'
 -type 'CryptoWallet'() :: #'domain_CryptoWallet'{}.
+
+%% struct 'MobileCommerce'
+-type 'MobileCommerce'() :: #'domain_MobileCommerce'{}.
+
+%% struct 'MobilePhone'
+-type 'MobilePhone'() :: #'domain_MobilePhone'{}.
 
 %% struct 'PaymentTerminal'
 -type 'PaymentTerminal'() :: #'domain_PaymentTerminal'{}.
@@ -1837,7 +1863,8 @@
     {'bank_card', 'BankCardCondition'()} |
     {'payment_terminal', 'PaymentTerminalCondition'()} |
     {'digital_wallet', 'DigitalWalletCondition'()} |
-    {'crypto_currency', 'CryptoCurrencyCondition'()}.
+    {'crypto_currency', 'CryptoCurrencyCondition'()} |
+    {'mobile_commerce', 'MobileCommerceCondition'()}.
 
 %% struct 'BankCardCondition'
 -type 'BankCardCondition'() :: #'domain_BankCardCondition'{}.
@@ -1873,6 +1900,13 @@
 %% union 'CryptoCurrencyConditionDefinition'
 -type 'CryptoCurrencyConditionDefinition'() ::
     {'crypto_currency_is', atom()}.
+
+%% struct 'MobileCommerceCondition'
+-type 'MobileCommerceCondition'() :: #'domain_MobileCommerceCondition'{}.
+
+%% union 'MobileCommerceConditionDefinition'
+-type 'MobileCommerceConditionDefinition'() ::
+    {'operator_is', atom()}.
 
 %% struct 'PartyCondition'
 -type 'PartyCondition'() :: #'domain_PartyCondition'{}.
@@ -2108,6 +2142,7 @@
     'BankCardPaymentSystem'() |
     'BankCardTokenProvider'() |
     'CryptoCurrency'() |
+    'MobileOperator'() |
     'TerminalPaymentProvider'() |
     'DigitalWalletProvider'() |
     'MerchantCashFlowAccount'() |
@@ -2187,6 +2222,7 @@ enums() ->
         'BankCardPaymentSystem',
         'BankCardTokenProvider',
         'CryptoCurrency',
+        'MobileOperator',
         'TerminalPaymentProvider',
         'DigitalWalletProvider',
         'MerchantCashFlowAccount',
@@ -2349,6 +2385,8 @@ structs() ->
         'DisposablePaymentResource',
         'BankCard',
         'CryptoWallet',
+        'MobileCommerce',
+        'MobilePhone',
         'PaymentTerminal',
         'DigitalWallet',
         'BankRef',
@@ -2411,6 +2449,8 @@ structs() ->
         'DigitalWalletConditionDefinition',
         'CryptoCurrencyCondition',
         'CryptoCurrencyConditionDefinition',
+        'MobileCommerceCondition',
+        'MobileCommerceConditionDefinition',
         'PartyCondition',
         'PartyConditionDefinition',
         'ProxyRef',
@@ -2939,6 +2979,15 @@ enum_info('CryptoCurrency') ->
         {'ripple', 3},
         {'ethereum', 4},
         {'zcash', 5}
+    ]};
+
+enum_info('MobileOperator') ->
+    {enum, [
+        {'mts', 1},
+        {'beeline', 2},
+        {'megafone', 3},
+        {'tele2', 4},
+        {'yota', 5}
     ]};
 
 enum_info('TerminalPaymentProvider') ->
@@ -3951,7 +4000,8 @@ struct_info('PaymentMethod') ->
     {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
     {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
-    {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
+    {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile', undefined}
 ]};
 
 struct_info('TokenizedBankCard') ->
@@ -3965,7 +4015,8 @@ struct_info('PaymentTool') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
+    {4, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
 ]};
 
 struct_info('DisposablePaymentResource') ->
@@ -3992,6 +4043,18 @@ struct_info('CryptoWallet') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
     {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
+]};
+
+struct_info('MobileCommerce') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'MobilePhone'}}, 'phone', undefined}
+]};
+
+struct_info('MobilePhone') ->
+    {struct, struct, [
+    {1, required, string, 'cc', undefined},
+    {2, required, string, 'ctn', undefined}
 ]};
 
 struct_info('PaymentTerminal') ->
@@ -4341,7 +4404,8 @@ struct_info('PaymentToolCondition') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyCondition'}}, 'crypto_currency', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyCondition'}}, 'crypto_currency', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerceCondition'}}, 'mobile_commerce', undefined}
 ]};
 
 struct_info('BankCardCondition') ->
@@ -4392,6 +4456,16 @@ struct_info('CryptoCurrencyCondition') ->
 struct_info('CryptoCurrencyConditionDefinition') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency_is', undefined}
+]};
+
+struct_info('MobileCommerceCondition') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'MobileCommerceConditionDefinition'}}, 'definition', undefined}
+]};
+
+struct_info('MobileCommerceConditionDefinition') ->
+    {struct, union, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator_is', undefined}
 ]};
 
 struct_info('PartyCondition') ->
@@ -5077,6 +5151,12 @@ record_name('OperationTimeout') ->
     record_name('CryptoWallet') ->
     'domain_CryptoWallet';
 
+    record_name('MobileCommerce') ->
+    'domain_MobileCommerce';
+
+    record_name('MobilePhone') ->
+    'domain_MobilePhone';
+
     record_name('PaymentTerminal') ->
     'domain_PaymentTerminal';
 
@@ -5205,6 +5285,9 @@ record_name('OperationTimeout') ->
 
     record_name('CryptoCurrencyCondition') ->
     'domain_CryptoCurrencyCondition';
+
+    record_name('MobileCommerceCondition') ->
+    'domain_MobileCommerceCondition';
 
     record_name('PartyCondition') ->
     'domain_PartyCondition';
