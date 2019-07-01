@@ -1319,6 +1319,7 @@ union PaymentMethod {
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
+    7: MobileCommerce mobile
 }
 
 struct TokenizedBankCard {
@@ -1358,6 +1359,7 @@ union PaymentTool {
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
     4: CryptoCurrency crypto_currency
+    5: MobileCommerce mobile_commerce
 }
 
 struct DisposablePaymentResource {
@@ -1394,6 +1396,29 @@ enum CryptoCurrency {
     zcash
 }
 
+struct MobileCommerce {
+    1: required MobileOperator operator
+    2: required MobilePhone    phone
+}
+
+enum MobileOperator {
+    mts      = 1
+    beeline  = 2
+    megafone = 3
+    tele2    = 4
+    yota     = 5
+}
+
+/**
+* Телефонный номер согласно (E.164 — рекомендация ITU-T)
+* +79114363738
+* cc = 7 - код страны(1-3 цифры)
+* ctn = 9114363738 - 10-ти значный номер абонента(макс 12)
+*/
+struct MobilePhone {
+    1: required string cc
+    2: required string ctn
+}
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
@@ -1838,6 +1863,7 @@ union PaymentToolCondition {
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
     4: CryptoCurrencyCondition crypto_currency
+    5: MobileCommerceCondition mobile_commerce
 }
 
 struct BankCardCondition {
@@ -1879,6 +1905,14 @@ struct CryptoCurrencyCondition {
 
 union CryptoCurrencyConditionDefinition {
     1: CryptoCurrency crypto_currency_is
+}
+
+struct MobileCommerceCondition {
+    1: optional MobileCommerceConditionDefinition definition
+}
+
+union MobileCommerceConditionDefinition {
+    1: MobileOperator operator_is
 }
 
 struct PartyCondition {
