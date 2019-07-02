@@ -35,7 +35,7 @@
     'Failure'/0,
     'Options'/0,
     'InternalState'/0,
-    'RateData'/0,
+    'QuoteData'/0,
     'Destination'/0,
     'Identity'/0
 ]).
@@ -47,9 +47,9 @@
     'SleepIntent'/0,
     'Withdrawal'/0,
     'Cash'/0,
-    'GetExchangeRateParams'/0,
+    'GetQuoteParams'/0,
     'ProcessResult'/0,
-    'ExchangeRate'/0
+    'Quote'/0
 ]).
 
 -type namespace() :: 'wthadpt'.
@@ -61,14 +61,14 @@
     'Failure' |
     'Options' |
     'InternalState' |
-    'RateData' |
+    'QuoteData' |
     'Destination' |
     'Identity'.
 
 -type 'Failure'() :: dmsl_domain_thrift:'Failure'().
 -type 'Options'() :: dmsl_domain_thrift:'ProxyOptions'().
 -type 'InternalState'() :: dmsl_msgpack_thrift:'Value'().
--type 'RateData'() :: dmsl_msgpack_thrift:'Value'().
+-type 'QuoteData'() :: dmsl_msgpack_thrift:'Value'().
 -type 'Destination'() :: dmsl_withdrawals_domain_thrift:'Destination'().
 -type 'Identity'() :: dmsl_withdrawals_domain_thrift:'Identity'().
 
@@ -88,9 +88,9 @@
     'SleepIntent' |
     'Withdrawal' |
     'Cash' |
-    'GetExchangeRateParams' |
+    'GetQuoteParams' |
     'ProcessResult' |
-    'ExchangeRate'.
+    'Quote'.
 
 -type exception_name() :: none().
 
@@ -119,14 +119,14 @@
 %% struct 'Cash'
 -type 'Cash'() :: #'wthadpt_Cash'{}.
 
-%% struct 'GetExchangeRateParams'
--type 'GetExchangeRateParams'() :: #'wthadpt_GetExchangeRateParams'{}.
+%% struct 'GetQuoteParams'
+-type 'GetQuoteParams'() :: #'wthadpt_GetQuoteParams'{}.
 
 %% struct 'ProcessResult'
 -type 'ProcessResult'() :: #'wthadpt_ProcessResult'{}.
 
-%% struct 'ExchangeRate'
--type 'ExchangeRate'() :: #'wthadpt_ExchangeRate'{}.
+%% struct 'Quote'
+-type 'Quote'() :: #'wthadpt_Quote'{}.
 
 %%
 %% services and functions
@@ -139,7 +139,7 @@
 
 -type 'Adapter_service_functions'() ::
     'ProcessWithdrawal' |
-    'GetExchangeRate'.
+    'GetQuote'.
 
 -export_type(['Adapter_service_functions'/0]).
 
@@ -177,7 +177,7 @@ typedefs() ->
         'Failure',
         'Options',
         'InternalState',
-        'RateData',
+        'QuoteData',
         'Destination',
         'Identity'
     ].
@@ -198,9 +198,9 @@ structs() ->
         'SleepIntent',
         'Withdrawal',
         'Cash',
-        'GetExchangeRateParams',
+        'GetQuoteParams',
         'ProcessResult',
-        'ExchangeRate'
+        'Quote'
     ].
 
 -spec services() -> [service_name()].
@@ -226,7 +226,7 @@ typedef_info('Options') ->
 typedef_info('InternalState') ->
     {struct, union, {dmsl_msgpack_thrift, 'Value'}};
 
-typedef_info('RateData') ->
+typedef_info('QuoteData') ->
     {struct, union, {dmsl_msgpack_thrift, 'Value'}};
 
 typedef_info('Destination') ->
@@ -277,7 +277,7 @@ struct_info('Withdrawal') ->
     {3, required, {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}}, 'destination', undefined},
     {4, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'sender', undefined},
     {5, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'receiver', undefined},
-    {6, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ExchangeRate'}}, 'exchange_rate', undefined}
+    {6, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}}, 'quote', undefined}
 ]};
 
 struct_info('Cash') ->
@@ -286,7 +286,7 @@ struct_info('Cash') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
 ]};
 
-struct_info('GetExchangeRateParams') ->
+struct_info('GetQuoteParams') ->
     {struct, struct, [
     {1, optional, string, 'idempotency_id', undefined},
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency_from', undefined},
@@ -300,13 +300,13 @@ struct_info('ProcessResult') ->
     {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined}
 ]};
 
-struct_info('ExchangeRate') ->
+struct_info('Quote') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'cash_from', undefined},
     {2, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'cash_to', undefined},
     {3, required, string, 'created_at', undefined},
     {4, required, string, 'expires_on', undefined},
-    {5, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'rate_data', undefined}
+    {5, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'quote_data', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -328,14 +328,14 @@ record_name('Success') ->
     record_name('Cash') ->
     'wthadpt_Cash';
 
-    record_name('GetExchangeRateParams') ->
-    'wthadpt_GetExchangeRateParams';
+    record_name('GetQuoteParams') ->
+    'wthadpt_GetQuoteParams';
 
     record_name('ProcessResult') ->
     'wthadpt_ProcessResult';
 
-    record_name('ExchangeRate') ->
-    'wthadpt_ExchangeRate';
+    record_name('Quote') ->
+    'wthadpt_Quote';
 
     record_name(_) -> error(badarg).
     
@@ -344,7 +344,7 @@ record_name('Success') ->
 functions('Adapter') ->
     [
         'ProcessWithdrawal',
-        'GetExchangeRate'
+        'GetQuote'
     ];
 
 functions(_) -> error(badarg).
@@ -362,14 +362,14 @@ function_info('Adapter', 'ProcessWithdrawal', reply_type) ->
         {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ProcessResult'}};
     function_info('Adapter', 'ProcessWithdrawal', exceptions) ->
         {struct, struct, []};
-function_info('Adapter', 'GetExchangeRate', params_type) ->
+function_info('Adapter', 'GetQuote', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GetExchangeRateParams'}}, 'params', undefined},
+    {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GetQuoteParams'}}, 'params', undefined},
     {2, undefined, {map, string, string}, 'opts', undefined}
 ]};
-function_info('Adapter', 'GetExchangeRate', reply_type) ->
-        {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ExchangeRate'}};
-    function_info('Adapter', 'GetExchangeRate', exceptions) ->
+function_info('Adapter', 'GetQuote', reply_type) ->
+        {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}};
+    function_info('Adapter', 'GetQuote', exceptions) ->
         {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

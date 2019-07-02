@@ -30,7 +30,7 @@
     'destination' :: dmsl_withdrawals_provider_adapter_thrift:'Destination'(),
     'sender' :: dmsl_withdrawals_provider_adapter_thrift:'Identity'() | undefined,
     'receiver' :: dmsl_withdrawals_provider_adapter_thrift:'Identity'() | undefined,
-    'exchange_rate' :: dmsl_withdrawals_provider_adapter_thrift:'ExchangeRate'() | undefined
+    'quote' :: dmsl_withdrawals_provider_adapter_thrift:'Quote'() | undefined
 }).
 
 %% struct 'Cash'
@@ -39,8 +39,8 @@
     'currency' :: dmsl_domain_thrift:'Currency'()
 }).
 
-%% struct 'GetExchangeRateParams'
--record('wthadpt_GetExchangeRateParams', {
+%% struct 'GetQuoteParams'
+-record('wthadpt_GetQuoteParams', {
     'idempotency_id' :: dmsl_base_thrift:'ID'() | undefined,
     'currency_from' :: dmsl_domain_thrift:'Currency'(),
     'currency_to' :: dmsl_domain_thrift:'Currency'(),
@@ -53,13 +53,13 @@
     'next_state' :: dmsl_withdrawals_provider_adapter_thrift:'InternalState'() | undefined
 }).
 
-%% struct 'ExchangeRate'
--record('wthadpt_ExchangeRate', {
+%% struct 'Quote'
+-record('wthadpt_Quote', {
     'cash_from' :: dmsl_withdrawals_provider_adapter_thrift:'Cash'(),
     'cash_to' :: dmsl_withdrawals_provider_adapter_thrift:'Cash'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'expires_on' :: dmsl_base_thrift:'Timestamp'(),
-    'rate_data' :: dmsl_withdrawals_provider_adapter_thrift:'RateData'() | undefined
+    'quote_data' :: dmsl_withdrawals_provider_adapter_thrift:'QuoteData'()
 }).
 
 -endif.
