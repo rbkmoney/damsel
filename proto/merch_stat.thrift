@@ -30,7 +30,7 @@ struct StatPayment {
     16: optional bool make_recurrent
     17: required domain.DataRevision domain_revision
     18: optional domain.InvoiceCart cart
-    19: optional domain.TransactionInfo transaction_info
+    19: optional domain.AdditionalTransactionInfo additional_transaction_info
 }
 
 union Payer {
