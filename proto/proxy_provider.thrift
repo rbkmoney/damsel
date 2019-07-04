@@ -96,7 +96,7 @@ struct SuspendIntent {
     4: optional TimeoutBehaviour timeout_behaviour
 }
 
-struct TimeoutBehaviour {
+union TimeoutBehaviour {
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
     1: domain.Failure failure
     /** Вызов прокси для обработки события истечения таймаута. */
