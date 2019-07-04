@@ -31,12 +31,6 @@
     'timeout_behaviour' :: dmsl_proxy_provider_thrift:'TimeoutBehaviour'() | undefined
 }).
 
-%% struct 'TimeoutBehaviour'
--record('prxprv_TimeoutBehaviour', {
-    'failure' :: dmsl_domain_thrift:'Failure'(),
-    'callback' :: dmsl_proxy_provider_thrift:'Callback'()
-}).
-
 %% struct 'RecurrentPaymentTool'
 -record('prxprv_RecurrentPaymentTool', {
     'id' :: dmsl_base_thrift:'ID'(),
