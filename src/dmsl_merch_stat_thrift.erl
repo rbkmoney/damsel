@@ -40,6 +40,7 @@
 ]).
 -export_type([
     'OnHoldExpiration'/0,
+    'CryptoCurrency'/0,
     'TerminalPaymentProvider'/0,
     'DigitalWalletProvider'/0,
     'OperationType'/0
@@ -127,6 +128,7 @@
 %%
 -type enum_name() ::
     'OnHoldExpiration' |
+    'CryptoCurrency' |
     'TerminalPaymentProvider' |
     'DigitalWalletProvider' |
     'OperationType'.
@@ -135,6 +137,15 @@
 -type 'OnHoldExpiration'() ::
     'cancel' |
     'capture'.
+
+%% enum 'CryptoCurrency'
+-type 'CryptoCurrency'() ::
+    'bitcoin' |
+    'litecoin' |
+    'bitcoin_cash' |
+    'ripple' |
+    'ethereum' |
+    'zcash'.
 
 %% enum 'TerminalPaymentProvider'
 -type 'TerminalPaymentProvider'() ::
@@ -282,7 +293,8 @@
 -type 'PaymentTool'() ::
     {'bank_card', 'BankCard'()} |
     {'payment_terminal', 'PaymentTerminal'()} |
-    {'digital_wallet', 'DigitalWallet'()}.
+    {'digital_wallet', 'DigitalWallet'()} |
+    {'crypto_currency', 'CryptoCurrency'()}.
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'merchstat_BankCard'{}.
@@ -462,6 +474,7 @@
 
 -type enum_choice() ::
     'OnHoldExpiration'() |
+    'CryptoCurrency'() |
     'TerminalPaymentProvider'() |
     'DigitalWalletProvider'() |
     'OperationType'().
@@ -487,6 +500,7 @@ typedefs() ->
 enums() ->
     [
         'OnHoldExpiration',
+        'CryptoCurrency',
         'TerminalPaymentProvider',
         'DigitalWalletProvider',
         'OperationType'
@@ -590,6 +604,16 @@ enum_info('OnHoldExpiration') ->
     {enum, [
         {'cancel', 0},
         {'capture', 1}
+    ]};
+
+enum_info('CryptoCurrency') ->
+    {enum, [
+        {'bitcoin', 0},
+        {'litecoin', 1},
+        {'bitcoin_cash', 2},
+        {'ripple', 3},
+        {'ethereum', 4},
+        {'zcash', 5}
     ]};
 
 enum_info('TerminalPaymentProvider') ->
@@ -740,7 +764,8 @@ struct_info('PaymentTool') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
     {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
+    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
+    {4, optional, {enum, {dmsl_merch_stat_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
 ]};
 
 struct_info('BankCard') ->
