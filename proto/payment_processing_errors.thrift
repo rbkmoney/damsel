@@ -93,6 +93,7 @@ union AuthorizationFailure {
     11: GeneralFailure    security_policy_violated
     12: GeneralFailure    temporarily_unavailable
     13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
+    14: RangeViolated     operation_amount_incorrect
 }
 
 union LimitExceeded {
