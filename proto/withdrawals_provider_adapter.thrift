@@ -20,10 +20,10 @@ typedef domain.ProxyOptions Options
 typedef msgpack.Value InternalState
 
 /**
- * Непрозрачные для процессинга данные конвертации валют, связанные с особенностями взаимодействия с
+ * Непрозрачные для процессинга данные котировки, связанные с особенностями взаимодействия с
  * третьей стороной.
  */
-typedef msgpack.Value RateData
+typedef msgpack.Value QuoteData
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
@@ -74,7 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
-    6: optional ExchangeRate exchange_rate
+    6: optional Quote quote
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -86,9 +86,9 @@ struct Cash {
 }
 
 /**
- * Данные для получения курса конвертации заданной суммы по выбранным валютам.
+ * Данные для получения котировки на заданную сумму по выбранным валютам.
  */
-struct GetExchangeRateParams {
+struct GetQuoteParams {
     1: optional base.ID idempotency_id
     2: required domain.Currency currency_from
     3: required domain.Currency currency_to
@@ -113,12 +113,12 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
-struct ExchangeRate {
+struct Quote {
     1: required Cash                cash_from
     2: required Cash                cash_to
     3: required base.Timestamp      created_at
     4: required base.Timestamp      expires_on
-    5: optional RateData            rate_data
+    5: required QuoteData           quote_data
 }
 
 service Adapter {
@@ -135,10 +135,10 @@ service Adapter {
     )
 
     /**
-     * Запрос к адаптеру на получение курсов конвертации.
+     * Запрос к адаптеру на получение котировки.
      */
-    ExchangeRate GetExchangeRate (
-        1: GetExchangeRateParams params
+    Quote GetQuote (
+        1: GetQuoteParams params
         2: Options opts
     )
     throws (

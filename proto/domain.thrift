@@ -340,13 +340,15 @@ struct InvoicePaymentAdjustment {
 }
 
 struct InvoicePaymentAdjustmentPending   {}
+struct InvoicePaymentAdjustmentProcessed {}
 struct InvoicePaymentAdjustmentCaptured  { 1: required base.Timestamp at }
 struct InvoicePaymentAdjustmentCancelled { 1: required base.Timestamp at }
 
 union InvoicePaymentAdjustmentStatus {
-    1: InvoicePaymentAdjustmentPending pending
-    2: InvoicePaymentAdjustmentCaptured captured
+    1: InvoicePaymentAdjustmentPending     pending
+    2: InvoicePaymentAdjustmentCaptured   captured
     3: InvoicePaymentAdjustmentCancelled cancelled
+    4: InvoicePaymentAdjustmentProcessed processed
 }
 
 /**
@@ -989,257 +991,257 @@ struct CategoryDecision {
 // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 
 enum Residence {
-    ABH /*Abkhazia*/
-    AUS /*Australia*/
-    AUT /*Austria*/
-    AZE /*Azerbaijan*/
-    ALB /*Albania*/
-    DZA /*Algeria*/
-    ASM /*American Samoa*/
-    AIA /*Anguilla*/
-    AGO /*Angola*/
-    AND /*Andorra*/
-    ATA /*Antarctica*/
-    ATG /*Antigua and Barbuda*/
-    ARG /*Argentina*/
-    ARM /*Armenia*/
-    ABW /*Aruba*/
-    AFG /*Afghanistan*/
-    BHS /*Bahamas*/
-    BGD /*Bangladesh*/
-    BRB /*Barbados*/
-    BHR /*Bahrain*/
-    BLR /*Belarus*/
-    BLZ /*Belize*/
-    BEL /*Belgium*/
-    BEN /*Benin*/
-    BMU /*Bermuda*/
-    BGR /*Bulgaria*/
-    BOL /*Bolivia, plurinational state of*/
-    BES /*Bonaire, Sint Eustatius and Saba*/
-    BIH /*Bosnia and Herzegovina*/
-    BWA /*Botswana*/
-    BRA /*Brazil*/
-    IOT /*British Indian Ocean Territory*/
-    BRN /*Brunei Darussalam*/
-    BFA /*Burkina Faso*/
-    BDI /*Burundi*/
-    BTN /*Bhutan*/
-    VUT /*Vanuatu*/
-    HUN /*Hungary*/
-    VEN /*Venezuela*/
-    VGB /*Virgin Islands, British*/
-    VIR /*Virgin Islands, U.S.*/
-    VNM /*Vietnam*/
-    GAB /*Gabon*/
-    HTI /*Haiti*/
-    GUY /*Guyana*/
-    GMB /*Gambia*/
-    GHA /*Ghana*/
-    GLP /*Guadeloupe*/
-    GTM /*Guatemala*/
-    GIN /*Guinea*/
-    GNB /*Guinea-Bissau*/
-    DEU /*Germany*/
-    GGY /*Guernsey*/
-    GIB /*Gibraltar*/
-    HND /*Honduras*/
-    HKG /*Hong Kong*/
-    GRD /*Grenada*/
-    GRL /*Greenland*/
-    GRC /*Greece*/
-    GEO /*Georgia*/
-    GUM /*Guam*/
-    DNK /*Denmark*/
-    JEY /*Jersey*/
-    DJI /*Djibouti*/
-    DMA /*Dominica*/
-    DOM /*Dominican Republic*/
-    EGY /*Egypt*/
-    ZMB /*Zambia*/
-    ESH /*Western Sahara*/
-    ZWE /*Zimbabwe*/
-    ISR /*Israel*/
-    IND /*India*/
-    IDN /*Indonesia*/
-    JOR /*Jordan*/
-    IRQ /*Iraq*/
-    IRN /*Iran, Islamic Republic of*/
-    IRL /*Ireland*/
-    ISL /*Iceland*/
-    ESP /*Spain*/
-    ITA /*Italy*/
-    YEM /*Yemen*/
-    CPV /*Cape Verde*/
-    KAZ /*Kazakhstan*/
-    KHM /*Cambodia*/
-    CMR /*Cameroon*/
-    CAN /*Canada*/
-    QAT /*Qatar*/
-    KEN /*Kenya*/
-    CYP /*Cyprus*/
-    KGZ /*Kyrgyzstan*/
-    KIR /*Kiribati*/
-    CHN /*China*/
-    CCK /*Cocos (Keeling) Islands*/
-    COL /*Colombia*/
-    COM /*Comoros*/
-    COG /*Congo*/
-    COD /*Congo, Democratic Republic of the*/
-    PRK /*Korea, Democratic People's republic of*/
-    KOR /*Korea, Republic of*/
-    CRI /*Costa Rica*/
-    CIV /*Cote d'Ivoire*/
-    CUB /*Cuba*/
-    KWT /*Kuwait*/
-    CUW /*Curaçao*/
-    LAO /*Lao People's Democratic Republic*/
-    LVA /*Latvia*/
-    LSO /*Lesotho*/
-    LBN /*Lebanon*/
-    LBY /*Libyan Arab Jamahiriya*/
-    LBR /*Liberia*/
-    LIE /*Liechtenstein*/
-    LTU /*Lithuania*/
-    LUX /*Luxembourg*/
-    MUS /*Mauritius*/
-    MRT /*Mauritania*/
-    MDG /*Madagascar*/
-    MYT /*Mayotte*/
-    MAC /*Macao*/
-    MWI /*Malawi*/
-    MYS /*Malaysia*/
-    MLI /*Mali*/
-    UMI /*United States Minor Outlying Islands*/
-    MDV /*Maldives*/
-    MLT /*Malta*/
-    MAR /*Morocco*/
-    MTQ /*Martinique*/
-    MHL /*Marshall Islands*/
-    MEX /*Mexico*/
-    FSM /*Micronesia, Federated States of*/
-    MOZ /*Mozambique*/
-    MDA /*Moldova*/
-    MCO /*Monaco*/
-    MNG /*Mongolia*/
-    MSR /*Montserrat*/
-    MMR /*Burma*/
-    NAM /*Namibia*/
-    NRU /*Nauru*/
-    NPL /*Nepal*/
-    NER /*Niger*/
-    NGA /*Nigeria*/
-    NLD /*Netherlands*/
-    NIC /*Nicaragua*/
-    NIU /*Niue*/
-    NZL /*New Zealand*/
-    NCL /*New Caledonia*/
-    NOR /*Norway*/
-    ARE /*United Arab Emirates*/
-    OMN /*Oman*/
-    BVT /*Bouvet Island*/
-    IMN /*Isle of Man*/
-    NFK /*Norfolk Island*/
-    CXR /*Christmas Island*/
-    HMD /*Heard Island and McDonald Islands*/
-    CYM /*Cayman Islands*/
-    COK /*Cook Islands*/
-    TCA /*Turks and Caicos Islands*/
-    PAK /*Pakistan*/
-    PLW /*Palau*/
-    PSE /*Palestinian Territory, Occupied*/
-    PAN /*Panama*/
-    VAT /*Holy See (Vatican City State)*/
-    PNG /*Papua New Guinea*/
-    PRY /*Paraguay*/
-    PER /*Peru*/
-    PCN /*Pitcairn*/
-    POL /*Poland*/
-    PRT /*Portugal*/
-    PRI /*Puerto Rico*/
-    MKD /*Macedonia, The Former Yugoslav Republic Of*/
-    REU /*Reunion*/
-    RUS /*Russian Federation*/
-    RWA /*Rwanda*/
-    ROU /*Romania*/
-    WSM /*Samoa*/
-    SMR /*San Marino*/
-    STP /*Sao Tome and Principe*/
-    SAU /*Saudi Arabia*/
-    SWZ /*Swaziland*/
-    SHN /*Saint Helena, Ascension And Tristan Da Cunha*/
-    MNP /*Northern Mariana Islands*/
-    BLM /*Saint Barthélemy*/
-    MAF /*Saint Martin (French Part)*/
-    SEN /*Senegal*/
-    VCT /*Saint Vincent and the Grenadines*/
-    KNA /*Saint Kitts and Nevis*/
-    LCA /*Saint Lucia*/
-    SPM /*Saint Pierre and Miquelon*/
-    SRB /*Serbia*/
-    SYC /*Seychelles*/
-    SGP /*Singapore*/
-    SXM /*Sint Maarten*/
-    SYR /*Syrian Arab Republic*/
-    SVK /*Slovakia*/
-    SVN /*Slovenia*/
-    GBR /*United Kingdom*/
-    USA /*United States*/
-    SLB /*Solomon Islands*/
-    SOM /*Somalia*/
-    SDN /*Sudan*/
-    SUR /*Suriname*/
-    SLE /*Sierra Leone*/
-    TJK /*Tajikistan*/
-    THA /*Thailand*/
-    TWN /*Taiwan, Province of China*/
-    TZA /*Tanzania, United Republic Of*/
-    TLS /*Timor-Leste*/
-    TGO /*Togo*/
-    TKL /*Tokelau*/
-    TON /*Tonga*/
-    TTO /*Trinidad and Tobago*/
-    TUV /*Tuvalu*/
-    TUN /*Tunisia*/
-    TKM /*Turkmenistan*/
-    TUR /*Turkey*/
-    UGA /*Uganda*/
-    UZB /*Uzbekistan*/
-    UKR /*Ukraine*/
-    WLF /*Wallis and Futuna*/
-    URY /*Uruguay*/
-    FRO /*Faroe Islands*/
-    FJI /*Fiji*/
-    PHL /*Philippines*/
-    FIN /*Finland*/
-    FLK /*Falkland Islands (Malvinas)*/
-    FRA /*France*/
-    GUF /*French Guiana*/
-    PYF /*French Polynesia*/
-    ATF /*French Southern Territories*/
-    HRV /*Croatia*/
-    CAF /*Central African Republic*/
-    TCD /*Chad*/
-    MNE /*Montenegro*/
-    CZE /*Czech Republic*/
-    CHL /*Chile*/
-    CHE /*Switzerland*/
-    SWE /*Sweden*/
-    SJM /*Svalbard and Jan Mayen*/
-    LKA /*Sri Lanka*/
-    ECU /*Ecuador*/
-    GNQ /*Equatorial Guinea*/
-    ALA /*Aland Islands*/
-    SLV /*El Salvador*/
-    ERI /*Eritrea*/
-    EST /*Estonia*/
-    ETH /*Ethiopia*/
-    ZAF /*South Africa*/
-    SGS /*South Georgia and the South Sandwich Islands*/
-    OST /*South Ossetia*/
-    SSD /*South Sudan*/
-    JAM /*Jamaica*/
-    JPN /*Japan*/
+    ABH =   0  /*Abkhazia*/
+    AUS =   1  /*Australia*/
+    AUT =   2  /*Austria*/
+    AZE =   3  /*Azerbaijan*/
+    ALB =   4  /*Albania*/
+    DZA =   5  /*Algeria*/
+    ASM =   6  /*American Samoa*/
+    AIA =   7  /*Anguilla*/
+    AGO =   8  /*Angola*/
+    AND =   9  /*Andorra*/
+    ATA =  10  /*Antarctica*/
+    ATG =  11  /*Antigua and Barbuda*/
+    ARG =  12  /*Argentina*/
+    ARM =  13  /*Armenia*/
+    ABW =  14  /*Aruba*/
+    AFG =  15  /*Afghanistan*/
+    BHS =  16  /*Bahamas*/
+    BGD =  17  /*Bangladesh*/
+    BRB =  18  /*Barbados*/
+    BHR =  19  /*Bahrain*/
+    BLR =  20  /*Belarus*/
+    BLZ =  21  /*Belize*/
+    BEL =  22  /*Belgium*/
+    BEN =  23  /*Benin*/
+    BMU =  24  /*Bermuda*/
+    BGR =  25  /*Bulgaria*/
+    BOL =  26  /*Bolivia, plurinational state of*/
+    BES =  27  /*Bonaire, Sint Eustatius and Saba*/
+    BIH =  28  /*Bosnia and Herzegovina*/
+    BWA =  29  /*Botswana*/
+    BRA =  30  /*Brazil*/
+    IOT =  31  /*British Indian Ocean Territory*/
+    BRN =  32  /*Brunei Darussalam*/
+    BFA =  33  /*Burkina Faso*/
+    BDI =  34  /*Burundi*/
+    BTN =  35  /*Bhutan*/
+    VUT =  36  /*Vanuatu*/
+    HUN =  37  /*Hungary*/
+    VEN =  38  /*Venezuela*/
+    VGB =  39  /*Virgin Islands, British*/
+    VIR =  40  /*Virgin Islands, U.S.*/
+    VNM =  41  /*Vietnam*/
+    GAB =  42  /*Gabon*/
+    HTI =  43  /*Haiti*/
+    GUY =  44  /*Guyana*/
+    GMB =  45  /*Gambia*/
+    GHA =  46  /*Ghana*/
+    GLP =  47  /*Guadeloupe*/
+    GTM =  48  /*Guatemala*/
+    GIN =  49  /*Guinea*/
+    GNB =  50  /*Guinea-Bissau*/
+    DEU =  51  /*Germany*/
+    GGY =  52  /*Guernsey*/
+    GIB =  53  /*Gibraltar*/
+    HND =  54  /*Honduras*/
+    HKG =  55  /*Hong Kong*/
+    GRD =  56  /*Grenada*/
+    GRL =  57  /*Greenland*/
+    GRC =  58  /*Greece*/
+    GEO =  59  /*Georgia*/
+    GUM =  60  /*Guam*/
+    DNK =  61  /*Denmark*/
+    JEY =  62  /*Jersey*/
+    DJI =  63  /*Djibouti*/
+    DMA =  64  /*Dominica*/
+    DOM =  65  /*Dominican Republic*/
+    EGY =  66  /*Egypt*/
+    ZMB =  67  /*Zambia*/
+    ESH =  68  /*Western Sahara*/
+    ZWE =  69  /*Zimbabwe*/
+    ISR =  70  /*Israel*/
+    IND =  71  /*India*/
+    IDN =  72  /*Indonesia*/
+    JOR =  73  /*Jordan*/
+    IRQ =  74  /*Iraq*/
+    IRN =  75  /*Iran, Islamic Republic of*/
+    IRL =  76  /*Ireland*/
+    ISL =  77  /*Iceland*/
+    ESP =  78  /*Spain*/
+    ITA =  79  /*Italy*/
+    YEM =  80  /*Yemen*/
+    CPV =  81  /*Cape Verde*/
+    KAZ =  82  /*Kazakhstan*/
+    KHM =  83  /*Cambodia*/
+    CMR =  84  /*Cameroon*/
+    CAN =  85  /*Canada*/
+    QAT =  86  /*Qatar*/
+    KEN =  87  /*Kenya*/
+    CYP =  88  /*Cyprus*/
+    KGZ =  89  /*Kyrgyzstan*/
+    KIR =  90  /*Kiribati*/
+    CHN =  91  /*China*/
+    CCK =  92  /*Cocos (Keeling) Islands*/
+    COL =  93  /*Colombia*/
+    COM =  94  /*Comoros*/
+    COG =  95  /*Congo*/
+    COD =  96  /*Congo, Democratic Republic of the*/
+    PRK =  97  /*Korea, Democratic People's republic of*/
+    KOR =  98  /*Korea, Republic of*/
+    CRI =  99  /*Costa Rica*/
+    CIV = 100  /*Cote d'Ivoire*/
+    CUB = 101  /*Cuba*/
+    KWT = 102  /*Kuwait*/
+    CUW = 103  /*Curaçao*/
+    LAO = 104  /*Lao People's Democratic Republic*/
+    LVA = 105  /*Latvia*/
+    LSO = 106  /*Lesotho*/
+    LBN = 107  /*Lebanon*/
+    LBY = 108  /*Libyan Arab Jamahiriya*/
+    LBR = 109  /*Liberia*/
+    LIE = 110  /*Liechtenstein*/
+    LTU = 111  /*Lithuania*/
+    LUX = 112  /*Luxembourg*/
+    MUS = 113  /*Mauritius*/
+    MRT = 114  /*Mauritania*/
+    MDG = 115  /*Madagascar*/
+    MYT = 116  /*Mayotte*/
+    MAC = 117  /*Macao*/
+    MWI = 118  /*Malawi*/
+    MYS = 119  /*Malaysia*/
+    MLI = 120  /*Mali*/
+    UMI = 121  /*United States Minor Outlying Islands*/
+    MDV = 122  /*Maldives*/
+    MLT = 123  /*Malta*/
+    MAR = 124  /*Morocco*/
+    MTQ = 125  /*Martinique*/
+    MHL = 126  /*Marshall Islands*/
+    MEX = 127  /*Mexico*/
+    FSM = 128  /*Micronesia, Federated States of*/
+    MOZ = 129  /*Mozambique*/
+    MDA = 130  /*Moldova*/
+    MCO = 131  /*Monaco*/
+    MNG = 132  /*Mongolia*/
+    MSR = 133  /*Montserrat*/
+    MMR = 134  /*Burma*/
+    NAM = 135  /*Namibia*/
+    NRU = 136  /*Nauru*/
+    NPL = 137  /*Nepal*/
+    NER = 138  /*Niger*/
+    NGA = 139  /*Nigeria*/
+    NLD = 140  /*Netherlands*/
+    NIC = 141  /*Nicaragua*/
+    NIU = 142  /*Niue*/
+    NZL = 143  /*New Zealand*/
+    NCL = 144  /*New Caledonia*/
+    NOR = 145  /*Norway*/
+    ARE = 146  /*United Arab Emirates*/
+    OMN = 147  /*Oman*/
+    BVT = 148  /*Bouvet Island*/
+    IMN = 149  /*Isle of Man*/
+    NFK = 150  /*Norfolk Island*/
+    CXR = 151  /*Christmas Island*/
+    HMD = 152  /*Heard Island and McDonald Islands*/
+    CYM = 153  /*Cayman Islands*/
+    COK = 154  /*Cook Islands*/
+    TCA = 155  /*Turks and Caicos Islands*/
+    PAK = 156  /*Pakistan*/
+    PLW = 157  /*Palau*/
+    PSE = 158  /*Palestinian Territory, Occupied*/
+    PAN = 159  /*Panama*/
+    VAT = 160  /*Holy See (Vatican City State)*/
+    PNG = 161  /*Papua New Guinea*/
+    PRY = 162  /*Paraguay*/
+    PER = 163  /*Peru*/
+    PCN = 164  /*Pitcairn*/
+    POL = 165  /*Poland*/
+    PRT = 166  /*Portugal*/
+    PRI = 167  /*Puerto Rico*/
+    MKD = 168  /*Macedonia, The Former Yugoslav Republic Of*/
+    REU = 169  /*Reunion*/
+    RUS = 170  /*Russian Federation*/
+    RWA = 171  /*Rwanda*/
+    ROU = 172  /*Romania*/
+    WSM = 173  /*Samoa*/
+    SMR = 174  /*San Marino*/
+    STP = 175  /*Sao Tome and Principe*/
+    SAU = 176  /*Saudi Arabia*/
+    SWZ = 177  /*Swaziland*/
+    SHN = 178  /*Saint Helena, Ascension And Tristan Da Cunha*/
+    MNP = 179  /*Northern Mariana Islands*/
+    BLM = 180  /*Saint Barthélemy*/
+    MAF = 181  /*Saint Martin (French Part)*/
+    SEN = 182  /*Senegal*/
+    VCT = 183  /*Saint Vincent and the Grenadines*/
+    KNA = 184  /*Saint Kitts and Nevis*/
+    LCA = 185  /*Saint Lucia*/
+    SPM = 186  /*Saint Pierre and Miquelon*/
+    SRB = 187  /*Serbia*/
+    SYC = 188  /*Seychelles*/
+    SGP = 189  /*Singapore*/
+    SXM = 190  /*Sint Maarten*/
+    SYR = 191  /*Syrian Arab Republic*/
+    SVK = 192  /*Slovakia*/
+    SVN = 193  /*Slovenia*/
+    GBR = 194  /*United Kingdom*/
+    USA = 195  /*United States*/
+    SLB = 196  /*Solomon Islands*/
+    SOM = 197  /*Somalia*/
+    SDN = 198  /*Sudan*/
+    SUR = 199  /*Suriname*/
+    SLE = 200  /*Sierra Leone*/
+    TJK = 201  /*Tajikistan*/
+    THA = 202  /*Thailand*/
+    TWN = 203  /*Taiwan, Province of China*/
+    TZA = 204  /*Tanzania, United Republic Of*/
+    TLS = 205  /*Timor-Leste*/
+    TGO = 206  /*Togo*/
+    TKL = 207  /*Tokelau*/
+    TON = 208  /*Tonga*/
+    TTO = 209  /*Trinidad and Tobago*/
+    TUV = 210  /*Tuvalu*/
+    TUN = 211  /*Tunisia*/
+    TKM = 212  /*Turkmenistan*/
+    TUR = 213  /*Turkey*/
+    UGA = 214  /*Uganda*/
+    UZB = 215  /*Uzbekistan*/
+    UKR = 216  /*Ukraine*/
+    WLF = 217  /*Wallis and Futuna*/
+    URY = 218  /*Uruguay*/
+    FRO = 219  /*Faroe Islands*/
+    FJI = 220  /*Fiji*/
+    PHL = 221  /*Philippines*/
+    FIN = 222  /*Finland*/
+    FLK = 223  /*Falkland Islands (Malvinas)*/
+    FRA = 224  /*France*/
+    GUF = 225  /*French Guiana*/
+    PYF = 226  /*French Polynesia*/
+    ATF = 227  /*French Southern Territories*/
+    HRV = 228  /*Croatia*/
+    CAF = 229  /*Central African Republic*/
+    TCD = 230  /*Chad*/
+    MNE = 231  /*Montenegro*/
+    CZE = 232  /*Czech Republic*/
+    CHL = 233  /*Chile*/
+    CHE = 234  /*Switzerland*/
+    SWE = 235  /*Sweden*/
+    SJM = 236  /*Svalbard and Jan Mayen*/
+    LKA = 237  /*Sri Lanka*/
+    ECU = 238  /*Ecuador*/
+    GNQ = 239  /*Equatorial Guinea*/
+    ALA = 240  /*Aland Islands*/
+    SLV = 241  /*El Salvador*/
+    ERI = 242  /*Eritrea*/
+    EST = 243  /*Estonia*/
+    ETH = 244  /*Ethiopia*/
+    ZAF = 245  /*South Africa*/
+    SGS = 246  /*South Georgia and the South Sandwich Islands*/
+    OST = 247  /*South Ossetia*/
+    SSD = 248  /*South Sudan*/
+    JAM = 249  /*Jamaica*/
+    JPN = 250  /*Japan*/
 }
 
 /* Schedules */
@@ -1317,6 +1319,7 @@ union PaymentMethod {
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
+    7: MobileCommerce mobile
 }
 
 struct TokenizedBankCard {
@@ -1356,6 +1359,7 @@ union PaymentTool {
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
     4: CryptoCurrency crypto_currency
+    5: MobileCommerce mobile_commerce
 }
 
 struct DisposablePaymentResource {
@@ -1394,6 +1398,29 @@ enum CryptoCurrency {
     zcash
 }
 
+struct MobileCommerce {
+    1: required MobileOperator operator
+    2: required MobilePhone    phone
+}
+
+enum MobileOperator {
+    mts      = 1
+    beeline  = 2
+    megafone = 3
+    tele2    = 4
+    yota     = 5
+}
+
+/**
+* Телефонный номер согласно (E.164 — рекомендация ITU-T)
+* +79114363738
+* cc = 7 - код страны(1-3 цифры)
+* ctn = 9114363738 - 10-ти значный номер абонента(макс 12)
+*/
+struct MobilePhone {
+    1: required string cc
+    2: required string ctn
+}
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
@@ -1838,6 +1865,7 @@ union PaymentToolCondition {
     2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
     4: CryptoCurrencyCondition crypto_currency
+    5: MobileCommerceCondition mobile_commerce
 }
 
 struct BankCardCondition {
@@ -1879,6 +1907,14 @@ struct CryptoCurrencyCondition {
 
 union CryptoCurrencyConditionDefinition {
     1: CryptoCurrency crypto_currency_is
+}
+
+struct MobileCommerceCondition {
+    1: optional MobileCommerceConditionDefinition definition
+}
+
+union MobileCommerceConditionDefinition {
+    1: MobileOperator operator_is
 }
 
 struct PartyCondition {

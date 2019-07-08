@@ -30,7 +30,7 @@ struct StatPayment {
     16: optional bool make_recurrent
     17: required domain.DataRevision domain_revision
     18: optional domain.InvoiceCart cart
-    19: optional domain.TransactionInfo transaction_info
+    19: optional domain.AdditionalTransactionInfo additional_transaction_info
 }
 
 union Payer {
@@ -114,6 +114,7 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: CryptoCurrency crypto_currency
 }
 
 struct BankCard {
@@ -122,6 +123,15 @@ struct BankCard {
     3: required string bin
     4: required string masked_pan
     5: optional domain.BankCardTokenProvider token_provider
+}
+
+enum CryptoCurrency {
+    bitcoin
+    litecoin
+    bitcoin_cash
+    ripple
+    ethereum
+    zcash
 }
 
 struct PaymentTerminal {

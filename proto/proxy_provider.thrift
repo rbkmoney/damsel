@@ -68,8 +68,9 @@ typedef base.Tag CallbackTag
 
 /**
  * Требование приостановить сессию взаимодействия, с продолжением по факту прихода обратного
- * запроса (callback), либо с неуспешным завершением по факту истечения заданного времени
- * ожидания.
+ * запроса (callback), либо выполняет один из указаных вариантов timeout_behaviour.
+ * Если не указан timeout_behaviour, сессия завершается с неуспешным завершением
+ * по факту истечения заданного времени ожидания.
  */
 struct SuspendIntent {
     /**
@@ -88,8 +89,19 @@ struct SuspendIntent {
      * в рамках сессии взаимодействия.
      */
     3: optional user_interaction.UserInteraction user_interaction
+
+    /**
+    * Поведение процессинга в случае истечения заданного timeout
+    */
+    4: optional TimeoutBehaviour timeout_behaviour
 }
 
+union TimeoutBehaviour {
+    /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
+    1: domain.Failure failure
+    /** Вызов прокси для обработки события истечения таймаута. */
+    2: Callback callback
+}
 
 struct RecurrentPaymentTool {
     1: required base.ID                          id
