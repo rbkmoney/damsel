@@ -93,13 +93,20 @@ union AuthorizationFailure {
     11: GeneralFailure    security_policy_violated
     12: GeneralFailure    temporarily_unavailable
     13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
-    14: GeneralFailure    operation_amount_exceeded
 }
 
 union LimitExceeded {
   1: GeneralFailure unknown
-  2: GeneralFailure amount
+  2: TimeViolated   amount
   3: GeneralFailure number
+}
+
+union TimeViolated {
+    1: GeneralFailure unknown
+    2: GeneralFailure once
+    3: GeneralFailure month
+    4: GeneralFailure week
+    5: GeneralFailure day
 }
 
 union PaymentToolReject {
