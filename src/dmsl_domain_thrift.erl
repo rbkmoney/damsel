@@ -4370,7 +4370,8 @@ struct_info('TerminalDecision') ->
 struct_info('ProviderTerminalRef') ->
     {struct, struct, [
     {1, required, i32, 'id', undefined},
-    {2, optional, i64, 'priority', 1000}
+    {2, optional, i64, 'priority', 1000},
+    {3, optional, i64, 'weight', undefined}
 ]};
 
 struct_info('TerminalRef') ->

@@ -1044,7 +1044,8 @@
 %% struct 'ProviderTerminalRef'
 -record('domain_ProviderTerminalRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'(),
-    'priority' = 1000 :: integer() | undefined
+    'priority' = 1000 :: integer() | undefined,
+    'weight' :: integer() | undefined
 }).
 
 %% struct 'TerminalRef'
