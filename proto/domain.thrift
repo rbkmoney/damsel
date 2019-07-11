@@ -1402,11 +1402,11 @@ struct MobileCommerce {
 }
 
 enum MobileOperator {
-    mts      = 1
-    beeline  = 2
-    megafone = 3
-    tele2    = 4
-    yota     = 5
+    mts
+    beeline
+    megafone
+    tele2
+    yota
 }
 
 /**
