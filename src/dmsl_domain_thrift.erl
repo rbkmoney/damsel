@@ -2983,11 +2983,11 @@ enum_info('CryptoCurrency') ->
 
 enum_info('MobileOperator') ->
     {enum, [
-        {'mts', 1},
-        {'beeline', 2},
-        {'megafone', 3},
-        {'tele2', 4},
-        {'yota', 5}
+        {'mts', 0},
+        {'beeline', 1},
+        {'megafone', 2},
+        {'tele2', 3},
+        {'yota', 4}
     ]};
 
 enum_info('TerminalPaymentProvider') ->
