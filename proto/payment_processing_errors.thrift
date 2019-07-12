@@ -96,15 +96,15 @@ union AuthorizationFailure {
 }
 
 union LimitExceeded {
-  1: GeneralFailure unknown
-  2: TimeViolated   amount
-  3: GeneralFailure number
+  1: GeneralFailure     unknown
+  2: LimitSpanExceeded  amount
+  3: GeneralFailure     number
 }
 
-union TimeViolated {
+union LimitSpanExceeded {
     1: GeneralFailure unknown
-    2: GeneralFailure once
-    3: GeneralFailure month
+    2: GeneralFailure operation
+    3: GeneralFailure monthly
     4: GeneralFailure week
     5: GeneralFailure day
 }
