@@ -106,7 +106,7 @@ union LimitSpanExceeded {
     2: GeneralFailure operation
     3: GeneralFailure monthly
     4: GeneralFailure weekly
-    5: GeneralFailure dayly
+    5: GeneralFailure daily
 }
 
 union PaymentToolReject {
