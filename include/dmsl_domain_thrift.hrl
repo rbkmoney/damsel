@@ -792,7 +792,8 @@
 %% struct 'CryptoWallet'
 -record('domain_CryptoWallet', {
     'id' :: binary(),
-    'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrency'()
+    'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrency'(),
+    'destination_tag' :: binary() | undefined
 }).
 
 %% struct 'MobileCommerce'

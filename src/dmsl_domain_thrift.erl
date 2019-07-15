@@ -4042,7 +4042,8 @@ struct_info('BankCard') ->
 struct_info('CryptoWallet') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
+    {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+    {3, optional, string, 'destination_tag', undefined}
 ]};
 
 struct_info('MobileCommerce') ->
