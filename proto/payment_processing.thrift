@@ -5,6 +5,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
+include "timeout_behaviour.thrift"
 include "repairing.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
