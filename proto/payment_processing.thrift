@@ -231,6 +231,7 @@ struct SessionFinished {
 
 struct SessionSuspended {
     1: optional base.Tag tag
+    2: optional timeout_behaviour.TimeoutBehaviour timeout_behaviour
 }
 
 struct SessionActivated {}
