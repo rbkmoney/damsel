@@ -4,6 +4,7 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
 -include("dmsl_user_interaction_thrift.hrl").
+-include("dmsl_timeout_behaviour_thrift.hrl").
 -include("dmsl_repairing_thrift.hrl").
 
 
@@ -92,7 +93,8 @@
 
 %% struct 'SessionSuspended'
 -record('payproc_SessionSuspended', {
-    'tag' :: dmsl_base_thrift:'Tag'() | undefined
+    'tag' :: dmsl_base_thrift:'Tag'() | undefined,
+    'timeout_behaviour' :: dmsl_timeout_behaviour_thrift:'TimeoutBehaviour'() | undefined
 }).
 
 %% struct 'SessionActivated'
