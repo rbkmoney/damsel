@@ -1833,6 +1833,7 @@ struct TerminalDecision {
 struct ProviderTerminalRef {
     1: required ObjectID id
     2: optional i64 priority = 1000
+    3: optional i64 weight
 }
 
 struct TerminalRef {
