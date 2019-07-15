@@ -96,9 +96,17 @@ union AuthorizationFailure {
 }
 
 union LimitExceeded {
-  1: GeneralFailure unknown
-  2: GeneralFailure amount
-  3: GeneralFailure number
+  1: GeneralFailure     unknown
+  2: LimitSpanExceeded  amount
+  3: GeneralFailure     number
+}
+
+union LimitSpanExceeded {
+    1: GeneralFailure unknown
+    2: GeneralFailure operation
+    3: GeneralFailure monthly
+    4: GeneralFailure weekly
+    5: GeneralFailure daily
 }
 
 union PaymentToolReject {

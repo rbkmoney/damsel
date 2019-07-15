@@ -36,6 +36,7 @@
     'RefundFailure'/0,
     'AuthorizationFailure'/0,
     'LimitExceeded'/0,
+    'LimitSpanExceeded'/0,
     'PaymentToolReject'/0,
     'BankCardReject'/0,
     'NoRouteFoundFailure'/0,
@@ -64,6 +65,7 @@
     'RefundFailure' |
     'AuthorizationFailure' |
     'LimitExceeded' |
+    'LimitSpanExceeded' |
     'PaymentToolReject' |
     'BankCardReject' |
     'NoRouteFoundFailure' |
@@ -103,8 +105,16 @@
 %% union 'LimitExceeded'
 -type 'LimitExceeded'() ::
     {'unknown', 'GeneralFailure'()} |
-    {'amount', 'GeneralFailure'()} |
+    {'amount', 'LimitSpanExceeded'()} |
     {'number', 'GeneralFailure'()}.
+
+%% union 'LimitSpanExceeded'
+-type 'LimitSpanExceeded'() ::
+    {'unknown', 'GeneralFailure'()} |
+    {'operation', 'GeneralFailure'()} |
+    {'monthly', 'GeneralFailure'()} |
+    {'weekly', 'GeneralFailure'()} |
+    {'daily', 'GeneralFailure'()}.
 
 %% union 'PaymentToolReject'
 -type 'PaymentToolReject'() ::
@@ -184,6 +194,7 @@ structs() ->
         'RefundFailure',
         'AuthorizationFailure',
         'LimitExceeded',
+        'LimitSpanExceeded',
         'PaymentToolReject',
         'BankCardReject',
         'NoRouteFoundFailure',
@@ -245,8 +256,17 @@ struct_info('AuthorizationFailure') ->
 struct_info('LimitExceeded') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'amount', undefined},
+    {2, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'LimitSpanExceeded'}}, 'amount', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'number', undefined}
+]};
+
+struct_info('LimitSpanExceeded') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'operation', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'monthly', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'weekly', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'daily', undefined}
 ]};
 
 struct_info('PaymentToolReject') ->
