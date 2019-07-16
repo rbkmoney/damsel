@@ -262,7 +262,8 @@
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'reason' :: binary() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundPending'

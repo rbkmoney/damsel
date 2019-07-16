@@ -382,6 +382,7 @@ struct InvoicePaymentRefund {
     6: optional Cash cash
     5: optional string reason
     8: optional InvoiceCart cart
+    9: optional string external_id
 }
 
 union InvoicePaymentRefundStatus {

@@ -2253,7 +2253,9 @@ struct_info('InvoicePaymentRefundParams') ->
     {1, optional, string, 'reason', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+    {5, optional, string, 'id', undefined},
+    {6, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoicePaymentCaptureParams') ->

@@ -3376,7 +3376,8 @@ struct_info('InvoicePaymentRefund') ->
     {7, optional, i64, 'party_revision', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {5, optional, string, 'reason', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+    {9, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundStatus') ->

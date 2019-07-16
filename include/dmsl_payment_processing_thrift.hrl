@@ -273,7 +273,9 @@
     'reason' :: binary() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentCaptureParams'
