@@ -488,6 +488,48 @@ struct InvoicePayment {
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
+/* WIP */
+
+/**
+ * Параметры создаваемого возврата платежа.
+ */
+struct InvoicePaymentChargebackParams {
+    /** Причина, на основании которой производится возврат. */
+    1: required string code
+    /**
+     * Сумма возврата.
+     * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
+     * Copypasta from refund
+     * seems appropriate for chargebacks too
+     */
+    2: optional domain.Cash cash
+    /**
+     * Данные проведённой вручную транзакции
+     * Copypasta from refund
+     * useful?
+     */
+    3: optional domain.TransactionInfo transaction_info
+    /**
+     * Итоговая корзина товаров.
+     * Используется для частичного возврата, содержит позиции, которые остались после возврата.
+     * Copypasta from refund
+     * might be useful for partial chargebacks perhaps?
+     */
+    4: optional domain.InvoiceCart cart
+    /**
+     * Идентификатор рефанда
+     */
+    /* 5: optional domain.InvoicePaymentRefundID id */
+    /**
+     * Внешний идентификатор объекта
+     */
+    6: optional string external_id
+    /**
+     * Опциональный комментарий
+     */
+    7: optional string comment
+}
+
 /**
  * Параметры создаваемого возврата платежа.
  */
@@ -655,6 +697,8 @@ exception AmountExceededCaptureBalance {
     1: required domain.Amount payment_amount
     2: optional domain.Amount passed_amount
 }
+
+exception ChargebackInProgress {}
 
 service Invoicing {
 
@@ -870,6 +914,33 @@ service Invoicing {
             11: InvalidPartyStatus ex11
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
+            14: ChargebackInProgress ex14
+        )
+
+        /* WIP */
+
+    /**
+     * Создать чарджбэк
+     */
+    domain.InvoicePaymentRefund CreateChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        /* TODO: Implement Params */
+        4: InvoicePaymentChargebackParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            6: OperationNotPermitted ex6,
+            7: InsufficientAccountBalance ex7,
+            8: InvoicePaymentAmountExceeded ex8
+            10: InvalidPartyStatus ex10
+            11: InvalidShopStatus ex11
+            12: InvalidContractStatus ex12
+            /* something else? */
         )
 
     /**
@@ -893,6 +964,7 @@ service Invoicing {
             10: InvalidPartyStatus ex10
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
+            13: ChargebackInProgress ex13
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
