@@ -371,6 +371,28 @@ enum OnHoldExpiration {
     capture
 }
 
+/* Chargebacks */
+
+struct InvoicePaymentChargeback {
+    1: required InvoicePaymentChargeback id
+    2: required InvoicePaymentChargebackStatus status
+    3: required base.Timestamp created_at
+    4: required DataRevision domain_revision
+    7: optional PartyRevision party_revision
+    6: optional Cash cash
+    /* is code a string? */
+    5: optional string code
+    8: optional InvoiceCart cart
+    9: optional string external_id
+}
+
+union InvoicePaymentChargebackStatus {
+    /* TODO currently copypasta of refunds */
+    1: InvoicePaymentChargebackPending pending
+    2: InvoicePaymentChargebackSucceeded succeeded
+    3: InvoicePaymentChargebackFailed failed
+}
+
 /* Refunds */
 
 struct InvoicePaymentRefund {
