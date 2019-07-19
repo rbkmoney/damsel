@@ -1633,7 +1633,7 @@
     {'tokenized_bank_card', 'TokenizedBankCard'()} |
     {'empty_cvv_bank_card', 'BankCardPaymentSystem'()} |
     {'crypto_currency', 'CryptoCurrency'()} |
-    {'mobile', 'MobileCommerce'()}.
+    {'mobile', 'MobileOperator'()}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
@@ -4002,7 +4002,7 @@ struct_info('PaymentMethod') ->
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
     {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
     {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile', undefined}
+    {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined}
 ]};
 
 struct_info('TokenizedBankCard') ->
