@@ -508,6 +508,14 @@ struct InvoicePaymentRefundParams {
      * Используется для частичного возврата, содержит позиции, которые остались после возврата.
      */
     4: optional domain.InvoiceCart cart
+    /**
+     * Идентификатор рефанда
+     */
+    5: optional domain.InvoicePaymentRefundID id
+    /**
+     * Внешний идентификатор объекта
+     */
+    6: optional string external_id
 }
 
 /**

@@ -382,6 +382,7 @@ struct InvoicePaymentRefund {
     6: optional Cash cash
     5: optional string reason
     8: optional InvoiceCart cart
+    9: optional string external_id
 }
 
 union InvoicePaymentRefundStatus {
@@ -1385,6 +1386,8 @@ struct BankCard {
 struct CryptoWallet {
     1: required string id // ID or wallet of the recipient in the third-party payment system
     2: required CryptoCurrency crypto_currency
+    // A destination tag is a unique 9-digit figure assigned to each Ripple (XRP) account
+    3: optional string destination_tag
 }
 
 enum CryptoCurrency {
