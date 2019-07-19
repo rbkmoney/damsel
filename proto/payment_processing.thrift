@@ -891,6 +891,48 @@ service Invoicing {
             4: InvoicePaymentAdjustmentNotFound ex4,
             5: InvalidPaymentAdjustmentStatus ex5
         )
+        /* WIP */
+
+    /**
+     * Создать чарджбэк
+     */
+     /* TODO: implement InvoicePaymentChargeback */
+
+    domain.InvoicePaymentChargeback CreateChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        /* TODO: Implement Params */
+        4: InvoicePaymentChargebackParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            6: OperationNotPermitted ex6,
+            7: InsufficientAccountBalance ex7,
+            8: InvoicePaymentAmountExceeded ex8
+            10: InvalidPartyStatus ex10
+            11: InvalidShopStatus ex11
+            12: InvalidContractStatus ex12
+            /* something else? */
+        )
+
+    domain.InvoicePaymentChargeback GetPaymentChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoiceChargebackID payment_id
+        4: domain.InvoicePaymentChargebackD chargeback_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentRefundNotFound ex4
+        )
+
+        /* WIP */
 
     /**
      * Сделать возврат платежа.
@@ -917,31 +959,6 @@ service Invoicing {
             14: ChargebackInProgress ex14
         )
 
-        /* WIP */
-
-    /**
-     * Создать чарджбэк
-     */
-    domain.InvoicePaymentRefund CreateChargeback (
-        1: UserInfo user
-        2: domain.InvoiceID id,
-        3: domain.InvoicePaymentID payment_id
-        /* TODO: Implement Params */
-        4: InvoicePaymentChargebackParams params
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: InvoiceNotFound ex2,
-            3: InvoicePaymentNotFound ex3,
-            4: InvalidPaymentStatus ex4,
-            6: OperationNotPermitted ex6,
-            7: InsufficientAccountBalance ex7,
-            8: InvoicePaymentAmountExceeded ex8
-            10: InvalidPartyStatus ex10
-            11: InvalidShopStatus ex11
-            12: InvalidContractStatus ex12
-            /* something else? */
-        )
 
     /**
      * Сделать ручной возврат.
