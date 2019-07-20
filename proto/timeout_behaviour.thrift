@@ -1,3 +1,4 @@
+namespace erlang tmbhv
 namespace java com.rbkmoney.damsel.timeout_behaviour
 include "base.thrift"
 include "domain.thrift"
