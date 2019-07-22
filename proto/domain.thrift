@@ -381,19 +381,16 @@ struct InvoicePaymentChargeback {
     7: optional PartyRevision party_revision
     6: optional Cash cash
     /* is code a string? */
-    5: optional string code
+    5: optional string reason_code
     8: optional InvoiceCart cart
     9: optional string external_id
 }
 
 union InvoicePaymentChargebackStatus {
-    /* TODO currently copypasta of refunds */
-    /* 1: InvoicePaymentChargebackPending pending */
+    1: InvoicePaymentChargebackPending pending
     /* 2: InvoicePaymentChargebackRejected rejected */
     /* 3: InvoicePaymentChargebackAccepted accepted */
     /* 4: InvoicePaymentChargebackFulfilled fulfilled */
-    2: InvoicePaymentChargebackSucceeded succeeded
-    3: InvoicePaymentChargebackFailed failed
 }
 
 /* Refunds */

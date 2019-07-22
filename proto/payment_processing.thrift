@@ -496,7 +496,7 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
  */
 struct InvoicePaymentChargebackParams {
     /** Причина, на основании которой производится возврат. */
-    1: required string code
+    1: required string reason_code
     /**
      * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
