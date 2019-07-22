@@ -388,7 +388,10 @@ struct InvoicePaymentChargeback {
 
 union InvoicePaymentChargebackStatus {
     /* TODO currently copypasta of refunds */
-    1: InvoicePaymentChargebackPending pending
+    /* 1: InvoicePaymentChargebackPending pending */
+    /* 2: InvoicePaymentChargebackRejected rejected */
+    /* 3: InvoicePaymentChargebackAccepted accepted */
+    /* 4: InvoicePaymentChargebackFulfilled fulfilled */
     2: InvoicePaymentChargebackSucceeded succeeded
     3: InvoicePaymentChargebackFailed failed
 }
