@@ -933,6 +933,20 @@ service Invoicing {
             4: InvoicePaymentRefundNotFound ex4
         )
 
+    domain.InvoicePaymentChargeback UpdateChargebackStatus (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoiceChargebackID payment_id
+        4: domain.InvoicePaymentChargebackD chargeback_id
+        5: domain.InvoicePaymentChargebackStatus status
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentRefundNotFound ex4
+        )
+
         /* WIP */
 
     /**
