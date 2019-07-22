@@ -483,6 +483,7 @@ struct InvoicePayment {
     1: required domain.InvoicePayment payment
     3: required list<InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
+    /* 4: required list<InvoicePaymentChargeback> chargebacks */
 }
 
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
