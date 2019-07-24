@@ -98,6 +98,16 @@ struct GetQuoteParams {
     4: required Cash exchange_cash
 }
 
+exception BadParams {
+    /** Пояснение, почему параметры считаются недопустимыми */
+    1: optional string details
+}
+
+exception LimitExceeded {
+    /** Пояснение, почему и какой лимит превышен */
+    1: optional string details
+}
+
 ///
 
 /**
@@ -142,5 +152,7 @@ service Adapter {
         2: Options opts
     )
     throws (
+        1: BadParams ex1,
+        2: LimitExceeded ex2
     )
 }
