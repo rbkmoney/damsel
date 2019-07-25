@@ -4172,7 +4172,8 @@ function_info('Invoicing', 'CreateManualRefund', reply_type) ->
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentRefundCurrency'}}, 'ex9', undefined},
         {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex10', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex11', undefined},
-        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
+        {13, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex13', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [
