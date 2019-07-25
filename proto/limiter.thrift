@@ -54,8 +54,8 @@ struct Limit {
     1: required LimitID id
     2: required domain.Amount init_amount
     3: required domain.Amount current_amount
-    3: optional LimitLifetime lifetime
-    7: optional LimitLifetime init_lifetime
+    4: optional LimitLifetime lifetime
+    5: optional LimitLifetime init_lifetime
     6: optional string description
 }
 
@@ -67,8 +67,8 @@ struct Limit {
 */
 struct LimitReduction {
     1: required LimitID id
-    3: required domain.Amount amount
-    4: required string description
+    2: required domain.Amount amount
+    3: required string description
 }
 
 /**
@@ -107,7 +107,7 @@ struct PlanChange {
 * affected_limits - новое состояние задействованных лимитов
 */
 struct PlanLog {
-    2: required map<LimitID, Limit> affected_limits
+    1: required map<LimitID, Limit> affected_limits
 }
 
 exception LimitNotFound {
