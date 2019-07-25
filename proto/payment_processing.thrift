@@ -893,6 +893,7 @@ service Invoicing {
             10: InvalidPartyStatus ex10
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
+            13: base.InvalidRequest ex13
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
