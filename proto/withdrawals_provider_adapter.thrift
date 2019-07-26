@@ -98,14 +98,30 @@ struct GetQuoteParams {
     4: required Cash exchange_cash
 }
 
-exception BadParams {
-    /** Пояснение, почему параметры считаются недопустимыми */
-    1: optional string details
+union QuoteFailure {
+    1: InvalidParamsFailure invalid_params
+    2: LimitExceededFailure limit_exceeded
 }
 
-exception LimitExceeded {
-    /** Пояснение, почему и какой лимит превышен */
-    1: optional string details
+union InvalidParamsFailure {
+    1: GeneralFailure bad_params
+    2: GeneralFailure exchange_currency
+    3: GeneralFailure not_enough_money
+    4: GeneralFailure user_blocked
+    5: GeneralFailure wallet_does_not_exist
+}
+
+union LimitExceededFailure {
+    1: GeneralFailure limit_per_day
+    2: GeneralFailure limit_per_month
+    3: GeneralFailure limit_per_transaction
+    4: GeneralFailure limits
+}
+
+struct GeneralFailure {}
+
+exception GetQuoteFailure {
+    1: required QuoteFailure failure
 }
 
 ///
@@ -152,7 +168,6 @@ service Adapter {
         2: Options opts
     )
     throws (
-        1: BadParams ex1,
-        2: LimitExceeded ex2
+        1: GetQuoteFailure ex1
     )
 }
