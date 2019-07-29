@@ -923,8 +923,8 @@ service Invoicing {
     domain.InvoicePaymentChargeback GetPaymentChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
-        3: domain.InvoiceChargebackID payment_id
-        4: domain.InvoicePaymentChargebackD chargeback_id
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
     )
         throws (
             1: InvalidUser ex1,
@@ -936,8 +936,8 @@ service Invoicing {
     domain.InvoicePaymentChargeback UpdateChargebackStatus (
         1: UserInfo user
         2: domain.InvoiceID id,
-        3: domain.InvoiceChargebackID payment_id
-        4: domain.InvoicePaymentChargebackD chargeback_id
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
         5: domain.InvoicePaymentChargebackStatus status
     )
         throws (
@@ -996,7 +996,7 @@ service Invoicing {
             10: InvalidPartyStatus ex10
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
-            
+
             13: ChargebackInProgress ex13
         )
 
