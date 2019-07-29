@@ -99,23 +99,12 @@ struct GetQuoteParams {
 }
 
 union QuoteFailure {
-    1: InvalidParamsFailure invalid_params
-    2: LimitExceededFailure limit_exceeded
-}
-
-union InvalidParamsFailure {
-    1: GeneralFailure bad_params
-    2: GeneralFailure exchange_currency
-    3: GeneralFailure not_enough_money
-    4: GeneralFailure user_blocked
-    5: GeneralFailure wallet_does_not_exist
+    1: LimitExceededFailure limit_exceeded
 }
 
 union LimitExceededFailure {
-    1: GeneralFailure limit_per_day
-    2: GeneralFailure limit_per_month
-    3: GeneralFailure limit_per_transaction
-    4: GeneralFailure limits
+    1: GeneralFailure value_above_max_limit
+    2: GeneralFailure value_ander_min_limit
 }
 
 struct GeneralFailure {}
