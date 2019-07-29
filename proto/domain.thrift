@@ -374,23 +374,34 @@ enum OnHoldExpiration {
 /* Chargebacks */
 
 struct InvoicePaymentChargeback {
-    1: required InvoicePaymentChargeback id
-    2: required InvoicePaymentChargebackStatus status
+    1: required InvoicePaymentChargeback        id
+    2: required InvoicePaymentChargebackStatus  status
+    3: required base.Timestamp                  created_at
+    4: required DataRevision                    domain_revision
+   10: required InvoicePaymentChargebackHistory history
+    5: required string                          reason_code
+    7: optional PartyRevision                   party_revision
+    6: optional Cash                            cash
+    9: optional string                          external_id
+
+typedef list<InvoicePaymentChargebackHistoryEvent> InvoicePaymentChargebackHistory
+
+struct InvoicePaymentChargebackHistoryEvent {
+    1: required InvoicePaymentChargebackStatus status
     3: required base.Timestamp created_at
-    4: required DataRevision domain_revision
-    7: optional PartyRevision party_revision
-    6: optional Cash cash
-    /* is code a string? */
-    5: optional string reason_code
-    8: optional InvoiceCart cart
-    9: optional string external_id
+    2: optional string comment
 }
 
 union InvoicePaymentChargebackStatus {
-    1: InvoicePaymentChargebackPending pending
-    /* 2: InvoicePaymentChargebackRejected rejected */
-    /* 3: InvoicePaymentChargebackAccepted accepted */
-    /* 4: InvoicePaymentChargebackFulfilled fulfilled */
+    1: InvoicePaymentChargebackCreated                        chargeback_created
+    2: InvoicePaymentChargebackAwaitingMerchant               chargeback_awaiting_merchant
+    3: InvoicePaymentChargebackAwaitingIssuer                 chargeback_awaiting_issuer
+    4: InvoicePaymentChargebackPrearbitrationCreated          prearbitration_created
+    5: InvoicePaymentChargebackPrearbitrationAwaitingMerchant prearbitration_awaiting_merchant
+    6: InvoicePaymentChargebackPrearbitrationAwaitingIssuer   prearbitration_awaiting_issuer
+    7: InvoicePaymentChargebackArbitraion                     arbitration
+    8: InvoicePaymentChargebackWon                            won
+    9: InvoicePaymentChargebackLost                           lost
 }
 
 /* Refunds */
