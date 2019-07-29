@@ -405,6 +405,16 @@ union InvoicePaymentChargebackStatus {
     9: InvoicePaymentChargebackLost                           lost
 }
 
+struct InvoicePaymentChargebackCreated                        {}
+struct InvoicePaymentChargebackAwaitingMerchant               {}
+struct InvoicePaymentChargebackAwaitingIssuer                 {}
+struct InvoicePaymentChargebackPrearbitrationCreated          {}
+struct InvoicePaymentChargebackPrearbitrationAwaitingMerchant {}
+struct InvoicePaymentChargebackPrearbitrationAwaitingIssuer   {}
+struct InvoicePaymentChargebackArbitraion                     {}
+struct InvoicePaymentChargebackWon                            {}
+struct InvoicePaymentChargebackLost                           {}
+
 /* Refunds */
 
 struct InvoicePaymentRefund {
