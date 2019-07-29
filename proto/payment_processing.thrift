@@ -143,15 +143,16 @@ struct InvoicePaymentChange {
  * Один из возможных вариантов события, порождённого платежом по инвойсу.
  */
 union InvoicePaymentChangePayload {
-    1: InvoicePaymentStarted               invoice_payment_started
-    8: InvoicePaymentRiskScoreChanged      invoice_payment_risk_score_changed
-    9: InvoicePaymentRouteChanged          invoice_payment_route_changed
-    10: InvoicePaymentCashFlowChanged      invoice_payment_cash_flow_changed
-    3: InvoicePaymentStatusChanged         invoice_payment_status_changed
-    2: InvoicePaymentSessionChange         invoice_payment_session_change
-    7: InvoicePaymentRefundChange          invoice_payment_refund_change
-    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
-    11: InvoicePaymentRecTokenAcquired     invoice_payment_rec_token_acquired
+     1: InvoicePaymentStarted               invoice_payment_started
+     2: InvoicePaymentSessionChange         invoice_payment_session_change
+     3: InvoicePaymentStatusChanged         invoice_payment_status_changed
+     6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
+     7: InvoicePaymentRefundChange          invoice_payment_refund_change
+     8: InvoicePaymentRiskScoreChanged      invoice_payment_risk_score_changed
+     9: InvoicePaymentRouteChanged          invoice_payment_route_changed
+    10: InvoicePaymentCashFlowChanged       invoice_payment_cash_flow_changed
+    11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
+    12: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
 }
 
 /**
@@ -290,6 +291,45 @@ struct SessionInteractionRequested {
     /** Необходимое взаимодействие */
     1: required user_interaction.UserInteraction interaction
 }
+
+/* WIP CHARGEBACKS */
+
+/**
+ * Событие, касающееся определённого чарджбека.
+ */
+struct InvoicePaymentChargebackChange {
+    1: required domain.InvoicePaymentChargebackID id
+    2: required InvoicePaymentChargebackChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого чарджбеком платежа по инвойсу.
+ */
+union InvoicePaymentChargebackChangePayload {
+    1: InvoicePaymentChargebackCreated       invoice_payment_chargeback_created
+    /* 2: InvoicePaymentChargebackStatusChanged invoice_payment_chargeback_status_changed */
+    3: InvoicePaymentSessionChange           invoice_payment_session_change
+}
+
+/**
+ * Событие о создании чарджбека
+ */
+struct InvoicePaymentChargebackCreated {
+    1: required domain.InvoicePaymentChargeback chargeback
+    2: required domain.FinalCashFlow cash_flow
+
+    /*/***/
+    /** Данные проведённой вручную транзакции.*/
+    /** В случае присутствия при обработке возврата этап обращения к адаптеру будет пропущен,*/
+    /** а эти данные будут использованы в качестве результата*/
+    /**/
+    /*3: optional domain.TransactionInfo transaction_info*/
+}
+
+
+
+/* WIP CHARGEBACKS */
+
 
 /**
  * Событие, касающееся определённого возврата платежа.
