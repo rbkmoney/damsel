@@ -383,6 +383,7 @@ struct InvoicePaymentChargeback {
     7: optional PartyRevision                   party_revision
     6: optional Cash                            cash
     9: optional string                          external_id
+}
 
 typedef list<InvoicePaymentChargebackHistoryEvent> InvoicePaymentChargebackHistory
 
