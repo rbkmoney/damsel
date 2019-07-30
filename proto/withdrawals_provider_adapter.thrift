@@ -104,7 +104,7 @@ union QuoteFailure {
 
 union LimitExceededFailure {
     1: GeneralFailure value_above_max_limit
-    2: GeneralFailure value_ander_min_limit
+    2: GeneralFailure value_under_min_limit
 }
 
 struct GeneralFailure {}
