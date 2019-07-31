@@ -863,17 +863,18 @@ struct TermSetHierarchyRef { 1: required ObjectID id }
 /* Payments service terms */
 
 struct PaymentsServiceTerms {
-    /* Shop level */
-    // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
-    1: optional CurrencySelector currencies
-    2: optional CategorySelector categories
-    /* Invoice level*/
-    4: optional PaymentMethodSelector payment_methods
-    5: optional CashLimitSelector cash_limit
-    /* Payment level */
-    6: optional CashFlowSelector fees
-    9: optional PaymentHoldsServiceTerms holds
-    8: optional PaymentRefundsServiceTerms refunds
+     /* Shop level */
+     // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
+     1: optional CurrencySelector currencies
+     2: optional CategorySelector categories
+     /* Invoice level*/
+     4: optional PaymentMethodSelector payment_methods
+     5: optional CashLimitSelector cash_limit
+     /* Payment level */
+     6: optional CashFlowSelector fees
+     9: optional PaymentHoldsServiceTerms holds
+     8: optional PaymentRefundsServiceTerms refunds
+    10: optional PaymentChargebackServiceTerms chargeback
 }
 
 struct PaymentHoldsServiceTerms {
@@ -884,6 +885,13 @@ struct PaymentHoldsServiceTerms {
 }
 
 struct PartialCaptureServiceTerms {}
+
+struct PaymentChargebackServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+    2: optional CashFlowSelector fees
+    3: optional TimeSpanSelector eligibility_time
+    /* 4: optional PartialRefundsServiceTerms partial_refunds */
+}
 
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
