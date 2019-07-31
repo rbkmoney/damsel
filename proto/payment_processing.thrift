@@ -370,9 +370,7 @@ struct InvoicePaymentRecTokenAcquired {
 
 struct InvoicePaymentPartialCaptureStarted {
     1: required domain.FinalCashFlow partial_cash_flow
-    2: required string reason
-    3: required domain.Cash cash
-    4: optional domain.InvoiceCart cart
+    2: required InvoicePaymentCaptureParams params
 }
 
 /**
