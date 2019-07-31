@@ -152,7 +152,7 @@ union InvoicePaymentChangePayload {
     7: InvoicePaymentRefundChange           invoice_payment_refund_change
     6: InvoicePaymentAdjustmentChange       invoice_payment_adjustment_change
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
-    12: InvoicePaymentPartialCaptureRequest invoice_payment_partial_capture_request
+    12: InvoicePaymentPartialCaptureStarted invoice_payment_partial_capture_started
 }
 
 /**
@@ -368,7 +368,7 @@ struct InvoicePaymentRecTokenAcquired {
     1: required domain.Token token
 }
 
-struct InvoicePaymentPartialCaptureRequest {
+struct InvoicePaymentPartialCaptureStarted {
     1: required domain.FinalCashFlow partial_cash_flow
     2: required string reason
     3: required domain.Cash cash
