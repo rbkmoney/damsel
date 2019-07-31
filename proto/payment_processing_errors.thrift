@@ -79,6 +79,11 @@ union RefundFailure {
     2: AuthorizationFailure authorization_failed
 }
 
+union ChargebackFailure {
+    1: TermsViolated        terms_violated
+    2: AuthorizationFailure authorization_failed
+}
+
 union AuthorizationFailure {
      1: GeneralFailure    unknown
      2: GeneralFailure    merchant_blocked
