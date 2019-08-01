@@ -146,6 +146,11 @@
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
+%% struct 'InvoicePaymentChargebackStatusChanged'
+-record('payproc_InvoicePaymentChargebackStatusChanged', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+}).
+
 %% struct 'InvoicePaymentRefundChange'
 -record('payproc_InvoicePaymentRefundChange', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),

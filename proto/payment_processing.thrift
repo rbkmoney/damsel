@@ -307,7 +307,7 @@ struct InvoicePaymentChargebackChange {
  */
 union InvoicePaymentChargebackChangePayload {
     1: InvoicePaymentChargebackCreated       invoice_payment_chargeback_created
-    /* 2: InvoicePaymentChargebackStatusChanged invoice_payment_chargeback_status_changed */
+    2: InvoicePaymentChargebackStatusChanged invoice_payment_chargeback_status_changed
     3: InvoicePaymentSessionChange           invoice_payment_session_change
 }
 
@@ -326,6 +326,9 @@ struct InvoicePaymentChargebackCreated {
     /*3: optional domain.TransactionInfo transaction_info*/
 }
 
+struct InvoicePaymentChargebackStatusChanged {
+    1: required domain.InvoicePaymentChargebackStatus status
+}
 
 
 /* WIP CHARGEBACKS */
