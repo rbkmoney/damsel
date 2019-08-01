@@ -173,6 +173,11 @@
     'token' :: dmsl_domain_thrift:'Token'()
 }).
 
+%% struct 'InvoicePaymentCaptureStarted'
+-record('payproc_InvoicePaymentCaptureStarted', {
+    'params' :: dmsl_payment_processing_thrift:'InvoicePaymentCaptureParams'()
+}).
+
 %% struct 'EventRange'
 -record('payproc_EventRange', {
     'after' :: dmsl_base_thrift:'EventID'() | undefined,
