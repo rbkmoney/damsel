@@ -152,7 +152,8 @@ union InvoicePaymentChangePayload {
      9: InvoicePaymentRouteChanged          invoice_payment_route_changed
     10: InvoicePaymentCashFlowChanged       invoice_payment_cash_flow_changed
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
-    12: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
+    12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
+    13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
 }
 
 /**
@@ -408,6 +409,10 @@ struct InvoicePaymentAdjustmentStatusChanged {
  */
 struct InvoicePaymentRecTokenAcquired {
     1: required domain.Token token
+}
+
+struct InvoicePaymentCaptureStarted {
+    1: required InvoicePaymentCaptureParams params
 }
 
 /**

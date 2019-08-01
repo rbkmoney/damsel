@@ -104,6 +104,7 @@
     'InvoicePaymentAdjustmentCreated'/0,
     'InvoicePaymentAdjustmentStatusChanged'/0,
     'InvoicePaymentRecTokenAcquired'/0,
+    'InvoicePaymentCaptureStarted'/0,
     'EventRange'/0,
     'InvoiceParams'/0,
     'InvoiceWithTemplateParams'/0,
@@ -404,6 +405,7 @@
     'InvoicePaymentAdjustmentCreated' |
     'InvoicePaymentAdjustmentStatusChanged' |
     'InvoicePaymentRecTokenAcquired' |
+    'InvoicePaymentCaptureStarted' |
     'EventRange' |
     'InvoiceParams' |
     'InvoiceWithTemplateParams' |
@@ -660,6 +662,7 @@
     {'invoice_payment_route_changed', 'InvoicePaymentRouteChanged'()} |
     {'invoice_payment_cash_flow_changed', 'InvoicePaymentCashFlowChanged'()} |
     {'invoice_payment_rec_token_acquired', 'InvoicePaymentRecTokenAcquired'()} |
+    {'invoice_payment_capture_started', 'InvoicePaymentCaptureStarted'()} |
     {'invoice_payment_chargeback_change', 'InvoicePaymentChargebackChange'()}.
 
 %% struct 'InvoicePaymentStarted'
@@ -777,6 +780,9 @@
 
 %% struct 'InvoicePaymentRecTokenAcquired'
 -type 'InvoicePaymentRecTokenAcquired'() :: #'payproc_InvoicePaymentRecTokenAcquired'{}.
+
+%% struct 'InvoicePaymentCaptureStarted'
+-type 'InvoicePaymentCaptureStarted'() :: #'payproc_InvoicePaymentCaptureStarted'{}.
 
 %% struct 'EventRange'
 -type 'EventRange'() :: #'payproc_EventRange'{}.
@@ -1705,6 +1711,7 @@ structs() ->
         'InvoicePaymentAdjustmentCreated',
         'InvoicePaymentAdjustmentStatusChanged',
         'InvoicePaymentRecTokenAcquired',
+        'InvoicePaymentCaptureStarted',
         'EventRange',
         'InvoiceParams',
         'InvoiceWithTemplateParams',
@@ -2025,7 +2032,8 @@ struct_info('InvoicePaymentChangePayload') ->
     {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRouteChanged'}}, 'invoice_payment_route_changed', undefined},
     {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCashFlowChanged'}}, 'invoice_payment_cash_flow_changed', undefined},
     {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}
+    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined},
+    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}
 ]};
 
 struct_info('InvoicePaymentStarted') ->
@@ -2205,6 +2213,11 @@ struct_info('InvoicePaymentAdjustmentStatusChanged') ->
 struct_info('InvoicePaymentRecTokenAcquired') ->
     {struct, struct, [
     {1, required, string, 'token', undefined}
+]};
+
+struct_info('InvoicePaymentCaptureStarted') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
 ]};
 
 struct_info('EventRange') ->
@@ -3403,6 +3416,9 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentRecTokenAcquired') ->
     'payproc_InvoicePaymentRecTokenAcquired';
+
+    record_name('InvoicePaymentCaptureStarted') ->
+    'payproc_InvoicePaymentCaptureStarted';
 
     record_name('EventRange') ->
     'payproc_EventRange';
