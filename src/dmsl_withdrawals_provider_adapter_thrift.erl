@@ -48,8 +48,14 @@
     'Withdrawal'/0,
     'Cash'/0,
     'GetQuoteParams'/0,
+    'QuoteFailure'/0,
+    'LimitExceededFailure'/0,
+    'GeneralFailure'/0,
     'ProcessResult'/0,
     'Quote'/0
+]).
+-export_type([
+    'GetQuoteFailure'/0
 ]).
 
 -type namespace() :: 'wthadpt'.
@@ -89,10 +95,14 @@
     'Withdrawal' |
     'Cash' |
     'GetQuoteParams' |
+    'QuoteFailure' |
+    'LimitExceededFailure' |
+    'GeneralFailure' |
     'ProcessResult' |
     'Quote'.
 
--type exception_name() :: none().
+-type exception_name() ::
+    'GetQuoteFailure'.
 
 %% union 'Intent'
 -type 'Intent'() ::
@@ -122,11 +132,26 @@
 %% struct 'GetQuoteParams'
 -type 'GetQuoteParams'() :: #'wthadpt_GetQuoteParams'{}.
 
+%% union 'QuoteFailure'
+-type 'QuoteFailure'() ::
+    {'limit_exceeded', 'LimitExceededFailure'()}.
+
+%% union 'LimitExceededFailure'
+-type 'LimitExceededFailure'() ::
+    {'value_above_max_limit', 'GeneralFailure'()} |
+    {'value_below_min_limit', 'GeneralFailure'()}.
+
+%% struct 'GeneralFailure'
+-type 'GeneralFailure'() :: #'wthadpt_GeneralFailure'{}.
+
 %% struct 'ProcessResult'
 -type 'ProcessResult'() :: #'wthadpt_ProcessResult'{}.
 
 %% struct 'Quote'
 -type 'Quote'() :: #'wthadpt_Quote'{}.
+
+%% exception 'GetQuoteFailure'
+-type 'GetQuoteFailure'() :: #'wthadpt_GetQuoteFailure'{}.
 
 %%
 %% services and functions
@@ -199,6 +224,9 @@ structs() ->
         'Withdrawal',
         'Cash',
         'GetQuoteParams',
+        'QuoteFailure',
+        'LimitExceededFailure',
+        'GeneralFailure',
         'ProcessResult',
         'Quote'
     ].
@@ -294,6 +322,20 @@ struct_info('GetQuoteParams') ->
     {4, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'exchange_cash', undefined}
 ]};
 
+struct_info('QuoteFailure') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'LimitExceededFailure'}}, 'limit_exceeded', undefined}
+]};
+
+struct_info('LimitExceededFailure') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GeneralFailure'}}, 'value_above_max_limit', undefined},
+    {2, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GeneralFailure'}}, 'value_below_min_limit', undefined}
+]};
+
+struct_info('GeneralFailure') ->
+    {struct, struct, []};
+
 struct_info('ProcessResult') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'Intent'}}, 'intent', undefined},
@@ -307,6 +349,11 @@ struct_info('Quote') ->
     {3, required, string, 'created_at', undefined},
     {4, required, string, 'expires_on', undefined},
     {5, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'quote_data', undefined}
+]};
+
+struct_info('GetQuoteFailure') ->
+    {struct, exception, [
+    {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'QuoteFailure'}}, 'failure', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -331,11 +378,17 @@ record_name('Success') ->
     record_name('GetQuoteParams') ->
     'wthadpt_GetQuoteParams';
 
+    record_name('GeneralFailure') ->
+    'wthadpt_GeneralFailure';
+
     record_name('ProcessResult') ->
     'wthadpt_ProcessResult';
 
     record_name('Quote') ->
     'wthadpt_Quote';
+
+    record_name('GetQuoteFailure') ->
+    'wthadpt_GetQuoteFailure';
 
     record_name(_) -> error(badarg).
     
@@ -370,6 +423,8 @@ function_info('Adapter', 'GetQuote', params_type) ->
 function_info('Adapter', 'GetQuote', reply_type) ->
         {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}};
     function_info('Adapter', 'GetQuote', exceptions) ->
-        {struct, struct, []};
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_withdrawals_provider_adapter_thrift, 'GetQuoteFailure'}}, 'ex1', undefined}
+    ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
