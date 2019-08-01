@@ -255,7 +255,7 @@
 
 %% struct 'InvoicePaymentChargeback'
 -record('domain_InvoicePaymentChargeback', {
-    'id' :: dmsl_domain_thrift:'InvoicePaymentChargeback'(),
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),

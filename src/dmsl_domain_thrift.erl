@@ -3470,7 +3470,7 @@ struct_info('InvoicePaymentFlowHold') ->
 
 struct_info('InvoicePaymentChargeback') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'id', undefined},
+    {1, required, string, 'id', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
     {4, required, i64, 'domain_revision', undefined},
