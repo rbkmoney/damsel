@@ -375,7 +375,7 @@ enum OnHoldExpiration {
 /* Chargebacks */
 
 struct InvoicePaymentChargeback {
-    1: required InvoicePaymentChargeback        id
+    1: required InvoicePaymentChargebackID      id
     2: required InvoicePaymentChargebackStatus  status
     3: required base.Timestamp                  created_at
     4: required DataRevision                    domain_revision
