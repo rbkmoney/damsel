@@ -98,6 +98,21 @@ struct GetQuoteParams {
     4: required Cash exchange_cash
 }
 
+union QuoteFailure {
+    1: LimitExceededFailure limit_exceeded
+}
+
+union LimitExceededFailure {
+    1: GeneralFailure value_above_max_limit
+    2: GeneralFailure value_below_min_limit
+}
+
+struct GeneralFailure {}
+
+exception GetQuoteFailure {
+    1: required QuoteFailure failure
+}
+
 ///
 
 /**
@@ -142,5 +157,6 @@ service Adapter {
         2: Options opts
     )
     throws (
+        1: GetQuoteFailure ex1
     )
 }
