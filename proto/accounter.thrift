@@ -90,8 +90,19 @@ struct PostingPlan {
 */
 struct PostingPlanChange {
    1: required PlanID id
-   2: required OperationID operation_id
-   3: required PostingBatch batch
+   2: required PostingBatch batch
+}
+
+union Clock {
+    1: VectorClock vector
+    2: LatestClock latest
+}
+
+struct VectorClock {
+    1: required base.Opaque state
+}
+
+struct LatestClock {
 }
 
 struct Operation {
@@ -147,19 +158,20 @@ exception AccountNotFound {
     1: required AccountID account_id
 }
 
-exception PlanNotYetExists {
+exception PlanNotExists {
     1: required PlanID plan_id
 }
 
-exception OperationNotYetExists {}
+exception OperationNotExists {}
+exception ClockInFuture {}
 //exception
 
 service Accounter {
-    Operation Hold(1: PostingPlanChange plan_change) throws (1:base.InvalidRequest e1)
-    Operation CommitPlan(1: PostingPlan plan) throws (1:base.InvalidRequest e1)
-    Operation RollbackPlan(1: PostingPlan plan) throws (1:base.InvalidRequest e1)
-    Operation getOperation(1: OperationID operation_id, 2: PostingPlanChange plan_change) throws (1: OperationNotYetExists e1, 2:base.InvalidRequest e2)
-    PostingPlan GetPlan(1: PlanID id) throws (1: PlanNotYetExists e1)
-    Account GetAccountByID(1: AccountID id, 2: OperationID operation_id) throws (1:AccountNotFound e1, 1: OperationNotYetExists e2)
+    Operation Hold(1: OperationID operation_id, 2: PostingPlanChange plan_change) throws (1:base.InvalidRequest e1)
+    Operation CommitPlan(1: OperationID operation_id, 2: PostingPlan plan) throws (1:base.InvalidRequest e1)
+    Operation RollbackPlan(1: OperationID operation_id, 2: PostingPlan plan) throws (1:base.InvalidRequest e1)
+    Operation getOperation(1: OperationID operation_id, 2: PostingPlanChange plan_change, 3: Clock clock) throws (1: OperationNotExists e1, 2: ClockInFuture e2, 3:base.InvalidRequest e3)
+    PostingPlan GetPlan(1: PlanID id, 2: Clock clock) throws (1: PlanNotExists e1, 2: ClockInFuture e2)
+    Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 1: OperationNotExists e2, 3: ClockInFuture e3)
     AccountID CreateAccount(1: AccountPrototype prototype)
 }
