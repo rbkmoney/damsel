@@ -6,6 +6,7 @@ namespace erlang accounter
 typedef base.ID PlanID
 typedef i64 BatchID
 typedef i64 AccountID
+typedef string OperationID
 
 /**
 * Данные, необходимые для создания счета:
@@ -89,7 +90,49 @@ struct PostingPlan {
 */
 struct PostingPlanChange {
    1: required PlanID id
-   2: required PostingBatch batch
+   2: required OperationID operation_id
+   3: required PostingBatch batch
+}
+
+struct Operation {
+    1: required OperationID id
+    2: required OperationType type
+    3: required OperationStatus status
+}
+
+union OperationType {
+    1: HoldOperationType hold
+    2: CommitOperationType commit
+    3: RollbackOperationType rollback
+}
+
+struct HoldOperationType {}
+
+struct CommitOperationType {}
+
+struct RollbackOperationType {}
+
+union OperationStatus {
+    1: CreatedOperationStatus created
+    2: CompletedOperationStatus completed
+    3: FailedOperationStatus failed
+}
+
+struct CreatedOperationStatus {}
+
+struct CompletedOperationStatus {
+    1: required map<AccountID, Account> affected_accounts
+}
+
+union FailedOperationStatus {
+    1: InvalidPostingParams wrong_postings
+}
+
+/**
+* Возникает в случае, если переданы некорректные параметры в одной или нескольких проводках
+*/
+struct InvalidPostingParams {
+    1: required map<Posting, string> wrong_postings
 }
 
 /**
@@ -104,22 +147,19 @@ exception AccountNotFound {
     1: required AccountID account_id
 }
 
-exception PlanNotFound {
+exception PlanNotYetExists {
     1: required PlanID plan_id
 }
 
-/**
-* Возникает в случае, если переданы некорректные параметры в одной или нескольких проводках
-*/
-exception InvalidPostingParams {
-    1: required map<Posting, string> wrong_postings
-}
+exception OperationNotYetExists {}
+//exception
 
 service Accounter {
-    PostingPlanLog Hold(1: PostingPlanChange plan_change) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
-    PostingPlanLog CommitPlan(1: PostingPlan plan) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
-    PostingPlanLog RollbackPlan(1: PostingPlan plan) throws (1:InvalidPostingParams e1, 2:base.InvalidRequest e2)
-    PostingPlan GetPlan(1: PlanID id) throws (1: PlanNotFound e1)
-    Account GetAccountByID(1: AccountID id) throws (1:AccountNotFound ex)
+    Operation Hold(1: PostingPlanChange plan_change) throws (1:base.InvalidRequest e1)
+    Operation CommitPlan(1: PostingPlan plan) throws (1:base.InvalidRequest e1)
+    Operation RollbackPlan(1: PostingPlan plan) throws (1:base.InvalidRequest e1)
+    Operation getOperation(1: OperationID operation_id, 2: PostingPlanChange plan_change) throws (1: OperationNotYetExists e1, 2:base.InvalidRequest e2)
+    PostingPlan GetPlan(1: PlanID id) throws (1: PlanNotYetExists e1)
+    Account GetAccountByID(1: AccountID id, 2: OperationID operation_id) throws (1:AccountNotFound e1, 1: OperationNotYetExists e2)
     AccountID CreateAccount(1: AccountPrototype prototype)
 }
