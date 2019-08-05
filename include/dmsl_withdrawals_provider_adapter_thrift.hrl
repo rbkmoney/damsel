@@ -47,6 +47,9 @@
     'exchange_cash' :: dmsl_withdrawals_provider_adapter_thrift:'Cash'()
 }).
 
+%% struct 'GeneralFailure'
+-record('wthadpt_GeneralFailure', {}).
+
 %% struct 'ProcessResult'
 -record('wthadpt_ProcessResult', {
     'intent' :: dmsl_withdrawals_provider_adapter_thrift:'Intent'(),
@@ -60,6 +63,11 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'expires_on' :: dmsl_base_thrift:'Timestamp'(),
     'quote_data' :: dmsl_withdrawals_provider_adapter_thrift:'QuoteData'()
+}).
+
+%% exception 'GetQuoteFailure'
+-record('wthadpt_GetQuoteFailure', {
+    'failure' :: dmsl_withdrawals_provider_adapter_thrift:'QuoteFailure'()
 }).
 
 -endif.
