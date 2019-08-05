@@ -170,7 +170,7 @@ service Accounter {
     Operation Hold(1: OperationID operation_id, 2: PostingPlanChange plan_change) throws (1:base.InvalidRequest e1)
     Operation CommitPlan(1: OperationID operation_id, 2: PostingPlan plan) throws (1:base.InvalidRequest e1)
     Operation RollbackPlan(1: OperationID operation_id, 2: PostingPlan plan) throws (1:base.InvalidRequest e1)
-    Operation getOperation(1: OperationID operation_id, 2: PostingPlanChange plan_change, 3: Clock clock) throws (1: OperationNotExists e1, 2: ClockInFuture e2, 3:base.InvalidRequest e3)
+    Operation getOperation(1: OperationID operation_id, 2: PostingPlan plan, 3: Clock clock) throws (1: OperationNotExists e1, 2: ClockInFuture e2, 3:base.InvalidRequest e3)
     PostingPlan GetPlan(1: PlanID id, 2: Clock clock) throws (1: PlanNotExists e1, 2: ClockInFuture e2)
     Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 1: OperationNotExists e2, 3: ClockInFuture e3)
     AccountID CreateAccount(1: AccountPrototype prototype)
