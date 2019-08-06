@@ -5,7 +5,7 @@ namespace java com.rbkmoney.damsel.accounter
 namespace erlang accounter
 typedef base.ID PlanID
 typedef i64 BatchID
-typedef string AccountID
+typedef i64 AccountID
 
 /**
 * Данные, необходимые для создания счета:
@@ -135,4 +135,5 @@ service Accounter {
     Clock RollbackPlan(1: PostingPlan plan) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
     PostingPlan GetPlan(1: PlanID id) throws (1: PlanNotFound e1)
     Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 3: ClockInFuture e2)
+    AccountID CreateAccount(1: AccountPrototype prototype)
 }
