@@ -693,6 +693,7 @@ exception InvalidUser {}
 exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
+exception InvoicePaymentChargebackNotFound {}
 exception InvoicePaymentAdjustmentNotFound {}
 exception EventNotFound {}
 exception OperationNotPermitted {}
