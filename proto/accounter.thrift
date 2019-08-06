@@ -109,6 +109,7 @@ struct Operation {
     1: required OperationID id
     2: required OperationType type
     3: required OperationStatus status
+    4: required Clock clock
 }
 
 union OperationType {
@@ -173,5 +174,4 @@ service Accounter {
     Operation getOperation(1: OperationID operation_id, 2: PostingPlan plan, 3: Clock clock) throws (1: OperationNotFound e1, 2: ClockInFuture e2, 3:base.InvalidRequest e3)
     PostingPlan GetPlan(1: PlanID id, 2: Clock clock) throws (1: PlanNotFound e1, 2: ClockInFuture e2)
     Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 1: OperationNotFound e2, 3: ClockInFuture e3)
-    AccountID CreateAccount(1: AccountPrototype prototype)
 }
