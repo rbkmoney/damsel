@@ -253,6 +253,7 @@
     'InvoiceNotFound'/0,
     'InvoicePaymentNotFound'/0,
     'InvoicePaymentRefundNotFound'/0,
+    'InvoicePaymentChargebackNotFound'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
     'OperationNotPermitted'/0,
@@ -554,6 +555,7 @@
     'InvoiceNotFound' |
     'InvoicePaymentNotFound' |
     'InvoicePaymentRefundNotFound' |
+    'InvoicePaymentChargebackNotFound' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
     'OperationNotPermitted' |
@@ -1352,6 +1354,9 @@
 
 %% exception 'InvoicePaymentRefundNotFound'
 -type 'InvoicePaymentRefundNotFound'() :: #'payproc_InvoicePaymentRefundNotFound'{}.
+
+%% exception 'InvoicePaymentChargebackNotFound'
+-type 'InvoicePaymentChargebackNotFound'() :: #'payproc_InvoicePaymentChargebackNotFound'{}.
 
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -type 'InvoicePaymentAdjustmentNotFound'() :: #'payproc_InvoicePaymentAdjustmentNotFound'{}.
@@ -3151,6 +3156,9 @@ struct_info('InvoicePaymentNotFound') ->
 struct_info('InvoicePaymentRefundNotFound') ->
     {struct, exception, []};
 
+struct_info('InvoicePaymentChargebackNotFound') ->
+    {struct, exception, []};
+
 struct_info('InvoicePaymentAdjustmentNotFound') ->
     {struct, exception, []};
 
@@ -3767,6 +3775,9 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentRefundNotFound') ->
     'payproc_InvoicePaymentRefundNotFound';
+
+    record_name('InvoicePaymentChargebackNotFound') ->
+    'payproc_InvoicePaymentChargebackNotFound';
 
     record_name('InvoicePaymentAdjustmentNotFound') ->
     'payproc_InvoicePaymentAdjustmentNotFound';

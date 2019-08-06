@@ -875,6 +875,9 @@
 %% exception 'InvoicePaymentRefundNotFound'
 -record('payproc_InvoicePaymentRefundNotFound', {}).
 
+%% exception 'InvoicePaymentChargebackNotFound'
+-record('payproc_InvoicePaymentChargebackNotFound', {}).
+
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -record('payproc_InvoicePaymentAdjustmentNotFound', {}).
 
