@@ -6,7 +6,6 @@ namespace erlang accounter
 typedef base.ID PlanID
 typedef i64 BatchID
 typedef string AccountID
-typedef string OperationID
 
 /**
 * Данные, необходимые для создания счета:
