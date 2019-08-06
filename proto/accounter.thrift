@@ -133,6 +133,6 @@ service Accounter {
     Clock Hold(1: PostingPlanChange plan_change) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
     Clock CommitPlan(1: PostingPlan plan) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
     Clock RollbackPlan(1: PostingPlan plan) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
-    PostingPlan GetPlan(1: PlanID id, 2: Clock clock) throws (1: PlanNotFound e1, 2: ClockInFuture e2)
+    PostingPlan GetPlan(1: PlanID id) throws (1: PlanNotFound e1)
     Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 3: ClockInFuture e2)
 }
