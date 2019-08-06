@@ -5,7 +5,7 @@ namespace java com.rbkmoney.damsel.accounter
 namespace erlang accounter
 typedef base.ID PlanID
 typedef i64 BatchID
-typedef i64 AccountID
+typedef string AccountID
 typedef string OperationID
 
 /**
@@ -105,41 +105,6 @@ struct VectorClock {
 struct LatestClock {
 }
 
-struct Operation {
-    1: required OperationID id
-    2: required OperationType type
-    3: required OperationStatus status
-    4: required Clock clock
-}
-
-union OperationType {
-    1: HoldOperationType hold
-    2: CommitOperationType commit
-    3: RollbackOperationType rollback
-}
-
-struct HoldOperationType {}
-
-struct CommitOperationType {}
-
-struct RollbackOperationType {}
-
-union OperationStatus {
-    1: CreatedOperationStatus created
-    2: CompletedOperationStatus completed
-    3: FailedOperationStatus failed
-}
-
-struct CreatedOperationStatus {}
-
-struct CompletedOperationStatus {
-    1: required map<AccountID, Account> affected_accounts
-}
-
-union FailedOperationStatus {
-    1: InvalidPostingParams wrong_postings
-}
-
 /**
 * Возникает в случае, если переданы некорректные параметры в одной или нескольких проводках
 */
@@ -163,15 +128,13 @@ exception PlanNotFound {
     1: required PlanID plan_id
 }
 
-exception OperationNotFound {}
 exception ClockInFuture {}
 //exception
 
 service Accounter {
-    Operation Hold(1: OperationID operation_id, 2: PostingPlanChange plan_change) throws (1:base.InvalidRequest e1)
-    Operation CommitPlan(1: OperationID operation_id, 2: PostingPlan plan) throws (1:base.InvalidRequest e1)
-    Operation RollbackPlan(1: OperationID operation_id, 2: PostingPlan plan) throws (1:base.InvalidRequest e1)
-    Operation getOperation(1: OperationID operation_id, 2: PostingPlan plan, 3: Clock clock) throws (1: OperationNotFound e1, 2: ClockInFuture e2, 3:base.InvalidRequest e3)
+    Clock Hold(1: PostingPlanChange plan_change) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
+    Clock CommitPlan(1: PostingPlan plan) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
+    Clock RollbackPlan(1: PostingPlan plan) throws (1: InvalidPostingParams e1, 2: base.InvalidRequest e2)
     PostingPlan GetPlan(1: PlanID id, 2: Clock clock) throws (1: PlanNotFound e1, 2: ClockInFuture e2)
-    Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 1: OperationNotFound e2, 3: ClockInFuture e3)
+    Account GetAccountByID(1: AccountID id, 2: Clock clock) throws (1:AccountNotFound e1, 3: ClockInFuture e2)
 }
