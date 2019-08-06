@@ -106,13 +106,6 @@ struct LatestClock {
 }
 
 /**
-* Возникает в случае, если переданы некорректные параметры в одной или нескольких проводках
-*/
-struct InvalidPostingParams {
-    1: required map<Posting, string> wrong_postings
-}
-
-/**
 * Результат применение единицы пополнения плана:
 * affected_accounts - новое состояние задействованных счетов
 */
@@ -128,6 +121,12 @@ exception PlanNotFound {
     1: required PlanID plan_id
 }
 
+/**
+* Возникает в случае, если переданы некорректные параметры в одной или нескольких проводках
+*/
+exception InvalidPostingParams {
+    1: required map<Posting, string> wrong_postings
+}
 exception ClockInFuture {}
 //exception
 
