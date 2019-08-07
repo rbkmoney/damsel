@@ -1109,6 +1109,7 @@ struct CustomerBinding {
 // Statuses
 union CustomerBindingStatus {
     1: CustomerBindingPending   pending
+    4: CustomerBindingProcessed processed
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
@@ -1117,6 +1118,11 @@ union CustomerBindingStatus {
  * Привязка находится в процессе обработки
  */
 struct CustomerBindingPending   {}
+
+/**
+ * Привязка обработана (recurrent_paytool создан)
+ */
+struct CustomerBindingProcessed {}
 
 /**
  * Привязка завершилась успешно
@@ -1234,6 +1240,7 @@ struct RecurrentPaymentTool {
 }
 
 struct RecurrentPaymentToolParams {
+    5: optional RecurrentPaymentToolID    id
     1: required PartyID                   party_id
     4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
