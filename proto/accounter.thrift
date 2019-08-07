@@ -14,7 +14,7 @@ typedef i64 AccountID
 * creation_time - время создания аккаунта
 */
 struct AccountPrototype {
-    1: required domain.CurrencySymbolicCode currency_sym_code
+    1: required domain.CurrencySymbolicCode currency_sym_code (erlang.woody_log = "true")
     2: optional string description
     3: optional base.Timestamp creation_time
 }
