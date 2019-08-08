@@ -1108,21 +1108,21 @@ struct CustomerBinding {
 
 // Statuses
 union CustomerBindingStatus {
+    4: CustomerBindingCreating  creating
     1: CustomerBindingPending   pending
-    4: CustomerBindingProcessed processed
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
 
 /**
+ * Привязка находится в процессе создания
+ */
+struct CustomerBindingCreating {}
+
+/**
  * Привязка находится в процессе обработки
  */
 struct CustomerBindingPending   {}
-
-/**
- * Привязка обработана (recurrent_paytool создан)
- */
-struct CustomerBindingProcessed {}
 
 /**
  * Привязка завершилась успешно
