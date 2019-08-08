@@ -580,7 +580,7 @@ struct InvoicePaymentChargebackParams {
     /**
      * необходимость удержания средств
      */
-    7: optional bool hold_funds
+    8: optional bool hold_funds
 }
 
 /**
