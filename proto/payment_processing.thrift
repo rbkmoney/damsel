@@ -577,6 +577,10 @@ struct InvoicePaymentChargebackParams {
      * Опциональный комментарий
      */
     7: optional string comment
+    /**
+     * необходимость удержания средств
+     */
+    8: optional bool hold_funds
 }
 
 /**
@@ -952,7 +956,6 @@ service Invoicing {
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        /* TODO: Implement Params */
         4: InvoicePaymentChargebackParams params
     )
         throws (
@@ -982,12 +985,12 @@ service Invoicing {
             4: InvoicePaymentRefundNotFound ex4
         )
 
-    domain.InvoicePaymentChargeback UpdateChargebackStatus (
+    domain.InvoicePaymentChargeback UpdateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
         4: domain.InvoicePaymentChargebackID chargeback_id
-        5: domain.InvoicePaymentChargebackStatus status
+        5: InvoicePaymentChargebackParams params
     )
         throws (
             1: InvalidUser ex1,

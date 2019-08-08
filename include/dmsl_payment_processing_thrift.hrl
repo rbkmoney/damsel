@@ -297,7 +297,8 @@
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined,
-    'comment' :: binary() | undefined
+    'comment' :: binary() | undefined,
+    'hold_funds' :: boolean() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundParams'

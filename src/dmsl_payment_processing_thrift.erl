@@ -1516,7 +1516,7 @@
     'CancelPaymentAdjustment' |
     'CreateChargeback' |
     'GetPaymentChargeback' |
-    'UpdateChargebackStatus' |
+    'UpdateChargeback' |
     'RefundPayment' |
     'CreateManualRefund' |
     'GetPaymentRefund' |
@@ -2340,7 +2340,8 @@ struct_info('InvoicePaymentChargebackParams') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
     {6, optional, string, 'external_id', undefined},
-    {7, optional, string, 'comment', undefined}
+    {7, optional, string, 'comment', undefined},
+    {8, optional, bool, 'hold_funds', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundParams') ->
@@ -3921,7 +3922,7 @@ functions('Invoicing') ->
         'CancelPaymentAdjustment',
         'CreateChargeback',
         'GetPaymentChargeback',
-        'UpdateChargebackStatus',
+        'UpdateChargeback',
         'RefundPayment',
         'CreateManualRefund',
         'GetPaymentRefund',
@@ -4290,17 +4291,17 @@ function_info('Invoicing', 'GetPaymentChargeback', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundNotFound'}}, 'ex4', undefined}
     ]};
-function_info('Invoicing', 'UpdateChargebackStatus', params_type) ->
+function_info('Invoicing', 'UpdateChargeback', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'id', undefined},
     {3, undefined, string, 'payment_id', undefined},
     {4, undefined, string, 'chargeback_id', undefined},
-    {5, undefined, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
+    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackParams'}}, 'params', undefined}
 ]};
-function_info('Invoicing', 'UpdateChargebackStatus', reply_type) ->
+function_info('Invoicing', 'UpdateChargeback', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
-    function_info('Invoicing', 'UpdateChargebackStatus', exceptions) ->
+    function_info('Invoicing', 'UpdateChargeback', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
