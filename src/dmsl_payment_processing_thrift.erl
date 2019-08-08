@@ -139,6 +139,7 @@
     'CustomerBindingParams'/0,
     'CustomerBinding'/0,
     'CustomerBindingStatus'/0,
+    'CustomerBindingCreating'/0,
     'CustomerBindingPending'/0,
     'CustomerBindingSucceeded'/0,
     'CustomerBindingFailed'/0,
@@ -434,6 +435,7 @@
     'CustomerBindingParams' |
     'CustomerBinding' |
     'CustomerBindingStatus' |
+    'CustomerBindingCreating' |
     'CustomerBindingPending' |
     'CustomerBindingSucceeded' |
     'CustomerBindingFailed' |
@@ -886,9 +888,13 @@
 
 %% union 'CustomerBindingStatus'
 -type 'CustomerBindingStatus'() ::
+    {'creating', 'CustomerBindingCreating'()} |
     {'pending', 'CustomerBindingPending'()} |
     {'succeeded', 'CustomerBindingSucceeded'()} |
     {'failed', 'CustomerBindingFailed'()}.
+
+%% struct 'CustomerBindingCreating'
+-type 'CustomerBindingCreating'() :: #'payproc_CustomerBindingCreating'{}.
 
 %% struct 'CustomerBindingPending'
 -type 'CustomerBindingPending'() :: #'payproc_CustomerBindingPending'{}.
@@ -1709,6 +1715,7 @@ structs() ->
         'CustomerBindingParams',
         'CustomerBinding',
         'CustomerBindingStatus',
+        'CustomerBindingCreating',
         'CustomerBindingPending',
         'CustomerBindingSucceeded',
         'CustomerBindingFailed',
@@ -2403,10 +2410,14 @@ struct_info('CustomerBinding') ->
 
 struct_info('CustomerBindingStatus') ->
     {struct, union, [
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingCreating'}}, 'creating', undefined},
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
 ]};
+
+struct_info('CustomerBindingCreating') ->
+    {struct, struct, []};
 
 struct_info('CustomerBindingPending') ->
     {struct, struct, []};
@@ -2458,6 +2469,7 @@ struct_info('RecurrentPaymentTool') ->
 
 struct_info('RecurrentPaymentToolParams') ->
     {struct, struct, [
+    {5, optional, string, 'id', undefined},
     {1, required, string, 'party_id', undefined},
     {4, optional, i64, 'party_revision', undefined},
     {2, required, string, 'shop_id', undefined},
@@ -3423,6 +3435,9 @@ record_name('InternalUser') ->
 
     record_name('CustomerBinding') ->
     'payproc_CustomerBinding';
+
+    record_name('CustomerBindingCreating') ->
+    'payproc_CustomerBindingCreating';
 
     record_name('CustomerBindingPending') ->
     'payproc_CustomerBindingPending';

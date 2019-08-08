@@ -385,6 +385,9 @@
     'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
 }).
 
+%% struct 'CustomerBindingCreating'
+-record('payproc_CustomerBindingCreating', {}).
+
 %% struct 'CustomerBindingPending'
 -record('payproc_CustomerBindingPending', {}).
 
@@ -428,6 +431,7 @@
 
 %% struct 'RecurrentPaymentToolParams'
 -record('payproc_RecurrentPaymentToolParams', {
+    'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'() | undefined,
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
