@@ -990,7 +990,7 @@ service Invoicing {
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
         4: domain.InvoicePaymentChargebackID chargeback_id
-        4: InvoicePaymentChargebackParams params
+        5: InvoicePaymentChargebackParams params
     )
         throws (
             1: InvalidUser ex1,
@@ -1259,16 +1259,10 @@ struct CustomerBinding {
 
 // Statuses
 union CustomerBindingStatus {
-    4: CustomerBindingCreating  creating
     1: CustomerBindingPending   pending
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
-
-/**
- * Привязка находится в процессе создания
- */
-struct CustomerBindingCreating {}
 
 /**
  * Привязка находится в процессе обработки
@@ -1391,7 +1385,6 @@ struct RecurrentPaymentTool {
 }
 
 struct RecurrentPaymentToolParams {
-    5: optional RecurrentPaymentToolID    id
     1: required PartyID                   party_id
     4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
