@@ -4,6 +4,7 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
 -include("dmsl_user_interaction_thrift.hrl").
+-include("dmsl_timeout_behaviour_thrift.hrl").
 
 
 
@@ -28,7 +29,7 @@
     'tag' :: dmsl_proxy_provider_thrift:'CallbackTag'(),
     'timeout' :: dmsl_base_thrift:'Timer'(),
     'user_interaction' :: dmsl_user_interaction_thrift:'UserInteraction'() | undefined,
-    'timeout_behaviour' :: dmsl_proxy_provider_thrift:'TimeoutBehaviour'() | undefined
+    'timeout_behaviour' :: dmsl_timeout_behaviour_thrift:'TimeoutBehaviour'() | undefined
 }).
 
 %% struct 'RecurrentPaymentTool'

@@ -2055,7 +2055,8 @@ struct_info('SessionFinished') ->
 
 struct_info('SessionSuspended') ->
     {struct, struct, [
-    {1, optional, string, 'tag', undefined}
+    {1, optional, string, 'tag', undefined},
+    {2, optional, {struct, union, {dmsl_timeout_behaviour_thrift, 'TimeoutBehaviour'}}, 'timeout_behaviour', undefined}
 ]};
 
 struct_info('SessionActivated') ->

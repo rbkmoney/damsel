@@ -44,7 +44,6 @@
     'Success'/0,
     'SleepIntent'/0,
     'SuspendIntent'/0,
-    'TimeoutBehaviour'/0,
     'RecurrentPaymentTool'/0,
     'RecurrentTokenInfo'/0,
     'RecurrentTokenSession'/0,
@@ -105,7 +104,6 @@
     'Success' |
     'SleepIntent' |
     'SuspendIntent' |
-    'TimeoutBehaviour' |
     'RecurrentPaymentTool' |
     'RecurrentTokenInfo' |
     'RecurrentTokenSession' |
@@ -156,11 +154,6 @@
 
 %% struct 'SuspendIntent'
 -type 'SuspendIntent'() :: #'prxprv_SuspendIntent'{}.
-
-%% union 'TimeoutBehaviour'
--type 'TimeoutBehaviour'() ::
-    {'failure', dmsl_domain_thrift:'Failure'()} |
-    {'callback', 'Callback'()}.
 
 %% struct 'RecurrentPaymentTool'
 -type 'RecurrentPaymentTool'() :: #'prxprv_RecurrentPaymentTool'{}.
@@ -322,7 +315,6 @@ structs() ->
         'Success',
         'SleepIntent',
         'SuspendIntent',
-        'TimeoutBehaviour',
         'RecurrentPaymentTool',
         'RecurrentTokenInfo',
         'RecurrentTokenSession',
@@ -418,13 +410,7 @@ struct_info('SuspendIntent') ->
     {1, required, string, 'tag', undefined},
     {2, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timeout', undefined},
     {3, optional, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'user_interaction', undefined},
-    {4, optional, {struct, union, {dmsl_proxy_provider_thrift, 'TimeoutBehaviour'}}, 'timeout_behaviour', undefined}
-]};
-
-struct_info('TimeoutBehaviour') ->
-    {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined},
-    {2, optional, string, 'callback', undefined}
+    {4, optional, {struct, union, {dmsl_timeout_behaviour_thrift, 'TimeoutBehaviour'}}, 'timeout_behaviour', undefined}
 ]};
 
 struct_info('RecurrentPaymentTool') ->
