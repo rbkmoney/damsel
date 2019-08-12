@@ -1,6 +1,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
+include "timeout_behaviour.thrift"
 
 namespace java com.rbkmoney.damsel.proxy_provider
 namespace erlang prxprv
@@ -93,14 +94,7 @@ struct SuspendIntent {
     /**
     * Поведение процессинга в случае истечения заданного timeout
     */
-    4: optional TimeoutBehaviour timeout_behaviour
-}
-
-union TimeoutBehaviour {
-    /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
-    1: domain.Failure failure
-    /** Вызов прокси для обработки события истечения таймаута. */
-    2: Callback callback
+    4: optional timeout_behaviour.TimeoutBehaviour timeout_behaviour
 }
 
 struct RecurrentPaymentTool {
