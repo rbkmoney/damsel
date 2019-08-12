@@ -285,6 +285,7 @@
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PartialCaptureProvisionTerms'/0,
+    'PaymentChargebackProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
     'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
@@ -1064,6 +1065,7 @@
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PartialCaptureProvisionTerms' |
+    'PaymentChargebackProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
     'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
@@ -1805,6 +1807,9 @@
 %% struct 'PartialCaptureProvisionTerms'
 -type 'PartialCaptureProvisionTerms'() :: #'domain_PartialCaptureProvisionTerms'{}.
 
+%% struct 'PaymentChargebackProvisionTerms'
+-type 'PaymentChargebackProvisionTerms'() :: #'domain_PaymentChargebackProvisionTerms'{}.
+
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
 
@@ -2460,6 +2465,7 @@ structs() ->
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PartialCaptureProvisionTerms',
+        'PaymentChargebackProvisionTerms',
         'PaymentRefundsProvisionTerms',
         'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
@@ -4328,7 +4334,7 @@ struct_info('PaymentsProvisionTerms') ->
     {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined}
 ]};
 
 struct_info('PaymentHoldsProvisionTerms') ->
@@ -4339,6 +4345,11 @@ struct_info('PaymentHoldsProvisionTerms') ->
 
 struct_info('PartialCaptureProvisionTerms') ->
     {struct, struct, []};
+
+struct_info('PaymentChargebackProvisionTerms') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+]};
 
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
@@ -5327,6 +5338,9 @@ record_name('OperationTimeout') ->
 
     record_name('PartialCaptureProvisionTerms') ->
     'domain_PartialCaptureProvisionTerms';
+
+    record_name('PaymentChargebackProvisionTerms') ->
+    'domain_PaymentChargebackProvisionTerms';
 
     record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
