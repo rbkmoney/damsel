@@ -4288,7 +4288,8 @@ function_info('Invoicing', 'CreateChargeback', reply_type) ->
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
         {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex10', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex11', undefined},
-        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ChargebackInProgress'}}, 'ex14', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentChargeback', params_type) ->
     {struct, struct, [
