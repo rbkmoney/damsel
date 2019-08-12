@@ -1,4 +1,4 @@
-{application, dmsl, [
+{application, damsel, [
     {description, "Damsel modules compiled to use as a dependency"},
     {vsn, "1"},
     {applications, [
