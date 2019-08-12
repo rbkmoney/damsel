@@ -870,7 +870,7 @@ struct PaymentChargebackServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
     3: optional TimeSpanSelector eligibility_time
-    /* 4: optional PartialRefundsServiceTerms partial_refunds */
+    /* 4: optional PartialChargebacksServiceTerms partial_chargebacks */
 }
 
 struct PaymentRefundsServiceTerms {
@@ -1748,7 +1748,7 @@ struct PaymentsProvisionTerms {
      4: optional CashFlowSelector cash_flow
      5: optional PaymentHoldsProvisionTerms holds
      7: optional PaymentRefundsProvisionTerms refunds
-    10: optional PaymentChargebackServiceTerms chargebacks
+    10: optional PaymentChargebackProvisionTerms chargebacks
 }
 
 struct PaymentHoldsProvisionTerms {
@@ -1758,6 +1758,11 @@ struct PaymentHoldsProvisionTerms {
 }
 
 struct PartialCaptureProvisionTerms {}
+
+struct PaymentChargebackProvisionTerms {
+    1: required CashFlowSelector cash_flow
+    /* 2: optional PartialRefundsProvisionTerms partial_refunds */
+}
 
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
