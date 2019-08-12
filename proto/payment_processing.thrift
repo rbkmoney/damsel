@@ -307,9 +307,11 @@ struct InvoicePaymentChargebackChange {
  * Один из возможных вариантов события, порождённого чарджбеком платежа по инвойсу.
  */
 union InvoicePaymentChargebackChangePayload {
-    1: InvoicePaymentChargebackCreated       invoice_payment_chargeback_created
-    2: InvoicePaymentChargebackStatusChanged invoice_payment_chargeback_status_changed
-    3: InvoicePaymentSessionChange           invoice_payment_session_change
+    1: InvoicePaymentChargebackCreated            invoice_payment_chargeback_created
+    /* 2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_funds_held */
+    /* 3: InvoicePaymentChargebackFundsReleased      invoice_payment_funds_released */
+    4: InvoicePaymentChargebackStatusChanged      invoice_payment_chargeback_status_changed
+    5: InvoicePaymentSessionChange                invoice_payment_session_change
 }
 
 /**
@@ -325,6 +327,10 @@ struct InvoicePaymentChargebackCreated {
     /** а эти данные будут использованы в качестве результата*/
     /**/
     /*3: optional domain.TransactionInfo transaction_info*/
+}
+
+struct InvoicePaymentChargebackFundsStatusChanged {
+    1: required bool hold_funds
 }
 
 struct InvoicePaymentChargebackStatusChanged {

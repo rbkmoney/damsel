@@ -50,7 +50,6 @@
     'Fingerprint'/0,
     'IPAddress'/0,
     'InvoiceTemplateID'/0,
-    'InvoicePaymentChargebackHistory'/0,
     'PartyID'/0,
     'PartyRevision'/0,
     'PartyMetaNamespace'/0,
@@ -150,15 +149,8 @@
     'InvoicePaymentFlowInstant'/0,
     'InvoicePaymentFlowHold'/0,
     'InvoicePaymentChargeback'/0,
-    'InvoicePaymentChargebackHistoryEvent'/0,
     'InvoicePaymentChargebackStatus'/0,
     'InvoicePaymentChargebackCreated'/0,
-    'InvoicePaymentChargebackAwaitingMerchant'/0,
-    'InvoicePaymentChargebackAwaitingIssuer'/0,
-    'InvoicePaymentChargebackPrearbitrationCreated'/0,
-    'InvoicePaymentChargebackPrearbitrationAwaitingMerchant'/0,
-    'InvoicePaymentChargebackPrearbitrationAwaitingIssuer'/0,
-    'InvoicePaymentChargebackArbitraion'/0,
     'InvoicePaymentChargebackWon'/0,
     'InvoicePaymentChargebackLost'/0,
     'InvoicePaymentRefund'/0,
@@ -402,7 +394,6 @@
     'Fingerprint' |
     'IPAddress' |
     'InvoiceTemplateID' |
-    'InvoicePaymentChargebackHistory' |
     'PartyID' |
     'PartyRevision' |
     'PartyMetaNamespace' |
@@ -447,7 +438,6 @@
 -type 'Fingerprint'() :: binary().
 -type 'IPAddress'() :: binary().
 -type 'InvoiceTemplateID'() :: dmsl_base_thrift:'ID'().
--type 'InvoicePaymentChargebackHistory'() :: ['InvoicePaymentChargebackHistoryEvent'()].
 -type 'PartyID'() :: dmsl_base_thrift:'ID'().
 -type 'PartyRevision'() :: integer().
 -type 'PartyMetaNamespace'() :: binary().
@@ -938,15 +928,8 @@
     'InvoicePaymentFlowInstant' |
     'InvoicePaymentFlowHold' |
     'InvoicePaymentChargeback' |
-    'InvoicePaymentChargebackHistoryEvent' |
     'InvoicePaymentChargebackStatus' |
     'InvoicePaymentChargebackCreated' |
-    'InvoicePaymentChargebackAwaitingMerchant' |
-    'InvoicePaymentChargebackAwaitingIssuer' |
-    'InvoicePaymentChargebackPrearbitrationCreated' |
-    'InvoicePaymentChargebackPrearbitrationAwaitingMerchant' |
-    'InvoicePaymentChargebackPrearbitrationAwaitingIssuer' |
-    'InvoicePaymentChargebackArbitraion' |
     'InvoicePaymentChargebackWon' |
     'InvoicePaymentChargebackLost' |
     'InvoicePaymentRefund' |
@@ -1341,41 +1324,14 @@
 %% struct 'InvoicePaymentChargeback'
 -type 'InvoicePaymentChargeback'() :: #'domain_InvoicePaymentChargeback'{}.
 
-%% struct 'InvoicePaymentChargebackHistoryEvent'
--type 'InvoicePaymentChargebackHistoryEvent'() :: #'domain_InvoicePaymentChargebackHistoryEvent'{}.
-
 %% union 'InvoicePaymentChargebackStatus'
 -type 'InvoicePaymentChargebackStatus'() ::
     {'chargeback_created', 'InvoicePaymentChargebackCreated'()} |
-    {'chargeback_awaiting_merchant', 'InvoicePaymentChargebackAwaitingMerchant'()} |
-    {'chargeback_awaiting_issuer', 'InvoicePaymentChargebackAwaitingIssuer'()} |
-    {'prearbitration_created', 'InvoicePaymentChargebackPrearbitrationCreated'()} |
-    {'prearbitration_awaiting_merchant', 'InvoicePaymentChargebackPrearbitrationAwaitingMerchant'()} |
-    {'prearbitration_awaiting_issuer', 'InvoicePaymentChargebackPrearbitrationAwaitingIssuer'()} |
-    {'arbitration', 'InvoicePaymentChargebackArbitraion'()} |
     {'won', 'InvoicePaymentChargebackWon'()} |
     {'lost', 'InvoicePaymentChargebackLost'()}.
 
 %% struct 'InvoicePaymentChargebackCreated'
 -type 'InvoicePaymentChargebackCreated'() :: #'domain_InvoicePaymentChargebackCreated'{}.
-
-%% struct 'InvoicePaymentChargebackAwaitingMerchant'
--type 'InvoicePaymentChargebackAwaitingMerchant'() :: #'domain_InvoicePaymentChargebackAwaitingMerchant'{}.
-
-%% struct 'InvoicePaymentChargebackAwaitingIssuer'
--type 'InvoicePaymentChargebackAwaitingIssuer'() :: #'domain_InvoicePaymentChargebackAwaitingIssuer'{}.
-
-%% struct 'InvoicePaymentChargebackPrearbitrationCreated'
--type 'InvoicePaymentChargebackPrearbitrationCreated'() :: #'domain_InvoicePaymentChargebackPrearbitrationCreated'{}.
-
-%% struct 'InvoicePaymentChargebackPrearbitrationAwaitingMerchant'
--type 'InvoicePaymentChargebackPrearbitrationAwaitingMerchant'() :: #'domain_InvoicePaymentChargebackPrearbitrationAwaitingMerchant'{}.
-
-%% struct 'InvoicePaymentChargebackPrearbitrationAwaitingIssuer'
--type 'InvoicePaymentChargebackPrearbitrationAwaitingIssuer'() :: #'domain_InvoicePaymentChargebackPrearbitrationAwaitingIssuer'{}.
-
-%% struct 'InvoicePaymentChargebackArbitraion'
--type 'InvoicePaymentChargebackArbitraion'() :: #'domain_InvoicePaymentChargebackArbitraion'{}.
 
 %% struct 'InvoicePaymentChargebackWon'
 -type 'InvoicePaymentChargebackWon'() :: #'domain_InvoicePaymentChargebackWon'{}.
@@ -2261,7 +2217,6 @@ typedefs() ->
         'Fingerprint',
         'IPAddress',
         'InvoiceTemplateID',
-        'InvoicePaymentChargebackHistory',
         'PartyID',
         'PartyRevision',
         'PartyMetaNamespace',
@@ -2369,15 +2324,8 @@ structs() ->
         'InvoicePaymentFlowInstant',
         'InvoicePaymentFlowHold',
         'InvoicePaymentChargeback',
-        'InvoicePaymentChargebackHistoryEvent',
         'InvoicePaymentChargebackStatus',
         'InvoicePaymentChargebackCreated',
-        'InvoicePaymentChargebackAwaitingMerchant',
-        'InvoicePaymentChargebackAwaitingIssuer',
-        'InvoicePaymentChargebackPrearbitrationCreated',
-        'InvoicePaymentChargebackPrearbitrationAwaitingMerchant',
-        'InvoicePaymentChargebackPrearbitrationAwaitingIssuer',
-        'InvoicePaymentChargebackArbitraion',
         'InvoicePaymentChargebackWon',
         'InvoicePaymentChargebackLost',
         'InvoicePaymentRefund',
@@ -2662,9 +2610,6 @@ typedef_info('IPAddress') ->
 
 typedef_info('InvoiceTemplateID') ->
     string;
-
-typedef_info('InvoicePaymentChargebackHistory') ->
-    {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackHistoryEvent'}}};
 
 typedef_info('PartyID') ->
     string;
@@ -3474,52 +3419,21 @@ struct_info('InvoicePaymentChargeback') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
     {4, required, i64, 'domain_revision', undefined},
-    {10, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackHistoryEvent'}}}, 'history', undefined},
     {5, required, string, 'reason_code', undefined},
     {7, optional, i64, 'party_revision', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
     {9, optional, string, 'external_id', undefined}
-]};
-
-struct_info('InvoicePaymentChargebackHistoryEvent') ->
-    {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
-    {3, required, string, 'created_at', undefined},
-    {2, optional, string, 'comment', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackStatus') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCreated'}}, 'chargeback_created', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackAwaitingMerchant'}}, 'chargeback_awaiting_merchant', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackAwaitingIssuer'}}, 'chargeback_awaiting_issuer', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPrearbitrationCreated'}}, 'prearbitration_created', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPrearbitrationAwaitingMerchant'}}, 'prearbitration_awaiting_merchant', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPrearbitrationAwaitingIssuer'}}, 'prearbitration_awaiting_issuer', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackArbitraion'}}, 'arbitration', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackWon'}}, 'won', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackLost'}}, 'lost', undefined}
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackWon'}}, 'won', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackLost'}}, 'lost', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackCreated') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentChargebackAwaitingMerchant') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentChargebackAwaitingIssuer') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentChargebackPrearbitrationCreated') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentChargebackPrearbitrationAwaitingMerchant') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentChargebackPrearbitrationAwaitingIssuer') ->
-    {struct, struct, []};
-
-struct_info('InvoicePaymentChargebackArbitraion') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentChargebackWon') ->
@@ -3937,7 +3851,7 @@ struct_info('PaymentsServiceTerms') ->
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargeback', undefined}
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
 ]};
 
 struct_info('PaymentHoldsServiceTerms') ->
@@ -4413,7 +4327,8 @@ struct_info('PaymentsProvisionTerms') ->
     {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
 ]};
 
 struct_info('PaymentHoldsProvisionTerms') ->
@@ -5092,29 +5007,8 @@ record_name('OperationTimeout') ->
     record_name('InvoicePaymentChargeback') ->
     'domain_InvoicePaymentChargeback';
 
-    record_name('InvoicePaymentChargebackHistoryEvent') ->
-    'domain_InvoicePaymentChargebackHistoryEvent';
-
     record_name('InvoicePaymentChargebackCreated') ->
     'domain_InvoicePaymentChargebackCreated';
-
-    record_name('InvoicePaymentChargebackAwaitingMerchant') ->
-    'domain_InvoicePaymentChargebackAwaitingMerchant';
-
-    record_name('InvoicePaymentChargebackAwaitingIssuer') ->
-    'domain_InvoicePaymentChargebackAwaitingIssuer';
-
-    record_name('InvoicePaymentChargebackPrearbitrationCreated') ->
-    'domain_InvoicePaymentChargebackPrearbitrationCreated';
-
-    record_name('InvoicePaymentChargebackPrearbitrationAwaitingMerchant') ->
-    'domain_InvoicePaymentChargebackPrearbitrationAwaitingMerchant';
-
-    record_name('InvoicePaymentChargebackPrearbitrationAwaitingIssuer') ->
-    'domain_InvoicePaymentChargebackPrearbitrationAwaitingIssuer';
-
-    record_name('InvoicePaymentChargebackArbitraion') ->
-    'domain_InvoicePaymentChargebackArbitraion';
 
     record_name('InvoicePaymentChargebackWon') ->
     'domain_InvoicePaymentChargebackWon';

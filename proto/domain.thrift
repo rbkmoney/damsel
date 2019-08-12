@@ -379,42 +379,22 @@ struct InvoicePaymentChargeback {
     2: required InvoicePaymentChargebackStatus  status
     3: required base.Timestamp                  created_at
     4: required DataRevision                    domain_revision
-   10: required InvoicePaymentChargebackHistory history
     5: required string                          reason_code
     7: optional PartyRevision                   party_revision
     6: optional Cash                            cash
+    8: optional InvoiceCart                     cart
     9: optional string                          external_id
 }
 
-typedef list<InvoicePaymentChargebackHistoryEvent> InvoicePaymentChargebackHistory
-
-struct InvoicePaymentChargebackHistoryEvent {
-    1: required InvoicePaymentChargebackStatus status
-    3: required base.Timestamp created_at
-    2: optional string comment
-}
-
 union InvoicePaymentChargebackStatus {
-    1: InvoicePaymentChargebackCreated                        chargeback_created
-    2: InvoicePaymentChargebackAwaitingMerchant               chargeback_awaiting_merchant
-    3: InvoicePaymentChargebackAwaitingIssuer                 chargeback_awaiting_issuer
-    4: InvoicePaymentChargebackPrearbitrationCreated          prearbitration_created
-    5: InvoicePaymentChargebackPrearbitrationAwaitingMerchant prearbitration_awaiting_merchant
-    6: InvoicePaymentChargebackPrearbitrationAwaitingIssuer   prearbitration_awaiting_issuer
-    7: InvoicePaymentChargebackArbitraion                     arbitration
-    8: InvoicePaymentChargebackWon                            won
-    9: InvoicePaymentChargebackLost                           lost
+    1: InvoicePaymentChargebackCreated chargeback_created
+    2: InvoicePaymentChargebackWon     won
+    3: InvoicePaymentChargebackLost    lost
 }
 
-struct InvoicePaymentChargebackCreated                        {}
-struct InvoicePaymentChargebackAwaitingMerchant               {}
-struct InvoicePaymentChargebackAwaitingIssuer                 {}
-struct InvoicePaymentChargebackPrearbitrationCreated          {}
-struct InvoicePaymentChargebackPrearbitrationAwaitingMerchant {}
-struct InvoicePaymentChargebackPrearbitrationAwaitingIssuer   {}
-struct InvoicePaymentChargebackArbitraion                     {}
-struct InvoicePaymentChargebackWon                            {}
-struct InvoicePaymentChargebackLost                           {}
+struct InvoicePaymentChargebackCreated {}
+struct InvoicePaymentChargebackWon     {}
+struct InvoicePaymentChargebackLost    {}
 
 /* Refunds */
 
@@ -874,7 +854,7 @@ struct PaymentsServiceTerms {
      6: optional CashFlowSelector fees
      9: optional PaymentHoldsServiceTerms holds
      8: optional PaymentRefundsServiceTerms refunds
-    10: optional PaymentChargebackServiceTerms chargeback
+    10: optional PaymentChargebackServiceTerms chargebacks
 }
 
 struct PaymentHoldsServiceTerms {
@@ -1761,13 +1741,14 @@ struct WithdrawalProvider {
 }
 
 struct PaymentsProvisionTerms {
-    1: optional CurrencySelector currencies
-    2: optional CategorySelector categories
-    3: optional PaymentMethodSelector payment_methods
-    6: optional CashLimitSelector cash_limit
-    4: optional CashFlowSelector cash_flow
-    5: optional PaymentHoldsProvisionTerms holds
-    7: optional PaymentRefundsProvisionTerms refunds
+     1: optional CurrencySelector currencies
+     2: optional CategorySelector categories
+     3: optional PaymentMethodSelector payment_methods
+     6: optional CashLimitSelector cash_limit
+     4: optional CashFlowSelector cash_flow
+     5: optional PaymentHoldsProvisionTerms holds
+     7: optional PaymentRefundsProvisionTerms refunds
+    10: optional PaymentChargebackServiceTerms chargebacks
 }
 
 struct PaymentHoldsProvisionTerms {

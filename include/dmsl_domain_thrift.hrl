@@ -259,40 +259,15 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
-    'history' :: dmsl_domain_thrift:'InvoicePaymentChargebackHistory'(),
     'reason_code' :: binary(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined
-}).
-
-%% struct 'InvoicePaymentChargebackHistoryEvent'
--record('domain_InvoicePaymentChargebackHistoryEvent', {
-    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
-    'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'comment' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackCreated'
 -record('domain_InvoicePaymentChargebackCreated', {}).
-
-%% struct 'InvoicePaymentChargebackAwaitingMerchant'
--record('domain_InvoicePaymentChargebackAwaitingMerchant', {}).
-
-%% struct 'InvoicePaymentChargebackAwaitingIssuer'
--record('domain_InvoicePaymentChargebackAwaitingIssuer', {}).
-
-%% struct 'InvoicePaymentChargebackPrearbitrationCreated'
--record('domain_InvoicePaymentChargebackPrearbitrationCreated', {}).
-
-%% struct 'InvoicePaymentChargebackPrearbitrationAwaitingMerchant'
--record('domain_InvoicePaymentChargebackPrearbitrationAwaitingMerchant', {}).
-
-%% struct 'InvoicePaymentChargebackPrearbitrationAwaitingIssuer'
--record('domain_InvoicePaymentChargebackPrearbitrationAwaitingIssuer', {}).
-
-%% struct 'InvoicePaymentChargebackArbitraion'
--record('domain_InvoicePaymentChargebackArbitraion', {}).
 
 %% struct 'InvoicePaymentChargebackWon'
 -record('domain_InvoicePaymentChargebackWon', {}).
@@ -635,7 +610,7 @@
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsServiceTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined,
-    'chargeback' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsServiceTerms'
@@ -1003,7 +978,8 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
-    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined,
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsProvisionTerms'
