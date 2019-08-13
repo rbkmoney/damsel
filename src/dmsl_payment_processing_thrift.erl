@@ -746,7 +746,7 @@
 %% union 'InvoicePaymentChargebackChangePayload'
 -type 'InvoicePaymentChargebackChangePayload'() ::
     {'invoice_payment_chargeback_created', 'InvoicePaymentChargebackCreated'()} |
-    {'invoice_payment_funds_held', 'InvoicePaymentChargebackFundsStatusChanged'()} |
+    {'invoice_payment_chargeback_funds_status_changed', 'InvoicePaymentChargebackFundsStatusChanged'()} |
     {'invoice_payment_chargeback_status_changed', 'InvoicePaymentChargebackStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()}.
 
@@ -2168,7 +2168,7 @@ struct_info('InvoicePaymentChargebackChange') ->
 struct_info('InvoicePaymentChargebackChangePayload') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackFundsStatusChanged'}}, 'invoice_payment_funds_held', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackFundsStatusChanged'}}, 'invoice_payment_chargeback_funds_status_changed', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
 ]};

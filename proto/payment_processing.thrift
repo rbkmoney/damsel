@@ -310,7 +310,7 @@ struct InvoicePaymentChargebackChange {
  */
 union InvoicePaymentChargebackChangePayload {
     1: InvoicePaymentChargebackCreated            invoice_payment_chargeback_created
-    2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_funds_held
+    2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_chargeback_funds_status_changed
     3: InvoicePaymentChargebackStatusChanged      invoice_payment_chargeback_status_changed
     4: InvoicePaymentSessionChange                invoice_payment_session_change
 }
