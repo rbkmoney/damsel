@@ -299,12 +299,12 @@
 
 %% struct 'InvoicePaymentChargebackParams'
 -record('payproc_InvoicePaymentChargebackParams', {
-    'reason_code' :: binary(),
+    'reason_code' :: binary() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
     'external_id' :: binary() | undefined,
-    'comment' :: binary() | undefined,
     'hold_funds' :: boolean() | undefined
 }).
 
@@ -420,6 +420,9 @@
     'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
 }).
 
+%% struct 'CustomerBindingCreating'
+-record('payproc_CustomerBindingCreating', {}).
+
 %% struct 'CustomerBindingPending'
 -record('payproc_CustomerBindingPending', {}).
 
@@ -463,6 +466,7 @@
 
 %% struct 'RecurrentPaymentToolParams'
 -record('payproc_RecurrentPaymentToolParams', {
+    'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'() | undefined,
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),

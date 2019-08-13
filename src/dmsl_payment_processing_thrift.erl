@@ -145,6 +145,7 @@
     'CustomerBindingParams'/0,
     'CustomerBinding'/0,
     'CustomerBindingStatus'/0,
+    'CustomerBindingCreating'/0,
     'CustomerBindingPending'/0,
     'CustomerBindingSucceeded'/0,
     'CustomerBindingFailed'/0,
@@ -448,6 +449,7 @@
     'CustomerBindingParams' |
     'CustomerBinding' |
     'CustomerBindingStatus' |
+    'CustomerBindingCreating' |
     'CustomerBindingPending' |
     'CustomerBindingSucceeded' |
     'CustomerBindingFailed' |
@@ -744,6 +746,7 @@
 %% union 'InvoicePaymentChargebackChangePayload'
 -type 'InvoicePaymentChargebackChangePayload'() ::
     {'invoice_payment_chargeback_created', 'InvoicePaymentChargebackCreated'()} |
+    {'invoice_payment_funds_held', 'InvoicePaymentChargebackFundsStatusChanged'()} |
     {'invoice_payment_chargeback_status_changed', 'InvoicePaymentChargebackStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()}.
 
@@ -924,9 +927,13 @@
 
 %% union 'CustomerBindingStatus'
 -type 'CustomerBindingStatus'() ::
+    {'creating', 'CustomerBindingCreating'()} |
     {'pending', 'CustomerBindingPending'()} |
     {'succeeded', 'CustomerBindingSucceeded'()} |
     {'failed', 'CustomerBindingFailed'()}.
+
+%% struct 'CustomerBindingCreating'
+-type 'CustomerBindingCreating'() :: #'payproc_CustomerBindingCreating'{}.
 
 %% struct 'CustomerBindingPending'
 -type 'CustomerBindingPending'() :: #'payproc_CustomerBindingPending'{}.
@@ -1762,6 +1769,7 @@ structs() ->
         'CustomerBindingParams',
         'CustomerBinding',
         'CustomerBindingStatus',
+        'CustomerBindingCreating',
         'CustomerBindingPending',
         'CustomerBindingSucceeded',
         'CustomerBindingFailed',
@@ -2160,8 +2168,9 @@ struct_info('InvoicePaymentChargebackChange') ->
 struct_info('InvoicePaymentChargebackChangePayload') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackFundsStatusChanged'}}, 'invoice_payment_funds_held', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackCreated') ->
@@ -2347,13 +2356,13 @@ struct_info('InvoicePayment') ->
 
 struct_info('InvoicePaymentChargebackParams') ->
     {struct, struct, [
-    {1, required, string, 'reason_code', undefined},
+    {1, optional, string, 'reason_code', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+    {5, optional, string, 'id', undefined},
     {6, optional, string, 'external_id', undefined},
-    {7, optional, string, 'comment', undefined},
-    {8, optional, bool, 'hold_funds', undefined}
+    {7, optional, bool, 'hold_funds', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundParams') ->
@@ -2498,10 +2507,14 @@ struct_info('CustomerBinding') ->
 
 struct_info('CustomerBindingStatus') ->
     {struct, union, [
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingCreating'}}, 'creating', undefined},
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
 ]};
+
+struct_info('CustomerBindingCreating') ->
+    {struct, struct, []};
 
 struct_info('CustomerBindingPending') ->
     {struct, struct, []};
@@ -2553,6 +2566,7 @@ struct_info('RecurrentPaymentTool') ->
 
 struct_info('RecurrentPaymentToolParams') ->
     {struct, struct, [
+    {5, optional, string, 'id', undefined},
     {1, required, string, 'party_id', undefined},
     {4, optional, i64, 'party_revision', undefined},
     {2, required, string, 'shop_id', undefined},
@@ -3540,6 +3554,9 @@ record_name('InternalUser') ->
     record_name('CustomerBinding') ->
     'payproc_CustomerBinding';
 
+    record_name('CustomerBindingCreating') ->
+    'payproc_CustomerBindingCreating';
+
     record_name('CustomerBindingPending') ->
     'payproc_CustomerBindingPending';
 
@@ -4371,7 +4388,8 @@ function_info('Invoicing', 'CreateManualRefund', reply_type) ->
         {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex10', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
-        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ChargebackInProgress'}}, 'ex13', undefined}
+        {13, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex13', undefined},
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ChargebackInProgress'}}, 'ex14', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [
