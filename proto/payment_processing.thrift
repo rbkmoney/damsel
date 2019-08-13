@@ -5,6 +5,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "user_interaction.thrift"
+include "timeout_behaviour.thrift"
 include "repairing.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
@@ -232,6 +233,7 @@ struct SessionFinished {
 
 struct SessionSuspended {
     1: optional base.Tag tag
+    2: optional timeout_behaviour.TimeoutBehaviour timeout_behaviour
 }
 
 struct SessionActivated {}
@@ -1108,10 +1110,16 @@ struct CustomerBinding {
 
 // Statuses
 union CustomerBindingStatus {
+    4: CustomerBindingCreating  creating
     1: CustomerBindingPending   pending
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
+
+/**
+ * Привязка находится в процессе создания
+ */
+struct CustomerBindingCreating {}
 
 /**
  * Привязка находится в процессе обработки
@@ -1234,6 +1242,7 @@ struct RecurrentPaymentTool {
 }
 
 struct RecurrentPaymentToolParams {
+    5: optional RecurrentPaymentToolID    id
     1: required PartyID                   party_id
     4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
