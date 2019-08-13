@@ -310,10 +310,9 @@ struct InvoicePaymentChargebackChange {
  */
 union InvoicePaymentChargebackChangePayload {
     1: InvoicePaymentChargebackCreated            invoice_payment_chargeback_created
-    /* 2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_funds_held */
-    /* 3: InvoicePaymentChargebackFundsReleased      invoice_payment_funds_released */
-    4: InvoicePaymentChargebackStatusChanged      invoice_payment_chargeback_status_changed
-    5: InvoicePaymentSessionChange                invoice_payment_session_change
+    2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_funds_held
+    3: InvoicePaymentChargebackStatusChanged      invoice_payment_chargeback_status_changed
+    4: InvoicePaymentSessionChange                invoice_payment_session_change
 }
 
 /**
@@ -323,11 +322,6 @@ struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
     2: required domain.FinalCashFlow cash_flow
 
-    /*/***/
-    /** Данные проведённой вручную транзакции.*/
-    /** В случае присутствия при обработке возврата этап обращения к адаптеру будет пропущен,*/
-    /** а эти данные будут использованы в качестве результата*/
-    /**/
     /*3: optional domain.TransactionInfo transaction_info*/
 }
 
@@ -548,16 +542,16 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 /* WIP */
 
 /**
- * Параметры создаваемого возврата платежа.
+ * Параметры создаваемого чарджбэка.
  */
 struct InvoicePaymentChargebackParams {
-    /** Причина, на основании которой производится возврат. */
-    1: required string reason_code
+    /**
+    * Код причины чарджбэка
+    */
+    1: optional string reason_code
     /**
      * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
-     * Copypasta from refund
-     * seems appropriate for chargebacks too
      */
     2: optional domain.Cash cash
     /**
@@ -569,26 +563,20 @@ struct InvoicePaymentChargebackParams {
     /**
      * Итоговая корзина товаров.
      * Используется для частичного возврата, содержит позиции, которые остались после возврата.
-     * Copypasta from refund
-     * might be useful for partial chargebacks perhaps?
      */
     4: optional domain.InvoiceCart cart
     /**
-     * Идентификатор рефанда
+     * Идентификатор чарджбэка
      */
-    /* 5: optional domain.InvoicePaymentRefundID id */
+    5: optional domain.InvoicePaymentChargebackID id
     /**
      * Внешний идентификатор объекта
      */
     6: optional string external_id
     /**
-     * Опциональный комментарий
-     */
-    7: optional string comment
-    /**
      * необходимость удержания средств
      */
-    8: optional bool hold_funds
+    7: optional bool hold_funds
 }
 
 /**
@@ -1057,8 +1045,8 @@ service Invoicing {
             10: InvalidPartyStatus ex10
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
-
-            13: ChargebackInProgress ex13
+            13: base.InvalidRequest ex13
+            14: ChargebackInProgress ex14
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
@@ -1268,10 +1256,16 @@ struct CustomerBinding {
 
 // Statuses
 union CustomerBindingStatus {
+    4: CustomerBindingCreating  creating
     1: CustomerBindingPending   pending
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
+
+/**
+ * Привязка находится в процессе создания
+ */
+struct CustomerBindingCreating {}
 
 /**
  * Привязка находится в процессе обработки
@@ -1394,6 +1388,7 @@ struct RecurrentPaymentTool {
 }
 
 struct RecurrentPaymentToolParams {
+    5: optional RecurrentPaymentToolID    id
     1: required PartyID                   party_id
     4: optional PartyRevision             party_revision
     2: required ShopID                    shop_id
