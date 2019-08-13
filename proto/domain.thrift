@@ -870,7 +870,11 @@ struct PaymentChargebackServiceTerms {
     1: optional PaymentMethodSelector payment_methods
     2: optional CashFlowSelector fees
     3: optional TimeSpanSelector eligibility_time
-    /* 4: optional PartialChargebacksServiceTerms partial_chargebacks */
+    4: optional PartialChargebackServiceTerms partial_chargebacks
+}
+
+struct PartialChargebackServiceTerms {
+    1: optional CashLimitSelector cash_limit
 }
 
 struct PaymentRefundsServiceTerms {
@@ -1741,13 +1745,13 @@ struct WithdrawalProvider {
 }
 
 struct PaymentsProvisionTerms {
-     1: optional CurrencySelector currencies
-     2: optional CategorySelector categories
-     3: optional PaymentMethodSelector payment_methods
-     6: optional CashLimitSelector cash_limit
-     4: optional CashFlowSelector cash_flow
-     5: optional PaymentHoldsProvisionTerms holds
-     7: optional PaymentRefundsProvisionTerms refunds
+    1: optional CurrencySelector currencies
+    2: optional CategorySelector categories
+    3: optional PaymentMethodSelector payment_methods
+    6: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
+    5: optional PaymentHoldsProvisionTerms holds
+    7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
 }
 
@@ -1761,7 +1765,7 @@ struct PartialCaptureProvisionTerms {}
 
 struct PaymentChargebackProvisionTerms {
     1: required CashFlowSelector cash_flow
-    /* 2: optional PartialRefundsProvisionTerms partial_refunds */
+    2: optional PartialChargebackProvisionTerms partial_chargebacks
 }
 
 struct PaymentRefundsProvisionTerms {
@@ -1770,6 +1774,10 @@ struct PaymentRefundsProvisionTerms {
      * Условия для частичных рефандов.
      */
     2: optional PartialRefundsProvisionTerms partial_refunds
+}
+
+struct PartialChargebackProvisionTerms {
+    1: required CashLimitSelector cash_limit
 }
 
 struct PartialRefundsProvisionTerms {
