@@ -19,7 +19,7 @@ exception LimitExceeded {}
 
 exception InvalidChangeset {
     1: required string reason
-    2: required list<ClaimChangeset> invalid_changesets
+    2: required ClaimChangeset invalid_changeset
 }
 
 exception InvalidClaimStatus {
