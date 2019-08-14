@@ -234,7 +234,8 @@
     'make_recurrent' :: boolean() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'() | undefined,
     'external_id' :: binary() | undefined,
-    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined
+    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
+    'payment_deadline' :: binary() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'
