@@ -448,6 +448,7 @@ struct InvoicePaymentParams {
     4: optional domain.InvoicePaymentID id
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
+    7: optional string payment_deadline
 }
 
 union PayerParams {
