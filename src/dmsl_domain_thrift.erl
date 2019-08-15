@@ -3187,7 +3187,8 @@ struct_info('InvoicePayment') ->
     {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {18, optional, bool, 'make_recurrent', undefined},
     {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {19, optional, string, 'external_id', undefined}
+    {19, optional, string, 'external_id', undefined},
+    {20, optional, string, 'payment_deadline', undefined}
 ]};
 
 struct_info('InvoicePaymentPending') ->

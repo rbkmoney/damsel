@@ -121,7 +121,8 @@
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
-    'make_recurrent' :: boolean() | undefined
+    'make_recurrent' :: boolean() | undefined,
+    'payment_deadline' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentRefund'

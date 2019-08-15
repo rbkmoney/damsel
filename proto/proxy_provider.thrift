@@ -203,6 +203,7 @@ struct InvoicePayment {
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
+    9: optional string                  payment_deadline
 }
 
 struct InvoicePaymentRefund {
