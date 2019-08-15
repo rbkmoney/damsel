@@ -2407,7 +2407,9 @@ struct_info('CustomerBinding') ->
     {1, required, string, 'id', undefined},
     {2, required, string, 'rec_payment_tool_id', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined}
+    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined},
+    {5, optional, i64, 'party_revision', undefined},
+    {6, optional, i64, 'domain_revision', undefined}
 ]};
 
 struct_info('CustomerBindingStatus') ->
@@ -2474,6 +2476,7 @@ struct_info('RecurrentPaymentToolParams') ->
     {5, optional, string, 'id', undefined},
     {1, required, string, 'party_id', undefined},
     {4, optional, i64, 'party_revision', undefined},
+    {6, optional, i64, 'domain_revision', undefined},
     {2, required, string, 'shop_id', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
 ]};

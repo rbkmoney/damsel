@@ -385,7 +385,9 @@
     'id' :: dmsl_payment_processing_thrift:'CustomerBindingID'(),
     'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
-    'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
+    'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'(),
+    'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined
 }).
 
 %% struct 'CustomerBindingCreating'
@@ -437,6 +439,7 @@
     'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'() | undefined,
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
