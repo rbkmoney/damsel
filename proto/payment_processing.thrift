@@ -533,7 +533,7 @@ struct InvoicePayment {
     1: required domain.InvoicePayment payment
     3: required list<InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
-    /* 4: required list<InvoicePaymentChargeback> chargebacks */
+    4: required list<InvoicePaymentChargeback> chargebacks
 }
 
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
@@ -748,7 +748,7 @@ exception AmountExceededCaptureBalance {
     2: optional domain.Amount passed_amount
 }
 
-exception ChargebackInProgress {}
+exception InvoicePaymentChargebackPending {}
 
 service Invoicing {
 
@@ -962,10 +962,8 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
             8: InvoicePaymentAmountExceeded ex8
-            10: InvalidPartyStatus ex10
-            11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
-            14: ChargebackInProgress ex14
+            14: InvoicePaymentChargebackPending ex14
             /* something else? */
         )
 
@@ -979,7 +977,7 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
-            4: InvoicePaymentRefundNotFound ex4
+            4: InvoicePaymentChargebackNotFound ex4
         )
 
     domain.InvoicePaymentChargeback UpdateChargeback (
@@ -993,7 +991,7 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
-            4: InvoicePaymentRefundNotFound ex4
+            4: InvoicePaymentChargebackNotFound ex4
         )
 
         /* WIP */
@@ -1020,7 +1018,7 @@ service Invoicing {
             11: InvalidPartyStatus ex11
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
-            14: ChargebackInProgress ex14
+            14: InvoicePaymentChargebackPending ex14
         )
 
 
@@ -1046,7 +1044,7 @@ service Invoicing {
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
             13: base.InvalidRequest ex13
-            14: ChargebackInProgress ex14
+            14: InvoicePaymentChargebackPending ex14
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (

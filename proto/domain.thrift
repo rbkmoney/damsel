@@ -285,6 +285,15 @@ union TargetInvoicePaymentStatus {
      */
     4: InvoicePaymentRefunded refunded
 
+    /**
+     * Платёж возвращён вследствие чарджбэка.
+     *
+     * При достижении платежом этого статуса процессинг должен быть уверен в том, что
+     *
+     * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
+     */
+    5: InvoicePaymentChargedBack charged_back
+
 }
 
 union Payer {
@@ -375,21 +384,22 @@ enum OnHoldExpiration {
 /* Chargebacks */
 
 struct InvoicePaymentChargeback {
-    1: required InvoicePaymentChargebackID      id
-    2: required InvoicePaymentChargebackStatus  status
-    3: required base.Timestamp                  created_at
-    4: required DataRevision                    domain_revision
-    5: required string                          reason_code
-    7: optional PartyRevision                   party_revision
-    6: optional Cash                            cash
-    8: optional InvoiceCart                     cart
-    9: optional string                          external_id
+     1: required InvoicePaymentChargebackID      id
+     2: required InvoicePaymentChargebackStatus  status
+     3: required base.Timestamp                  created_at
+     4: required DataRevision                    domain_revision
+     5: required string                          reason_code
+     6: required bool                            funds_held
+     7: optional PartyRevision                   party_revision
+     8: optional Cash                            cash
+     9: optional InvoiceCart                     cart
+    10: optional string                          external_id
 }
 
 union InvoicePaymentChargebackStatus {
-    1: InvoicePaymentChargebackCreated chargeback_created
-    2: InvoicePaymentChargebackWon     won
-    3: InvoicePaymentChargebackLost    lost
+    1: InvoicePaymentChargebackCreated  created
+    2: InvoicePaymentChargebackAccepted accepted
+    3: InvoicePaymentChargebackRejected rejected
 }
 
 struct InvoicePaymentChargebackCreated {}
