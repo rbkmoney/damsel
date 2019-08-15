@@ -1107,6 +1107,8 @@ struct CustomerBinding {
     2: required RecurrentPaymentToolID    rec_payment_tool_id
     3: required DisposablePaymentResource payment_resource
     4: required CustomerBindingStatus     status
+    5: optional PartyRevision             party_revision
+    6: optional domain.DataRevision       domain_revision
 }
 
 // Statuses
@@ -1246,6 +1248,7 @@ struct RecurrentPaymentToolParams {
     5: optional RecurrentPaymentToolID    id
     1: required PartyID                   party_id
     4: optional PartyRevision             party_revision
+    6: optional domain.DataRevision       domain_revision
     2: required ShopID                    shop_id
     3: required DisposablePaymentResource payment_resource
 }
