@@ -240,6 +240,7 @@ union InvoicePaymentStatus {
     5: InvoicePaymentCancelled cancelled
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
+    7: InvoicePaymentChargedBack charged_back
 }
 
 /**
