@@ -550,6 +550,7 @@ struct InvoicePayment {
 
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
+typedef domain.InvoicePaymentChargeback InvoicePaymentChargeback
 
 /* WIP */
 
@@ -1003,7 +1004,7 @@ service Invoicing {
      */
      /* TODO: implement InvoicePaymentChargeback */
 
-    domain.InvoicePaymentChargeback CreateChargeback (
+    InvoicePaymentChargeback CreateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -1022,7 +1023,7 @@ service Invoicing {
             /* something else? */
         )
 
-    domain.InvoicePaymentChargeback GetPaymentChargeback (
+    InvoicePaymentChargeback GetPaymentChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -1035,7 +1036,7 @@ service Invoicing {
             4: InvoicePaymentChargebackNotFound ex4
         )
 
-    domain.InvoicePaymentChargeback UpdateChargeback (
+    InvoicePaymentChargeback UpdateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
