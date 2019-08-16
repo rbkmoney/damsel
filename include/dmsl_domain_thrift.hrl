@@ -154,6 +154,9 @@
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
+%% struct 'InvoicePaymentChargedBack'
+-record('domain_InvoicePaymentChargedBack', {}).
+
 %% struct 'InvoiceTemplate'
 -record('domain_InvoiceTemplate', {
     'id' :: dmsl_domain_thrift:'InvoiceTemplateID'(),
@@ -260,20 +263,21 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'reason_code' :: binary(),
+    'funds_held' :: boolean(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined
 }).
 
-%% struct 'InvoicePaymentChargebackCreated'
--record('domain_InvoicePaymentChargebackCreated', {}).
+%% struct 'InvoicePaymentChargebackPending'
+-record('domain_InvoicePaymentChargebackPending', {}).
 
-%% struct 'InvoicePaymentChargebackWon'
--record('domain_InvoicePaymentChargebackWon', {}).
+%% struct 'InvoicePaymentChargebackAccepted'
+-record('domain_InvoicePaymentChargebackAccepted', {}).
 
-%% struct 'InvoicePaymentChargebackLost'
--record('domain_InvoicePaymentChargebackLost', {}).
+%% struct 'InvoicePaymentChargebackRejected'
+-record('domain_InvoicePaymentChargebackRejected', {}).
 
 %% struct 'InvoicePaymentRefund'
 -record('domain_InvoicePaymentRefund', {

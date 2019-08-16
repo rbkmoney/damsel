@@ -191,6 +191,8 @@ struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
+struct InvoicePaymentChargedBack {}
+
 /**
  * Шаблон инвойса.
  * Согласно https://github.com/rbkmoney/coredocs/blob/0a5ae1a79f977be3134c3b22028631da5225d407/docs/domain/entities/invoice.md#шаблон-инвойса
@@ -238,6 +240,7 @@ union InvoicePaymentStatus {
     5: InvoicePaymentCancelled cancelled
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
+    7: InvoicePaymentChargedBack charged_back
 }
 
 /**
@@ -284,6 +287,15 @@ union TargetInvoicePaymentStatus {
      * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
      */
     4: InvoicePaymentRefunded refunded
+
+    /**
+     * Платёж возвращён вследствие чарджбэка.
+     *
+     * При достижении платежом этого статуса процессинг должен быть уверен в том, что
+     *
+     * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
+     */
+    5: InvoicePaymentChargedBack charged_back
 
 }
 
@@ -375,26 +387,27 @@ enum OnHoldExpiration {
 /* Chargebacks */
 
 struct InvoicePaymentChargeback {
-    1: required InvoicePaymentChargebackID      id
-    2: required InvoicePaymentChargebackStatus  status
-    3: required base.Timestamp                  created_at
-    4: required DataRevision                    domain_revision
-    5: required string                          reason_code
-    7: optional PartyRevision                   party_revision
-    6: optional Cash                            cash
-    8: optional InvoiceCart                     cart
-    9: optional string                          external_id
+     1: required InvoicePaymentChargebackID      id
+     2: required InvoicePaymentChargebackStatus  status
+     3: required base.Timestamp                  created_at
+     4: required DataRevision                    domain_revision
+     5: required string                          reason_code
+     6: required bool                            funds_held
+     7: optional PartyRevision                   party_revision
+     8: optional Cash                            cash
+     9: optional InvoiceCart                     cart
+    10: optional string                          external_id
 }
 
 union InvoicePaymentChargebackStatus {
-    1: InvoicePaymentChargebackCreated chargeback_created
-    2: InvoicePaymentChargebackWon     won
-    3: InvoicePaymentChargebackLost    lost
+    1: InvoicePaymentChargebackPending  pending
+    2: InvoicePaymentChargebackAccepted accepted
+    3: InvoicePaymentChargebackRejected rejected
 }
 
-struct InvoicePaymentChargebackCreated {}
-struct InvoicePaymentChargebackWon     {}
-struct InvoicePaymentChargebackLost    {}
+struct InvoicePaymentChargebackPending  {}
+struct InvoicePaymentChargebackAccepted {}
+struct InvoicePaymentChargebackRejected {}
 
 /* Refunds */
 

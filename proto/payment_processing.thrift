@@ -310,8 +310,8 @@ struct InvoicePaymentChargebackChange {
  */
 union InvoicePaymentChargebackChangePayload {
     1: InvoicePaymentChargebackCreated            invoice_payment_chargeback_created
-    2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_chargeback_funds_status_changed
     3: InvoicePaymentChargebackStatusChanged      invoice_payment_chargeback_status_changed
+    2: InvoicePaymentChargebackFundsStatusChanged invoice_payment_chargeback_funds_status_changed
     4: InvoicePaymentSessionChange                invoice_payment_session_change
 }
 
@@ -319,23 +319,35 @@ union InvoicePaymentChargebackChangePayload {
  * Событие о создании чарджбека
  */
 struct InvoicePaymentChargebackCreated {
-    1: required domain.InvoicePaymentChargeback chargeback
-    2: required domain.FinalCashFlow cash_flow
-
-    /*3: optional domain.TransactionInfo transaction_info*/
+    1: required domain.InvoicePaymentChargebackID id
 }
 
-struct InvoicePaymentChargebackFundsStatusChanged {
-    1: required bool hold_funds
-}
-
+/**
+ * Событие об изменении статуса удержания средств мерчанта по инвойсу
+ */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
 }
 
+struct InvoicePaymentChargebackFundsStatusChanged {
+    1: required InvoicePaymentChargebackFundsStatus status
+    2: required bool hold_funds
+    3: required domain.FinalCashFlow cash_flow
+}
+
+union InvoicePaymentChargebackFundsStatus {
+    1: InvoicePaymentChargebackFundsStatusPending   pending
+    2: InvoicePaymentChargebackFundsStatusSucceeded succeeded
+    3: InvoicePaymentChargebackFundsStatusFailed    failed
+}
+
+struct InvoicePaymentChargebackFundsStatusPending   {}
+struct InvoicePaymentChargebackFundsStatusSucceeded {}
+struct InvoicePaymentChargebackFundsStatusFailed    {
+    1: required domain.OperationFailure failure
+}
 
 /* WIP CHARGEBACKS */
-
 
 /**
  * Событие, касающееся определённого возврата платежа.
@@ -533,22 +545,23 @@ struct InvoicePayment {
     1: required domain.InvoicePayment payment
     3: required list<InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
-    /* 4: required list<InvoicePaymentChargeback> chargebacks */
+    4: required list<InvoicePaymentChargeback> chargebacks
 }
 
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
+typedef domain.InvoicePaymentChargeback InvoicePaymentChargeback
 
 /* WIP */
 
 /**
  * Параметры создаваемого чарджбэка.
  */
-struct InvoicePaymentChargebackParams {
+struct InvoicePaymentCreateChargebackParams {
     /**
     * Код причины чарджбэка
     */
-    1: optional string reason_code
+    1: required string reason_code
     /**
      * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
@@ -564,7 +577,7 @@ struct InvoicePaymentChargebackParams {
      * Итоговая корзина товаров.
      * Используется для частичного возврата, содержит позиции, которые остались после возврата.
      */
-    4: optional domain.InvoiceCart cart
+    /* 4: optional domain.InvoiceCart cart */
     /**
      * Идентификатор чарджбэка
      */
@@ -576,7 +589,50 @@ struct InvoicePaymentChargebackParams {
     /**
      * необходимость удержания средств
      */
+    7: required bool hold_funds = false
+}
+
+/**
+ * Параметры создаваемого чарджбэка.
+ */
+struct InvoicePaymentUpdateChargebackParams {
+    /**
+    * Код причины чарджбэка
+    */
+    1: optional string reason_code
+    /**
+     * Сумма возврата.
+     * Чапрджбэк может поступить на всю сумму, но быть возмещён частично.
+     */
+    2: optional domain.Cash cash
+    /**
+     * Данные проведённой вручную транзакции
+     * Copypasta from refund
+     * useful?
+     */
+    3: optional domain.TransactionInfo transaction_info
+    /**
+     * Итоговая корзина товаров.
+     * Используется для частичного возврата, содержит позиции, которые остались после возврата.
+     */
+    /* 4: optional domain.InvoiceCart cart */
+    /**
+     * Идентификатор чарджбэка
+     */
+    /* 5: optional domain.InvoicePaymentChargebackID id */
+    /**
+     * Внешний идентификатор объекта
+     */
+    /* 6: optional string external_id */
+    /**
+     * Необходимость удержания средств
+     */
     7: optional bool hold_funds
+
+    /**
+     * Изменение статуса чарджбэка
+     */
+    8: optional domain.InvoicePaymentChargebackStatus status
 }
 
 /**
@@ -748,7 +804,7 @@ exception AmountExceededCaptureBalance {
     2: optional domain.Amount passed_amount
 }
 
-exception ChargebackInProgress {}
+exception InvoicePaymentChargebackPending {}
 
 service Invoicing {
 
@@ -948,28 +1004,26 @@ service Invoicing {
      */
      /* TODO: implement InvoicePaymentChargeback */
 
-    domain.InvoicePaymentChargeback CreateChargeback (
+    InvoicePaymentChargeback CreateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        4: InvoicePaymentChargebackParams params
+        4: InvoicePaymentCreateChargebackParams params
     )
         throws (
-            1: InvalidUser ex1,
-            2: InvoiceNotFound ex2,
-            3: InvoicePaymentNotFound ex3,
-            4: InvalidPaymentStatus ex4,
-            6: OperationNotPermitted ex6,
-            7: InsufficientAccountBalance ex7,
-            8: InvoicePaymentAmountExceeded ex8
-            10: InvalidPartyStatus ex10
-            11: InvalidShopStatus ex11
+            1:  InvalidUser ex1,
+            2:  InvoiceNotFound ex2,
+            3:  InvoicePaymentNotFound ex3,
+            4:  InvalidPaymentStatus ex4,
+            6:  OperationNotPermitted ex6,
+            7:  InsufficientAccountBalance ex7,
+            8:  InvoicePaymentAmountExceeded ex8
             12: InvalidContractStatus ex12
-            14: ChargebackInProgress ex14
+            14: InvoicePaymentChargebackPending ex14
             /* something else? */
         )
 
-    domain.InvoicePaymentChargeback GetPaymentChargeback (
+    InvoicePaymentChargeback GetPaymentChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -979,21 +1033,25 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
-            4: InvoicePaymentRefundNotFound ex4
+            4: InvoicePaymentChargebackNotFound ex4
         )
 
-    domain.InvoicePaymentChargeback UpdateChargeback (
+    InvoicePaymentChargeback UpdateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
         4: domain.InvoicePaymentChargebackID chargeback_id
-        5: InvoicePaymentChargebackParams params
+        5: InvoicePaymentUpdateChargebackParams params
     )
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoicePaymentNotFound ex3,
-            4: InvoicePaymentRefundNotFound ex4
+            4: InvoicePaymentChargebackNotFound ex4
+            6:  OperationNotPermitted ex6,
+            7:  InsufficientAccountBalance ex7,
+            8:  InvoicePaymentAmountExceeded ex8
+            12: InvalidContractStatus ex12
         )
 
         /* WIP */
@@ -1020,7 +1078,7 @@ service Invoicing {
             11: InvalidPartyStatus ex11
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
-            14: ChargebackInProgress ex14
+            14: InvoicePaymentChargebackPending ex14
         )
 
 
@@ -1046,7 +1104,7 @@ service Invoicing {
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
             13: base.InvalidRequest ex13
-            14: ChargebackInProgress ex14
+            14: InvoicePaymentChargebackPending ex14
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (

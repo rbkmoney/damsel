@@ -144,18 +144,30 @@
 
 %% struct 'InvoicePaymentChargebackCreated'
 -record('payproc_InvoicePaymentChargebackCreated', {
-    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'(),
-    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
-}).
-
-%% struct 'InvoicePaymentChargebackFundsStatusChanged'
--record('payproc_InvoicePaymentChargebackFundsStatusChanged', {
-    'hold_funds' :: boolean()
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'()
 }).
 
 %% struct 'InvoicePaymentChargebackStatusChanged'
 -record('payproc_InvoicePaymentChargebackStatusChanged', {
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+}).
+
+%% struct 'InvoicePaymentChargebackFundsStatusChanged'
+-record('payproc_InvoicePaymentChargebackFundsStatusChanged', {
+    'status' :: dmsl_payment_processing_thrift:'InvoicePaymentChargebackFundsStatus'(),
+    'hold_funds' :: boolean(),
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
+}).
+
+%% struct 'InvoicePaymentChargebackFundsStatusPending'
+-record('payproc_InvoicePaymentChargebackFundsStatusPending', {}).
+
+%% struct 'InvoicePaymentChargebackFundsStatusSucceeded'
+-record('payproc_InvoicePaymentChargebackFundsStatusSucceeded', {}).
+
+%% struct 'InvoicePaymentChargebackFundsStatusFailed'
+-record('payproc_InvoicePaymentChargebackFundsStatusFailed', {
+    'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
 %% struct 'InvoicePaymentRefundChange'
@@ -294,18 +306,27 @@
 -record('payproc_InvoicePayment', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
-    'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()]
+    'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
+    'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()]
 }).
 
-%% struct 'InvoicePaymentChargebackParams'
--record('payproc_InvoicePaymentChargebackParams', {
+%% struct 'InvoicePaymentCreateChargebackParams'
+-record('payproc_InvoicePaymentCreateChargebackParams', {
+    'reason_code' :: binary(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
+    'external_id' :: binary() | undefined,
+    'hold_funds' = false :: boolean()
+}).
+
+%% struct 'InvoicePaymentUpdateChargebackParams'
+-record('payproc_InvoicePaymentUpdateChargebackParams', {
     'reason_code' :: binary() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
-    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
-    'external_id' :: binary() | undefined,
-    'hold_funds' :: boolean() | undefined
+    'hold_funds' :: boolean() | undefined,
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundParams'
@@ -968,8 +989,8 @@
     'passed_amount' :: dmsl_domain_thrift:'Amount'() | undefined
 }).
 
-%% exception 'ChargebackInProgress'
--record('payproc_ChargebackInProgress', {}).
+%% exception 'InvoicePaymentChargebackPending'
+-record('payproc_InvoicePaymentChargebackPending', {}).
 
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {
