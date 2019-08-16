@@ -72,6 +72,7 @@ union PaymentFailure {
     2: GeneralFailure       preauthorization_failed
     3: AuthorizationFailure authorization_failed
     4: NoRouteFoundFailure  no_route_found
+    5: GeneralFailure       payment_deadline_reached
 }
 
 union RefundFailure {
