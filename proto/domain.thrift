@@ -397,14 +397,14 @@ struct InvoicePaymentChargeback {
 }
 
 union InvoicePaymentChargebackStatus {
-    1: InvoicePaymentChargebackCreated  created
+    1: InvoicePaymentChargebackPending  pending
     2: InvoicePaymentChargebackAccepted accepted
     3: InvoicePaymentChargebackRejected rejected
 }
 
-struct InvoicePaymentChargebackCreated {}
-struct InvoicePaymentChargebackWon     {}
-struct InvoicePaymentChargebackLost    {}
+struct InvoicePaymentChargebackPending  {}
+struct InvoicePaymentChargebackAccepted {}
+struct InvoicePaymentChargebackRejected {}
 
 /* Refunds */
 
