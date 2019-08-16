@@ -178,7 +178,6 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     6:  optional InvoicePaymentContext context
     19: optional string external_id
-    20: optional base.Timestamp payment_deadline
 }
 
 struct InvoicePaymentPending   {}
@@ -191,6 +190,8 @@ struct InvoicePaymentCaptured  {
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
+
+struct InvoicePaymentChargedBack {}
 
 /**
  * Шаблон инвойса.
