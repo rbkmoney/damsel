@@ -144,7 +144,7 @@
 
 %% struct 'InvoicePaymentChargebackCreated'
 -record('payproc_InvoicePaymentChargebackCreated', {
-    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'()
+    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'()
 }).
 
 %% struct 'InvoicePaymentChargebackStatusChanged'

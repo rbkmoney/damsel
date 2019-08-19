@@ -2215,7 +2215,7 @@ struct_info('InvoicePaymentChargebackChangePayload') ->
 
 struct_info('InvoicePaymentChargebackCreated') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined}
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackStatusChanged') ->
