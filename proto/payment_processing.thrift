@@ -319,7 +319,7 @@ union InvoicePaymentChargebackChangePayload {
  * Событие о создании чарджбека
  */
 struct InvoicePaymentChargebackCreated {
-    1: required domain.InvoicePaymentChargebackID id
+    1: required domain.InvoicePaymentChargeback chargeback
 }
 
 /**
