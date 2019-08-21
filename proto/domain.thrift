@@ -290,10 +290,6 @@ union TargetInvoicePaymentStatus {
 
     /**
      * Платёж возвращён вследствие чарджбэка.
-     *
-     * При достижении платежом этого статуса процессинг должен быть уверен в том, что
-     *
-     * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
      */
     5: InvoicePaymentChargedBack charged_back
 
@@ -391,23 +387,25 @@ struct InvoicePaymentChargeback {
      2: required InvoicePaymentChargebackStatus  status
      3: required base.Timestamp                  created_at
      4: required DataRevision                    domain_revision
+     7: optional PartyRevision                   party_revision
      5: required string                          reason_code
      6: required bool                            funds_held
-     7: optional PartyRevision                   party_revision
      8: optional Cash                            cash
      9: optional InvoiceCart                     cart
     10: optional string                          external_id
 }
 
 union InvoicePaymentChargebackStatus {
-    1: InvoicePaymentChargebackPending  pending
-    2: InvoicePaymentChargebackAccepted accepted
-    3: InvoicePaymentChargebackRejected rejected
+    1: InvoicePaymentChargebackPending   pending
+    2: InvoicePaymentChargebackAccepted  accepted
+    3: InvoicePaymentChargebackRejected  rejected
+    4: InvoicePaymentChargebackCancelled cancelled
 }
 
-struct InvoicePaymentChargebackPending  {}
-struct InvoicePaymentChargebackAccepted {}
-struct InvoicePaymentChargebackRejected {}
+struct InvoicePaymentChargebackPending   {}
+struct InvoicePaymentChargebackAccepted  {}
+struct InvoicePaymentChargebackRejected  {}
+struct InvoicePaymentChargebackCancelled {}
 
 /* Refunds */
 
