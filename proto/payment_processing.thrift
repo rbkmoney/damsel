@@ -589,7 +589,7 @@ struct InvoicePaymentChargebackAcceptParams {
      * Сумма возврата.
      * Если сумма не указана, то текущая сумма не меняется
      */
-    1: optional Cash cash
+    1: optional domain.Cash cash
 }
 
 struct InvoicePaymentChargebackReopenParams {
@@ -597,7 +597,7 @@ struct InvoicePaymentChargebackReopenParams {
      * Сумма возврата.
      * Если сумма не указана, то текущая сумма не меняется
      */
-    1: optional Cash cash
+    1: optional domain.Cash cash
     /**
      * Необходимость удержания средств
      * В случае, если операция считается рискованной, можно заблокировать средства
