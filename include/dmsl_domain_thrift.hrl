@@ -262,9 +262,9 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'reason_code' :: binary(),
     'funds_held' :: boolean(),
-    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined
@@ -278,6 +278,9 @@
 
 %% struct 'InvoicePaymentChargebackRejected'
 -record('domain_InvoicePaymentChargebackRejected', {}).
+
+%% struct 'InvoicePaymentChargebackCancelled'
+-record('domain_InvoicePaymentChargebackCancelled', {}).
 
 %% struct 'InvoicePaymentRefund'
 -record('domain_InvoicePaymentRefund', {

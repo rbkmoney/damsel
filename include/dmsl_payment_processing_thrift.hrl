@@ -152,22 +152,14 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
 }).
 
-%% struct 'InvoicePaymentChargebackFundsStatusChanged'
--record('payproc_InvoicePaymentChargebackFundsStatusChanged', {
-    'status' :: dmsl_payment_processing_thrift:'InvoicePaymentChargebackFundsStatus'(),
-    'hold_funds' :: boolean(),
+%% struct 'InvoicePaymentChargebackCashFlowCreated'
+-record('payproc_InvoicePaymentChargebackCashFlowCreated', {
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
-%% struct 'InvoicePaymentChargebackFundsStatusPending'
--record('payproc_InvoicePaymentChargebackFundsStatusPending', {}).
-
-%% struct 'InvoicePaymentChargebackFundsStatusSucceeded'
--record('payproc_InvoicePaymentChargebackFundsStatusSucceeded', {}).
-
-%% struct 'InvoicePaymentChargebackFundsStatusFailed'
--record('payproc_InvoicePaymentChargebackFundsStatusFailed', {
-    'failure' :: dmsl_domain_thrift:'OperationFailure'()
+%% struct 'InvoicePaymentChargebackCashFlowChanged'
+-record('payproc_InvoicePaymentChargebackCashFlowChanged', {
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
 %% struct 'InvoicePaymentRefundChange'
@@ -310,23 +302,25 @@
     'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()]
 }).
 
-%% struct 'InvoicePaymentCreateChargebackParams'
--record('payproc_InvoicePaymentCreateChargebackParams', {
+%% struct 'InvoicePaymentChargebackParams'
+-record('payproc_InvoicePaymentChargebackParams', {
     'reason_code' :: binary(),
+    'hold_funds' = false :: boolean() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
-    'external_id' :: binary() | undefined,
-    'hold_funds' = false :: boolean()
+    'external_id' :: binary() | undefined
 }).
 
-%% struct 'InvoicePaymentUpdateChargebackParams'
--record('payproc_InvoicePaymentUpdateChargebackParams', {
-    'reason_code' :: binary() | undefined,
+%% struct 'InvoicePaymentChargebackAcceptParams'
+-record('payproc_InvoicePaymentChargebackAcceptParams', {
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackReopenParams'
+-record('payproc_InvoicePaymentChargebackReopenParams', {
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'hold_funds' :: boolean() | undefined,
-    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined
+    'hold_funds' = false :: boolean() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundParams'
@@ -438,7 +432,9 @@
     'id' :: dmsl_payment_processing_thrift:'CustomerBindingID'(),
     'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
-    'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'()
+    'status' :: dmsl_payment_processing_thrift:'CustomerBindingStatus'(),
+    'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined
 }).
 
 %% struct 'CustomerBindingCreating'
@@ -490,6 +486,7 @@
     'id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'() | undefined,
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'party_revision' :: dmsl_payment_processing_thrift:'PartyRevision'() | undefined,
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
@@ -910,6 +907,11 @@
 
 %% exception 'InvoicePaymentChargebackNotFound'
 -record('payproc_InvoicePaymentChargebackNotFound', {}).
+
+%% exception 'InvoicePaymentChargebackInvalidStatus'
+-record('payproc_InvoicePaymentChargebackInvalidStatus', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+}).
 
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -record('payproc_InvoicePaymentAdjustmentNotFound', {}).

@@ -154,6 +154,7 @@
     'InvoicePaymentChargebackPending'/0,
     'InvoicePaymentChargebackAccepted'/0,
     'InvoicePaymentChargebackRejected'/0,
+    'InvoicePaymentChargebackCancelled'/0,
     'InvoicePaymentRefund'/0,
     'InvoicePaymentRefundStatus'/0,
     'InvoicePaymentRefundPending'/0,
@@ -937,6 +938,7 @@
     'InvoicePaymentChargebackPending' |
     'InvoicePaymentChargebackAccepted' |
     'InvoicePaymentChargebackRejected' |
+    'InvoicePaymentChargebackCancelled' |
     'InvoicePaymentRefund' |
     'InvoicePaymentRefundStatus' |
     'InvoicePaymentRefundPending' |
@@ -1341,7 +1343,8 @@
 -type 'InvoicePaymentChargebackStatus'() ::
     {'pending', 'InvoicePaymentChargebackPending'()} |
     {'accepted', 'InvoicePaymentChargebackAccepted'()} |
-    {'rejected', 'InvoicePaymentChargebackRejected'()}.
+    {'rejected', 'InvoicePaymentChargebackRejected'()} |
+    {'cancelled', 'InvoicePaymentChargebackCancelled'()}.
 
 %% struct 'InvoicePaymentChargebackPending'
 -type 'InvoicePaymentChargebackPending'() :: #'domain_InvoicePaymentChargebackPending'{}.
@@ -1351,6 +1354,9 @@
 
 %% struct 'InvoicePaymentChargebackRejected'
 -type 'InvoicePaymentChargebackRejected'() :: #'domain_InvoicePaymentChargebackRejected'{}.
+
+%% struct 'InvoicePaymentChargebackCancelled'
+-type 'InvoicePaymentChargebackCancelled'() :: #'domain_InvoicePaymentChargebackCancelled'{}.
 
 %% struct 'InvoicePaymentRefund'
 -type 'InvoicePaymentRefund'() :: #'domain_InvoicePaymentRefund'{}.
@@ -2351,6 +2357,7 @@ structs() ->
         'InvoicePaymentChargebackPending',
         'InvoicePaymentChargebackAccepted',
         'InvoicePaymentChargebackRejected',
+        'InvoicePaymentChargebackCancelled',
         'InvoicePaymentRefund',
         'InvoicePaymentRefundStatus',
         'InvoicePaymentRefundPending',
@@ -3450,9 +3457,9 @@ struct_info('InvoicePaymentChargeback') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
     {4, required, i64, 'domain_revision', undefined},
+    {7, optional, i64, 'party_revision', undefined},
     {5, required, string, 'reason_code', undefined},
     {6, required, bool, 'funds_held', undefined},
-    {7, optional, i64, 'party_revision', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
     {10, optional, string, 'external_id', undefined}
@@ -3462,7 +3469,8 @@ struct_info('InvoicePaymentChargebackStatus') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackAccepted'}}, 'accepted', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackRejected'}}, 'rejected', undefined}
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackRejected'}}, 'rejected', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCancelled'}}, 'cancelled', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackPending') ->
@@ -3472,6 +3480,9 @@ struct_info('InvoicePaymentChargebackAccepted') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentChargebackRejected') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackCancelled') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentRefund') ->
@@ -5067,6 +5078,9 @@ record_name('OperationTimeout') ->
 
     record_name('InvoicePaymentChargebackRejected') ->
     'domain_InvoicePaymentChargebackRejected';
+
+    record_name('InvoicePaymentChargebackCancelled') ->
+    'domain_InvoicePaymentChargebackCancelled';
 
     record_name('InvoicePaymentRefund') ->
     'domain_InvoicePaymentRefund';
