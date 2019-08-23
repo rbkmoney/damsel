@@ -1,3 +1,8 @@
+/**
+* NOTE: Данный протокол является устаревшим и может быть удалён в одном из будующих релизов
+* Для работы с маккаунтами используйте https://github.com/rbkmoney/shumpune-proto
+**/
+
 include 'base.thrift'
 include 'domain.thrift'
 

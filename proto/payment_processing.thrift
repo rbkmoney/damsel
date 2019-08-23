@@ -1672,9 +1672,13 @@ struct ShopProxyChanged {
 
 struct AccountState {
     1: required domain.AccountID account_id
+    2: required domain.Currency currency
+}
+
+struct AccountBalance {
+    1: required domain.AccountID account_id
     2: required domain.Amount own_amount
     3: required domain.Amount available_amount
-    4: required domain.Currency currency
 }
 
 // Events
@@ -2036,6 +2040,9 @@ service PartyManagement {
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ShopAccountNotFound ex4)
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    AccountBalance GetAccountBalance (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
 
     /* Payment institutions */
