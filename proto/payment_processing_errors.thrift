@@ -72,7 +72,6 @@ union PaymentFailure {
     2: GeneralFailure       preauthorization_failed
     3: AuthorizationFailure authorization_failed
     4: NoRouteFoundFailure  no_route_found
-    5: GeneralFailure       processing_deadline_reached
 }
 
 union RefundFailure {
@@ -94,6 +93,7 @@ union AuthorizationFailure {
     11: GeneralFailure    security_policy_violated
     12: GeneralFailure    temporarily_unavailable
     13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
+    14: GeneralFailure    processing_deadline_reached
 }
 
 union LimitExceeded {

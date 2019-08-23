@@ -79,8 +79,7 @@
     {'rejected_by_inspector', 'GeneralFailure'()} |
     {'preauthorization_failed', 'GeneralFailure'()} |
     {'authorization_failed', 'AuthorizationFailure'()} |
-    {'no_route_found', 'NoRouteFoundFailure'()} |
-    {'processing_deadline_reached', 'GeneralFailure'()}.
+    {'no_route_found', 'NoRouteFoundFailure'()}.
 
 %% union 'RefundFailure'
 -type 'RefundFailure'() ::
@@ -101,7 +100,8 @@
     {'payment_tool_rejected', 'PaymentToolReject'()} |
     {'security_policy_violated', 'GeneralFailure'()} |
     {'temporarily_unavailable', 'GeneralFailure'()} |
-    {'rejected_by_issuer', 'GeneralFailure'()}.
+    {'rejected_by_issuer', 'GeneralFailure'()} |
+    {'processing_deadline_reached', 'GeneralFailure'()}.
 
 %% union 'LimitExceeded'
 -type 'LimitExceeded'() ::
@@ -228,8 +228,7 @@ struct_info('PaymentFailure') ->
     {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'rejected_by_inspector', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'preauthorization_failed', undefined},
     {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined},
-    {4, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'NoRouteFoundFailure'}}, 'no_route_found', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'processing_deadline_reached', undefined}
+    {4, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'NoRouteFoundFailure'}}, 'no_route_found', undefined}
 ]};
 
 struct_info('RefundFailure') ->
@@ -252,7 +251,8 @@ struct_info('AuthorizationFailure') ->
     {10, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'PaymentToolReject'}}, 'payment_tool_rejected', undefined},
     {11, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'security_policy_violated', undefined},
     {12, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'temporarily_unavailable', undefined},
-    {13, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'rejected_by_issuer', undefined}
+    {13, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'rejected_by_issuer', undefined},
+    {14, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'processing_deadline_reached', undefined}
 ]};
 
 struct_info('LimitExceeded') ->
