@@ -126,7 +126,7 @@
     'make_recurrent' :: boolean() | undefined,
     'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
     'external_id' :: binary() | undefined,
-    'payment_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentPending'

@@ -235,7 +235,7 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'() | undefined,
     'external_id' :: binary() | undefined,
     'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
-    'payment_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'

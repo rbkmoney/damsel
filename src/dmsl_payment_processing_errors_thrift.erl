@@ -80,7 +80,7 @@
     {'preauthorization_failed', 'GeneralFailure'()} |
     {'authorization_failed', 'AuthorizationFailure'()} |
     {'no_route_found', 'NoRouteFoundFailure'()} |
-    {'payment_deadline_reached', 'GeneralFailure'()}.
+    {'processing_deadline_reached', 'GeneralFailure'()}.
 
 %% union 'RefundFailure'
 -type 'RefundFailure'() ::
@@ -229,7 +229,7 @@ struct_info('PaymentFailure') ->
     {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'preauthorization_failed', undefined},
     {3, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined},
     {4, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'NoRouteFoundFailure'}}, 'no_route_found', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'payment_deadline_reached', undefined}
+    {5, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'processing_deadline_reached', undefined}
 ]};
 
 struct_info('RefundFailure') ->
