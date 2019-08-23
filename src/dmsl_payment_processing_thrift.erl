@@ -2337,7 +2337,8 @@ struct_info('InvoicePaymentParams') ->
     {3, optional, bool, 'make_recurrent', undefined},
     {4, optional, string, 'id', undefined},
     {5, optional, string, 'external_id', undefined},
-    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {7, optional, string, 'processing_deadline', undefined}
 ]};
 
 struct_info('PayerParams') ->

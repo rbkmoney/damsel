@@ -522,7 +522,7 @@ struct_info('InvoicePayment') ->
     {5, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined},
     {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
     {8, optional, bool, 'make_recurrent', undefined},
-    {9, optional, string, 'payment_deadline', undefined}
+    {9, optional, string, 'processing_deadline', undefined}
 ]};
 
 struct_info('InvoicePaymentRefund') ->

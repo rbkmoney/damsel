@@ -500,6 +500,7 @@ struct InvoicePaymentParams {
     4: optional domain.InvoicePaymentID id
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
+    7: optional base.Timestamp processing_deadline
 }
 
 union PayerParams {
