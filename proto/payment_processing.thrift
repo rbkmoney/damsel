@@ -1672,8 +1672,8 @@ struct ShopProxyChanged {
 
 struct AccountState {
     1: required domain.AccountID account_id
-    2: optional domain.Amount own_amount         // Deprecated. Use AccountBalance unstead
-    3: optional domain.Amount available_amount   // Deprecated. Use AccountBalance unstead
+    2: optional domain.Amount own_amount         // Deprecated. Use AccountBalance instead
+    3: optional domain.Amount available_amount   // Deprecated. Use AccountBalance instead
     4: required domain.Currency currency
 }
 
