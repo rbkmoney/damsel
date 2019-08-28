@@ -313,6 +313,7 @@ union InvoicePaymentChargebackChangePayload {
     2: InvoicePaymentChargebackStatusChanged   invoice_payment_chargeback_status_changed
     3: InvoicePaymentChargebackCashFlowCreated invoice_payment_chargeback_cash_flow_created
     4: InvoicePaymentChargebackCashFlowChanged invoice_payment_chargeback_cash_flow_changed
+    5: InvoicePaymentChargebackChanged         invoice_payment_chargeback_changed
 }
 
 /**
@@ -333,16 +334,24 @@ struct InvoicePaymentChargebackStatusChanged {
  * Событие о создании кэшфлоу чарджбека
  */
 struct InvoicePaymentChargebackCashFlowCreated {
-    3: required domain.FinalCashFlow cash_flow
+    1: required domain.FinalCashFlow cash_flow
 }
 
 /**
  * Событие об изменении кэшфлоу чарджбека
  */
 struct InvoicePaymentChargebackCashFlowChanged {
-    3: required domain.FinalCashFlow cash_flow
+    1: required domain.FinalCashFlow cash_flow
 }
 
+/**
+ * Событие об изменении чарджбека
+ */
+struct InvoicePaymentChargebackChanged {
+    1: optional domain.Cash                           cash
+    2: optional bool                                  funds_held
+    1: optional domain.InvoicePaymentChargebackStatus target_status
+}
 
 /* WIP CHARGEBACKS */
 
