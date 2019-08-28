@@ -2243,8 +2243,7 @@ struct_info('InvoicePaymentChargebackChanged') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {2, optional, bool, 'hold_funds', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundChange') ->
