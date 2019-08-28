@@ -98,6 +98,7 @@
     'InvoicePaymentChargebackStatusChanged'/0,
     'InvoicePaymentChargebackCashFlowCreated'/0,
     'InvoicePaymentChargebackCashFlowChanged'/0,
+    'InvoicePaymentChargebackChanged'/0,
     'InvoicePaymentRefundChange'/0,
     'InvoicePaymentRefundChangePayload'/0,
     'InvoicePaymentRefundCreated'/0,
@@ -408,6 +409,7 @@
     'InvoicePaymentChargebackStatusChanged' |
     'InvoicePaymentChargebackCashFlowCreated' |
     'InvoicePaymentChargebackCashFlowChanged' |
+    'InvoicePaymentChargebackChanged' |
     'InvoicePaymentRefundChange' |
     'InvoicePaymentRefundChangePayload' |
     'InvoicePaymentRefundCreated' |
@@ -759,7 +761,8 @@
     {'invoice_payment_chargeback_created', 'InvoicePaymentChargebackCreated'()} |
     {'invoice_payment_chargeback_status_changed', 'InvoicePaymentChargebackStatusChanged'()} |
     {'invoice_payment_chargeback_cash_flow_created', 'InvoicePaymentChargebackCashFlowCreated'()} |
-    {'invoice_payment_chargeback_cash_flow_changed', 'InvoicePaymentChargebackCashFlowChanged'()}.
+    {'invoice_payment_chargeback_cash_flow_changed', 'InvoicePaymentChargebackCashFlowChanged'()} |
+    {'invoice_payment_chargeback_changed', 'InvoicePaymentChargebackChanged'()}.
 
 %% struct 'InvoicePaymentChargebackCreated'
 -type 'InvoicePaymentChargebackCreated'() :: #'payproc_InvoicePaymentChargebackCreated'{}.
@@ -772,6 +775,9 @@
 
 %% struct 'InvoicePaymentChargebackCashFlowChanged'
 -type 'InvoicePaymentChargebackCashFlowChanged'() :: #'payproc_InvoicePaymentChargebackCashFlowChanged'{}.
+
+%% struct 'InvoicePaymentChargebackChanged'
+-type 'InvoicePaymentChargebackChanged'() :: #'payproc_InvoicePaymentChargebackChanged'{}.
 
 %% struct 'InvoicePaymentRefundChange'
 -type 'InvoicePaymentRefundChange'() :: #'payproc_InvoicePaymentRefundChange'{}.
@@ -1748,6 +1754,7 @@ structs() ->
         'InvoicePaymentChargebackStatusChanged',
         'InvoicePaymentChargebackCashFlowCreated',
         'InvoicePaymentChargebackCashFlowChanged',
+        'InvoicePaymentChargebackChanged',
         'InvoicePaymentRefundChange',
         'InvoicePaymentRefundChangePayload',
         'InvoicePaymentRefundCreated',
@@ -2203,7 +2210,8 @@ struct_info('InvoicePaymentChargebackChangePayload') ->
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowCreated'}}, 'invoice_payment_chargeback_cash_flow_created', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined}
+    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined},
+    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChanged'}}, 'invoice_payment_chargeback_changed', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackCreated') ->
@@ -2218,12 +2226,19 @@ struct_info('InvoicePaymentChargebackStatusChanged') ->
 
 struct_info('InvoicePaymentChargebackCashFlowCreated') ->
     {struct, struct, [
-    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackCashFlowChanged') ->
     {struct, struct, [
-    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+]};
+
+struct_info('InvoicePaymentChargebackChanged') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {2, optional, bool, 'funds_held', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundChange') ->
@@ -3493,6 +3508,9 @@ record_name('InternalUser') ->
 
     record_name('InvoicePaymentChargebackCashFlowChanged') ->
     'payproc_InvoicePaymentChargebackCashFlowChanged';
+
+    record_name('InvoicePaymentChargebackChanged') ->
+    'payproc_InvoicePaymentChargebackChanged';
 
     record_name('InvoicePaymentRefundChange') ->
     'payproc_InvoicePaymentRefundChange';
