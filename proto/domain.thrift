@@ -390,7 +390,7 @@ struct InvoicePaymentChargeback {
      4: required DataRevision                    domain_revision
      7: optional PartyRevision                   party_revision
      5: required string                          reason_code
-     6: required bool                            funds_held
+     6: required bool                            hold_funds
      8: optional Cash                            cash
      9: optional InvoiceCart                     cart
     10: optional string                          external_id
