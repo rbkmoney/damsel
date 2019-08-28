@@ -3467,7 +3467,7 @@ struct_info('InvoicePaymentChargeback') ->
     {4, required, i64, 'domain_revision', undefined},
     {7, optional, i64, 'party_revision', undefined},
     {5, required, string, 'reason_code', undefined},
-    {6, required, bool, 'funds_held', undefined},
+    {6, required, bool, 'hold_funds', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
     {10, optional, string, 'external_id', undefined}

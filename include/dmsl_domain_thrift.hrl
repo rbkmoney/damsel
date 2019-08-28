@@ -265,7 +265,7 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'reason_code' :: binary(),
-    'funds_held' :: boolean(),
+    'hold_funds' :: boolean(),
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined
