@@ -351,6 +351,7 @@ struct InvoicePaymentChargebackChanged {
     1: optional domain.Cash                           cash
     2: optional bool                                  hold_funds
     3: optional domain.InvoicePaymentChargebackStatus target_status
+    4: optional domain.InvoicePaymentChargebackStage  stage
 }
 
 /* WIP CHARGEBACKS */
@@ -734,6 +735,7 @@ exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
 
 exception InvoicePaymentChargebackNotFound {}
+exception InvoicePaymentChargebackCannotReopenAfterArbitration {}
 exception InvoicePaymentChargebackInvalidStatus {
     1: required domain.InvoicePaymentChargebackStatus status
 }
@@ -1084,6 +1086,7 @@ service Invoicing {
             6:  OperationNotPermitted ex6
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
+            13: InvoicePaymentChargebackCannotReopenAfterArbitration ex13
         )
 
     /**
