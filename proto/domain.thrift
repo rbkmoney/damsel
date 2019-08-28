@@ -387,14 +387,25 @@ struct InvoicePaymentChargeback {
      1: required InvoicePaymentChargebackID      id
      2: required InvoicePaymentChargebackStatus  status
      3: required base.Timestamp                  created_at
-     4: required DataRevision                    domain_revision
-     7: optional PartyRevision                   party_revision
-     5: required string                          reason_code
-     6: required bool                            hold_funds
-     8: optional Cash                            cash
-     9: optional InvoiceCart                     cart
-    10: optional string                          external_id
+     4: required string                          reason_code
+     5: required bool                            hold_funds
+     6: required InvoicePaymentChargebackStage   stage
+     7: required DataRevision                    domain_revision
+     8: optional PartyRevision                   party_revision
+     9: optional Cash                            cash
+    10: optional InvoiceCart                     cart
+    11: optional string                          external_id
 }
+
+union InvoicePaymentChargebackStage {
+    1: InvoicePaymentChargebackStageChargeback     chargeback
+    2: InvoicePaymentChargebackStagePreArbitration pre_arbitration
+    3: InvoicePaymentChargebackStageArbitration    arbitration
+}
+
+struct InvoicePaymentChargebackStageChargeback     {}
+struct InvoicePaymentChargebackStagePreArbitration {}
+struct InvoicePaymentChargebackStageArbitration    {}
 
 union InvoicePaymentChargebackStatus {
     1: InvoicePaymentChargebackPending   pending

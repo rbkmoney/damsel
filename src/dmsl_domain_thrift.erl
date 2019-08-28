@@ -150,6 +150,10 @@
     'InvoicePaymentFlowInstant'/0,
     'InvoicePaymentFlowHold'/0,
     'InvoicePaymentChargeback'/0,
+    'InvoicePaymentChargebackStage'/0,
+    'InvoicePaymentChargebackStageChargeback'/0,
+    'InvoicePaymentChargebackStagePreArbitration'/0,
+    'InvoicePaymentChargebackStageArbitration'/0,
     'InvoicePaymentChargebackStatus'/0,
     'InvoicePaymentChargebackPending'/0,
     'InvoicePaymentChargebackAccepted'/0,
@@ -935,6 +939,10 @@
     'InvoicePaymentFlowInstant' |
     'InvoicePaymentFlowHold' |
     'InvoicePaymentChargeback' |
+    'InvoicePaymentChargebackStage' |
+    'InvoicePaymentChargebackStageChargeback' |
+    'InvoicePaymentChargebackStagePreArbitration' |
+    'InvoicePaymentChargebackStageArbitration' |
     'InvoicePaymentChargebackStatus' |
     'InvoicePaymentChargebackPending' |
     'InvoicePaymentChargebackAccepted' |
@@ -1340,6 +1348,21 @@
 
 %% struct 'InvoicePaymentChargeback'
 -type 'InvoicePaymentChargeback'() :: #'domain_InvoicePaymentChargeback'{}.
+
+%% union 'InvoicePaymentChargebackStage'
+-type 'InvoicePaymentChargebackStage'() ::
+    {'chargeback', 'InvoicePaymentChargebackStageChargeback'()} |
+    {'pre_arbitration', 'InvoicePaymentChargebackStagePreArbitration'()} |
+    {'arbitration', 'InvoicePaymentChargebackStageArbitration'()}.
+
+%% struct 'InvoicePaymentChargebackStageChargeback'
+-type 'InvoicePaymentChargebackStageChargeback'() :: #'domain_InvoicePaymentChargebackStageChargeback'{}.
+
+%% struct 'InvoicePaymentChargebackStagePreArbitration'
+-type 'InvoicePaymentChargebackStagePreArbitration'() :: #'domain_InvoicePaymentChargebackStagePreArbitration'{}.
+
+%% struct 'InvoicePaymentChargebackStageArbitration'
+-type 'InvoicePaymentChargebackStageArbitration'() :: #'domain_InvoicePaymentChargebackStageArbitration'{}.
 
 %% union 'InvoicePaymentChargebackStatus'
 -type 'InvoicePaymentChargebackStatus'() ::
@@ -2359,6 +2382,10 @@ structs() ->
         'InvoicePaymentFlowInstant',
         'InvoicePaymentFlowHold',
         'InvoicePaymentChargeback',
+        'InvoicePaymentChargebackStage',
+        'InvoicePaymentChargebackStageChargeback',
+        'InvoicePaymentChargebackStagePreArbitration',
+        'InvoicePaymentChargebackStageArbitration',
         'InvoicePaymentChargebackStatus',
         'InvoicePaymentChargebackPending',
         'InvoicePaymentChargebackAccepted',
@@ -3464,14 +3491,31 @@ struct_info('InvoicePaymentChargeback') ->
     {1, required, string, 'id', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
-    {4, required, i64, 'domain_revision', undefined},
-    {7, optional, i64, 'party_revision', undefined},
-    {5, required, string, 'reason_code', undefined},
-    {6, required, bool, 'hold_funds', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-    {10, optional, string, 'external_id', undefined}
+    {4, required, string, 'reason_code', undefined},
+    {5, required, bool, 'hold_funds', undefined},
+    {6, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
+    {7, required, i64, 'domain_revision', undefined},
+    {8, optional, i64, 'party_revision', undefined},
+    {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+    {11, optional, string, 'external_id', undefined}
 ]};
+
+struct_info('InvoicePaymentChargebackStage') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageChargeback'}}, 'chargeback', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStagePreArbitration'}}, 'pre_arbitration', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageArbitration'}}, 'arbitration', undefined}
+]};
+
+struct_info('InvoicePaymentChargebackStageChargeback') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackStagePreArbitration') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackStageArbitration') ->
+    {struct, struct, []};
 
 struct_info('InvoicePaymentChargebackStatus') ->
     {struct, union, [
@@ -5083,6 +5127,15 @@ record_name('OperationTimeout') ->
 
     record_name('InvoicePaymentChargeback') ->
     'domain_InvoicePaymentChargeback';
+
+    record_name('InvoicePaymentChargebackStageChargeback') ->
+    'domain_InvoicePaymentChargebackStageChargeback';
+
+    record_name('InvoicePaymentChargebackStagePreArbitration') ->
+    'domain_InvoicePaymentChargebackStagePreArbitration';
+
+    record_name('InvoicePaymentChargebackStageArbitration') ->
+    'domain_InvoicePaymentChargebackStageArbitration';
 
     record_name('InvoicePaymentChargebackPending') ->
     'domain_InvoicePaymentChargebackPending';

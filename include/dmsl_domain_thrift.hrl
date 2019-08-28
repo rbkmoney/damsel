@@ -262,14 +262,24 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
-    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'reason_code' :: binary(),
     'hold_funds' :: boolean(),
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined
 }).
+
+%% struct 'InvoicePaymentChargebackStageChargeback'
+-record('domain_InvoicePaymentChargebackStageChargeback', {}).
+
+%% struct 'InvoicePaymentChargebackStagePreArbitration'
+-record('domain_InvoicePaymentChargebackStagePreArbitration', {}).
+
+%% struct 'InvoicePaymentChargebackStageArbitration'
+-record('domain_InvoicePaymentChargebackStageArbitration', {}).
 
 %% struct 'InvoicePaymentChargebackPending'
 -record('domain_InvoicePaymentChargebackPending', {}).

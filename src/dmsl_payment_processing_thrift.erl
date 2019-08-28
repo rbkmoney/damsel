@@ -261,6 +261,7 @@
     'InvoicePaymentNotFound'/0,
     'InvoicePaymentRefundNotFound'/0,
     'InvoicePaymentChargebackNotFound'/0,
+    'InvoicePaymentChargebackCannotReopenAfterArbitration'/0,
     'InvoicePaymentChargebackInvalidStatus'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
@@ -572,6 +573,7 @@
     'InvoicePaymentNotFound' |
     'InvoicePaymentRefundNotFound' |
     'InvoicePaymentChargebackNotFound' |
+    'InvoicePaymentChargebackCannotReopenAfterArbitration' |
     'InvoicePaymentChargebackInvalidStatus' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
@@ -1395,6 +1397,9 @@
 
 %% exception 'InvoicePaymentChargebackNotFound'
 -type 'InvoicePaymentChargebackNotFound'() :: #'payproc_InvoicePaymentChargebackNotFound'{}.
+
+%% exception 'InvoicePaymentChargebackCannotReopenAfterArbitration'
+-type 'InvoicePaymentChargebackCannotReopenAfterArbitration'() :: #'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration'{}.
 
 %% exception 'InvoicePaymentChargebackInvalidStatus'
 -type 'InvoicePaymentChargebackInvalidStatus'() :: #'payproc_InvoicePaymentChargebackInvalidStatus'{}.
@@ -2238,7 +2243,8 @@ struct_info('InvoicePaymentChargebackChanged') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {2, optional, bool, 'hold_funds', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundChange') ->
@@ -3253,6 +3259,9 @@ struct_info('InvoicePaymentRefundNotFound') ->
 struct_info('InvoicePaymentChargebackNotFound') ->
     {struct, exception, []};
 
+struct_info('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
+    {struct, exception, []};
+
 struct_info('InvoicePaymentChargebackInvalidStatus') ->
     {struct, exception, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
@@ -3896,6 +3905,9 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentChargebackNotFound') ->
     'payproc_InvoicePaymentChargebackNotFound';
 
+    record_name('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
+    'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration';
+
     record_name('InvoicePaymentChargebackInvalidStatus') ->
     'payproc_InvoicePaymentChargebackInvalidStatus';
 
@@ -4469,7 +4481,8 @@ function_info('Invoicing', 'ReopenChargeback', reply_type) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
-        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCannotReopenAfterArbitration'}}, 'ex13', undefined}
     ]};
 function_info('Invoicing', 'CancelChargeback', params_type) ->
     {struct, struct, [

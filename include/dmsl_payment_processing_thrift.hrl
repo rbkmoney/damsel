@@ -166,7 +166,8 @@
 -record('payproc_InvoicePaymentChargebackChanged', {
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'hold_funds' :: boolean() | undefined,
-    'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined
+    'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined,
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundChange'
@@ -915,6 +916,9 @@
 
 %% exception 'InvoicePaymentChargebackNotFound'
 -record('payproc_InvoicePaymentChargebackNotFound', {}).
+
+%% exception 'InvoicePaymentChargebackCannotReopenAfterArbitration'
+-record('payproc_InvoicePaymentChargebackCannotReopenAfterArbitration', {}).
 
 %% exception 'InvoicePaymentChargebackInvalidStatus'
 -record('payproc_InvoicePaymentChargebackInvalidStatus', {
