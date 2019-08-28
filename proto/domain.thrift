@@ -403,6 +403,10 @@ union InvoicePaymentChargebackStage {
     3: InvoicePaymentChargebackStageArbitration    arbitration
 }
 
+struct InvoicePaymentChargebackStageChargeback     {}
+struct InvoicePaymentChargebackStagePreArbitration {}
+struct InvoicePaymentChargebackStageArbitration    {}
+
 union InvoicePaymentChargebackStatus {
     1: InvoicePaymentChargebackPending   pending
     2: InvoicePaymentChargebackAccepted  accepted
