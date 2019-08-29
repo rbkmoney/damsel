@@ -1043,6 +1043,7 @@ service Invoicing {
             3:  InvoicePaymentNotFound ex3,
             4:  InvoicePaymentChargebackNotFound ex4
             6:  OperationNotPermitted ex6,
+            8:  InvoicePaymentAmountExceeded ex8
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
         )
@@ -1083,6 +1084,7 @@ service Invoicing {
             3:  InvoicePaymentNotFound ex3
             4:  InvoicePaymentChargebackNotFound ex4
             6:  OperationNotPermitted ex6
+            8:  InvoicePaymentAmountExceeded ex8
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
             13: InvoicePaymentChargebackCannotReopenAfterArbitration ex13

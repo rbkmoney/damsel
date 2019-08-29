@@ -4440,6 +4440,7 @@ function_info('Invoicing', 'AcceptChargeback', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
     ]};
@@ -4479,6 +4480,7 @@ function_info('Invoicing', 'ReopenChargeback', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
         {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCannotReopenAfterArbitration'}}, 'ex13', undefined}
