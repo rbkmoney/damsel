@@ -328,7 +328,7 @@
 %% struct 'InvoicePaymentChargebackReopenParams'
 -record('payproc_InvoicePaymentChargebackReopenParams', {
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'hold_funds' = false :: boolean() | undefined
+    'hold_funds' :: boolean() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundParams'

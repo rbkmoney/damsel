@@ -613,7 +613,7 @@ struct InvoicePaymentChargebackReopenParams {
      * В случае, если операция считается рискованной, можно заблокировать средства
      * на счёте мерчанта. По умолчанию мерчанту доверяем и средства не удерживаем.
      */
-    2: optional bool hold_funds = false
+    2: optional bool hold_funds
 }
 
 /**

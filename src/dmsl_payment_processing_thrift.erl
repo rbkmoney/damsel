@@ -2431,7 +2431,7 @@ struct_info('InvoicePaymentChargebackAcceptParams') ->
 struct_info('InvoicePaymentChargebackReopenParams') ->
     {struct, struct, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {2, optional, bool, 'hold_funds', false}
+    {2, optional, bool, 'hold_funds', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundParams') ->
