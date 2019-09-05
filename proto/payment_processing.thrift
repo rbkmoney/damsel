@@ -1113,16 +1113,10 @@ struct CustomerBinding {
 
 // Statuses
 union CustomerBindingStatus {
-    4: CustomerBindingCreating  creating
     1: CustomerBindingPending   pending
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
-
-/**
- * Привязка находится в процессе создания
- */
-struct CustomerBindingCreating {}
 
 /**
  * Привязка находится в процессе обработки
