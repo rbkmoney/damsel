@@ -390,9 +390,6 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined
 }).
 
-%% struct 'CustomerBindingCreating'
--record('payproc_CustomerBindingCreating', {}).
-
 %% struct 'CustomerBindingPending'
 -record('payproc_CustomerBindingPending', {}).
 
