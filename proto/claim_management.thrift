@@ -159,11 +159,6 @@ struct ContractorModificationUnit {
 union ContractorModification {
     1: domain.Contractor creation
     2: domain.ContractorIdentificationLevel identification_level_modification
-    3: ContractorIdentityDocumentsModification identity_documents_modification
-}
-
-struct ContractorIdentityDocumentsModification {
-    1: required list<domain.IdentityDocumentToken> identity_documents
 }
 
 struct ContractModificationUnit {
