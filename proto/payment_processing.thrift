@@ -1884,6 +1884,11 @@ service PartyManagement {
     void Unblock (1: UserInfo user, 2: PartyID party_id, 3: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
 
+    /* Party Status */
+
+    domain.PartyStatus GetStatus (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
     /* Party Meta */
 
     domain.PartyMeta GetMeta (1: UserInfo user, 2: PartyID party_id)
