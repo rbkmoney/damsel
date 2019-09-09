@@ -150,7 +150,6 @@
     'CustomerBindingParams'/0,
     'CustomerBinding'/0,
     'CustomerBindingStatus'/0,
-    'CustomerBindingCreating'/0,
     'CustomerBindingPending'/0,
     'CustomerBindingSucceeded'/0,
     'CustomerBindingFailed'/0,
@@ -462,7 +461,6 @@
     'CustomerBindingParams' |
     'CustomerBinding' |
     'CustomerBindingStatus' |
-    'CustomerBindingCreating' |
     'CustomerBindingPending' |
     'CustomerBindingSucceeded' |
     'CustomerBindingFailed' |
@@ -955,13 +953,9 @@
 
 %% union 'CustomerBindingStatus'
 -type 'CustomerBindingStatus'() ::
-    {'creating', 'CustomerBindingCreating'()} |
     {'pending', 'CustomerBindingPending'()} |
     {'succeeded', 'CustomerBindingSucceeded'()} |
     {'failed', 'CustomerBindingFailed'()}.
-
-%% struct 'CustomerBindingCreating'
--type 'CustomerBindingCreating'() :: #'payproc_CustomerBindingCreating'{}.
 
 %% struct 'CustomerBindingPending'
 -type 'CustomerBindingPending'() :: #'payproc_CustomerBindingPending'{}.
@@ -1618,6 +1612,7 @@
     'Activate' |
     'Block' |
     'Unblock' |
+    'GetStatus' |
     'GetMeta' |
     'GetMetaData' |
     'SetMetaData' |
@@ -1811,7 +1806,6 @@ structs() ->
         'CustomerBindingParams',
         'CustomerBinding',
         'CustomerBindingStatus',
-        'CustomerBindingCreating',
         'CustomerBindingPending',
         'CustomerBindingSucceeded',
         'CustomerBindingFailed',
@@ -2578,14 +2572,10 @@ struct_info('CustomerBinding') ->
 
 struct_info('CustomerBindingStatus') ->
     {struct, union, [
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingCreating'}}, 'creating', undefined},
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingPending'}}, 'pending', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
 ]};
-
-struct_info('CustomerBindingCreating') ->
-    {struct, struct, []};
 
 struct_info('CustomerBindingPending') ->
     {struct, struct, []};
@@ -3646,9 +3636,6 @@ record_name('InternalUser') ->
     record_name('CustomerBinding') ->
     'payproc_CustomerBinding';
 
-    record_name('CustomerBindingCreating') ->
-    'payproc_CustomerBindingCreating';
-
     record_name('CustomerBindingPending') ->
     'payproc_CustomerBindingPending';
 
@@ -4108,6 +4095,7 @@ functions('PartyManagement') ->
         'Activate',
         'Block',
         'Unblock',
+        'GetStatus',
         'GetMeta',
         'GetMetaData',
         'SetMetaData',
@@ -4969,6 +4957,18 @@ function_info('PartyManagement', 'Unblock', reply_type) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'GetStatus', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined}
+]};
+function_info('PartyManagement', 'GetStatus', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'PartyStatus'}};
+    function_info('PartyManagement', 'GetStatus', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'GetMeta', params_type) ->
     {struct, struct, [

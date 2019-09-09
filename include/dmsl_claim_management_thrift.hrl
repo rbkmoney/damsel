@@ -92,11 +92,6 @@
     'modification' :: dmsl_claim_management_thrift:'ContractorModification'()
 }).
 
-%% struct 'ContractorIdentityDocumentsModification'
--record('claim_management_ContractorIdentityDocumentsModification', {
-    'identity_documents' :: [dmsl_domain_thrift:'IdentityDocumentToken'()]
-}).
-
 %% struct 'ContractModificationUnit'
 -record('claim_management_ContractModificationUnit', {
     'id' :: dmsl_domain_thrift:'ContractID'(),

@@ -358,6 +358,14 @@
     'revision' :: dmsl_domain_thrift:'PartyRevision'()
 }).
 
+%% struct 'PartyStatus'
+-record('domain_PartyStatus', {
+    'id' :: dmsl_domain_thrift:'PartyID'(),
+    'blocking' :: dmsl_domain_thrift:'Blocking'(),
+    'suspension' :: dmsl_domain_thrift:'Suspension'(),
+    'revision' :: dmsl_domain_thrift:'PartyRevision'()
+}).
+
 %% struct 'PartyContactInfo'
 -record('domain_PartyContactInfo', {
     'email' :: binary()
