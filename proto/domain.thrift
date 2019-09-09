@@ -503,6 +503,16 @@ struct Party {
     6: required PartyRevision revision
 }
 
+/** Статусы участника **/
+/** Данная структура используется только для получения статусов Участника **/
+
+struct PartyStatus {
+    1: required PartyID id
+    2: required Blocking blocking
+    3: required Suspension suspension
+    4: required PartyRevision revision
+}
+
 struct PartyContactInfo {
     1: required string email
 }
