@@ -1527,6 +1527,7 @@
     'Activate' |
     'Block' |
     'Unblock' |
+    'GetStatus' |
     'GetMeta' |
     'GetMetaData' |
     'SetMetaData' |
@@ -3871,6 +3872,7 @@ functions('PartyManagement') ->
         'Activate',
         'Block',
         'Unblock',
+        'GetStatus',
         'GetMeta',
         'GetMetaData',
         'SetMetaData',
@@ -4615,6 +4617,18 @@ function_info('PartyManagement', 'Unblock', reply_type) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'GetStatus', params_type) ->
+    {struct, struct, [
+    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+    {2, undefined, string, 'party_id', undefined}
+]};
+function_info('PartyManagement', 'GetStatus', reply_type) ->
+        {struct, struct, {dmsl_domain_thrift, 'PartyStatus'}};
+    function_info('PartyManagement', 'GetStatus', exceptions) ->
+        {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'GetMeta', params_type) ->
     {struct, struct, [

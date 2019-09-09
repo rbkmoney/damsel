@@ -159,6 +159,7 @@
     'Active'/0,
     'Suspended'/0,
     'Party'/0,
+    'PartyStatus'/0,
     'PartyContactInfo'/0,
     'Shop'/0,
     'ShopAccount'/0,
@@ -930,6 +931,7 @@
     'Active' |
     'Suspended' |
     'Party' |
+    'PartyStatus' |
     'PartyContactInfo' |
     'Shop' |
     'ShopAccount' |
@@ -1348,6 +1350,9 @@
 
 %% struct 'Party'
 -type 'Party'() :: #'domain_Party'{}.
+
+%% struct 'PartyStatus'
+-type 'PartyStatus'() :: #'domain_PartyStatus'{}.
 
 %% struct 'PartyContactInfo'
 -type 'PartyContactInfo'() :: #'domain_PartyContactInfo'{}.
@@ -2298,6 +2303,7 @@ structs() ->
         'Active',
         'Suspended',
         'Party',
+        'PartyStatus',
         'PartyContactInfo',
         'Shop',
         'ShopAccount',
@@ -3445,6 +3451,14 @@ struct_info('Party') ->
     {5, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Shop'}}}, 'shops', undefined},
     {10, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}}, 'wallets', undefined},
     {6, required, i64, 'revision', undefined}
+]};
+
+struct_info('PartyStatus') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+    {4, required, i64, 'revision', undefined}
 ]};
 
 struct_info('PartyContactInfo') ->
@@ -4947,6 +4961,9 @@ record_name('OperationTimeout') ->
 
     record_name('Party') ->
     'domain_Party';
+
+    record_name('PartyStatus') ->
+    'domain_PartyStatus';
 
     record_name('PartyContactInfo') ->
     'domain_PartyContactInfo';
