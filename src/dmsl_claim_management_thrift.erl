@@ -66,7 +66,6 @@
     'ShopParams'/0,
     'ContractorModificationUnit'/0,
     'ContractorModification'/0,
-    'ContractorIdentityDocumentsModification'/0,
     'ContractModificationUnit'/0,
     'ContractModification'/0,
     'ContractTermination'/0,
@@ -174,7 +173,6 @@
     'ShopParams' |
     'ContractorModificationUnit' |
     'ContractorModification' |
-    'ContractorIdentityDocumentsModification' |
     'ContractModificationUnit' |
     'ContractModification' |
     'ContractTermination' |
@@ -309,11 +307,7 @@
 %% union 'ContractorModification'
 -type 'ContractorModification'() ::
     {'creation', dmsl_domain_thrift:'Contractor'()} |
-    {'identification_level_modification', atom()} |
-    {'identity_documents_modification', 'ContractorIdentityDocumentsModification'()}.
-
-%% struct 'ContractorIdentityDocumentsModification'
--type 'ContractorIdentityDocumentsModification'() :: #'claim_management_ContractorIdentityDocumentsModification'{}.
+    {'identification_level_modification', atom()}.
 
 %% struct 'ContractModificationUnit'
 -type 'ContractModificationUnit'() :: #'claim_management_ContractModificationUnit'{}.
@@ -575,7 +569,6 @@ structs() ->
         'ShopParams',
         'ContractorModificationUnit',
         'ContractorModification',
-        'ContractorIdentityDocumentsModification',
         'ContractModificationUnit',
         'ContractModification',
         'ContractTermination',
@@ -807,13 +800,7 @@ struct_info('ContractorModificationUnit') ->
 struct_info('ContractorModification') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'creation', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined},
-    {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorIdentityDocumentsModification'}}, 'identity_documents_modification', undefined}
-]};
-
-struct_info('ContractorIdentityDocumentsModification') ->
-    {struct, struct, [
-    {1, required, {list, string}, 'identity_documents', undefined}
+    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined}
 ]};
 
 struct_info('ContractModificationUnit') ->
@@ -1082,9 +1069,6 @@ record_name('ContractorEffectUnit') ->
 
     record_name('ContractorModificationUnit') ->
     'claim_management_ContractorModificationUnit';
-
-    record_name('ContractorIdentityDocumentsModification') ->
-    'claim_management_ContractorIdentityDocumentsModification';
 
     record_name('ContractModificationUnit') ->
     'claim_management_ContractModificationUnit';
