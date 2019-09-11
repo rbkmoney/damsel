@@ -1367,16 +1367,10 @@ struct CustomerBinding {
 
 // Statuses
 union CustomerBindingStatus {
-    4: CustomerBindingCreating  creating
     1: CustomerBindingPending   pending
     2: CustomerBindingSucceeded succeeded
     3: CustomerBindingFailed    failed
 }
-
-/**
- * Привязка находится в процессе создания
- */
-struct CustomerBindingCreating {}
 
 /**
  * Привязка находится в процессе обработки
@@ -2143,6 +2137,11 @@ service PartyManagement {
 
     void Unblock (1: UserInfo user, 2: PartyID party_id, 3: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: InvalidPartyStatus ex3)
+
+    /* Party Status */
+
+    domain.PartyStatus GetStatus (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
 
     /* Party Meta */
 
