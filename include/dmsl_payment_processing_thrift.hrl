@@ -307,7 +307,7 @@
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
-    'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()]
+    'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackParams'

@@ -268,7 +268,6 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'external_id' :: binary() | undefined
 }).
 

@@ -2404,7 +2404,7 @@ struct_info('InvoicePayment') ->
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
     {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
     {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
-    {4, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined}
+    {4, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackParams') ->
@@ -4505,7 +4505,6 @@ function_info('Invoicing', 'RefundPayment', reply_type) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
-        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InsufficientAccountBalance'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex8', undefined},
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex9', undefined},
         {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentRefundCurrency'}}, 'ex10', undefined},

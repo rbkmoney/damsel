@@ -3503,7 +3503,6 @@ struct_info('InvoicePaymentChargeback') ->
     {7, required, i64, 'domain_revision', undefined},
     {8, optional, i64, 'party_revision', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
     {11, optional, string, 'external_id', undefined}
 ]};
 
