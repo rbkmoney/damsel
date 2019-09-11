@@ -552,7 +552,7 @@ struct InvoicePayment {
     1: required domain.InvoicePayment payment
     3: required list<InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
-    4: required list<InvoicePaymentChargeback> chargebacks
+    4: optional list<InvoicePaymentChargeback> chargebacks
 }
 
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
@@ -611,7 +611,7 @@ struct InvoicePaymentChargebackReopenParams {
     /**
      * Необходимость удержания средств
      * В случае, если операция считается рискованной, можно заблокировать средства
-     * на счёте мерчанта. По умолчанию мерчанту доверяем и средства не удерживаем.
+     * на счёте мерчанта.
      */
     2: optional bool hold_funds
 }
@@ -1123,7 +1123,6 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
-            7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
             9: InvoicePaymentAmountExceeded ex9
             10: InconsistentRefundCurrency ex10
