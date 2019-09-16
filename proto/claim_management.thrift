@@ -281,8 +281,8 @@ union PartyModification {
 struct ModificationUnit {
     1: required ModificationID modification_id
     2: required base.Timestamp created_at
-    4: required UserInfo user_info
     3: required Modification modification
+    4: required UserInfo user_info
 }
 
 union Modification {
