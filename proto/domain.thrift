@@ -288,12 +288,6 @@ union TargetInvoicePaymentStatus {
      * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
      */
     4: InvoicePaymentRefunded refunded
-
-    /**
-     * Платёж возвращён вследствие чарджбэка.
-     */
-    5: InvoicePaymentChargedBack charged_back
-
 }
 
 union Payer {
