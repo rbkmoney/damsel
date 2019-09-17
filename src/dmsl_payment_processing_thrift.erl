@@ -673,13 +673,13 @@
 %% union 'InvoicePaymentChangePayload'
 -type 'InvoicePaymentChangePayload'() ::
     {'invoice_payment_started', 'InvoicePaymentStarted'()} |
-    {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
-    {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
-    {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()} |
-    {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
     {'invoice_payment_risk_score_changed', 'InvoicePaymentRiskScoreChanged'()} |
     {'invoice_payment_route_changed', 'InvoicePaymentRouteChanged'()} |
     {'invoice_payment_cash_flow_changed', 'InvoicePaymentCashFlowChanged'()} |
+    {'invoice_payment_status_changed', 'InvoicePaymentStatusChanged'()} |
+    {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
+    {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
+    {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()} |
     {'invoice_payment_rec_token_acquired', 'InvoicePaymentRecTokenAcquired'()} |
     {'invoice_payment_capture_started', 'InvoicePaymentCaptureStarted'()} |
     {'invoice_payment_chargeback_change', 'InvoicePaymentChargebackChange'()}.
@@ -2082,13 +2082,13 @@ struct_info('InvoicePaymentChange') ->
 struct_info('InvoicePaymentChangePayload') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStarted'}}, 'invoice_payment_started', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
     {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRiskScoreChanged'}}, 'invoice_payment_risk_score_changed', undefined},
     {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRouteChanged'}}, 'invoice_payment_route_changed', undefined},
     {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCashFlowChanged'}}, 'invoice_payment_cash_flow_changed', undefined},
+    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
+    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
     {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined},
     {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined},
     {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}

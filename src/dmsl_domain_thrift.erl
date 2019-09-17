@@ -1288,8 +1288,7 @@
     {'processed', 'InvoicePaymentProcessed'()} |
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
-    {'refunded', 'InvoicePaymentRefunded'()} |
-    {'charged_back', 'InvoicePaymentChargedBack'()}.
+    {'refunded', 'InvoicePaymentRefunded'()}.
 
 %% union 'Payer'
 -type 'Payer'() ::
@@ -3390,8 +3389,7 @@ struct_info('TargetInvoicePaymentStatus') ->
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargedBack'}}, 'charged_back', undefined}
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
 ]};
 
 struct_info('Payer') ->
