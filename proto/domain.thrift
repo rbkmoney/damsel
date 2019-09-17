@@ -405,16 +405,12 @@ union InvoicePaymentChargebackStatus {
     2: InvoicePaymentChargebackAccepted  accepted
     3: InvoicePaymentChargebackRejected  rejected
     4: InvoicePaymentChargebackCancelled cancelled
-    5: InvoicePaymentChargebackFailed    failed
 }
 
 struct InvoicePaymentChargebackPending   {}
 struct InvoicePaymentChargebackAccepted  {}
 struct InvoicePaymentChargebackRejected  {}
 struct InvoicePaymentChargebackCancelled {}
-struct InvoicePaymentChargebackFailed    {
-    1: required OperationFailure failure
-}
 
 /* Refunds */
 

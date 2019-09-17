@@ -292,11 +292,6 @@
 %% struct 'InvoicePaymentChargebackCancelled'
 -record('domain_InvoicePaymentChargebackCancelled', {}).
 
-%% struct 'InvoicePaymentChargebackFailed'
--record('domain_InvoicePaymentChargebackFailed', {
-    'failure' :: dmsl_domain_thrift:'OperationFailure'()
-}).
-
 %% struct 'InvoicePaymentRefund'
 -record('domain_InvoicePaymentRefund', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
