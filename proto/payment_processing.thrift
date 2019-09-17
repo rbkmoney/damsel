@@ -144,14 +144,14 @@ struct InvoicePaymentChange {
  * Один из возможных вариантов события, порождённого платежом по инвойсу.
  */
 union InvoicePaymentChangePayload {
-    1: InvoicePaymentStarted               invoice_payment_started
-    2: InvoicePaymentSessionChange         invoice_payment_session_change
-    3: InvoicePaymentStatusChanged         invoice_payment_status_changed
-    6: InvoicePaymentAdjustmentChange      invoice_payment_adjustment_change
-    7: InvoicePaymentRefundChange          invoice_payment_refund_change
-    8: InvoicePaymentRiskScoreChanged      invoice_payment_risk_score_changed
-    9: InvoicePaymentRouteChanged          invoice_payment_route_changed
+    1: InvoicePaymentStarted                invoice_payment_started
+    8: InvoicePaymentRiskScoreChanged       invoice_payment_risk_score_changed
+    9: InvoicePaymentRouteChanged           invoice_payment_route_changed
     10: InvoicePaymentCashFlowChanged       invoice_payment_cash_flow_changed
+    3: InvoicePaymentStatusChanged          invoice_payment_status_changed
+    2: InvoicePaymentSessionChange          invoice_payment_session_change
+    7: InvoicePaymentRefundChange           invoice_payment_refund_change
+    6: InvoicePaymentAdjustmentChange       invoice_payment_adjustment_change
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
