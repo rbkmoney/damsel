@@ -115,6 +115,31 @@ union PaymentTool {
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
     4: CryptoCurrency crypto_currency
+    5: MobileCommerce mobile_commerce
+}
+
+struct MobileCommerce {
+    1: required MobileOperator operator
+    2: required MobilePhone    phone
+}
+
+enum MobileOperator {
+    mts      = 1
+    beeline  = 2
+    megafone = 3
+    tele2    = 4
+    yota     = 5
+}
+
+/**
+* Телефонный номер согласно (E.164 — рекомендация ITU-T)
+* +79114363738
+* cc = 7 - код страны(1-3 цифры)
+* ctn = 9114363738 - 10-ти значный номер абонента(макс 12)
+*/
+struct MobilePhone {
+    1: required string cc
+    2: required string ctn
 }
 
 struct BankCard {
