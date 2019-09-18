@@ -153,6 +153,7 @@
     'RecurrentPaymentToolAbandoned'/0,
     'RecurrentPaymentToolFailed'/0,
     'RecurrentPaymentToolStatus'/0,
+    'RecurrentPaymentToolEventData'/0,
     'RecurrentPaymentToolEvent'/0,
     'RecurrentPaymentToolSessionChange'/0,
     'RecurrentPaymentToolChange'/0,
@@ -208,6 +209,7 @@
     'WalletEffect'/0,
     'ShopProxyChanged'/0,
     'AccountState'/0,
+    'PartyEventData'/0,
     'PartyChange'/0,
     'PartyCreated'/0,
     'ShopBlocking'/0,
@@ -448,6 +450,7 @@
     'RecurrentPaymentToolAbandoned' |
     'RecurrentPaymentToolFailed' |
     'RecurrentPaymentToolStatus' |
+    'RecurrentPaymentToolEventData' |
     'RecurrentPaymentToolEvent' |
     'RecurrentPaymentToolSessionChange' |
     'RecurrentPaymentToolChange' |
@@ -503,6 +506,7 @@
     'WalletEffect' |
     'ShopProxyChanged' |
     'AccountState' |
+    'PartyEventData' |
     'PartyChange' |
     'PartyCreated' |
     'ShopBlocking' |
@@ -939,6 +943,9 @@
     {'abandoned', 'RecurrentPaymentToolAbandoned'()} |
     {'failed', 'RecurrentPaymentToolFailed'()}.
 
+%% struct 'RecurrentPaymentToolEventData'
+-type 'RecurrentPaymentToolEventData'() :: #'payproc_RecurrentPaymentToolEventData'{}.
+
 %% struct 'RecurrentPaymentToolEvent'
 -type 'RecurrentPaymentToolEvent'() :: #'payproc_RecurrentPaymentToolEvent'{}.
 
@@ -1166,6 +1173,9 @@
 
 %% struct 'AccountState'
 -type 'AccountState'() :: #'payproc_AccountState'{}.
+
+%% struct 'PartyEventData'
+-type 'PartyEventData'() :: #'payproc_PartyEventData'{}.
 
 %% union 'PartyChange'
 -type 'PartyChange'() ::
@@ -1724,6 +1734,7 @@ structs() ->
         'RecurrentPaymentToolAbandoned',
         'RecurrentPaymentToolFailed',
         'RecurrentPaymentToolStatus',
+        'RecurrentPaymentToolEventData',
         'RecurrentPaymentToolEvent',
         'RecurrentPaymentToolSessionChange',
         'RecurrentPaymentToolChange',
@@ -1779,6 +1790,7 @@ structs() ->
         'WalletEffect',
         'ShopProxyChanged',
         'AccountState',
+        'PartyEventData',
         'PartyChange',
         'PartyCreated',
         'ShopBlocking',
@@ -2493,6 +2505,11 @@ struct_info('RecurrentPaymentToolStatus') ->
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolFailed'}}, 'failed', undefined}
 ]};
 
+struct_info('RecurrentPaymentToolEventData') ->
+    {struct, struct, [
+    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'changes', undefined}
+]};
+
 struct_info('RecurrentPaymentToolEvent') ->
     {struct, struct, [
     {1, required, i64, 'id', undefined},
@@ -2851,6 +2868,12 @@ struct_info('AccountState') ->
     {2, required, i64, 'own_amount', undefined},
     {3, required, i64, 'available_amount', undefined},
     {4, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
+]};
+
+struct_info('PartyEventData') ->
+    {struct, struct, [
+    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyChange'}}}, 'changes', undefined},
+    {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state_snapshot', undefined}
 ]};
 
 struct_info('PartyChange') ->
@@ -3467,6 +3490,9 @@ record_name('InternalUser') ->
     record_name('RecurrentPaymentToolFailed') ->
     'payproc_RecurrentPaymentToolFailed';
 
+    record_name('RecurrentPaymentToolEventData') ->
+    'payproc_RecurrentPaymentToolEventData';
+
     record_name('RecurrentPaymentToolEvent') ->
     'payproc_RecurrentPaymentToolEvent';
 
@@ -3589,6 +3615,9 @@ record_name('InternalUser') ->
 
     record_name('AccountState') ->
     'payproc_AccountState';
+
+    record_name('PartyEventData') ->
+    'payproc_PartyEventData';
 
     record_name('PartyCreated') ->
     'payproc_PartyCreated';

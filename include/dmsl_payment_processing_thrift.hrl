@@ -6,6 +6,7 @@
 -include("dmsl_user_interaction_thrift.hrl").
 -include("dmsl_timeout_behaviour_thrift.hrl").
 -include("dmsl_repairing_thrift.hrl").
+-include("dmsl_msgpack_thrift.hrl").
 
 
 
@@ -455,6 +456,11 @@
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
+%% struct 'RecurrentPaymentToolEventData'
+-record('payproc_RecurrentPaymentToolEventData', {
+    'changes' :: [dmsl_payment_processing_thrift:'RecurrentPaymentToolChange'()]
+}).
+
 %% struct 'RecurrentPaymentToolEvent'
 -record('payproc_RecurrentPaymentToolEvent', {
     'id' :: dmsl_base_thrift:'EventID'(),
@@ -694,6 +700,12 @@
     'own_amount' :: dmsl_domain_thrift:'Amount'(),
     'available_amount' :: dmsl_domain_thrift:'Amount'(),
     'currency' :: dmsl_domain_thrift:'Currency'()
+}).
+
+%% struct 'PartyEventData'
+-record('payproc_PartyEventData', {
+    'changes' :: [dmsl_payment_processing_thrift:'PartyChange'()],
+    'state_snapshot' :: dmsl_msgpack_thrift:'Value'() | undefined
 }).
 
 %% struct 'PartyCreated'
