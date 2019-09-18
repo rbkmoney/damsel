@@ -1266,11 +1266,16 @@ typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
 /*
  * События, связанные непосредственно с получением рекуррентных токенов
  */
+
+union RecurrentPaymentToolChanges {
+    1: list<RecurrentPaymentToolChange> changes
+}
+
 struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
     3: required RecurrentPaymentToolID           source
-    4: required list<RecurrentPaymentToolChange> payload
+    4: required RecurrentPaymentToolChanges      payload
 }
 
 struct RecurrentPaymentToolSessionChange {
@@ -1672,8 +1677,12 @@ struct AccountState {
 }
 
 // Events
-// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
+struct PartyEventData {
+    1: required list<PartyChange> changes
+    2: optional msgpack.Value state_snapshot
+}
 
+// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
 union PartyChange {
     1: PartyCreated         party_created           // #
     4: domain.Blocking      party_blocking          // #
