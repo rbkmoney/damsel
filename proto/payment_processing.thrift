@@ -1268,15 +1268,15 @@ typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
  * События, связанные непосредственно с получением рекуррентных токенов
  */
 
-union RecurrentPaymentToolChanges {
-    1: list<RecurrentPaymentToolChange> changes
+struct RecurrentPaymentToolEventData {
+    1: required list<RecurrentPaymentToolChange> changes
 }
 
 struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
     3: required RecurrentPaymentToolID           source
-    4: required RecurrentPaymentToolChanges      payload
+    4: required list<RecurrentPaymentToolChange> payload
 }
 
 struct RecurrentPaymentToolSessionChange {
