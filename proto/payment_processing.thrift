@@ -7,6 +7,7 @@ include "domain.thrift"
 include "user_interaction.thrift"
 include "timeout_behaviour.thrift"
 include "repairing.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
