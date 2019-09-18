@@ -102,6 +102,18 @@
     'at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
+%% struct 'MobileCommerce'
+-record('merchstat_MobileCommerce', {
+    'operator' :: dmsl_merch_stat_thrift:'MobileOperator'(),
+    'phone' :: dmsl_merch_stat_thrift:'MobilePhone'()
+}).
+
+%% struct 'MobilePhone'
+-record('merchstat_MobilePhone', {
+    'cc' :: binary(),
+    'ctn' :: binary()
+}).
+
 %% struct 'BankCard'
 -record('merchstat_BankCard', {
     'token' :: dmsl_domain_thrift:'Token'(),

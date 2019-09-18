@@ -7,6 +7,7 @@ include "domain.thrift"
 include "user_interaction.thrift"
 include "timeout_behaviour.thrift"
 include "repairing.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -1521,6 +1522,11 @@ typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
 /*
  * События, связанные непосредственно с получением рекуррентных токенов
  */
+
+struct RecurrentPaymentToolEventData {
+    1: required list<RecurrentPaymentToolChange> changes
+}
+
 struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
@@ -1927,8 +1933,12 @@ struct AccountState {
 }
 
 // Events
-// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
+struct PartyEventData {
+    1: required list<PartyChange> changes
+    2: optional msgpack.Value state_snapshot
+}
 
+// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
 union PartyChange {
     1: PartyCreated         party_created           // #
     4: domain.Blocking      party_blocking          // #
