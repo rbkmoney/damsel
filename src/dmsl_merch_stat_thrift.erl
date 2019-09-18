@@ -40,6 +40,7 @@
 ]).
 -export_type([
     'OnHoldExpiration'/0,
+    'MobileOperator'/0,
     'CryptoCurrency'/0,
     'TerminalPaymentProvider'/0,
     'DigitalWalletProvider'/0,
@@ -65,6 +66,8 @@
     'InvoicePaymentFailed'/0,
     'InvoicePaymentStatus'/0,
     'PaymentTool'/0,
+    'MobileCommerce'/0,
+    'MobilePhone'/0,
     'BankCard'/0,
     'PaymentTerminal'/0,
     'DigitalWallet'/0,
@@ -128,6 +131,7 @@
 %%
 -type enum_name() ::
     'OnHoldExpiration' |
+    'MobileOperator' |
     'CryptoCurrency' |
     'TerminalPaymentProvider' |
     'DigitalWalletProvider' |
@@ -137,6 +141,14 @@
 -type 'OnHoldExpiration'() ::
     'cancel' |
     'capture'.
+
+%% enum 'MobileOperator'
+-type 'MobileOperator'() ::
+    'mts' |
+    'beeline' |
+    'megafone' |
+    'tele2' |
+    'yota'.
 
 %% enum 'CryptoCurrency'
 -type 'CryptoCurrency'() ::
@@ -183,6 +195,8 @@
     'InvoicePaymentFailed' |
     'InvoicePaymentStatus' |
     'PaymentTool' |
+    'MobileCommerce' |
+    'MobilePhone' |
     'BankCard' |
     'PaymentTerminal' |
     'DigitalWallet' |
@@ -294,7 +308,14 @@
     {'bank_card', 'BankCard'()} |
     {'payment_terminal', 'PaymentTerminal'()} |
     {'digital_wallet', 'DigitalWallet'()} |
-    {'crypto_currency', 'CryptoCurrency'()}.
+    {'crypto_currency', 'CryptoCurrency'()} |
+    {'mobile_commerce', 'MobileCommerce'()}.
+
+%% struct 'MobileCommerce'
+-type 'MobileCommerce'() :: #'merchstat_MobileCommerce'{}.
+
+%% struct 'MobilePhone'
+-type 'MobilePhone'() :: #'merchstat_MobilePhone'{}.
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'merchstat_BankCard'{}.
@@ -474,6 +495,7 @@
 
 -type enum_choice() ::
     'OnHoldExpiration'() |
+    'MobileOperator'() |
     'CryptoCurrency'() |
     'TerminalPaymentProvider'() |
     'DigitalWalletProvider'() |
@@ -500,6 +522,7 @@ typedefs() ->
 enums() ->
     [
         'OnHoldExpiration',
+        'MobileOperator',
         'CryptoCurrency',
         'TerminalPaymentProvider',
         'DigitalWalletProvider',
@@ -529,6 +552,8 @@ structs() ->
         'InvoicePaymentFailed',
         'InvoicePaymentStatus',
         'PaymentTool',
+        'MobileCommerce',
+        'MobilePhone',
         'BankCard',
         'PaymentTerminal',
         'DigitalWallet',
@@ -604,6 +629,15 @@ enum_info('OnHoldExpiration') ->
     {enum, [
         {'cancel', 0},
         {'capture', 1}
+    ]};
+
+enum_info('MobileOperator') ->
+    {enum, [
+        {'mts', 1},
+        {'beeline', 2},
+        {'megafone', 3},
+        {'tele2', 4},
+        {'yota', 5}
     ]};
 
 enum_info('CryptoCurrency') ->
@@ -765,7 +799,20 @@ struct_info('PaymentTool') ->
     {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
     {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
     {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
-    {4, optional, {enum, {dmsl_merch_stat_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
+    {4, optional, {enum, {dmsl_merch_stat_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+    {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
+]};
+
+struct_info('MobileCommerce') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_merch_stat_thrift, 'MobileOperator'}}, 'operator', undefined},
+    {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'MobilePhone'}}, 'phone', undefined}
+]};
+
+struct_info('MobilePhone') ->
+    {struct, struct, [
+    {1, required, string, 'cc', undefined},
+    {2, required, string, 'ctn', undefined}
 ]};
 
 struct_info('BankCard') ->
@@ -1065,6 +1112,12 @@ record_name('RecurrentParentPayment') ->
 
     record_name('InvoicePaymentFailed') ->
     'merchstat_InvoicePaymentFailed';
+
+    record_name('MobileCommerce') ->
+    'merchstat_MobileCommerce';
+
+    record_name('MobilePhone') ->
+    'merchstat_MobilePhone';
 
     record_name('BankCard') ->
     'merchstat_BankCard';
