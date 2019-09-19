@@ -43,9 +43,14 @@
     'MetadataValue'/0,
     'Metadata'/0,
     'ClaimChangeset'/0,
-    'ClaimEffects'/0
+    'ClaimEffects'/0,
+    'UserID'/0
 ]).
 -export_type([
+    'UserInfo'/0,
+    'UserType'/0,
+    'InternalUser'/0,
+    'ExternalUser'/0,
     'ClaimEffect'/0,
     'ContractEffectUnit'/0,
     'ContractEffect'/0,
@@ -129,7 +134,8 @@
     'MetadataValue' |
     'Metadata' |
     'ClaimChangeset' |
-    'ClaimEffects'.
+    'ClaimEffects' |
+    'UserID'.
 
 -type 'ClaimID'() :: integer().
 -type 'ModificationID'() :: integer().
@@ -143,6 +149,7 @@
 -type 'Metadata'() :: #{'MetadataKey'() => 'MetadataValue'()}.
 -type 'ClaimChangeset'() :: ['ModificationUnit'()].
 -type 'ClaimEffects'() :: ['ClaimEffect'()].
+-type 'UserID'() :: dmsl_base_thrift:'ID'().
 
 %%
 %% enums
@@ -153,6 +160,10 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
+    'UserInfo' |
+    'UserType' |
+    'InternalUser' |
+    'ExternalUser' |
     'ClaimEffect' |
     'ContractEffectUnit' |
     'ContractEffect' |
@@ -217,6 +228,20 @@
     'InvalidChangeset' |
     'InvalidClaimStatus' |
     'MetadataKeyNotFound'.
+
+%% struct 'UserInfo'
+-type 'UserInfo'() :: #'claim_management_UserInfo'{}.
+
+%% union 'UserType'
+-type 'UserType'() ::
+    {'internal_user', 'InternalUser'()} |
+    {'external_user', 'ExternalUser'()}.
+
+%% struct 'InternalUser'
+-type 'InternalUser'() :: #'claim_management_InternalUser'{}.
+
+%% struct 'ExternalUser'
+-type 'ExternalUser'() :: #'claim_management_ExternalUser'{}.
 
 %% union 'ClaimEffect'
 -type 'ClaimEffect'() ::
@@ -537,7 +562,8 @@ typedefs() ->
         'MetadataValue',
         'Metadata',
         'ClaimChangeset',
-        'ClaimEffects'
+        'ClaimEffects',
+        'UserID'
     ].
 
 -spec enums() -> [].
@@ -549,6 +575,10 @@ enums() ->
 
 structs() ->
     [
+        'UserInfo',
+        'UserType',
+        'InternalUser',
+        'ExternalUser',
         'ClaimEffect',
         'ContractEffectUnit',
         'ContractEffect',
@@ -655,6 +685,9 @@ typedef_info('ClaimChangeset') ->
 typedef_info('ClaimEffects') ->
     {list, {struct, union, {dmsl_claim_management_thrift, 'ClaimEffect'}}};
 
+typedef_info('UserID') ->
+    string;
+
 typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(_) -> no_return().
@@ -662,6 +695,26 @@ typedef_info(_) -> erlang:error(badarg).
 enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
+
+struct_info('UserInfo') ->
+    {struct, struct, [
+    {1, required, string, 'id', undefined},
+    {2, required, string, 'email', undefined},
+    {3, required, string, 'username', undefined},
+    {4, required, {struct, union, {dmsl_claim_management_thrift, 'UserType'}}, 'type', undefined}
+]};
+
+struct_info('UserType') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InternalUser'}}, 'internal_user', undefined},
+    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ExternalUser'}}, 'external_user', undefined}
+]};
+
+struct_info('InternalUser') ->
+    {struct, struct, []};
+
+struct_info('ExternalUser') ->
+    {struct, struct, []};
 
 struct_info('ClaimEffect') ->
     {struct, union, [
@@ -928,7 +981,8 @@ struct_info('ModificationUnit') ->
     {struct, struct, [
     {1, required, i64, 'modification_id', undefined},
     {2, required, string, 'created_at', undefined},
-    {3, required, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}, 'modification', undefined}
+    {3, required, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}, 'modification', undefined},
+    {4, required, {struct, struct, {dmsl_claim_management_thrift, 'UserInfo'}}, 'user_info', undefined}
 ]};
 
 struct_info('Modification') ->
@@ -1028,10 +1082,19 @@ struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
 
-record_name('ContractEffectUnit') ->
+record_name('UserInfo') ->
+    'claim_management_UserInfo';
+
+record_name('InternalUser') ->
+    'claim_management_InternalUser';
+
+    record_name('ExternalUser') ->
+    'claim_management_ExternalUser';
+
+    record_name('ContractEffectUnit') ->
     'claim_management_ContractEffectUnit';
 
-record_name('ContractorEffectUnit') ->
+    record_name('ContractorEffectUnit') ->
     'claim_management_ContractorEffectUnit';
 
     record_name('ScheduleChanged') ->
