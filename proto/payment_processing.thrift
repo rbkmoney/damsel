@@ -786,6 +786,10 @@ exception InconsistentRefundCurrency {
     1: required domain.CurrencySymbolicCode currency
 }
 
+exception InconsistentcChargebackCurrency {
+    1: required domain.CurrencySymbolicCode currency
+}
+
 exception InconsistentCaptureCurrency {
     1: required domain.CurrencySymbolicCode payment_currency
     2: optional domain.CurrencySymbolicCode passed_currency

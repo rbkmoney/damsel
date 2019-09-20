@@ -280,6 +280,7 @@
     'InvoiceTemplateRemoved'/0,
     'InvoicePaymentAmountExceeded'/0,
     'InconsistentRefundCurrency'/0,
+    'InconsistentcChargebackCurrency'/0,
     'InconsistentCaptureCurrency'/0,
     'AmountExceededCaptureBalance'/0,
     'InvoicePaymentChargebackPending'/0,
@@ -593,6 +594,7 @@
     'InvoiceTemplateRemoved' |
     'InvoicePaymentAmountExceeded' |
     'InconsistentRefundCurrency' |
+    'InconsistentcChargebackCurrency' |
     'InconsistentCaptureCurrency' |
     'AmountExceededCaptureBalance' |
     'InvoicePaymentChargebackPending' |
@@ -1455,6 +1457,9 @@
 
 %% exception 'InconsistentRefundCurrency'
 -type 'InconsistentRefundCurrency'() :: #'payproc_InconsistentRefundCurrency'{}.
+
+%% exception 'InconsistentcChargebackCurrency'
+-type 'InconsistentcChargebackCurrency'() :: #'payproc_InconsistentcChargebackCurrency'{}.
 
 %% exception 'InconsistentCaptureCurrency'
 -type 'InconsistentCaptureCurrency'() :: #'payproc_InconsistentCaptureCurrency'{}.
@@ -3346,6 +3351,11 @@ struct_info('InconsistentRefundCurrency') ->
     {1, required, string, 'currency', undefined}
 ]};
 
+struct_info('InconsistentcChargebackCurrency') ->
+    {struct, exception, [
+    {1, required, string, 'currency', undefined}
+]};
+
 struct_info('InconsistentCaptureCurrency') ->
     {struct, exception, [
     {1, required, string, 'payment_currency', undefined},
@@ -3974,6 +3984,9 @@ record_name('InternalUser') ->
 
     record_name('InconsistentRefundCurrency') ->
     'payproc_InconsistentRefundCurrency';
+
+    record_name('InconsistentcChargebackCurrency') ->
+    'payproc_InconsistentcChargebackCurrency';
 
     record_name('InconsistentCaptureCurrency') ->
     'payproc_InconsistentCaptureCurrency';

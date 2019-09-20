@@ -1000,6 +1000,11 @@
     'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
 }).
 
+%% exception 'InconsistentcChargebackCurrency'
+-record('payproc_InconsistentcChargebackCurrency', {
+    'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
+}).
+
 %% exception 'InconsistentCaptureCurrency'
 -record('payproc_InconsistentCaptureCurrency', {
     'payment_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
