@@ -786,7 +786,7 @@ exception InconsistentRefundCurrency {
     1: required domain.CurrencySymbolicCode currency
 }
 
-exception InconsistentcChargebackCurrency {
+exception InconsistentChargebackCurrency {
     1: required domain.CurrencySymbolicCode currency
 }
 
