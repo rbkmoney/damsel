@@ -39,6 +39,24 @@ exception MetadataKeyNotFound {}
 typedef list<ModificationUnit> ClaimChangeset
 typedef list<ClaimEffect> ClaimEffects
 
+typedef base.ID UserID
+
+struct UserInfo {
+    1: required UserID id
+    2: required string email
+    3: required string username
+    4: required UserType type
+}
+
+union UserType {
+    1: InternalUser internal_user
+    2: ExternalUser external_user
+}
+
+struct InternalUser {}
+
+struct ExternalUser {}
+
 union ClaimEffect {
     /* 1: PartyEffect Reserved for future */
     2: ContractEffectUnit contract_effect
@@ -264,6 +282,7 @@ struct ModificationUnit {
     1: required ModificationID modification_id
     2: required base.Timestamp created_at
     3: required Modification modification
+    4: required UserInfo user_info
 }
 
 union Modification {
