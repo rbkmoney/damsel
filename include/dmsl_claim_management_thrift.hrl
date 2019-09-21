@@ -7,6 +7,20 @@
 
 
 
+%% struct 'UserInfo'
+-record('claim_management_UserInfo', {
+    'id' :: dmsl_claim_management_thrift:'UserID'(),
+    'email' :: binary(),
+    'username' :: binary(),
+    'type' :: dmsl_claim_management_thrift:'UserType'()
+}).
+
+%% struct 'InternalUser'
+-record('claim_management_InternalUser', {}).
+
+%% struct 'ExternalUser'
+-record('claim_management_ExternalUser', {}).
+
 %% struct 'ContractEffectUnit'
 -record('claim_management_ContractEffectUnit', {
     'contract_id' :: dmsl_domain_thrift:'ContractID'(),
@@ -160,7 +174,8 @@
 -record('claim_management_ModificationUnit', {
     'modification_id' :: dmsl_claim_management_thrift:'ModificationID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'modification' :: dmsl_claim_management_thrift:'Modification'()
+    'modification' :: dmsl_claim_management_thrift:'Modification'(),
+    'user_info' :: dmsl_claim_management_thrift:'UserInfo'()
 }).
 
 %% struct 'Claim'
