@@ -1012,6 +1012,7 @@ service Invoicing {
             6:  OperationNotPermitted ex6,
             7:  InsufficientAccountBalance ex7,
             8:  InvoicePaymentAmountExceeded ex8
+            9:  InconsistentChargebackCurrency ex9,
             12: InvalidContractStatus ex12
             14: InvoicePaymentChargebackPending ex14
             /* something else? */
@@ -1050,6 +1051,7 @@ service Invoicing {
             4:  InvoicePaymentChargebackNotFound ex4
             6:  OperationNotPermitted ex6,
             8:  InvoicePaymentAmountExceeded ex8
+            9:  InconsistentChargebackCurrency ex9,
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
         )
@@ -1091,6 +1093,7 @@ service Invoicing {
             4:  InvoicePaymentChargebackNotFound ex4
             6:  OperationNotPermitted ex6
             8:  InvoicePaymentAmountExceeded ex8
+            9:  InconsistentChargebackCurrency ex9,
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
             13: InvoicePaymentChargebackCannotReopenAfterArbitration ex13
