@@ -109,6 +109,8 @@ service Reporting {
   */
   list<Report> GetReports(1: ReportRequest request, 2: list<ReportType> report_types) throws (1: DatasetTooBig ex1, 2: InvalidRequest ex2)
 
+  list<Report> GetReportsByPartyId(1: PartyID party_id, 2: ReportTimeRange time_range, 3: list<ReportType> report_types) throws (1: DatasetTooBig ex1, 2: InvalidRequest ex2)
+
   /**
   * Сгенерировать отчет с указанным типом по магазину за указанный промежуток времени
   * Возвращает идентификатор отчета
@@ -119,6 +121,8 @@ service Reporting {
   */
   ReportID GenerateReport(1: ReportRequest request, 2: ReportType report_type) throws (1: PartyNotFound ex1, 2: ShopNotFound ex2, 3: InvalidRequest ex3)
 
+  ReportID GenerateReportByPartyId(1: PartyID party_id, 2: ReportTimeRange time_range, 3: ReportType report_type) throws (1: PartyNotFound ex1, 2: ShopNotFound ex2, 3: InvalidRequest ex3)
+
   /**
   * Запрос на получение отчета
   *
@@ -126,12 +130,16 @@ service Reporting {
   */
   Report GetReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
 
+  Report GetReportByPartyId(1: PartyID party_id, 2: ReportID report_id) throws (1: ReportNotFound ex1)
+
   /**
   * Запрос на отмену отчета
   *
   * ReportNotFound, если отчет не найден
   */
   void cancelReport(1: PartyID party_id, 2: ShopID shop_id, 3: ReportID report_id) throws (1: ReportNotFound ex1)
+
+  void cancelReportByPartyId(1: PartyID party_id, 2: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
   * Сгенерировать ссылку на файл
