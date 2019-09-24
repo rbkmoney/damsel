@@ -39,7 +39,7 @@ struct ReportTimeRange {
 struct ReportRequest {
     1: required PartyID party_id
     2: optional ShopID shop_id
-    3: optional ReportTimeRange time_range
+    3: required ReportTimeRange time_range
 }
 
 /**
@@ -66,6 +66,8 @@ struct Report {
     4: required ReportType report_type
     5: required ReportStatus status
     6: optional list<FileMeta> files
+    7: required PartyID party_id
+    8: optional ShopID shop_id
 }
 
 /**
@@ -124,14 +126,14 @@ service Reporting {
   *
   * ReportNotFound, если отчет не найден
   */
-  Report GetReport(1: ReportRequest request, 2: ReportID report_id) throws (1: ReportNotFound ex1)
+  Report GetReport(1: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
   * Запрос на отмену отчета
   *
   * ReportNotFound, если отчет не найден
   */
-  void cancelReport(1: ReportRequest request, 2: ReportID report_id) throws (1: ReportNotFound ex1)
+  void cancelReport(1: ReportID report_id) throws (1: ReportNotFound ex1)
 
   /**
   * Сгенерировать ссылку на файл
