@@ -11,6 +11,7 @@ typedef base.ID FileID
 typedef domain.PartyID PartyID
 typedef domain.ShopID ShopID
 typedef string URL
+typedef string ReportType
 
 /**
 * Ошибка превышения максимального размера блока данных, доступного для отправки клиенту.
@@ -87,16 +88,6 @@ struct FileMeta {
 struct Signature {
     1: required string md5
     2: required string sha256
-}
-
-/**
-* Типы отчетов
-*/
-enum ReportType {
-    // Акт об оказании услуг
-    provision_of_service,
-    // Реестр платежей
-    payment_registry
 }
 
 service Reporting {
