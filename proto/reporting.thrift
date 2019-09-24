@@ -93,6 +93,16 @@ struct Signature {
 service Reporting {
 
   /**
+  * Создать отчет с указанным типом по магазину за указанный промежуток времени
+  * Возвращает идентификатор отчета
+  *
+  * PartyNotFound, если party не найден
+  * ShopNotFound, если shop не найден
+  * InvalidRequest, если промежуток времени некорректен
+  */
+  ReportID CreateReport(1: ReportRequest request, 2: ReportType report_type) throws (1: PartyNotFound ex1, 2: ShopNotFound ex2, 3: InvalidRequest ex3)
+
+  /**
   * Получить список отчетов по магазину за указанный промежуток времени с фильтрацией по типу
   * В случае если список report_types пустой, фильтрации по типу не будет
   * Возвращает список отчетов или пустой список, если отчеты по магазину не найдены
@@ -101,16 +111,6 @@ service Reporting {
   * DatasetTooBig, если размер списка превышает допустимый лимит
   */
   list<Report> GetReports(1: ReportRequest request, 2: list<ReportType> report_types) throws (1: DatasetTooBig ex1, 2: InvalidRequest ex2)
-
-  /**
-  * Сгенерировать отчет с указанным типом по магазину за указанный промежуток времени
-  * Возвращает идентификатор отчета
-  *
-  * PartyNotFound, если party не найден
-  * ShopNotFound, если shop не найден
-  * InvalidRequest, если промежуток времени некорректен
-  */
-  ReportID GenerateReport(1: ReportRequest request, 2: ReportType report_type) throws (1: PartyNotFound ex1, 2: ShopNotFound ex2, 3: InvalidRequest ex3)
 
   /**
   * Запрос на получение отчета
