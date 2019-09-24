@@ -1237,7 +1237,7 @@ struct RecurrentPaymentTool {
     8:  required DisposablePaymentResource  payment_resource
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
-    12: optional domain.Cash                cash
+    12: optional domain.Cash                minimal_payment_cost
 }
 
 struct RecurrentPaymentToolParams {
