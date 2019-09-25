@@ -710,7 +710,7 @@ service Invoicing {
 
     /* CashFlow */
 
-    CashFlow GetCashFlow (
+    domain.CashFlow GetCashFlow (
         1: domain.InvoiceID id,
         2: InvoicePaymentParams params
     )
