@@ -708,6 +708,18 @@ service Invoicing {
     domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
 
+    /* CashFlow */
+
+    CashFlow GetCashFlow (
+        1: domain.InvoiceID id,
+        2: InvoicePaymentParams params
+    )
+        throws (
+            1: InvoiceNotFound ex1
+            2: InvalidInvoiceStatus ex2
+            3: InvalidPartyStatus ex3
+        )
+
     /* Payments */
 
     InvoicePayment StartPayment (

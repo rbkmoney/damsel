@@ -1532,6 +1532,7 @@ union CashFlowAccount {
     3: SystemCashFlowAccount system
     4: ExternalCashFlowAccount external
     5: WalletCashFlowAccount wallet
+    6: PayerCashFlowAccount payer
 }
 
 enum MerchantCashFlowAccount {
@@ -1607,6 +1608,8 @@ enum WalletCashFlowAccount {
     receiver_destination
 }
 
+enum PayerCashFlowAccount {}
+
 enum CashFlowConstant {
     operation_amount = 1
     // ...
@@ -1618,6 +1621,9 @@ enum CashFlowConstant {
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
+
+
+// typedef list<OperationPlanPosting> OperationPlan
 
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
@@ -1690,6 +1696,16 @@ struct CashFlowDecision {
     1: required Predicate if_
     2: required CashFlowSelector then_
 }
+
+// union OperationPlanSelector {
+//     1: list<OperationPlanDecision> decisions
+//     2: OperationPlan value
+// }
+
+// struct OperationPlanDecision {
+//     1: required Predicate if_
+//     2: required OperationPlanSelector then_
+// }
 
 /* Providers */
 
