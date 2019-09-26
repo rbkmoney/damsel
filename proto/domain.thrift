@@ -1650,6 +1650,7 @@ struct FinalCashFlowAccount {
     2: required AccountID account_id
 }
 
+/** TODO set another name */
 typedef list<OperationPlanPosting> OperationPlan
 
 struct OperationPlanPosting {

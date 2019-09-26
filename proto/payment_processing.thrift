@@ -596,9 +596,8 @@ struct InvoiceRepairParams {
 typedef base.Opaque ConditionToken
 
 struct Condition {
-    1: required domain.Cash cash
-    2: required domain.CashFlow cash_flow
-    3: required ConditionToken token
+    1: required domain.OperationPlan plan
+    2: required ConditionToken token
 }
 
 // Exceptions
