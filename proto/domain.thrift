@@ -1623,8 +1623,6 @@ enum CashFlowConstant {
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
 
-// typedef list<OperationPlanPosting> OperationPlan
-
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
 
@@ -1650,6 +1648,15 @@ struct FinalCashFlowPosting {
 struct FinalCashFlowAccount {
     1: required CashFlowAccount account_type
     2: required AccountID account_id
+}
+
+typedef list<OperationPlanPosting> OperationPlan
+
+struct OperationPlanPosting {
+    1: required CashFlowAccount source
+    2: required CashFlowAccount destination
+    3: required Cash volume
+    4: optional string details
 }
 
 /** Объём финансовой проводки. */
@@ -1696,16 +1703,6 @@ struct CashFlowDecision {
     1: required Predicate if_
     2: required CashFlowSelector then_
 }
-
-// union OperationPlanSelector {
-//     1: list<OperationPlanDecision> decisions
-//     2: OperationPlan value
-// }
-
-// struct OperationPlanDecision {
-//     1: required Predicate if_
-//     2: required OperationPlanSelector then_
-// }
 
 /* Providers */
 
