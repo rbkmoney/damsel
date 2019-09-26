@@ -1286,6 +1286,8 @@ struct RecurrentPaymentToolSessionChange {
 
 union RecurrentPaymentToolChange {
     1: RecurrentPaymentToolHasCreated    rec_payment_tool_created
+    6: RecurrentPaymentToolScoreChanged  rec_payment_tool_risk_score_changed
+    7: RecurrentPaymentToolRouteChanged  rec_payment_tool_route_changed
     2: RecurrentPaymentToolHasAcquired   rec_payment_tool_acquired
     3: RecurrentPaymentToolHasAbandoned  rec_payment_tool_abandoned
     4: RecurrentPaymentToolHasFailed     rec_payment_tool_failed
@@ -1297,8 +1299,27 @@ union RecurrentPaymentToolChange {
  */
 struct RecurrentPaymentToolHasCreated {
     1: required RecurrentPaymentTool rec_payment_tool
-    2: required domain.RiskScore     risk_score
-    3: required domain.PaymentRoute  route
+    /** deprecated */
+    /** Оценка риска платежного средства. */
+    2: optional domain.RiskScore     risk_score
+    /** Выбранный маршрут обработки платежного средства. */
+    3: optional domain.PaymentRoute  route
+}
+
+/**
+ * Событие об изменении оценки риска платежного средства.
+ */
+struct RecurrentPaymentToolScoreChanged {
+    /** Оценка риска платежного средства. */
+    1: required domain.RiskScore risk_score
+}
+
+/**
+ * Событие об изменении маршрута обработки платежного средства.
+ */
+struct RecurrentPaymentToolRouteChanged {
+    /** Выбранный маршрут обработки платежного средства. */
+    1: required domain.PaymentRoute route
 }
 
 /*
