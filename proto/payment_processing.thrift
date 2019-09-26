@@ -414,6 +414,7 @@ struct InvoiceParams {
     6: required domain.InvoiceContext context
     7: optional domain.InvoiceID id
     8: optional string external_id
+    9: optional ConditionToken token
 }
 
 struct InvoiceWithTemplateParams {
@@ -450,6 +451,7 @@ struct InvoicePaymentParams {
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
     7: optional base.Timestamp processing_deadline
+    8: optional ConditionToken token
 }
 
 union PayerParams {
@@ -589,6 +591,16 @@ struct InvoiceRepairParams {
     1: optional bool validate_transitions = true
 }
 
+/* Условия проведения платежа: сумма с учетом комиссии плательщика; условия для вычисления комиссии */
+
+typedef base.Opaque ConditionToken
+
+struct Condition {
+    1: required domain.Cash cash
+    2: required domain.CashFlow cash_flow
+    3: required ConditionToken token
+}
+
 // Exceptions
 
 // forward-declared
@@ -708,16 +720,18 @@ service Invoicing {
     domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
 
-    /* CashFlow */
+    /* Conditions */
 
-    domain.CashFlow GetCashFlow (
-        1: domain.InvoiceID id,
-        2: InvoicePaymentParams params
+    Condition GetCondition (
+        1: UserInfo user
+        2: domain.Cash cash
+        3: ShopID shop_id
+        4: PartyID party_id
     )
         throws (
-            1: InvoiceNotFound ex1
-            2: InvalidInvoiceStatus ex2
-            3: InvalidPartyStatus ex3
+            1: InvalidUser ex1
+            2: InvalidPartyStatus ex2
+            3: InvalidShopStatus ex3
         )
 
     /* Payments */
