@@ -2350,9 +2350,8 @@ struct_info('InvoiceRepairParams') ->
 
 struct_info('Condition') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}}, 'cash_flow', undefined},
-    {3, required, string, 'token', undefined}
+    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanPosting'}}}, 'plan', undefined},
+    {2, required, string, 'token', undefined}
 ]};
 
 struct_info('InvalidStatus') ->

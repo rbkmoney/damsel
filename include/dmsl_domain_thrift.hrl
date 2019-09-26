@@ -899,6 +899,14 @@
     'account_id' :: dmsl_domain_thrift:'AccountID'()
 }).
 
+%% struct 'OperationPlanPosting'
+-record('domain_OperationPlanPosting', {
+    'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
+    'destination' :: dmsl_domain_thrift:'CashFlowAccount'(),
+    'volume' :: dmsl_domain_thrift:'Cash'(),
+    'details' :: binary() | undefined
+}).
+
 %% struct 'CashVolumeFixed'
 -record('domain_CashVolumeFixed', {
     'cash' :: dmsl_domain_thrift:'Cash'()

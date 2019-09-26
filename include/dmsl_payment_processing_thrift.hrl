@@ -329,8 +329,7 @@
 
 %% struct 'Condition'
 -record('payproc_Condition', {
-    'cash' :: dmsl_domain_thrift:'Cash'(),
-    'cash_flow' :: dmsl_domain_thrift:'CashFlow'(),
+    'plan' :: dmsl_domain_thrift:'OperationPlan'(),
     'token' :: dmsl_payment_processing_thrift:'ConditionToken'()
 }).
 

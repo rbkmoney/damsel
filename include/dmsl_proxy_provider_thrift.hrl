@@ -122,7 +122,8 @@
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
     'make_recurrent' :: boolean() | undefined,
-    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'operation_plan' :: dmsl_domain_thrift:'OperationPlan'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefund'
