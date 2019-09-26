@@ -196,7 +196,8 @@
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'(),
     'id' :: dmsl_domain_thrift:'InvoiceID'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'token' :: dmsl_payment_processing_thrift:'ConditionToken'() | undefined
 }).
 
 %% struct 'InvoiceWithTemplateParams'
@@ -236,7 +237,8 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'() | undefined,
     'external_id' :: binary() | undefined,
     'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
-    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'token' :: dmsl_payment_processing_thrift:'ConditionToken'() | undefined
 }).
 
 %% struct 'PaymentResourcePayerParams'
@@ -323,6 +325,13 @@
 %% struct 'InvoiceRepairParams'
 -record('payproc_InvoiceRepairParams', {
     'validate_transitions' = true :: boolean() | undefined
+}).
+
+%% struct 'Condition'
+-record('payproc_Condition', {
+    'cash' :: dmsl_domain_thrift:'Cash'(),
+    'cash_flow' :: dmsl_domain_thrift:'CashFlow'(),
+    'token' :: dmsl_payment_processing_thrift:'ConditionToken'()
 }).
 
 %% struct 'CustomerParams'
