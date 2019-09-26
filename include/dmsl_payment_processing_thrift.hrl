@@ -485,7 +485,8 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
     'rec_token' :: dmsl_domain_thrift:'Token'() | undefined,
-    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
+    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'RecurrentPaymentToolParams'
