@@ -595,11 +595,18 @@ struct InvoiceRepairParams {
 
 typedef base.Opaque ConditionToken
 
-struct Condition {
+struct PaymentCondition {
     1: required domain.OperationPlan plan
     2: required ConditionToken token
+    3: optional domain.FinalOperationPlan final_plan
 }
 
+struct ConditionParams {
+    1: required ShopID shop_id
+    2: required PartyID party_id
+    3: required domain.PaymentTool psyment_tool
+    4: optional domain.Cash cash
+}
 // Exceptions
 
 // forward-declared
@@ -721,12 +728,7 @@ service Invoicing {
 
     /* Conditions */
 
-    Condition GetCondition (
-        1: UserInfo user
-        2: domain.Cash cash
-        3: ShopID shop_id
-        4: PartyID party_id
-    )
+    PaymentCondition GetPaymentCondition (1: UserInfo user, 2: ConditionParams params)
         throws (
             1: InvalidUser ex1
             2: InvalidPartyStatus ex2

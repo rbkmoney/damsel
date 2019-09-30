@@ -1650,13 +1650,22 @@ struct FinalCashFlowAccount {
     2: required AccountID account_id
 }
 
-/** TODO set another name */
+/** TODO p2p */
 typedef list<OperationPlanPosting> OperationPlan
 
 struct OperationPlanPosting {
     1: required CashFlowAccount source
     2: required CashFlowAccount destination
-    3: required Cash volume
+    3: required CashVolume volume
+    4: optional string details
+}
+
+typedef list<FinalOperationPlanPosting> FinalOperationPlan
+
+struct FinalOperationPlanPosting {
+    1: required CashFlowAccount source
+    2: required CashFlowAccount destination
+    3: required Cash cash
     4: optional string details
 }
 
