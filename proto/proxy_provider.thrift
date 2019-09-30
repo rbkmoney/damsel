@@ -204,7 +204,6 @@ struct InvoicePayment {
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
     9: optional base.Timestamp          processing_deadline
-    10: optional domain.OperationPlan   operation_plan
 }
 
 struct InvoicePaymentRefund {

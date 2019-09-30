@@ -72,6 +72,7 @@
     'CashFlow'/0,
     'FinalCashFlow'/0,
     'OperationPlan'/0,
+    'FinalOperationPlan'/0,
     'ProviderAccountSet'/0,
     'ProxyOptions'/0,
     'Domain'/0
@@ -269,6 +270,7 @@
     'FinalCashFlowPosting'/0,
     'FinalCashFlowAccount'/0,
     'OperationPlanPosting'/0,
+    'FinalOperationPlanPosting'/0,
     'CashVolume'/0,
     'CashVolumeFixed'/0,
     'CashVolumeShare'/0,
@@ -413,6 +415,7 @@
     'CashFlow' |
     'FinalCashFlow' |
     'OperationPlan' |
+    'FinalOperationPlan' |
     'ProviderAccountSet' |
     'ProxyOptions' |
     'Domain'.
@@ -457,6 +460,7 @@
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
 -type 'OperationPlan'() :: ['OperationPlanPosting'()].
+-type 'FinalOperationPlan'() :: ['FinalOperationPlanPosting'()].
 -type 'ProviderAccountSet'() :: #{'CurrencyRef'() => 'ProviderAccount'()}.
 -type 'ProxyOptions'() :: dmsl_base_thrift:'StringMap'().
 -type 'Domain'() :: #{'Reference'() => 'DomainObject'()}.
@@ -1048,6 +1052,7 @@
     'FinalCashFlowPosting' |
     'FinalCashFlowAccount' |
     'OperationPlanPosting' |
+    'FinalOperationPlanPosting' |
     'CashVolume' |
     'CashVolumeFixed' |
     'CashVolumeShare' |
@@ -1742,6 +1747,9 @@
 %% struct 'OperationPlanPosting'
 -type 'OperationPlanPosting'() :: #'domain_OperationPlanPosting'{}.
 
+%% struct 'FinalOperationPlanPosting'
+-type 'FinalOperationPlanPosting'() :: #'domain_FinalOperationPlanPosting'{}.
+
 %% union 'CashVolume'
 -type 'CashVolume'() ::
     {'fixed', 'CashVolumeFixed'()} |
@@ -2223,6 +2231,7 @@ typedefs() ->
         'CashFlow',
         'FinalCashFlow',
         'OperationPlan',
+        'FinalOperationPlan',
         'ProviderAccountSet',
         'ProxyOptions',
         'Domain'
@@ -2428,6 +2437,7 @@ structs() ->
         'FinalCashFlowPosting',
         'FinalCashFlowAccount',
         'OperationPlanPosting',
+        'FinalOperationPlanPosting',
         'CashVolume',
         'CashVolumeFixed',
         'CashVolumeShare',
@@ -2657,6 +2667,9 @@ typedef_info('FinalCashFlow') ->
 
 typedef_info('OperationPlan') ->
     {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanPosting'}}};
+
+typedef_info('FinalOperationPlan') ->
+    {list, {struct, struct, {dmsl_domain_thrift, 'FinalOperationPlanPosting'}}};
 
 typedef_info('ProviderAccountSet') ->
     {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}};
@@ -4211,7 +4224,15 @@ struct_info('OperationPlanPosting') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'destination', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'volume', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}, 'volume', undefined},
+    {4, optional, string, 'details', undefined}
+]};
+
+struct_info('FinalOperationPlanPosting') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'destination', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {4, optional, string, 'details', undefined}
 ]};
 
@@ -5252,6 +5273,9 @@ record_name('OperationTimeout') ->
 
     record_name('OperationPlanPosting') ->
     'domain_OperationPlanPosting';
+
+    record_name('FinalOperationPlanPosting') ->
+    'domain_FinalOperationPlanPosting';
 
     record_name('CashVolumeFixed') ->
     'domain_CashVolumeFixed';

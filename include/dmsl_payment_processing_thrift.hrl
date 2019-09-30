@@ -327,10 +327,19 @@
     'validate_transitions' = true :: boolean() | undefined
 }).
 
-%% struct 'Condition'
--record('payproc_Condition', {
+%% struct 'PaymentCondition'
+-record('payproc_PaymentCondition', {
     'plan' :: dmsl_domain_thrift:'OperationPlan'(),
-    'token' :: dmsl_payment_processing_thrift:'ConditionToken'()
+    'token' :: dmsl_payment_processing_thrift:'ConditionToken'(),
+    'final_plan' :: dmsl_domain_thrift:'FinalOperationPlan'() | undefined
+}).
+
+%% struct 'ConditionParams'
+-record('payproc_ConditionParams', {
+    'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
+    'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'psyment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'CustomerParams'

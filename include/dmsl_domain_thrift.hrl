@@ -903,7 +903,15 @@
 -record('domain_OperationPlanPosting', {
     'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
     'destination' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'volume' :: dmsl_domain_thrift:'Cash'(),
+    'volume' :: dmsl_domain_thrift:'CashVolume'(),
+    'details' :: binary() | undefined
+}).
+
+%% struct 'FinalOperationPlanPosting'
+-record('domain_FinalOperationPlanPosting', {
+    'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
+    'destination' :: dmsl_domain_thrift:'CashFlowAccount'(),
+    'cash' :: dmsl_domain_thrift:'Cash'(),
     'details' :: binary() | undefined
 }).
 
