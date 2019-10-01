@@ -1132,6 +1132,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
+            7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
             9: InvoicePaymentAmountExceeded ex9
             10: InconsistentRefundCurrency ex10
