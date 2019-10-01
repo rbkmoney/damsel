@@ -414,7 +414,6 @@ struct InvoiceParams {
     6: required domain.InvoiceContext context
     7: optional domain.InvoiceID id
     8: optional string external_id
-    9: optional ConditionToken token
 }
 
 struct InvoiceWithTemplateParams {
@@ -451,7 +450,6 @@ struct InvoicePaymentParams {
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
     7: optional base.Timestamp processing_deadline
-    8: optional ConditionToken token
 }
 
 union PayerParams {

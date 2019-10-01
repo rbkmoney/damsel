@@ -1643,6 +1643,15 @@ struct OperationPlanPosting {
     4: optional string details
 }
 
+typedef list<FinalOperationPlanPosting> FinalOperationPlan
+
+struct FinalOperationPlanPosting {
+    1: required CashFlowAccount source
+    2: required CashFlowAccount destination
+    3: required Cash cash
+    4: optional string details
+}
+
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
 
@@ -1668,25 +1677,6 @@ struct FinalCashFlowPosting {
 struct FinalCashFlowAccount {
     1: required CashFlowAccount account_type
     2: required AccountID account_id
-}
-
-/** TODO p2p */
-typedef list<OperationPlanPosting> OperationPlan
-
-struct OperationPlanPosting {
-    1: required CashFlowAccount source
-    2: required CashFlowAccount destination
-    3: required CashVolume volume
-    4: optional string details
-}
-
-typedef list<FinalOperationPlanPosting> FinalOperationPlan
-
-struct FinalOperationPlanPosting {
-    1: required CashFlowAccount source
-    2: required CashFlowAccount destination
-    3: required Cash cash
-    4: optional string details
 }
 
 /** Объём финансовой проводки. */
