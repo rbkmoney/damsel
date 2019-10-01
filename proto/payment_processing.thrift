@@ -591,22 +591,6 @@ struct InvoiceRepairParams {
     1: optional bool validate_transitions = true
 }
 
-/* Условия проведения платежа: сумма с учетом комиссии плательщика; условия для вычисления комиссии */
-
-typedef base.Opaque ConditionToken
-
-struct PaymentCondition {
-    1: required domain.OperationPlan plan
-    2: required ConditionToken token
-    3: optional domain.FinalOperationPlan final_plan
-}
-
-struct ConditionParams {
-    1: required ShopID shop_id
-    2: required PartyID party_id
-    3: required domain.PaymentTool psyment_tool
-    4: optional domain.Cash cash
-}
 // Exceptions
 
 // forward-declared
@@ -725,15 +709,6 @@ service Invoicing {
 
     domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
-
-    /* Conditions */
-
-    PaymentCondition GetPaymentCondition (1: UserInfo user, 2: ConditionParams params)
-        throws (
-            1: InvalidUser ex1
-            2: InvalidPartyStatus ex2
-            3: InvalidShopStatus ex3
-        )
 
     /* Payments */
 

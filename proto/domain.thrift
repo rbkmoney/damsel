@@ -892,6 +892,7 @@ struct WalletServiceTerms {
     2: optional CashLimitSelector wallet_limit
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
+    5: optional P2pServiceTerms p2p
 }
 
 union CumulativeLimitSelector {
@@ -923,6 +924,14 @@ struct WithdrawalServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
+}
+
+/** P2p service terms **/
+
+struct P2pServiceTerms {
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional OperationPlanSelector operation_plan
 }
 
 /* Payout methods */
@@ -1532,7 +1541,7 @@ union CashFlowAccount {
     3: SystemCashFlowAccount system
     4: ExternalCashFlowAccount external
     5: WalletCashFlowAccount wallet
-    6: PayerCashFlowAccount payer
+    6: PersonCashFlowAccount person
 }
 
 enum MerchantCashFlowAccount {
@@ -1608,7 +1617,10 @@ enum WalletCashFlowAccount {
     receiver_destination
 }
 
-enum PayerCashFlowAccount {}
+enum PersonCashFlowAccount {
+    sender
+    receiver
+}
 
 enum CashFlowConstant {
     operation_amount = 1
@@ -1622,6 +1634,14 @@ enum CashFlowConstant {
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
+typedef list<OperationPlanPosting> OperationPlan
+
+struct OperationPlanPosting {
+    1: required CashFlowAccount source
+    2: required CashFlowAccount destination
+    3: required CashVolume volume
+    4: optional string details
+}
 
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
@@ -1712,6 +1732,16 @@ union CashFlowSelector {
 struct CashFlowDecision {
     1: required Predicate if_
     2: required CashFlowSelector then_
+}
+
+union OperationPlanSelector {
+    1: list<OperationPlanDecision> decisions
+    2: OperationPlan value
+}
+
+struct OperationPlanDecision {
+    1: required Predicate if_
+    2: required OperationPlanSelector then_
 }
 
 /* Providers */
