@@ -36,7 +36,6 @@
     'Events'/0,
     'InvoicePaymentRefund'/0,
     'InvoicePaymentAdjustment'/0,
-    'ConditionToken'/0,
     'CustomerID'/0,
     'Metadata'/0,
     'CustomerBindingID'/0,
@@ -126,8 +125,6 @@
     'InvoiceRepairComplex'/0,
     'InvoiceRepairScenario'/0,
     'InvoiceRepairParams'/0,
-    'PaymentCondition'/0,
-    'ConditionParams'/0,
     'InvalidStatus'/0,
     'CustomerParams'/0,
     'Customer'/0,
@@ -304,7 +301,6 @@
     'Events' |
     'InvoicePaymentRefund' |
     'InvoicePaymentAdjustment' |
-    'ConditionToken' |
     'CustomerID' |
     'Metadata' |
     'CustomerBindingID' |
@@ -329,7 +325,6 @@
 -type 'Events'() :: ['Event'()].
 -type 'InvoicePaymentRefund'() :: dmsl_domain_thrift:'InvoicePaymentRefund'().
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
--type 'ConditionToken'() :: dmsl_base_thrift:'Opaque'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
 -type 'CustomerBindingID'() :: dmsl_domain_thrift:'CustomerBindingID'().
@@ -427,8 +422,6 @@
     'InvoiceRepairComplex' |
     'InvoiceRepairScenario' |
     'InvoiceRepairParams' |
-    'PaymentCondition' |
-    'ConditionParams' |
     'InvalidStatus' |
     'CustomerParams' |
     'Customer' |
@@ -847,12 +840,6 @@
 
 %% struct 'InvoiceRepairParams'
 -type 'InvoiceRepairParams'() :: #'payproc_InvoiceRepairParams'{}.
-
-%% struct 'PaymentCondition'
--type 'PaymentCondition'() :: #'payproc_PaymentCondition'{}.
-
-%% struct 'ConditionParams'
--type 'ConditionParams'() :: #'payproc_ConditionParams'{}.
 
 %% union 'InvalidStatus'
 -type 'InvalidStatus'() ::
@@ -1489,7 +1476,6 @@
     'Get' |
     'GetEvents' |
     'ComputeTerms' |
-    'GetPaymentCondition' |
     'StartPayment' |
     'GetPayment' |
     'CancelPayment' |
@@ -1622,7 +1608,6 @@ typedefs() ->
         'Events',
         'InvoicePaymentRefund',
         'InvoicePaymentAdjustment',
-        'ConditionToken',
         'CustomerID',
         'Metadata',
         'CustomerBindingID',
@@ -1721,8 +1706,6 @@ structs() ->
         'InvoiceRepairComplex',
         'InvoiceRepairScenario',
         'InvoiceRepairParams',
-        'PaymentCondition',
-        'ConditionParams',
         'InvalidStatus',
         'CustomerParams',
         'Customer',
@@ -1866,9 +1849,6 @@ typedef_info('InvoicePaymentRefund') ->
 
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
-
-typedef_info('ConditionToken') ->
-    string;
 
 typedef_info('CustomerID') ->
     string;
@@ -2202,8 +2182,7 @@ struct_info('InvoiceParams') ->
     {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
     {7, optional, string, 'id', undefined},
-    {8, optional, string, 'external_id', undefined},
-    {9, optional, string, 'token', undefined}
+    {8, optional, string, 'external_id', undefined}
 ]};
 
 struct_info('InvoiceWithTemplateParams') ->
@@ -2243,8 +2222,7 @@ struct_info('InvoicePaymentParams') ->
     {4, optional, string, 'id', undefined},
     {5, optional, string, 'external_id', undefined},
     {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {7, optional, string, 'processing_deadline', undefined},
-    {8, optional, string, 'token', undefined}
+    {7, optional, string, 'processing_deadline', undefined}
 ]};
 
 struct_info('PayerParams') ->
@@ -2352,21 +2330,6 @@ struct_info('InvoiceRepairScenario') ->
 struct_info('InvoiceRepairParams') ->
     {struct, struct, [
     {1, optional, bool, 'validate_transitions', true}
-]};
-
-struct_info('PaymentCondition') ->
-    {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanPosting'}}}, 'plan', undefined},
-    {2, required, string, 'token', undefined},
-    {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalOperationPlanPosting'}}}, 'final_plan', undefined}
-]};
-
-struct_info('ConditionParams') ->
-    {struct, struct, [
-    {1, required, string, 'shop_id', undefined},
-    {2, required, string, 'party_id', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'psyment_tool', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
 ]};
 
 struct_info('InvalidStatus') ->
@@ -3461,12 +3424,6 @@ record_name('InternalUser') ->
     record_name('InvoiceRepairParams') ->
     'payproc_InvoiceRepairParams';
 
-    record_name('PaymentCondition') ->
-    'payproc_PaymentCondition';
-
-    record_name('ConditionParams') ->
-    'payproc_ConditionParams';
-
     record_name('CustomerParams') ->
     'payproc_CustomerParams';
 
@@ -3883,7 +3840,6 @@ functions('Invoicing') ->
         'Get',
         'GetEvents',
         'ComputeTerms',
-        'GetPaymentCondition',
         'StartPayment',
         'GetPayment',
         'CancelPayment',
@@ -4057,19 +4013,6 @@ function_info('Invoicing', 'ComputeTerms', reply_type) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined}
-    ]};
-function_info('Invoicing', 'GetPaymentCondition', params_type) ->
-    {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'ConditionParams'}}, 'params', undefined}
-]};
-function_info('Invoicing', 'GetPaymentCondition', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'PaymentCondition'}};
-    function_info('Invoicing', 'GetPaymentCondition', exceptions) ->
-        {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex3', undefined}
     ]};
 function_info('Invoicing', 'StartPayment', params_type) ->
     {struct, struct, [
