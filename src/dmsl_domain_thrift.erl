@@ -309,6 +309,7 @@
     'TerminalRef'/0,
     'Predicate'/0,
     'Condition'/0,
+    'P2PToolCondition'/0,
     'PaymentToolCondition'/0,
     'BankCardCondition'/0,
     'BankCardConditionDefinition'/0,
@@ -1096,6 +1097,7 @@
     'TerminalRef' |
     'Predicate' |
     'Condition' |
+    'P2PToolCondition' |
     'PaymentToolCondition' |
     'BankCardCondition' |
     'BankCardConditionDefinition' |
@@ -1902,7 +1904,13 @@
     {'shop_location_is', 'ShopLocation'()} |
     {'party', 'PartyCondition'()} |
     {'payout_method_is', 'PayoutMethodRef'()} |
-    {'identification_level_is', atom()}.
+    {'identification_level_is', atom()} |
+    {'p2p_tool', 'P2PToolCondition'()}.
+
+%% union 'P2PToolCondition'
+-type 'P2PToolCondition'() ::
+    {'sender', 'PaymentToolCondition'()} |
+    {'receiver', 'PaymentToolCondition'()}.
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
@@ -2495,6 +2503,7 @@ structs() ->
         'TerminalRef',
         'Predicate',
         'Condition',
+        'P2PToolCondition',
         'PaymentToolCondition',
         'BankCardCondition',
         'BankCardConditionDefinition',
@@ -4513,7 +4522,14 @@ struct_info('Condition') ->
     {5, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'shop_location_is', undefined},
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
-    {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined}
+    {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
+    {9, optional, {struct, union, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
+]};
+
+struct_info('P2PToolCondition') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver', undefined}
 ]};
 
 struct_info('PaymentToolCondition') ->

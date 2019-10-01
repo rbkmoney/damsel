@@ -1914,6 +1914,12 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
+    9: P2PToolCondition p2p_tool
+}
+
+union P2PToolCondition {
+    1: PaymentToolCondition sender
+    2: PaymentToolCondition receiver
 }
 
 union PaymentToolCondition {
