@@ -892,7 +892,7 @@ struct WalletServiceTerms {
     2: optional CashLimitSelector wallet_limit
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
-    5: optional P2pServiceTerms p2p
+    5: optional P2PServiceTerms p2p
 }
 
 union CumulativeLimitSelector {
