@@ -478,7 +478,17 @@
 %% struct 'RecurrentPaymentToolHasCreated'
 -record('payproc_RecurrentPaymentToolHasCreated', {
     'rec_payment_tool' :: dmsl_payment_processing_thrift:'RecurrentPaymentTool'(),
-    'risk_score' :: atom(),
+    'risk_score' :: atom() | undefined,
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
+}).
+
+%% struct 'RecurrentPaymentToolRiskScoreChanged'
+-record('payproc_RecurrentPaymentToolRiskScoreChanged', {
+    'risk_score' :: atom()
+}).
+
+%% struct 'RecurrentPaymentToolRouteChanged'
+-record('payproc_RecurrentPaymentToolRouteChanged', {
     'route' :: dmsl_domain_thrift:'PaymentRoute'()
 }).
 
