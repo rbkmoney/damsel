@@ -926,9 +926,9 @@ struct WithdrawalServiceTerms {
     3: optional CashFlowSelector cash_flow
 }
 
-/** P2p service terms **/
+/** P2P service terms **/
 
-struct P2pServiceTerms {
+struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional OperationPlanSelector operation_plan
