@@ -672,7 +672,7 @@
 -record('domain_P2PServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'operation_plan' :: dmsl_domain_thrift:'OperationPlanSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
@@ -885,22 +885,6 @@
     'then_' :: dmsl_domain_thrift:'TimeSpanSelector'()
 }).
 
-%% struct 'OperationPlanPosting'
--record('domain_OperationPlanPosting', {
-    'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'destination' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'volume' :: dmsl_domain_thrift:'CashVolume'(),
-    'details' :: binary() | undefined
-}).
-
-%% struct 'FinalOperationPlanPosting'
--record('domain_FinalOperationPlanPosting', {
-    'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'destination' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'cash' :: dmsl_domain_thrift:'Cash'(),
-    'details' :: binary() | undefined
-}).
-
 %% struct 'CashFlowPosting'
 -record('domain_CashFlowPosting', {
     'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
@@ -939,12 +923,6 @@
 -record('domain_CashFlowDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'CashFlowSelector'()
-}).
-
-%% struct 'OperationPlanDecision'
--record('domain_OperationPlanDecision', {
-    'if_' :: dmsl_domain_thrift:'Predicate'(),
-    'then_' :: dmsl_domain_thrift:'OperationPlanSelector'()
 }).
 
 %% struct 'ProviderRef'
@@ -1096,8 +1074,8 @@
 
 %% struct 'P2PToolCondition'
 -record('domain_P2PToolCondition', {
-    'sender_is' :: dmsl_domain_thrift:'PaymentToolCondition'(),
-    'receiver_is' :: dmsl_domain_thrift:'PaymentToolCondition'()
+    'sender_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined,
+    'receiver_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined
 }).
 
 %% struct 'BankCardCondition'

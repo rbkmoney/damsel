@@ -69,8 +69,6 @@
     'Token'/0,
     'DigitalWalletID'/0,
     'CashFlowContext'/0,
-    'OperationPlan'/0,
-    'FinalOperationPlan'/0,
     'CashFlow'/0,
     'FinalCashFlow'/0,
     'ProviderAccountSet'/0,
@@ -267,8 +265,6 @@
     'TimeSpanSelector'/0,
     'TimeSpanDecision'/0,
     'CashFlowAccount'/0,
-    'OperationPlanPosting'/0,
-    'FinalOperationPlanPosting'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
     'FinalCashFlowAccount'/0,
@@ -278,8 +274,6 @@
     'CashVolumeProduct'/0,
     'CashFlowSelector'/0,
     'CashFlowDecision'/0,
-    'OperationPlanSelector'/0,
-    'OperationPlanDecision'/0,
     'ProviderRef'/0,
     'Provider'/0,
     'WithdrawalProviderRef'/0,
@@ -416,8 +410,6 @@
     'Token' |
     'DigitalWalletID' |
     'CashFlowContext' |
-    'OperationPlan' |
-    'FinalOperationPlan' |
     'CashFlow' |
     'FinalCashFlow' |
     'ProviderAccountSet' |
@@ -461,8 +453,6 @@
 -type 'Token'() :: binary().
 -type 'DigitalWalletID'() :: binary().
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
--type 'OperationPlan'() :: ['OperationPlanPosting'()].
--type 'FinalOperationPlan'() :: ['FinalOperationPlanPosting'()].
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
 -type 'ProviderAccountSet'() :: #{'CurrencyRef'() => 'ProviderAccount'()}.
@@ -1055,8 +1045,6 @@
     'TimeSpanSelector' |
     'TimeSpanDecision' |
     'CashFlowAccount' |
-    'OperationPlanPosting' |
-    'FinalOperationPlanPosting' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
     'FinalCashFlowAccount' |
@@ -1066,8 +1054,6 @@
     'CashVolumeProduct' |
     'CashFlowSelector' |
     'CashFlowDecision' |
-    'OperationPlanSelector' |
-    'OperationPlanDecision' |
     'ProviderRef' |
     'Provider' |
     'WithdrawalProviderRef' |
@@ -1748,12 +1734,6 @@
     {'wallet', 'WalletCashFlowAccount'()} |
     {'person', 'PersonCashFlowAccount'()}.
 
-%% struct 'OperationPlanPosting'
--type 'OperationPlanPosting'() :: #'domain_OperationPlanPosting'{}.
-
-%% struct 'FinalOperationPlanPosting'
--type 'FinalOperationPlanPosting'() :: #'domain_FinalOperationPlanPosting'{}.
-
 %% struct 'CashFlowPosting'
 -type 'CashFlowPosting'() :: #'domain_CashFlowPosting'{}.
 
@@ -1787,14 +1767,6 @@
 
 %% struct 'CashFlowDecision'
 -type 'CashFlowDecision'() :: #'domain_CashFlowDecision'{}.
-
-%% union 'OperationPlanSelector'
--type 'OperationPlanSelector'() ::
-    {'decisions', ['OperationPlanDecision'()]} |
-    {'value', 'OperationPlan'()}.
-
-%% struct 'OperationPlanDecision'
--type 'OperationPlanDecision'() :: #'domain_OperationPlanDecision'{}.
 
 %% struct 'ProviderRef'
 -type 'ProviderRef'() :: #'domain_ProviderRef'{}.
@@ -2253,8 +2225,6 @@ typedefs() ->
         'Token',
         'DigitalWalletID',
         'CashFlowContext',
-        'OperationPlan',
-        'FinalOperationPlan',
         'CashFlow',
         'FinalCashFlow',
         'ProviderAccountSet',
@@ -2459,8 +2429,6 @@ structs() ->
         'TimeSpanSelector',
         'TimeSpanDecision',
         'CashFlowAccount',
-        'OperationPlanPosting',
-        'FinalOperationPlanPosting',
         'CashFlowPosting',
         'FinalCashFlowPosting',
         'FinalCashFlowAccount',
@@ -2470,8 +2438,6 @@ structs() ->
         'CashVolumeProduct',
         'CashFlowSelector',
         'CashFlowDecision',
-        'OperationPlanSelector',
-        'OperationPlanDecision',
         'ProviderRef',
         'Provider',
         'WithdrawalProviderRef',
@@ -2687,12 +2653,6 @@ typedef_info('DigitalWalletID') ->
 
 typedef_info('CashFlowContext') ->
     {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, struct, {dmsl_domain_thrift, 'Cash'}}};
-
-typedef_info('OperationPlan') ->
-    {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanPosting'}}};
-
-typedef_info('FinalOperationPlan') ->
-    {list, {struct, struct, {dmsl_domain_thrift, 'FinalOperationPlanPosting'}}};
 
 typedef_info('CashFlow') ->
     {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}};
@@ -3941,7 +3901,7 @@ struct_info('P2PServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'OperationPlanSelector'}}, 'operation_plan', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -4238,22 +4198,6 @@ struct_info('CashFlowAccount') ->
     {6, optional, {enum, {dmsl_domain_thrift, 'PersonCashFlowAccount'}}, 'person', undefined}
 ]};
 
-struct_info('OperationPlanPosting') ->
-    {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'destination', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}, 'volume', undefined},
-    {4, optional, string, 'details', undefined}
-]};
-
-struct_info('FinalOperationPlanPosting') ->
-    {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'destination', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {4, optional, string, 'details', undefined}
-]};
-
 struct_info('CashFlowPosting') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
@@ -4311,18 +4255,6 @@ struct_info('CashFlowDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'then_', undefined}
-]};
-
-struct_info('OperationPlanSelector') ->
-    {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanDecision'}}}, 'decisions', undefined},
-    {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanPosting'}}}, 'value', undefined}
-]};
-
-struct_info('OperationPlanDecision') ->
-    {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'OperationPlanSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('ProviderRef') ->
@@ -4526,8 +4458,8 @@ struct_info('Condition') ->
 
 struct_info('P2PToolCondition') ->
     {struct, struct, [
-    {1, undefined, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender_is', undefined},
-    {2, undefined, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver_is', undefined}
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender_is', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver_is', undefined}
 ]};
 
 struct_info('PaymentToolCondition') ->
@@ -5324,12 +5256,6 @@ record_name('OperationTimeout') ->
     record_name('TimeSpanDecision') ->
     'domain_TimeSpanDecision';
 
-    record_name('OperationPlanPosting') ->
-    'domain_OperationPlanPosting';
-
-    record_name('FinalOperationPlanPosting') ->
-    'domain_FinalOperationPlanPosting';
-
     record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
 
@@ -5347,9 +5273,6 @@ record_name('OperationTimeout') ->
 
     record_name('CashFlowDecision') ->
     'domain_CashFlowDecision';
-
-    record_name('OperationPlanDecision') ->
-    'domain_OperationPlanDecision';
 
     record_name('ProviderRef') ->
     'domain_ProviderRef';
