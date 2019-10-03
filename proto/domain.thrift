@@ -892,7 +892,7 @@ struct WalletServiceTerms {
     2: optional CashLimitSelector wallet_limit
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
-    5: optional P2pServiceTerms p2p
+    5: optional P2PServiceTerms p2p
 }
 
 union CumulativeLimitSelector {
@@ -926,9 +926,9 @@ struct WithdrawalServiceTerms {
     3: optional CashFlowSelector cash_flow
 }
 
-/** P2p service terms **/
+/** P2P service terms **/
 
-struct P2pServiceTerms {
+struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional OperationPlanSelector operation_plan
@@ -1917,9 +1917,9 @@ union Condition {
     9: P2PToolCondition p2p_tool
 }
 
-union P2PToolCondition {
-    1: PaymentToolCondition sender
-    2: PaymentToolCondition receiver
+struct P2PToolCondition {
+    1: PaymentToolCondition sender_is
+    2: PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {

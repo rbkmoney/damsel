@@ -158,6 +158,8 @@
     'RecurrentPaymentToolSessionChange'/0,
     'RecurrentPaymentToolChange'/0,
     'RecurrentPaymentToolHasCreated'/0,
+    'RecurrentPaymentToolRiskScoreChanged'/0,
+    'RecurrentPaymentToolRouteChanged'/0,
     'RecurrentPaymentToolHasAcquired'/0,
     'RecurrentPaymentToolHasAbandoned'/0,
     'RecurrentPaymentToolHasFailed'/0,
@@ -455,6 +457,8 @@
     'RecurrentPaymentToolSessionChange' |
     'RecurrentPaymentToolChange' |
     'RecurrentPaymentToolHasCreated' |
+    'RecurrentPaymentToolRiskScoreChanged' |
+    'RecurrentPaymentToolRouteChanged' |
     'RecurrentPaymentToolHasAcquired' |
     'RecurrentPaymentToolHasAbandoned' |
     'RecurrentPaymentToolHasFailed' |
@@ -955,6 +959,8 @@
 %% union 'RecurrentPaymentToolChange'
 -type 'RecurrentPaymentToolChange'() ::
     {'rec_payment_tool_created', 'RecurrentPaymentToolHasCreated'()} |
+    {'rec_payment_tool_risk_score_changed', 'RecurrentPaymentToolRiskScoreChanged'()} |
+    {'rec_payment_tool_route_changed', 'RecurrentPaymentToolRouteChanged'()} |
     {'rec_payment_tool_acquired', 'RecurrentPaymentToolHasAcquired'()} |
     {'rec_payment_tool_abandoned', 'RecurrentPaymentToolHasAbandoned'()} |
     {'rec_payment_tool_failed', 'RecurrentPaymentToolHasFailed'()} |
@@ -962,6 +968,12 @@
 
 %% struct 'RecurrentPaymentToolHasCreated'
 -type 'RecurrentPaymentToolHasCreated'() :: #'payproc_RecurrentPaymentToolHasCreated'{}.
+
+%% struct 'RecurrentPaymentToolRiskScoreChanged'
+-type 'RecurrentPaymentToolRiskScoreChanged'() :: #'payproc_RecurrentPaymentToolRiskScoreChanged'{}.
+
+%% struct 'RecurrentPaymentToolRouteChanged'
+-type 'RecurrentPaymentToolRouteChanged'() :: #'payproc_RecurrentPaymentToolRouteChanged'{}.
 
 %% struct 'RecurrentPaymentToolHasAcquired'
 -type 'RecurrentPaymentToolHasAcquired'() :: #'payproc_RecurrentPaymentToolHasAcquired'{}.
@@ -1739,6 +1751,8 @@ structs() ->
         'RecurrentPaymentToolSessionChange',
         'RecurrentPaymentToolChange',
         'RecurrentPaymentToolHasCreated',
+        'RecurrentPaymentToolRiskScoreChanged',
+        'RecurrentPaymentToolRouteChanged',
         'RecurrentPaymentToolHasAcquired',
         'RecurrentPaymentToolHasAbandoned',
         'RecurrentPaymentToolHasFailed',
@@ -2470,7 +2484,8 @@ struct_info('RecurrentPaymentTool') ->
     {7, required, string, 'created_at', undefined},
     {8, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
     {9, optional, string, 'rec_token', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+    {12, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolParams') ->
@@ -2526,6 +2541,8 @@ struct_info('RecurrentPaymentToolSessionChange') ->
 struct_info('RecurrentPaymentToolChange') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRiskScoreChanged'}}, 'rec_payment_tool_risk_score_changed', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRouteChanged'}}, 'rec_payment_tool_route_changed', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasFailed'}}, 'rec_payment_tool_failed', undefined},
@@ -2535,8 +2552,18 @@ struct_info('RecurrentPaymentToolChange') ->
 struct_info('RecurrentPaymentToolHasCreated') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    {2, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+]};
+
+struct_info('RecurrentPaymentToolRiskScoreChanged') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+]};
+
+struct_info('RecurrentPaymentToolRouteChanged') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolHasAcquired') ->
@@ -3501,6 +3528,12 @@ record_name('InternalUser') ->
 
     record_name('RecurrentPaymentToolHasCreated') ->
     'payproc_RecurrentPaymentToolHasCreated';
+
+    record_name('RecurrentPaymentToolRiskScoreChanged') ->
+    'payproc_RecurrentPaymentToolRiskScoreChanged';
+
+    record_name('RecurrentPaymentToolRouteChanged') ->
+    'payproc_RecurrentPaymentToolRouteChanged';
 
     record_name('RecurrentPaymentToolHasAcquired') ->
     'payproc_RecurrentPaymentToolHasAcquired';

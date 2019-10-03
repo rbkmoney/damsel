@@ -429,7 +429,8 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'(),
     'rec_token' :: dmsl_domain_thrift:'Token'() | undefined,
-    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
+    'minimal_payment_cost' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'RecurrentPaymentToolParams'
@@ -477,7 +478,17 @@
 %% struct 'RecurrentPaymentToolHasCreated'
 -record('payproc_RecurrentPaymentToolHasCreated', {
     'rec_payment_tool' :: dmsl_payment_processing_thrift:'RecurrentPaymentTool'(),
-    'risk_score' :: atom(),
+    'risk_score' :: atom() | undefined,
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
+}).
+
+%% struct 'RecurrentPaymentToolRiskScoreChanged'
+-record('payproc_RecurrentPaymentToolRiskScoreChanged', {
+    'risk_score' :: atom()
+}).
+
+%% struct 'RecurrentPaymentToolRouteChanged'
+-record('payproc_RecurrentPaymentToolRouteChanged', {
     'route' :: dmsl_domain_thrift:'PaymentRoute'()
 }).
 

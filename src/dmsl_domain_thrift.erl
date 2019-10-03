@@ -221,7 +221,7 @@
     'CumulativeLimitDecision'/0,
     'CumulativeLimit'/0,
     'WithdrawalServiceTerms'/0,
-    'P2pServiceTerms'/0,
+    'P2PServiceTerms'/0,
     'PayoutMethodRef'/0,
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
@@ -1009,7 +1009,7 @@
     'CumulativeLimitDecision' |
     'CumulativeLimit' |
     'WithdrawalServiceTerms' |
-    'P2pServiceTerms' |
+    'P2PServiceTerms' |
     'PayoutMethodRef' |
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
@@ -1574,8 +1574,8 @@
 %% struct 'WithdrawalServiceTerms'
 -type 'WithdrawalServiceTerms'() :: #'domain_WithdrawalServiceTerms'{}.
 
-%% struct 'P2pServiceTerms'
--type 'P2pServiceTerms'() :: #'domain_P2pServiceTerms'{}.
+%% struct 'P2PServiceTerms'
+-type 'P2PServiceTerms'() :: #'domain_P2PServiceTerms'{}.
 
 %% struct 'PayoutMethodRef'
 -type 'PayoutMethodRef'() :: #'domain_PayoutMethodRef'{}.
@@ -1907,10 +1907,8 @@
     {'identification_level_is', atom()} |
     {'p2p_tool', 'P2PToolCondition'()}.
 
-%% union 'P2PToolCondition'
--type 'P2PToolCondition'() ::
-    {'sender', 'PaymentToolCondition'()} |
-    {'receiver', 'PaymentToolCondition'()}.
+%% struct 'P2PToolCondition'
+-type 'P2PToolCondition'() :: #'domain_P2PToolCondition'{}.
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
@@ -2415,7 +2413,7 @@ structs() ->
         'CumulativeLimitDecision',
         'CumulativeLimit',
         'WithdrawalServiceTerms',
-        'P2pServiceTerms',
+        'P2PServiceTerms',
         'PayoutMethodRef',
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
@@ -3911,7 +3909,7 @@ struct_info('WalletServiceTerms') ->
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'wallet_limit', undefined},
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalServiceTerms'}}, 'withdrawals', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2pServiceTerms'}}, 'p2p', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PServiceTerms'}}, 'p2p', undefined}
 ]};
 
 struct_info('CumulativeLimitSelector') ->
@@ -3939,7 +3937,7 @@ struct_info('WithdrawalServiceTerms') ->
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
 ]};
 
-struct_info('P2pServiceTerms') ->
+struct_info('P2PServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
@@ -4523,13 +4521,13 @@ struct_info('Condition') ->
     {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
     {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
-    {9, optional, {struct, union, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
+    {9, optional, {struct, struct, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
 ]};
 
 struct_info('P2PToolCondition') ->
-    {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver', undefined}
+    {struct, struct, [
+    {1, undefined, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender_is', undefined},
+    {2, undefined, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver_is', undefined}
 ]};
 
 struct_info('PaymentToolCondition') ->
@@ -5224,8 +5222,8 @@ record_name('OperationTimeout') ->
     record_name('WithdrawalServiceTerms') ->
     'domain_WithdrawalServiceTerms';
 
-    record_name('P2pServiceTerms') ->
-    'domain_P2pServiceTerms';
+    record_name('P2PServiceTerms') ->
+    'domain_P2PServiceTerms';
 
     record_name('PayoutMethodRef') ->
     'domain_PayoutMethodRef';
@@ -5418,6 +5416,9 @@ record_name('OperationTimeout') ->
 
     record_name('TerminalRef') ->
     'domain_TerminalRef';
+
+    record_name('P2PToolCondition') ->
+    'domain_P2PToolCondition';
 
     record_name('BankCardCondition') ->
     'domain_BankCardCondition';

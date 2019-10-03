@@ -646,7 +646,7 @@
     'wallet_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'turnover_limit' :: dmsl_domain_thrift:'CumulativeLimitSelector'() | undefined,
     'withdrawals' :: dmsl_domain_thrift:'WithdrawalServiceTerms'() | undefined,
-    'p2p' :: dmsl_domain_thrift:'P2pServiceTerms'() | undefined
+    'p2p' :: dmsl_domain_thrift:'P2PServiceTerms'() | undefined
 }).
 
 %% struct 'CumulativeLimitDecision'
@@ -668,8 +668,8 @@
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
-%% struct 'P2pServiceTerms'
--record('domain_P2pServiceTerms', {
+%% struct 'P2PServiceTerms'
+-record('domain_P2PServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'operation_plan' :: dmsl_domain_thrift:'OperationPlanSelector'() | undefined
@@ -1092,6 +1092,12 @@
 %% struct 'TerminalRef'
 -record('domain_TerminalRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'P2PToolCondition'
+-record('domain_P2PToolCondition', {
+    'sender_is' :: dmsl_domain_thrift:'PaymentToolCondition'(),
+    'receiver_is' :: dmsl_domain_thrift:'PaymentToolCondition'()
 }).
 
 %% struct 'BankCardCondition'
