@@ -1917,9 +1917,9 @@ union Condition {
     9: P2PToolCondition p2p_tool
 }
 
-union P2PToolCondition {
-    1: PaymentToolCondition sender
-    2: PaymentToolCondition receiver
+struct P2PToolCondition {
+    1: PaymentToolCondition sender_is
+    2: PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {
