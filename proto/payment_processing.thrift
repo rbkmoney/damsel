@@ -1944,8 +1944,21 @@ service PartyManagement {
             3: ContractNotFound ex3
         )
 
-    domain.TermSet ComputeContractTerms (1: UserInfo user, 2: PartyID party_id, 3: ContractID id, 4: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ContractNotFound ex4)
+    domain.TermSet ComputeContractTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: base.Timestamp timestamp
+        5: PartyRevisionParam party_revision
+        6: domain.DataRevision domain_revision
+        7: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3
+            4: ContractNotFound ex4
+        )
 
     /* Shop */
 
@@ -1977,16 +1990,6 @@ service PartyManagement {
         3: ContractID contract_id,
         4: base.Timestamp timestamp
         5: Varset varset
-    )
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
-
-    domain.TermSet ComputeWalletTerms (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ContractID contract_id,
-        4: PartyRevisionParam party_revision
-        6: domain.DataRevision domain_revision
-        7: Varset varset
     )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
