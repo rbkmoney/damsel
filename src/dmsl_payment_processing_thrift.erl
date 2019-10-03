@@ -4889,9 +4889,9 @@ function_info('PartyManagement', 'ComputeWalletTerms', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
     {3, undefined, string, 'contract_id', undefined},
-    {4, undefined, string, 'wallet_id', undefined},
-    {5, undefined, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {6, undefined, string, 'timestamp', undefined}
+    {4, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
+    {6, undefined, i64, 'domain_revision', undefined},
+    {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
 ]};
 function_info('PartyManagement', 'ComputeWalletTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
