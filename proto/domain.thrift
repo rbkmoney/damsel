@@ -931,7 +931,7 @@ struct WithdrawalServiceTerms {
 struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
-    3: optional OperationPlanSelector operation_plan
+    3: optional CashFlowSelector cash_flow
 }
 
 /* Payout methods */
@@ -1634,24 +1634,6 @@ enum CashFlowConstant {
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
-typedef list<OperationPlanPosting> OperationPlan
-
-struct OperationPlanPosting {
-    1: required CashFlowAccount source
-    2: required CashFlowAccount destination
-    3: required CashVolume volume
-    4: optional string details
-}
-
-typedef list<FinalOperationPlanPosting> FinalOperationPlan
-
-struct FinalOperationPlanPosting {
-    1: required CashFlowAccount source
-    2: required CashFlowAccount destination
-    3: required Cash cash
-    4: optional string details
-}
-
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
 
@@ -1722,16 +1704,6 @@ union CashFlowSelector {
 struct CashFlowDecision {
     1: required Predicate if_
     2: required CashFlowSelector then_
-}
-
-union OperationPlanSelector {
-    1: list<OperationPlanDecision> decisions
-    2: OperationPlan value
-}
-
-struct OperationPlanDecision {
-    1: required Predicate if_
-    2: required OperationPlanSelector then_
 }
 
 /* Providers */
@@ -1918,8 +1890,8 @@ union Condition {
 }
 
 struct P2PToolCondition {
-    1: PaymentToolCondition sender_is
-    2: PaymentToolCondition receiver_is
+    1: optional PaymentToolCondition sender_is
+    2: optional PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {
