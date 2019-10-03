@@ -1969,7 +1969,7 @@ service PartyManagement {
 
     /* Wallet */
 
-    // temporary method for transfer period
+    // deprecated
     // do not use
     domain.TermSet ComputeWalletTermsNew (
         1: UserInfo user,
@@ -1980,14 +1980,13 @@ service PartyManagement {
     )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
-    // deprecated
     domain.TermSet ComputeWalletTerms (
         1: UserInfo user,
         2: PartyID party_id,
         3: ContractID contract_id,
-        4: WalletID wallet_id,
-        5: domain.CurrencyRef currency,
-        6: base.Timestamp timestamp
+        4: PartyRevisionParam party_revision
+        6: domain.DataRevision domain_revision
+        7: Varset varset
     )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
