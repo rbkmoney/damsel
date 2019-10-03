@@ -1563,7 +1563,6 @@
     'UnblockShop' |
     'ComputeShopTerms' |
     'ComputeWalletTermsNew' |
-    'ComputeWalletTerms' |
     'CreateClaim' |
     'GetClaim' |
     'GetClaims' |
@@ -3948,7 +3947,6 @@ functions('PartyManagement') ->
         'UnblockShop',
         'ComputeShopTerms',
         'ComputeWalletTermsNew',
-        'ComputeWalletTerms',
         'CreateClaim',
         'GetClaim',
         'GetClaims',
@@ -4764,8 +4762,11 @@ function_info('PartyManagement', 'ComputeContractTerms', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'timestamp', undefined}
+    {3, undefined, string, 'contract_id', undefined},
+    {4, undefined, string, 'timestamp', undefined},
+    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
+    {6, undefined, i64, 'domain_revision', undefined},
+    {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
 ]};
 function_info('PartyManagement', 'ComputeContractTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -4879,23 +4880,6 @@ function_info('PartyManagement', 'ComputeWalletTermsNew', params_type) ->
 function_info('PartyManagement', 'ComputeWalletTermsNew', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
     function_info('PartyManagement', 'ComputeWalletTermsNew', exceptions) ->
-        {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined}
-    ]};
-function_info('PartyManagement', 'ComputeWalletTerms', params_type) ->
-    {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'contract_id', undefined},
-    {4, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
-    {6, undefined, i64, 'domain_revision', undefined},
-    {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
-]};
-function_info('PartyManagement', 'ComputeWalletTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('PartyManagement', 'ComputeWalletTerms', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
