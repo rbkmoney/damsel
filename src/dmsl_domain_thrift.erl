@@ -243,6 +243,7 @@
     'CashBound'/0,
     'CashLimitSelector'/0,
     'CashLimitDecision'/0,
+    'P2PTool'/0,
     'PaymentMethod'/0,
     'TokenizedBankCard'/0,
     'PaymentTool'/0,
@@ -278,6 +279,8 @@
     'Provider'/0,
     'WithdrawalProviderRef'/0,
     'WithdrawalProvider'/0,
+    'P2PProviderRef'/0,
+    'P2PProvider'/0,
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PartialCaptureProvisionTerms'/0,
@@ -285,6 +288,7 @@
     'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
     'WithdrawalProvisionTerms'/0,
+    'P2PProvisionTerms'/0,
     'CashValueSelector'/0,
     'CashValueDecision'/0,
     'ProviderAccount'/0,
@@ -292,6 +296,8 @@
     'ProviderDecision'/0,
     'WithdrawalProviderSelector'/0,
     'WithdrawalProviderDecision'/0,
+    'P2PProviderSelector'/0,
+    'P2PProviderDecision'/0,
     'InspectorRef'/0,
     'Inspector'/0,
     'InspectorSelector'/0,
@@ -356,6 +362,7 @@
     'BankObject'/0,
     'ProviderObject'/0,
     'WithdrawalProviderObject'/0,
+    'P2PProviderObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
     'PaymentInstitutionObject'/0,
@@ -1023,6 +1030,7 @@
     'CashBound' |
     'CashLimitSelector' |
     'CashLimitDecision' |
+    'P2PTool' |
     'PaymentMethod' |
     'TokenizedBankCard' |
     'PaymentTool' |
@@ -1058,6 +1066,8 @@
     'Provider' |
     'WithdrawalProviderRef' |
     'WithdrawalProvider' |
+    'P2PProviderRef' |
+    'P2PProvider' |
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PartialCaptureProvisionTerms' |
@@ -1065,6 +1075,7 @@
     'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
     'WithdrawalProvisionTerms' |
+    'P2PProvisionTerms' |
     'CashValueSelector' |
     'CashValueDecision' |
     'ProviderAccount' |
@@ -1072,6 +1083,8 @@
     'ProviderDecision' |
     'WithdrawalProviderSelector' |
     'WithdrawalProviderDecision' |
+    'P2PProviderSelector' |
+    'P2PProviderDecision' |
     'InspectorRef' |
     'Inspector' |
     'InspectorSelector' |
@@ -1136,6 +1149,7 @@
     'BankObject' |
     'ProviderObject' |
     'WithdrawalProviderObject' |
+    'P2PProviderObject' |
     'TerminalObject' |
     'InspectorObject' |
     'PaymentInstitutionObject' |
@@ -1644,6 +1658,9 @@
 %% struct 'CashLimitDecision'
 -type 'CashLimitDecision'() :: #'domain_CashLimitDecision'{}.
 
+%% struct 'P2PTool'
+-type 'P2PTool'() :: #'domain_P2PTool'{}.
+
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
     {'bank_card', 'BankCardPaymentSystem'()} |
@@ -1780,6 +1797,12 @@
 %% struct 'WithdrawalProvider'
 -type 'WithdrawalProvider'() :: #'domain_WithdrawalProvider'{}.
 
+%% struct 'P2PProviderRef'
+-type 'P2PProviderRef'() :: #'domain_P2PProviderRef'{}.
+
+%% struct 'P2PProvider'
+-type 'P2PProvider'() :: #'domain_P2PProvider'{}.
+
 %% struct 'PaymentsProvisionTerms'
 -type 'PaymentsProvisionTerms'() :: #'domain_PaymentsProvisionTerms'{}.
 
@@ -1800,6 +1823,9 @@
 
 %% struct 'WithdrawalProvisionTerms'
 -type 'WithdrawalProvisionTerms'() :: #'domain_WithdrawalProvisionTerms'{}.
+
+%% struct 'P2PProvisionTerms'
+-type 'P2PProvisionTerms'() :: #'domain_P2PProvisionTerms'{}.
 
 %% union 'CashValueSelector'
 -type 'CashValueSelector'() ::
@@ -1827,6 +1853,14 @@
 
 %% struct 'WithdrawalProviderDecision'
 -type 'WithdrawalProviderDecision'() :: #'domain_WithdrawalProviderDecision'{}.
+
+%% union 'P2PProviderSelector'
+-type 'P2PProviderSelector'() ::
+    {'decisions', ['P2PProviderDecision'()]} |
+    {'value', ordsets:ordset('P2PProviderRef'())}.
+
+%% struct 'P2PProviderDecision'
+-type 'P2PProviderDecision'() :: #'domain_P2PProviderDecision'{}.
 
 %% struct 'InspectorRef'
 -type 'InspectorRef'() :: #'domain_InspectorRef'{}.
@@ -2058,6 +2092,9 @@
 %% struct 'WithdrawalProviderObject'
 -type 'WithdrawalProviderObject'() :: #'domain_WithdrawalProviderObject'{}.
 
+%% struct 'P2PProviderObject'
+-type 'P2PProviderObject'() :: #'domain_P2PProviderObject'{}.
+
 %% struct 'TerminalObject'
 -type 'TerminalObject'() :: #'domain_TerminalObject'{}.
 
@@ -2099,6 +2136,7 @@
     {'proxy', 'ProxyRef'()} |
     {'globals', 'GlobalsRef'()} |
     {'withdrawal_provider', 'WithdrawalProviderRef'()} |
+    {'p2p_provider', 'P2PProviderRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2123,6 +2161,7 @@
     {'proxy', 'ProxyObject'()} |
     {'globals', 'GlobalsObject'()} |
     {'withdrawal_provider', 'WithdrawalProviderObject'()} |
+    {'p2p_provider', 'P2PProviderObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2407,6 +2446,7 @@ structs() ->
         'CashBound',
         'CashLimitSelector',
         'CashLimitDecision',
+        'P2PTool',
         'PaymentMethod',
         'TokenizedBankCard',
         'PaymentTool',
@@ -2442,6 +2482,8 @@ structs() ->
         'Provider',
         'WithdrawalProviderRef',
         'WithdrawalProvider',
+        'P2PProviderRef',
+        'P2PProvider',
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PartialCaptureProvisionTerms',
@@ -2449,6 +2491,7 @@ structs() ->
         'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
         'WithdrawalProvisionTerms',
+        'P2PProvisionTerms',
         'CashValueSelector',
         'CashValueDecision',
         'ProviderAccount',
@@ -2456,6 +2499,8 @@ structs() ->
         'ProviderDecision',
         'WithdrawalProviderSelector',
         'WithdrawalProviderDecision',
+        'P2PProviderSelector',
+        'P2PProviderDecision',
         'InspectorRef',
         'Inspector',
         'InspectorSelector',
@@ -2520,6 +2565,7 @@ structs() ->
         'BankObject',
         'ProviderObject',
         'WithdrawalProviderObject',
+        'P2PProviderObject',
         'TerminalObject',
         'InspectorObject',
         'PaymentInstitutionObject',
@@ -4046,6 +4092,12 @@ struct_info('CashLimitDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'then_', undefined}
 ]};
 
+struct_info('P2PTool') ->
+    {struct, struct, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'sender', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'receiver', undefined}
+]};
+
 struct_info('PaymentMethod') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
@@ -4289,6 +4341,21 @@ struct_info('WithdrawalProvider') ->
     {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
 ]};
 
+struct_info('P2PProviderRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined}
+]};
+
+struct_info('P2PProvider') ->
+    {struct, struct, [
+    {1, required, string, 'name', undefined},
+    {2, optional, string, 'description', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+    {4, optional, string, 'identity', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p_terms', undefined},
+    {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+]};
+
 struct_info('PaymentsProvisionTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
@@ -4335,6 +4402,13 @@ struct_info('WithdrawalProvisionTerms') ->
     {4, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
 ]};
 
+struct_info('P2PProvisionTerms') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+]};
+
 struct_info('CashValueSelector') ->
     {struct, union, [
     {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashValueDecision'}}}, 'decisions', undefined},
@@ -4374,6 +4448,18 @@ struct_info('WithdrawalProviderDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'then_', undefined}
+]};
+
+struct_info('P2PProviderSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PProviderDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}}, 'value', undefined}
+]};
+
+struct_info('P2PProviderDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('InspectorRef') ->
@@ -4641,7 +4727,8 @@ struct_info('PaymentInstitution') ->
     {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
     {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
     {12, optional, string, 'identity', undefined},
-    {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined}
+    {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
+    {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined}
 ]};
 
 struct_info('ContractPaymentInstitutionDefaults') ->
@@ -4770,6 +4857,12 @@ struct_info('WithdrawalProviderObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvider'}}, 'data', undefined}
 ]};
 
+struct_info('P2PProviderObject') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PProvider'}}, 'data', undefined}
+]};
+
 struct_info('TerminalObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'ref', undefined},
@@ -4832,6 +4925,7 @@ struct_info('Reference') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
     {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
+    {23, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -4857,6 +4951,7 @@ struct_info('DomainObject') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
     {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderObject'}}, 'withdrawal_provider', undefined},
+    {23, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -5208,6 +5303,9 @@ record_name('OperationTimeout') ->
     record_name('CashLimitDecision') ->
     'domain_CashLimitDecision';
 
+    record_name('P2PTool') ->
+    'domain_P2PTool';
+
     record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
 
@@ -5286,6 +5384,12 @@ record_name('OperationTimeout') ->
     record_name('WithdrawalProvider') ->
     'domain_WithdrawalProvider';
 
+    record_name('P2PProviderRef') ->
+    'domain_P2PProviderRef';
+
+    record_name('P2PProvider') ->
+    'domain_P2PProvider';
+
     record_name('PaymentsProvisionTerms') ->
     'domain_PaymentsProvisionTerms';
 
@@ -5307,6 +5411,9 @@ record_name('OperationTimeout') ->
     record_name('WithdrawalProvisionTerms') ->
     'domain_WithdrawalProvisionTerms';
 
+    record_name('P2PProvisionTerms') ->
+    'domain_P2PProvisionTerms';
+
     record_name('CashValueDecision') ->
     'domain_CashValueDecision';
 
@@ -5318,6 +5425,9 @@ record_name('OperationTimeout') ->
 
     record_name('WithdrawalProviderDecision') ->
     'domain_WithdrawalProviderDecision';
+
+    record_name('P2PProviderDecision') ->
+    'domain_P2PProviderDecision';
 
     record_name('InspectorRef') ->
     'domain_InspectorRef';
@@ -5471,6 +5581,9 @@ record_name('OperationTimeout') ->
 
     record_name('WithdrawalProviderObject') ->
     'domain_WithdrawalProviderObject';
+
+    record_name('P2PProviderObject') ->
+    'domain_P2PProviderObject';
 
     record_name('TerminalObject') ->
     'domain_TerminalObject';

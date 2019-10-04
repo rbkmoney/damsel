@@ -1333,6 +1333,11 @@ struct CashLimitDecision {
 
 /* Payment methods */
 
+struct P2PTool {
+    1: optional PaymentMethod sender
+    2: optional PaymentMethod receiver
+}
+
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
@@ -1362,6 +1367,8 @@ enum BankCardPaymentSystem {
     jcb
     nspkmir
 }
+
+
 
 /** Тип платежного токена **/
 
@@ -1733,6 +1740,17 @@ struct WithdrawalProvider {
     6: optional ProviderAccountSet accounts = {}
 }
 
+struct P2PProviderRef { 1: required ObjectID id }
+
+struct P2PProvider {
+    1: required string name
+    2: optional string description
+    3: required Proxy proxy
+    4: optional string identity
+    5: optional P2PProvisionTerms p2p_terms
+    6: optional ProviderAccountSet accounts = {}
+}
+
 struct PaymentsProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
@@ -1776,6 +1794,12 @@ struct WithdrawalProvisionTerms {
     4: required CashFlowSelector cash_flow
 }
 
+struct P2PProvisionTerms {
+    1: required CurrencySelector currencies
+    2: required CashLimitSelector cash_limit
+    3: required CashFlowSelector cash_flow
+}
+
 union CashValueSelector {
     1: list<CashValueDecision> decisions
     2: Cash value
@@ -1810,6 +1834,16 @@ union WithdrawalProviderSelector {
 struct WithdrawalProviderDecision {
     1: required Predicate if_
     2: required WithdrawalProviderSelector then_
+}
+
+union P2PProviderSelector {
+    1: list<P2PProviderDecision> decisions
+    2: set<P2PProviderRef> value
+}
+
+struct P2PProviderDecision {
+    1: required Predicate if_
+    2: required P2PProviderSelector then_
 }
 
 /** Inspectors */
@@ -2048,6 +2082,7 @@ struct PaymentInstitution {
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
     13: optional WithdrawalProviderSelector withdrawal_providers
+    14: optional P2PProviderSelector p2p_providers
 }
 
 enum PaymentInstitutionRealm {
@@ -2166,6 +2201,12 @@ struct WithdrawalProviderObject {
     2: required WithdrawalProvider data
 }
 
+struct P2PProviderObject {
+    1: required P2PProviderRef ref
+    2: required P2PProvider data
+}
+
+
 struct TerminalObject {
     1: required TerminalRef ref
     2: required Terminal data
@@ -2221,6 +2262,7 @@ union Reference {
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
+    23 : P2PProviderRef          p2p_provider
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2249,6 +2291,7 @@ union DomainObject {
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
+    23 : P2PProviderObject          p2p_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
