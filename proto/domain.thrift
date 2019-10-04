@@ -1333,9 +1333,8 @@ struct CashLimitDecision {
 
 /* Payment methods */
 
-struct P2PTool {
-    1: optional PaymentMethod sender
-    2: optional PaymentMethod receiver
+union P2PMethod {
+    1: Residence bank_card_country
 }
 
 union PaymentMethod {
@@ -1505,6 +1504,23 @@ union PaymentMethodSelector {
 struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
+}
+
+struct P2PMethodRef { 1: required P2PMethod id }
+
+struct P2PMethodDefinition {
+    1: required string name
+    2: required string description
+}
+
+union P2PMethodSelector {
+    1: list<P2PMethodDecision> decisions
+    2: set<P2PMethodRef> value
+}
+
+struct P2PMethodDecision {
+    1: required Predicate if_
+    2: required P2PMethodSelector then_
 }
 
 /* Holds */
@@ -2263,6 +2279,7 @@ union Reference {
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : P2PProviderRef          p2p_provider
+    24 : P2PMethodRef            p2p_method
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
