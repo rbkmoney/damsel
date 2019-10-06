@@ -1333,7 +1333,12 @@ struct CashLimitDecision {
 
 /* Payment methods */
 
-union P2PMethod {
+struct P2PMethod {
+    1: P2PPaymentMethod sender
+    2: P2PPaymentMethod receiver
+}
+
+union P2PPaymentMethod {
     1: Residence bank_card_country
 }
 
