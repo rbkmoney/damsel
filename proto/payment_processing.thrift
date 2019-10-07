@@ -1491,6 +1491,7 @@ struct RecurrentPaymentTool {
     8:  required DisposablePaymentResource  payment_resource
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
+    12: optional domain.Cash                minimal_payment_cost
 }
 
 struct RecurrentPaymentToolParams {
@@ -1538,11 +1539,13 @@ struct RecurrentPaymentToolSessionChange {
 }
 
 union RecurrentPaymentToolChange {
-    1: RecurrentPaymentToolHasCreated    rec_payment_tool_created
-    2: RecurrentPaymentToolHasAcquired   rec_payment_tool_acquired
-    3: RecurrentPaymentToolHasAbandoned  rec_payment_tool_abandoned
-    4: RecurrentPaymentToolHasFailed     rec_payment_tool_failed
-    5: RecurrentPaymentToolSessionChange rec_payment_tool_session_changed
+    1: RecurrentPaymentToolHasCreated       rec_payment_tool_created
+    6: RecurrentPaymentToolRiskScoreChanged rec_payment_tool_risk_score_changed
+    7: RecurrentPaymentToolRouteChanged     rec_payment_tool_route_changed
+    2: RecurrentPaymentToolHasAcquired      rec_payment_tool_acquired
+    3: RecurrentPaymentToolHasAbandoned     rec_payment_tool_abandoned
+    4: RecurrentPaymentToolHasFailed        rec_payment_tool_failed
+    5: RecurrentPaymentToolSessionChange    rec_payment_tool_session_changed
 }
 
 /*
@@ -1550,8 +1553,27 @@ union RecurrentPaymentToolChange {
  */
 struct RecurrentPaymentToolHasCreated {
     1: required RecurrentPaymentTool rec_payment_tool
-    2: required domain.RiskScore     risk_score
-    3: required domain.PaymentRoute  route
+    /** deprecated */
+    /** Оценка риска платежного средства. */
+    2: optional domain.RiskScore     risk_score
+    /** Выбранный маршрут обработки платежного средства. */
+    3: optional domain.PaymentRoute  route
+}
+
+/**
+ * Событие об изменении оценки риска платежного средства.
+ */
+struct RecurrentPaymentToolRiskScoreChanged {
+    /** Оценка риска платежного средства. */
+    1: required domain.RiskScore risk_score
+}
+
+/**
+ * Событие об изменении маршрута обработки платежного средства.
+ */
+struct RecurrentPaymentToolRouteChanged {
+    /** Выбранный маршрут обработки платежного средства. */
+    1: required domain.PaymentRoute route
 }
 
 /*
@@ -2176,8 +2198,21 @@ service PartyManagement {
             3: ContractNotFound ex3
         )
 
-    domain.TermSet ComputeContractTerms (1: UserInfo user, 2: PartyID party_id, 3: ContractID id, 4: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ContractNotFound ex4)
+    domain.TermSet ComputeContractTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: base.Timestamp timestamp
+        5: PartyRevisionParam party_revision
+        6: domain.DataRevision domain_revision
+        7: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3
+            4: ContractNotFound ex4
+        )
 
     /* Shop */
 
@@ -2201,7 +2236,7 @@ service PartyManagement {
 
     /* Wallet */
 
-    // temporary method for transfer period
+    // deprecated
     // do not use
     domain.TermSet ComputeWalletTermsNew (
         1: UserInfo user,
@@ -2209,17 +2244,6 @@ service PartyManagement {
         3: ContractID contract_id,
         4: base.Timestamp timestamp
         5: Varset varset
-    )
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
-
-    // deprecated
-    domain.TermSet ComputeWalletTerms (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ContractID contract_id,
-        4: WalletID wallet_id,
-        5: domain.CurrencyRef currency,
-        6: base.Timestamp timestamp
     )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
