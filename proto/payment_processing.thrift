@@ -689,13 +689,7 @@ service Invoicing {
             7: InvoiceTemplateRemoved ex7
         )
 
-    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
-        throws (
-            1: InvalidUser ex1,
-            2: InvoiceNotFound ex2
-        )
-
-    Invoice GetState (1: UserInfo user, 2: domain.InvoiceID id, 3: i32 limit)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id, 3: i32 limit)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -738,17 +732,6 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: InvoiceNotFound ex2,
-            3: InvoicePaymentNotFound ex3
-        )
-
-    InvoicePayment GetPaymentState (
-        1: UserInfo user,
-        2: domain.InvoiceID id,
-        3: domain.InvoicePaymentID payment_id,
         4: i32 limit
     )
         throws (
