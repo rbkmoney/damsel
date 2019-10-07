@@ -932,6 +932,7 @@ struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
+    4: optional P2PMethodSelector p2p_method
 }
 
 /* Payout methods */
@@ -1334,26 +1335,24 @@ struct CashLimitDecision {
 /* Payment methods */
 
 struct P2PMethod {
-    1: optional P2PPaymentMethod sender
-    2: optional P2PPaymentMethod receiver
-}
-
-union P2PPaymentMethod {
-    1: P2PPaymentMethodCard bank_card
-}
-
-union P2PPaymentMethodCard {
-    1: Residence issuer_country
+    1: required PaymentMethod sender
+    2: required PaymentMethod receiver
 }
 
 union PaymentMethod {
-    1: BankCardPaymentSystem bank_card
+    1: BankCardPaymentSystem bank_card_legacy
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
+    8: BankCardPaymentMethod bank_card
+}
+
+struct BankCardPaymentMethod {
+    1: required BankCardPaymentSystem payment_system
+    2: optional Residence issuer_country
 }
 
 struct TokenizedBankCard {
@@ -1772,8 +1771,8 @@ struct P2PProvider {
     2: optional string description
     3: required Proxy proxy
     4: optional string identity
-    5: optional P2PProvisionTerms p2p_terms
-    6: optional ProviderAccountSet accounts = {}
+    6: optional P2PProvisionTerms p2p_terms
+    7: optional ProviderAccountSet accounts = {}
 }
 
 struct PaymentsProvisionTerms {
@@ -1820,9 +1819,10 @@ struct WithdrawalProvisionTerms {
 }
 
 struct P2PProvisionTerms {
-    1: required CurrencySelector currencies
-    2: required CashLimitSelector cash_limit
-    3: required CashFlowSelector cash_flow
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional CashFlowSelector cash_flow
+    4: optional P2PMethodSelector p2p_method
 }
 
 union CashValueSelector {
@@ -2231,6 +2231,10 @@ struct P2PProviderObject {
     2: required P2PProvider data
 }
 
+struct P2PMethodObject {
+    1: required P2PMethodRef ref
+    2: required P2PMethodDefinition data
+}
 
 struct TerminalObject {
     1: required TerminalRef ref
@@ -2318,6 +2322,7 @@ union DomainObject {
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : P2PProviderObject          p2p_provider
+    24 : P2PMethodObject            p2p_method
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link

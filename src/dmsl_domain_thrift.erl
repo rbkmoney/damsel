@@ -244,9 +244,8 @@
     'CashLimitSelector'/0,
     'CashLimitDecision'/0,
     'P2PMethod'/0,
-    'P2PPaymentMethod'/0,
-    'P2PPaymentMethodCard'/0,
     'PaymentMethod'/0,
+    'BankCardPaymentMethod'/0,
     'TokenizedBankCard'/0,
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
@@ -369,6 +368,7 @@
     'ProviderObject'/0,
     'WithdrawalProviderObject'/0,
     'P2PProviderObject'/0,
+    'P2PMethodObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
     'PaymentInstitutionObject'/0,
@@ -1037,9 +1037,8 @@
     'CashLimitSelector' |
     'CashLimitDecision' |
     'P2PMethod' |
-    'P2PPaymentMethod' |
-    'P2PPaymentMethodCard' |
     'PaymentMethod' |
+    'BankCardPaymentMethod' |
     'TokenizedBankCard' |
     'PaymentTool' |
     'DisposablePaymentResource' |
@@ -1162,6 +1161,7 @@
     'ProviderObject' |
     'WithdrawalProviderObject' |
     'P2PProviderObject' |
+    'P2PMethodObject' |
     'TerminalObject' |
     'InspectorObject' |
     'PaymentInstitutionObject' |
@@ -1673,23 +1673,19 @@
 %% struct 'P2PMethod'
 -type 'P2PMethod'() :: #'domain_P2PMethod'{}.
 
-%% union 'P2PPaymentMethod'
--type 'P2PPaymentMethod'() ::
-    {'bank_card', 'P2PPaymentMethodCard'()}.
-
-%% union 'P2PPaymentMethodCard'
--type 'P2PPaymentMethodCard'() ::
-    {'issuer_country', atom()}.
-
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
-    {'bank_card', 'BankCardPaymentSystem'()} |
+    {'bank_card_legacy', 'BankCardPaymentSystem'()} |
     {'payment_terminal', 'TerminalPaymentProvider'()} |
     {'digital_wallet', 'DigitalWalletProvider'()} |
     {'tokenized_bank_card', 'TokenizedBankCard'()} |
     {'empty_cvv_bank_card', 'BankCardPaymentSystem'()} |
     {'crypto_currency', 'CryptoCurrency'()} |
-    {'mobile', 'MobileOperator'()}.
+    {'mobile', 'MobileOperator'()} |
+    {'bank_card', 'BankCardPaymentMethod'()}.
+
+%% struct 'BankCardPaymentMethod'
+-type 'BankCardPaymentMethod'() :: #'domain_BankCardPaymentMethod'{}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
@@ -2129,6 +2125,9 @@
 %% struct 'P2PProviderObject'
 -type 'P2PProviderObject'() :: #'domain_P2PProviderObject'{}.
 
+%% struct 'P2PMethodObject'
+-type 'P2PMethodObject'() :: #'domain_P2PMethodObject'{}.
+
 %% struct 'TerminalObject'
 -type 'TerminalObject'() :: #'domain_TerminalObject'{}.
 
@@ -2197,6 +2196,7 @@
     {'globals', 'GlobalsObject'()} |
     {'withdrawal_provider', 'WithdrawalProviderObject'()} |
     {'p2p_provider', 'P2PProviderObject'()} |
+    {'p2p_method', 'P2PMethodObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2482,9 +2482,8 @@ structs() ->
         'CashLimitSelector',
         'CashLimitDecision',
         'P2PMethod',
-        'P2PPaymentMethod',
-        'P2PPaymentMethodCard',
         'PaymentMethod',
+        'BankCardPaymentMethod',
         'TokenizedBankCard',
         'PaymentTool',
         'DisposablePaymentResource',
@@ -2607,6 +2606,7 @@ structs() ->
         'ProviderObject',
         'WithdrawalProviderObject',
         'P2PProviderObject',
+        'P2PMethodObject',
         'TerminalObject',
         'InspectorObject',
         'PaymentInstitutionObject',
@@ -3988,7 +3988,8 @@ struct_info('P2PServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'P2PMethodSelector'}}, 'p2p_method', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -4135,29 +4136,26 @@ struct_info('CashLimitDecision') ->
 
 struct_info('P2PMethod') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'P2PPaymentMethod'}}, 'sender', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'P2PPaymentMethod'}}, 'receiver', undefined}
-]};
-
-struct_info('P2PPaymentMethod') ->
-    {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'P2PPaymentMethodCard'}}, 'bank_card', undefined}
-]};
-
-struct_info('P2PPaymentMethodCard') ->
-    {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined}
+    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'sender', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'receiver', undefined}
 ]};
 
 struct_info('PaymentMethod') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
+    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card_legacy', undefined},
     {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
     {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
     {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
     {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-    {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined}
+    {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined},
+    {8, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardPaymentMethod'}}, 'bank_card', undefined}
+]};
+
+struct_info('BankCardPaymentMethod') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+    {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined}
 ]};
 
 struct_info('TokenizedBankCard') ->
@@ -4426,8 +4424,8 @@ struct_info('P2PProvider') ->
     {2, optional, string, 'description', undefined},
     {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
     {4, optional, string, 'identity', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p_terms', undefined},
-    {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p_terms', undefined},
+    {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
 ]};
 
 struct_info('PaymentsProvisionTerms') ->
@@ -4478,9 +4476,10 @@ struct_info('WithdrawalProvisionTerms') ->
 
 struct_info('P2PProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'P2PMethodSelector'}}, 'p2p_method', undefined}
 ]};
 
 struct_info('CashValueSelector') ->
@@ -4937,6 +4936,12 @@ struct_info('P2PProviderObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PProvider'}}, 'data', undefined}
 ]};
 
+struct_info('P2PMethodObject') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PMethodRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PMethodDefinition'}}, 'data', undefined}
+]};
+
 struct_info('TerminalObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'ref', undefined},
@@ -5027,6 +5032,7 @@ struct_info('DomainObject') ->
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
     {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderObject'}}, 'withdrawal_provider', undefined},
     {23, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
+    {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PMethodObject'}}, 'p2p_method', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -5381,6 +5387,9 @@ record_name('OperationTimeout') ->
     record_name('P2PMethod') ->
     'domain_P2PMethod';
 
+    record_name('BankCardPaymentMethod') ->
+    'domain_BankCardPaymentMethod';
+
     record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
 
@@ -5668,6 +5677,9 @@ record_name('OperationTimeout') ->
 
     record_name('P2PProviderObject') ->
     'domain_P2PProviderObject';
+
+    record_name('P2PMethodObject') ->
+    'domain_P2PMethodObject';
 
     record_name('TerminalObject') ->
     'domain_TerminalObject';
