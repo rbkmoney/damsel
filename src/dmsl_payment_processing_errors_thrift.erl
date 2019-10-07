@@ -34,7 +34,6 @@
 -export_type([
     'PaymentFailure'/0,
     'RefundFailure'/0,
-    'ChargebackFailure'/0,
     'AuthorizationFailure'/0,
     'LimitExceeded'/0,
     'LimitSpanExceeded'/0,
@@ -64,7 +63,6 @@
 -type struct_name() ::
     'PaymentFailure' |
     'RefundFailure' |
-    'ChargebackFailure' |
     'AuthorizationFailure' |
     'LimitExceeded' |
     'LimitSpanExceeded' |
@@ -85,11 +83,6 @@
 
 %% union 'RefundFailure'
 -type 'RefundFailure'() ::
-    {'terms_violated', 'TermsViolated'()} |
-    {'authorization_failed', 'AuthorizationFailure'()}.
-
-%% union 'ChargebackFailure'
--type 'ChargebackFailure'() ::
     {'terms_violated', 'TermsViolated'()} |
     {'authorization_failed', 'AuthorizationFailure'()}.
 
@@ -200,7 +193,6 @@ structs() ->
     [
         'PaymentFailure',
         'RefundFailure',
-        'ChargebackFailure',
         'AuthorizationFailure',
         'LimitExceeded',
         'LimitSpanExceeded',
@@ -240,12 +232,6 @@ struct_info('PaymentFailure') ->
 ]};
 
 struct_info('RefundFailure') ->
-    {struct, union, [
-    {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'TermsViolated'}}, 'terms_violated', undefined},
-    {2, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined}
-]};
-
-struct_info('ChargebackFailure') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'TermsViolated'}}, 'terms_violated', undefined},
     {2, optional, {struct, union, {dmsl_payment_processing_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined}

@@ -296,8 +296,6 @@ struct SessionInteractionRequested {
     1: required user_interaction.UserInteraction interaction
 }
 
-/* WIP CHARGEBACKS */
-
 /**
  * Событие, касающееся определённого чарджбека.
  */
@@ -354,8 +352,6 @@ struct InvoicePaymentChargebackChanged {
     3: optional domain.InvoicePaymentChargebackStatus target_status
     4: optional domain.InvoicePaymentChargebackStage  stage
 }
-
-/* WIP CHARGEBACKS */
 
 /**
  * Событие, касающееся определённого возврата платежа.
@@ -560,8 +556,6 @@ struct InvoicePayment {
 typedef domain.InvoicePaymentRefund InvoicePaymentRefund
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 typedef domain.InvoicePaymentChargeback InvoicePaymentChargeback
-
-/* WIP */
 
 /**
  * Параметры создаваемого чарджбэка.
@@ -993,7 +987,6 @@ service Invoicing {
             4: InvoicePaymentAdjustmentNotFound ex4,
             5: InvalidPaymentAdjustmentStatus ex5
         )
-        /* WIP */
 
     /**
      * Создать чарджбэк
@@ -1115,8 +1108,6 @@ service Invoicing {
             4:  InvoicePaymentChargebackNotFound ex4
         )
 
-        /* WIP */
-
     /**
      * Сделать возврат платежа.
      */
@@ -1132,6 +1123,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
+            7: InsufficientAccountBalance ex7,
             8: base.InvalidRequest ex8
             9: InvoicePaymentAmountExceeded ex9
             10: InconsistentRefundCurrency ex10
