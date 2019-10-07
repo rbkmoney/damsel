@@ -243,7 +243,9 @@
     'CashBound'/0,
     'CashLimitSelector'/0,
     'CashLimitDecision'/0,
-    'P2PTool'/0,
+    'P2PMethod'/0,
+    'P2PPaymentMethod'/0,
+    'P2PPaymentMethodCard'/0,
     'PaymentMethod'/0,
     'TokenizedBankCard'/0,
     'PaymentTool'/0,
@@ -260,6 +262,10 @@
     'PaymentMethodDefinition'/0,
     'PaymentMethodSelector'/0,
     'PaymentMethodDecision'/0,
+    'P2PMethodRef'/0,
+    'P2PMethodDefinition'/0,
+    'P2PMethodSelector'/0,
+    'P2PMethodDecision'/0,
     'HoldLifetime'/0,
     'HoldLifetimeSelector'/0,
     'HoldLifetimeDecision'/0,
@@ -1030,7 +1036,9 @@
     'CashBound' |
     'CashLimitSelector' |
     'CashLimitDecision' |
-    'P2PTool' |
+    'P2PMethod' |
+    'P2PPaymentMethod' |
+    'P2PPaymentMethodCard' |
     'PaymentMethod' |
     'TokenizedBankCard' |
     'PaymentTool' |
@@ -1047,6 +1055,10 @@
     'PaymentMethodDefinition' |
     'PaymentMethodSelector' |
     'PaymentMethodDecision' |
+    'P2PMethodRef' |
+    'P2PMethodDefinition' |
+    'P2PMethodSelector' |
+    'P2PMethodDecision' |
     'HoldLifetime' |
     'HoldLifetimeSelector' |
     'HoldLifetimeDecision' |
@@ -1658,8 +1670,16 @@
 %% struct 'CashLimitDecision'
 -type 'CashLimitDecision'() :: #'domain_CashLimitDecision'{}.
 
-%% struct 'P2PTool'
--type 'P2PTool'() :: #'domain_P2PTool'{}.
+%% struct 'P2PMethod'
+-type 'P2PMethod'() :: #'domain_P2PMethod'{}.
+
+%% union 'P2PPaymentMethod'
+-type 'P2PPaymentMethod'() ::
+    {'bank_card', 'P2PPaymentMethodCard'()}.
+
+%% union 'P2PPaymentMethodCard'
+-type 'P2PPaymentMethodCard'() ::
+    {'issuer_country', atom()}.
 
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
@@ -1722,6 +1742,20 @@
 
 %% struct 'PaymentMethodDecision'
 -type 'PaymentMethodDecision'() :: #'domain_PaymentMethodDecision'{}.
+
+%% struct 'P2PMethodRef'
+-type 'P2PMethodRef'() :: #'domain_P2PMethodRef'{}.
+
+%% struct 'P2PMethodDefinition'
+-type 'P2PMethodDefinition'() :: #'domain_P2PMethodDefinition'{}.
+
+%% union 'P2PMethodSelector'
+-type 'P2PMethodSelector'() ::
+    {'decisions', ['P2PMethodDecision'()]} |
+    {'value', ordsets:ordset('P2PMethodRef'())}.
+
+%% struct 'P2PMethodDecision'
+-type 'P2PMethodDecision'() :: #'domain_P2PMethodDecision'{}.
 
 %% struct 'HoldLifetime'
 -type 'HoldLifetime'() :: #'domain_HoldLifetime'{}.
@@ -2137,6 +2171,7 @@
     {'globals', 'GlobalsRef'()} |
     {'withdrawal_provider', 'WithdrawalProviderRef'()} |
     {'p2p_provider', 'P2PProviderRef'()} |
+    {'p2p_method', 'P2PMethodRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2446,7 +2481,9 @@ structs() ->
         'CashBound',
         'CashLimitSelector',
         'CashLimitDecision',
-        'P2PTool',
+        'P2PMethod',
+        'P2PPaymentMethod',
+        'P2PPaymentMethodCard',
         'PaymentMethod',
         'TokenizedBankCard',
         'PaymentTool',
@@ -2463,6 +2500,10 @@ structs() ->
         'PaymentMethodDefinition',
         'PaymentMethodSelector',
         'PaymentMethodDecision',
+        'P2PMethodRef',
+        'P2PMethodDefinition',
+        'P2PMethodSelector',
+        'P2PMethodDecision',
         'HoldLifetime',
         'HoldLifetimeSelector',
         'HoldLifetimeDecision',
@@ -4092,10 +4133,20 @@ struct_info('CashLimitDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'then_', undefined}
 ]};
 
-struct_info('P2PTool') ->
+struct_info('P2PMethod') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'sender', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'receiver', undefined}
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'P2PPaymentMethod'}}, 'sender', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'P2PPaymentMethod'}}, 'receiver', undefined}
+]};
+
+struct_info('P2PPaymentMethod') ->
+    {struct, union, [
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'P2PPaymentMethodCard'}}, 'bank_card', undefined}
+]};
+
+struct_info('P2PPaymentMethodCard') ->
+    {struct, union, [
+    {1, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined}
 ]};
 
 struct_info('PaymentMethod') ->
@@ -4209,6 +4260,29 @@ struct_info('PaymentMethodDecision') ->
     {struct, struct, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'then_', undefined}
+]};
+
+struct_info('P2PMethodRef') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PMethod'}}, 'id', undefined}
+]};
+
+struct_info('P2PMethodDefinition') ->
+    {struct, struct, [
+    {1, required, string, 'name', undefined},
+    {2, required, string, 'description', undefined}
+]};
+
+struct_info('P2PMethodSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PMethodDecision'}}}, 'decisions', undefined},
+    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'P2PMethodRef'}}}, 'value', undefined}
+]};
+
+struct_info('P2PMethodDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'P2PMethodSelector'}}, 'then_', undefined}
 ]};
 
 struct_info('HoldLifetime') ->
@@ -4926,6 +5000,7 @@ struct_info('Reference') ->
     {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
     {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
     {23, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
+    {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PMethodRef'}}, 'p2p_method', undefined},
     {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
     {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
     {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -5303,8 +5378,8 @@ record_name('OperationTimeout') ->
     record_name('CashLimitDecision') ->
     'domain_CashLimitDecision';
 
-    record_name('P2PTool') ->
-    'domain_P2PTool';
+    record_name('P2PMethod') ->
+    'domain_P2PMethod';
 
     record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
@@ -5344,6 +5419,15 @@ record_name('OperationTimeout') ->
 
     record_name('PaymentMethodDecision') ->
     'domain_PaymentMethodDecision';
+
+    record_name('P2PMethodRef') ->
+    'domain_P2PMethodRef';
+
+    record_name('P2PMethodDefinition') ->
+    'domain_P2PMethodDefinition';
+
+    record_name('P2PMethodDecision') ->
+    'domain_P2PMethodDecision';
 
     record_name('HoldLifetime') ->
     'domain_HoldLifetime';

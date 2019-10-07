@@ -781,10 +781,10 @@
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
-%% struct 'P2PTool'
--record('domain_P2PTool', {
-    'sender' :: dmsl_domain_thrift:'PaymentMethod'() | undefined,
-    'receiver' :: dmsl_domain_thrift:'PaymentMethod'() | undefined
+%% struct 'P2PMethod'
+-record('domain_P2PMethod', {
+    'sender' :: dmsl_domain_thrift:'P2PPaymentMethod'() | undefined,
+    'receiver' :: dmsl_domain_thrift:'P2PPaymentMethod'() | undefined
 }).
 
 %% struct 'TokenizedBankCard'
@@ -872,6 +872,23 @@
 -record('domain_PaymentMethodDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'PaymentMethodSelector'()
+}).
+
+%% struct 'P2PMethodRef'
+-record('domain_P2PMethodRef', {
+    'id' :: dmsl_domain_thrift:'P2PMethod'()
+}).
+
+%% struct 'P2PMethodDefinition'
+-record('domain_P2PMethodDefinition', {
+    'name' :: binary(),
+    'description' :: binary()
+}).
+
+%% struct 'P2PMethodDecision'
+-record('domain_P2PMethodDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'P2PMethodSelector'()
 }).
 
 %% struct 'HoldLifetime'
