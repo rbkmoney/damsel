@@ -932,7 +932,6 @@ struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
-    4: optional P2PMethodSelector p2p_method
 }
 
 /* Payout methods */
@@ -1334,25 +1333,14 @@ struct CashLimitDecision {
 
 /* Payment methods */
 
-struct P2PMethod {
-    1: required PaymentMethod sender
-    2: required PaymentMethod receiver
-}
-
 union PaymentMethod {
-    1: BankCardPaymentSystem bank_card_legacy
+    1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
     4: TokenizedBankCard tokenized_bank_card
     5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
-    8: BankCardPaymentMethod bank_card
-}
-
-struct BankCardPaymentMethod {
-    1: required BankCardPaymentSystem payment_system
-    2: optional Residence issuer_country
 }
 
 struct TokenizedBankCard {
@@ -1512,23 +1500,6 @@ union PaymentMethodSelector {
 struct PaymentMethodDecision {
     1: required Predicate if_
     2: required PaymentMethodSelector then_
-}
-
-struct P2PMethodRef { 1: required P2PMethod id }
-
-struct P2PMethodDefinition {
-    1: required string name
-    2: required string description
-}
-
-union P2PMethodSelector {
-    1: list<P2PMethodDecision> decisions
-    2: set<P2PMethodRef> value
-}
-
-struct P2PMethodDecision {
-    1: required Predicate if_
-    2: required P2PMethodSelector then_
 }
 
 /* Holds */
@@ -1822,7 +1793,6 @@ struct P2PProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
-    4: optional P2PMethodSelector p2p_method
 }
 
 union CashValueSelector {
@@ -1945,12 +1915,6 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
-    9: P2PToolCondition p2p_tool
-}
-
-struct P2PToolCondition {
-    1: optional PaymentToolCondition sender_is
-    2: optional PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {
@@ -2231,11 +2195,6 @@ struct P2PProviderObject {
     2: required P2PProvider data
 }
 
-struct P2PMethodObject {
-    1: required P2PMethodRef ref
-    2: required P2PMethodDefinition data
-}
-
 struct TerminalObject {
     1: required TerminalRef ref
     2: required Terminal data
@@ -2292,7 +2251,6 @@ union Reference {
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : P2PProviderRef          p2p_provider
-    24 : P2PMethodRef            p2p_method
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2322,7 +2280,6 @@ union DomainObject {
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : P2PProviderObject          p2p_provider
-    24 : P2PMethodObject            p2p_method
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
