@@ -169,6 +169,8 @@
     'RecurrentPaymentToolSessionChange'/0,
     'RecurrentPaymentToolChange'/0,
     'RecurrentPaymentToolHasCreated'/0,
+    'RecurrentPaymentToolRiskScoreChanged'/0,
+    'RecurrentPaymentToolRouteChanged'/0,
     'RecurrentPaymentToolHasAcquired'/0,
     'RecurrentPaymentToolHasAbandoned'/0,
     'RecurrentPaymentToolHasFailed'/0,
@@ -483,6 +485,8 @@
     'RecurrentPaymentToolSessionChange' |
     'RecurrentPaymentToolChange' |
     'RecurrentPaymentToolHasCreated' |
+    'RecurrentPaymentToolRiskScoreChanged' |
+    'RecurrentPaymentToolRouteChanged' |
     'RecurrentPaymentToolHasAcquired' |
     'RecurrentPaymentToolHasAbandoned' |
     'RecurrentPaymentToolHasFailed' |
@@ -1024,6 +1028,8 @@
 %% union 'RecurrentPaymentToolChange'
 -type 'RecurrentPaymentToolChange'() ::
     {'rec_payment_tool_created', 'RecurrentPaymentToolHasCreated'()} |
+    {'rec_payment_tool_risk_score_changed', 'RecurrentPaymentToolRiskScoreChanged'()} |
+    {'rec_payment_tool_route_changed', 'RecurrentPaymentToolRouteChanged'()} |
     {'rec_payment_tool_acquired', 'RecurrentPaymentToolHasAcquired'()} |
     {'rec_payment_tool_abandoned', 'RecurrentPaymentToolHasAbandoned'()} |
     {'rec_payment_tool_failed', 'RecurrentPaymentToolHasFailed'()} |
@@ -1031,6 +1037,12 @@
 
 %% struct 'RecurrentPaymentToolHasCreated'
 -type 'RecurrentPaymentToolHasCreated'() :: #'payproc_RecurrentPaymentToolHasCreated'{}.
+
+%% struct 'RecurrentPaymentToolRiskScoreChanged'
+-type 'RecurrentPaymentToolRiskScoreChanged'() :: #'payproc_RecurrentPaymentToolRiskScoreChanged'{}.
+
+%% struct 'RecurrentPaymentToolRouteChanged'
+-type 'RecurrentPaymentToolRouteChanged'() :: #'payproc_RecurrentPaymentToolRouteChanged'{}.
 
 %% struct 'RecurrentPaymentToolHasAcquired'
 -type 'RecurrentPaymentToolHasAcquired'() :: #'payproc_RecurrentPaymentToolHasAcquired'{}.
@@ -1641,7 +1653,6 @@
     'UnblockShop' |
     'ComputeShopTerms' |
     'ComputeWalletTermsNew' |
-    'ComputeWalletTerms' |
     'CreateClaim' |
     'GetClaim' |
     'GetClaims' |
@@ -1840,6 +1851,8 @@ structs() ->
         'RecurrentPaymentToolSessionChange',
         'RecurrentPaymentToolChange',
         'RecurrentPaymentToolHasCreated',
+        'RecurrentPaymentToolRiskScoreChanged',
+        'RecurrentPaymentToolRouteChanged',
         'RecurrentPaymentToolHasAcquired',
         'RecurrentPaymentToolHasAbandoned',
         'RecurrentPaymentToolHasFailed',
@@ -2697,6 +2710,8 @@ struct_info('RecurrentPaymentToolSessionChange') ->
 struct_info('RecurrentPaymentToolChange') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
+    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRiskScoreChanged'}}, 'rec_payment_tool_risk_score_changed', undefined},
+    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRouteChanged'}}, 'rec_payment_tool_route_changed', undefined},
     {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
     {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
     {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasFailed'}}, 'rec_payment_tool_failed', undefined},
@@ -2706,8 +2721,18 @@ struct_info('RecurrentPaymentToolChange') ->
 struct_info('RecurrentPaymentToolHasCreated') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    {2, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+]};
+
+struct_info('RecurrentPaymentToolRiskScoreChanged') ->
+    {struct, struct, [
+    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+]};
+
+struct_info('RecurrentPaymentToolRouteChanged') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
 ]};
 
 struct_info('RecurrentPaymentToolHasAcquired') ->
@@ -3719,6 +3744,12 @@ record_name('InternalUser') ->
     record_name('RecurrentPaymentToolHasCreated') ->
     'payproc_RecurrentPaymentToolHasCreated';
 
+    record_name('RecurrentPaymentToolRiskScoreChanged') ->
+    'payproc_RecurrentPaymentToolRiskScoreChanged';
+
+    record_name('RecurrentPaymentToolRouteChanged') ->
+    'payproc_RecurrentPaymentToolRouteChanged';
+
     record_name('RecurrentPaymentToolHasAcquired') ->
     'payproc_RecurrentPaymentToolHasAcquired';
 
@@ -4153,7 +4184,6 @@ functions('PartyManagement') ->
         'UnblockShop',
         'ComputeShopTerms',
         'ComputeWalletTermsNew',
-        'ComputeWalletTerms',
         'CreateClaim',
         'GetClaim',
         'GetClaims',
@@ -5088,8 +5118,11 @@ function_info('PartyManagement', 'ComputeContractTerms', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'timestamp', undefined}
+    {3, undefined, string, 'contract_id', undefined},
+    {4, undefined, string, 'timestamp', undefined},
+    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
+    {6, undefined, i64, 'domain_revision', undefined},
+    {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
 ]};
 function_info('PartyManagement', 'ComputeContractTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -5203,23 +5236,6 @@ function_info('PartyManagement', 'ComputeWalletTermsNew', params_type) ->
 function_info('PartyManagement', 'ComputeWalletTermsNew', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
     function_info('PartyManagement', 'ComputeWalletTermsNew', exceptions) ->
-        {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined}
-    ]};
-function_info('PartyManagement', 'ComputeWalletTerms', params_type) ->
-    {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'contract_id', undefined},
-    {4, undefined, string, 'wallet_id', undefined},
-    {5, undefined, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {6, undefined, string, 'timestamp', undefined}
-]};
-function_info('PartyManagement', 'ComputeWalletTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('PartyManagement', 'ComputeWalletTerms', exceptions) ->
         {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
