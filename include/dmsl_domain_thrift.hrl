@@ -787,6 +787,12 @@
     'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'()
 }).
 
+%% struct 'P2PTool'
+-record('domain_P2PTool', {
+    'sender' :: dmsl_domain_thrift:'PaymentTool'(),
+    'receiver' :: dmsl_domain_thrift:'PaymentTool'()
+}).
+
 %% struct 'DisposablePaymentResource'
 -record('domain_DisposablePaymentResource', {
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),

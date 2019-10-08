@@ -245,6 +245,7 @@
     'CashLimitDecision'/0,
     'PaymentMethod'/0,
     'TokenizedBankCard'/0,
+    'P2PTool'/0,
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
     'BankCard'/0,
@@ -1031,6 +1032,7 @@
     'CashLimitDecision' |
     'PaymentMethod' |
     'TokenizedBankCard' |
+    'P2PTool' |
     'PaymentTool' |
     'DisposablePaymentResource' |
     'BankCard' |
@@ -1668,6 +1670,9 @@
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
+
+%% struct 'P2PTool'
+-type 'P2PTool'() :: #'domain_P2PTool'{}.
 
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
@@ -2443,6 +2448,7 @@ structs() ->
         'CashLimitDecision',
         'PaymentMethod',
         'TokenizedBankCard',
+        'P2PTool',
         'PaymentTool',
         'DisposablePaymentResource',
         'BankCard',
@@ -4103,6 +4109,12 @@ struct_info('TokenizedBankCard') ->
     {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
 ]};
 
+struct_info('P2PTool') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'sender', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'receiver', undefined}
+]};
+
 struct_info('PaymentTool') ->
     {struct, union, [
     {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
@@ -5293,6 +5305,9 @@ record_name('OperationTimeout') ->
 
     record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
+
+    record_name('P2PTool') ->
+    'domain_P2PTool';
 
     record_name('DisposablePaymentResource') ->
     'domain_DisposablePaymentResource';

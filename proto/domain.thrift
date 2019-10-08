@@ -1375,6 +1375,11 @@ typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
 typedef base.ID RecurrentPaymentToolID
 
+struct P2PTool {
+    1: required PaymentTool sender
+    2: required PaymentTool receiver
+}
+
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
