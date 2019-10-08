@@ -672,8 +672,7 @@
 -record('domain_P2PServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'p2p_method' :: dmsl_domain_thrift:'P2PMethodSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
@@ -782,18 +781,6 @@
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
-%% struct 'P2PMethod'
--record('domain_P2PMethod', {
-    'sender' :: dmsl_domain_thrift:'PaymentMethod'(),
-    'receiver' :: dmsl_domain_thrift:'PaymentMethod'()
-}).
-
-%% struct 'BankCardPaymentMethod'
--record('domain_BankCardPaymentMethod', {
-    'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
-    'issuer_country' :: atom() | undefined
-}).
-
 %% struct 'TokenizedBankCard'
 -record('domain_TokenizedBankCard', {
     'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
@@ -879,23 +866,6 @@
 -record('domain_PaymentMethodDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'PaymentMethodSelector'()
-}).
-
-%% struct 'P2PMethodRef'
--record('domain_P2PMethodRef', {
-    'id' :: dmsl_domain_thrift:'P2PMethod'()
-}).
-
-%% struct 'P2PMethodDefinition'
--record('domain_P2PMethodDefinition', {
-    'name' :: binary(),
-    'description' :: binary()
-}).
-
-%% struct 'P2PMethodDecision'
--record('domain_P2PMethodDecision', {
-    'if_' :: dmsl_domain_thrift:'Predicate'(),
-    'then_' :: dmsl_domain_thrift:'P2PMethodSelector'()
 }).
 
 %% struct 'HoldLifetime'
@@ -1052,8 +1022,7 @@
 -record('domain_P2PProvisionTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'p2p_method' :: dmsl_domain_thrift:'P2PMethodSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'CashValueDecision'
@@ -1394,12 +1363,6 @@
 -record('domain_P2PProviderObject', {
     'ref' :: dmsl_domain_thrift:'P2PProviderRef'(),
     'data' :: dmsl_domain_thrift:'P2PProvider'()
-}).
-
-%% struct 'P2PMethodObject'
--record('domain_P2PMethodObject', {
-    'ref' :: dmsl_domain_thrift:'P2PMethodRef'(),
-    'data' :: dmsl_domain_thrift:'P2PMethodDefinition'()
 }).
 
 %% struct 'TerminalObject'

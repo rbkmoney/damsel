@@ -2586,8 +2586,7 @@ struct_info('Varset') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {6, optional, string, 'wallet_id', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PMethodRef'}}, 'p2p_method', undefined}
+    {6, optional, string, 'wallet_id', undefined}
 ]};
 
 struct_info('PartyParams') ->
