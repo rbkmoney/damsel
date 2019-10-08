@@ -689,7 +689,7 @@ service Invoicing {
             7: InvoiceTemplateRemoved ex7
         )
 
-    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id, 3: i32 limit)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -732,7 +732,7 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        4: i32 limit
+        4: EventRange range
     )
         throws (
             1: InvalidUser ex1,
