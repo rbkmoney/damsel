@@ -89,12 +89,12 @@ struct Cash {
 }
 
 /** Граф финансовых потоков. */
-struct CashFlow {
-    1: required list<CashFlowPosting> postings
+struct OperationCashFlow {
+    1: required list<OperationCashFlowPosting> postings
 }
 
 /** Денежный поток между двумя участниками. */
-struct CashFlowPosting {
+struct OperationCashFlowPosting {
     1: required domain.CashFlowAccount source
     2: required domain.CashFlowAccount destination
     3: required Cash volume
@@ -122,7 +122,7 @@ struct ProcessOperationInfo {
      * Это поле может быть использовано, если провайдеру необходимо передавать суммы с учетом комиссий,
      * сумму и комиссию по-отдельности и т.п.
      */
-    2: required CashFlow cash_flow
+    2: required OperationCashFlow cash_flow
 
     /** Платежный инструмент, с которого будут списываться деньги. */
     3: required PaymentResource sender
