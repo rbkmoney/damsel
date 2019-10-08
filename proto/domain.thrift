@@ -1363,8 +1363,6 @@ enum BankCardPaymentSystem {
     nspkmir
 }
 
-
-
 /** Тип платежного токена **/
 
 enum BankCardTokenProvider {
