@@ -399,7 +399,7 @@ struct EventRange {
      *
      * _Допустимые значения_: неотрицательные числа
      */
-    2: required i32 limit
+    2: optional i32 limit
 
 }
 
