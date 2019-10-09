@@ -18,6 +18,7 @@ typedef base.Opaque CallbackPayload
 typedef base.Opaque CallbackResponsePayload
 
 typedef base.Tag CallbackTag
+typedef base.ID UserInterationID
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -67,7 +68,7 @@ struct SleepIntent {
      * Взаимодействие с пользователем, в случае если таковое необходимо для продолжения прогресса
      * в рамках сессии взаимодействия.
      */
-    2: optional user_interaction.UserInteraction user_interaction
+    2: optional UserInteractions user_interaction
 
     /**
      * Идентификатор, по которому обработчик обратного запроса сможет идентифицировать сессию
@@ -80,8 +81,42 @@ struct SleepIntent {
      * обработанный идентификатор приведет к ошибке.
      */
     3: required CallbackTag callback_tag
-
 }
+
+struct UserInteractions {
+    1: required list<UserInteractionIntent> actions
+}
+
+struct UserInteractionIntent {
+    /**
+     * Идентификатор запроса взаимодействия с пользователем.
+     * Должен быть уникален в пределах операции.
+     * Этот идентификатор будет виден внешним пользователям.
+     */
+    1: required UserInterationID interaction_id
+
+    /** Что именно необходимо сделать с запросом взаимодействия */
+    2: required UserInteractionAction action
+}
+
+union UserInteractionAction {
+    /**
+     * Новый запрос взаимодействия с пользователем.
+     * Для одного идентификатора может быть указан не более одного раза.
+     */
+    1: UserInteractionCreate create
+
+    /**
+     * Запрос взаимодействия с пользователем более не актуален.
+     */
+    2: UserInteractionFinish finish
+}
+
+struct UserInteractionCreate {
+    1: required user_interaction.UserInteraction user_interaction
+}
+
+struct UserInteractionFinish {}
 
 struct Cash {
     1: required domain.Amount   amount
