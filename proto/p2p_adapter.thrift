@@ -184,6 +184,11 @@ struct Context {
     1: required Session             session
     2: required OperationInfo       operation
     3: optional domain.ProxyOptions options = {}
+    /**
+     * Время до которого рекомендуется завершить сессию взаимодействия с третьей стороной.
+     * Сессия может продолжаться и большее время, если нет возможности её прервать.
+     */
+    4: optional base.Timestamp      deadline
 }
 
 /**
@@ -252,7 +257,6 @@ struct FinishedCallback {
 }
 
 service P2PAdapterHost {
-
     /**
      * Запрос к процессингу на обработку обратного вызова от провайдера.
      * Обработка этого метода процессингом зависит от состояния сессии:
