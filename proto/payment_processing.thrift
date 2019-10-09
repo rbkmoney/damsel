@@ -732,7 +732,6 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        4: EventRange range
     )
         throws (
             1: InvalidUser ex1,
