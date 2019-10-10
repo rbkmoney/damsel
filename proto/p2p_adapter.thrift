@@ -68,7 +68,7 @@ struct SleepIntent {
      * Взаимодействие с пользователем, в случае если таковое необходимо для продолжения прогресса
      * в рамках сессии взаимодействия.
      */
-    2: optional UserInteractions user_interaction
+    2: optional UserInteraction user_interaction
 
     /**
      * Идентификатор, по которому обработчик обратного запроса сможет идентифицировать сессию
@@ -83,23 +83,19 @@ struct SleepIntent {
     3: required CallbackTag callback_tag
 }
 
-struct UserInteractions {
-    1: required list<UserInteractionIntent> actions
-}
-
-struct UserInteractionIntent {
+struct UserInteraction {
     /**
      * Идентификатор запроса взаимодействия с пользователем.
      * Должен быть уникален в пределах операции.
      * Этот идентификатор будет виден внешним пользователям.
      */
-    1: required UserInterationID interaction_id
+    1: required UserInterationID id
 
     /** Что именно необходимо сделать с запросом взаимодействия */
-    2: required UserInteractionAction action
+    2: required UserInteractionIntent intent
 }
 
-union UserInteractionAction {
+union UserInteractionIntent {
     /**
      * Новый запрос взаимодействия с пользователем.
      * Для одного идентификатора может быть указан не более одного раза.
@@ -123,18 +119,6 @@ struct Cash {
     2: required domain.Currency currency
 }
 
-/** Граф финансовых потоков. */
-struct OperationCashFlow {
-    1: required list<OperationCashFlowPosting> postings
-}
-
-/** Денежный поток между двумя участниками. */
-struct OperationCashFlowPosting {
-    1: required domain.CashFlowAccount source
-    2: required domain.CashFlowAccount destination
-    3: required Cash volume
-}
-
 /**
  * Данные операции, необходимые для обращения к провайдеру.
  */
@@ -151,19 +135,17 @@ struct ProcessOperationInfo {
      */
     1: required Cash body
 
-    /**
-     * Граф финансовых потоков.
-     * Описывает представления процессинга о том, как должны перемещаться деньги между участниками.
-     * Это поле может быть использовано, если провайдеру необходимо передавать суммы с учетом комиссий,
-     * сумму и комиссию по-отдельности и т.п.
-     */
-    2: required OperationCashFlow cash_flow
-
     /** Платежный инструмент, с которого будут списываться деньги. */
-    3: required PaymentResource sender
+    2: required PaymentResource sender
 
     /** Платежный инструмент, куда будут пересылаться деньги. */
-    4: required PaymentResource receiver
+    3: required PaymentResource receiver
+
+    /**
+     * Время до которого рекомендуется завершить сессию взаимодействия с третьей стороной.
+     * Сессия может продолжаться и большее время, если нет возможности её прервать.
+     */
+    4: optional base.Timestamp deadline
 }
 
 union PaymentResource {
@@ -184,11 +166,6 @@ struct Context {
     1: required Session             session
     2: required OperationInfo       operation
     3: optional domain.ProxyOptions options = {}
-    /**
-     * Время до которого рекомендуется завершить сессию взаимодействия с третьей стороной.
-     * Сессия может продолжаться и большее время, если нет возможности её прервать.
-     */
-    4: optional base.Timestamp      deadline
 }
 
 /**
@@ -241,7 +218,7 @@ service P2PAdapter {
     CallbackResult HandleCallback (1: Callback callback, 2: Context context)
 }
 
-exception CallbackNotFound {}
+exception SessionNotFound {}
 
 union ProcessCallbackResult {
     /** Вызов был обработан в рамках сесии */
@@ -267,9 +244,9 @@ service P2PAdapterHost {
      *  - будет возвращен ответ, что сессия уже завершена, если сессия завершена, и вызов с таким
      *    идентификатором не был обработан успешно.
      */
-    CallbackResponse ProcessCallback (1: Callback callback)
+    ProcessCallbackResult ProcessCallback (1: Callback callback)
         throws (
-            1: CallbackNotFound ex1
+            1: SessionNotFound ex1
         )
 
 }
