@@ -2183,7 +2183,7 @@ struct_info('InvoicePaymentCaptureStarted') ->
 struct_info('EventRange') ->
     {struct, struct, [
     {1, optional, i64, 'after', undefined},
-    {2, required, i32, 'limit', undefined}
+    {2, optional, i32, 'limit', undefined}
 ]};
 
 struct_info('InvoiceParams') ->
@@ -4009,7 +4009,8 @@ function_info('Invoicing', 'CreateWithTemplate', reply_type) ->
 function_info('Invoicing', 'Get', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined}
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
 ]};
 function_info('Invoicing', 'Get', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
@@ -4435,7 +4436,8 @@ function_info('CustomerManagement', 'Create', reply_type) ->
     ]};
 function_info('CustomerManagement', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
+    {1, undefined, string, 'id', undefined},
+    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
 ]};
 function_info('CustomerManagement', 'Get', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
