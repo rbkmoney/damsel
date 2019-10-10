@@ -1181,7 +1181,7 @@ service CustomerManagement {
             6: OperationNotPermitted operation_not_permitted
         )
 
-    Customer Get (1: CustomerID id)
+    Customer Get (1: CustomerID id, 2: EventRange range)
         throws (
             1: InvalidUser      invalid_user
             2: CustomerNotFound not_found
