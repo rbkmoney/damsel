@@ -534,6 +534,8 @@ enum RiskScore {
     fatal = 9999
 }
 
+typedef base.ID RiskType
+
 /* Contracts */
 
 typedef base.ID ContractorID
