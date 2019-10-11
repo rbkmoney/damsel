@@ -35,13 +35,6 @@ union Intent {
 struct FinishIntent {
     /** Статус, с которым завершилось взаиможействие */
     1: required FinishStatus status
-
-    /**
-     * Ответ, который следует возвращать на требования обработать обратный запрос.
-     * Указанный ответ будет возвращен при вызове P2PAdapterHost.ProcessCallback
-     * с любым CallbackTag из этой сессии, если тот не был обработан до завершения сессии.
-     */
-    2: optional CallbackResponse callbacks_response
 }
 
 /**
@@ -222,15 +215,21 @@ exception SessionNotFound {}
 
 union ProcessCallbackResult {
     /** Вызов был обработан в рамках сесии */
-    1: CallbackResponse response
+    1: ProcessCallbackSucceeded succeeded
 
     /** Сессия уже завершена, вызов обработать не удалось */
-    2: FinishedCallback finished
+    2: ProcessCallbackFinished finished
 }
 
-struct FinishedCallback {
-    /** Ответ, указанный при завершении сессии в FinishIntent */
-    1: optional CallbackResponse response
+struct ProcessCallbackSucceeded {
+    1: required CallbackResponse response
+}
+
+struct ProcessCallbackFinished {
+    /**
+     * Состояние сессии после обработки последнего ответа адаптера.
+     */
+    1: required Context response
 }
 
 service P2PAdapterHost {
