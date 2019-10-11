@@ -1795,16 +1795,6 @@ struct ProviderDecision {
     2: required ProviderSelector then_
 }
 
-union CashRegProviderSelector {
-    1: list<CashRegProviderDecision> decisions
-    2: set<CashRegProviderRef> value
-}
-
-struct CashRegProviderDecision {
-    1: required Predicate if_
-    2: required CashRegProviderSelector then_
-}
-
 union WithdrawalProviderSelector {
     1: list<WithdrawalProviderDecision> decisions
     2: set<WithdrawalProviderRef> value
@@ -2045,7 +2035,6 @@ struct PaymentInstitution {
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
     13: optional WithdrawalProviderSelector withdrawal_providers
-    14: optional CashRegProviderSelector cashreg_providers
 }
 
 enum PaymentInstitutionRealm {
