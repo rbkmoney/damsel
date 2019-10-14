@@ -864,7 +864,8 @@
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
     'operation_amount' |
-    'operation_fee'.
+    'operation_fee' |
+    'operation_fee_part'.
 
 %% enum 'RoundingMethod'
 -type 'RoundingMethod'() ::
@@ -3102,7 +3103,8 @@ enum_info('WalletCashFlowAccount') ->
 enum_info('CashFlowConstant') ->
     {enum, [
         {'operation_amount', 1},
-        {'operation_fee', 2}
+        {'operation_fee', 2},
+        {'operation_fee_part', 3}
     ]};
 
 enum_info('RoundingMethod') ->

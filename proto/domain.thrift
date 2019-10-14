@@ -1622,8 +1622,9 @@ enum WalletCashFlowAccount {
 }
 
 enum CashFlowConstant {
-    operation_amount = 1
-    operation_fee    = 2
+    operation_amount    = 1
+    operation_fee       = 2
+    operation_fee_part  = 3
     // ...
     // TODO
 
@@ -1635,7 +1636,6 @@ enum CashFlowConstant {
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
 /** Граф финансовых потоков. */
-// typedef list<CashFlowPosting> CashFlow
 
 struct CashFlow {
     1: required list<CashFlowPosting> posting
