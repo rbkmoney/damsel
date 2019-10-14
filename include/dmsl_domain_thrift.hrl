@@ -894,7 +894,7 @@
 %% struct 'OperationPlan'
 -record('domain_OperationPlan', {
     'cash_flow' :: dmsl_domain_thrift:'CashFlow'(),
-    'posting_context' :: #{atom() => dmsl_domain_thrift:'CashVolume'()} | undefined
+    'context' :: #{atom() => dmsl_domain_thrift:'CashVolume'()} | undefined
 }).
 
 %% struct 'CashFlowPosting'
@@ -1052,7 +1052,7 @@
 -record('domain_P2PProvisionTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+    'operation_plan' :: dmsl_domain_thrift:'OperationPlanSelector'() | undefined
 }).
 
 %% struct 'CashValueDecision'

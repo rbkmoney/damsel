@@ -1623,8 +1623,7 @@ enum WalletCashFlowAccount {
 
 enum CashFlowConstant {
     operation_amount    = 1
-    operation_fee       = 2
-    operation_fee_part  = 3
+    surplus             = 2
     // ...
     // TODO
 
@@ -1640,7 +1639,7 @@ typedef list<CashFlowPosting> CashFlow
 
 struct OperationPlan {
     1: required CashFlow cash_flow
-    2: optional map<CashFlowConstant, CashVolume> posting_context
+    2: optional map<CashFlowConstant, CashVolume> context
 }
 
 /** Денежный поток между двумя участниками. */
@@ -1713,7 +1712,7 @@ struct CashFlowDecision {
 }
 
 union OperationPlanSelector {
-    1: list<CashFlowDecision> decisions
+    1: list<OperationPlanDecision> decisions
     2: OperationPlan value
 }
 
@@ -1814,7 +1813,7 @@ struct WithdrawalProvisionTerms {
 struct P2PProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
-    3: optional CashFlowSelector cash_flow
+    3: optional OperationPlanSelector operation_plan
 }
 
 union CashValueSelector {

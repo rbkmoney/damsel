@@ -872,8 +872,7 @@
 %% enum 'CashFlowConstant'
 -type 'CashFlowConstant'() ::
     'operation_amount' |
-    'operation_fee' |
-    'operation_fee_part'.
+    'surplus'.
 
 %% enum 'RoundingMethod'
 -type 'RoundingMethod'() ::
@@ -1796,7 +1795,7 @@
 
 %% union 'OperationPlanSelector'
 -type 'OperationPlanSelector'() ::
-    {'decisions', ['CashFlowDecision'()]} |
+    {'decisions', ['OperationPlanDecision'()]} |
     {'value', 'OperationPlan'()}.
 
 %% struct 'OperationPlanDecision'
@@ -3144,8 +3143,7 @@ enum_info('WalletCashFlowAccount') ->
 enum_info('CashFlowConstant') ->
     {enum, [
         {'operation_amount', 1},
-        {'operation_fee', 2},
-        {'operation_fee_part', 3}
+        {'surplus', 2}
     ]};
 
 enum_info('RoundingMethod') ->
@@ -4280,7 +4278,7 @@ struct_info('CashFlowAccount') ->
 struct_info('OperationPlan') ->
     {struct, struct, [
     {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}}, 'cash_flow', undefined},
-    {2, optional, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'posting_context', undefined}
+    {2, optional, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'context', undefined}
 ]};
 
 struct_info('CashFlowPosting') ->
@@ -4344,7 +4342,7 @@ struct_info('CashFlowDecision') ->
 
 struct_info('OperationPlanSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowDecision'}}}, 'decisions', undefined},
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'OperationPlanDecision'}}}, 'decisions', undefined},
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'OperationPlan'}}, 'value', undefined}
 ]};
 
@@ -4463,7 +4461,7 @@ struct_info('P2PProvisionTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'OperationPlanSelector'}}, 'operation_plan', undefined}
 ]};
 
 struct_info('CashValueSelector') ->
