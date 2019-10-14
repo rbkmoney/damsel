@@ -810,6 +810,7 @@ struct TermSet {
     3: optional PayoutsServiceTerms payouts
     4: optional ReportsServiceTerms reports
     5: optional WalletServiceTerms wallets
+    6: optional FeeSelector fees
 }
 
 struct TimedTermSet {
@@ -931,7 +932,7 @@ struct WithdrawalServiceTerms {
 struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
-    3: optional OperationPlanSelector operation_plan
+    3: optional CashFlowSelector cash_flow
 }
 
 /* Payout methods */
@@ -1632,15 +1633,14 @@ enum CashFlowConstant {
     // payment_amount = 1
 }
 
+struct Fees {
+   1: required map<CashFlowConstant, CashVolume> context
+}
+
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
 /** Граф финансовых потоков. */
 typedef list<CashFlowPosting> CashFlow
-
-struct OperationPlan {
-    1: required CashFlow cash_flow
-    2: optional map<CashFlowConstant, CashVolume> context
-}
 
 /** Денежный поток между двумя участниками. */
 struct CashFlowPosting {
@@ -1711,16 +1711,15 @@ struct CashFlowDecision {
     2: required CashFlowSelector then_
 }
 
-union OperationPlanSelector {
-    1: list<OperationPlanDecision> decisions
-    2: OperationPlan value
+union FeeSelector {
+    1: list<FeeDecision> decisions
+    2: Fees value
 }
 
-struct OperationPlanDecision {
+struct FeeDecision {
     1: required Predicate if_
-    2: required OperationPlanSelector then_
+    2: required FeeSelector then_
 }
-
 /* Providers */
 
 struct ProviderRef { 1: required ObjectID id }
@@ -1813,7 +1812,7 @@ struct WithdrawalProvisionTerms {
 struct P2PProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
-    3: optional OperationPlanSelector operation_plan
+    3: optional CashFlowSelector cash_flow
 }
 
 union CashValueSelector {
