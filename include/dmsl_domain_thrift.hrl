@@ -891,6 +891,12 @@
     'then_' :: dmsl_domain_thrift:'TimeSpanSelector'()
 }).
 
+%% struct 'CashFlow'
+-record('domain_CashFlow', {
+    'posting' :: [dmsl_domain_thrift:'CashFlowPosting'()],
+    'posting_context' :: #{atom() => dmsl_domain_thrift:'CashVolume'()} | undefined
+}).
+
 %% struct 'CashFlowPosting'
 -record('domain_CashFlowPosting', {
     'source' :: dmsl_domain_thrift:'CashFlowAccount'(),

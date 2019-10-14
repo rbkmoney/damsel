@@ -1546,7 +1546,6 @@ union CashFlowAccount {
     3: SystemCashFlowAccount system
     4: ExternalCashFlowAccount external
     5: WalletCashFlowAccount wallet
-    6: PersonCashFlowAccount person
 }
 
 enum MerchantCashFlowAccount {
@@ -1622,13 +1621,9 @@ enum WalletCashFlowAccount {
     receiver_destination
 }
 
-enum PersonCashFlowAccount {
-    sender
-    receiver
-}
-
 enum CashFlowConstant {
     operation_amount = 1
+    operation_fee    = 2
     // ...
     // TODO
 
@@ -1640,7 +1635,12 @@ enum CashFlowConstant {
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
 /** Граф финансовых потоков. */
-typedef list<CashFlowPosting> CashFlow
+// typedef list<CashFlowPosting> CashFlow
+
+struct CashFlow {
+    1: required list<CashFlowPosting> posting
+    2: optional map<CashFlowConstant, CashVolume> posting_context
+}
 
 /** Денежный поток между двумя участниками. */
 struct CashFlowPosting {
