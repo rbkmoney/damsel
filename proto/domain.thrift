@@ -1709,6 +1709,14 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 }
 
+struct CashRegProviderRef { 1: required ObjectID id }
+
+struct CashRegProvider {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+}
+
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
 struct WithdrawalProvider {
@@ -2142,6 +2150,11 @@ struct ProviderObject {
     2: required Provider data
 }
 
+struct CashRegProviderObject {
+    1: required CashRegProviderRef ref
+    2: required CashRegProvider data
+}
+
 struct WithdrawalProviderObject {
     1: required WithdrawalProviderRef ref
     2: required WithdrawalProvider data
@@ -2202,6 +2215,7 @@ union Reference {
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
+    23 : CashRegProviderRef      cashreg_provider
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2230,6 +2244,7 @@ union DomainObject {
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
+    23 : CashRegProviderObject      cashreg_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
