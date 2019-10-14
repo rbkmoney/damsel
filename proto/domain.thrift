@@ -1445,8 +1445,8 @@ struct PaymentTerminal {
 *  например Евросеть
 **/
 enum TerminalPaymentProvider {
-    euroset,
-    wechat,
+    euroset
+    wechat
     alipay
 }
 
