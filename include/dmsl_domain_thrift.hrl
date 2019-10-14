@@ -954,6 +954,18 @@
     'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
 }).
 
+%% struct 'CashRegProviderRef'
+-record('domain_CashRegProviderRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'CashRegProvider'
+-record('domain_CashRegProvider', {
+    'name' :: binary(),
+    'description' :: binary(),
+    'proxy' :: dmsl_domain_thrift:'Proxy'()
+}).
+
 %% struct 'WithdrawalProviderRef'
 -record('domain_WithdrawalProviderRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -1363,6 +1375,12 @@
 -record('domain_ProviderObject', {
     'ref' :: dmsl_domain_thrift:'ProviderRef'(),
     'data' :: dmsl_domain_thrift:'Provider'()
+}).
+
+%% struct 'CashRegProviderObject'
+-record('domain_CashRegProviderObject', {
+    'ref' :: dmsl_domain_thrift:'CashRegProviderRef'(),
+    'data' :: dmsl_domain_thrift:'CashRegProvider'()
 }).
 
 %% struct 'WithdrawalProviderObject'

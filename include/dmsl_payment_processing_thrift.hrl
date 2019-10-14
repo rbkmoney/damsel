@@ -184,7 +184,7 @@
 %% struct 'EventRange'
 -record('payproc_EventRange', {
     'after' :: dmsl_base_thrift:'EventID'() | undefined,
-    'limit' :: integer()
+    'limit' :: integer() | undefined
 }).
 
 %% struct 'InvoiceParams'

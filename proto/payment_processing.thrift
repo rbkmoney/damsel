@@ -399,7 +399,7 @@ struct EventRange {
      *
      * _Допустимые значения_: неотрицательные числа
      */
-    2: required i32 limit
+    2: optional i32 limit
 
 }
 
@@ -689,7 +689,7 @@ service Invoicing {
             7: InvoiceTemplateRemoved ex7
         )
 
-    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -1181,7 +1181,7 @@ service CustomerManagement {
             6: OperationNotPermitted operation_not_permitted
         )
 
-    Customer Get (1: CustomerID id)
+    Customer Get (1: CustomerID id, 2: EventRange range)
         throws (
             1: InvalidUser      invalid_user
             2: CustomerNotFound not_found
