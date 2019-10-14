@@ -13,16 +13,24 @@ typedef base.ID LevelID
  * Набор данных для взаимодействия с инспекторским прокси.
  */
 struct Context {
-    1: required Info info
+    1: required TransferInfo info
     2: optional domain.ProxyOptions options = {}
 }
 
 /**
  * Данные перевода, необходимые для инспекции перевода.
  */
-struct Info {
-    1: required Identity identity
-    2: required Transfer transfer
+struct TransferInfo {
+    1: required Transfer transfer
+}
+
+struct Transfer {
+    1: required base.ID id
+    2: required Identity identity
+    3: required base.Timestamp created_at
+    4: required Payer sender
+    5: required Payer receiver
+    6: required domain.Cash cost
 }
 
 struct Identity {
@@ -33,15 +41,10 @@ struct Identity {
     5: optional ContractID contract_id
 }
 
-struct Transfer {
-    1: required base.ID id
-    2: required base.Timestamp created_at
-    3: required Payer sender
-    4: required Payer receiver
-    5: required domain.Cash cost
-}
-
 union Payer {
+    /**
+    *   Данные плательщика полученные на старте операции и не привязанные к сущностям системы
+    */
     1: Raw raw
 }
 
