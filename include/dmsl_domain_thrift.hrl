@@ -566,7 +566,8 @@
     'recurrent_paytools' :: dmsl_domain_thrift:'RecurrentPaytoolsServiceTerms'() | undefined,
     'payouts' :: dmsl_domain_thrift:'PayoutsServiceTerms'() | undefined,
     'reports' :: dmsl_domain_thrift:'ReportsServiceTerms'() | undefined,
-    'wallets' :: dmsl_domain_thrift:'WalletServiceTerms'() | undefined
+    'wallets' :: dmsl_domain_thrift:'WalletServiceTerms'() | undefined,
+    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
 }).
 
 %% struct 'TimedTermSet'
@@ -672,7 +673,7 @@
 -record('domain_P2PServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'operation_plan' :: dmsl_domain_thrift:'OperationPlanSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
@@ -891,10 +892,9 @@
     'then_' :: dmsl_domain_thrift:'TimeSpanSelector'()
 }).
 
-%% struct 'OperationPlan'
--record('domain_OperationPlan', {
-    'cash_flow' :: dmsl_domain_thrift:'CashFlow'(),
-    'context' :: #{atom() => dmsl_domain_thrift:'CashVolume'()} | undefined
+%% struct 'Fees'
+-record('domain_Fees', {
+    'context' :: #{atom() => dmsl_domain_thrift:'CashVolume'()}
 }).
 
 %% struct 'CashFlowPosting'
@@ -937,10 +937,10 @@
     'then_' :: dmsl_domain_thrift:'CashFlowSelector'()
 }).
 
-%% struct 'OperationPlanDecision'
--record('domain_OperationPlanDecision', {
+%% struct 'FeeDecision'
+-record('domain_FeeDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
-    'then_' :: dmsl_domain_thrift:'OperationPlanSelector'()
+    'then_' :: dmsl_domain_thrift:'FeeSelector'()
 }).
 
 %% struct 'ProviderRef'
@@ -1052,7 +1052,7 @@
 -record('domain_P2PProvisionTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'operation_plan' :: dmsl_domain_thrift:'OperationPlanSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'CashValueDecision'
