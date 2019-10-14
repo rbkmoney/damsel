@@ -1,66 +1,59 @@
 include "base.thrift"
 include "domain.thrift"
 
-namespace java com.rbkmoney.damsel.proxy_inspector_p2p
-namespace erlang proxy_inspector_p2p
+namespace java com.rbkmoney.damsel.p2p_insp
+namespace erlang p2p_insp
+
+typedef base.ID ContractID
+typedef base.ID ProviderID
+typedef base.ID ClassID
+typedef base.ID LevelID
 
 /**
  * Набор данных для взаимодействия с инспекторским прокси.
  */
 struct Context {
-    1: required P2PInfo p2p
+    1: required Info info
     2: optional domain.ProxyOptions options = {}
 }
 
 /**
  * Данные перевода, необходимые для инспекции перевода.
  */
-struct P2PInfo {
+struct Info {
     1: required Identity identity
-    2: required P2P p2p
+    2: required Transfer transfer
 }
 
 struct Identity {
     1: required base.ID identity_id
+    2: required ProviderID provider_id
+    3: required ClassID class_id
+    4: optional LevelID level_id
+    5: optional ContractID contract_id
 }
 
-struct P2P {
+struct Transfer {
     1: required base.ID id
     2: required base.Timestamp created_at
-    3: required P2PPayer payer_from
-    4: required P2PPayer payer_to
+    3: required Payer sender
+    4: required Payer receiver
     5: required domain.Cash cost
 }
 
-union P2PPayer {
-    1: P2PInstrument instrument
-    2: P2PRaw raw
+union Payer {
+    1: Raw raw
 }
 
-struct P2PInstrument {
-    1: required base.ID instrument_id
-    2: required base.Timestamp created_at
-    3: required domain.Payer payer
-    4: required P2PInstrumentStatus status
-}
-
-union P2PInstrumentStatus {
-    1: Authorized       authorized
-    2: Unauthorized     unauthorized
-}
-
-struct Authorized {}
-struct Unauthorized {}
-
-struct P2PRaw {
+struct Raw {
     1: required domain.Payer payer
 }
 
 struct InspectResult {
-    1: required map<domain.RiskType, domain.RiskScore> scores
+    1: required map<domain.ScoreID, domain.RiskScore> scores
 }
 
 service InspectorProxy {
-    InspectResult InspectPayment (1: Context context, 2: list<domain.RiskType> risk_types)
+    InspectResult InspectTransfer (1: Context context, 2: list<domain.ScoreID> risk_types)
         throws (1: base.InvalidRequest ex1)
 }
