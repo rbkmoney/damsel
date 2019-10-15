@@ -14,10 +14,10 @@ typedef string CryptoAddress
 
 typedef string CryptoCurrencySymbolicCode
 
-/**
- * Строка, используемая для генерации QR-кода
- */
-typedef string QrCode
+struct QrCode {
+    /** Содержимое QR-кода, записанное в виде потока бит */
+    1: required binary payload
+}
 
 struct CryptoCash {
     1: required base.Rational crypto_amount
@@ -62,7 +62,7 @@ struct CryptoCurrencyTransferRequest {
     2: required CryptoCash crypto_cash
 }
 
-struct QrCodeGenerationRequest {
+struct QrCodeShowRequest {
     1: required QrCode qr_code
 }
 
@@ -88,7 +88,7 @@ union UserInteraction {
     3: CryptoCurrencyTransferRequest crypto_currency_transfer_request
 
     /**
-     * Запрос на генерацию и отображение пользователю QR-кода
+     * Запрос на отображение пользователю QR-кода
      */
-    4: QrCodeGenerationRequest qr_code_generation_request
+    4: QrCodeShowRequest qr_code_show_request
 }
