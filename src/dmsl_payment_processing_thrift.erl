@@ -4860,7 +4860,8 @@ function_info('PartyManagement', 'ComputeShopTerms', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
     {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'timestamp', undefined}
+    {4, undefined, string, 'timestamp', undefined},
+    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined}
 ]};
 function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
