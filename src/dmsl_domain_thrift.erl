@@ -466,7 +466,7 @@
 -type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
 -type 'Token'() :: binary().
 -type 'DigitalWalletID'() :: binary().
--type 'CashVolumes'() :: ['CashVolume'()].
+-type 'CashVolumes'() :: ordsets:ordset('CashVolume'()).
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
@@ -2733,7 +2733,7 @@ typedef_info('DigitalWalletID') ->
     string;
 
 typedef_info('CashVolumes') ->
-    {list, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}};
+    {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}};
 
 typedef_info('CashFlowContext') ->
     {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, struct, {dmsl_domain_thrift, 'Cash'}}};
@@ -3868,8 +3868,7 @@ struct_info('TermSet') ->
     {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined},
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined}
 ]};
 
 struct_info('TimedTermSet') ->
@@ -3981,7 +3980,8 @@ struct_info('P2PServiceTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -4285,7 +4285,7 @@ struct_info('CashFlowAccount') ->
 
 struct_info('Fees') ->
     {struct, struct, [
-    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {list, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}}, 'fees', undefined}
+    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}}, 'fees', undefined}
 ]};
 
 struct_info('CashFlowPosting') ->

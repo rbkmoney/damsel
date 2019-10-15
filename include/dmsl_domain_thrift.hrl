@@ -566,8 +566,7 @@
     'recurrent_paytools' :: dmsl_domain_thrift:'RecurrentPaytoolsServiceTerms'() | undefined,
     'payouts' :: dmsl_domain_thrift:'PayoutsServiceTerms'() | undefined,
     'reports' :: dmsl_domain_thrift:'ReportsServiceTerms'() | undefined,
-    'wallets' :: dmsl_domain_thrift:'WalletServiceTerms'() | undefined,
-    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
+    'wallets' :: dmsl_domain_thrift:'WalletServiceTerms'() | undefined
 }).
 
 %% struct 'TimedTermSet'
@@ -673,7 +672,8 @@
 -record('domain_P2PServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
