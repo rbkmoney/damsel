@@ -1634,7 +1634,7 @@ enum CashFlowConstant {
     // payment_amount = 1
 }
 
-typedef set<CashVolume> CashVolumes
+typedef list<CashVolume> CashVolumes
 
 /** Структура содержит таблицу с комиссиями, удерживаемых при совершение операции. */
 struct Fees {
