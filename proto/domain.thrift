@@ -1633,10 +1633,10 @@ enum CashFlowConstant {
     // payment_amount = 1
 }
 
-typedef list<Fees> FeeFlow
+typedef list<CashVolume> CashVolumes
 
 struct Fees {
-   1: required map<CashFlowConstant, CashVolume> fee
+   1: required map<CashFlowConstant, CashVolumes> fees
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
@@ -1715,7 +1715,7 @@ struct CashFlowDecision {
 
 union FeeSelector {
     1: list<FeeDecision> decisions
-    2: FeeFlow value
+    2: Fees value
 }
 
 struct FeeDecision {
