@@ -68,6 +68,7 @@
     'RecurrentPaymentToolID'/0,
     'Token'/0,
     'DigitalWalletID'/0,
+    'FeeFlow'/0,
     'CashFlowContext'/0,
     'CashFlow'/0,
     'FinalCashFlow'/0,
@@ -421,6 +422,7 @@
     'RecurrentPaymentToolID' |
     'Token' |
     'DigitalWalletID' |
+    'FeeFlow' |
     'CashFlowContext' |
     'CashFlow' |
     'FinalCashFlow' |
@@ -464,6 +466,7 @@
 -type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
 -type 'Token'() :: binary().
 -type 'DigitalWalletID'() :: binary().
+-type 'FeeFlow'() :: ['Fees'()].
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
@@ -1796,7 +1799,7 @@
 %% union 'FeeSelector'
 -type 'FeeSelector'() ::
     {'decisions', ['FeeDecision'()]} |
-    {'value', 'Fees'()}.
+    {'value', 'FeeFlow'()}.
 
 %% struct 'FeeDecision'
 -type 'FeeDecision'() :: #'domain_FeeDecision'{}.
@@ -2289,6 +2292,7 @@ typedefs() ->
         'RecurrentPaymentToolID',
         'Token',
         'DigitalWalletID',
+        'FeeFlow',
         'CashFlowContext',
         'CashFlow',
         'FinalCashFlow',
@@ -2727,6 +2731,9 @@ typedef_info('Token') ->
 
 typedef_info('DigitalWalletID') ->
     string;
+
+typedef_info('FeeFlow') ->
+    {list, {struct, struct, {dmsl_domain_thrift, 'Fees'}}};
 
 typedef_info('CashFlowContext') ->
     {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, struct, {dmsl_domain_thrift, 'Cash'}}};
@@ -4278,7 +4285,7 @@ struct_info('CashFlowAccount') ->
 
 struct_info('Fees') ->
     {struct, struct, [
-    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'context', undefined}
+    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'fee', undefined}
 ]};
 
 struct_info('CashFlowPosting') ->
@@ -4343,7 +4350,7 @@ struct_info('CashFlowDecision') ->
 struct_info('FeeSelector') ->
     {struct, union, [
     {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FeeDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Fees'}}, 'value', undefined}
+    {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'Fees'}}}, 'value', undefined}
 ]};
 
 struct_info('FeeDecision') ->
