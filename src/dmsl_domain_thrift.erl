@@ -68,7 +68,6 @@
     'RecurrentPaymentToolID'/0,
     'Token'/0,
     'DigitalWalletID'/0,
-    'CashVolumes'/0,
     'CashFlowContext'/0,
     'CashFlow'/0,
     'FinalCashFlow'/0,
@@ -422,7 +421,6 @@
     'RecurrentPaymentToolID' |
     'Token' |
     'DigitalWalletID' |
-    'CashVolumes' |
     'CashFlowContext' |
     'CashFlow' |
     'FinalCashFlow' |
@@ -466,7 +464,6 @@
 -type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
 -type 'Token'() :: binary().
 -type 'DigitalWalletID'() :: binary().
--type 'CashVolumes'() :: ['CashVolume'()].
 -type 'CashFlowContext'() :: #{atom() => 'Cash'()}.
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
@@ -2292,7 +2289,6 @@ typedefs() ->
         'RecurrentPaymentToolID',
         'Token',
         'DigitalWalletID',
-        'CashVolumes',
         'CashFlowContext',
         'CashFlow',
         'FinalCashFlow',
@@ -2731,9 +2727,6 @@ typedef_info('Token') ->
 
 typedef_info('DigitalWalletID') ->
     string;
-
-typedef_info('CashVolumes') ->
-    {list, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}};
 
 typedef_info('CashFlowContext') ->
     {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, struct, {dmsl_domain_thrift, 'Cash'}}};
@@ -4285,7 +4278,7 @@ struct_info('CashFlowAccount') ->
 
 struct_info('Fees') ->
     {struct, struct, [
-    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {list, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}}, 'fees', undefined}
+    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'fees', undefined}
 ]};
 
 struct_info('CashFlowPosting') ->

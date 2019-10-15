@@ -894,7 +894,7 @@
 
 %% struct 'Fees'
 -record('domain_Fees', {
-    'fees' :: #{atom() => dmsl_domain_thrift:'CashVolumes'()}
+    'fees' :: #{atom() => dmsl_domain_thrift:'CashVolume'()}
 }).
 
 %% struct 'CashFlowPosting'
