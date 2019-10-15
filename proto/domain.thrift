@@ -810,7 +810,6 @@ struct TermSet {
     3: optional PayoutsServiceTerms payouts
     4: optional ReportsServiceTerms reports
     5: optional WalletServiceTerms wallets
-    6: optional FeeSelector fees
 }
 
 struct TimedTermSet {
@@ -933,6 +932,7 @@ struct P2PServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
+    4: optional FeeSelector fees
 }
 
 /* Payout methods */
@@ -1624,6 +1624,7 @@ enum WalletCashFlowAccount {
 
 enum CashFlowConstant {
     operation_amount    = 1
+    /** Комиссия "сверху" - удерживаем с плательщика, помимо суммы операции  */
     surplus             = 2
     // ...
     // TODO
@@ -1633,8 +1634,9 @@ enum CashFlowConstant {
     // payment_amount = 1
 }
 
-typedef list<CashVolume> CashVolumes
+typedef set<CashVolume> CashVolumes
 
+/** Структура содержит таблицу с комиссиями, удерживаемых при совершение операции. */
 struct Fees {
    1: required map<CashFlowConstant, CashVolumes> fees
 }
