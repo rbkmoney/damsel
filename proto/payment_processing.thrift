@@ -705,7 +705,11 @@ service Invoicing {
 
     /* Terms */
 
-    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
+    domain.TermSet ComputeTerms (
+        1: UserInfo user,
+        2: domain.InvoiceID id
+        3: PartyRevisionParam party_revision_param
+    )
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
 
     /* Payments */
@@ -1004,7 +1008,12 @@ service InvoiceTemplating {
 
     /* Terms */
 
-    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: base.Timestamp timestamp)
+    domain.TermSet ComputeTerms (
+        1: UserInfo user,
+        2: domain.InvoiceTemplateID id,
+        3: base.Timestamp timestamp,
+        4: PartyRevisionParam party_revision_param
+    )
         throws (
             1: InvalidUser ex1,
             2: InvoiceTemplateNotFound ex2,
