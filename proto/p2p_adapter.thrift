@@ -20,6 +20,8 @@ typedef base.Opaque CallbackResponsePayload
 typedef base.Tag CallbackTag
 typedef base.ID UserInterationID
 
+typedef base.StringMap AdapterOptions
+
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
  * с третьей стороной.
@@ -156,9 +158,9 @@ struct Session {
  * Набор данных для взаимодействия с адаптером в рамках операции.
  */
 struct Context {
-    1: required Session               session
-    2: required OperationInfo         operation
-    3: optional domain.AdapterOptions options = {}
+    1: required Session        session
+    2: required OperationInfo  operation
+    3: optional AdapterOptions options = {}
 }
 
 /**
