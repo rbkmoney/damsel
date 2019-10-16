@@ -1637,12 +1637,14 @@ enum CashFlowConstant {
 /** Структура содержит таблицу с комиссиями, удерживаемых при совершение операции.
     В случае когда CashVolume не fixed, Surplus может быть выражена только через operation_amount.
     Например(5% от суммы платежа):
-        map<CashFlowConstant, CashVolume> fees = {
-            'surplus': CashVolume{
-                share = CashVolumeShare{
-                parts = base.Rational{p = 5, q = 100},
-                of = operation_amount}
-            }>
+    fees = {
+        'surplus': CashVolume{
+            share = CashVolumeShare{
+                    parts = base.Rational{p = 5, q = 100},
+                    of = operation_amount
+                }
+            }
+        }
  */
 struct Fees {
    1: required map<CashFlowConstant, CashVolume> fees
