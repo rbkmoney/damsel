@@ -34,11 +34,7 @@ struct Transfer {
 }
 
 struct Identity {
-    1: required base.ID identity_id
-    2: required ProviderID provider_id
-    3: required ClassID class_id
-    4: optional LevelID level_id
-    5: optional ContractID contract_id
+    1: required base.ID id
 }
 
 union Payer {
