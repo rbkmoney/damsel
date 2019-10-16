@@ -645,7 +645,8 @@
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'wallet_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'turnover_limit' :: dmsl_domain_thrift:'CumulativeLimitSelector'() | undefined,
-    'withdrawals' :: dmsl_domain_thrift:'WithdrawalServiceTerms'() | undefined
+    'withdrawals' :: dmsl_domain_thrift:'WithdrawalServiceTerms'() | undefined,
+    'p2p' :: dmsl_domain_thrift:'P2PServiceTerms'() | undefined
 }).
 
 %% struct 'CumulativeLimitDecision'
@@ -665,6 +666,14 @@
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+}).
+
+%% struct 'P2PServiceTerms'
+-record('domain_P2PServiceTerms', {
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
@@ -779,6 +788,12 @@
     'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'()
 }).
 
+%% struct 'P2PTool'
+-record('domain_P2PTool', {
+    'sender' :: dmsl_domain_thrift:'PaymentTool'(),
+    'receiver' :: dmsl_domain_thrift:'PaymentTool'()
+}).
+
 %% struct 'DisposablePaymentResource'
 -record('domain_DisposablePaymentResource', {
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'(),
@@ -877,6 +892,11 @@
     'then_' :: dmsl_domain_thrift:'TimeSpanSelector'()
 }).
 
+%% struct 'Fees'
+-record('domain_Fees', {
+    'fees' :: #{atom() => dmsl_domain_thrift:'CashVolume'()}
+}).
+
 %% struct 'CashFlowPosting'
 -record('domain_CashFlowPosting', {
     'source' :: dmsl_domain_thrift:'CashFlowAccount'(),
@@ -915,6 +935,12 @@
 -record('domain_CashFlowDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'CashFlowSelector'()
+}).
+
+%% struct 'FeeDecision'
+-record('domain_FeeDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'FeeSelector'()
 }).
 
 %% struct 'ProviderRef'
@@ -958,6 +984,21 @@
     'proxy' :: dmsl_domain_thrift:'Proxy'(),
     'identity' :: binary() | undefined,
     'withdrawal_terms' :: dmsl_domain_thrift:'WithdrawalProvisionTerms'() | undefined,
+    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
+}).
+
+%% struct 'P2PProviderRef'
+-record('domain_P2PProviderRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'P2PProvider'
+-record('domain_P2PProvider', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'proxy' :: dmsl_domain_thrift:'Proxy'(),
+    'identity' :: binary() | undefined,
+    'p2p_terms' :: dmsl_domain_thrift:'P2PProvisionTerms'() | undefined,
     'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
 }).
 
@@ -1007,6 +1048,14 @@
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
 }).
 
+%% struct 'P2PProvisionTerms'
+-record('domain_P2PProvisionTerms', {
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
+}).
+
 %% struct 'CashValueDecision'
 -record('domain_CashValueDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
@@ -1028,6 +1077,12 @@
 -record('domain_WithdrawalProviderDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'WithdrawalProviderSelector'()
+}).
+
+%% struct 'P2PProviderDecision'
+-record('domain_P2PProviderDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'P2PProviderSelector'()
 }).
 
 %% struct 'InspectorRef'
@@ -1074,6 +1129,12 @@
 %% struct 'TerminalRef'
 -record('domain_TerminalRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'P2PToolCondition'
+-record('domain_P2PToolCondition', {
+    'sender_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined,
+    'receiver_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined
 }).
 
 %% struct 'BankCardCondition'
@@ -1199,7 +1260,8 @@
     'residences' :: ordsets:ordset(atom()),
     'wallet_system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
     'identity' :: binary() | undefined,
-    'withdrawal_providers' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined
+    'withdrawal_providers' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
+    'p2p_providers' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined
 }).
 
 %% struct 'ContractPaymentInstitutionDefaults'
@@ -1332,6 +1394,12 @@
 -record('domain_WithdrawalProviderObject', {
     'ref' :: dmsl_domain_thrift:'WithdrawalProviderRef'(),
     'data' :: dmsl_domain_thrift:'WithdrawalProvider'()
+}).
+
+%% struct 'P2PProviderObject'
+-record('domain_P2PProviderObject', {
+    'ref' :: dmsl_domain_thrift:'P2PProviderRef'(),
+    'data' :: dmsl_domain_thrift:'P2PProvider'()
 }).
 
 %% struct 'TerminalObject'
