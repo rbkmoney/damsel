@@ -4461,7 +4461,8 @@ struct_info('P2PProvisionTerms') ->
     {struct, struct, [
     {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
     {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
 ]};
 
 struct_info('CashValueSelector') ->

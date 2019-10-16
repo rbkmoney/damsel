@@ -1624,7 +1624,7 @@ enum WalletCashFlowAccount {
 
 enum CashFlowConstant {
     operation_amount    = 1
-    /** Комиссия "сверху" - удерживаем с плательщика, помимо суммы операции  */
+    /** Комиссия "сверху" - взимается с клиента в дополнение к сумме операции */
     surplus             = 2
     // ...
     // TODO
@@ -1635,13 +1635,14 @@ enum CashFlowConstant {
 }
 
 /** Структура содержит таблицу с комиссиями, удерживаемых при совершение операции.
-    Surplus может быть выражена только через operation_amount.
+    В случае когда CashVolume не fixed, Surplus может быть выражена только через operation_amount.
     Например(5% от суммы платежа):
-        map<surplus, CashVolume{
-            share = CashVolumeShare{
-            parts = base.Rational{p = 5, q = 100},
-            of = operation_amount}
-        }>
+        map<CashFlowConstant, CashVolume> fees = {
+            'surplus': CashVolume{
+                share = CashVolumeShare{
+                parts = base.Rational{p = 5, q = 100},
+                of = operation_amount}
+            }>
  */
 struct Fees {
    1: required map<CashFlowConstant, CashVolume> fees
@@ -1823,6 +1824,7 @@ struct P2PProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
+    4: optional FeeSelector fees
 }
 
 union CashValueSelector {

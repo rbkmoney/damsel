@@ -1052,7 +1052,8 @@
 -record('domain_P2PProvisionTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
 }).
 
 %% struct 'CashValueDecision'
