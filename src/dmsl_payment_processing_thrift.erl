@@ -4038,7 +4038,8 @@ function_info('Invoicing', 'GetEvents', reply_type) ->
 function_info('Invoicing', 'ComputeTerms', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined}
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
 ]};
 function_info('Invoicing', 'ComputeTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -4408,7 +4409,8 @@ function_info('InvoiceTemplating', 'ComputeTerms', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'timestamp', undefined}
+    {3, undefined, string, 'timestamp', undefined},
+    {4, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
 ]};
 function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -4861,7 +4863,8 @@ function_info('PartyManagement', 'ComputeShopTerms', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
     {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'timestamp', undefined}
+    {4, undefined, string, 'timestamp', undefined},
+    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined}
 ]};
 function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
