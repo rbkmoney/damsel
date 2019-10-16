@@ -52,7 +52,7 @@
 
 %% struct 'Session'
 -record('p2p_adapter_Session', {
-    'state' :: dmsl_p2p_adapter_thrift:'ProxyState'() | undefined
+    'state' :: dmsl_p2p_adapter_thrift:'AdapterState'() | undefined
 }).
 
 %% struct 'Context'
@@ -65,7 +65,7 @@
 %% struct 'ProcessResult'
 -record('p2p_adapter_ProcessResult', {
     'intent' :: dmsl_p2p_adapter_thrift:'Intent'(),
-    'next_state' :: dmsl_p2p_adapter_thrift:'ProxyState'() | undefined,
+    'next_state' :: dmsl_p2p_adapter_thrift:'AdapterState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
@@ -83,7 +83,7 @@
 %% struct 'CallbackResult'
 -record('p2p_adapter_CallbackResult', {
     'intent' :: dmsl_p2p_adapter_thrift:'Intent'(),
-    'next_state' :: dmsl_p2p_adapter_thrift:'ProxyState'() | undefined,
+    'next_state' :: dmsl_p2p_adapter_thrift:'AdapterState'() | undefined,
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'response' :: dmsl_p2p_adapter_thrift:'CallbackResponse'()
 }).

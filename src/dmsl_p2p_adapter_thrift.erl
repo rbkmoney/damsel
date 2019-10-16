@@ -32,7 +32,7 @@
 -export_type([struct_info/0]).
 
 -export_type([
-    'ProxyState'/0,
+    'AdapterState'/0,
     'CallbackPayload'/0,
     'CallbackResponsePayload'/0,
     'CallbackTag'/0,
@@ -72,13 +72,13 @@
 %% typedefs
 %%
 -type typedef_name() ::
-    'ProxyState' |
+    'AdapterState' |
     'CallbackPayload' |
     'CallbackResponsePayload' |
     'CallbackTag' |
     'UserInterationID'.
 
--type 'ProxyState'() :: dmsl_base_thrift:'Opaque'().
+-type 'AdapterState'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackPayload'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackResponsePayload'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackTag'() :: dmsl_base_thrift:'Tag'().
@@ -251,7 +251,7 @@
 
 typedefs() ->
     [
-        'ProxyState',
+        'AdapterState',
         'CallbackPayload',
         'CallbackResponsePayload',
         'CallbackTag',
@@ -306,7 +306,7 @@ namespace() ->
 
 -spec typedef_info(typedef_name()) -> field_type() | no_return().
 
-typedef_info('ProxyState') ->
+typedef_info('AdapterState') ->
     string;
 
 typedef_info('CallbackPayload') ->
