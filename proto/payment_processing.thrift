@@ -350,7 +350,10 @@ struct InvoicePaymentChargebackChanged {
     1: optional domain.Cash                           cash
     2: optional bool                                  hold_funds
     3: optional domain.InvoicePaymentChargebackStatus target_status
-    4: optional domain.InvoicePaymentChargebackStage  stage
+}
+
+struct InvoicePaymentChargebackStageChanged {
+    1: required domain.InvoicePaymentChargebackStage  stage
 }
 
 /**
@@ -1006,6 +1009,7 @@ service Invoicing {
             7:  InsufficientAccountBalance ex7,
             8:  InvoicePaymentAmountExceeded ex8
             9:  InconsistentChargebackCurrency ex9,
+            11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
             14: InvoicePaymentChargebackPending ex14
             /* something else? */
