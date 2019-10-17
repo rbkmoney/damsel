@@ -140,17 +140,18 @@ union InvoiceStatus {
 struct InvoicePayment {
     1:  required InvoicePaymentID id
     2:  required base.Timestamp created_at
+    3:  required InvoicePaymentStatus status
+    6:  optional InvoicePaymentContext context
+    8:  required Cash cost
     10: required DataRevision domain_revision
+    13: required InvoicePaymentFlow flow
+    14: required Payer payer
+    15: optional PartyRevision party_revision
     16: optional PartyID owner_id
     17: optional ShopID shop_id
-    15: optional PartyRevision party_revision
-    3:  required InvoicePaymentStatus status
-    14: required Payer payer
-    8:  required Cash cost
-    13: required InvoicePaymentFlow flow
     18: optional bool make_recurrent
-    6:  optional InvoicePaymentContext context
     19: optional string external_id
+    20: optional PaymentRoute route
 }
 
 struct InvoicePaymentPending   {}
@@ -763,6 +764,7 @@ struct ContractAdjustment {
 //   ...
 
 struct TermSet {
+
     1: optional PaymentsServiceTerms payments
     2: optional RecurrentPaytoolsServiceTerms recurrent_paytools
     3: optional PayoutsServiceTerms payouts
@@ -772,8 +774,10 @@ struct TermSet {
 
 struct TimedTermSet {
     1: required base.TimestampInterval action_time
+
     2: required TermSet terms
 }
+
 
 struct TermSetHierarchy {
     3: optional string name
@@ -792,6 +796,7 @@ struct PaymentsServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
     /* Invoice level*/
+
     4: optional PaymentMethodSelector payment_methods
     5: optional CashLimitSelector cash_limit
     /* Payment level */
@@ -1395,6 +1400,7 @@ struct PaymentMethodDefinition {
 
 union PaymentMethodSelector {
     1: list<PaymentMethodDecision> decisions
+
     2: set<PaymentMethodRef> value
 }
 
