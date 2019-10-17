@@ -20,6 +20,12 @@ typedef domain.ProxyOptions Options
 typedef msgpack.Value InternalState
 
 /**
+ * Непрозрачные для процессинга данные котировки, связанные с особенностями взаимодействия с
+ * третьей стороной.
+ */
+typedef msgpack.Value QuoteData
+
+/**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
  * стороной.
  */
@@ -68,6 +74,7 @@ struct Withdrawal {
     3: required Destination destination
     4: optional Identity sender
     5: optional Identity receiver
+    6: optional Quote quote
 }
 
 typedef withdrawals_domain.Destination Destination
@@ -76,6 +83,34 @@ typedef withdrawals_domain.Identity    Identity
 struct Cash {
     1: required domain.Amount   amount
     2: required domain.Currency currency
+}
+
+/**
+ * Данные для получения котировки на заданную сумму по выбранным валютам.
+ */
+struct GetQuoteParams {
+    1: optional base.ID idempotency_id
+    2: required domain.Currency currency_from
+    3: required domain.Currency currency_to
+    /**
+     * Сумма в одной из валют обмена
+     */
+    4: required Cash exchange_cash
+}
+
+union QuoteFailure {
+    1: LimitExceededFailure limit_exceeded
+}
+
+union LimitExceededFailure {
+    1: GeneralFailure value_above_max_limit
+    2: GeneralFailure value_below_min_limit
+}
+
+struct GeneralFailure {}
+
+exception GetQuoteFailure {
+    1: required QuoteFailure failure
 }
 
 ///
@@ -93,6 +128,14 @@ struct ProcessResult {
     2: optional InternalState          next_state
 }
 
+struct Quote {
+    1: required Cash                cash_from
+    2: required Cash                cash_to
+    3: required base.Timestamp      created_at
+    4: required base.Timestamp      expires_on
+    5: required QuoteData           quote_data
+}
+
 service Adapter {
 
     /**
@@ -106,4 +149,14 @@ service Adapter {
     throws (
     )
 
+    /**
+     * Запрос к адаптеру на получение котировки.
+     */
+    Quote GetQuote (
+        1: GetQuoteParams params
+        2: Options opts
+    )
+    throws (
+        1: GetQuoteFailure ex1
+    )
 }

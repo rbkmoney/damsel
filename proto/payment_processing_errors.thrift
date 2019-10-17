@@ -71,7 +71,12 @@ union PaymentFailure {
     1: GeneralFailure       rejected_by_inspector
     2: GeneralFailure       preauthorization_failed
     3: AuthorizationFailure authorization_failed
-    4: GeneralFailure       no_route_found
+    4: NoRouteFoundFailure  no_route_found
+}
+
+union RefundFailure {
+    1: TermsViolated        terms_violated
+    2: AuthorizationFailure authorization_failed
 }
 
 union AuthorizationFailure {
@@ -88,12 +93,21 @@ union AuthorizationFailure {
     11: GeneralFailure    security_policy_violated
     12: GeneralFailure    temporarily_unavailable
     13: GeneralFailure    rejected_by_issuer         // "silent reject" / "do not honor" / rejected by issuer / ...
+    14: GeneralFailure    processing_deadline_reached
 }
 
 union LimitExceeded {
-  1: GeneralFailure unknown
-  2: GeneralFailure amount
-  3: GeneralFailure number
+  1: GeneralFailure     unknown
+  2: LimitSpanExceeded  amount
+  3: GeneralFailure     number
+}
+
+union LimitSpanExceeded {
+    1: GeneralFailure unknown
+    2: GeneralFailure operation
+    3: GeneralFailure monthly
+    4: GeneralFailure weekly
+    5: GeneralFailure daily
 }
 
 union PaymentToolReject {
@@ -109,6 +123,15 @@ union BankCardReject {
     5: GeneralFailure cvv_invalid
     // 6: GeneralFailure card_unsupported // на самом деле это нужно было роутить в другую сторону
     7: GeneralFailure issuer_not_found
+}
+
+union NoRouteFoundFailure {
+    1: GeneralFailure unknown
+    2: GeneralFailure risk_score_is_too_high
+}
+
+union TermsViolated {
+    1: GeneralFailure insufficient_merchant_funds
 }
 
 struct GeneralFailure {}

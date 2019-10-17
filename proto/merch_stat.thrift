@@ -29,6 +29,8 @@ struct StatPayment {
     15: optional string short_id
     16: optional bool make_recurrent
     17: required domain.DataRevision domain_revision
+    18: optional domain.InvoiceCart cart
+    19: optional domain.AdditionalTransactionInfo additional_transaction_info
 }
 
 union Payer {
@@ -112,6 +114,32 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
+    4: CryptoCurrency crypto_currency
+    5: MobileCommerce mobile_commerce
+}
+
+struct MobileCommerce {
+    1: required MobileOperator operator
+    2: required MobilePhone    phone
+}
+
+enum MobileOperator {
+    mts      = 1
+    beeline  = 2
+    megafone = 3
+    tele2    = 4
+    yota     = 5
+}
+
+/**
+* Телефонный номер согласно (E.164 — рекомендация ITU-T)
+* +79114363738
+* cc = 7 - код страны(1-3 цифры)
+* ctn = 9114363738 - 10-ти значный номер абонента(макс 12)
+*/
+struct MobilePhone {
+    1: required string cc
+    2: required string ctn
 }
 
 struct BankCard {
@@ -120,6 +148,15 @@ struct BankCard {
     3: required string bin
     4: required string masked_pan
     5: optional domain.BankCardTokenProvider token_provider
+}
+
+enum CryptoCurrency {
+    bitcoin
+    litecoin
+    bitcoin_cash
+    ripple
+    ethereum
+    zcash
 }
 
 struct PaymentTerminal {
@@ -180,6 +217,12 @@ struct StatInvoice {
     10: required string currency_symbolic_code
     11: optional base.Content context
     12: optional domain.InvoiceCart cart
+}
+
+struct EnrichedStatInvoice {
+    1: required StatInvoice invoice
+    2: required list<StatPayment> payments
+    3: required list<StatRefund> refunds
 }
 
 struct InvoiceUnpaid    {}
@@ -300,6 +343,7 @@ struct StatRefund {
     9 : required domain.Amount fee
     10: required string currency_symbolic_code
     11: optional string reason
+    12: optional domain.InvoiceCart cart
 }
 
 union InvoicePaymentRefundStatus {
@@ -354,6 +398,7 @@ union StatResponseData {
     4: list<StatInfo> records
     5: list<StatPayout> payouts
     6: list<StatRefund> refunds
+    7: list<EnrichedStatInvoice> enriched_invoices
 }
 
 /**
@@ -388,5 +433,14 @@ service MerchantStatistics {
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
      */
     StatResponse GetStatistics(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+}
+
+service DarkMessiahStatistics {
+
+    /**
+     * Возвращает набор данных
+     */
+    StatResponse GetByQuery(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
 }
 
