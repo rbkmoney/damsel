@@ -15,7 +15,7 @@ typedef string CryptoAddress
 typedef string CryptoCurrencySymbolicCode
 
 struct QrCode {
-    /** Содержимое QR-кода, записанное в виде потока бит */
+    /** Содержимое QR-кода, записанное в виде потока байт */
     1: required binary payload
 }
 
