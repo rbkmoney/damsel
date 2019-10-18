@@ -3284,18 +3284,19 @@ struct_info('InvoicePayment') ->
     {struct, struct, [
     {1, required, string, 'id', undefined},
     {2, required, string, 'created_at', undefined},
+    {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
+    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+    {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
     {10, required, i64, 'domain_revision', undefined},
+    {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
+    {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+    {15, optional, i64, 'party_revision', undefined},
     {16, optional, string, 'owner_id', undefined},
     {17, optional, string, 'shop_id', undefined},
-    {15, optional, i64, 'party_revision', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
-    {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
-    {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
     {18, optional, bool, 'make_recurrent', undefined},
-    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
     {19, optional, string, 'external_id', undefined},
-    {20, optional, string, 'processing_deadline', undefined}
+    {20, optional, string, 'processing_deadline', undefined},
+    {21, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
 ]};
 
 struct_info('InvoicePaymentPending') ->

@@ -115,18 +115,19 @@
 -record('domain_InvoicePayment', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'(),
+    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
+    'cost' :: dmsl_domain_thrift:'Cash'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
+    'payer' :: dmsl_domain_thrift:'Payer'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'owner_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
-    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
-    'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'(),
-    'payer' :: dmsl_domain_thrift:'Payer'(),
-    'cost' :: dmsl_domain_thrift:'Cash'(),
-    'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
     'make_recurrent' :: boolean() | undefined,
-    'context' :: dmsl_domain_thrift:'InvoicePaymentContext'() | undefined,
     'external_id' :: binary() | undefined,
-    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
 }).
 
 %% struct 'InvoicePaymentPending'
