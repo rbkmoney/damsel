@@ -167,8 +167,12 @@
 -record('payproc_InvoicePaymentChargebackChanged', {
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'hold_funds' :: boolean() | undefined,
-    'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined,
-    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'() | undefined
+    'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackStageChanged'
+-record('payproc_InvoicePaymentChargebackStageChanged', {
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'()
 }).
 
 %% struct 'InvoicePaymentRefundChange'
