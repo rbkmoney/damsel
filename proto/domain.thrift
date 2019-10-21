@@ -1462,6 +1462,8 @@ struct PaymentTerminal {
 **/
 enum TerminalPaymentProvider {
     euroset
+    wechat
+    alipay
 }
 
 typedef string DigitalWalletID
