@@ -1110,6 +1110,7 @@ service Invoicing {
             2:  InvoiceNotFound ex2
             3:  InvoicePaymentNotFound ex3
             4:  InvoicePaymentChargebackNotFound ex4
+            11: InvoicePaymentChargebackInvalidStatus ex11
         )
 
     /**
