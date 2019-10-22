@@ -403,11 +403,11 @@ union InvoicePaymentChargebackReasonCategory {
     5: InvoicePaymentChargebackReasonCategoryOther         other
 }
 
-struct InvoicePaymentChargebackReasonFraud         {}
-struct InvoicePaymentChargebackReasonDispute       {}
-struct InvoicePaymentChargebackReasonAuthorisation {}
-struct InvoicePaymentChargebackReasonPOIError      {}
-struct InvoicePaymentChargebackReasonOther         {}
+struct InvoicePaymentChargebackReasonCategoryFraud         {}
+struct InvoicePaymentChargebackReasonCategoryDispute       {}
+struct InvoicePaymentChargebackReasonCategoryAuthorisation {}
+struct InvoicePaymentChargebackReasonCategoryPOIError      {}
+struct InvoicePaymentChargebackReasonCategoryOther         {}
 
 union InvoicePaymentChargebackStage {
     1: InvoicePaymentChargebackStageChargeback     chargeback
