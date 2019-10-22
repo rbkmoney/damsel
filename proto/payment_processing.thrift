@@ -705,7 +705,11 @@ service Invoicing {
 
     /* Terms */
 
-    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
+    domain.TermSet ComputeTerms (
+        1: UserInfo user,
+        2: domain.InvoiceID id
+        3: PartyRevisionParam party_revision_param
+    )
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
 
     /* Payments */
@@ -1004,7 +1008,12 @@ service InvoiceTemplating {
 
     /* Terms */
 
-    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: base.Timestamp timestamp)
+    domain.TermSet ComputeTerms (
+        1: UserInfo user,
+        2: domain.InvoiceTemplateID id,
+        3: base.Timestamp timestamp,
+        4: PartyRevisionParam party_revision_param
+    )
         throws (
             1: InvalidUser ex1,
             2: InvoiceTemplateNotFound ex2,
@@ -1416,6 +1425,7 @@ struct Varset {
     4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
     6: optional domain.WalletID wallet_id
+    7: optional domain.P2PTool p2p_tool
 }
 
 struct PartyParams {
@@ -1977,7 +1987,13 @@ service PartyManagement {
     void UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
-    domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
+    domain.TermSet ComputeShopTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ShopID id,
+        4: base.Timestamp timestamp
+        5: PartyRevisionParam party_revision
+    )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
 
     /* Wallet */
