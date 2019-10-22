@@ -56,6 +56,7 @@
     'PartyMeta'/0,
     'ShopID'/0,
     'WalletID'/0,
+    'ScoreID'/0,
     'ContractorID'/0,
     'IdentityDocumentToken'/0,
     'PayoutToolID'/0,
@@ -409,6 +410,7 @@
     'PartyMeta' |
     'ShopID' |
     'WalletID' |
+    'ScoreID' |
     'ContractorID' |
     'IdentityDocumentToken' |
     'PayoutToolID' |
@@ -452,6 +454,7 @@
 -type 'PartyMeta'() :: #{'PartyMetaNamespace'() => 'PartyMetaData'()}.
 -type 'ShopID'() :: dmsl_base_thrift:'ID'().
 -type 'WalletID'() :: dmsl_base_thrift:'ID'().
+-type 'ScoreID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractorID'() :: dmsl_base_thrift:'ID'().
 -type 'IdentityDocumentToken'() :: dmsl_base_thrift:'Opaque'().
 -type 'PayoutToolID'() :: dmsl_base_thrift:'ID'().
@@ -2279,6 +2282,7 @@ typedefs() ->
         'PartyMeta',
         'ShopID',
         'WalletID',
+        'ScoreID',
         'ContractorID',
         'IdentityDocumentToken',
         'PayoutToolID',
@@ -2692,6 +2696,9 @@ typedef_info('ShopID') ->
     string;
 
 typedef_info('WalletID') ->
+    string;
+
+typedef_info('ScoreID') ->
     string;
 
 typedef_info('ContractorID') ->
