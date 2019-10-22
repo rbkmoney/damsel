@@ -262,7 +262,7 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'reason_code' :: binary(),
+    'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
     'hold_funds' :: boolean(),
     'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
@@ -270,6 +270,27 @@
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'external_id' :: binary() | undefined
 }).
+
+%% struct 'InvoicePaymentChargebackReason'
+-record('domain_InvoicePaymentChargebackReason', {
+    'code' :: binary(),
+    'category' :: dmsl_domain_thrift:'InvoicePaymentChargebackReasonCategory'()
+}).
+
+%% struct 'InvoicePaymentChargebackReasonCategoryFraud'
+-record('domain_InvoicePaymentChargebackReasonCategoryFraud', {}).
+
+%% struct 'InvoicePaymentChargebackReasonCategoryDispute'
+-record('domain_InvoicePaymentChargebackReasonCategoryDispute', {}).
+
+%% struct 'InvoicePaymentChargebackReasonCategoryAuthorisation'
+-record('domain_InvoicePaymentChargebackReasonCategoryAuthorisation', {}).
+
+%% struct 'InvoicePaymentChargebackReasonCategoryPOIError'
+-record('domain_InvoicePaymentChargebackReasonCategoryPOIError', {}).
+
+%% struct 'InvoicePaymentChargebackReasonCategoryOther'
+-record('domain_InvoicePaymentChargebackReasonCategoryOther', {}).
 
 %% struct 'InvoicePaymentChargebackStageChargeback'
 -record('domain_InvoicePaymentChargebackStageChargeback', {}).

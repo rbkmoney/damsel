@@ -381,7 +381,7 @@ struct InvoicePaymentChargeback {
      1: required InvoicePaymentChargebackID      id
      2: required InvoicePaymentChargebackStatus  status
      3: required base.Timestamp                  created_at
-     4: required string                          reason_code
+     4: required InvoicePaymentChargebackReason  reason
      5: required bool                            hold_funds
      6: required InvoicePaymentChargebackStage   stage
      7: required DataRevision                    domain_revision
@@ -389,6 +389,25 @@ struct InvoicePaymentChargeback {
      9: optional Cash                            cash
     11: optional string                          external_id
 }
+
+struct InvoicePaymentChargebackReason {
+    1: required string code
+    2: required InvoicePaymentChargebackReasonCategory category
+}
+
+union InvoicePaymentChargebackReasonCategory {
+    1: InvoicePaymentChargebackReasonCategoryFraud         fraud
+    2: InvoicePaymentChargebackReasonCategoryDispute       dispute
+    3: InvoicePaymentChargebackReasonCategoryAuthorisation authorisation
+    4: InvoicePaymentChargebackReasonCategoryPOIError      poi_error
+    5: InvoicePaymentChargebackReasonCategoryOther         other
+}
+
+struct InvoicePaymentChargebackReasonCategoryFraud         {}
+struct InvoicePaymentChargebackReasonCategoryDispute       {}
+struct InvoicePaymentChargebackReasonCategoryAuthorisation {}
+struct InvoicePaymentChargebackReasonCategoryPOIError      {}
+struct InvoicePaymentChargebackReasonCategoryOther         {}
 
 union InvoicePaymentChargebackStage {
     1: InvoicePaymentChargebackStageChargeback     chargeback

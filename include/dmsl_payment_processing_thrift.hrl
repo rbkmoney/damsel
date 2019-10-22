@@ -318,7 +318,7 @@
 
 %% struct 'InvoicePaymentChargebackParams'
 -record('payproc_InvoicePaymentChargebackParams', {
-    'reason_code' :: binary(),
+    'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
     'hold_funds' = false :: boolean() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,

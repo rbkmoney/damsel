@@ -150,6 +150,13 @@
     'InvoicePaymentFlowInstant'/0,
     'InvoicePaymentFlowHold'/0,
     'InvoicePaymentChargeback'/0,
+    'InvoicePaymentChargebackReason'/0,
+    'InvoicePaymentChargebackReasonCategory'/0,
+    'InvoicePaymentChargebackReasonCategoryFraud'/0,
+    'InvoicePaymentChargebackReasonCategoryDispute'/0,
+    'InvoicePaymentChargebackReasonCategoryAuthorisation'/0,
+    'InvoicePaymentChargebackReasonCategoryPOIError'/0,
+    'InvoicePaymentChargebackReasonCategoryOther'/0,
     'InvoicePaymentChargebackStage'/0,
     'InvoicePaymentChargebackStageChargeback'/0,
     'InvoicePaymentChargebackStagePreArbitration'/0,
@@ -939,6 +946,13 @@
     'InvoicePaymentFlowInstant' |
     'InvoicePaymentFlowHold' |
     'InvoicePaymentChargeback' |
+    'InvoicePaymentChargebackReason' |
+    'InvoicePaymentChargebackReasonCategory' |
+    'InvoicePaymentChargebackReasonCategoryFraud' |
+    'InvoicePaymentChargebackReasonCategoryDispute' |
+    'InvoicePaymentChargebackReasonCategoryAuthorisation' |
+    'InvoicePaymentChargebackReasonCategoryPOIError' |
+    'InvoicePaymentChargebackReasonCategoryOther' |
     'InvoicePaymentChargebackStage' |
     'InvoicePaymentChargebackStageChargeback' |
     'InvoicePaymentChargebackStagePreArbitration' |
@@ -1347,6 +1361,32 @@
 
 %% struct 'InvoicePaymentChargeback'
 -type 'InvoicePaymentChargeback'() :: #'domain_InvoicePaymentChargeback'{}.
+
+%% struct 'InvoicePaymentChargebackReason'
+-type 'InvoicePaymentChargebackReason'() :: #'domain_InvoicePaymentChargebackReason'{}.
+
+%% union 'InvoicePaymentChargebackReasonCategory'
+-type 'InvoicePaymentChargebackReasonCategory'() ::
+    {'fraud', 'InvoicePaymentChargebackReasonCategoryFraud'()} |
+    {'dispute', 'InvoicePaymentChargebackReasonCategoryDispute'()} |
+    {'authorisation', 'InvoicePaymentChargebackReasonCategoryAuthorisation'()} |
+    {'poi_error', 'InvoicePaymentChargebackReasonCategoryPOIError'()} |
+    {'other', 'InvoicePaymentChargebackReasonCategoryOther'()}.
+
+%% struct 'InvoicePaymentChargebackReasonCategoryFraud'
+-type 'InvoicePaymentChargebackReasonCategoryFraud'() :: #'domain_InvoicePaymentChargebackReasonCategoryFraud'{}.
+
+%% struct 'InvoicePaymentChargebackReasonCategoryDispute'
+-type 'InvoicePaymentChargebackReasonCategoryDispute'() :: #'domain_InvoicePaymentChargebackReasonCategoryDispute'{}.
+
+%% struct 'InvoicePaymentChargebackReasonCategoryAuthorisation'
+-type 'InvoicePaymentChargebackReasonCategoryAuthorisation'() :: #'domain_InvoicePaymentChargebackReasonCategoryAuthorisation'{}.
+
+%% struct 'InvoicePaymentChargebackReasonCategoryPOIError'
+-type 'InvoicePaymentChargebackReasonCategoryPOIError'() :: #'domain_InvoicePaymentChargebackReasonCategoryPOIError'{}.
+
+%% struct 'InvoicePaymentChargebackReasonCategoryOther'
+-type 'InvoicePaymentChargebackReasonCategoryOther'() :: #'domain_InvoicePaymentChargebackReasonCategoryOther'{}.
 
 %% union 'InvoicePaymentChargebackStage'
 -type 'InvoicePaymentChargebackStage'() ::
@@ -2380,6 +2420,13 @@ structs() ->
         'InvoicePaymentFlowInstant',
         'InvoicePaymentFlowHold',
         'InvoicePaymentChargeback',
+        'InvoicePaymentChargebackReason',
+        'InvoicePaymentChargebackReasonCategory',
+        'InvoicePaymentChargebackReasonCategoryFraud',
+        'InvoicePaymentChargebackReasonCategoryDispute',
+        'InvoicePaymentChargebackReasonCategoryAuthorisation',
+        'InvoicePaymentChargebackReasonCategoryPOIError',
+        'InvoicePaymentChargebackReasonCategoryOther',
         'InvoicePaymentChargebackStage',
         'InvoicePaymentChargebackStageChargeback',
         'InvoicePaymentChargebackStagePreArbitration',
@@ -3488,7 +3535,7 @@ struct_info('InvoicePaymentChargeback') ->
     {1, required, string, 'id', undefined},
     {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
     {3, required, string, 'created_at', undefined},
-    {4, required, string, 'reason_code', undefined},
+    {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
     {5, required, bool, 'hold_funds', undefined},
     {6, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
     {7, required, i64, 'domain_revision', undefined},
@@ -3496,6 +3543,36 @@ struct_info('InvoicePaymentChargeback') ->
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
     {11, optional, string, 'external_id', undefined}
 ]};
+
+struct_info('InvoicePaymentChargebackReason') ->
+    {struct, struct, [
+    {1, required, string, 'code', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackReasonCategory'}}, 'category', undefined}
+]};
+
+struct_info('InvoicePaymentChargebackReasonCategory') ->
+    {struct, union, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReasonCategoryFraud'}}, 'fraud', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReasonCategoryDispute'}}, 'dispute', undefined},
+    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReasonCategoryAuthorisation'}}, 'authorisation', undefined},
+    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReasonCategoryPOIError'}}, 'poi_error', undefined},
+    {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReasonCategoryOther'}}, 'other', undefined}
+]};
+
+struct_info('InvoicePaymentChargebackReasonCategoryFraud') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackReasonCategoryDispute') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackReasonCategoryAuthorisation') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackReasonCategoryPOIError') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackReasonCategoryOther') ->
+    {struct, struct, []};
 
 struct_info('InvoicePaymentChargebackStage') ->
     {struct, union, [
@@ -5127,6 +5204,24 @@ record_name('OperationTimeout') ->
 
     record_name('InvoicePaymentChargeback') ->
     'domain_InvoicePaymentChargeback';
+
+    record_name('InvoicePaymentChargebackReason') ->
+    'domain_InvoicePaymentChargebackReason';
+
+    record_name('InvoicePaymentChargebackReasonCategoryFraud') ->
+    'domain_InvoicePaymentChargebackReasonCategoryFraud';
+
+    record_name('InvoicePaymentChargebackReasonCategoryDispute') ->
+    'domain_InvoicePaymentChargebackReasonCategoryDispute';
+
+    record_name('InvoicePaymentChargebackReasonCategoryAuthorisation') ->
+    'domain_InvoicePaymentChargebackReasonCategoryAuthorisation';
+
+    record_name('InvoicePaymentChargebackReasonCategoryPOIError') ->
+    'domain_InvoicePaymentChargebackReasonCategoryPOIError';
+
+    record_name('InvoicePaymentChargebackReasonCategoryOther') ->
+    'domain_InvoicePaymentChargebackReasonCategoryOther';
 
     record_name('InvoicePaymentChargebackStageChargeback') ->
     'domain_InvoicePaymentChargebackStageChargeback';

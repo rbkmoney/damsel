@@ -569,7 +569,7 @@ struct InvoicePaymentChargebackParams {
     /**
     * Код причины чарджбэка
     */
-    1: required string reason_code
+    1: required domain.InvoicePaymentChargebackReason reason
     /**
      * Необходимость удержания средств
      * В случае, если операция считается рискованной, можно заблокировать средства
