@@ -736,6 +736,9 @@ exception InvoicePaymentRefundNotFound {}
 
 exception InvoicePaymentChargebackNotFound {}
 exception InvoicePaymentChargebackCannotReopenAfterArbitration {}
+exception InvoicePaymentChargebackInvalidStage {
+    1: required domain.InvoicePaymentChargebackStage stage
+}
 exception InvoicePaymentChargebackInvalidStatus {
     1: required domain.InvoicePaymentChargebackStatus status
 }
@@ -1113,6 +1116,7 @@ service Invoicing {
             3:  InvoicePaymentNotFound ex3
             4:  InvoicePaymentChargebackNotFound ex4
             11: InvoicePaymentChargebackInvalidStatus ex11
+            15: InvoicePaymentChargebackInvalidStage ex15
         )
 
     /**
