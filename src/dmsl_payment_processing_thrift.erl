@@ -266,6 +266,7 @@
     'InvoicePaymentRefundNotFound'/0,
     'InvoicePaymentChargebackNotFound'/0,
     'InvoicePaymentChargebackCannotReopenAfterArbitration'/0,
+    'InvoicePaymentChargebackInvalidStage'/0,
     'InvoicePaymentChargebackInvalidStatus'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
@@ -583,6 +584,7 @@
     'InvoicePaymentRefundNotFound' |
     'InvoicePaymentChargebackNotFound' |
     'InvoicePaymentChargebackCannotReopenAfterArbitration' |
+    'InvoicePaymentChargebackInvalidStage' |
     'InvoicePaymentChargebackInvalidStatus' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
@@ -1424,6 +1426,9 @@
 
 %% exception 'InvoicePaymentChargebackCannotReopenAfterArbitration'
 -type 'InvoicePaymentChargebackCannotReopenAfterArbitration'() :: #'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration'{}.
+
+%% exception 'InvoicePaymentChargebackInvalidStage'
+-type 'InvoicePaymentChargebackInvalidStage'() :: #'payproc_InvoicePaymentChargebackInvalidStage'{}.
 
 %% exception 'InvoicePaymentChargebackInvalidStatus'
 -type 'InvoicePaymentChargebackInvalidStatus'() :: #'payproc_InvoicePaymentChargebackInvalidStatus'{}.
@@ -3318,6 +3323,11 @@ struct_info('InvoicePaymentChargebackNotFound') ->
 struct_info('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
     {struct, exception, []};
 
+struct_info('InvoicePaymentChargebackInvalidStage') ->
+    {struct, exception, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
+]};
+
 struct_info('InvoicePaymentChargebackInvalidStatus') ->
     {struct, exception, [
     {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
@@ -3981,6 +3991,9 @@ record_name('InternalUser') ->
     record_name('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
     'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration';
 
+    record_name('InvoicePaymentChargebackInvalidStage') ->
+    'payproc_InvoicePaymentChargebackInvalidStage';
+
     record_name('InvoicePaymentChargebackInvalidStatus') ->
     'payproc_InvoicePaymentChargebackInvalidStatus';
 
@@ -4581,7 +4594,8 @@ function_info('Invoicing', 'CancelChargeback', reply_type) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
-        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined}
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
+        {15, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStage'}}, 'ex15', undefined}
     ]};
 function_info('Invoicing', 'RefundPayment', params_type) ->
     {struct, struct, [

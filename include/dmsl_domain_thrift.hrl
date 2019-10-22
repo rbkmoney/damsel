@@ -283,14 +283,16 @@
 %% struct 'InvoicePaymentChargebackPending'
 -record('domain_InvoicePaymentChargebackPending', {}).
 
-%% struct 'InvoicePaymentChargebackAccepted'
--record('domain_InvoicePaymentChargebackAccepted', {}).
-
 %% struct 'InvoicePaymentChargebackRejected'
 -record('domain_InvoicePaymentChargebackRejected', {}).
 
 %% struct 'InvoicePaymentChargebackCancelled'
 -record('domain_InvoicePaymentChargebackCancelled', {}).
+
+%% struct 'InvoicePaymentChargebackAccepted'
+-record('domain_InvoicePaymentChargebackAccepted', {
+    'cash' :: dmsl_domain_thrift:'Cash'()
+}).
 
 %% struct 'InvoicePaymentRefund'
 -record('domain_InvoicePaymentRefund', {

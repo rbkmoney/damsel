@@ -944,6 +944,11 @@
 %% exception 'InvoicePaymentChargebackCannotReopenAfterArbitration'
 -record('payproc_InvoicePaymentChargebackCannotReopenAfterArbitration', {}).
 
+%% exception 'InvoicePaymentChargebackInvalidStage'
+-record('payproc_InvoicePaymentChargebackInvalidStage', {
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'()
+}).
+
 %% exception 'InvoicePaymentChargebackInvalidStatus'
 -record('payproc_InvoicePaymentChargebackInvalidStatus', {
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
