@@ -936,7 +936,7 @@ struct P2PServiceTerms {
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
     4: optional FeeSelector fees
-    5: optional P2PMethodSelector p2p_method
+    5: optional Predicate allow
     6: optional P2PTokenLifetime lifetime
 }
 
@@ -1352,21 +1352,6 @@ struct CashLimitDecision {
 }
 
 /* Payment methods */
-
-struct P2PMethod {
-    1: required set<P2PInstrument> sender
-    2: required set<P2PInstrument> receiver
-}
-
-struct P2PInstrument {
-    1: optional PaymentSystemCondition payment_system
-    2: optional ResidenceCondition issuer_country
-}
-
-union ResidenceCondition {
-    1: Residence is_
-    2: Residence is_not
-}
 
 union PaymentMethod {
     1: BankCardPaymentSystem bank_card
