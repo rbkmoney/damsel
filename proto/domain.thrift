@@ -970,16 +970,6 @@ struct PayoutMethodDecision {
     2: required PayoutMethodSelector then_
 }
 
-union P2PMethodSelector {
-    1: list<P2PMethodDecision> decisions
-    2: set<P2PMethod> value
-}
-
-struct P2PMethodDecision {
-    1: required Predicate if_
-    2: required P2PMethodSelector then_
-}
-
 /* Reports service terms */
 struct ReportsServiceTerms {
     1: optional ServiceAcceptanceActsTerms acts
