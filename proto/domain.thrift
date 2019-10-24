@@ -774,6 +774,7 @@ struct LifetimeInterval {
     1: optional i16 years
     2: optional i16 months
     3: optional i16 days
+    4: optional i32 seconds
 }
 
 union ContractTemplateSelector {
@@ -936,12 +937,8 @@ struct P2PServiceTerms {
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
     4: optional FeeSelector fees
-    5: optional Predicate allow_is
-    6: optional P2PTokenLifetime lifetime
-}
-
-struct P2PTokenLifetime {
-    1: required i32 seconds
+    5: optional Predicate allow
+    6: optional Lifetime lifetime
 }
 
 /* Payout methods */
