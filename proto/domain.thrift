@@ -936,7 +936,7 @@ struct P2PServiceTerms {
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
     4: optional FeeSelector fees
-    5: optional Predicate allow
+    5: optional Predicate allow_is
     6: optional P2PTokenLifetime lifetime
 }
 
