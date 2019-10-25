@@ -36,7 +36,7 @@
     'CallbackPayload'/0,
     'CallbackResponsePayload'/0,
     'CallbackTag'/0,
-    'UserInterationID'/0
+    'UserInteractionID'/0
 ]).
 -export_type([
     'Intent'/0,
@@ -76,13 +76,13 @@
     'CallbackPayload' |
     'CallbackResponsePayload' |
     'CallbackTag' |
-    'UserInterationID'.
+    'UserInteractionID'.
 
 -type 'AdapterState'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackPayload'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackResponsePayload'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackTag'() :: dmsl_base_thrift:'Tag'().
--type 'UserInterationID'() :: dmsl_base_thrift:'ID'().
+-type 'UserInteractionID'() :: dmsl_base_thrift:'ID'().
 
 %%
 %% enums
@@ -255,7 +255,7 @@ typedefs() ->
         'CallbackPayload',
         'CallbackResponsePayload',
         'CallbackTag',
-        'UserInterationID'
+        'UserInteractionID'
     ].
 
 -spec enums() -> [].
@@ -318,7 +318,7 @@ typedef_info('CallbackResponsePayload') ->
 typedef_info('CallbackTag') ->
     string;
 
-typedef_info('UserInterationID') ->
+typedef_info('UserInteractionID') ->
     string;
 
 typedef_info(_) -> erlang:error(badarg).

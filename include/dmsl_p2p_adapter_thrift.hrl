@@ -24,7 +24,7 @@
 
 %% struct 'UserInteraction'
 -record('p2p_adapter_UserInteraction', {
-    'id' :: dmsl_p2p_adapter_thrift:'UserInterationID'(),
+    'id' :: dmsl_p2p_adapter_thrift:'UserInteractionID'(),
     'intent' :: dmsl_p2p_adapter_thrift:'UserInteractionIntent'()
 }).
 

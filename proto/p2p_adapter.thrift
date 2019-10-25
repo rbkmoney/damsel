@@ -18,7 +18,7 @@ typedef base.Opaque CallbackPayload
 typedef base.Opaque CallbackResponsePayload
 
 typedef base.Tag CallbackTag
-typedef base.ID UserInterationID
+typedef base.ID UserInteractionID
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -82,7 +82,7 @@ struct UserInteraction {
      * Должен быть уникален в пределах операции.
      * Этот идентификатор будет виден внешним пользователям.
      */
-    1: required UserInterationID id
+    1: required UserInteractionID id
 
     /** Что именно необходимо сделать с запросом взаимодействия */
     2: required UserInteractionIntent intent
