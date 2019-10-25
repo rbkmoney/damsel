@@ -938,7 +938,6 @@ struct P2PServiceTerms {
     3: optional CashFlowSelector cash_flow
     4: optional FeeSelector fees
     5: optional Predicate allow
-    6: optional Lifetime lifetime
 }
 
 /* Payout methods */
@@ -1655,7 +1654,8 @@ enum CashFlowConstant {
         }
  */
 struct Fees {
-   1: required map<CashFlowConstant, CashVolume> fees
+    1: required map<CashFlowConstant, CashVolume> fees
+    2: optional Lifetime token_lifetime
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
