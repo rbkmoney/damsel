@@ -774,6 +774,9 @@ struct LifetimeInterval {
     1: optional i16 years
     2: optional i16 months
     3: optional i16 days
+    4: optional i16 hours
+    5: optional i16 minutes
+    6: optional i16 seconds
 }
 
 union ContractTemplateSelector {
@@ -932,10 +935,12 @@ struct WithdrawalServiceTerms {
 /** P2P service terms **/
 
 struct P2PServiceTerms {
-    1: optional CurrencySelector currencies
-    2: optional CashLimitSelector cash_limit
-    3: optional CashFlowSelector cash_flow
-    4: optional FeeSelector fees
+    1: optional Predicate allow
+    2: optional CurrencySelector currencies
+    3: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
+    5: optional FeeSelector fees
+    6: optional Lifetime quote_lifetime
 }
 
 /* Payout methods */
@@ -1652,7 +1657,7 @@ enum CashFlowConstant {
         }
  */
 struct Fees {
-   1: required map<CashFlowConstant, CashVolume> fees
+    1: required map<CashFlowConstant, CashVolume> fees
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext

@@ -3843,7 +3843,10 @@ struct_info('LifetimeInterval') ->
     {struct, struct, [
     {1, optional, i16, 'years', undefined},
     {2, optional, i16, 'months', undefined},
-    {3, optional, i16, 'days', undefined}
+    {3, optional, i16, 'days', undefined},
+    {4, optional, i16, 'hours', undefined},
+    {5, optional, i16, 'minutes', undefined},
+    {6, optional, i16, 'seconds', undefined}
 ]};
 
 struct_info('ContractTemplateSelector') ->
@@ -3983,10 +3986,12 @@ struct_info('WithdrawalServiceTerms') ->
 
 struct_info('P2PServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
+    {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+    {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+    {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined},
+    {6, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'quote_lifetime', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
