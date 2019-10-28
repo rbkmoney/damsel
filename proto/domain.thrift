@@ -940,7 +940,7 @@ struct P2PServiceTerms {
     3: optional CashLimitSelector cash_limit
     4: optional CashFlowSelector cash_flow
     5: optional FeeSelector fees
-    6: optional Lifetime fee_token_lifetime
+    6: optional Lifetime quote_lifetime
 }
 
 /* Payout methods */
