@@ -114,7 +114,6 @@ typedef base.ID InvoicePaymentRefundID
 typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
-typedef base.Content InvoiceRefundContext
 typedef string PaymentSessionID
 typedef string Fingerprint
 typedef string IPAddress
