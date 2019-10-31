@@ -7,6 +7,7 @@ include "domain.thrift"
 include "user_interaction.thrift"
 include "timeout_behaviour.thrift"
 include "repairing.thrift"
+include "msgpack.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -398,7 +399,7 @@ struct EventRange {
      *
      * _Допустимые значения_: неотрицательные числа
      */
-    2: required i32 limit
+    2: optional i32 limit
 
 }
 
@@ -688,7 +689,7 @@ service Invoicing {
             7: InvoiceTemplateRemoved ex7
         )
 
-    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id)
+    Invoice Get (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2
@@ -704,7 +705,11 @@ service Invoicing {
 
     /* Terms */
 
-    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceID id)
+    domain.TermSet ComputeTerms (
+        1: UserInfo user,
+        2: domain.InvoiceID id
+        3: PartyRevisionParam party_revision_param
+    )
         throws (1: InvalidUser ex1, 2: InvoiceNotFound ex2)
 
     /* Payments */
@@ -1003,7 +1008,12 @@ service InvoiceTemplating {
 
     /* Terms */
 
-    domain.TermSet ComputeTerms (1: UserInfo user, 2: domain.InvoiceTemplateID id, 3: base.Timestamp timestamp)
+    domain.TermSet ComputeTerms (
+        1: UserInfo user,
+        2: domain.InvoiceTemplateID id,
+        3: base.Timestamp timestamp,
+        4: PartyRevisionParam party_revision_param
+    )
         throws (
             1: InvalidUser ex1,
             2: InvoiceTemplateNotFound ex2,
@@ -1180,7 +1190,7 @@ service CustomerManagement {
             6: OperationNotPermitted operation_not_permitted
         )
 
-    Customer Get (1: CustomerID id)
+    Customer Get (1: CustomerID id, 2: EventRange range)
         throws (
             1: InvalidUser      invalid_user
             2: CustomerNotFound not_found
@@ -1236,6 +1246,7 @@ struct RecurrentPaymentTool {
     8:  required DisposablePaymentResource  payment_resource
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
+    12: optional domain.Cash                minimal_payment_cost
 }
 
 struct RecurrentPaymentToolParams {
@@ -1266,6 +1277,11 @@ typedef list<RecurrentPaymentToolEvent> RecurrentPaymentToolEvents
 /*
  * События, связанные непосредственно с получением рекуррентных токенов
  */
+
+struct RecurrentPaymentToolEventData {
+    1: required list<RecurrentPaymentToolChange> changes
+}
+
 struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
@@ -1278,11 +1294,13 @@ struct RecurrentPaymentToolSessionChange {
 }
 
 union RecurrentPaymentToolChange {
-    1: RecurrentPaymentToolHasCreated    rec_payment_tool_created
-    2: RecurrentPaymentToolHasAcquired   rec_payment_tool_acquired
-    3: RecurrentPaymentToolHasAbandoned  rec_payment_tool_abandoned
-    4: RecurrentPaymentToolHasFailed     rec_payment_tool_failed
-    5: RecurrentPaymentToolSessionChange rec_payment_tool_session_changed
+    1: RecurrentPaymentToolHasCreated       rec_payment_tool_created
+    6: RecurrentPaymentToolRiskScoreChanged rec_payment_tool_risk_score_changed
+    7: RecurrentPaymentToolRouteChanged     rec_payment_tool_route_changed
+    2: RecurrentPaymentToolHasAcquired      rec_payment_tool_acquired
+    3: RecurrentPaymentToolHasAbandoned     rec_payment_tool_abandoned
+    4: RecurrentPaymentToolHasFailed        rec_payment_tool_failed
+    5: RecurrentPaymentToolSessionChange    rec_payment_tool_session_changed
 }
 
 /*
@@ -1290,8 +1308,27 @@ union RecurrentPaymentToolChange {
  */
 struct RecurrentPaymentToolHasCreated {
     1: required RecurrentPaymentTool rec_payment_tool
-    2: required domain.RiskScore     risk_score
-    3: required domain.PaymentRoute  route
+    /** deprecated */
+    /** Оценка риска платежного средства. */
+    2: optional domain.RiskScore     risk_score
+    /** Выбранный маршрут обработки платежного средства. */
+    3: optional domain.PaymentRoute  route
+}
+
+/**
+ * Событие об изменении оценки риска платежного средства.
+ */
+struct RecurrentPaymentToolRiskScoreChanged {
+    /** Оценка риска платежного средства. */
+    1: required domain.RiskScore risk_score
+}
+
+/**
+ * Событие об изменении маршрута обработки платежного средства.
+ */
+struct RecurrentPaymentToolRouteChanged {
+    /** Выбранный маршрут обработки платежного средства. */
+    1: required domain.PaymentRoute route
 }
 
 /*
@@ -1388,6 +1425,7 @@ struct Varset {
     4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
     6: optional domain.WalletID wallet_id
+    7: optional domain.P2PTool p2p_tool
 }
 
 struct PartyParams {
@@ -1672,8 +1710,12 @@ struct AccountState {
 }
 
 // Events
-// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
+struct PartyEventData {
+    1: required list<PartyChange> changes
+    2: optional msgpack.Value state_snapshot
+}
 
+// changes, marked by '#' may affect Party state and may produce PartyRevisionChanged change as well
 union PartyChange {
     1: PartyCreated         party_created           // #
     4: domain.Blocking      party_blocking          // #
@@ -1912,8 +1954,21 @@ service PartyManagement {
             3: ContractNotFound ex3
         )
 
-    domain.TermSet ComputeContractTerms (1: UserInfo user, 2: PartyID party_id, 3: ContractID id, 4: base.Timestamp timestamp)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ContractNotFound ex4)
+    domain.TermSet ComputeContractTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ContractID contract_id,
+        4: base.Timestamp timestamp
+        5: PartyRevisionParam party_revision
+        6: domain.DataRevision domain_revision
+        7: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3
+            4: ContractNotFound ex4
+        )
 
     /* Shop */
 
@@ -1932,12 +1987,18 @@ service PartyManagement {
     void UnblockShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: string reason)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
 
-    domain.TermSet ComputeShopTerms (1: UserInfo user, 2: PartyID party_id, 3: ShopID id, 4: base.Timestamp timestamp)
+    domain.TermSet ComputeShopTerms (
+        1: UserInfo user,
+        2: PartyID party_id,
+        3: ShopID id,
+        4: base.Timestamp timestamp
+        5: PartyRevisionParam party_revision
+    )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
 
     /* Wallet */
 
-    // temporary method for transfer period
+    // deprecated
     // do not use
     domain.TermSet ComputeWalletTermsNew (
         1: UserInfo user,
@@ -1945,17 +2006,6 @@ service PartyManagement {
         3: ContractID contract_id,
         4: base.Timestamp timestamp
         5: Varset varset
-    )
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
-
-    // deprecated
-    domain.TermSet ComputeWalletTerms (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ContractID contract_id,
-        4: WalletID wallet_id,
-        5: domain.CurrencyRef currency,
-        6: base.Timestamp timestamp
     )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
 
