@@ -1903,7 +1903,6 @@ struct Inspector {
     2: required string description
     3: required Proxy proxy
     4: optional RiskScore fallback_risk_score
-    5: optional list<ScoreID> risk_types
 }
 
 union InspectorSelector {
@@ -1914,6 +1913,25 @@ union InspectorSelector {
 struct InspectorDecision {
     1: required Predicate if_
     2: required InspectorSelector then_
+}
+
+struct P2PInspectorRef { 1: required ObjectID id }
+
+struct P2PInspector {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+    4: optional map<ScoreID, RiskScore> fallback_risk_score
+}
+
+union P2PInspectorSelector {
+    1: list<P2PInspectorDecision> decisions
+    2: P2PInspectorRef value
+}
+
+struct P2PInspectorDecision {
+    1: required Predicate if_
+    2: required P2PInspectorSelector then_
 }
 
 /**
@@ -2271,6 +2289,11 @@ struct InspectorObject {
     2: required Inspector data
 }
 
+struct P2PInspectorObject {
+    1: required P2PInspectorRef ref
+    2: required P2PInspector data
+}
+
 struct PaymentInstitutionObject {
     1: required PaymentInstitutionRef ref
     2: required PaymentInstitution data
@@ -2311,6 +2334,7 @@ union Reference {
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
+    25 : P2PInspectorRef         p2p_inspector
     14 : SystemAccountSetRef     system_account_set
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
@@ -2341,6 +2365,7 @@ union DomainObject {
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
+    25 : P2PInspectorObject         p2p_inspector
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
