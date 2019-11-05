@@ -1415,6 +1415,16 @@ struct BankCard {
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
     9: optional bool is_cvv_empty
+   10: optional BankCardExpDate exp_date
+   11: optional string cardholder
+}
+
+/** Дата экспирации */
+struct BankCardExpDate {
+    /** Месяц 1..12 */
+    1: required i8 month
+    /** Год 2015..∞ */
+    2: required i16 year
 }
 
 struct CryptoWallet {
