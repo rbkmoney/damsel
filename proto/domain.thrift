@@ -940,7 +940,7 @@ struct P2PServiceTerms {
     3: optional CashLimitSelector cash_limit
     4: optional CashFlowSelector cash_flow
     5: optional FeeSelector fees
-    6: optional Lifetime quote_lifetime
+    6: optional LifetimeSelector quote_lifetime
 }
 
 /* Payout methods */
@@ -1544,6 +1544,15 @@ struct TimeSpanDecision {
     2: required TimeSpanSelector then_
 }
 
+union LifetimeSelector {
+    1: list<LifetimeDecision> decisions
+    2: Lifetime value
+}
+
+struct LifetimeDecision {
+    1: required Predicate if_
+    2: required LifetimeSelector then_
+}
 /* Flows */
 
 // TODO
@@ -1894,6 +1903,7 @@ struct Inspector {
     2: required string description
     3: required Proxy proxy
     4: optional RiskScore fallback_risk_score
+    5: optional list<ScoreID> risk_types
 }
 
 union InspectorSelector {
@@ -2122,6 +2132,7 @@ struct PaymentInstitution {
     12: optional string identity
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
+    15: optional InspectorSelector p2p_inspector
 }
 
 enum PaymentInstitutionRealm {
