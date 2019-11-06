@@ -2150,7 +2150,7 @@ struct PaymentInstitution {
     12: optional string identity
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
-    15: optional InspectorSelector p2p_inspector
+    15: optional P2PInspectorSelector p2p_inspector
 }
 
 enum PaymentInstitutionRealm {
