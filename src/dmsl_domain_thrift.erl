@@ -249,6 +249,7 @@
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
     'BankCard'/0,
+    'BankCardExpDate'/0,
     'CryptoWallet'/0,
     'MobileCommerce'/0,
     'MobilePhone'/0,
@@ -1041,6 +1042,7 @@
     'PaymentTool' |
     'DisposablePaymentResource' |
     'BankCard' |
+    'BankCardExpDate' |
     'CryptoWallet' |
     'MobileCommerce' |
     'MobilePhone' |
@@ -1698,6 +1700,9 @@
 
 %% struct 'BankCard'
 -type 'BankCard'() :: #'domain_BankCard'{}.
+
+%% struct 'BankCardExpDate'
+-type 'BankCardExpDate'() :: #'domain_BankCardExpDate'{}.
 
 %% struct 'CryptoWallet'
 -type 'CryptoWallet'() :: #'domain_CryptoWallet'{}.
@@ -2483,6 +2488,7 @@ structs() ->
         'PaymentTool',
         'DisposablePaymentResource',
         'BankCard',
+        'BankCardExpDate',
         'CryptoWallet',
         'MobileCommerce',
         'MobilePhone',
@@ -4185,7 +4191,15 @@ struct_info('BankCard') ->
     {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
     {7, optional, string, 'bank_name', undefined},
     {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
-    {9, optional, bool, 'is_cvv_empty', undefined}
+    {9, optional, bool, 'is_cvv_empty', undefined},
+    {10, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardExpDate'}}, 'exp_date', undefined},
+    {11, optional, string, 'cardholder_name', undefined}
+]};
+
+struct_info('BankCardExpDate') ->
+    {struct, struct, [
+    {1, required, byte, 'month', undefined},
+    {2, required, i16, 'year', undefined}
 ]};
 
 struct_info('CryptoWallet') ->
@@ -5395,6 +5409,9 @@ record_name('OperationTimeout') ->
 
     record_name('BankCard') ->
     'domain_BankCard';
+
+    record_name('BankCardExpDate') ->
+    'domain_BankCardExpDate';
 
     record_name('CryptoWallet') ->
     'domain_CryptoWallet';
