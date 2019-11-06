@@ -679,7 +679,7 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined,
-    'quote_lifetime' :: dmsl_domain_thrift:'Lifetime'() | undefined
+    'quote_lifetime' :: dmsl_domain_thrift:'LifetimeSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'
@@ -906,6 +906,12 @@
     'then_' :: dmsl_domain_thrift:'TimeSpanSelector'()
 }).
 
+%% struct 'LifetimeDecision'
+-record('domain_LifetimeDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'LifetimeSelector'()
+}).
+
 %% struct 'Fees'
 -record('domain_Fees', {
     'fees' :: #{atom() => dmsl_domain_thrift:'CashVolume'()}
@@ -1118,6 +1124,25 @@
     'then_' :: dmsl_domain_thrift:'InspectorSelector'()
 }).
 
+%% struct 'P2PInspectorRef'
+-record('domain_P2PInspectorRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'P2PInspector'
+-record('domain_P2PInspector', {
+    'name' :: binary(),
+    'description' :: binary(),
+    'proxy' :: dmsl_domain_thrift:'Proxy'(),
+    'fallback_risk_score' :: #{dmsl_domain_thrift:'ScoreID'() => atom()} | undefined
+}).
+
+%% struct 'P2PInspectorDecision'
+-record('domain_P2PInspectorDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'P2PInspectorSelector'()
+}).
+
 %% struct 'Terminal'
 -record('domain_Terminal', {
     'name' :: binary(),
@@ -1275,7 +1300,8 @@
     'wallet_system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
     'identity' :: binary() | undefined,
     'withdrawal_providers' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
-    'p2p_providers' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined
+    'p2p_providers' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined,
+    'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined
 }).
 
 %% struct 'ContractPaymentInstitutionDefaults'
@@ -1426,6 +1452,12 @@
 -record('domain_InspectorObject', {
     'ref' :: dmsl_domain_thrift:'InspectorRef'(),
     'data' :: dmsl_domain_thrift:'Inspector'()
+}).
+
+%% struct 'P2PInspectorObject'
+-record('domain_P2PInspectorObject', {
+    'ref' :: dmsl_domain_thrift:'P2PInspectorRef'(),
+    'data' :: dmsl_domain_thrift:'P2PInspector'()
 }).
 
 %% struct 'PaymentInstitutionObject'

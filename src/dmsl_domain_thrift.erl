@@ -266,6 +266,8 @@
     'HoldLifetimeDecision'/0,
     'TimeSpanSelector'/0,
     'TimeSpanDecision'/0,
+    'LifetimeSelector'/0,
+    'LifetimeDecision'/0,
     'CashFlowAccount'/0,
     'Fees'/0,
     'CashFlowPosting'/0,
@@ -308,6 +310,10 @@
     'Inspector'/0,
     'InspectorSelector'/0,
     'InspectorDecision'/0,
+    'P2PInspectorRef'/0,
+    'P2PInspector'/0,
+    'P2PInspectorSelector'/0,
+    'P2PInspectorDecision'/0,
     'Terminal'/0,
     'TerminalSelector'/0,
     'TerminalDecision'/0,
@@ -372,6 +378,7 @@
     'P2PProviderObject'/0,
     'TerminalObject'/0,
     'InspectorObject'/0,
+    'P2PInspectorObject'/0,
     'PaymentInstitutionObject'/0,
     'SystemAccountSetObject'/0,
     'ExternalAccountSetObject'/0,
@@ -1059,6 +1066,8 @@
     'HoldLifetimeDecision' |
     'TimeSpanSelector' |
     'TimeSpanDecision' |
+    'LifetimeSelector' |
+    'LifetimeDecision' |
     'CashFlowAccount' |
     'Fees' |
     'CashFlowPosting' |
@@ -1101,6 +1110,10 @@
     'Inspector' |
     'InspectorSelector' |
     'InspectorDecision' |
+    'P2PInspectorRef' |
+    'P2PInspector' |
+    'P2PInspectorSelector' |
+    'P2PInspectorDecision' |
     'Terminal' |
     'TerminalSelector' |
     'TerminalDecision' |
@@ -1165,6 +1178,7 @@
     'P2PProviderObject' |
     'TerminalObject' |
     'InspectorObject' |
+    'P2PInspectorObject' |
     'PaymentInstitutionObject' |
     'SystemAccountSetObject' |
     'ExternalAccountSetObject' |
@@ -1758,6 +1772,14 @@
 %% struct 'TimeSpanDecision'
 -type 'TimeSpanDecision'() :: #'domain_TimeSpanDecision'{}.
 
+%% union 'LifetimeSelector'
+-type 'LifetimeSelector'() ::
+    {'decisions', ['LifetimeDecision'()]} |
+    {'value', 'Lifetime'()}.
+
+%% struct 'LifetimeDecision'
+-type 'LifetimeDecision'() :: #'domain_LifetimeDecision'{}.
+
 %% union 'CashFlowAccount'
 -type 'CashFlowAccount'() ::
     {'merchant', 'MerchantCashFlowAccount'()} |
@@ -1907,6 +1929,20 @@
 
 %% struct 'InspectorDecision'
 -type 'InspectorDecision'() :: #'domain_InspectorDecision'{}.
+
+%% struct 'P2PInspectorRef'
+-type 'P2PInspectorRef'() :: #'domain_P2PInspectorRef'{}.
+
+%% struct 'P2PInspector'
+-type 'P2PInspector'() :: #'domain_P2PInspector'{}.
+
+%% union 'P2PInspectorSelector'
+-type 'P2PInspectorSelector'() ::
+    {'decisions', ['P2PInspectorDecision'()]} |
+    {'value', 'P2PInspectorRef'()}.
+
+%% struct 'P2PInspectorDecision'
+-type 'P2PInspectorDecision'() :: #'domain_P2PInspectorDecision'{}.
 
 %% struct 'Terminal'
 -type 'Terminal'() :: #'domain_Terminal'{}.
@@ -2136,6 +2172,9 @@
 %% struct 'InspectorObject'
 -type 'InspectorObject'() :: #'domain_InspectorObject'{}.
 
+%% struct 'P2PInspectorObject'
+-type 'P2PInspectorObject'() :: #'domain_P2PInspectorObject'{}.
+
 %% struct 'PaymentInstitutionObject'
 -type 'PaymentInstitutionObject'() :: #'domain_PaymentInstitutionObject'{}.
 
@@ -2166,6 +2205,7 @@
     {'provider', 'ProviderRef'()} |
     {'terminal', 'TerminalRef'()} |
     {'inspector', 'InspectorRef'()} |
+    {'p2p_inspector', 'P2PInspectorRef'()} |
     {'system_account_set', 'SystemAccountSetRef'()} |
     {'external_account_set', 'ExternalAccountSetRef'()} |
     {'proxy', 'ProxyRef'()} |
@@ -2192,6 +2232,7 @@
     {'provider', 'ProviderObject'()} |
     {'terminal', 'TerminalObject'()} |
     {'inspector', 'InspectorObject'()} |
+    {'p2p_inspector', 'P2PInspectorObject'()} |
     {'system_account_set', 'SystemAccountSetObject'()} |
     {'external_account_set', 'ExternalAccountSetObject'()} |
     {'proxy', 'ProxyObject'()} |
@@ -2505,6 +2546,8 @@ structs() ->
         'HoldLifetimeDecision',
         'TimeSpanSelector',
         'TimeSpanDecision',
+        'LifetimeSelector',
+        'LifetimeDecision',
         'CashFlowAccount',
         'Fees',
         'CashFlowPosting',
@@ -2547,6 +2590,10 @@ structs() ->
         'Inspector',
         'InspectorSelector',
         'InspectorDecision',
+        'P2PInspectorRef',
+        'P2PInspector',
+        'P2PInspectorSelector',
+        'P2PInspectorDecision',
         'Terminal',
         'TerminalSelector',
         'TerminalDecision',
@@ -2611,6 +2658,7 @@ structs() ->
         'P2PProviderObject',
         'TerminalObject',
         'InspectorObject',
+        'P2PInspectorObject',
         'PaymentInstitutionObject',
         'SystemAccountSetObject',
         'ExternalAccountSetObject',
@@ -3997,7 +4045,7 @@ struct_info('P2PServiceTerms') ->
     {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
     {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
     {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'quote_lifetime', undefined}
+    {6, optional, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'quote_lifetime', undefined}
 ]};
 
 struct_info('PayoutMethodRef') ->
@@ -4298,6 +4346,18 @@ struct_info('TimeSpanDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'then_', undefined}
 ]};
 
+struct_info('LifetimeSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'LifetimeDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'value', undefined}
+]};
+
+struct_info('LifetimeDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'then_', undefined}
+]};
+
 struct_info('CashFlowAccount') ->
     {struct, union, [
     {1, optional, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'merchant', undefined},
@@ -4574,6 +4634,31 @@ struct_info('InspectorDecision') ->
     {2, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'then_', undefined}
 ]};
 
+struct_info('P2PInspectorRef') ->
+    {struct, struct, [
+    {1, required, i32, 'id', undefined}
+]};
+
+struct_info('P2PInspector') ->
+    {struct, struct, [
+    {1, required, string, 'name', undefined},
+    {2, required, string, 'description', undefined},
+    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+    {4, optional, {map, string, {enum, {dmsl_domain_thrift, 'RiskScore'}}}, 'fallback_risk_score', undefined}
+]};
+
+struct_info('P2PInspectorSelector') ->
+    {struct, union, [
+    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorDecision'}}}, 'decisions', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'value', undefined}
+]};
+
+struct_info('P2PInspectorDecision') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+    {2, required, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'then_', undefined}
+]};
+
 struct_info('Terminal') ->
     {struct, struct, [
     {1, required, string, 'name', undefined},
@@ -4815,7 +4900,8 @@ struct_info('PaymentInstitution') ->
     {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
     {12, optional, string, 'identity', undefined},
     {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
-    {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined}
+    {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined},
+    {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined}
 ]};
 
 struct_info('ContractPaymentInstitutionDefaults') ->
@@ -4968,6 +5054,12 @@ struct_info('InspectorObject') ->
     {2, required, {struct, struct, {dmsl_domain_thrift, 'Inspector'}}, 'data', undefined}
 ]};
 
+struct_info('P2PInspectorObject') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'ref', undefined},
+    {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspector'}}, 'data', undefined}
+]};
+
 struct_info('PaymentInstitutionObject') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
@@ -5013,6 +5105,7 @@ struct_info('Reference') ->
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined},
     {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'inspector', undefined},
+    {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'p2p_inspector', undefined},
     {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'system_account_set', undefined},
     {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'external_account_set', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
@@ -5040,6 +5133,7 @@ struct_info('DomainObject') ->
     {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderObject'}}, 'provider', undefined},
     {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalObject'}}, 'terminal', undefined},
     {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorObject'}}, 'inspector', undefined},
+    {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorObject'}}, 'p2p_inspector', undefined},
     {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetObject'}}, 'system_account_set', undefined},
     {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetObject'}}, 'external_account_set', undefined},
     {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
@@ -5452,6 +5546,9 @@ record_name('OperationTimeout') ->
     record_name('TimeSpanDecision') ->
     'domain_TimeSpanDecision';
 
+    record_name('LifetimeDecision') ->
+    'domain_LifetimeDecision';
+
     record_name('Fees') ->
     'domain_Fees';
 
@@ -5547,6 +5644,15 @@ record_name('OperationTimeout') ->
 
     record_name('InspectorDecision') ->
     'domain_InspectorDecision';
+
+    record_name('P2PInspectorRef') ->
+    'domain_P2PInspectorRef';
+
+    record_name('P2PInspector') ->
+    'domain_P2PInspector';
+
+    record_name('P2PInspectorDecision') ->
+    'domain_P2PInspectorDecision';
 
     record_name('Terminal') ->
     'domain_Terminal';
@@ -5703,6 +5809,9 @@ record_name('OperationTimeout') ->
 
     record_name('InspectorObject') ->
     'domain_InspectorObject';
+
+    record_name('P2PInspectorObject') ->
+    'domain_P2PInspectorObject';
 
     record_name('PaymentInstitutionObject') ->
     'domain_PaymentInstitutionObject';
