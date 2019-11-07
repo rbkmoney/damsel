@@ -179,7 +179,12 @@ struct InvoicePayment {
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
     21: optional PaymentRoute route
-    22: optional list<TransactionInfo> transaction_info
+    22: optional list<InvoicePaymentSession> sessions
+}
+
+struct InvoicePaymentSession {
+    1: required TargetInvoicePaymentStatus target
+    2: optional TransactionInfo transaction_info
 }
 
 struct InvoicePaymentPending   {}
@@ -386,7 +391,7 @@ struct InvoicePaymentRefund {
     5: optional string reason
     8: optional InvoiceCart cart
     9: optional string external_id
-    10: optional list<TransactionInfo> transaction_info
+    10: optional list<InvoicePaymentSession> sessions
 }
 
 union InvoicePaymentRefundStatus {
