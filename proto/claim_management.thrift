@@ -30,7 +30,7 @@ exception InvalidClaimStatus {
 typedef base.ID FileID
 typedef base.ID DocumentID
 typedef base.ID CommentID
-typedef base.ID ProviderID
+typedef base.ID CashRegProviderID
 
 typedef string MetadataKey
 typedef msgpack.Value MetadataValue
@@ -151,7 +151,7 @@ struct ScheduleModification {
  * Изменение настроек ККТ
  */
 struct CashRegModification {
-    1: required ProviderID provider_id
+    1: required CashRegProviderID cash_reg_provider_id
     2: required CashRegProviderParams cash_reg_provider_params
 }
 
@@ -175,7 +175,7 @@ struct StarrysCashRegParams {
     4: required i32 tax_mode     // тип системы налогообложения
     5: required i32 payment_type // тип оплаты
     6: optional string client_id // идентификатор точки продажи (необязательный?)
-    7: optional string group      // идентификатор группы ККТ? (необязательный?)
+    7: optional string group     // идентификатор группы ККТ? (необязательный?)
 }
 
 /**
@@ -193,7 +193,7 @@ struct AtolCashRegParams {
     9:  required string company_address // адрес компании
     10: required string company_email   // e-mail компании
     11: required string payment_method  // признак способа расчета
-    12: required string payment_object   // признак предмета расчета
+    12: required string payment_object  // признак предмета расчета
 }
 
 /**
@@ -211,7 +211,7 @@ struct BusinessruCashRegParams {
     9:  required string company_address // адрес компании
     10: required string company_email   // e-mail компании
     11: required string payment_method  // признак способа расчета
-    12: required string payment_object   // признак предмета расчета
+    12: required string payment_object  // признак предмета расчета
 }
 
 /**
@@ -225,7 +225,7 @@ struct OrangedataCashRegParams {
     5: required i32 tax_id         // код налога
     6: required i32 tax_mode       // тип системы налогообложения
     7: required string inn         // ИНН
-    8: required string key          // код агента?
+    8: required string key         // код агента?
 }
 
 struct ShopAccountParams {
