@@ -159,9 +159,9 @@ struct CashRegModification {
  * Настройки ККТ
  */
 union CashRegProviderParams {
-    1: StarrysCashRegParams starrrys_cash_reg_params,
-    2: AtolCashRegParams atol_cash_reg_params,
-    3: BusinessruCashRegParams businessru_cashreg_params,
+    1: StarrysCashRegParams starrrys_cash_reg_params
+    2: AtolCashRegParams atol_cash_reg_params
+    3: BusinessruCashRegParams businessru_cashreg_params
     4: OrangedataCashRegParams orangedata_cash_reg_params
 }
 
@@ -169,12 +169,12 @@ union CashRegProviderParams {
  * StarRys
  */
 struct StarrysCashRegParams {
-    1: required string url,       // URL к ККТ
-    2: required string pass,      // пароль (числовой?)
-    3: required i32 tax_id,       // код налога
-    4: required i32 tax_mode,     // тип системы налогообложения
-    5: required i32 payment_type, // тип оплаты
-    6: optional string client_id, // идентификатор точки продажи (необязательный?)
+    1: required string url       // URL к ККТ
+    2: required string pass      // пароль (числовой?)
+    3: required i32 tax_id       // код налога
+    4: required i32 tax_mode     // тип системы налогообложения
+    5: required i32 payment_type // тип оплаты
+    6: optional string client_id // идентификатор точки продажи (необязательный?)
     7: optional string group      // идентификатор группы ККТ? (необязательный?)
 }
 
@@ -182,17 +182,17 @@ struct StarrysCashRegParams {
  * Atol
  */
 struct AtolCashRegParams {
-    1:  required string url,             // URL к ККТ
-    2:  required string login,           // логин пользователя
-    3:  required string pass,            // пароль пользователя
-    4:  required string group,           // идентификатор группы ККТ
-    5:  required string tax_id,          // код налога
-    6:  required string tax_mode,        // тип системы налогообложения
-    7:  required string inn,             // ИНН
-    8:  required string company_name,    // название компании
-    9:  required string company_address, // адрес компании
-    10: required string company_email,   // e-mail компании
-    11: required string payment_method,  // признак способа расчета
+    1:  required string url             // URL к ККТ
+    2:  required string login           // логин пользователя
+    3:  required string pass            // пароль пользователя
+    4:  required string group           // идентификатор группы ККТ
+    5:  required string tax_id          // код налога
+    6:  required string tax_mode        // тип системы налогообложения
+    7:  required string inn             // ИНН
+    8:  required string company_name    // название компании
+    9:  required string company_address // адрес компании
+    10: required string company_email   // e-mail компании
+    11: required string payment_method  // признак способа расчета
     12: required string payment_object   // признак предмета расчета
 }
 
@@ -200,17 +200,17 @@ struct AtolCashRegParams {
  * Бизнес.ру
  */
 struct BusinessruCashRegParams {
-    1:  required string url,             // URL к ККТ
-    2:  required string login,           // логин пользователя
-    3:  required string pass,            // пароль пользователя
-    4:  required string group,           // идентификатор группы ККТ
-    5:  required string tax_id,          // код налога
-    6:  required string tax_mode,        // тип системы налогообложения
-    7:  required string inn,             // ИНН
-    8:  required string company_name,    // название компании
-    9:  required string company_address, // адрес компании
-    10: required string company_email,   // e-mail компании
-    11: required string payment_method,  // признак способа расчета
+    1:  required string url             // URL к ККТ
+    2:  required string login           // логин пользователя
+    3:  required string pass            // пароль пользователя
+    4:  required string group           // идентификатор группы ККТ
+    5:  required string tax_id          // код налога
+    6:  required string tax_mode        // тип системы налогообложения
+    7:  required string inn             // ИНН
+    8:  required string company_name    // название компании
+    9:  required string company_address // адрес компании
+    10: required string company_email   // e-mail компании
+    11: required string payment_method  // признак способа расчета
     12: required string payment_object   // признак предмета расчета
 }
 
@@ -218,13 +218,13 @@ struct BusinessruCashRegParams {
  * Штрих-М (OrangeData)
  */
 struct OrangedataCashRegParams {
-    1: required string url,         // URL к ККТ
-    2: required string private_key, // приватный ключ пользователя
-    3: required string group,       // идентификатор группы ККТ
-    4: required i32 payment_type,   // тип оплаты
-    5: required i32 tax_id,         // код налога
-    6: required i32 tax_mode,       // тип системы налогообложения
-    7: required string inn,         // ИНН
+    1: required string url         // URL к ККТ
+    2: required string private_key // приватный ключ пользователя
+    3: required string group       // идентификатор группы ККТ
+    4: required i32 payment_type   // тип оплаты
+    5: required i32 tax_id         // код налога
+    6: required i32 tax_mode       // тип системы налогообложения
+    7: required string inn         // ИНН
     8: required string key          // код агента?
 }
 
