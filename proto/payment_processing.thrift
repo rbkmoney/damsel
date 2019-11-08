@@ -169,8 +169,6 @@ struct InvoicePaymentStarted {
     4: optional domain.RiskScore risk_score
     /** Выбранный маршрут обработки платежа. */
     2: optional domain.PaymentRoute route
-    /** Данные финансового взаимодействия. */
-    3: optional domain.FinalCashFlow cash_flow
 }
 
 /**

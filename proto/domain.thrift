@@ -179,6 +179,7 @@ struct InvoicePayment {
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
     21: optional PaymentRoute route
+    22: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentPending   {}
