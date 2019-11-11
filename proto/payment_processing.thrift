@@ -490,19 +490,19 @@ struct Invoice {
 
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
-    2: optional list<InvoicePaymentSession> sessions
     3: required list<InvoicePaymentRefund> refunds
-    4: required list<InvoicePaymentAdjustment> adjustments
+    2: required list<InvoicePaymentAdjustment> adjustments
+    4: optional list<InvoicePaymentSession> sessions
+}
+
+struct InvoicePaymentRefund {
+    1: required domain.InvoicePaymentRefund refund
+    2: required list<InvoicePaymentSession> sessions
 }
 
 struct InvoicePaymentSession {
     1: required domain.TargetInvoicePaymentStatus target
     2: optional domain.TransactionInfo transaction_info
-}
-
-struct InvoicePaymentRefund {
-    1: required domain.InvoicePaymentRefund refund
-    2: required list<domain.TransactionInfo> transaction_info
 }
 
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
