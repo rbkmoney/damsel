@@ -159,7 +159,7 @@ struct CashRegModification {
  * Настройки ККТ
  */
 union CashRegProviderParams {
-    1: StarrysCashRegParams starrrys_cash_reg_params
+    1: StarrysCashRegParams starrys_cash_reg_params
     2: AtolCashRegParams atol_cash_reg_params
     3: BusinessruCashRegParams businessru_cashreg_params
     4: OrangedataCashRegParams orangedata_cash_reg_params
