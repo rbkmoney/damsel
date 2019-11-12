@@ -490,11 +490,11 @@ struct Invoice {
 
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
-    # deprecated
-    3: required list<domain.InvoicePaymentRefund> refunds
     2: required list<InvoicePaymentAdjustment> adjustments
     4: required list<InvoicePaymentRefund> paymentRefunds
-    5: optional list<InvoicePaymentSession> sessions
+    5: required list<InvoicePaymentSession> sessions
+    # deprecated
+    3: required list<domain.InvoicePaymentRefund> refunds
 }
 
 struct InvoicePaymentRefund {
@@ -503,12 +503,12 @@ struct InvoicePaymentRefund {
 }
 
 struct InvoicePaymentSession {
-    1: required domain.TargetInvoicePaymentStatus status
+    1: required domain.TargetInvoicePaymentStatus targetStatus
     2: optional domain.TransactionInfo transaction_info
 }
 
 struct InvoiceRefundSession {
-    1: required domain.InvoicePaymentRefundStatus status
+    1: required domain.TargetInvoicePaymentStatus targetStatus
     2: optional domain.TransactionInfo transaction_info
 }
 
