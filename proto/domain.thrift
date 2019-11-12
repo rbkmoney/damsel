@@ -396,10 +396,32 @@ struct InvoicePaymentChargebackReason {
 }
 
 union InvoicePaymentChargebackReasonCategory {
+    /* The Fraud category is used for reason codes related to fraudulent transactions.
+       Reason codes related to no cardholder authorization, EMV liability, Card Present
+       and Card Not Present fraud are all found within the Fraud category. */
     1: InvoicePaymentChargebackReasonCategoryFraud         fraud
+
+    /* Consumer Disputes represent chargebacks initiated by the cardholder
+       in regards to product, service, or merchant issues.
+       Consumer Disputes are also referred to as Cardholder Disputes,
+       Card Member Disputes, and Service chargebacks.
+       The reasons for disputes categorized under Consumer Disputes are varied;
+       and can include circumstances like goods not received to cancelled recurring billing. */
     2: InvoicePaymentChargebackReasonCategoryDispute       dispute
+
+    /* Authorisation chargebacks represent disputes related to authorization issues.
+       For example, transactions where authorization was required, but not obtained.
+       They can also represent disputes where an Authorisation Request received a Decline
+       or Pickup Response and the merchant completed the transaction anyway. */
     3: InvoicePaymentChargebackReasonCategoryAuthorisation authorisation
+
+    /* Processing Errors, also referred to as Point-of-Interaction Errors,
+       categorize reason codes representing disputes including duplicate processing,
+       late presentment, credit processed as charge, invalid card numbers,
+       addendum/“no show” disputes, incorrect charge amounts, and other similar situations. */
     4: InvoicePaymentChargebackReasonCategoryPOIError      poi_error
+
+    /* This is here just in case really*/
     5: InvoicePaymentChargebackReasonCategoryOther         other
 }
 
