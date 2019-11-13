@@ -5,6 +5,11 @@
 
 
 
+%% struct 'QrCode'
+-record('QrCode', {
+    'payload' :: binary()
+}).
+
 %% struct 'CryptoCash'
 -record('CryptoCash', {
     'crypto_amount' :: dmsl_base_thrift:'Rational'(),
@@ -32,6 +37,11 @@
 -record('CryptoCurrencyTransferRequest', {
     'crypto_address' :: dmsl_user_interaction_thrift:'CryptoAddress'(),
     'crypto_cash' :: dmsl_user_interaction_thrift:'CryptoCash'()
+}).
+
+%% struct 'QrCodeShowRequest'
+-record('QrCodeShowRequest', {
+    'qr_code' :: dmsl_user_interaction_thrift:'QrCode'()
 }).
 
 -endif.

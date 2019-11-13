@@ -38,12 +38,14 @@
     'CryptoCurrencySymbolicCode'/0
 ]).
 -export_type([
+    'QrCode'/0,
     'CryptoCash'/0,
     'BrowserHTTPRequest'/0,
     'BrowserGetRequest'/0,
     'BrowserPostRequest'/0,
     'PaymentTerminalReceipt'/0,
     'CryptoCurrencyTransferRequest'/0,
+    'QrCodeShowRequest'/0,
     'UserInteraction'/0
 ]).
 
@@ -72,15 +74,20 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
+    'QrCode' |
     'CryptoCash' |
     'BrowserHTTPRequest' |
     'BrowserGetRequest' |
     'BrowserPostRequest' |
     'PaymentTerminalReceipt' |
     'CryptoCurrencyTransferRequest' |
+    'QrCodeShowRequest' |
     'UserInteraction'.
 
 -type exception_name() :: none().
+
+%% struct 'QrCode'
+-type 'QrCode'() :: #'QrCode'{}.
 
 %% struct 'CryptoCash'
 -type 'CryptoCash'() :: #'CryptoCash'{}.
@@ -102,11 +109,15 @@
 %% struct 'CryptoCurrencyTransferRequest'
 -type 'CryptoCurrencyTransferRequest'() :: #'CryptoCurrencyTransferRequest'{}.
 
+%% struct 'QrCodeShowRequest'
+-type 'QrCodeShowRequest'() :: #'QrCodeShowRequest'{}.
+
 %% union 'UserInteraction'
 -type 'UserInteraction'() ::
     {'redirect', 'BrowserHTTPRequest'()} |
     {'payment_terminal_reciept', 'PaymentTerminalReceipt'()} |
-    {'crypto_currency_transfer_request', 'CryptoCurrencyTransferRequest'()}.
+    {'crypto_currency_transfer_request', 'CryptoCurrencyTransferRequest'()} |
+    {'qr_code_show_request', 'QrCodeShowRequest'()}.
 
 %%
 %% services and functions
@@ -161,12 +172,14 @@ enums() ->
 
 structs() ->
     [
+        'QrCode',
         'CryptoCash',
         'BrowserHTTPRequest',
         'BrowserGetRequest',
         'BrowserPostRequest',
         'PaymentTerminalReceipt',
         'CryptoCurrencyTransferRequest',
+        'QrCodeShowRequest',
         'UserInteraction'
     ].
 
@@ -201,6 +214,11 @@ typedef_info(_) -> erlang:error(badarg).
 enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
+
+struct_info('QrCode') ->
+    {struct, struct, [
+    {1, required, string, 'payload', undefined}
+]};
 
 struct_info('CryptoCash') ->
     {struct, struct, [
@@ -237,21 +255,30 @@ struct_info('CryptoCurrencyTransferRequest') ->
     {2, required, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCash'}}, 'crypto_cash', undefined}
 ]};
 
+struct_info('QrCodeShowRequest') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_user_interaction_thrift, 'QrCode'}}, 'qr_code', undefined}
+]};
+
 struct_info('UserInteraction') ->
     {struct, union, [
     {1, optional, {struct, union, {dmsl_user_interaction_thrift, 'BrowserHTTPRequest'}}, 'redirect', undefined},
     {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'PaymentTerminalReceipt'}}, 'payment_terminal_reciept', undefined},
-    {3, optional, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCurrencyTransferRequest'}}, 'crypto_currency_transfer_request', undefined}
+    {3, optional, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCurrencyTransferRequest'}}, 'crypto_currency_transfer_request', undefined},
+    {4, optional, {struct, struct, {dmsl_user_interaction_thrift, 'QrCodeShowRequest'}}, 'qr_code_show_request', undefined}
 ]};
 
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
 
+record_name('QrCode') ->
+    'QrCode';
+
 record_name('CryptoCash') ->
     'CryptoCash';
 
-record_name('BrowserGetRequest') ->
+    record_name('BrowserGetRequest') ->
     'BrowserGetRequest';
 
     record_name('BrowserPostRequest') ->
@@ -262,6 +289,9 @@ record_name('BrowserGetRequest') ->
 
     record_name('CryptoCurrencyTransferRequest') ->
     'CryptoCurrencyTransferRequest';
+
+    record_name('QrCodeShowRequest') ->
+    'QrCodeShowRequest';
 
     record_name(_) -> error(badarg).
     

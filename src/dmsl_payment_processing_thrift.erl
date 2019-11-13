@@ -34,7 +34,6 @@
 -export_type([
     'UserID'/0,
     'Events'/0,
-    'InvoicePaymentRefund'/0,
     'InvoicePaymentAdjustment'/0,
     'InvoicePaymentChargeback'/0,
     'CustomerID'/0,
@@ -125,6 +124,9 @@
     'InvoicePaymentParamsFlowHold'/0,
     'Invoice'/0,
     'InvoicePayment'/0,
+    'InvoicePaymentRefund'/0,
+    'InvoicePaymentSession'/0,
+    'InvoiceRefundSession'/0,
     'InvoicePaymentChargebackParams'/0,
     'InvoicePaymentChargebackAcceptParams'/0,
     'InvoicePaymentChargebackReopenParams'/0,
@@ -319,7 +321,6 @@
 -type typedef_name() ::
     'UserID' |
     'Events' |
-    'InvoicePaymentRefund' |
     'InvoicePaymentAdjustment' |
     'InvoicePaymentChargeback' |
     'CustomerID' |
@@ -344,7 +345,6 @@
 
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
--type 'InvoicePaymentRefund'() :: dmsl_domain_thrift:'InvoicePaymentRefund'().
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
 -type 'InvoicePaymentChargeback'() :: dmsl_domain_thrift:'InvoicePaymentChargeback'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
@@ -443,6 +443,9 @@
     'InvoicePaymentParamsFlowHold' |
     'Invoice' |
     'InvoicePayment' |
+    'InvoicePaymentRefund' |
+    'InvoicePaymentSession' |
+    'InvoiceRefundSession' |
     'InvoicePaymentChargebackParams' |
     'InvoicePaymentChargebackAcceptParams' |
     'InvoicePaymentChargebackReopenParams' |
@@ -881,6 +884,15 @@
 
 %% struct 'InvoicePayment'
 -type 'InvoicePayment'() :: #'payproc_InvoicePayment'{}.
+
+%% struct 'InvoicePaymentRefund'
+-type 'InvoicePaymentRefund'() :: #'payproc_InvoicePaymentRefund'{}.
+
+%% struct 'InvoicePaymentSession'
+-type 'InvoicePaymentSession'() :: #'payproc_InvoicePaymentSession'{}.
+
+%% struct 'InvoiceRefundSession'
+-type 'InvoiceRefundSession'() :: #'payproc_InvoiceRefundSession'{}.
 
 %% struct 'InvoicePaymentChargebackParams'
 -type 'InvoicePaymentChargebackParams'() :: #'payproc_InvoicePaymentChargebackParams'{}.
@@ -1718,7 +1730,6 @@ typedefs() ->
     [
         'UserID',
         'Events',
-        'InvoicePaymentRefund',
         'InvoicePaymentAdjustment',
         'InvoicePaymentChargeback',
         'CustomerID',
@@ -1818,6 +1829,9 @@ structs() ->
         'InvoicePaymentParamsFlowHold',
         'Invoice',
         'InvoicePayment',
+        'InvoicePaymentRefund',
+        'InvoicePaymentSession',
+        'InvoiceRefundSession',
         'InvoicePaymentChargebackParams',
         'InvoicePaymentChargebackAcceptParams',
         'InvoicePaymentChargebackReopenParams',
@@ -1969,9 +1983,6 @@ typedef_info('UserID') ->
 
 typedef_info('Events') ->
     {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
-
-typedef_info('InvoicePaymentRefund') ->
-    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
 
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
@@ -2347,7 +2358,7 @@ struct_info('InvoicePaymentCaptureStarted') ->
 struct_info('EventRange') ->
     {struct, struct, [
     {1, optional, i64, 'after', undefined},
-    {2, required, i32, 'limit', undefined}
+    {2, optional, i32, 'limit', undefined}
 ]};
 
 struct_info('InvoiceParams') ->
@@ -2449,9 +2460,28 @@ struct_info('Invoice') ->
 struct_info('InvoicePayment') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
     {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
-    {4, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined}
+    {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
+    {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
+    {6, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
+    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
+]};
+
+struct_info('InvoicePaymentRefund') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+    {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRefundSession'}}}, 'sessions', undefined}
+]};
+
+struct_info('InvoicePaymentSession') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target_status', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+]};
+
+struct_info('InvoiceRefundSession') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
 ]};
 
 struct_info('InvoicePaymentChargebackParams') ->
@@ -2771,7 +2801,8 @@ struct_info('Varset') ->
     {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
     {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
     {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {6, optional, string, 'wallet_id', undefined}
+    {6, optional, string, 'wallet_id', undefined},
+    {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTool'}}, 'p2p_tool', undefined}
 ]};
 
 struct_info('PartyParams') ->
@@ -3657,6 +3688,15 @@ record_name('InternalUser') ->
     record_name('InvoicePayment') ->
     'payproc_InvoicePayment';
 
+    record_name('InvoicePaymentRefund') ->
+    'payproc_InvoicePaymentRefund';
+
+    record_name('InvoicePaymentSession') ->
+    'payproc_InvoicePaymentSession';
+
+    record_name('InvoiceRefundSession') ->
+    'payproc_InvoiceRefundSession';
+
     record_name('InvoicePaymentChargebackParams') ->
     'payproc_InvoicePaymentChargebackParams';
 
@@ -4273,7 +4313,8 @@ function_info('Invoicing', 'CreateWithTemplate', reply_type) ->
 function_info('Invoicing', 'Get', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined}
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
 ]};
 function_info('Invoicing', 'Get', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
@@ -4300,7 +4341,8 @@ function_info('Invoicing', 'GetEvents', reply_type) ->
 function_info('Invoicing', 'ComputeTerms', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined}
+    {2, undefined, string, 'id', undefined},
+    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
 ]};
 function_info('Invoicing', 'ComputeTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -4793,7 +4835,8 @@ function_info('InvoiceTemplating', 'ComputeTerms', params_type) ->
     {struct, struct, [
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'timestamp', undefined}
+    {3, undefined, string, 'timestamp', undefined},
+    {4, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
 ]};
 function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -4822,7 +4865,8 @@ function_info('CustomerManagement', 'Create', reply_type) ->
     ]};
 function_info('CustomerManagement', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
+    {1, undefined, string, 'id', undefined},
+    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
 ]};
 function_info('CustomerManagement', 'Get', reply_type) ->
         {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
@@ -5245,7 +5289,8 @@ function_info('PartyManagement', 'ComputeShopTerms', params_type) ->
     {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
     {2, undefined, string, 'party_id', undefined},
     {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'timestamp', undefined}
+    {4, undefined, string, 'timestamp', undefined},
+    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined}
 ]};
 function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
         {struct, struct, {dmsl_domain_thrift, 'TermSet'}};

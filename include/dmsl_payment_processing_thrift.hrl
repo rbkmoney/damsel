@@ -221,7 +221,7 @@
 %% struct 'EventRange'
 -record('payproc_EventRange', {
     'after' :: dmsl_base_thrift:'EventID'() | undefined,
-    'limit' :: integer()
+    'limit' :: integer() | undefined
 }).
 
 %% struct 'InvoiceParams'
@@ -310,9 +310,28 @@
 %% struct 'InvoicePayment'
 -record('payproc_InvoicePayment', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
-    'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
-    'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined
+    'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
+    'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
+    'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined,
+    'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
+}).
+
+%% struct 'InvoicePaymentRefund'
+-record('payproc_InvoicePaymentRefund', {
+    'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
+    'sessions' :: [dmsl_payment_processing_thrift:'InvoiceRefundSession'()]
+}).
+
+%% struct 'InvoicePaymentSession'
+-record('payproc_InvoicePaymentSession', {
+    'target_status' :: dmsl_domain_thrift:'TargetInvoicePaymentStatus'(),
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'InvoiceRefundSession'
+-record('payproc_InvoiceRefundSession', {
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackParams'
@@ -571,7 +590,8 @@
     'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
     'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
-    'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined,
+    'p2p_tool' :: dmsl_domain_thrift:'P2PTool'() | undefined
 }).
 
 %% struct 'PartyParams'
