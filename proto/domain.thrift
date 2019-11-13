@@ -167,18 +167,19 @@ union InvoiceStatus {
 struct InvoicePayment {
     1:  required InvoicePaymentID id
     2:  required base.Timestamp created_at
+    3:  required InvoicePaymentStatus status
+    6:  optional InvoicePaymentContext context
+    8:  required Cash cost
     10: required DataRevision domain_revision
+    13: required InvoicePaymentFlow flow
+    14: required Payer payer
+    15: optional PartyRevision party_revision
     16: optional PartyID owner_id
     17: optional ShopID shop_id
-    15: optional PartyRevision party_revision
-    3:  required InvoicePaymentStatus status
-    14: required Payer payer
-    8:  required Cash cost
-    13: required InvoicePaymentFlow flow
     18: optional bool make_recurrent
-    6:  optional InvoicePaymentContext context
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
+    21: optional PaymentRoute route
 }
 
 struct InvoicePaymentPending   {}
@@ -615,6 +616,8 @@ enum RiskScore {
     fatal = 9999
 }
 
+typedef base.ID ScoreID
+
 /* Contracts */
 
 typedef base.ID ContractorID
@@ -852,6 +855,9 @@ struct LifetimeInterval {
     1: optional i16 years
     2: optional i16 months
     3: optional i16 days
+    4: optional i16 hours
+    5: optional i16 minutes
+    6: optional i16 seconds
 }
 
 union ContractTemplateSelector {
@@ -985,6 +991,7 @@ struct WalletServiceTerms {
     2: optional CashLimitSelector wallet_limit
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
+    5: optional P2PServiceTerms p2p
 }
 
 union CumulativeLimitSelector {
@@ -1016,6 +1023,17 @@ struct WithdrawalServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
+}
+
+/** P2P service terms **/
+
+struct P2PServiceTerms {
+    1: optional Predicate allow
+    2: optional CurrencySelector currencies
+    3: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
+    5: optional FeeSelector fees
+    6: optional LifetimeSelector quote_lifetime
 }
 
 /* Payout methods */
@@ -1459,6 +1477,11 @@ typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
 typedef base.ID RecurrentPaymentToolID
 
+struct P2PTool {
+    1: required PaymentTool sender
+    2: required PaymentTool receiver
+}
+
 union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
@@ -1485,6 +1508,16 @@ struct BankCard {
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
     9: optional bool is_cvv_empty
+   10: optional BankCardExpDate exp_date
+   11: optional string cardholder_name
+}
+
+/** Дата экспирации */
+struct BankCardExpDate {
+    /** Месяц 1..12 */
+    1: required i8 month
+    /** Год 2015..∞ */
+    2: required i16 year
 }
 
 struct CryptoWallet {
@@ -1539,6 +1572,8 @@ struct PaymentTerminal {
 **/
 enum TerminalPaymentProvider {
     euroset
+    wechat
+    alipay
 }
 
 typedef string DigitalWalletID
@@ -1612,6 +1647,15 @@ struct TimeSpanDecision {
     2: required TimeSpanSelector then_
 }
 
+union LifetimeSelector {
+    1: list<LifetimeDecision> decisions
+    2: Lifetime value
+}
+
+struct LifetimeDecision {
+    1: required Predicate if_
+    2: required LifetimeSelector then_
+}
 /* Flows */
 
 // TODO
@@ -1701,13 +1745,31 @@ enum WalletCashFlowAccount {
 }
 
 enum CashFlowConstant {
-    operation_amount = 1
+    operation_amount    = 1
+    /** Комиссия "сверху" - взимается с клиента в дополнение к сумме операции */
+    surplus             = 2
     // ...
     // TODO
 
     /* deprecated */
     // invoice_amount = 0
     // payment_amount = 1
+}
+
+/** Структура содержит таблицу с комиссиями, удерживаемых при совершение операции.
+    В случае когда CashVolume не fixed, Surplus может быть выражена только через operation_amount.
+    Например(5% от суммы платежа):
+    fees = {
+        'surplus': CashVolume{
+            share = CashVolumeShare{
+                    parts = base.Rational{p = 5, q = 100},
+                    of = operation_amount
+                }
+            }
+        }
+ */
+struct Fees {
+    1: required map<CashFlowConstant, CashVolume> fees
 }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
@@ -1784,6 +1846,15 @@ struct CashFlowDecision {
     2: required CashFlowSelector then_
 }
 
+union FeeSelector {
+    1: list<FeeDecision> decisions
+    2: Fees value
+}
+
+struct FeeDecision {
+    1: required Predicate if_
+    2: required FeeSelector then_
+}
 /* Providers */
 
 struct ProviderRef { 1: required ObjectID id }
@@ -1800,6 +1871,14 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 }
 
+struct CashRegProviderRef { 1: required ObjectID id }
+
+struct CashRegProvider {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+}
+
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
 struct WithdrawalProvider {
@@ -1809,6 +1888,17 @@ struct WithdrawalProvider {
     4: optional string identity
     5: optional WithdrawalProvisionTerms withdrawal_terms
     6: optional ProviderAccountSet accounts = {}
+}
+
+struct P2PProviderRef { 1: required ObjectID id }
+
+struct P2PProvider {
+    1: required string name
+    2: optional string description
+    3: required Proxy proxy
+    4: optional string identity
+    6: optional P2PProvisionTerms p2p_terms
+    7: optional ProviderAccountSet accounts = {}
 }
 
 struct PaymentsProvisionTerms {
@@ -1864,6 +1954,13 @@ struct WithdrawalProvisionTerms {
     4: required CashFlowSelector cash_flow
 }
 
+struct P2PProvisionTerms {
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional CashFlowSelector cash_flow
+    4: optional FeeSelector fees
+}
+
 union CashValueSelector {
     1: list<CashValueDecision> decisions
     2: Cash value
@@ -1900,6 +1997,16 @@ struct WithdrawalProviderDecision {
     2: required WithdrawalProviderSelector then_
 }
 
+union P2PProviderSelector {
+    1: list<P2PProviderDecision> decisions
+    2: set<P2PProviderRef> value
+}
+
+struct P2PProviderDecision {
+    1: required Predicate if_
+    2: required P2PProviderSelector then_
+}
+
 /** Inspectors */
 
 struct InspectorRef { 1: required ObjectID id }
@@ -1919,6 +2026,25 @@ union InspectorSelector {
 struct InspectorDecision {
     1: required Predicate if_
     2: required InspectorSelector then_
+}
+
+struct P2PInspectorRef { 1: required ObjectID id }
+
+struct P2PInspector {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+    4: optional map<ScoreID, RiskScore> fallback_risk_score
+}
+
+union P2PInspectorSelector {
+    1: list<P2PInspectorDecision> decisions
+    2: P2PInspectorRef value
+}
+
+struct P2PInspectorDecision {
+    1: required Predicate if_
+    2: required P2PInspectorSelector then_
 }
 
 /**
@@ -1974,6 +2100,12 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
+    9: P2PToolCondition p2p_tool
+}
+
+struct P2PToolCondition {
+    1: optional PaymentToolCondition sender_is
+    2: optional PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {
@@ -2130,6 +2262,8 @@ struct PaymentInstitution {
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
     13: optional WithdrawalProviderSelector withdrawal_providers
+    14: optional P2PProviderSelector p2p_providers
+    15: optional P2PInspectorSelector p2p_inspector
 }
 
 enum PaymentInstitutionRealm {
@@ -2243,9 +2377,19 @@ struct ProviderObject {
     2: required Provider data
 }
 
+struct CashRegProviderObject {
+    1: required CashRegProviderRef ref
+    2: required CashRegProvider data
+}
+
 struct WithdrawalProviderObject {
     1: required WithdrawalProviderRef ref
     2: required WithdrawalProvider data
+}
+
+struct P2PProviderObject {
+    1: required P2PProviderRef ref
+    2: required P2PProvider data
 }
 
 struct TerminalObject {
@@ -2256,6 +2400,11 @@ struct TerminalObject {
 struct InspectorObject {
     1: required InspectorRef ref
     2: required Inspector data
+}
+
+struct P2PInspectorObject {
+    1: required P2PInspectorRef ref
+    2: required P2PInspector data
 }
 
 struct PaymentInstitutionObject {
@@ -2298,11 +2447,14 @@ union Reference {
     7  : ProviderRef             provider
     8  : TerminalRef             terminal
     15 : InspectorRef            inspector
+    25 : P2PInspectorRef         p2p_inspector
     14 : SystemAccountSetRef     system_account_set
     16 : ExternalAccountSetRef   external_account_set
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
+    23 : CashRegProviderRef      cashreg_provider
+    24 : P2PProviderRef          p2p_provider
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2326,11 +2478,14 @@ union DomainObject {
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
+    25 : P2PInspectorObject         p2p_inspector
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
+    23 : CashRegProviderObject      cashreg_provider
+    24 : P2PProviderObject          p2p_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link

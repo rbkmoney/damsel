@@ -14,6 +14,11 @@ typedef string CryptoAddress
 
 typedef string CryptoCurrencySymbolicCode
 
+struct QrCode {
+    /** Содержимое QR-кода, записанное в виде потока байт */
+    1: required binary payload
+}
+
 struct CryptoCash {
     1: required base.Rational crypto_amount
     2: required CryptoCurrencySymbolicCode crypto_symbolic_code
@@ -38,19 +43,27 @@ struct BrowserPostRequest {
     2: required Form form
 }
 
-// Платеж через терминал
+/**
+ * Платеж через терминал.
+ */
 struct PaymentTerminalReceipt  {
-    // Сокращенный идентификатор платежа и инвойса (spid)
+    /** Сокращенный идентификатор платежа и инвойса (spid). */
     1: required string short_payment_id;
 
-    // Дата истечения срока платежа
-    // после этой даты платеж будет отклонен
+    /**
+     * Дата истечения срока платежа.
+     * После этой даты платеж будет отклонен.
+     */
     2: required base.Timestamp due
 }
 
 struct CryptoCurrencyTransferRequest {
     1: required CryptoAddress crypto_address
     2: required CryptoCash crypto_cash
+}
+
+struct QrCodeShowRequest {
+    1: required QrCode qr_code
 }
 
 union UserInteraction {
@@ -65,12 +78,17 @@ union UserInteraction {
     1: BrowserHTTPRequest redirect
 
     /**
-    * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
-    **/
+     * Информация о платежной квитанции, которую нужно оплатить вне нашей системы
+     */
     2: PaymentTerminalReceipt payment_terminal_reciept
 
     /**
-    * Запрос на перевод криптовалюты
-    **/
+     * Запрос на перевод криптовалюты
+     */
     3: CryptoCurrencyTransferRequest crypto_currency_transfer_request
+
+    /**
+     * Запрос на отображение пользователю QR-кода
+     */
+    4: QrCodeShowRequest qr_code_show_request
 }
