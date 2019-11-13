@@ -516,6 +516,7 @@ struct InvoiceRefundSession {
 
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 typedef domain.FinalCashFlow FinalCashFlow
+
 /**
  * Параметры создаваемого возврата платежа.
  */
