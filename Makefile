@@ -109,7 +109,7 @@ endif
 
 # Java
 
-MVN = "mvn --no-transfer-progress"
+MVN = mvn --no-transfer-progress
 
 ifdef SETTINGS_XML
 DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
