@@ -106,11 +106,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -168,42 +168,42 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Withdrawal') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
-    {2, required, {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}}, 'destination', undefined},
-    {3, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'sender', undefined},
-    {4, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'receiver', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
+        {2, required, {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}}, 'destination', undefined},
+        {3, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'sender', undefined},
+        {4, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'receiver', undefined}
+    ]};
 
 struct_info('Destination') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoWallet'}}, 'crypto_wallet', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoWallet'}}, 'crypto_wallet', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined}
+    ]};
 
 struct_info('Identity') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, optional, {list, {struct, union, {dmsl_withdrawals_domain_thrift, 'IdentityDocument'}}}, 'documents', undefined},
-    {3, optional, {list, {struct, union, {dmsl_withdrawals_domain_thrift, 'ContactDetail'}}}, 'contact', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, optional, {list, {struct, union, {dmsl_withdrawals_domain_thrift, 'IdentityDocument'}}}, 'documents', undefined},
+        {3, optional, {list, {struct, union, {dmsl_withdrawals_domain_thrift, 'ContactDetail'}}}, 'contact', undefined}
+    ]};
 
 struct_info('IdentityDocument') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'RUSDomesticPassport'}}, 'rus_domestic_passport', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'RUSDomesticPassport'}}, 'rus_domestic_passport', undefined}
+    ]};
 
 struct_info('RUSDomesticPassport') ->
     {struct, struct, [
-    {1, required, string, 'token', undefined},
-    {2, optional, string, 'fullname_masked', undefined}
-]};
+        {1, required, string, 'token', undefined},
+        {2, optional, string, 'fullname_masked', undefined}
+    ]};
 
 struct_info('ContactDetail') ->
     {struct, union, [
-    {1, optional, string, 'email', undefined},
-    {2, optional, string, 'phone_number', undefined}
-]};
+        {1, optional, string, 'email', undefined},
+        {2, optional, string, 'phone_number', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -215,12 +215,12 @@ record_name('Withdrawal') ->
 record_name('Identity') ->
     'wthdm_Identity';
 
-    record_name('RUSDomesticPassport') ->
+record_name('RUSDomesticPassport') ->
     'wthdm_RUSDomesticPassport';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

@@ -91,11 +91,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -166,8 +166,8 @@ record_name('PartyNotFound') ->
     'elastico_PartyNotFound';
 
 record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Elastico') ->
     [
@@ -182,21 +182,21 @@ functions(_) -> error(badarg).
 
 function_info('Elastico', 'getPartyById', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'partyId', undefined}
-]};
+        {1, undefined, string, 'partyId', undefined}
+    ]};
 function_info('Elastico', 'getPartyById', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'Party'}};
-    function_info('Elastico', 'getPartyById', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'Party'}};
+function_info('Elastico', 'getPartyById', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_elastico_thrift, 'PartyNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Elastico', 'searchParty', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'text', undefined}
-]};
+        {1, undefined, string, 'text', undefined}
+    ]};
 function_info('Elastico', 'searchParty', reply_type) ->
-        {list, {struct, struct, {dmsl_domain_thrift, 'Party'}}};
-    function_info('Elastico', 'searchParty', exceptions) ->
-        {struct, struct, []};
+    {list, {struct, struct, {dmsl_domain_thrift, 'Party'}}};
+function_info('Elastico', 'searchParty', exceptions) ->
+    {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

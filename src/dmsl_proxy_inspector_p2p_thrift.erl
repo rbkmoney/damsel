@@ -127,11 +127,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -209,44 +209,44 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Context') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'TransferInfo'}}, 'info', undefined},
-    {2, optional, {map, string, string}, 'options', #{}}
-]};
+        {1, required, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'TransferInfo'}}, 'info', undefined},
+        {2, optional, {map, string, string}, 'options', #{}}
+    ]};
 
 struct_info('TransferInfo') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Transfer'}}, 'transfer', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Transfer'}}, 'transfer', undefined}
+    ]};
 
 struct_info('Transfer') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Identity'}}, 'identity', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, {struct, union, {dmsl_proxy_inspector_p2p_thrift, 'Payer'}}, 'sender', undefined},
-    {5, required, {struct, union, {dmsl_proxy_inspector_p2p_thrift, 'Payer'}}, 'receiver', undefined},
-    {6, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Identity'}}, 'identity', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {struct, union, {dmsl_proxy_inspector_p2p_thrift, 'Payer'}}, 'sender', undefined},
+        {5, required, {struct, union, {dmsl_proxy_inspector_p2p_thrift, 'Payer'}}, 'receiver', undefined},
+        {6, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
+    ]};
 
 struct_info('Identity') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined}
-]};
+        {1, required, string, 'id', undefined}
+    ]};
 
 struct_info('Payer') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Raw'}}, 'raw', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Raw'}}, 'raw', undefined}
+    ]};
 
 struct_info('Raw') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined}
+    ]};
 
 struct_info('InspectResult') ->
     {struct, struct, [
-    {1, required, {map, string, {enum, {dmsl_domain_thrift, 'RiskScore'}}}, 'scores', undefined}
-]};
+        {1, required, {map, string, {enum, {dmsl_domain_thrift, 'RiskScore'}}}, 'scores', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -258,21 +258,21 @@ record_name('Context') ->
 record_name('TransferInfo') ->
     'p2p_insp_TransferInfo';
 
-    record_name('Transfer') ->
+record_name('Transfer') ->
     'p2p_insp_Transfer';
 
-    record_name('Identity') ->
+record_name('Identity') ->
     'p2p_insp_Identity';
 
-    record_name('Raw') ->
+record_name('Raw') ->
     'p2p_insp_Raw';
 
-    record_name('InspectResult') ->
+record_name('InspectResult') ->
     'p2p_insp_InspectResult';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('InspectorProxy') ->
     [
@@ -286,13 +286,13 @@ functions(_) -> error(badarg).
 
 function_info('InspectorProxy', 'InspectTransfer', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Context'}}, 'context', undefined},
-    {2, undefined, {list, string}, 'risk_types', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'Context'}}, 'context', undefined},
+        {2, undefined, {list, string}, 'risk_types', undefined}
+    ]};
 function_info('InspectorProxy', 'InspectTransfer', reply_type) ->
-        {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'InspectResult'}};
-    function_info('InspectorProxy', 'InspectTransfer', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_proxy_inspector_p2p_thrift, 'InspectResult'}};
+function_info('InspectorProxy', 'InspectTransfer', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 

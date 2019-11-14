@@ -482,11 +482,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -672,85 +672,85 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('StatPayment') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'invoice_id', undefined},
-    {3, required, string, 'owner_id', undefined},
-    {4, required, string, 'shop_id', undefined},
-    {5, required, string, 'created_at', undefined},
-    {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
-    {7, required, i64, 'amount', undefined},
-    {8, required, i64, 'fee', undefined},
-    {9, required, string, 'currency_symbolic_code', undefined},
-    {10, required, {struct, union, {dmsl_merch_stat_thrift, 'Payer'}}, 'payer', undefined},
-    {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
-    {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
-    {15, optional, string, 'short_id', undefined},
-    {16, optional, bool, 'make_recurrent', undefined},
-    {17, required, i64, 'domain_revision', undefined},
-    {18, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_transaction_info', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'invoice_id', undefined},
+        {3, required, string, 'owner_id', undefined},
+        {4, required, string, 'shop_id', undefined},
+        {5, required, string, 'created_at', undefined},
+        {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
+        {7, required, i64, 'amount', undefined},
+        {8, required, i64, 'fee', undefined},
+        {9, required, string, 'currency_symbolic_code', undefined},
+        {10, required, {struct, union, {dmsl_merch_stat_thrift, 'Payer'}}, 'payer', undefined},
+        {12, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {13, optional, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}, 'location_info', undefined},
+        {14, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
+        {15, optional, string, 'short_id', undefined},
+        {16, optional, bool, 'make_recurrent', undefined},
+        {17, required, i64, 'domain_revision', undefined},
+        {18, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {19, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_transaction_info', undefined}
+    ]};
 
 struct_info('Payer') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'CustomerPayer'}}, 'customer', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
+    ]};
 
 struct_info('RecurrentParentPayment') ->
     {struct, struct, [
-    {1, required, string, 'invoice_id', undefined},
-    {2, required, string, 'payment_id', undefined}
-]};
+        {1, required, string, 'invoice_id', undefined},
+        {2, required, string, 'payment_id', undefined}
+    ]};
 
 struct_info('RecurrentPayer') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
-    {3, optional, string, 'phone_number', undefined},
-    {4, optional, string, 'email', undefined}
-]};
+        {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+        {3, optional, string, 'phone_number', undefined},
+        {4, optional, string, 'email', undefined}
+    ]};
 
 struct_info('PaymentResourcePayer') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {2, optional, string, 'ip_address', undefined},
-    {3, optional, string, 'fingerprint', undefined},
-    {4, optional, string, 'phone_number', undefined},
-    {5, optional, string, 'email', undefined},
-    {6, optional, string, 'session_id', undefined}
-]};
+        {1, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {2, optional, string, 'ip_address', undefined},
+        {3, optional, string, 'fingerprint', undefined},
+        {4, optional, string, 'phone_number', undefined},
+        {5, optional, string, 'email', undefined},
+        {6, optional, string, 'session_id', undefined}
+    ]};
 
 struct_info('CustomerPayer') ->
     {struct, struct, [
-    {1, required, string, 'customer_id', undefined},
-    {2, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {3, optional, string, 'phone_number', undefined},
-    {4, optional, string, 'email', undefined}
-]};
+        {1, required, string, 'customer_id', undefined},
+        {2, required, {struct, union, {dmsl_merch_stat_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {3, optional, string, 'phone_number', undefined},
+        {4, optional, string, 'email', undefined}
+    ]};
 
 struct_info('InvoicePaymentFlow') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
+    ]};
 
 struct_info('InvoicePaymentFlowInstant') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentFlowHold') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_merch_stat_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
-    {2, required, string, 'held_until', undefined}
-]};
+        {1, required, {enum, {dmsl_merch_stat_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
+        {2, required, string, 'held_until', undefined}
+    ]};
 
 struct_info('OperationFailure') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('OperationTimeout') ->
     {struct, struct, []};
@@ -760,232 +760,232 @@ struct_info('InvoicePaymentPending') ->
 
 struct_info('InvoicePaymentProcessed') ->
     {struct, struct, [
-    {1, optional, string, 'at', undefined}
-]};
+        {1, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentCaptured') ->
     {struct, struct, [
-    {1, optional, string, 'at', undefined}
-]};
+        {1, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentCancelled') ->
     {struct, struct, [
-    {1, optional, string, 'at', undefined}
-]};
+        {1, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefunded') ->
     {struct, struct, [
-    {1, optional, string, 'at', undefined}
-]};
+        {1, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
-    {2, optional, string, 'at', undefined}
-]};
+        {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+        {2, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
-    {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
-    {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {6, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
+        {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
+        {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
+        {6, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('PaymentTool') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
-    {4, optional, {enum, {dmsl_merch_stat_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-    {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'bank_card', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
+        {4, optional, {enum, {dmsl_merch_stat_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+        {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
+    ]};
 
 struct_info('MobileCommerce') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_merch_stat_thrift, 'MobileOperator'}}, 'operator', undefined},
-    {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'MobilePhone'}}, 'phone', undefined}
-]};
+        {1, required, {enum, {dmsl_merch_stat_thrift, 'MobileOperator'}}, 'operator', undefined},
+        {2, required, {struct, struct, {dmsl_merch_stat_thrift, 'MobilePhone'}}, 'phone', undefined}
+    ]};
 
 struct_info('MobilePhone') ->
     {struct, struct, [
-    {1, required, string, 'cc', undefined},
-    {2, required, string, 'ctn', undefined}
-]};
+        {1, required, string, 'cc', undefined},
+        {2, required, string, 'ctn', undefined}
+    ]};
 
 struct_info('BankCard') ->
     {struct, struct, [
-    {1, required, string, 'token', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
-    {3, required, string, 'bin', undefined},
-    {4, required, string, 'masked_pan', undefined},
-    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
-]};
+        {1, required, string, 'token', undefined},
+        {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {3, required, string, 'bin', undefined},
+        {4, required, string, 'masked_pan', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
+    ]};
 
 struct_info('PaymentTerminal') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_merch_stat_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
-]};
+        {1, required, {enum, {dmsl_merch_stat_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
+    ]};
 
 struct_info('DigitalWallet') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_merch_stat_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
-    {2, required, string, 'id', undefined}
-]};
+        {1, required, {enum, {dmsl_merch_stat_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
+        {2, required, string, 'id', undefined}
+    ]};
 
 struct_info('RussianBankAccount') ->
     {struct, struct, [
-    {1, required, string, 'account', undefined},
-    {2, required, string, 'bank_name', undefined},
-    {3, required, string, 'bank_post_account', undefined},
-    {4, required, string, 'bank_bik', undefined}
-]};
+        {1, required, string, 'account', undefined},
+        {2, required, string, 'bank_name', undefined},
+        {3, required, string, 'bank_post_account', undefined},
+        {4, required, string, 'bank_bik', undefined}
+    ]};
 
 struct_info('InternationalBankAccount') ->
     {struct, struct, [
-    {1, optional, string, 'number', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
-    {4, optional, string, 'iban', undefined},
-    {5, optional, string, 'account_holder', undefined}
-]};
+        {1, optional, string, 'number', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
+        {4, optional, string, 'iban', undefined},
+        {5, optional, string, 'account_holder', undefined}
+    ]};
 
 struct_info('InternationalBankDetails') ->
     {struct, struct, [
-    {1, optional, string, 'bic', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
-    {3, optional, string, 'name', undefined},
-    {4, optional, string, 'address', undefined},
-    {5, optional, string, 'aba_rtn', undefined}
-]};
+        {1, optional, string, 'bic', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+        {3, optional, string, 'name', undefined},
+        {4, optional, string, 'address', undefined},
+        {5, optional, string, 'aba_rtn', undefined}
+    ]};
 
 struct_info('StatInvoice') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'owner_id', undefined},
-    {3, required, string, 'shop_id', undefined},
-    {4, required, string, 'created_at', undefined},
-    {5, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoiceStatus'}}, 'status', undefined},
-    {6, required, string, 'product', undefined},
-    {7, optional, string, 'description', undefined},
-    {8, required, string, 'due', undefined},
-    {9, required, i64, 'amount', undefined},
-    {10, required, string, 'currency_symbolic_code', undefined},
-    {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'owner_id', undefined},
+        {3, required, string, 'shop_id', undefined},
+        {4, required, string, 'created_at', undefined},
+        {5, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoiceStatus'}}, 'status', undefined},
+        {6, required, string, 'product', undefined},
+        {7, optional, string, 'description', undefined},
+        {8, required, string, 'due', undefined},
+        {9, required, i64, 'amount', undefined},
+        {10, required, string, 'currency_symbolic_code', undefined},
+        {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    ]};
 
 struct_info('EnrichedStatInvoice') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}, 'invoice', undefined},
-    {2, required, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayment'}}}, 'payments', undefined},
-    {3, required, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}, 'invoice', undefined},
+        {2, required, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayment'}}}, 'payments', undefined},
+        {3, required, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined}
+    ]};
 
 struct_info('InvoiceUnpaid') ->
     {struct, struct, []};
 
 struct_info('InvoicePaid') ->
     {struct, struct, [
-    {1, optional, string, 'at', undefined}
-]};
+        {1, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoiceCancelled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined},
-    {2, optional, string, 'at', undefined}
-]};
+        {1, required, string, 'details', undefined},
+        {2, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoiceFulfilled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined},
-    {2, optional, string, 'at', undefined}
-]};
+        {1, required, string, 'details', undefined},
+        {2, optional, string, 'at', undefined}
+    ]};
 
 struct_info('InvoiceStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoiceUnpaid'}}, 'unpaid', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaid'}}, 'paid', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoiceCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoiceFulfilled'}}, 'fulfilled', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoiceUnpaid'}}, 'unpaid', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaid'}}, 'paid', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoiceCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoiceFulfilled'}}, 'fulfilled', undefined}
+    ]};
 
 struct_info('StatCustomer') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'created_at', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'created_at', undefined}
+    ]};
 
 struct_info('StatPayout') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'party_id', undefined},
-    {3, required, string, 'shop_id', undefined},
-    {4, required, string, 'created_at', undefined},
-    {5, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutStatus'}}, 'status', undefined},
-    {6, required, i64, 'amount', undefined},
-    {7, required, i64, 'fee', undefined},
-    {8, required, string, 'currency_symbolic_code', undefined},
-    {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'type', undefined},
-    {10, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'party_id', undefined},
+        {3, required, string, 'shop_id', undefined},
+        {4, required, string, 'created_at', undefined},
+        {5, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutStatus'}}, 'status', undefined},
+        {6, required, i64, 'amount', undefined},
+        {7, required, i64, 'fee', undefined},
+        {8, required, string, 'currency_symbolic_code', undefined},
+        {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'type', undefined},
+        {10, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined}
+    ]};
 
 struct_info('PayoutSummaryItem') ->
     {struct, struct, [
-    {1, required, i64, 'amount', undefined},
-    {2, required, i64, 'fee', undefined},
-    {3, required, string, 'currency_symbolic_code', undefined},
-    {4, required, string, 'from_time', undefined},
-    {5, required, string, 'to_time', undefined},
-    {6, required, {enum, {dmsl_merch_stat_thrift, 'OperationType'}}, 'operation_type', undefined},
-    {7, required, i32, 'count', undefined}
-]};
+        {1, required, i64, 'amount', undefined},
+        {2, required, i64, 'fee', undefined},
+        {3, required, string, 'currency_symbolic_code', undefined},
+        {4, required, string, 'from_time', undefined},
+        {5, required, string, 'to_time', undefined},
+        {6, required, {enum, {dmsl_merch_stat_thrift, 'OperationType'}}, 'operation_type', undefined},
+        {7, required, i32, 'count', undefined}
+    ]};
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, union, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'Wallet'}}, 'wallet', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCard'}}, 'bank_card', undefined},
+        {2, optional, {struct, union, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'Wallet'}}, 'wallet', undefined}
+    ]};
 
 struct_info('Wallet') ->
     {struct, struct, [
-    {1, required, string, 'wallet_id', undefined}
-]};
+        {1, required, string, 'wallet_id', undefined}
+    ]};
 
 struct_info('PayoutCard') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'card', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'card', undefined}
+    ]};
 
 struct_info('PayoutAccount') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
+    ]};
 
 struct_info('RussianPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
-    {2, required, string, 'inn', undefined},
-    {3, required, string, 'purpose', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
+        {2, required, string, 'inn', undefined},
+        {3, required, string, 'purpose', undefined}
+    ]};
 
 struct_info('InternationalPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
-    {2, required, string, 'purpose', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
+        {2, required, string, 'purpose', undefined}
+    ]};
 
 struct_info('PayoutStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutUnpaid'}}, 'unpaid', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutPaid'}}, 'paid', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutConfirmed'}}, 'confirmed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutUnpaid'}}, 'unpaid', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutPaid'}}, 'paid', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutConfirmed'}}, 'confirmed', undefined}
+    ]};
 
 struct_info('PayoutUnpaid') ->
     {struct, struct, []};
@@ -995,77 +995,77 @@ struct_info('PayoutPaid') ->
 
 struct_info('PayoutCancelled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
-]};
+        {1, required, string, 'details', undefined}
+    ]};
 
 struct_info('PayoutConfirmed') ->
     {struct, struct, []};
 
 struct_info('StatRefund') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'payment_id', undefined},
-    {3, required, string, 'invoice_id', undefined},
-    {4, required, string, 'owner_id', undefined},
-    {5, required, string, 'shop_id', undefined},
-    {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
-    {7, required, string, 'created_at', undefined},
-    {8, required, i64, 'amount', undefined},
-    {9, required, i64, 'fee', undefined},
-    {10, required, string, 'currency_symbolic_code', undefined},
-    {11, optional, string, 'reason', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'payment_id', undefined},
+        {3, required, string, 'invoice_id', undefined},
+        {4, required, string, 'owner_id', undefined},
+        {5, required, string, 'shop_id', undefined},
+        {6, required, {struct, union, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
+        {7, required, string, 'created_at', undefined},
+        {8, required, i64, 'amount', undefined},
+        {9, required, i64, 'fee', undefined},
+        {10, required, string, 'currency_symbolic_code', undefined},
+        {11, optional, string, 'reason', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundPending') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentRefundSucceeded') ->
     {struct, struct, [
-    {1, required, string, 'at', undefined}
-]};
+        {1, required, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
-    {2, required, string, 'at', undefined}
-]};
+        {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
+        {2, required, string, 'at', undefined}
+    ]};
 
 struct_info('StatRequest') ->
     {struct, struct, [
-    {1, required, string, 'dsl', undefined},
-    {2, optional, string, 'continuation_token', undefined}
-]};
+        {1, required, string, 'dsl', undefined},
+        {2, optional, string, 'continuation_token', undefined}
+    ]};
 
 struct_info('StatResponse') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_merch_stat_thrift, 'StatResponseData'}}, 'data', undefined},
-    {2, optional, i32, 'total_count', undefined},
-    {3, optional, string, 'continuation_token', undefined}
-]};
+        {1, required, {struct, union, {dmsl_merch_stat_thrift, 'StatResponseData'}}, 'data', undefined},
+        {2, optional, i32, 'total_count', undefined},
+        {3, optional, string, 'continuation_token', undefined}
+    ]};
 
 struct_info('StatResponseData') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayment'}}}, 'payments', undefined},
-    {2, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}}, 'invoices', undefined},
-    {3, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatCustomer'}}}, 'customers', undefined},
-    {4, optional, {list, {map, string, string}}, 'records', undefined},
-    {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
-    {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined},
-    {7, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'EnrichedStatInvoice'}}}, 'enriched_invoices', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayment'}}}, 'payments', undefined},
+        {2, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatInvoice'}}}, 'invoices', undefined},
+        {3, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatCustomer'}}}, 'customers', undefined},
+        {4, optional, {list, {map, string, string}}, 'records', undefined},
+        {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
+        {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined},
+        {7, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'EnrichedStatInvoice'}}}, 'enriched_invoices', undefined}
+    ]};
 
 struct_info('BadToken') ->
     {struct, exception, [
-    {1, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, string, 'reason', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -1077,141 +1077,141 @@ record_name('StatPayment') ->
 record_name('RecurrentParentPayment') ->
     'merchstat_RecurrentParentPayment';
 
-    record_name('RecurrentPayer') ->
+record_name('RecurrentPayer') ->
     'merchstat_RecurrentPayer';
 
-    record_name('PaymentResourcePayer') ->
+record_name('PaymentResourcePayer') ->
     'merchstat_PaymentResourcePayer';
 
-    record_name('CustomerPayer') ->
+record_name('CustomerPayer') ->
     'merchstat_CustomerPayer';
 
-    record_name('InvoicePaymentFlowInstant') ->
+record_name('InvoicePaymentFlowInstant') ->
     'merchstat_InvoicePaymentFlowInstant';
 
-    record_name('InvoicePaymentFlowHold') ->
+record_name('InvoicePaymentFlowHold') ->
     'merchstat_InvoicePaymentFlowHold';
 
-    record_name('OperationTimeout') ->
+record_name('OperationTimeout') ->
     'merchstat_OperationTimeout';
 
-    record_name('InvoicePaymentPending') ->
+record_name('InvoicePaymentPending') ->
     'merchstat_InvoicePaymentPending';
 
-    record_name('InvoicePaymentProcessed') ->
+record_name('InvoicePaymentProcessed') ->
     'merchstat_InvoicePaymentProcessed';
 
-    record_name('InvoicePaymentCaptured') ->
+record_name('InvoicePaymentCaptured') ->
     'merchstat_InvoicePaymentCaptured';
 
-    record_name('InvoicePaymentCancelled') ->
+record_name('InvoicePaymentCancelled') ->
     'merchstat_InvoicePaymentCancelled';
 
-    record_name('InvoicePaymentRefunded') ->
+record_name('InvoicePaymentRefunded') ->
     'merchstat_InvoicePaymentRefunded';
 
-    record_name('InvoicePaymentFailed') ->
+record_name('InvoicePaymentFailed') ->
     'merchstat_InvoicePaymentFailed';
 
-    record_name('MobileCommerce') ->
+record_name('MobileCommerce') ->
     'merchstat_MobileCommerce';
 
-    record_name('MobilePhone') ->
+record_name('MobilePhone') ->
     'merchstat_MobilePhone';
 
-    record_name('BankCard') ->
+record_name('BankCard') ->
     'merchstat_BankCard';
 
-    record_name('PaymentTerminal') ->
+record_name('PaymentTerminal') ->
     'merchstat_PaymentTerminal';
 
-    record_name('DigitalWallet') ->
+record_name('DigitalWallet') ->
     'merchstat_DigitalWallet';
 
-    record_name('RussianBankAccount') ->
+record_name('RussianBankAccount') ->
     'merchstat_RussianBankAccount';
 
-    record_name('InternationalBankAccount') ->
+record_name('InternationalBankAccount') ->
     'merchstat_InternationalBankAccount';
 
-    record_name('InternationalBankDetails') ->
+record_name('InternationalBankDetails') ->
     'merchstat_InternationalBankDetails';
 
-    record_name('StatInvoice') ->
+record_name('StatInvoice') ->
     'merchstat_StatInvoice';
 
-    record_name('EnrichedStatInvoice') ->
+record_name('EnrichedStatInvoice') ->
     'merchstat_EnrichedStatInvoice';
 
-    record_name('InvoiceUnpaid') ->
+record_name('InvoiceUnpaid') ->
     'merchstat_InvoiceUnpaid';
 
-    record_name('InvoicePaid') ->
+record_name('InvoicePaid') ->
     'merchstat_InvoicePaid';
 
-    record_name('InvoiceCancelled') ->
+record_name('InvoiceCancelled') ->
     'merchstat_InvoiceCancelled';
 
-    record_name('InvoiceFulfilled') ->
+record_name('InvoiceFulfilled') ->
     'merchstat_InvoiceFulfilled';
 
-    record_name('StatCustomer') ->
+record_name('StatCustomer') ->
     'merchstat_StatCustomer';
 
-    record_name('StatPayout') ->
+record_name('StatPayout') ->
     'merchstat_StatPayout';
 
-    record_name('PayoutSummaryItem') ->
+record_name('PayoutSummaryItem') ->
     'merchstat_PayoutSummaryItem';
 
-    record_name('Wallet') ->
+record_name('Wallet') ->
     'merchstat_Wallet';
 
-    record_name('PayoutCard') ->
+record_name('PayoutCard') ->
     'merchstat_PayoutCard';
 
-    record_name('RussianPayoutAccount') ->
+record_name('RussianPayoutAccount') ->
     'merchstat_RussianPayoutAccount';
 
-    record_name('InternationalPayoutAccount') ->
+record_name('InternationalPayoutAccount') ->
     'merchstat_InternationalPayoutAccount';
 
-    record_name('PayoutUnpaid') ->
+record_name('PayoutUnpaid') ->
     'merchstat_PayoutUnpaid';
 
-    record_name('PayoutPaid') ->
+record_name('PayoutPaid') ->
     'merchstat_PayoutPaid';
 
-    record_name('PayoutCancelled') ->
+record_name('PayoutCancelled') ->
     'merchstat_PayoutCancelled';
 
-    record_name('PayoutConfirmed') ->
+record_name('PayoutConfirmed') ->
     'merchstat_PayoutConfirmed';
 
-    record_name('StatRefund') ->
+record_name('StatRefund') ->
     'merchstat_StatRefund';
 
-    record_name('InvoicePaymentRefundPending') ->
+record_name('InvoicePaymentRefundPending') ->
     'merchstat_InvoicePaymentRefundPending';
 
-    record_name('InvoicePaymentRefundSucceeded') ->
+record_name('InvoicePaymentRefundSucceeded') ->
     'merchstat_InvoicePaymentRefundSucceeded';
 
-    record_name('InvoicePaymentRefundFailed') ->
+record_name('InvoicePaymentRefundFailed') ->
     'merchstat_InvoicePaymentRefundFailed';
 
-    record_name('StatRequest') ->
+record_name('StatRequest') ->
     'merchstat_StatRequest';
 
-    record_name('StatResponse') ->
+record_name('StatResponse') ->
     'merchstat_StatResponse';
 
-    record_name('BadToken') ->
+record_name('BadToken') ->
     'merchstat_BadToken';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('MerchantStatistics') ->
     [
@@ -1234,68 +1234,68 @@ functions(_) -> error(badarg).
 
 function_info('MerchantStatistics', 'GetPayments', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
 function_info('MerchantStatistics', 'GetPayments', reply_type) ->
-        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
-    function_info('MerchantStatistics', 'GetPayments', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetPayments', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetInvoices', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
 function_info('MerchantStatistics', 'GetInvoices', reply_type) ->
-        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
-    function_info('MerchantStatistics', 'GetInvoices', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetInvoices', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetCustomers', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
 function_info('MerchantStatistics', 'GetCustomers', reply_type) ->
-        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
-    function_info('MerchantStatistics', 'GetCustomers', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetCustomers', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetPayouts', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
 function_info('MerchantStatistics', 'GetPayouts', reply_type) ->
-        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
-    function_info('MerchantStatistics', 'GetPayouts', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetPayouts', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 function_info('MerchantStatistics', 'GetStatistics', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
 function_info('MerchantStatistics', 'GetStatistics', reply_type) ->
-        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
-    function_info('MerchantStatistics', 'GetStatistics', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetStatistics', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};
 
 function_info('DarkMessiahStatistics', 'GetByQuery', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
 function_info('DarkMessiahStatistics', 'GetByQuery', reply_type) ->
-        {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
-    function_info('DarkMessiahStatistics', 'GetByQuery', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('DarkMessiahStatistics', 'GetByQuery', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
     ]};

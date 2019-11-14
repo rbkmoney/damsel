@@ -96,11 +96,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -163,15 +163,15 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Value') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_msgpack_thrift, 'Nil'}}, 'nl', undefined},
-    {2, optional, bool, 'b', undefined},
-    {3, optional, i64, 'i', undefined},
-    {4, optional, double, 'flt', undefined},
-    {5, optional, string, 'str', undefined},
-    {6, optional, string, 'bin', undefined},
-    {7, optional, {map, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'obj', undefined},
-    {8, optional, {list, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'arr', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_msgpack_thrift, 'Nil'}}, 'nl', undefined},
+        {2, optional, bool, 'b', undefined},
+        {3, optional, i64, 'i', undefined},
+        {4, optional, double, 'flt', undefined},
+        {5, optional, string, 'str', undefined},
+        {6, optional, string, 'bin', undefined},
+        {7, optional, {map, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'obj', undefined},
+        {8, optional, {list, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'arr', undefined}
+    ]};
 
 struct_info('Nil') ->
     {struct, struct, []};
@@ -184,8 +184,8 @@ record_name('Nil') ->
     'msgpack_Nil';
 
 record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

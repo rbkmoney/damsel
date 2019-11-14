@@ -229,11 +229,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -331,128 +331,128 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Intent') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'FinishIntent'}}, 'finish', undefined},
-    {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'SleepIntent'}}, 'sleep', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'FinishIntent'}}, 'finish', undefined},
+        {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'SleepIntent'}}, 'sleep', undefined}
+    ]};
 
 struct_info('FinishIntent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_p2p_adapter_thrift, 'FinishStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_p2p_adapter_thrift, 'FinishStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('FinishStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'Success'}}, 'success', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'Success'}}, 'success', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('Success') ->
     {struct, struct, []};
 
 struct_info('SleepIntent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined},
-    {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteraction'}}, 'user_interaction', undefined},
-    {3, required, string, 'callback_tag', undefined}
-]};
+        {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined},
+        {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteraction'}}, 'user_interaction', undefined},
+        {3, required, string, 'callback_tag', undefined}
+    ]};
 
 struct_info('UserInteraction') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'UserInteractionIntent'}}, 'intent', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'UserInteractionIntent'}}, 'intent', undefined}
+    ]};
 
 struct_info('UserInteractionIntent') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteractionCreate'}}, 'create', undefined},
-    {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteractionFinish'}}, 'finish', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteractionCreate'}}, 'create', undefined},
+        {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteractionFinish'}}, 'finish', undefined}
+    ]};
 
 struct_info('UserInteractionCreate') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'user_interaction', undefined}
-]};
+        {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'user_interaction', undefined}
+    ]};
 
 struct_info('UserInteractionFinish') ->
     {struct, struct, []};
 
 struct_info('Cash') ->
     {struct, struct, [
-    {1, required, i64, 'amount', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
-]};
+        {1, required, i64, 'amount', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
+    ]};
 
 struct_info('OperationInfo') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessOperationInfo'}}, 'process', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessOperationInfo'}}, 'process', undefined}
+    ]};
 
 struct_info('ProcessOperationInfo') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Cash'}}, 'body', undefined},
-    {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'sender', undefined},
-    {3, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'receiver', undefined},
-    {4, optional, string, 'deadline', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Cash'}}, 'body', undefined},
+        {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'sender', undefined},
+        {3, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'receiver', undefined},
+        {4, optional, string, 'deadline', undefined}
+    ]};
 
 struct_info('PaymentResource') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'disposable', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'disposable', undefined}
+    ]};
 
 struct_info('Session') ->
     {struct, struct, [
-    {1, optional, string, 'state', undefined}
-]};
+        {1, optional, string, 'state', undefined}
+    ]};
 
 struct_info('Context') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Session'}}, 'session', undefined},
-    {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'OperationInfo'}}, 'operation', undefined},
-    {3, optional, {map, string, string}, 'options', #{}}
-]};
+        {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Session'}}, 'session', undefined},
+        {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'OperationInfo'}}, 'operation', undefined},
+        {3, optional, {map, string, string}, 'options', #{}}
+    ]};
 
 struct_info('ProcessResult') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_p2p_adapter_thrift, 'Intent'}}, 'intent', undefined},
-    {2, optional, string, 'next_state', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
-]};
+        {1, required, {struct, union, {dmsl_p2p_adapter_thrift, 'Intent'}}, 'intent', undefined},
+        {2, optional, string, 'next_state', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+    ]};
 
 struct_info('Callback') ->
     {struct, struct, [
-    {1, required, string, 'tag', undefined},
-    {2, required, string, 'payload', undefined}
-]};
+        {1, required, string, 'tag', undefined},
+        {2, required, string, 'payload', undefined}
+    ]};
 
 struct_info('CallbackResponse') ->
     {struct, struct, [
-    {1, required, string, 'payload', undefined}
-]};
+        {1, required, string, 'payload', undefined}
+    ]};
 
 struct_info('CallbackResult') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_p2p_adapter_thrift, 'Intent'}}, 'intent', undefined},
-    {2, optional, string, 'next_state', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
-    {4, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
-]};
+        {1, required, {struct, union, {dmsl_p2p_adapter_thrift, 'Intent'}}, 'intent', undefined},
+        {2, optional, string, 'next_state', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
+        {4, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
+    ]};
 
 struct_info('ProcessCallbackResult') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessCallbackSucceeded'}}, 'succeeded', undefined},
-    {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessCallbackFinished'}}, 'finished', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessCallbackSucceeded'}}, 'succeeded', undefined},
+        {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessCallbackFinished'}}, 'finished', undefined}
+    ]};
 
 struct_info('ProcessCallbackSucceeded') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
+    ]};
 
 struct_info('ProcessCallbackFinished') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Context'}}, 'response', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Context'}}, 'response', undefined}
+    ]};
 
 struct_info('SessionNotFound') ->
     {struct, exception, []};
@@ -467,54 +467,54 @@ record_name('FinishIntent') ->
 record_name('Success') ->
     'p2p_adapter_Success';
 
-    record_name('SleepIntent') ->
+record_name('SleepIntent') ->
     'p2p_adapter_SleepIntent';
 
-    record_name('UserInteraction') ->
+record_name('UserInteraction') ->
     'p2p_adapter_UserInteraction';
 
-    record_name('UserInteractionCreate') ->
+record_name('UserInteractionCreate') ->
     'p2p_adapter_UserInteractionCreate';
 
-    record_name('UserInteractionFinish') ->
+record_name('UserInteractionFinish') ->
     'p2p_adapter_UserInteractionFinish';
 
-    record_name('Cash') ->
+record_name('Cash') ->
     'p2p_adapter_Cash';
 
-    record_name('ProcessOperationInfo') ->
+record_name('ProcessOperationInfo') ->
     'p2p_adapter_ProcessOperationInfo';
 
-    record_name('Session') ->
+record_name('Session') ->
     'p2p_adapter_Session';
 
-    record_name('Context') ->
+record_name('Context') ->
     'p2p_adapter_Context';
 
-    record_name('ProcessResult') ->
+record_name('ProcessResult') ->
     'p2p_adapter_ProcessResult';
 
-    record_name('Callback') ->
+record_name('Callback') ->
     'p2p_adapter_Callback';
 
-    record_name('CallbackResponse') ->
+record_name('CallbackResponse') ->
     'p2p_adapter_CallbackResponse';
 
-    record_name('CallbackResult') ->
+record_name('CallbackResult') ->
     'p2p_adapter_CallbackResult';
 
-    record_name('ProcessCallbackSucceeded') ->
+record_name('ProcessCallbackSucceeded') ->
     'p2p_adapter_ProcessCallbackSucceeded';
 
-    record_name('ProcessCallbackFinished') ->
+record_name('ProcessCallbackFinished') ->
     'p2p_adapter_ProcessCallbackFinished';
 
-    record_name('SessionNotFound') ->
+record_name('SessionNotFound') ->
     'p2p_adapter_SessionNotFound';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('P2PAdapter') ->
     [
@@ -534,30 +534,30 @@ functions(_) -> error(badarg).
 
 function_info('P2PAdapter', 'Process', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Context'}}, 'context', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Context'}}, 'context', undefined}
+    ]};
 function_info('P2PAdapter', 'Process', reply_type) ->
-        {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessResult'}};
-    function_info('P2PAdapter', 'Process', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessResult'}};
+function_info('P2PAdapter', 'Process', exceptions) ->
+    {struct, struct, []};
 function_info('P2PAdapter', 'HandleCallback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Callback'}}, 'callback', undefined},
-    {2, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Context'}}, 'context', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Callback'}}, 'callback', undefined},
+        {2, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Context'}}, 'context', undefined}
+    ]};
 function_info('P2PAdapter', 'HandleCallback', reply_type) ->
-        {struct, struct, {dmsl_p2p_adapter_thrift, 'CallbackResult'}};
-    function_info('P2PAdapter', 'HandleCallback', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, {dmsl_p2p_adapter_thrift, 'CallbackResult'}};
+function_info('P2PAdapter', 'HandleCallback', exceptions) ->
+    {struct, struct, []};
 
 function_info('P2PAdapterHost', 'ProcessCallback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Callback'}}, 'callback', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_p2p_adapter_thrift, 'Callback'}}, 'callback', undefined}
+    ]};
 function_info('P2PAdapterHost', 'ProcessCallback', reply_type) ->
-        {struct, union, {dmsl_p2p_adapter_thrift, 'ProcessCallbackResult'}};
-    function_info('P2PAdapterHost', 'ProcessCallback', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_p2p_adapter_thrift, 'ProcessCallbackResult'}};
+function_info('P2PAdapterHost', 'ProcessCallback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_p2p_adapter_thrift, 'SessionNotFound'}}, 'ex1', undefined}
     ]};
 

@@ -220,11 +220,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -373,88 +373,88 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Content') ->
     {struct, struct, [
-    {1, required, string, 'type', undefined},
-    {2, required, string, 'data', undefined}
-]};
+        {1, required, string, 'type', undefined},
+        {2, required, string, 'data', undefined}
+    ]};
 
 struct_info('TimestampInterval') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_base_thrift, 'TimestampIntervalBound'}}, 'lower_bound', undefined},
-    {2, optional, {struct, struct, {dmsl_base_thrift, 'TimestampIntervalBound'}}, 'upper_bound', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_base_thrift, 'TimestampIntervalBound'}}, 'lower_bound', undefined},
+        {2, optional, {struct, struct, {dmsl_base_thrift, 'TimestampIntervalBound'}}, 'upper_bound', undefined}
+    ]};
 
 struct_info('TimestampIntervalBound') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_base_thrift, 'BoundType'}}, 'bound_type', undefined},
-    {2, required, string, 'bound_time', undefined}
-]};
+        {1, required, {enum, {dmsl_base_thrift, 'BoundType'}}, 'bound_type', undefined},
+        {2, required, string, 'bound_time', undefined}
+    ]};
 
 struct_info('TimeSpan') ->
     {struct, struct, [
-    {1, optional, i16, 'years', undefined},
-    {2, optional, i16, 'months', undefined},
-    {4, optional, i16, 'days', undefined},
-    {5, optional, i16, 'hours', undefined},
-    {6, optional, i16, 'minutes', undefined},
-    {7, optional, i16, 'seconds', undefined}
-]};
+        {1, optional, i16, 'years', undefined},
+        {2, optional, i16, 'months', undefined},
+        {4, optional, i16, 'days', undefined},
+        {5, optional, i16, 'hours', undefined},
+        {6, optional, i16, 'minutes', undefined},
+        {7, optional, i16, 'seconds', undefined}
+    ]};
 
 struct_info('Schedule') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_base_thrift, 'ScheduleYear'}}, 'year', undefined},
-    {2, required, {struct, union, {dmsl_base_thrift, 'ScheduleMonth'}}, 'month', undefined},
-    {3, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'day_of_month', undefined},
-    {4, required, {struct, union, {dmsl_base_thrift, 'ScheduleDayOfWeek'}}, 'day_of_week', undefined},
-    {5, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'hour', undefined},
-    {6, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'minute', undefined},
-    {7, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'second', undefined}
-]};
+        {1, required, {struct, union, {dmsl_base_thrift, 'ScheduleYear'}}, 'year', undefined},
+        {2, required, {struct, union, {dmsl_base_thrift, 'ScheduleMonth'}}, 'month', undefined},
+        {3, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'day_of_month', undefined},
+        {4, required, {struct, union, {dmsl_base_thrift, 'ScheduleDayOfWeek'}}, 'day_of_week', undefined},
+        {5, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'hour', undefined},
+        {6, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'minute', undefined},
+        {7, required, {struct, union, {dmsl_base_thrift, 'ScheduleFragment'}}, 'second', undefined}
+    ]};
 
 struct_info('ScheduleEvery') ->
     {struct, struct, [
-    {1, optional, byte, 'nth', undefined}
-]};
+        {1, optional, byte, 'nth', undefined}
+    ]};
 
 struct_info('ScheduleFragment') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
-    {2, optional, {set, byte}, 'on', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
+        {2, optional, {set, byte}, 'on', undefined}
+    ]};
 
 struct_info('ScheduleDayOfWeek') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
-    {2, optional, {set, {enum, {dmsl_base_thrift, 'DayOfWeek'}}}, 'on', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
+        {2, optional, {set, {enum, {dmsl_base_thrift, 'DayOfWeek'}}}, 'on', undefined}
+    ]};
 
 struct_info('ScheduleMonth') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
-    {2, optional, {set, {enum, {dmsl_base_thrift, 'Month'}}}, 'on', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
+        {2, optional, {set, {enum, {dmsl_base_thrift, 'Month'}}}, 'on', undefined}
+    ]};
 
 struct_info('ScheduleYear') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
-    {2, optional, {set, i32}, 'on', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_base_thrift, 'ScheduleEvery'}}, 'every', undefined},
+        {2, optional, {set, i32}, 'on', undefined}
+    ]};
 
 struct_info('Rational') ->
     {struct, struct, [
-    {1, required, i64, 'p', undefined},
-    {2, required, i64, 'q', undefined}
-]};
+        {1, required, i64, 'p', undefined},
+        {2, required, i64, 'q', undefined}
+    ]};
 
 struct_info('Timer') ->
     {struct, union, [
-    {1, optional, i32, 'timeout', undefined},
-    {2, optional, string, 'deadline', undefined}
-]};
+        {1, optional, i32, 'timeout', undefined},
+        {2, optional, string, 'deadline', undefined}
+    ]};
 
 struct_info('InvalidRequest') ->
     {struct, exception, [
-    {1, required, {list, string}, 'errors', undefined}
-]};
+        {1, required, {list, string}, 'errors', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -466,27 +466,27 @@ record_name('Content') ->
 record_name('TimestampInterval') ->
     'TimestampInterval';
 
-    record_name('TimestampIntervalBound') ->
+record_name('TimestampIntervalBound') ->
     'TimestampIntervalBound';
 
-    record_name('TimeSpan') ->
+record_name('TimeSpan') ->
     'TimeSpan';
 
-    record_name('Schedule') ->
+record_name('Schedule') ->
     'Schedule';
 
-    record_name('ScheduleEvery') ->
+record_name('ScheduleEvery') ->
     'ScheduleEvery';
 
-    record_name('Rational') ->
+record_name('Rational') ->
     'Rational';
 
-    record_name('InvalidRequest') ->
+record_name('InvalidRequest') ->
     'InvalidRequest';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

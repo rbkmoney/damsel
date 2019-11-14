@@ -75,11 +75,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -150,11 +150,11 @@ functions(_) -> error(badarg).
 
 function_info('Signer', 'sign', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'data', undefined}
-]};
+        {1, undefined, string, 'data', undefined}
+    ]};
 function_info('Signer', 'sign', reply_type) ->
-        string;
-    function_info('Signer', 'sign', exceptions) ->
-        {struct, struct, []};
+    string;
+function_info('Signer', 'sign', exceptions) ->
+    {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

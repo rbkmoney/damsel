@@ -529,11 +529,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -698,17 +698,17 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('UserInfo') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'email', undefined},
-    {3, required, string, 'username', undefined},
-    {4, required, {struct, union, {dmsl_claim_management_thrift, 'UserType'}}, 'type', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'email', undefined},
+        {3, required, string, 'username', undefined},
+        {4, required, {struct, union, {dmsl_claim_management_thrift, 'UserType'}}, 'type', undefined}
+    ]};
 
 struct_info('UserType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InternalUser'}}, 'internal_user', undefined},
-    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ExternalUser'}}, 'external_user', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InternalUser'}}, 'internal_user', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ExternalUser'}}, 'external_user', undefined}
+    ]};
 
 struct_info('InternalUser') ->
     {struct, struct, []};
@@ -718,299 +718,299 @@ struct_info('ExternalUser') ->
 
 struct_info('ClaimEffect') ->
     {struct, union, [
-    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractEffectUnit'}}, 'contract_effect', undefined},
-    {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopEffectUnit'}}, 'shop_effect', undefined},
-    {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorEffectUnit'}}, 'contractor_effect', undefined}
-]};
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractEffectUnit'}}, 'contract_effect', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopEffectUnit'}}, 'shop_effect', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorEffectUnit'}}, 'contractor_effect', undefined}
+    ]};
 
 struct_info('ContractEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('ContractEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'created', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
-    {5, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolInfoChanged'}}, 'payout_tool_info_changed', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
-    {8, optional, string, 'contractor_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'created', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
+        {5, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolInfoChanged'}}, 'payout_tool_info_changed', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
+        {8, optional, string, 'contractor_changed', undefined}
+    ]};
 
 struct_info('ContractorEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractorEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractorEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('ContractorEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'created', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'created', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_changed', undefined}
+    ]};
 
 struct_info('ScheduleChanged') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
+    ]};
 
 struct_info('PayoutToolInfoChanged') ->
     {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info', undefined}
-]};
+        {1, required, string, 'payout_tool_id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info', undefined}
+    ]};
 
 struct_info('ShopEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'shop_id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ShopEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'shop_id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ShopEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('ShopEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_changed', undefined},
-    {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopContractChanged'}}, 'contract_changed', undefined},
-    {5, optional, string, 'payout_tool_changed', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
-    {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ScheduleChanged'}}, 'payout_schedule_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_changed', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopContractChanged'}}, 'contract_changed', undefined},
+        {5, optional, string, 'payout_tool_changed', undefined},
+        {6, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
+        {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ScheduleChanged'}}, 'payout_schedule_changed', undefined}
+    ]};
 
 struct_info('ShopContractChanged') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, string, 'payout_tool_id', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('PayoutToolParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'tool_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'tool_info', undefined}
+    ]};
 
 struct_info('ContractParams') ->
     {struct, struct, [
-    {1, optional, string, 'contractor_id', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined}
-]};
+        {1, optional, string, 'contractor_id', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined}
+    ]};
 
 struct_info('ShopModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ShopModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ShopModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ShopContractModification') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, string, 'payout_tool_id', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('ScheduleModification') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
+    ]};
 
 struct_info('ShopAccountParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+    ]};
 
 struct_info('ShopModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopParams'}}, 'creation', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_modification', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_modification', undefined},
-    {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopContractModification'}}, 'contract_modification', undefined},
-    {5, optional, string, 'payout_tool_modification', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
-    {7, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
-    {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopParams'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_modification', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_modification', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopContractModification'}}, 'contract_modification', undefined},
+        {5, optional, string, 'payout_tool_modification', undefined},
+        {6, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
+        {7, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
+        {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined}
+    ]};
 
 struct_info('ShopParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
-    {4, required, string, 'contract_id', undefined},
-    {5, required, string, 'payout_tool_id', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
+        {4, required, string, 'contract_id', undefined},
+        {5, required, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('ContractorModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractorModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractorModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ContractorModification') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'creation', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'creation', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined}
+    ]};
 
 struct_info('ContractModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ContractModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractParams'}}, 'creation', undefined},
-    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractTermination'}}, 'termination', undefined},
-    {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractAdjustmentModificationUnit'}}, 'adjustment_modification', undefined},
-    {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolModificationUnit'}}, 'payout_tool_modification', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_binding', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined},
-    {7, optional, string, 'contractor_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractParams'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractTermination'}}, 'termination', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractAdjustmentModificationUnit'}}, 'adjustment_modification', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolModificationUnit'}}, 'payout_tool_modification', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_binding', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined},
+        {7, optional, string, 'contractor_modification', undefined}
+    ]};
 
 struct_info('ContractTermination') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('ContractAdjustmentModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'adjustment_id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractAdjustmentModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'adjustment_id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ContractAdjustmentModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ContractAdjustmentParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined}
+    ]};
 
 struct_info('ContractAdjustmentModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractAdjustmentParams'}}, 'creation', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractAdjustmentParams'}}, 'creation', undefined}
+    ]};
 
 struct_info('PayoutToolModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'PayoutToolModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'payout_tool_id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'PayoutToolModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('PayoutToolModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolParams'}}, 'creation', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolParams'}}, 'creation', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info_modification', undefined}
+    ]};
 
 struct_info('DocumentModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentCreated'}}, 'creation', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentCreated'}}, 'creation', undefined}
+    ]};
 
 struct_info('DocumentCreated') ->
     {struct, struct, []};
 
 struct_info('DocumentModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'DocumentModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'DocumentModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('FileModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileCreated'}}, 'creation', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileCreated'}}, 'creation', undefined}
+    ]};
 
 struct_info('FileCreated') ->
     {struct, struct, []};
 
 struct_info('FileModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'FileModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'FileModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('CommentModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentCreated'}}, 'creation', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentCreated'}}, 'creation', undefined}
+    ]};
 
 struct_info('CommentCreated') ->
     {struct, struct, []};
 
 struct_info('CommentModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'CommentModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'CommentModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('StatusChanged') ->
     {struct, struct, []};
 
 struct_info('StatusModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'StatusChanged'}}, 'change', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'StatusChanged'}}, 'change', undefined}
+    ]};
 
 struct_info('StatusModificationUnit') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'StatusModification'}}, 'modification', undefined}
-]};
+        {1, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'StatusModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ClaimModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentModificationUnit'}}, 'document_modification', undefined},
-    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileModificationUnit'}}, 'file_modification', undefined},
-    {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentModificationUnit'}}, 'comment_modification', undefined},
-    {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'StatusModificationUnit'}}, 'status_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentModificationUnit'}}, 'document_modification', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileModificationUnit'}}, 'file_modification', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentModificationUnit'}}, 'comment_modification', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'StatusModificationUnit'}}, 'status_modification', undefined}
+    ]};
 
 struct_info('PartyModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
-    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
-    {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined}
+    ]};
 
 struct_info('ModificationUnit') ->
     {struct, struct, [
-    {1, required, i64, 'modification_id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}, 'modification', undefined},
-    {4, required, {struct, struct, {dmsl_claim_management_thrift, 'UserInfo'}}, 'user_info', undefined}
-]};
+        {1, required, i64, 'modification_id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}, 'modification', undefined},
+        {4, required, {struct, struct, {dmsl_claim_management_thrift, 'UserInfo'}}, 'user_info', undefined}
+    ]};
 
 struct_info('Modification') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_claim_management_thrift, 'PartyModification'}}, 'party_modification', undefined},
-    {2, optional, {struct, union, {dmsl_claim_management_thrift, 'ClaimModification'}}, 'claim_modfication', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_claim_management_thrift, 'PartyModification'}}, 'party_modification', undefined},
+        {2, optional, {struct, union, {dmsl_claim_management_thrift, 'ClaimModification'}}, 'claim_modfication', undefined}
+    ]};
 
 struct_info('Claim') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined},
-    {3, required, {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}}, 'changeset', undefined},
-    {4, required, i32, 'revision', undefined},
-    {5, required, string, 'created_at', undefined},
-    {6, optional, string, 'updated_at', undefined},
-    {7, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined},
+        {3, required, {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}}, 'changeset', undefined},
+        {4, required, i32, 'revision', undefined},
+        {5, required, string, 'created_at', undefined},
+        {6, optional, string, 'updated_at', undefined},
+        {7, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    ]};
 
 struct_info('ClaimStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimReview'}}, 'review', undefined},
-    {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimPendingAcceptance'}}, 'pending_acceptance', undefined},
-    {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimAccepted'}}, 'accepted', undefined},
-    {5, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimDenied'}}, 'denied', undefined},
-    {6, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimRevoked'}}, 'revoked', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimReview'}}, 'review', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimPendingAcceptance'}}, 'pending_acceptance', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimAccepted'}}, 'accepted', undefined},
+        {5, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimDenied'}}, 'denied', undefined},
+        {6, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimRevoked'}}, 'revoked', undefined}
+    ]};
 
 struct_info('ClaimPending') ->
     {struct, struct, []};
@@ -1026,21 +1026,21 @@ struct_info('ClaimAccepted') ->
 
 struct_info('ClaimDenied') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('ClaimRevoked') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('ClaimSearchQuery') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, optional, {list, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}}, 'statuses', undefined},
-    {3, optional, string, 'token', undefined},
-    {4, required, i32, 'limit', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, optional, {list, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}}, 'statuses', undefined},
+        {3, optional, string, 'token', undefined},
+        {4, required, i32, 'limit', undefined}
+    ]};
 
 struct_info('ClaimNotFound') ->
     {struct, exception, []};
@@ -1053,27 +1053,27 @@ struct_info('InvalidClaimRevision') ->
 
 struct_info('ChangesetConflict') ->
     {struct, exception, [
-    {1, required, i64, 'conflicted_id', undefined}
-]};
+        {1, required, i64, 'conflicted_id', undefined}
+    ]};
 
 struct_info('BadContinuationToken') ->
     {struct, exception, [
-    {1, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, string, 'reason', undefined}
+    ]};
 
 struct_info('LimitExceeded') ->
     {struct, exception, []};
 
 struct_info('InvalidChangeset') ->
     {struct, exception, [
-    {1, required, string, 'reason', undefined},
-    {2, required, {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}}, 'invalid_changeset', undefined}
-]};
+        {1, required, string, 'reason', undefined},
+        {2, required, {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}}, 'invalid_changeset', undefined}
+    ]};
 
 struct_info('InvalidClaimStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('MetadataKeyNotFound') ->
     {struct, exception, []};
@@ -1088,147 +1088,147 @@ record_name('UserInfo') ->
 record_name('InternalUser') ->
     'claim_management_InternalUser';
 
-    record_name('ExternalUser') ->
+record_name('ExternalUser') ->
     'claim_management_ExternalUser';
 
-    record_name('ContractEffectUnit') ->
+record_name('ContractEffectUnit') ->
     'claim_management_ContractEffectUnit';
 
-    record_name('ContractorEffectUnit') ->
+record_name('ContractorEffectUnit') ->
     'claim_management_ContractorEffectUnit';
 
-    record_name('ScheduleChanged') ->
+record_name('ScheduleChanged') ->
     'claim_management_ScheduleChanged';
 
-    record_name('PayoutToolInfoChanged') ->
+record_name('PayoutToolInfoChanged') ->
     'claim_management_PayoutToolInfoChanged';
 
-    record_name('ShopEffectUnit') ->
+record_name('ShopEffectUnit') ->
     'claim_management_ShopEffectUnit';
 
-    record_name('ShopContractChanged') ->
+record_name('ShopContractChanged') ->
     'claim_management_ShopContractChanged';
 
-    record_name('PayoutToolParams') ->
+record_name('PayoutToolParams') ->
     'claim_management_PayoutToolParams';
 
-    record_name('ContractParams') ->
+record_name('ContractParams') ->
     'claim_management_ContractParams';
 
-    record_name('ShopModificationUnit') ->
+record_name('ShopModificationUnit') ->
     'claim_management_ShopModificationUnit';
 
-    record_name('ShopContractModification') ->
+record_name('ShopContractModification') ->
     'claim_management_ShopContractModification';
 
-    record_name('ScheduleModification') ->
+record_name('ScheduleModification') ->
     'claim_management_ScheduleModification';
 
-    record_name('ShopAccountParams') ->
+record_name('ShopAccountParams') ->
     'claim_management_ShopAccountParams';
 
-    record_name('ShopParams') ->
+record_name('ShopParams') ->
     'claim_management_ShopParams';
 
-    record_name('ContractorModificationUnit') ->
+record_name('ContractorModificationUnit') ->
     'claim_management_ContractorModificationUnit';
 
-    record_name('ContractModificationUnit') ->
+record_name('ContractModificationUnit') ->
     'claim_management_ContractModificationUnit';
 
-    record_name('ContractTermination') ->
+record_name('ContractTermination') ->
     'claim_management_ContractTermination';
 
-    record_name('ContractAdjustmentModificationUnit') ->
+record_name('ContractAdjustmentModificationUnit') ->
     'claim_management_ContractAdjustmentModificationUnit';
 
-    record_name('ContractAdjustmentParams') ->
+record_name('ContractAdjustmentParams') ->
     'claim_management_ContractAdjustmentParams';
 
-    record_name('PayoutToolModificationUnit') ->
+record_name('PayoutToolModificationUnit') ->
     'claim_management_PayoutToolModificationUnit';
 
-    record_name('DocumentCreated') ->
+record_name('DocumentCreated') ->
     'claim_management_DocumentCreated';
 
-    record_name('DocumentModificationUnit') ->
+record_name('DocumentModificationUnit') ->
     'claim_management_DocumentModificationUnit';
 
-    record_name('FileCreated') ->
+record_name('FileCreated') ->
     'claim_management_FileCreated';
 
-    record_name('FileModificationUnit') ->
+record_name('FileModificationUnit') ->
     'claim_management_FileModificationUnit';
 
-    record_name('CommentCreated') ->
+record_name('CommentCreated') ->
     'claim_management_CommentCreated';
 
-    record_name('CommentModificationUnit') ->
+record_name('CommentModificationUnit') ->
     'claim_management_CommentModificationUnit';
 
-    record_name('StatusChanged') ->
+record_name('StatusChanged') ->
     'claim_management_StatusChanged';
 
-    record_name('StatusModificationUnit') ->
+record_name('StatusModificationUnit') ->
     'claim_management_StatusModificationUnit';
 
-    record_name('ModificationUnit') ->
+record_name('ModificationUnit') ->
     'claim_management_ModificationUnit';
 
-    record_name('Claim') ->
+record_name('Claim') ->
     'claim_management_Claim';
 
-    record_name('ClaimPending') ->
+record_name('ClaimPending') ->
     'claim_management_ClaimPending';
 
-    record_name('ClaimReview') ->
+record_name('ClaimReview') ->
     'claim_management_ClaimReview';
 
-    record_name('ClaimPendingAcceptance') ->
+record_name('ClaimPendingAcceptance') ->
     'claim_management_ClaimPendingAcceptance';
 
-    record_name('ClaimAccepted') ->
+record_name('ClaimAccepted') ->
     'claim_management_ClaimAccepted';
 
-    record_name('ClaimDenied') ->
+record_name('ClaimDenied') ->
     'claim_management_ClaimDenied';
 
-    record_name('ClaimRevoked') ->
+record_name('ClaimRevoked') ->
     'claim_management_ClaimRevoked';
 
-    record_name('ClaimSearchQuery') ->
+record_name('ClaimSearchQuery') ->
     'claim_management_ClaimSearchQuery';
 
-    record_name('ClaimNotFound') ->
+record_name('ClaimNotFound') ->
     'claim_management_ClaimNotFound';
 
-    record_name('PartyNotFound') ->
+record_name('PartyNotFound') ->
     'claim_management_PartyNotFound';
 
-    record_name('InvalidClaimRevision') ->
+record_name('InvalidClaimRevision') ->
     'claim_management_InvalidClaimRevision';
 
-    record_name('ChangesetConflict') ->
+record_name('ChangesetConflict') ->
     'claim_management_ChangesetConflict';
 
-    record_name('BadContinuationToken') ->
+record_name('BadContinuationToken') ->
     'claim_management_BadContinuationToken';
 
-    record_name('LimitExceeded') ->
+record_name('LimitExceeded') ->
     'claim_management_LimitExceeded';
 
-    record_name('InvalidChangeset') ->
+record_name('InvalidChangeset') ->
     'claim_management_InvalidChangeset';
 
-    record_name('InvalidClaimStatus') ->
+record_name('InvalidClaimStatus') ->
     'claim_management_InvalidClaimStatus';
 
-    record_name('MetadataKeyNotFound') ->
+record_name('MetadataKeyNotFound') ->
     'claim_management_MetadataKeyNotFound';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('ClaimManagement') ->
     [
@@ -1257,13 +1257,13 @@ functions(_) -> error(badarg).
 
 function_info('ClaimManagement', 'CreateClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'changeset', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'changeset', undefined}
+    ]};
 function_info('ClaimManagement', 'CreateClaim', reply_type) ->
-        {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
-    function_info('ClaimManagement', 'CreateClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
+function_info('ClaimManagement', 'CreateClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex3', undefined},
@@ -1271,38 +1271,38 @@ function_info('ClaimManagement', 'CreateClaim', reply_type) ->
     ]};
 function_info('ClaimManagement', 'GetClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined}
+    ]};
 function_info('ClaimManagement', 'GetClaim', reply_type) ->
-        {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
-    function_info('ClaimManagement', 'GetClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
+function_info('ClaimManagement', 'GetClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined}
     ]};
 function_info('ClaimManagement', 'SearchClaims', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_claim_management_thrift, 'ClaimSearchQuery'}}, 'claim_request', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_claim_management_thrift, 'ClaimSearchQuery'}}, 'claim_request', undefined}
+    ]};
 function_info('ClaimManagement', 'SearchClaims', reply_type) ->
-        {list, {struct, struct, {dmsl_claim_management_thrift, 'Claim'}}};
-    function_info('ClaimManagement', 'SearchClaims', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_claim_management_thrift, 'Claim'}}};
+function_info('ClaimManagement', 'SearchClaims', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'LimitExceeded'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'BadContinuationToken'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'AcceptClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined},
-    {3, undefined, i32, 'revision', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, i32, 'revision', undefined}
+    ]};
 function_info('ClaimManagement', 'AcceptClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimManagement', 'AcceptClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimManagement', 'AcceptClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
@@ -1311,15 +1311,15 @@ function_info('ClaimManagement', 'AcceptClaim', reply_type) ->
     ]};
 function_info('ClaimManagement', 'UpdateClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined},
-    {3, undefined, i32, 'revision', undefined},
-    {4, undefined, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'changeset', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, i32, 'revision', undefined},
+        {4, undefined, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'changeset', undefined}
+    ]};
 function_info('ClaimManagement', 'UpdateClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimManagement', 'UpdateClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimManagement', 'UpdateClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
@@ -1329,15 +1329,15 @@ function_info('ClaimManagement', 'UpdateClaim', reply_type) ->
     ]};
 function_info('ClaimManagement', 'DenyClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined},
-    {3, undefined, i32, 'revision', undefined},
-    {4, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, i32, 'revision', undefined},
+        {4, undefined, string, 'reason', undefined}
+    ]};
 function_info('ClaimManagement', 'DenyClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimManagement', 'DenyClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimManagement', 'DenyClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
@@ -1345,15 +1345,15 @@ function_info('ClaimManagement', 'DenyClaim', reply_type) ->
     ]};
 function_info('ClaimManagement', 'RevokeClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined},
-    {3, undefined, i32, 'revision', undefined},
-    {4, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, i32, 'revision', undefined},
+        {4, undefined, string, 'reason', undefined}
+    ]};
 function_info('ClaimManagement', 'RevokeClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimManagement', 'RevokeClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimManagement', 'RevokeClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
@@ -1361,41 +1361,41 @@ function_info('ClaimManagement', 'RevokeClaim', reply_type) ->
     ]};
 function_info('ClaimManagement', 'GetMetaData', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined},
-    {3, undefined, string, 'key', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, string, 'key', undefined}
+    ]};
 function_info('ClaimManagement', 'GetMetaData', reply_type) ->
-        {struct, union, {dmsl_msgpack_thrift, 'Value'}};
-    function_info('ClaimManagement', 'GetMetaData', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_msgpack_thrift, 'Value'}};
+function_info('ClaimManagement', 'GetMetaData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'SetMetaData', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'id', undefined},
-    {3, undefined, string, 'key', undefined},
-    {4, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'value', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, string, 'key', undefined},
+        {4, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'value', undefined}
+    ]};
 function_info('ClaimManagement', 'SetMetaData', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimManagement', 'SetMetaData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimManagement', 'SetMetaData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined}
     ]};
 function_info('ClaimManagement', 'RemoveMetaData', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'key', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'key', undefined}
+    ]};
 function_info('ClaimManagement', 'RemoveMetaData', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimManagement', 'RemoveMetaData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimManagement', 'RemoveMetaData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex3', undefined}
@@ -1403,24 +1403,24 @@ function_info('ClaimManagement', 'RemoveMetaData', reply_type) ->
 
 function_info('ClaimCommitter', 'Accept', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, {struct, struct, {dmsl_claim_management_thrift, 'Claim'}}, 'claim', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, {struct, struct, {dmsl_claim_management_thrift, 'Claim'}}, 'claim', undefined}
+    ]};
 function_info('ClaimCommitter', 'Accept', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimCommitter', 'Accept', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('ClaimCommitter', 'Accept', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex2', undefined}
     ]};
 function_info('ClaimCommitter', 'Commit', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, {struct, struct, {dmsl_claim_management_thrift, 'Claim'}}, 'claim', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, {struct, struct, {dmsl_claim_management_thrift, 'Claim'}}, 'claim', undefined}
+    ]};
 function_info('ClaimCommitter', 'Commit', reply_type) ->
-        {struct, struct, []};
-    function_info('ClaimCommitter', 'Commit', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, []};
+function_info('ClaimCommitter', 'Commit', exceptions) ->
+    {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

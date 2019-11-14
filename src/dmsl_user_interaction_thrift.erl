@@ -135,11 +135,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -217,56 +217,56 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('QrCode') ->
     {struct, struct, [
-    {1, required, string, 'payload', undefined}
-]};
+        {1, required, string, 'payload', undefined}
+    ]};
 
 struct_info('CryptoCash') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'crypto_amount', undefined},
-    {2, required, string, 'crypto_symbolic_code', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'crypto_amount', undefined},
+        {2, required, string, 'crypto_symbolic_code', undefined}
+    ]};
 
 struct_info('BrowserHTTPRequest') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_user_interaction_thrift, 'BrowserGetRequest'}}, 'get_request', undefined},
-    {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'BrowserPostRequest'}}, 'post_request', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_user_interaction_thrift, 'BrowserGetRequest'}}, 'get_request', undefined},
+        {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'BrowserPostRequest'}}, 'post_request', undefined}
+    ]};
 
 struct_info('BrowserGetRequest') ->
     {struct, struct, [
-    {1, required, string, 'uri', undefined}
-]};
+        {1, required, string, 'uri', undefined}
+    ]};
 
 struct_info('BrowserPostRequest') ->
     {struct, struct, [
-    {1, required, string, 'uri', undefined},
-    {2, required, {map, string, string}, 'form', undefined}
-]};
+        {1, required, string, 'uri', undefined},
+        {2, required, {map, string, string}, 'form', undefined}
+    ]};
 
 struct_info('PaymentTerminalReceipt') ->
     {struct, struct, [
-    {1, required, string, 'short_payment_id', undefined},
-    {2, required, string, 'due', undefined}
-]};
+        {1, required, string, 'short_payment_id', undefined},
+        {2, required, string, 'due', undefined}
+    ]};
 
 struct_info('CryptoCurrencyTransferRequest') ->
     {struct, struct, [
-    {1, required, string, 'crypto_address', undefined},
-    {2, required, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCash'}}, 'crypto_cash', undefined}
-]};
+        {1, required, string, 'crypto_address', undefined},
+        {2, required, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCash'}}, 'crypto_cash', undefined}
+    ]};
 
 struct_info('QrCodeShowRequest') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_user_interaction_thrift, 'QrCode'}}, 'qr_code', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_user_interaction_thrift, 'QrCode'}}, 'qr_code', undefined}
+    ]};
 
 struct_info('UserInteraction') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_user_interaction_thrift, 'BrowserHTTPRequest'}}, 'redirect', undefined},
-    {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'PaymentTerminalReceipt'}}, 'payment_terminal_reciept', undefined},
-    {3, optional, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCurrencyTransferRequest'}}, 'crypto_currency_transfer_request', undefined},
-    {4, optional, {struct, struct, {dmsl_user_interaction_thrift, 'QrCodeShowRequest'}}, 'qr_code_show_request', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_user_interaction_thrift, 'BrowserHTTPRequest'}}, 'redirect', undefined},
+        {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'PaymentTerminalReceipt'}}, 'payment_terminal_reciept', undefined},
+        {3, optional, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCurrencyTransferRequest'}}, 'crypto_currency_transfer_request', undefined},
+        {4, optional, {struct, struct, {dmsl_user_interaction_thrift, 'QrCodeShowRequest'}}, 'qr_code_show_request', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -278,24 +278,24 @@ record_name('QrCode') ->
 record_name('CryptoCash') ->
     'CryptoCash';
 
-    record_name('BrowserGetRequest') ->
+record_name('BrowserGetRequest') ->
     'BrowserGetRequest';
 
-    record_name('BrowserPostRequest') ->
+record_name('BrowserPostRequest') ->
     'BrowserPostRequest';
 
-    record_name('PaymentTerminalReceipt') ->
+record_name('PaymentTerminalReceipt') ->
     'PaymentTerminalReceipt';
 
-    record_name('CryptoCurrencyTransferRequest') ->
+record_name('CryptoCurrencyTransferRequest') ->
     'CryptoCurrencyTransferRequest';
 
-    record_name('QrCodeShowRequest') ->
+record_name('QrCodeShowRequest') ->
     'QrCodeShowRequest';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

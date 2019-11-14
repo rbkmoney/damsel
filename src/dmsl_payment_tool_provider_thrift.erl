@@ -183,11 +183,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -270,111 +270,111 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('WrappedPaymentTool') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentRequest'}}, 'request', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentRequest'}}, 'request', undefined}
+    ]};
 
 struct_info('PaymentRequest') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ApplePayRequest'}}, 'apple', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'SamsungPayRequest'}}, 'samsung', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayRequest'}}, 'google', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ApplePayRequest'}}, 'apple', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'SamsungPayRequest'}}, 'samsung', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayRequest'}}, 'google', undefined}
+    ]};
 
 struct_info('ApplePayRequest') ->
     {struct, struct, [
-    {1, required, string, 'merchant_id', undefined},
-    {2, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'payment_token', undefined}
-]};
+        {1, required, string, 'merchant_id', undefined},
+        {2, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'payment_token', undefined}
+    ]};
 
 struct_info('SamsungPayRequest') ->
     {struct, struct, [
-    {1, required, string, 'service_id', undefined},
-    {2, required, string, 'reference_id', undefined}
-]};
+        {1, required, string, 'service_id', undefined},
+        {2, required, string, 'reference_id', undefined}
+    ]};
 
 struct_info('GooglePayRequest') ->
     {struct, struct, [
-    {1, required, string, 'gateway_merchant_id', undefined},
-    {2, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'payment_token', undefined}
-]};
+        {1, required, string, 'gateway_merchant_id', undefined},
+        {2, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'payment_token', undefined}
+    ]};
 
 struct_info('UnwrappedPaymentTool') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'CardInfo'}}, 'card_info', undefined},
-    {2, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'CardPaymentData'}}, 'payment_data', undefined},
-    {3, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentDetails'}}, 'details', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'CardInfo'}}, 'card_info', undefined},
+        {2, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'CardPaymentData'}}, 'payment_data', undefined},
+        {3, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentDetails'}}, 'details', undefined}
+    ]};
 
 struct_info('PaymentDetails') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ApplePayDetails'}}, 'apple', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'SamsungPayDetails'}}, 'samsung', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayDetails'}}, 'google', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ApplePayDetails'}}, 'apple', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'SamsungPayDetails'}}, 'samsung', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayDetails'}}, 'google', undefined}
+    ]};
 
 struct_info('ApplePayDetails') ->
     {struct, struct, [
-    {1, required, string, 'transaction_id', undefined},
-    {2, required, i64, 'amount', undefined},
-    {3, required, i16, 'currency_numeric_code', undefined},
-    {4, required, string, 'device_id', undefined}
-]};
+        {1, required, string, 'transaction_id', undefined},
+        {2, required, i64, 'amount', undefined},
+        {3, required, i16, 'currency_numeric_code', undefined},
+        {4, required, string, 'device_id', undefined}
+    ]};
 
 struct_info('SamsungPayDetails') ->
     {struct, struct, [
-    {1, optional, string, 'device_id', undefined}
-]};
+        {1, optional, string, 'device_id', undefined}
+    ]};
 
 struct_info('GooglePayDetails') ->
     {struct, struct, [
-    {1, required, string, 'message_id', undefined},
-    {2, required, string, 'message_expiration', undefined}
-]};
+        {1, required, string, 'message_id', undefined},
+        {2, required, string, 'message_expiration', undefined}
+    ]};
 
 struct_info('CardInfo') ->
     {struct, struct, [
-    {1, optional, string, 'display_name', undefined},
-    {2, optional, string, 'cardholder_name', undefined},
-    {3, optional, string, 'last_4_digits', undefined},
-    {4, optional, {enum, {dmsl_payment_tool_provider_thrift, 'CardClass'}}, 'card_class', undefined},
-    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined}
-]};
+        {1, optional, string, 'display_name', undefined},
+        {2, optional, string, 'cardholder_name', undefined},
+        {3, optional, string, 'last_4_digits', undefined},
+        {4, optional, {enum, {dmsl_payment_tool_provider_thrift, 'CardClass'}}, 'card_class', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined}
+    ]};
 
 struct_info('CardPaymentData') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'TokenizedCard'}}, 'tokenized_card', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'Card'}}, 'card', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'TokenizedCard'}}, 'tokenized_card', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'Card'}}, 'card', undefined}
+    ]};
 
 struct_info('TokenizedCard') ->
     {struct, struct, [
-    {1, required, string, 'dpan', undefined},
-    {2, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ExpDate'}}, 'exp_date', undefined},
-    {3, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'AuthData'}}, 'auth_data', undefined}
-]};
+        {1, required, string, 'dpan', undefined},
+        {2, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ExpDate'}}, 'exp_date', undefined},
+        {3, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'AuthData'}}, 'auth_data', undefined}
+    ]};
 
 struct_info('Card') ->
     {struct, struct, [
-    {1, required, string, 'pan', undefined},
-    {2, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ExpDate'}}, 'exp_date', undefined}
-]};
+        {1, required, string, 'pan', undefined},
+        {2, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ExpDate'}}, 'exp_date', undefined}
+    ]};
 
 struct_info('ExpDate') ->
     {struct, struct, [
-    {1, required, byte, 'month', undefined},
-    {2, required, i16, 'year', undefined}
-]};
+        {1, required, byte, 'month', undefined},
+        {2, required, i16, 'year', undefined}
+    ]};
 
 struct_info('AuthData') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'Auth3DS'}}, 'auth_3ds', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'Auth3DS'}}, 'auth_3ds', undefined}
+    ]};
 
 struct_info('Auth3DS') ->
     {struct, struct, [
-    {1, required, string, 'cryptogram', undefined},
-    {2, optional, string, 'eci', undefined}
-]};
+        {1, required, string, 'cryptogram', undefined},
+        {2, optional, string, 'eci', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -386,42 +386,42 @@ record_name('WrappedPaymentTool') ->
 record_name('ApplePayRequest') ->
     'paytoolprv_ApplePayRequest';
 
-    record_name('SamsungPayRequest') ->
+record_name('SamsungPayRequest') ->
     'paytoolprv_SamsungPayRequest';
 
-    record_name('GooglePayRequest') ->
+record_name('GooglePayRequest') ->
     'paytoolprv_GooglePayRequest';
 
-    record_name('UnwrappedPaymentTool') ->
+record_name('UnwrappedPaymentTool') ->
     'paytoolprv_UnwrappedPaymentTool';
 
-    record_name('ApplePayDetails') ->
+record_name('ApplePayDetails') ->
     'paytoolprv_ApplePayDetails';
 
-    record_name('SamsungPayDetails') ->
+record_name('SamsungPayDetails') ->
     'paytoolprv_SamsungPayDetails';
 
-    record_name('GooglePayDetails') ->
+record_name('GooglePayDetails') ->
     'paytoolprv_GooglePayDetails';
 
-    record_name('CardInfo') ->
+record_name('CardInfo') ->
     'paytoolprv_CardInfo';
 
-    record_name('TokenizedCard') ->
+record_name('TokenizedCard') ->
     'paytoolprv_TokenizedCard';
 
-    record_name('Card') ->
+record_name('Card') ->
     'paytoolprv_Card';
 
-    record_name('ExpDate') ->
+record_name('ExpDate') ->
     'paytoolprv_ExpDate';
 
-    record_name('Auth3DS') ->
+record_name('Auth3DS') ->
     'paytoolprv_Auth3DS';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('PaymentToolProvider') ->
     [
@@ -435,12 +435,12 @@ functions(_) -> error(badarg).
 
 function_info('PaymentToolProvider', 'Unwrap', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_tool_provider_thrift, 'WrappedPaymentTool'}}, 'payment_tool', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_tool_provider_thrift, 'WrappedPaymentTool'}}, 'payment_tool', undefined}
+    ]};
 function_info('PaymentToolProvider', 'Unwrap', reply_type) ->
-        {struct, struct, {dmsl_payment_tool_provider_thrift, 'UnwrappedPaymentTool'}};
-    function_info('PaymentToolProvider', 'Unwrap', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_tool_provider_thrift, 'UnwrappedPaymentTool'}};
+function_info('PaymentToolProvider', 'Unwrap', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 

@@ -104,11 +104,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -174,23 +174,23 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('LocationInfo') ->
     {struct, struct, [
-    {1, required, i32, 'city_geo_id', undefined},
-    {2, required, i32, 'country_geo_id', undefined},
-    {3, optional, string, 'raw_response', undefined}
-]};
+        {1, required, i32, 'city_geo_id', undefined},
+        {2, required, i32, 'country_geo_id', undefined},
+        {3, optional, string, 'raw_response', undefined}
+    ]};
 
 struct_info('SubdivisionInfo') ->
     {struct, struct, [
-    {1, required, i16, 'level', undefined},
-    {2, required, string, 'subdivision_name', undefined}
-]};
+        {1, required, i16, 'level', undefined},
+        {2, required, string, 'subdivision_name', undefined}
+    ]};
 
 struct_info('GeoIDInfo') ->
     {struct, struct, [
-    {2, required, string, 'country_name', undefined},
-    {3, optional, {set, {struct, struct, {dmsl_geo_ip_thrift, 'SubdivisionInfo'}}}, 'subdivisions', undefined},
-    {4, optional, string, 'city_name', undefined}
-]};
+        {2, required, string, 'country_name', undefined},
+        {3, optional, {set, {struct, struct, {dmsl_geo_ip_thrift, 'SubdivisionInfo'}}}, 'subdivisions', undefined},
+        {4, optional, string, 'city_name', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -202,12 +202,12 @@ record_name('LocationInfo') ->
 record_name('SubdivisionInfo') ->
     'geo_ip_SubdivisionInfo';
 
-    record_name('GeoIDInfo') ->
+record_name('GeoIDInfo') ->
     'geo_ip_GeoIDInfo';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('GeoIpService') ->
     [
@@ -225,54 +225,54 @@ functions(_) -> error(badarg).
 
 function_info('GeoIpService', 'GetLocation', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'ip', undefined}
-]};
+        {1, undefined, string, 'ip', undefined}
+    ]};
 function_info('GeoIpService', 'GetLocation', reply_type) ->
-        {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}};
-    function_info('GeoIpService', 'GetLocation', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}};
+function_info('GeoIpService', 'GetLocation', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('GeoIpService', 'GetLocations', params_type) ->
     {struct, struct, [
-    {1, undefined, {set, string}, 'ip', undefined}
-]};
+        {1, undefined, {set, string}, 'ip', undefined}
+    ]};
 function_info('GeoIpService', 'GetLocations', reply_type) ->
-        {map, string, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}};
-    function_info('GeoIpService', 'GetLocations', exceptions) ->
-        {struct, struct, [
+    {map, string, {struct, struct, {dmsl_geo_ip_thrift, 'LocationInfo'}}};
+function_info('GeoIpService', 'GetLocations', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('GeoIpService', 'GetLocationInfo', params_type) ->
     {struct, struct, [
-    {1, undefined, {set, i32}, 'geo_ids', undefined},
-    {2, undefined, string, 'lang', undefined}
-]};
+        {1, undefined, {set, i32}, 'geo_ids', undefined},
+        {2, undefined, string, 'lang', undefined}
+    ]};
 function_info('GeoIpService', 'GetLocationInfo', reply_type) ->
-        {map, i32, {struct, struct, {dmsl_geo_ip_thrift, 'GeoIDInfo'}}};
-    function_info('GeoIpService', 'GetLocationInfo', exceptions) ->
-        {struct, struct, [
+    {map, i32, {struct, struct, {dmsl_geo_ip_thrift, 'GeoIDInfo'}}};
+function_info('GeoIpService', 'GetLocationInfo', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('GeoIpService', 'GetLocationName', params_type) ->
     {struct, struct, [
-    {1, undefined, {set, i32}, 'geo_ids', undefined},
-    {2, undefined, string, 'lang', undefined}
-]};
+        {1, undefined, {set, i32}, 'geo_ids', undefined},
+        {2, undefined, string, 'lang', undefined}
+    ]};
 function_info('GeoIpService', 'GetLocationName', reply_type) ->
-        {map, i32, string};
-    function_info('GeoIpService', 'GetLocationName', exceptions) ->
-        {struct, struct, [
+    {map, i32, string};
+function_info('GeoIpService', 'GetLocationName', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('GeoIpService', 'GetLocationIsoCode', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'ip', undefined}
-]};
+        {1, undefined, string, 'ip', undefined}
+    ]};
 function_info('GeoIpService', 'GetLocationIsoCode', reply_type) ->
-        string;
-    function_info('GeoIpService', 'GetLocationIsoCode', exceptions) ->
-        {struct, struct, [
+    string;
+function_info('GeoIpService', 'GetLocationIsoCode', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 

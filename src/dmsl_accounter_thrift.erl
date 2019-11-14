@@ -145,11 +145,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -223,68 +223,68 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('AccountPrototype') ->
     {struct, struct, [
-    {1, required, string, 'currency_sym_code', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, optional, string, 'creation_time', undefined}
-]};
+        {1, required, string, 'currency_sym_code', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, optional, string, 'creation_time', undefined}
+    ]};
 
 struct_info('Account') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, i64, 'own_amount', undefined},
-    {3, required, i64, 'max_available_amount', undefined},
-    {4, required, i64, 'min_available_amount', undefined},
-    {5, required, string, 'currency_sym_code', undefined},
-    {6, optional, string, 'description', undefined},
-    {7, optional, string, 'creation_time', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, i64, 'own_amount', undefined},
+        {3, required, i64, 'max_available_amount', undefined},
+        {4, required, i64, 'min_available_amount', undefined},
+        {5, required, string, 'currency_sym_code', undefined},
+        {6, optional, string, 'description', undefined},
+        {7, optional, string, 'creation_time', undefined}
+    ]};
 
 struct_info('Posting') ->
     {struct, struct, [
-    {1, required, i64, 'from_id', undefined},
-    {2, required, i64, 'to_id', undefined},
-    {3, required, i64, 'amount', undefined},
-    {4, required, string, 'currency_sym_code', undefined},
-    {5, required, string, 'description', undefined}
-]};
+        {1, required, i64, 'from_id', undefined},
+        {2, required, i64, 'to_id', undefined},
+        {3, required, i64, 'amount', undefined},
+        {4, required, string, 'currency_sym_code', undefined},
+        {5, required, string, 'description', undefined}
+    ]};
 
 struct_info('PostingBatch') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, {list, {struct, struct, {dmsl_accounter_thrift, 'Posting'}}}, 'postings', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, {list, {struct, struct, {dmsl_accounter_thrift, 'Posting'}}}, 'postings', undefined}
+    ]};
 
 struct_info('PostingPlan') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {list, {struct, struct, {dmsl_accounter_thrift, 'PostingBatch'}}}, 'batch_list', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {list, {struct, struct, {dmsl_accounter_thrift, 'PostingBatch'}}}, 'batch_list', undefined}
+    ]};
 
 struct_info('PostingPlanChange') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, struct, {dmsl_accounter_thrift, 'PostingBatch'}}, 'batch', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_accounter_thrift, 'PostingBatch'}}, 'batch', undefined}
+    ]};
 
 struct_info('PostingPlanLog') ->
     {struct, struct, [
-    {2, required, {map, i64, {struct, struct, {dmsl_accounter_thrift, 'Account'}}}, 'affected_accounts', undefined}
-]};
+        {2, required, {map, i64, {struct, struct, {dmsl_accounter_thrift, 'Account'}}}, 'affected_accounts', undefined}
+    ]};
 
 struct_info('AccountNotFound') ->
     {struct, exception, [
-    {1, required, i64, 'account_id', undefined}
-]};
+        {1, required, i64, 'account_id', undefined}
+    ]};
 
 struct_info('PlanNotFound') ->
     {struct, exception, [
-    {1, required, string, 'plan_id', undefined}
-]};
+        {1, required, string, 'plan_id', undefined}
+    ]};
 
 struct_info('InvalidPostingParams') ->
     {struct, exception, [
-    {1, required, {map, {struct, struct, {dmsl_accounter_thrift, 'Posting'}}, string}, 'wrong_postings', undefined}
-]};
+        {1, required, {map, {struct, struct, {dmsl_accounter_thrift, 'Posting'}}, string}, 'wrong_postings', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -296,33 +296,33 @@ record_name('AccountPrototype') ->
 record_name('Account') ->
     'accounter_Account';
 
-    record_name('Posting') ->
+record_name('Posting') ->
     'accounter_Posting';
 
-    record_name('PostingBatch') ->
+record_name('PostingBatch') ->
     'accounter_PostingBatch';
 
-    record_name('PostingPlan') ->
+record_name('PostingPlan') ->
     'accounter_PostingPlan';
 
-    record_name('PostingPlanChange') ->
+record_name('PostingPlanChange') ->
     'accounter_PostingPlanChange';
 
-    record_name('PostingPlanLog') ->
+record_name('PostingPlanLog') ->
     'accounter_PostingPlanLog';
 
-    record_name('AccountNotFound') ->
+record_name('AccountNotFound') ->
     'accounter_AccountNotFound';
 
-    record_name('PlanNotFound') ->
+record_name('PlanNotFound') ->
     'accounter_PlanNotFound';
 
-    record_name('InvalidPostingParams') ->
+record_name('InvalidPostingParams') ->
     'accounter_InvalidPostingParams';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Accounter') ->
     [
@@ -341,64 +341,64 @@ functions(_) -> error(badarg).
 
 function_info('Accounter', 'Hold', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'PostingPlanChange'}}, 'plan_change', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'PostingPlanChange'}}, 'plan_change', undefined}
+    ]};
 function_info('Accounter', 'Hold', reply_type) ->
-        {struct, struct, {dmsl_accounter_thrift, 'PostingPlanLog'}};
-    function_info('Accounter', 'Hold', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_accounter_thrift, 'PostingPlanLog'}};
+function_info('Accounter', 'Hold', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_accounter_thrift, 'InvalidPostingParams'}}, 'e1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e2', undefined}
     ]};
 function_info('Accounter', 'CommitPlan', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'PostingPlan'}}, 'plan', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'PostingPlan'}}, 'plan', undefined}
+    ]};
 function_info('Accounter', 'CommitPlan', reply_type) ->
-        {struct, struct, {dmsl_accounter_thrift, 'PostingPlanLog'}};
-    function_info('Accounter', 'CommitPlan', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_accounter_thrift, 'PostingPlanLog'}};
+function_info('Accounter', 'CommitPlan', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_accounter_thrift, 'InvalidPostingParams'}}, 'e1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e2', undefined}
     ]};
 function_info('Accounter', 'RollbackPlan', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'PostingPlan'}}, 'plan', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'PostingPlan'}}, 'plan', undefined}
+    ]};
 function_info('Accounter', 'RollbackPlan', reply_type) ->
-        {struct, struct, {dmsl_accounter_thrift, 'PostingPlanLog'}};
-    function_info('Accounter', 'RollbackPlan', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_accounter_thrift, 'PostingPlanLog'}};
+function_info('Accounter', 'RollbackPlan', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_accounter_thrift, 'InvalidPostingParams'}}, 'e1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e2', undefined}
     ]};
 function_info('Accounter', 'GetPlan', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 function_info('Accounter', 'GetPlan', reply_type) ->
-        {struct, struct, {dmsl_accounter_thrift, 'PostingPlan'}};
-    function_info('Accounter', 'GetPlan', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_accounter_thrift, 'PostingPlan'}};
+function_info('Accounter', 'GetPlan', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_accounter_thrift, 'PlanNotFound'}}, 'e1', undefined}
     ]};
 function_info('Accounter', 'GetAccountByID', params_type) ->
     {struct, struct, [
-    {1, undefined, i64, 'id', undefined}
-]};
+        {1, undefined, i64, 'id', undefined}
+    ]};
 function_info('Accounter', 'GetAccountByID', reply_type) ->
-        {struct, struct, {dmsl_accounter_thrift, 'Account'}};
-    function_info('Accounter', 'GetAccountByID', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_accounter_thrift, 'Account'}};
+function_info('Accounter', 'GetAccountByID', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_accounter_thrift, 'AccountNotFound'}}, 'ex', undefined}
     ]};
 function_info('Accounter', 'CreateAccount', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'AccountPrototype'}}, 'prototype', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_accounter_thrift, 'AccountPrototype'}}, 'prototype', undefined}
+    ]};
 function_info('Accounter', 'CreateAccount', reply_type) ->
-        i64;
-    function_info('Accounter', 'CreateAccount', exceptions) ->
-        {struct, struct, []};
+    i64;
+function_info('Accounter', 'CreateAccount', exceptions) ->
+    {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
