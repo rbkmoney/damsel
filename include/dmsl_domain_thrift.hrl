@@ -126,8 +126,7 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'make_recurrent' :: boolean() | undefined,
     'external_id' :: binary() | undefined,
-    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
-    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentPending'

@@ -34,8 +34,8 @@
 -export_type([
     'UserID'/0,
     'Events'/0,
-    'InvoicePaymentRefund'/0,
     'InvoicePaymentAdjustment'/0,
+    'FinalCashFlow'/0,
     'CustomerID'/0,
     'Metadata'/0,
     'CustomerBindingID'/0,
@@ -116,6 +116,9 @@
     'InvoicePaymentParamsFlowHold'/0,
     'Invoice'/0,
     'InvoicePayment'/0,
+    'InvoicePaymentRefund'/0,
+    'InvoicePaymentSession'/0,
+    'InvoiceRefundSession'/0,
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentCaptureParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
@@ -301,8 +304,8 @@
 -type typedef_name() ::
     'UserID' |
     'Events' |
-    'InvoicePaymentRefund' |
     'InvoicePaymentAdjustment' |
+    'FinalCashFlow' |
     'CustomerID' |
     'Metadata' |
     'CustomerBindingID' |
@@ -325,8 +328,8 @@
 
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
--type 'InvoicePaymentRefund'() :: dmsl_domain_thrift:'InvoicePaymentRefund'().
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
+-type 'FinalCashFlow'() :: dmsl_domain_thrift:'FinalCashFlow'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
 -type 'CustomerBindingID'() :: dmsl_domain_thrift:'CustomerBindingID'().
@@ -415,6 +418,9 @@
     'InvoicePaymentParamsFlowHold' |
     'Invoice' |
     'InvoicePayment' |
+    'InvoicePaymentRefund' |
+    'InvoicePaymentSession' |
+    'InvoiceRefundSession' |
     'InvoicePaymentRefundParams' |
     'InvoicePaymentCaptureParams' |
     'InvoicePaymentAdjustmentParams' |
@@ -813,6 +819,15 @@
 
 %% struct 'InvoicePayment'
 -type 'InvoicePayment'() :: #'payproc_InvoicePayment'{}.
+
+%% struct 'InvoicePaymentRefund'
+-type 'InvoicePaymentRefund'() :: #'payproc_InvoicePaymentRefund'{}.
+
+%% struct 'InvoicePaymentSession'
+-type 'InvoicePaymentSession'() :: #'payproc_InvoicePaymentSession'{}.
+
+%% struct 'InvoiceRefundSession'
+-type 'InvoiceRefundSession'() :: #'payproc_InvoiceRefundSession'{}.
 
 %% struct 'InvoicePaymentRefundParams'
 -type 'InvoicePaymentRefundParams'() :: #'payproc_InvoicePaymentRefundParams'{}.
@@ -1617,8 +1632,8 @@ typedefs() ->
     [
         'UserID',
         'Events',
-        'InvoicePaymentRefund',
         'InvoicePaymentAdjustment',
+        'FinalCashFlow',
         'CustomerID',
         'Metadata',
         'CustomerBindingID',
@@ -1708,6 +1723,9 @@ structs() ->
         'InvoicePaymentParamsFlowHold',
         'Invoice',
         'InvoicePayment',
+        'InvoicePaymentRefund',
+        'InvoicePaymentSession',
+        'InvoiceRefundSession',
         'InvoicePaymentRefundParams',
         'InvoicePaymentCaptureParams',
         'InvoicePaymentAdjustmentParams',
@@ -1857,11 +1875,11 @@ typedef_info('UserID') ->
 typedef_info('Events') ->
     {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
 
-typedef_info('InvoicePaymentRefund') ->
-    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
-
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
+
+typedef_info('FinalCashFlow') ->
+    {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
 
 typedef_info('CustomerID') ->
     string;
@@ -2285,8 +2303,30 @@ struct_info('Invoice') ->
 struct_info('InvoicePayment') ->
     {struct, struct, [
     {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
-    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined}
+    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+    {7, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
+    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
+    {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
+    {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
+    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
+]};
+
+struct_info('InvoicePaymentRefund') ->
+    {struct, struct, [
+    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+    {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRefundSession'}}}, 'sessions', undefined},
+    {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+]};
+
+struct_info('InvoicePaymentSession') ->
+    {struct, struct, [
+    {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target_status', undefined},
+    {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+]};
+
+struct_info('InvoiceRefundSession') ->
+    {struct, struct, [
+    {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
 ]};
 
 struct_info('InvoicePaymentRefundParams') ->
@@ -3426,6 +3466,15 @@ record_name('InternalUser') ->
 
     record_name('InvoicePayment') ->
     'payproc_InvoicePayment';
+
+    record_name('InvoicePaymentRefund') ->
+    'payproc_InvoicePaymentRefund';
+
+    record_name('InvoicePaymentSession') ->
+    'payproc_InvoicePaymentSession';
+
+    record_name('InvoiceRefundSession') ->
+    'payproc_InvoiceRefundSession';
 
     record_name('InvoicePaymentRefundParams') ->
     'payproc_InvoicePaymentRefundParams';

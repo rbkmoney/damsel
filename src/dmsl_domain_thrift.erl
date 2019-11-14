@@ -3360,8 +3360,7 @@ struct_info('InvoicePayment') ->
     {17, optional, string, 'shop_id', undefined},
     {18, optional, bool, 'make_recurrent', undefined},
     {19, optional, string, 'external_id', undefined},
-    {20, optional, string, 'processing_deadline', undefined},
-    {21, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    {20, optional, string, 'processing_deadline', undefined}
 ]};
 
 struct_info('InvoicePaymentPending') ->

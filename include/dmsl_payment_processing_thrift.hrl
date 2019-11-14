@@ -273,8 +273,30 @@
 %% struct 'InvoicePayment'
 -record('payproc_InvoicePayment', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined,
+    'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
-    'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()]
+    'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
+    'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
+}).
+
+%% struct 'InvoicePaymentRefund'
+-record('payproc_InvoicePaymentRefund', {
+    'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
+    'sessions' :: [dmsl_payment_processing_thrift:'InvoiceRefundSession'()],
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined
+}).
+
+%% struct 'InvoicePaymentSession'
+-record('payproc_InvoicePaymentSession', {
+    'target_status' :: dmsl_domain_thrift:'TargetInvoicePaymentStatus'(),
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'InvoiceRefundSession'
+-record('payproc_InvoiceRefundSession', {
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundParams'
