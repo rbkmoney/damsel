@@ -16,7 +16,7 @@ SERVICE_IMAGE_TAG ?= $(shell git rev-parse HEAD)
 SERVICE_IMAGE_PUSH_TAG ?= $(SERVICE_IMAGE_TAG)
 
 
-BUILD_IMAGE_TAG := eee42f2ca018c313190bc350fe47d4dea70b6d27
+BUILD_IMAGE_TAG := 4536c31941b9c27c134e8daf0fd18848809219c9
 
 PROTODIR = proto
 FILES = $(wildcard $(PROTODIR)/*.thrift)
@@ -109,6 +109,8 @@ endif
 
 # Java
 
+MVN = mvn --no-transfer-progress
+
 ifdef SETTINGS_XML
 DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
 DOCKER_RUN_OPTS += -e SETTINGS_XML=$(SETTINGS_XML)
@@ -123,21 +125,21 @@ NUMBER_COMMITS = $(shell git rev-list --count HEAD)
 
 java_compile:
 	$(if $(SETTINGS_XML),,echo "SETTINGS_XML not defined" ; exit 1)
-	mvn compile -s $(SETTINGS_XML)
+	$(MVN) compile -s $(SETTINGS_XML)
 
 deploy_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
-	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
+	$(MVN) versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
+	&& $(MVN) deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
 
 deploy_epic_nexus:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
-	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)-epic" -s $(SETTINGS_XML) \
-	&& mvn deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
+	$(MVN) versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)-epic" -s $(SETTINGS_XML) \
+	&& $(MVN) deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
 
 
 java_install:
 	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
-	mvn clean -s $(SETTINGS_XML) && \
-	mvn versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& mvn install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
+	$(MVN) clean -s $(SETTINGS_XML) && \
+	$(MVN) versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
+	&& $(MVN) install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
