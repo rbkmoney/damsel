@@ -178,7 +178,6 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
-    21: optional PaymentRoute route
 }
 
 struct InvoicePaymentPending   {}
