@@ -45,7 +45,7 @@
     'BrowserPostRequest'/0,
     'PaymentTerminalReceipt'/0,
     'CryptoCurrencyTransferRequest'/0,
-    'QrCodeShowRequest'/0,
+    'QrCodeDisplayRequest'/0,
     'UserInteraction'/0
 ]).
 
@@ -81,7 +81,7 @@
     'BrowserPostRequest' |
     'PaymentTerminalReceipt' |
     'CryptoCurrencyTransferRequest' |
-    'QrCodeShowRequest' |
+    'QrCodeDisplayRequest' |
     'UserInteraction'.
 
 -type exception_name() :: none().
@@ -109,15 +109,15 @@
 %% struct 'CryptoCurrencyTransferRequest'
 -type 'CryptoCurrencyTransferRequest'() :: #'CryptoCurrencyTransferRequest'{}.
 
-%% struct 'QrCodeShowRequest'
--type 'QrCodeShowRequest'() :: #'QrCodeShowRequest'{}.
+%% struct 'QrCodeDisplayRequest'
+-type 'QrCodeDisplayRequest'() :: #'QrCodeDisplayRequest'{}.
 
 %% union 'UserInteraction'
 -type 'UserInteraction'() ::
     {'redirect', 'BrowserHTTPRequest'()} |
     {'payment_terminal_reciept', 'PaymentTerminalReceipt'()} |
     {'crypto_currency_transfer_request', 'CryptoCurrencyTransferRequest'()} |
-    {'qr_code_show_request', 'QrCodeShowRequest'()}.
+    {'qr_code_display_request', 'QrCodeDisplayRequest'()}.
 
 %%
 %% services and functions
@@ -179,7 +179,7 @@ structs() ->
         'BrowserPostRequest',
         'PaymentTerminalReceipt',
         'CryptoCurrencyTransferRequest',
-        'QrCodeShowRequest',
+        'QrCodeDisplayRequest',
         'UserInteraction'
     ].
 
@@ -255,7 +255,7 @@ struct_info('CryptoCurrencyTransferRequest') ->
         {2, required, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCash'}}, 'crypto_cash', undefined}
     ]};
 
-struct_info('QrCodeShowRequest') ->
+struct_info('QrCodeDisplayRequest') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_user_interaction_thrift, 'QrCode'}}, 'qr_code', undefined}
     ]};
@@ -265,7 +265,7 @@ struct_info('UserInteraction') ->
         {1, optional, {struct, union, {dmsl_user_interaction_thrift, 'BrowserHTTPRequest'}}, 'redirect', undefined},
         {2, optional, {struct, struct, {dmsl_user_interaction_thrift, 'PaymentTerminalReceipt'}}, 'payment_terminal_reciept', undefined},
         {3, optional, {struct, struct, {dmsl_user_interaction_thrift, 'CryptoCurrencyTransferRequest'}}, 'crypto_currency_transfer_request', undefined},
-        {4, optional, {struct, struct, {dmsl_user_interaction_thrift, 'QrCodeShowRequest'}}, 'qr_code_show_request', undefined}
+        {4, optional, {struct, struct, {dmsl_user_interaction_thrift, 'QrCodeDisplayRequest'}}, 'qr_code_display_request', undefined}
     ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -290,8 +290,8 @@ record_name('PaymentTerminalReceipt') ->
 record_name('CryptoCurrencyTransferRequest') ->
     'CryptoCurrencyTransferRequest';
 
-record_name('QrCodeShowRequest') ->
-    'QrCodeShowRequest';
+record_name('QrCodeDisplayRequest') ->
+    'QrCodeDisplayRequest';
 
 record_name(_) -> error(badarg).
 
