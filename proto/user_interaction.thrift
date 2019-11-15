@@ -62,7 +62,7 @@ struct CryptoCurrencyTransferRequest {
     2: required CryptoCash crypto_cash
 }
 
-struct QrCodeShowRequest {
+struct QrCodeDisplayRequest {
     1: required QrCode qr_code
 }
 
@@ -90,5 +90,5 @@ union UserInteraction {
     /**
      * Запрос на отображение пользователю QR-кода
      */
-    4: QrCodeShowRequest qr_code_show_request
+    4: QrCodeDisplayRequest qr_code_display_request
 }
