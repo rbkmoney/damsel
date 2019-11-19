@@ -20,10 +20,10 @@ build('damsel', 'docker-host') {
         }
 
         // Erlang
+        runStage('Generate Erlang lib') {
+          sh "make wc_release-erlang"
+        }
         if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith('epic/')) {
-          runStage('Generate Erlang lib') {
-            sh "make wc_release-erlang"
-          }
           runStage('Publish Erlang lib') {
             dir("_release/erlang") {
               gitUtils.push(commitMsg: "Generated from commit: $COMMIT_ID \n\non $BRANCH_NAME in $RBK_REPO_URL\n\nChanges:\n$COMMIT_MSG",
