@@ -1571,6 +1571,7 @@ struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
     3: required RecurrentPaymentToolID           source
+    5: optional base.SequenceID                  sequence
     4: required list<RecurrentPaymentToolChange> payload
 }
 
