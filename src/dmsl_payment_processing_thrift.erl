@@ -2569,6 +2569,7 @@ struct_info('RecurrentPaymentToolEvent') ->
         {1, required, i64, 'id', undefined},
         {2, required, string, 'created_at', undefined},
         {3, required, string, 'source', undefined},
+        {5, optional, i32, 'sequence', undefined},
         {4, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'payload', undefined}
     ]};
 

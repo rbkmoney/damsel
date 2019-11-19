@@ -489,6 +489,7 @@
     'id' :: dmsl_base_thrift:'EventID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'source' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'sequence' :: dmsl_base_thrift:'SequenceID'() | undefined,
     'payload' :: [dmsl_payment_processing_thrift:'RecurrentPaymentToolChange'()]
 }).
 
