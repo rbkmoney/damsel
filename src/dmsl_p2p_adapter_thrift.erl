@@ -353,7 +353,7 @@ struct_info('SleepIntent') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined},
         {2, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'UserInteraction'}}, 'user_interaction', undefined},
-        {3, required, string, 'callback_tag', undefined}
+        {3, optional, string, 'callback_tag', undefined}
     ]};
 
 struct_info('UserInteraction') ->
