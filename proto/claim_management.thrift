@@ -37,7 +37,6 @@ typedef map<MetadataKey, MetadataValue> Metadata
 exception MetadataKeyNotFound {}
 
 typedef list<ModificationUnit> ClaimChangeset
-typedef list<ClaimEffect> ClaimEffects
 
 typedef base.ID UserID
 
@@ -57,39 +56,6 @@ struct InternalUser {}
 
 struct ExternalUser {}
 
-union ClaimEffect {
-    /* 1: PartyEffect Reserved for future */
-    2: ContractEffectUnit contract_effect
-    3: ShopEffectUnit shop_effect
-    4: ContractorEffectUnit contractor_effect
-}
-
-struct ContractEffectUnit {
-    1: required domain.ContractID contract_id
-    2: required ContractEffect effect
-}
-
-union ContractEffect {
-    1: domain.Contract created
-    2: domain.ContractStatus status_changed
-    3: domain.ContractAdjustment adjustment_created
-    4: domain.PayoutTool payout_tool_created
-    5: PayoutToolInfoChanged payout_tool_info_changed
-    6: domain.LegalAgreement legal_agreement_bound
-    7: domain.ReportPreferences report_preferences_changed
-    8: domain.ContractorID contractor_changed
-}
-
-struct ContractorEffectUnit {
-    1: required domain.ContractorID id
-    2: required ContractorEffect effect
-}
-
-union ContractorEffect {
-    1: domain.PartyContractor created
-    2: domain.ContractorIdentificationLevel identification_level_changed
-}
-
 struct ScheduleChanged {
     1: optional domain.BusinessScheduleRef schedule
 }
@@ -97,22 +63,6 @@ struct ScheduleChanged {
 struct PayoutToolInfoChanged {
     1: required domain.PayoutToolID payout_tool_id
     2: required domain.PayoutToolInfo info
-}
-
-struct ShopEffectUnit {
-    1: required domain.ShopID shop_id
-    2: required ShopEffect effect
-}
-
-union ShopEffect {
-    1: domain.Shop created
-    2: domain.CategoryRef category_changed
-    3: domain.ShopDetails details_changed
-    4: ShopContractChanged contract_changed
-    5: domain.PayoutToolID payout_tool_changed
-    6: domain.ShopLocation location_changed
-    7: domain.ShopAccount account_created
-    8: ScheduleChanged payout_schedule_changed
 }
 
 struct ShopContractChanged {
@@ -287,7 +237,7 @@ struct ModificationUnit {
 
 union Modification {
     1: PartyModification party_modification
-    2: ClaimModification claim_modfication
+    2: ClaimModification claim_modification
 }
 
 struct Claim {
@@ -326,10 +276,15 @@ struct ClaimRevoked {
 }
 
 struct ClaimSearchQuery {
-    1: required domain.PartyID party_id
+    1: optional domain.PartyID party_id
     2: optional list<ClaimStatus> statuses
-    3: optional ContinuationToken token
+    3: optional ContinuationToken continuation_token
     4: required i32 limit
+}
+
+struct ClaimSearchResponse {
+    1: required list<Claim> result
+    2: optional ContinuationToken continuation_token
 }
 
 service ClaimManagement {
@@ -345,7 +300,7 @@ service ClaimManagement {
         Claim GetClaim (1: domain.PartyID party_id, 2: ClaimID id)
             throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2)
 
-        list<Claim> SearchClaims (1: ClaimSearchQuery claim_request)
+        ClaimSearchResponse SearchClaims (1: ClaimSearchQuery claim_request)
                 throws (1: PartyNotFound ex1, 2: LimitExceeded ex2, 3: BadContinuationToken ex3)
 
         void AcceptClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
@@ -367,6 +322,14 @@ service ClaimManagement {
                     6: InvalidChangeset ex6
                 )
 
+        void RequestReviewClaim(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
+                throws (
+                    1: PartyNotFound ex1,
+                    2: ClaimNotFound ex2,
+                    3: InvalidClaimStatus ex3,
+                    4: InvalidClaimRevision ex4
+                )
+
         void DenyClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: string reason)
                 throws (
                     1: PartyNotFound ex1,
@@ -383,13 +346,13 @@ service ClaimManagement {
                     4: InvalidClaimRevision ex4
                 )
 
-        MetadataValue GetMetaData (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
+        MetadataValue GetMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
                 throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2, 3: MetadataKeyNotFound ex3)
 
-        void SetMetaData (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key, 4: MetadataValue value)
+        void SetMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key, 4: MetadataValue value)
                 throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2)
 
-        void RemoveMetaData (1: domain.PartyID party_id, 3: MetadataKey key)
+        void RemoveMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
                 throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2, 3: MetadataKeyNotFound ex3)
 
 }
