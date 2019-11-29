@@ -322,7 +322,15 @@ service ClaimManagement {
                     6: InvalidChangeset ex6
                 )
 
-        void RequestReviewClaim(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
+        void RequestClaimReview(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
+                throws (
+                    1: PartyNotFound ex1,
+                    2: ClaimNotFound ex2,
+                    3: InvalidClaimStatus ex3,
+                    4: InvalidClaimRevision ex4
+                )
+
+        void RequestClaimChanges(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
                     1: PartyNotFound ex1,
                     2: ClaimNotFound ex2,
