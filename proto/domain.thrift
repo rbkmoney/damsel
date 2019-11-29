@@ -1402,14 +1402,6 @@ struct DisposablePaymentResource {
     3: optional ClientInfo         client_info
 }
 
-union PublicToken {
-    1: BankCardPayload bank_card_payload
-}
-
-struct BankCardPayload {
-    1: required BankCard bank_card
-}
-
 typedef string Token
 
 struct BankCard {
