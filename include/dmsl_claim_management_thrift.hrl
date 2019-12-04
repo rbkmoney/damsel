@@ -163,6 +163,7 @@
 %% struct 'Claim'
 -record('claim_management_Claim', {
     'id' :: dmsl_claim_management_thrift:'ClaimID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'status' :: dmsl_claim_management_thrift:'ClaimStatus'(),
     'changeset' :: dmsl_claim_management_thrift:'ClaimChangeset'(),
     'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),

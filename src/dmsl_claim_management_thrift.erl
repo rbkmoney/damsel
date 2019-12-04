@@ -877,6 +877,7 @@ struct_info('Modification') ->
 struct_info('Claim') ->
     {struct, struct, [
         {1, required, i64, 'id', undefined},
+        {8, required, string, 'party_id', undefined},
         {2, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined},
         {3, required, {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}}, 'changeset', undefined},
         {4, required, i32, 'revision', undefined},
