@@ -242,6 +242,7 @@ union Modification {
 
 struct Claim {
     1: required ClaimID id
+    8: required domain.PartyID party_id
     2: required ClaimStatus status
     3: required ClaimChangeset changeset
     4: required ClaimRevision revision
