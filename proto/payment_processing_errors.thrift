@@ -82,6 +82,7 @@ union RefundFailure {
 union PreAuthorizationFailure {
      1: GeneralFailure    unknown
      2: GeneralFailure    three_ds_not_finished
+     3: GeneralFailure    three_ds_failed
 }
 
 union AuthorizationFailure {
