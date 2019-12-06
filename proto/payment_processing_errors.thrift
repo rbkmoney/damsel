@@ -68,15 +68,21 @@ namespace erlang payprocerr
   */
 
 union PaymentFailure {
-    1: GeneralFailure       rejected_by_inspector
-    2: GeneralFailure       preauthorization_failed
-    3: AuthorizationFailure authorization_failed
-    4: NoRouteFoundFailure  no_route_found
+    1: GeneralFailure           rejected_by_inspector
+    2: PreAuthorizationFailure  preauthorization_failed
+    3: AuthorizationFailure     authorization_failed
+    4: NoRouteFoundFailure      no_route_found
 }
 
 union RefundFailure {
     1: TermsViolated        terms_violated
     2: AuthorizationFailure authorization_failed
+}
+
+union PreAuthorizationFailure {
+     1: GeneralFailure    unknown
+     2: GeneralFailure    three_ds_not_finished
+     3: GeneralFailure    three_ds_failed
 }
 
 union AuthorizationFailure {

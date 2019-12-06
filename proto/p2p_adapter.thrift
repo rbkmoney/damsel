@@ -73,7 +73,7 @@ struct SleepIntent {
      * обратный вызов с таким идентификатором не будет успешно обработан. Попытка установить уже
      * обработанный идентификатор приведет к ошибке.
      */
-    3: required CallbackTag callback_tag
+    3: optional CallbackTag callback_tag
 }
 
 struct UserInteraction {
