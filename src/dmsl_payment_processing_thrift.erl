@@ -36,6 +36,7 @@
     'Events'/0,
     'InvoicePaymentAdjustment'/0,
     'InvoicePaymentChargeback'/0,
+    'FinalCashFlow'/0,
     'CustomerID'/0,
     'Metadata'/0,
     'CustomerBindingID'/0,
@@ -323,6 +324,7 @@
     'Events' |
     'InvoicePaymentAdjustment' |
     'InvoicePaymentChargeback' |
+    'FinalCashFlow' |
     'CustomerID' |
     'Metadata' |
     'CustomerBindingID' |
@@ -347,6 +349,7 @@
 -type 'Events'() :: ['Event'()].
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
 -type 'InvoicePaymentChargeback'() :: dmsl_domain_thrift:'InvoicePaymentChargeback'().
+-type 'FinalCashFlow'() :: dmsl_domain_thrift:'FinalCashFlow'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
 -type 'CustomerBindingID'() :: dmsl_domain_thrift:'CustomerBindingID'().
@@ -1706,11 +1709,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -1732,6 +1735,7 @@ typedefs() ->
         'Events',
         'InvoicePaymentAdjustment',
         'InvoicePaymentChargeback',
+        'FinalCashFlow',
         'CustomerID',
         'Metadata',
         'CustomerBindingID',
@@ -1990,6 +1994,9 @@ typedef_info('InvoicePaymentAdjustment') ->
 typedef_info('InvoicePaymentChargeback') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
 
+typedef_info('FinalCashFlow') ->
+    {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
+
 typedef_info('CustomerID') ->
     string;
 
@@ -2057,16 +2064,16 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('UserInfo') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'UserType'}}, 'type', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'UserType'}}, 'type', undefined}
+    ]};
 
 struct_info('UserType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InternalUser'}}, 'internal_user', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ExternalUser'}}, 'external_user', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ServiceUser'}}, 'service_user', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InternalUser'}}, 'internal_user', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ExternalUser'}}, 'external_user', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ServiceUser'}}, 'service_user', undefined}
+    ]};
 
 struct_info('InternalUser') ->
     {struct, struct, []};
@@ -2079,520 +2086,523 @@ struct_info('ServiceUser') ->
 
 struct_info('Event') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, {struct, union, {dmsl_payment_processing_thrift, 'EventSource'}}, 'source', undefined},
-    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'EventPayload'}}, 'payload', undefined},
-    {5, optional, i32, 'sequence', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, {struct, union, {dmsl_payment_processing_thrift, 'EventSource'}}, 'source', undefined},
+        {4, required, {struct, union, {dmsl_payment_processing_thrift, 'EventPayload'}}, 'payload', undefined},
+        {5, optional, i32, 'sequence', undefined}
+    ]};
 
 struct_info('EventSource') ->
     {struct, union, [
-    {1, optional, string, 'invoice_id', undefined},
-    {2, optional, string, 'party_id', undefined},
-    {3, optional, string, 'invoice_template_id', undefined},
-    {4, optional, string, 'customer_id', undefined}
-]};
+        {1, optional, string, 'invoice_id', undefined},
+        {2, optional, string, 'party_id', undefined},
+        {3, optional, string, 'invoice_template_id', undefined},
+        {4, optional, string, 'customer_id', undefined}
+    ]};
 
 struct_info('EventPayload') ->
     {struct, union, [
-    {1, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'invoice_changes', undefined},
-    {2, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyChange'}}}, 'party_changes', undefined},
-    {3, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceTemplateChange'}}}, 'invoice_template_changes', undefined},
-    {4, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'CustomerChange'}}}, 'customer_changes', undefined}
-]};
+        {1, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'invoice_changes', undefined},
+        {2, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyChange'}}}, 'party_changes', undefined},
+        {3, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceTemplateChange'}}}, 'invoice_template_changes', undefined},
+        {4, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'CustomerChange'}}}, 'customer_changes', undefined}
+    ]};
 
 struct_info('InvoiceChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceCreated'}}, 'invoice_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceStatusChanged'}}, 'invoice_status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChange'}}, 'invoice_payment_change', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceCreated'}}, 'invoice_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceStatusChanged'}}, 'invoice_status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChange'}}, 'invoice_payment_change', undefined}
+    ]};
 
 struct_info('InvoiceTemplateChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateCreated'}}, 'invoice_template_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateUpdated'}}, 'invoice_template_updated', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateDeleted'}}, 'invoice_template_deleted', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateCreated'}}, 'invoice_template_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateUpdated'}}, 'invoice_template_updated', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateDeleted'}}, 'invoice_template_deleted', undefined}
+    ]};
 
 struct_info('InvoiceCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Invoice'}}, 'invoice', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Invoice'}}, 'invoice', undefined}
+    ]};
 
 struct_info('InvoiceStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoicePaymentChange') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('InvoicePaymentChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStarted'}}, 'invoice_payment_started', undefined},
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRiskScoreChanged'}}, 'invoice_payment_risk_score_changed', undefined},
-    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRouteChanged'}}, 'invoice_payment_route_changed', undefined},
-    {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCashFlowChanged'}}, 'invoice_payment_cash_flow_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
-    {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined},
-    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStarted'}}, 'invoice_payment_started', undefined},
+        {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRiskScoreChanged'}}, 'invoice_payment_risk_score_changed', undefined},
+        {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRouteChanged'}}, 'invoice_payment_route_changed', undefined},
+        {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCashFlowChanged'}}, 'invoice_payment_cash_flow_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentStatusChanged'}}, 'invoice_payment_status_changed', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
+        {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined},
+        {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined},
+        {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}
+    ]};
 
 struct_info('InvoicePaymentStarted') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-    {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+        {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('InvoicePaymentRiskScoreChanged') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+    ]};
 
 struct_info('InvoicePaymentRouteChanged') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    ]};
 
 struct_info('InvoicePaymentCashFlowChanged') ->
     {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
-]};
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('InvoicePaymentStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoicePaymentSessionChange') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('SessionChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionStarted'}}, 'session_started', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionFinished'}}, 'session_finished', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionSuspended'}}, 'session_suspended', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionActivated'}}, 'session_activated', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionTransactionBound'}}, 'session_transaction_bound', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionProxyStateChanged'}}, 'session_proxy_state_changed', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionInteractionRequested'}}, 'session_interaction_requested', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionStarted'}}, 'session_started', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionFinished'}}, 'session_finished', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionSuspended'}}, 'session_suspended', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionActivated'}}, 'session_activated', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionTransactionBound'}}, 'session_transaction_bound', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionProxyStateChanged'}}, 'session_proxy_state_changed', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionInteractionRequested'}}, 'session_interaction_requested', undefined}
+    ]};
 
 struct_info('SessionStarted') ->
     {struct, struct, []};
 
 struct_info('SessionFinished') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionResult'}}, 'result', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionResult'}}, 'result', undefined}
+    ]};
 
 struct_info('SessionSuspended') ->
     {struct, struct, [
-    {1, optional, string, 'tag', undefined},
-    {2, optional, {struct, union, {dmsl_timeout_behaviour_thrift, 'TimeoutBehaviour'}}, 'timeout_behaviour', undefined}
-]};
+        {1, optional, string, 'tag', undefined},
+        {2, optional, {struct, union, {dmsl_timeout_behaviour_thrift, 'TimeoutBehaviour'}}, 'timeout_behaviour', undefined}
+    ]};
 
 struct_info('SessionActivated') ->
     {struct, struct, []};
 
 struct_info('SessionResult') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionSucceeded'}}, 'succeeded', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionSucceeded'}}, 'succeeded', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'SessionFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('SessionSucceeded') ->
     {struct, struct, []};
 
 struct_info('SessionFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info('InvoiceTemplateCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}}, 'invoice_template', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}}, 'invoice_template', undefined}
+    ]};
 
 struct_info('InvoiceTemplateUpdated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateUpdateParams'}}, 'diff', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateUpdateParams'}}, 'diff', undefined}
+    ]};
 
 struct_info('InvoiceTemplateDeleted') ->
     {struct, struct, []};
 
 struct_info('SessionTransactionBound') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+    ]};
 
 struct_info('SessionProxyStateChanged') ->
     {struct, struct, [
-    {1, required, string, 'proxy_state', undefined}
-]};
+        {1, required, string, 'proxy_state', undefined}
+    ]};
 
 struct_info('SessionInteractionRequested') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
-]};
+        {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackChange') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowCreated'}}, 'invoice_payment_chargeback_cash_flow_created', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChanged'}}, 'invoice_payment_chargeback_changed', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStageChanged'}}, 'invoice_payment_chargeback_stage_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowCreated'}}, 'invoice_payment_chargeback_cash_flow_created', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChanged'}}, 'invoice_payment_chargeback_changed', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStageChanged'}}, 'invoice_payment_chargeback_stage_changed', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackCashFlowCreated') ->
     {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
-]};
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackCashFlowChanged') ->
     {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
-]};
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackChanged') ->
     {struct, struct, [
-    {1, optional, bool, 'hold_funds', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined}
-]};
+        {1, optional, bool, 'hold_funds', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackStageChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundChange') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
-    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+        {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentChange') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentCreated'}}, 'invoice_payment_adjustment_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentStatusChanged'}}, 'invoice_payment_adjustment_status_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentCreated'}}, 'invoice_payment_adjustment_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentStatusChanged'}}, 'invoice_payment_adjustment_status_changed', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}, 'adjustment', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}, 'adjustment', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoicePaymentRecTokenAcquired') ->
     {struct, struct, [
-    {1, required, string, 'token', undefined}
-]};
+        {1, required, string, 'token', undefined}
+    ]};
 
 struct_info('InvoicePaymentCaptureStarted') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
+    ]};
 
 struct_info('EventRange') ->
     {struct, struct, [
-    {1, optional, i64, 'after', undefined},
-    {2, optional, i32, 'limit', undefined}
-]};
+        {1, optional, i64, 'after', undefined},
+        {2, optional, i32, 'limit', undefined}
+    ]};
 
 struct_info('InvoiceParams') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, string, 'shop_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
-    {4, required, string, 'due', undefined},
-    {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {7, optional, string, 'id', undefined},
-    {8, optional, string, 'external_id', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
+        {4, required, string, 'due', undefined},
+        {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+        {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {7, optional, string, 'id', undefined},
+        {8, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoiceWithTemplateParams') ->
     {struct, struct, [
-    {1, required, string, 'template_id', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {3, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {4, optional, string, 'id', undefined},
-    {5, optional, string, 'external_id', undefined}
-]};
+        {1, required, string, 'template_id', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+        {3, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {4, optional, string, 'id', undefined},
+        {5, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoiceTemplateCreateParams') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, string, 'shop_id', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
-    {7, required, string, 'product', undefined},
-    {8, optional, string, 'description', undefined},
-    {9, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
-    {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
+        {7, required, string, 'product', undefined},
+        {8, optional, string, 'description', undefined},
+        {9, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
+        {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    ]};
 
 struct_info('InvoiceTemplateUpdateParams') ->
     {struct, struct, [
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
-    {5, optional, string, 'product', undefined},
-    {6, optional, string, 'description', undefined},
-    {7, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
-    {4, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
-]};
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
+        {5, optional, string, 'product', undefined},
+        {6, optional, string, 'description', undefined},
+        {7, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
+        {4, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    ]};
 
 struct_info('InvoicePaymentParams') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined},
-    {3, optional, bool, 'make_recurrent', undefined},
-    {4, optional, string, 'id', undefined},
-    {5, optional, string, 'external_id', undefined},
-    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {7, optional, string, 'processing_deadline', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined},
+        {3, optional, bool, 'make_recurrent', undefined},
+        {4, optional, string, 'id', undefined},
+        {5, optional, string, 'external_id', undefined},
+        {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {7, optional, string, 'processing_deadline', undefined}
+    ]};
 
 struct_info('PayerParams') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PaymentResourcePayerParams'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerPayerParams'}}, 'customer', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPayerParams'}}, 'recurrent', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PaymentResourcePayerParams'}}, 'payment_resource', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerPayerParams'}}, 'customer', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPayerParams'}}, 'recurrent', undefined}
+    ]};
 
 struct_info('PaymentResourcePayerParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'resource', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'resource', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('CustomerPayerParams') ->
     {struct, struct, [
-    {1, required, string, 'customer_id', undefined}
-]};
+        {1, required, string, 'customer_id', undefined}
+    ]};
 
 struct_info('RecurrentPayerParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('InvoicePaymentParamsFlow') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlowInstant'}}, 'instant', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlowHold'}}, 'hold', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlowInstant'}}, 'instant', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlowHold'}}, 'hold', undefined}
+    ]};
 
 struct_info('InvoicePaymentParamsFlowInstant') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentParamsFlowHold') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined}
+    ]};
 
 struct_info('Invoice') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Invoice'}}, 'invoice', undefined},
-    {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePayment'}}}, 'payments', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Invoice'}}, 'invoice', undefined},
+        {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePayment'}}}, 'payments', undefined}
+    ]};
 
 struct_info('InvoicePayment') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
-    {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
-    {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
-    {6, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
-    {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+        {7, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
+        {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
+        {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
+        {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
+        {8, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
+        {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefund') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
-    {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRefundSession'}}}, 'sessions', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
+        {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRefundSession'}}}, 'sessions', undefined},
+        {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('InvoicePaymentSession') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target_status', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'TargetInvoicePaymentStatus'}}, 'target_status', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+    ]};
 
 struct_info('InvoiceRefundSession') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
-    {2, optional, bool, 'hold_funds', false},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
-    {5, optional, string, 'id', undefined},
-    {6, optional, string, 'external_id', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
+        {2, optional, bool, 'hold_funds', false},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
+        {5, optional, string, 'id', undefined},
+        {6, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackAcceptParams') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackReopenParams') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {2, optional, bool, 'hold_funds', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {2, optional, bool, 'hold_funds', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundParams') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-    {5, optional, string, 'id', undefined},
-    {6, optional, string, 'external_id', undefined}
-]};
+        {1, optional, string, 'reason', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {5, optional, string, 'id', undefined},
+        {6, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoicePaymentCaptureParams') ->
     {struct, struct, [
-    {1, required, string, 'reason', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
-]};
+        {1, required, string, 'reason', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentParams') ->
     {struct, struct, [
-    {1, optional, i64, 'domain_revision', undefined},
-    {2, required, string, 'reason', undefined}
-]};
+        {1, optional, i64, 'domain_revision', undefined},
+        {2, required, string, 'reason', undefined}
+    ]};
 
 struct_info('InvoiceRepairFailPreProcessing') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('InvoiceRepairSkipInspector') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+    ]};
 
 struct_info('InvoiceRepairFailSession') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('InvoiceRepairComplex') ->
     {struct, struct, [
-    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceRepairScenario'}}}, 'scenarios', undefined}
-]};
+        {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceRepairScenario'}}}, 'scenarios', undefined}
+    ]};
 
 struct_info('InvoiceRepairScenario') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairComplex'}}, 'complex', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailPreProcessing'}}, 'fail_pre_processing', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairSkipInspector'}}, 'skip_inspector', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailSession'}}, 'fail_session', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairComplex'}}, 'complex', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailPreProcessing'}}, 'fail_pre_processing', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairSkipInspector'}}, 'skip_inspector', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailSession'}}, 'fail_session', undefined}
+    ]};
 
 struct_info('InvoiceRepairParams') ->
     {struct, struct, [
-    {1, optional, bool, 'validate_transitions', true}
-]};
+        {1, optional, bool, 'validate_transitions', true}
+    ]};
 
 struct_info('InvalidStatus') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
+    ]};
 
 struct_info('CustomerParams') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, string, 'shop_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
-    {4, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+        {4, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined}
+    ]};
 
 struct_info('Customer') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'owner_id', undefined},
-    {3, required, string, 'shop_id', undefined},
-    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined},
-    {5, required, string, 'created_at', undefined},
-    {6, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}}, 'bindings', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
-    {8, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined},
-    {9, optional, string, 'active_binding_id', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'owner_id', undefined},
+        {3, required, string, 'shop_id', undefined},
+        {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined},
+        {5, required, string, 'created_at', undefined},
+        {6, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}}, 'bindings', undefined},
+        {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+        {8, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined},
+        {9, optional, string, 'active_binding_id', undefined}
+    ]};
 
 struct_info('CustomerStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerUnready'}}, 'unready', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerReady'}}, 'ready', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerUnready'}}, 'unready', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerReady'}}, 'ready', undefined}
+    ]};
 
 struct_info('CustomerUnready') ->
     {struct, struct, []};
@@ -2602,57 +2612,57 @@ struct_info('CustomerReady') ->
 
 struct_info('CustomerChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerCreated'}}, 'customer_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerDeleted'}}, 'customer_deleted', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerStatusChanged'}}, 'customer_status_changed', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingChanged'}}, 'customer_binding_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerCreated'}}, 'customer_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerDeleted'}}, 'customer_deleted', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerStatusChanged'}}, 'customer_status_changed', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingChanged'}}, 'customer_binding_changed', undefined}
+    ]};
 
 struct_info('CustomerCreated') ->
     {struct, struct, [
-    {2, required, string, 'customer_id', undefined},
-    {3, required, string, 'owner_id', undefined},
-    {4, required, string, 'shop_id', undefined},
-    {5, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined},
-    {6, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
-    {7, required, string, 'created_at', undefined}
-]};
+        {2, required, string, 'customer_id', undefined},
+        {3, required, string, 'owner_id', undefined},
+        {4, required, string, 'shop_id', undefined},
+        {5, required, {struct, union, {dmsl_json_thrift, 'Value'}}, 'metadata', undefined},
+        {6, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
+        {7, required, string, 'created_at', undefined}
+    ]};
 
 struct_info('CustomerDeleted') ->
     {struct, struct, []};
 
 struct_info('CustomerStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('CustomerBindingChanged') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('CustomerBindingParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
+    ]};
 
 struct_info('CustomerBinding') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'rec_payment_tool_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined},
-    {5, optional, i64, 'party_revision', undefined},
-    {6, optional, i64, 'domain_revision', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'rec_payment_tool_id', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
+        {4, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined},
+        {5, optional, i64, 'party_revision', undefined},
+        {6, optional, i64, 'domain_revision', undefined}
+    ]};
 
 struct_info('CustomerBindingStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('CustomerBindingPending') ->
     {struct, struct, []};
@@ -2662,56 +2672,56 @@ struct_info('CustomerBindingSucceeded') ->
 
 struct_info('CustomerBindingFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info('CustomerBindingChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStatusChanged'}}, 'status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingInteractionRequested'}}, 'interaction_requested', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingStatusChanged'}}, 'status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingInteractionRequested'}}, 'interaction_requested', undefined}
+    ]};
 
 struct_info('CustomerBindingStarted') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}, 'binding', undefined},
-    {2, optional, string, 'timestamp', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}}, 'binding', undefined},
+        {2, optional, string, 'timestamp', undefined}
+    ]};
 
 struct_info('CustomerBindingStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerBindingStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('CustomerBindingInteractionRequested') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
-]};
+        {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
+    ]};
 
 struct_info('RecurrentPaymentTool') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'shop_id', undefined},
-    {3, required, string, 'party_id', undefined},
-    {11, optional, i64, 'party_revision', undefined},
-    {4, required, i64, 'domain_revision', undefined},
-    {6, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
-    {7, required, string, 'created_at', undefined},
-    {8, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
-    {9, optional, string, 'rec_token', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {3, required, string, 'party_id', undefined},
+        {11, optional, i64, 'party_revision', undefined},
+        {4, required, i64, 'domain_revision', undefined},
+        {6, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined},
+        {7, required, string, 'created_at', undefined},
+        {8, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined},
+        {9, optional, string, 'rec_token', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'minimal_payment_cost', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolParams') ->
     {struct, struct, [
-    {5, optional, string, 'id', undefined},
-    {1, required, string, 'party_id', undefined},
-    {4, optional, i64, 'party_revision', undefined},
-    {6, optional, i64, 'domain_revision', undefined},
-    {2, required, string, 'shop_id', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
-]};
+        {5, optional, string, 'id', undefined},
+        {1, required, string, 'party_id', undefined},
+        {4, optional, i64, 'party_revision', undefined},
+        {6, optional, i64, 'domain_revision', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolCreated') ->
     {struct, struct, []};
@@ -2724,581 +2734,582 @@ struct_info('RecurrentPaymentToolAbandoned') ->
 
 struct_info('RecurrentPaymentToolFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolAcquired'}}, 'acquired', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolAbandoned'}}, 'abandoned', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolCreated'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolAcquired'}}, 'acquired', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolAbandoned'}}, 'abandoned', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolEventData') ->
     {struct, struct, [
-    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'changes', undefined}
-]};
+        {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'changes', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolEvent') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, string, 'source', undefined},
-    {4, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'payload', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, string, 'source', undefined},
+        {5, optional, i32, 'sequence', undefined},
+        {4, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolChange'}}}, 'payload', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolSessionChange') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRiskScoreChanged'}}, 'rec_payment_tool_risk_score_changed', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRouteChanged'}}, 'rec_payment_tool_route_changed', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasFailed'}}, 'rec_payment_tool_failed', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolSessionChange'}}, 'rec_payment_tool_session_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasCreated'}}, 'rec_payment_tool_created', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRiskScoreChanged'}}, 'rec_payment_tool_risk_score_changed', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolRouteChanged'}}, 'rec_payment_tool_route_changed', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAcquired'}}, 'rec_payment_tool_acquired', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasAbandoned'}}, 'rec_payment_tool_abandoned', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolHasFailed'}}, 'rec_payment_tool_failed', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolSessionChange'}}, 'rec_payment_tool_session_changed', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolHasCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}}, 'rec_payment_tool', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolRiskScoreChanged') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolRouteChanged') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolHasAcquired') ->
     {struct, struct, [
-    {1, required, string, 'token', undefined}
-]};
+        {1, required, string, 'token', undefined}
+    ]};
 
 struct_info('RecurrentPaymentToolHasAbandoned') ->
     {struct, struct, []};
 
 struct_info('RecurrentPaymentToolHasFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info('Varset') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {6, optional, string, 'wallet_id', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTool'}}, 'p2p_tool', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
+        {6, optional, string, 'wallet_id', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTool'}}, 'p2p_tool', undefined}
+    ]};
 
 struct_info('PartyParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('PayoutToolParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'tool_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'tool_info', undefined}
+    ]};
 
 struct_info('ShopParams') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
-    {3, required, string, 'contract_id', undefined},
-    {4, required, string, 'payout_tool_id', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+        {6, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
+        {3, required, string, 'contract_id', undefined},
+        {4, required, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('ShopAccountParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+    ]};
 
 struct_info('ContractParams') ->
     {struct, struct, [
-    {4, optional, string, 'contractor_id', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
-]};
+        {4, optional, string, 'contractor_id', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
+    ]};
 
 struct_info('ContractAdjustmentParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'template', undefined}
+    ]};
 
 struct_info('PartyModification') ->
     {struct, union, [
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletModificationUnit'}}, 'wallet_modification', undefined}
-]};
+        {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletModificationUnit'}}, 'wallet_modification', undefined}
+    ]};
 
 struct_info('ContractorModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractorModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractorModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ContractorModification') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'creation', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorIdentityDocumentsModification'}}, 'identity_documents_modification', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'creation', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_modification', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorIdentityDocumentsModification'}}, 'identity_documents_modification', undefined}
+    ]};
 
 struct_info('ContractorIdentityDocumentsModification') ->
     {struct, struct, [
-    {1, required, {list, string}, 'identity_documents', undefined}
-]};
+        {1, required, {list, string}, 'identity_documents', undefined}
+    ]};
 
 struct_info('ContractModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ContractModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractParams'}}, 'creation', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermination'}}, 'termination', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractAdjustmentModificationUnit'}}, 'adjustment_modification', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolModificationUnit'}}, 'payout_tool_modification', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_binding', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined},
-    {7, optional, string, 'contractor_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractParams'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermination'}}, 'termination', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractAdjustmentModificationUnit'}}, 'adjustment_modification', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolModificationUnit'}}, 'payout_tool_modification', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_binding', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_modification', undefined},
+        {7, optional, string, 'contractor_modification', undefined}
+    ]};
 
 struct_info('ContractTermination') ->
     {struct, struct, [
-    {2, optional, string, 'reason', undefined}
-]};
+        {2, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('ContractAdjustmentModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'adjustment_id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractAdjustmentModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'adjustment_id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractAdjustmentModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ContractAdjustmentModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractAdjustmentParams'}}, 'creation', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractAdjustmentParams'}}, 'creation', undefined}
+    ]};
 
 struct_info('PayoutToolModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'PayoutToolModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'payout_tool_id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'PayoutToolModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('PayoutToolModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info_modification', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolParams'}}, 'creation', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info_modification', undefined}
+    ]};
 
 struct_info('ShopModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ShopModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ShopModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('ShopModification') ->
     {struct, union, [
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopParams'}}, 'creation', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_modification', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_modification', undefined},
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopContractModification'}}, 'contract_modification', undefined},
-    {9, optional, string, 'payout_tool_modification', undefined},
-    {11, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
-    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined},
-    {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ProxyModification'}}, 'proxy_modification', undefined}
-]};
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopParams'}}, 'creation', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_modification', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_modification', undefined},
+        {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopContractModification'}}, 'contract_modification', undefined},
+        {9, optional, string, 'payout_tool_modification', undefined},
+        {11, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
+        {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
+        {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined},
+        {10, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ProxyModification'}}, 'proxy_modification', undefined}
+    ]};
 
 struct_info('ShopContractModification') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, string, 'payout_tool_id', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('ScheduleModification') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
+    ]};
 
 struct_info('ProxyModification') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+    ]};
 
 struct_info('WalletModificationUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'WalletModification'}}, 'modification', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'WalletModification'}}, 'modification', undefined}
+    ]};
 
 struct_info('WalletModification') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletParams'}}, 'creation', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletAccountParams'}}, 'account_creation', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletParams'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletAccountParams'}}, 'account_creation', undefined}
+    ]};
 
 struct_info('WalletParams') ->
     {struct, struct, [
-    {1, optional, string, 'name', undefined},
-    {2, required, string, 'contract_id', undefined}
-]};
+        {1, optional, string, 'name', undefined},
+        {2, required, string, 'contract_id', undefined}
+    ]};
 
 struct_info('WalletAccountParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+    ]};
 
 struct_info('Claim') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined},
-    {3, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined},
-    {4, required, i32, 'revision', undefined},
-    {5, required, string, 'created_at', undefined},
-    {6, optional, string, 'updated_at', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined},
+        {3, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined},
+        {4, required, i32, 'revision', undefined},
+        {5, required, string, 'created_at', undefined},
+        {6, optional, string, 'updated_at', undefined}
+    ]};
 
 struct_info('ClaimStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimAccepted'}}, 'accepted', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimDenied'}}, 'denied', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimRevoked'}}, 'revoked', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimAccepted'}}, 'accepted', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimDenied'}}, 'denied', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimRevoked'}}, 'revoked', undefined}
+    ]};
 
 struct_info('ClaimPending') ->
     {struct, struct, []};
 
 struct_info('ClaimAccepted') ->
     {struct, struct, [
-    {2, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'ClaimEffect'}}}, 'effects', undefined}
-]};
+        {2, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'ClaimEffect'}}}, 'effects', undefined}
+    ]};
 
 struct_info('ClaimDenied') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('ClaimRevoked') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('ClaimEffect') ->
     {struct, union, [
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractEffectUnit'}}, 'contract_effect', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopEffectUnit'}}, 'shop_effect', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorEffectUnit'}}, 'contractor_effect', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletEffectUnit'}}, 'wallet_effect', undefined}
-]};
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractEffectUnit'}}, 'contract_effect', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopEffectUnit'}}, 'shop_effect', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorEffectUnit'}}, 'contractor_effect', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletEffectUnit'}}, 'wallet_effect', undefined}
+    ]};
 
 struct_info('ContractEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('ContractEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'created', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolInfoChanged'}}, 'payout_tool_info_changed', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
-    {7, optional, string, 'contractor_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'created', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}, 'adjustment_created', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}, 'payout_tool_created', undefined},
+        {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutToolInfoChanged'}}, 'payout_tool_info_changed', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement_bound', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences_changed', undefined},
+        {7, optional, string, 'contractor_changed', undefined}
+    ]};
 
 struct_info('ShopEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'shop_id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ShopEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'shop_id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ShopEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('ShopEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_changed', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopContractChanged'}}, 'contract_changed', undefined},
-    {5, optional, string, 'payout_tool_changed', undefined},
-    {7, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
-    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleChanged'}}, 'payout_schedule_changed', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopProxyChanged'}}, 'proxy_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details_changed', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopContractChanged'}}, 'contract_changed', undefined},
+        {5, optional, string, 'payout_tool_changed', undefined},
+        {7, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_changed', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account_created', undefined},
+        {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ScheduleChanged'}}, 'payout_schedule_changed', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopProxyChanged'}}, 'proxy_changed', undefined}
+    ]};
 
 struct_info('ShopContractChanged') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, string, 'payout_tool_id', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('ScheduleChanged') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined}
+    ]};
 
 struct_info('ContractorEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractorEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ContractorEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('ContractorEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'created', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_changed', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorIdentityDocumentsChanged'}}, 'identity_documents_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'created', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorIdentityDocumentsChanged'}}, 'identity_documents_changed', undefined}
+    ]};
 
 struct_info('ContractorIdentityDocumentsChanged') ->
     {struct, struct, [
-    {1, required, {list, string}, 'identity_documents', undefined}
-]};
+        {1, required, {list, string}, 'identity_documents', undefined}
+    ]};
 
 struct_info('PayoutToolInfoChanged') ->
     {struct, struct, [
-    {1, required, string, 'payout_tool_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info', undefined}
-]};
+        {1, required, string, 'payout_tool_id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info', undefined}
+    ]};
 
 struct_info('WalletEffectUnit') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'WalletEffect'}}, 'effect', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'WalletEffect'}}, 'effect', undefined}
+    ]};
 
 struct_info('WalletEffect') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'WalletAccount'}}, 'account_created', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'WalletAccount'}}, 'account_created', undefined}
+    ]};
 
 struct_info('ShopProxyChanged') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+    ]};
 
 struct_info('AccountState') ->
     {struct, struct, [
-    {1, required, i64, 'account_id', undefined},
-    {2, required, i64, 'own_amount', undefined},
-    {3, required, i64, 'available_amount', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
-]};
+        {1, required, i64, 'account_id', undefined},
+        {2, required, i64, 'own_amount', undefined},
+        {3, required, i64, 'available_amount', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
+    ]};
 
 struct_info('PartyEventData') ->
     {struct, struct, [
-    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyChange'}}}, 'changes', undefined},
-    {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state_snapshot', undefined}
-]};
+        {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyChange'}}}, 'changes', undefined},
+        {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state_snapshot', undefined}
+    ]};
 
 struct_info('PartyChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyCreated'}}, 'party_created', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'party_blocking', undefined},
-    {5, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'party_suspension', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopBlocking'}}, 'shop_blocking', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopSuspension'}}, 'shop_suspension', undefined},
-    {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletBlocking'}}, 'wallet_blocking', undefined},
-    {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletSuspension'}}, 'wallet_suspension', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}}, 'claim_created', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimStatusChanged'}}, 'claim_status_changed', undefined},
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimUpdated'}}, 'claim_updated', undefined},
-    {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyMetaSet'}}, 'party_meta_set', undefined},
-    {10, optional, string, 'party_meta_removed', undefined},
-    {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyRevisionChanged'}}, 'revision_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyCreated'}}, 'party_created', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'party_blocking', undefined},
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'party_suspension', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopBlocking'}}, 'shop_blocking', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopSuspension'}}, 'shop_suspension', undefined},
+        {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletBlocking'}}, 'wallet_blocking', undefined},
+        {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'WalletSuspension'}}, 'wallet_suspension', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}}, 'claim_created', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimStatusChanged'}}, 'claim_status_changed', undefined},
+        {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimUpdated'}}, 'claim_updated', undefined},
+        {9, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyMetaSet'}}, 'party_meta_set', undefined},
+        {10, optional, string, 'party_meta_removed', undefined},
+        {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'PartyRevisionChanged'}}, 'revision_changed', undefined}
+    ]};
 
 struct_info('PartyCreated') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined},
-    {8, required, string, 'created_at', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {7, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined},
+        {8, required, string, 'created_at', undefined}
+    ]};
 
 struct_info('ShopBlocking') ->
     {struct, struct, [
-    {1, required, string, 'shop_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined}
-]};
+        {1, required, string, 'shop_id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined}
+    ]};
 
 struct_info('ShopSuspension') ->
     {struct, struct, [
-    {1, required, string, 'shop_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
-]};
+        {1, required, string, 'shop_id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
+    ]};
 
 struct_info('WalletBlocking') ->
     {struct, struct, [
-    {1, required, string, 'wallet_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined}
-]};
+        {1, required, string, 'wallet_id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined}
+    ]};
 
 struct_info('WalletSuspension') ->
     {struct, struct, [
-    {1, required, string, 'wallet_id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
-]};
+        {1, required, string, 'wallet_id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
+    ]};
 
 struct_info('ClaimStatusChanged') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined},
-    {3, required, i32, 'revision', undefined},
-    {4, required, string, 'changed_at', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined},
+        {3, required, i32, 'revision', undefined},
+        {4, required, string, 'changed_at', undefined}
+    ]};
 
 struct_info('ClaimUpdated') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined},
-    {3, required, i32, 'revision', undefined},
-    {4, required, string, 'updated_at', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined},
+        {3, required, i32, 'revision', undefined},
+        {4, required, string, 'updated_at', undefined}
+    ]};
 
 struct_info('PartyMetaSet') ->
     {struct, struct, [
-    {1, required, string, 'ns', undefined},
-    {2, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'data', undefined}
-]};
+        {1, required, string, 'ns', undefined},
+        {2, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'data', undefined}
+    ]};
 
 struct_info('PartyRevisionChanged') ->
     {struct, struct, [
-    {1, required, string, 'timestamp', undefined},
-    {2, required, i64, 'revision', undefined}
-]};
+        {1, required, string, 'timestamp', undefined},
+        {2, required, i64, 'revision', undefined}
+    ]};
 
 struct_info('PartyRevisionParam') ->
     {struct, union, [
-    {1, optional, string, 'timestamp', undefined},
-    {2, optional, i64, 'revision', undefined}
-]};
+        {1, optional, string, 'timestamp', undefined},
+        {2, optional, i64, 'revision', undefined}
+    ]};
 
 struct_info('PayoutParams') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
-    {3, required, string, 'timestamp', undefined},
-    {4, optional, string, 'payout_tool_id', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+        {3, required, string, 'timestamp', undefined},
+        {4, optional, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('InvalidChangesetReason') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContract'}}, 'invalid_contract', undefined},
-    {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidShop'}}, 'invalid_shop', undefined},
-    {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidWallet'}}, 'invalid_wallet', undefined},
-    {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContractor'}}, 'invalid_contractor', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContract'}}, 'invalid_contract', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidShop'}}, 'invalid_shop', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidWallet'}}, 'invalid_wallet', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContractor'}}, 'invalid_contractor', undefined}
+    ]};
 
 struct_info('InvalidContract') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidContractReason'}}, 'reason', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidContractReason'}}, 'reason', undefined}
+    ]};
 
 struct_info('InvalidShop') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidShopReason'}}, 'reason', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidShopReason'}}, 'reason', undefined}
+    ]};
 
 struct_info('InvalidWallet') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidWalletReason'}}, 'reason', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidWalletReason'}}, 'reason', undefined}
+    ]};
 
 struct_info('InvalidContractor') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidContractorReason'}}, 'reason', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidContractorReason'}}, 'reason', undefined}
+    ]};
 
 struct_info('InvalidContractReason') ->
     {struct, union, [
-    {1, optional, string, 'not_exists', undefined},
-    {2, optional, string, 'already_exists', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'invalid_status', undefined},
-    {4, optional, string, 'contract_adjustment_already_exists', undefined},
-    {5, optional, string, 'payout_tool_not_exists', undefined},
-    {6, optional, string, 'payout_tool_already_exists', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined},
-    {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorNotExists'}}, 'contractor_not_exists', undefined}
-]};
+        {1, optional, string, 'not_exists', undefined},
+        {2, optional, string, 'already_exists', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'invalid_status', undefined},
+        {4, optional, string, 'contract_adjustment_already_exists', undefined},
+        {5, optional, string, 'payout_tool_not_exists', undefined},
+        {6, optional, string, 'payout_tool_already_exists', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined},
+        {8, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractorNotExists'}}, 'contractor_not_exists', undefined}
+    ]};
 
 struct_info('InvalidShopReason') ->
     {struct, union, [
-    {1, optional, string, 'not_exists', undefined},
-    {2, optional, string, 'already_exists', undefined},
-    {3, optional, string, 'no_account', undefined},
-    {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined},
-    {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopPayoutToolInvalid'}}, 'payout_tool_invalid', undefined},
-    {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
-]};
+        {1, optional, string, 'not_exists', undefined},
+        {2, optional, string, 'already_exists', undefined},
+        {3, optional, string, 'no_account', undefined},
+        {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ShopPayoutToolInvalid'}}, 'payout_tool_invalid', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
+    ]};
 
 struct_info('InvalidWalletReason') ->
     {struct, union, [
-    {1, optional, string, 'not_exists', undefined},
-    {2, optional, string, 'already_exists', undefined},
-    {3, optional, string, 'no_account', undefined},
-    {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
-    {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined}
-]};
+        {1, optional, string, 'not_exists', undefined},
+        {2, optional, string, 'already_exists', undefined},
+        {3, optional, string, 'no_account', undefined},
+        {4, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined}
+    ]};
 
 struct_info('InvalidContractorReason') ->
     {struct, union, [
-    {1, optional, string, 'not_exists', undefined},
-    {2, optional, string, 'already_exists', undefined}
-]};
+        {1, optional, string, 'not_exists', undefined},
+        {2, optional, string, 'already_exists', undefined}
+    ]};
 
 struct_info('ContractorNotExists') ->
     {struct, struct, [
-    {1, optional, string, 'id', undefined}
-]};
+        {1, optional, string, 'id', undefined}
+    ]};
 
 struct_info('ContractTermsViolated') ->
     {struct, struct, [
-    {1, required, string, 'contract_id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSet'}}, 'terms', undefined}
-]};
+        {1, required, string, 'contract_id', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSet'}}, 'terms', undefined}
+    ]};
 
 struct_info('ShopPayoutToolInvalid') ->
     {struct, struct, [
-    {1, optional, string, 'payout_tool_id', undefined}
-]};
+        {1, optional, string, 'payout_tool_id', undefined}
+    ]};
 
 struct_info('InvalidObjectReference') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'ref', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'ref', undefined}
+    ]};
 
 struct_info('PartyNotFound') ->
     {struct, exception, []};
@@ -3317,23 +3328,23 @@ struct_info('WalletNotFound') ->
 
 struct_info('InvalidPartyStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidShopStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidWalletStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidContractStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidUser') ->
     {struct, exception, []};
@@ -3355,13 +3366,13 @@ struct_info('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
 
 struct_info('InvoicePaymentChargebackInvalidStage') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackInvalidStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentNotFound') ->
     {struct, exception, []};
@@ -3380,38 +3391,38 @@ struct_info('InsufficientAccountBalance') ->
 
 struct_info('InvalidRecurrentParentPayment') ->
     {struct, exception, [
-    {1, optional, string, 'details', undefined}
-]};
+        {1, optional, string, 'details', undefined}
+    ]};
 
 struct_info('InvoicePaymentPending') ->
     {struct, exception, [
-    {1, required, string, 'id', undefined}
-]};
+        {1, required, string, 'id', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundPending') ->
     {struct, exception, [
-    {1, required, string, 'id', undefined}
-]};
+        {1, required, string, 'id', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentPending') ->
     {struct, exception, [
-    {1, required, string, 'id', undefined}
-]};
+        {1, required, string, 'id', undefined}
+    ]};
 
 struct_info('InvalidInvoiceStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidPaymentStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidPaymentAdjustmentStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('InvoiceTemplateNotFound') ->
     {struct, exception, []};
@@ -3421,38 +3432,38 @@ struct_info('InvoiceTemplateRemoved') ->
 
 struct_info('InvoicePaymentAmountExceeded') ->
     {struct, exception, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'maximum', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'maximum', undefined}
+    ]};
 
 struct_info('InconsistentRefundCurrency') ->
     {struct, exception, [
-    {1, required, string, 'currency', undefined}
-]};
+        {1, required, string, 'currency', undefined}
+    ]};
 
 struct_info('InconsistentChargebackCurrency') ->
     {struct, exception, [
-    {1, required, string, 'currency', undefined}
-]};
+        {1, required, string, 'currency', undefined}
+    ]};
 
 struct_info('InconsistentCaptureCurrency') ->
     {struct, exception, [
-    {1, required, string, 'payment_currency', undefined},
-    {2, optional, string, 'passed_currency', undefined}
-]};
+        {1, required, string, 'payment_currency', undefined},
+        {2, optional, string, 'passed_currency', undefined}
+    ]};
 
 struct_info('AmountExceededCaptureBalance') ->
     {struct, exception, [
-    {1, required, i64, 'payment_amount', undefined},
-    {2, optional, i64, 'passed_amount', undefined}
-]};
+        {1, required, i64, 'payment_amount', undefined},
+        {2, optional, i64, 'passed_amount', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackPending') ->
     {struct, exception, []};
 
 struct_info('InvalidCustomerStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('CustomerNotFound') ->
     {struct, exception, []};
@@ -3474,8 +3485,8 @@ struct_info('InvalidPaymentMethod') ->
 
 struct_info('InvalidRecurrentPaymentToolStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('NoLastEvent') ->
     {struct, exception, []};
@@ -3494,18 +3505,18 @@ struct_info('InvalidClaimRevision') ->
 
 struct_info('InvalidClaimStatus') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('ChangesetConflict') ->
     {struct, exception, [
-    {1, required, i64, 'conflicted_id', undefined}
-]};
+        {1, required, i64, 'conflicted_id', undefined}
+    ]};
 
 struct_info('InvalidChangeset') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidChangesetReason'}}, 'reason', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'InvalidChangesetReason'}}, 'reason', undefined}
+    ]};
 
 struct_info('AccountNotFound') ->
     {struct, exception, []};
@@ -3532,636 +3543,636 @@ record_name('UserInfo') ->
 record_name('InternalUser') ->
     'payproc_InternalUser';
 
-    record_name('ExternalUser') ->
+record_name('ExternalUser') ->
     'payproc_ExternalUser';
 
-    record_name('ServiceUser') ->
+record_name('ServiceUser') ->
     'payproc_ServiceUser';
 
-    record_name('Event') ->
+record_name('Event') ->
     'payproc_Event';
 
-    record_name('InvoiceCreated') ->
+record_name('InvoiceCreated') ->
     'payproc_InvoiceCreated';
 
-    record_name('InvoiceStatusChanged') ->
+record_name('InvoiceStatusChanged') ->
     'payproc_InvoiceStatusChanged';
 
-    record_name('InvoicePaymentChange') ->
+record_name('InvoicePaymentChange') ->
     'payproc_InvoicePaymentChange';
 
-    record_name('InvoicePaymentStarted') ->
+record_name('InvoicePaymentStarted') ->
     'payproc_InvoicePaymentStarted';
 
-    record_name('InvoicePaymentRiskScoreChanged') ->
+record_name('InvoicePaymentRiskScoreChanged') ->
     'payproc_InvoicePaymentRiskScoreChanged';
 
-    record_name('InvoicePaymentRouteChanged') ->
+record_name('InvoicePaymentRouteChanged') ->
     'payproc_InvoicePaymentRouteChanged';
 
-    record_name('InvoicePaymentCashFlowChanged') ->
+record_name('InvoicePaymentCashFlowChanged') ->
     'payproc_InvoicePaymentCashFlowChanged';
 
-    record_name('InvoicePaymentStatusChanged') ->
+record_name('InvoicePaymentStatusChanged') ->
     'payproc_InvoicePaymentStatusChanged';
 
-    record_name('InvoicePaymentSessionChange') ->
+record_name('InvoicePaymentSessionChange') ->
     'payproc_InvoicePaymentSessionChange';
 
-    record_name('SessionStarted') ->
+record_name('SessionStarted') ->
     'payproc_SessionStarted';
 
-    record_name('SessionFinished') ->
+record_name('SessionFinished') ->
     'payproc_SessionFinished';
 
-    record_name('SessionSuspended') ->
+record_name('SessionSuspended') ->
     'payproc_SessionSuspended';
 
-    record_name('SessionActivated') ->
+record_name('SessionActivated') ->
     'payproc_SessionActivated';
 
-    record_name('SessionSucceeded') ->
+record_name('SessionSucceeded') ->
     'payproc_SessionSucceeded';
 
-    record_name('SessionFailed') ->
+record_name('SessionFailed') ->
     'payproc_SessionFailed';
 
-    record_name('InvoiceTemplateCreated') ->
+record_name('InvoiceTemplateCreated') ->
     'payproc_InvoiceTemplateCreated';
 
-    record_name('InvoiceTemplateUpdated') ->
+record_name('InvoiceTemplateUpdated') ->
     'payproc_InvoiceTemplateUpdated';
 
-    record_name('InvoiceTemplateDeleted') ->
+record_name('InvoiceTemplateDeleted') ->
     'payproc_InvoiceTemplateDeleted';
 
-    record_name('SessionTransactionBound') ->
+record_name('SessionTransactionBound') ->
     'payproc_SessionTransactionBound';
 
-    record_name('SessionProxyStateChanged') ->
+record_name('SessionProxyStateChanged') ->
     'payproc_SessionProxyStateChanged';
 
-    record_name('SessionInteractionRequested') ->
+record_name('SessionInteractionRequested') ->
     'payproc_SessionInteractionRequested';
 
-    record_name('InvoicePaymentChargebackChange') ->
+record_name('InvoicePaymentChargebackChange') ->
     'payproc_InvoicePaymentChargebackChange';
 
-    record_name('InvoicePaymentChargebackCreated') ->
+record_name('InvoicePaymentChargebackCreated') ->
     'payproc_InvoicePaymentChargebackCreated';
 
-    record_name('InvoicePaymentChargebackStatusChanged') ->
+record_name('InvoicePaymentChargebackStatusChanged') ->
     'payproc_InvoicePaymentChargebackStatusChanged';
 
-    record_name('InvoicePaymentChargebackCashFlowCreated') ->
+record_name('InvoicePaymentChargebackCashFlowCreated') ->
     'payproc_InvoicePaymentChargebackCashFlowCreated';
 
-    record_name('InvoicePaymentChargebackCashFlowChanged') ->
+record_name('InvoicePaymentChargebackCashFlowChanged') ->
     'payproc_InvoicePaymentChargebackCashFlowChanged';
 
-    record_name('InvoicePaymentChargebackChanged') ->
+record_name('InvoicePaymentChargebackChanged') ->
     'payproc_InvoicePaymentChargebackChanged';
 
-    record_name('InvoicePaymentChargebackStageChanged') ->
+record_name('InvoicePaymentChargebackStageChanged') ->
     'payproc_InvoicePaymentChargebackStageChanged';
 
-    record_name('InvoicePaymentRefundChange') ->
+record_name('InvoicePaymentRefundChange') ->
     'payproc_InvoicePaymentRefundChange';
 
-    record_name('InvoicePaymentRefundCreated') ->
+record_name('InvoicePaymentRefundCreated') ->
     'payproc_InvoicePaymentRefundCreated';
 
-    record_name('InvoicePaymentRefundStatusChanged') ->
+record_name('InvoicePaymentRefundStatusChanged') ->
     'payproc_InvoicePaymentRefundStatusChanged';
 
-    record_name('InvoicePaymentAdjustmentChange') ->
+record_name('InvoicePaymentAdjustmentChange') ->
     'payproc_InvoicePaymentAdjustmentChange';
 
-    record_name('InvoicePaymentAdjustmentCreated') ->
+record_name('InvoicePaymentAdjustmentCreated') ->
     'payproc_InvoicePaymentAdjustmentCreated';
 
-    record_name('InvoicePaymentAdjustmentStatusChanged') ->
+record_name('InvoicePaymentAdjustmentStatusChanged') ->
     'payproc_InvoicePaymentAdjustmentStatusChanged';
 
-    record_name('InvoicePaymentRecTokenAcquired') ->
+record_name('InvoicePaymentRecTokenAcquired') ->
     'payproc_InvoicePaymentRecTokenAcquired';
 
-    record_name('InvoicePaymentCaptureStarted') ->
+record_name('InvoicePaymentCaptureStarted') ->
     'payproc_InvoicePaymentCaptureStarted';
 
-    record_name('EventRange') ->
+record_name('EventRange') ->
     'payproc_EventRange';
 
-    record_name('InvoiceParams') ->
+record_name('InvoiceParams') ->
     'payproc_InvoiceParams';
 
-    record_name('InvoiceWithTemplateParams') ->
+record_name('InvoiceWithTemplateParams') ->
     'payproc_InvoiceWithTemplateParams';
 
-    record_name('InvoiceTemplateCreateParams') ->
+record_name('InvoiceTemplateCreateParams') ->
     'payproc_InvoiceTemplateCreateParams';
 
-    record_name('InvoiceTemplateUpdateParams') ->
+record_name('InvoiceTemplateUpdateParams') ->
     'payproc_InvoiceTemplateUpdateParams';
 
-    record_name('InvoicePaymentParams') ->
+record_name('InvoicePaymentParams') ->
     'payproc_InvoicePaymentParams';
 
-    record_name('PaymentResourcePayerParams') ->
+record_name('PaymentResourcePayerParams') ->
     'payproc_PaymentResourcePayerParams';
 
-    record_name('CustomerPayerParams') ->
+record_name('CustomerPayerParams') ->
     'payproc_CustomerPayerParams';
 
-    record_name('RecurrentPayerParams') ->
+record_name('RecurrentPayerParams') ->
     'payproc_RecurrentPayerParams';
 
-    record_name('InvoicePaymentParamsFlowInstant') ->
+record_name('InvoicePaymentParamsFlowInstant') ->
     'payproc_InvoicePaymentParamsFlowInstant';
 
-    record_name('InvoicePaymentParamsFlowHold') ->
+record_name('InvoicePaymentParamsFlowHold') ->
     'payproc_InvoicePaymentParamsFlowHold';
 
-    record_name('Invoice') ->
+record_name('Invoice') ->
     'payproc_Invoice';
 
-    record_name('InvoicePayment') ->
+record_name('InvoicePayment') ->
     'payproc_InvoicePayment';
 
-    record_name('InvoicePaymentRefund') ->
+record_name('InvoicePaymentRefund') ->
     'payproc_InvoicePaymentRefund';
 
-    record_name('InvoicePaymentSession') ->
+record_name('InvoicePaymentSession') ->
     'payproc_InvoicePaymentSession';
 
-    record_name('InvoiceRefundSession') ->
+record_name('InvoiceRefundSession') ->
     'payproc_InvoiceRefundSession';
 
-    record_name('InvoicePaymentChargebackParams') ->
+record_name('InvoicePaymentChargebackParams') ->
     'payproc_InvoicePaymentChargebackParams';
 
-    record_name('InvoicePaymentChargebackAcceptParams') ->
+record_name('InvoicePaymentChargebackAcceptParams') ->
     'payproc_InvoicePaymentChargebackAcceptParams';
 
-    record_name('InvoicePaymentChargebackReopenParams') ->
+record_name('InvoicePaymentChargebackReopenParams') ->
     'payproc_InvoicePaymentChargebackReopenParams';
 
-    record_name('InvoicePaymentRefundParams') ->
+record_name('InvoicePaymentRefundParams') ->
     'payproc_InvoicePaymentRefundParams';
 
-    record_name('InvoicePaymentCaptureParams') ->
+record_name('InvoicePaymentCaptureParams') ->
     'payproc_InvoicePaymentCaptureParams';
 
-    record_name('InvoicePaymentAdjustmentParams') ->
+record_name('InvoicePaymentAdjustmentParams') ->
     'payproc_InvoicePaymentAdjustmentParams';
 
-    record_name('InvoiceRepairFailPreProcessing') ->
+record_name('InvoiceRepairFailPreProcessing') ->
     'payproc_InvoiceRepairFailPreProcessing';
 
-    record_name('InvoiceRepairSkipInspector') ->
+record_name('InvoiceRepairSkipInspector') ->
     'payproc_InvoiceRepairSkipInspector';
 
-    record_name('InvoiceRepairFailSession') ->
+record_name('InvoiceRepairFailSession') ->
     'payproc_InvoiceRepairFailSession';
 
-    record_name('InvoiceRepairComplex') ->
+record_name('InvoiceRepairComplex') ->
     'payproc_InvoiceRepairComplex';
 
-    record_name('InvoiceRepairParams') ->
+record_name('InvoiceRepairParams') ->
     'payproc_InvoiceRepairParams';
 
-    record_name('CustomerParams') ->
+record_name('CustomerParams') ->
     'payproc_CustomerParams';
 
-    record_name('Customer') ->
+record_name('Customer') ->
     'payproc_Customer';
 
-    record_name('CustomerUnready') ->
+record_name('CustomerUnready') ->
     'payproc_CustomerUnready';
 
-    record_name('CustomerReady') ->
+record_name('CustomerReady') ->
     'payproc_CustomerReady';
 
-    record_name('CustomerCreated') ->
+record_name('CustomerCreated') ->
     'payproc_CustomerCreated';
 
-    record_name('CustomerDeleted') ->
+record_name('CustomerDeleted') ->
     'payproc_CustomerDeleted';
 
-    record_name('CustomerStatusChanged') ->
+record_name('CustomerStatusChanged') ->
     'payproc_CustomerStatusChanged';
 
-    record_name('CustomerBindingChanged') ->
+record_name('CustomerBindingChanged') ->
     'payproc_CustomerBindingChanged';
 
-    record_name('CustomerBindingParams') ->
+record_name('CustomerBindingParams') ->
     'payproc_CustomerBindingParams';
 
-    record_name('CustomerBinding') ->
+record_name('CustomerBinding') ->
     'payproc_CustomerBinding';
 
-    record_name('CustomerBindingPending') ->
+record_name('CustomerBindingPending') ->
     'payproc_CustomerBindingPending';
 
-    record_name('CustomerBindingSucceeded') ->
+record_name('CustomerBindingSucceeded') ->
     'payproc_CustomerBindingSucceeded';
 
-    record_name('CustomerBindingFailed') ->
+record_name('CustomerBindingFailed') ->
     'payproc_CustomerBindingFailed';
 
-    record_name('CustomerBindingStarted') ->
+record_name('CustomerBindingStarted') ->
     'payproc_CustomerBindingStarted';
 
-    record_name('CustomerBindingStatusChanged') ->
+record_name('CustomerBindingStatusChanged') ->
     'payproc_CustomerBindingStatusChanged';
 
-    record_name('CustomerBindingInteractionRequested') ->
+record_name('CustomerBindingInteractionRequested') ->
     'payproc_CustomerBindingInteractionRequested';
 
-    record_name('RecurrentPaymentTool') ->
+record_name('RecurrentPaymentTool') ->
     'payproc_RecurrentPaymentTool';
 
-    record_name('RecurrentPaymentToolParams') ->
+record_name('RecurrentPaymentToolParams') ->
     'payproc_RecurrentPaymentToolParams';
 
-    record_name('RecurrentPaymentToolCreated') ->
+record_name('RecurrentPaymentToolCreated') ->
     'payproc_RecurrentPaymentToolCreated';
 
-    record_name('RecurrentPaymentToolAcquired') ->
+record_name('RecurrentPaymentToolAcquired') ->
     'payproc_RecurrentPaymentToolAcquired';
 
-    record_name('RecurrentPaymentToolAbandoned') ->
+record_name('RecurrentPaymentToolAbandoned') ->
     'payproc_RecurrentPaymentToolAbandoned';
 
-    record_name('RecurrentPaymentToolFailed') ->
+record_name('RecurrentPaymentToolFailed') ->
     'payproc_RecurrentPaymentToolFailed';
 
-    record_name('RecurrentPaymentToolEventData') ->
+record_name('RecurrentPaymentToolEventData') ->
     'payproc_RecurrentPaymentToolEventData';
 
-    record_name('RecurrentPaymentToolEvent') ->
+record_name('RecurrentPaymentToolEvent') ->
     'payproc_RecurrentPaymentToolEvent';
 
-    record_name('RecurrentPaymentToolSessionChange') ->
+record_name('RecurrentPaymentToolSessionChange') ->
     'payproc_RecurrentPaymentToolSessionChange';
 
-    record_name('RecurrentPaymentToolHasCreated') ->
+record_name('RecurrentPaymentToolHasCreated') ->
     'payproc_RecurrentPaymentToolHasCreated';
 
-    record_name('RecurrentPaymentToolRiskScoreChanged') ->
+record_name('RecurrentPaymentToolRiskScoreChanged') ->
     'payproc_RecurrentPaymentToolRiskScoreChanged';
 
-    record_name('RecurrentPaymentToolRouteChanged') ->
+record_name('RecurrentPaymentToolRouteChanged') ->
     'payproc_RecurrentPaymentToolRouteChanged';
 
-    record_name('RecurrentPaymentToolHasAcquired') ->
+record_name('RecurrentPaymentToolHasAcquired') ->
     'payproc_RecurrentPaymentToolHasAcquired';
 
-    record_name('RecurrentPaymentToolHasAbandoned') ->
+record_name('RecurrentPaymentToolHasAbandoned') ->
     'payproc_RecurrentPaymentToolHasAbandoned';
 
-    record_name('RecurrentPaymentToolHasFailed') ->
+record_name('RecurrentPaymentToolHasFailed') ->
     'payproc_RecurrentPaymentToolHasFailed';
 
-    record_name('Varset') ->
+record_name('Varset') ->
     'payproc_Varset';
 
-    record_name('PartyParams') ->
+record_name('PartyParams') ->
     'payproc_PartyParams';
 
-    record_name('PayoutToolParams') ->
+record_name('PayoutToolParams') ->
     'payproc_PayoutToolParams';
 
-    record_name('ShopParams') ->
+record_name('ShopParams') ->
     'payproc_ShopParams';
 
-    record_name('ShopAccountParams') ->
+record_name('ShopAccountParams') ->
     'payproc_ShopAccountParams';
 
-    record_name('ContractParams') ->
+record_name('ContractParams') ->
     'payproc_ContractParams';
 
-    record_name('ContractAdjustmentParams') ->
+record_name('ContractAdjustmentParams') ->
     'payproc_ContractAdjustmentParams';
 
-    record_name('ContractorModificationUnit') ->
+record_name('ContractorModificationUnit') ->
     'payproc_ContractorModificationUnit';
 
-    record_name('ContractorIdentityDocumentsModification') ->
+record_name('ContractorIdentityDocumentsModification') ->
     'payproc_ContractorIdentityDocumentsModification';
 
-    record_name('ContractModificationUnit') ->
+record_name('ContractModificationUnit') ->
     'payproc_ContractModificationUnit';
 
-    record_name('ContractTermination') ->
+record_name('ContractTermination') ->
     'payproc_ContractTermination';
 
-    record_name('ContractAdjustmentModificationUnit') ->
+record_name('ContractAdjustmentModificationUnit') ->
     'payproc_ContractAdjustmentModificationUnit';
 
-    record_name('PayoutToolModificationUnit') ->
+record_name('PayoutToolModificationUnit') ->
     'payproc_PayoutToolModificationUnit';
 
-    record_name('ShopModificationUnit') ->
+record_name('ShopModificationUnit') ->
     'payproc_ShopModificationUnit';
 
-    record_name('ShopContractModification') ->
+record_name('ShopContractModification') ->
     'payproc_ShopContractModification';
 
-    record_name('ScheduleModification') ->
+record_name('ScheduleModification') ->
     'payproc_ScheduleModification';
 
-    record_name('ProxyModification') ->
+record_name('ProxyModification') ->
     'payproc_ProxyModification';
 
-    record_name('WalletModificationUnit') ->
+record_name('WalletModificationUnit') ->
     'payproc_WalletModificationUnit';
 
-    record_name('WalletParams') ->
+record_name('WalletParams') ->
     'payproc_WalletParams';
 
-    record_name('WalletAccountParams') ->
+record_name('WalletAccountParams') ->
     'payproc_WalletAccountParams';
 
-    record_name('Claim') ->
+record_name('Claim') ->
     'payproc_Claim';
 
-    record_name('ClaimPending') ->
+record_name('ClaimPending') ->
     'payproc_ClaimPending';
 
-    record_name('ClaimAccepted') ->
+record_name('ClaimAccepted') ->
     'payproc_ClaimAccepted';
 
-    record_name('ClaimDenied') ->
+record_name('ClaimDenied') ->
     'payproc_ClaimDenied';
 
-    record_name('ClaimRevoked') ->
+record_name('ClaimRevoked') ->
     'payproc_ClaimRevoked';
 
-    record_name('ContractEffectUnit') ->
+record_name('ContractEffectUnit') ->
     'payproc_ContractEffectUnit';
 
-    record_name('ShopEffectUnit') ->
+record_name('ShopEffectUnit') ->
     'payproc_ShopEffectUnit';
 
-    record_name('ShopContractChanged') ->
+record_name('ShopContractChanged') ->
     'payproc_ShopContractChanged';
 
-    record_name('ScheduleChanged') ->
+record_name('ScheduleChanged') ->
     'payproc_ScheduleChanged';
 
-    record_name('ContractorEffectUnit') ->
+record_name('ContractorEffectUnit') ->
     'payproc_ContractorEffectUnit';
 
-    record_name('ContractorIdentityDocumentsChanged') ->
+record_name('ContractorIdentityDocumentsChanged') ->
     'payproc_ContractorIdentityDocumentsChanged';
 
-    record_name('PayoutToolInfoChanged') ->
+record_name('PayoutToolInfoChanged') ->
     'payproc_PayoutToolInfoChanged';
 
-    record_name('WalletEffectUnit') ->
+record_name('WalletEffectUnit') ->
     'payproc_WalletEffectUnit';
 
-    record_name('ShopProxyChanged') ->
+record_name('ShopProxyChanged') ->
     'payproc_ShopProxyChanged';
 
-    record_name('AccountState') ->
+record_name('AccountState') ->
     'payproc_AccountState';
 
-    record_name('PartyEventData') ->
+record_name('PartyEventData') ->
     'payproc_PartyEventData';
 
-    record_name('PartyCreated') ->
+record_name('PartyCreated') ->
     'payproc_PartyCreated';
 
-    record_name('ShopBlocking') ->
+record_name('ShopBlocking') ->
     'payproc_ShopBlocking';
 
-    record_name('ShopSuspension') ->
+record_name('ShopSuspension') ->
     'payproc_ShopSuspension';
 
-    record_name('WalletBlocking') ->
+record_name('WalletBlocking') ->
     'payproc_WalletBlocking';
 
-    record_name('WalletSuspension') ->
+record_name('WalletSuspension') ->
     'payproc_WalletSuspension';
 
-    record_name('ClaimStatusChanged') ->
+record_name('ClaimStatusChanged') ->
     'payproc_ClaimStatusChanged';
 
-    record_name('ClaimUpdated') ->
+record_name('ClaimUpdated') ->
     'payproc_ClaimUpdated';
 
-    record_name('PartyMetaSet') ->
+record_name('PartyMetaSet') ->
     'payproc_PartyMetaSet';
 
-    record_name('PartyRevisionChanged') ->
+record_name('PartyRevisionChanged') ->
     'payproc_PartyRevisionChanged';
 
-    record_name('PayoutParams') ->
+record_name('PayoutParams') ->
     'payproc_PayoutParams';
 
-    record_name('InvalidContract') ->
+record_name('InvalidContract') ->
     'payproc_InvalidContract';
 
-    record_name('InvalidShop') ->
+record_name('InvalidShop') ->
     'payproc_InvalidShop';
 
-    record_name('InvalidWallet') ->
+record_name('InvalidWallet') ->
     'payproc_InvalidWallet';
 
-    record_name('InvalidContractor') ->
+record_name('InvalidContractor') ->
     'payproc_InvalidContractor';
 
-    record_name('ContractorNotExists') ->
+record_name('ContractorNotExists') ->
     'payproc_ContractorNotExists';
 
-    record_name('ContractTermsViolated') ->
+record_name('ContractTermsViolated') ->
     'payproc_ContractTermsViolated';
 
-    record_name('ShopPayoutToolInvalid') ->
+record_name('ShopPayoutToolInvalid') ->
     'payproc_ShopPayoutToolInvalid';
 
-    record_name('InvalidObjectReference') ->
+record_name('InvalidObjectReference') ->
     'payproc_InvalidObjectReference';
 
-    record_name('PartyNotFound') ->
+record_name('PartyNotFound') ->
     'payproc_PartyNotFound';
 
-    record_name('PartyNotExistsYet') ->
+record_name('PartyNotExistsYet') ->
     'payproc_PartyNotExistsYet';
 
-    record_name('InvalidPartyRevision') ->
+record_name('InvalidPartyRevision') ->
     'payproc_InvalidPartyRevision';
 
-    record_name('ShopNotFound') ->
+record_name('ShopNotFound') ->
     'payproc_ShopNotFound';
 
-    record_name('WalletNotFound') ->
+record_name('WalletNotFound') ->
     'payproc_WalletNotFound';
 
-    record_name('InvalidPartyStatus') ->
+record_name('InvalidPartyStatus') ->
     'payproc_InvalidPartyStatus';
 
-    record_name('InvalidShopStatus') ->
+record_name('InvalidShopStatus') ->
     'payproc_InvalidShopStatus';
 
-    record_name('InvalidWalletStatus') ->
+record_name('InvalidWalletStatus') ->
     'payproc_InvalidWalletStatus';
 
-    record_name('InvalidContractStatus') ->
+record_name('InvalidContractStatus') ->
     'payproc_InvalidContractStatus';
 
-    record_name('InvalidUser') ->
+record_name('InvalidUser') ->
     'payproc_InvalidUser';
 
-    record_name('InvoiceNotFound') ->
+record_name('InvoiceNotFound') ->
     'payproc_InvoiceNotFound';
 
-    record_name('InvoicePaymentNotFound') ->
+record_name('InvoicePaymentNotFound') ->
     'payproc_InvoicePaymentNotFound';
 
-    record_name('InvoicePaymentRefundNotFound') ->
+record_name('InvoicePaymentRefundNotFound') ->
     'payproc_InvoicePaymentRefundNotFound';
 
-    record_name('InvoicePaymentChargebackNotFound') ->
+record_name('InvoicePaymentChargebackNotFound') ->
     'payproc_InvoicePaymentChargebackNotFound';
 
-    record_name('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
+record_name('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
     'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration';
 
-    record_name('InvoicePaymentChargebackInvalidStage') ->
+record_name('InvoicePaymentChargebackInvalidStage') ->
     'payproc_InvoicePaymentChargebackInvalidStage';
 
-    record_name('InvoicePaymentChargebackInvalidStatus') ->
+record_name('InvoicePaymentChargebackInvalidStatus') ->
     'payproc_InvoicePaymentChargebackInvalidStatus';
 
-    record_name('InvoicePaymentAdjustmentNotFound') ->
+record_name('InvoicePaymentAdjustmentNotFound') ->
     'payproc_InvoicePaymentAdjustmentNotFound';
 
-    record_name('EventNotFound') ->
+record_name('EventNotFound') ->
     'payproc_EventNotFound';
 
-    record_name('OperationNotPermitted') ->
+record_name('OperationNotPermitted') ->
     'payproc_OperationNotPermitted';
 
-    record_name('PayoutToolNotFound') ->
+record_name('PayoutToolNotFound') ->
     'payproc_PayoutToolNotFound';
 
-    record_name('InsufficientAccountBalance') ->
+record_name('InsufficientAccountBalance') ->
     'payproc_InsufficientAccountBalance';
 
-    record_name('InvalidRecurrentParentPayment') ->
+record_name('InvalidRecurrentParentPayment') ->
     'payproc_InvalidRecurrentParentPayment';
 
-    record_name('InvoicePaymentPending') ->
+record_name('InvoicePaymentPending') ->
     'payproc_InvoicePaymentPending';
 
-    record_name('InvoicePaymentRefundPending') ->
+record_name('InvoicePaymentRefundPending') ->
     'payproc_InvoicePaymentRefundPending';
 
-    record_name('InvoicePaymentAdjustmentPending') ->
+record_name('InvoicePaymentAdjustmentPending') ->
     'payproc_InvoicePaymentAdjustmentPending';
 
-    record_name('InvalidInvoiceStatus') ->
+record_name('InvalidInvoiceStatus') ->
     'payproc_InvalidInvoiceStatus';
 
-    record_name('InvalidPaymentStatus') ->
+record_name('InvalidPaymentStatus') ->
     'payproc_InvalidPaymentStatus';
 
-    record_name('InvalidPaymentAdjustmentStatus') ->
+record_name('InvalidPaymentAdjustmentStatus') ->
     'payproc_InvalidPaymentAdjustmentStatus';
 
-    record_name('InvoiceTemplateNotFound') ->
+record_name('InvoiceTemplateNotFound') ->
     'payproc_InvoiceTemplateNotFound';
 
-    record_name('InvoiceTemplateRemoved') ->
+record_name('InvoiceTemplateRemoved') ->
     'payproc_InvoiceTemplateRemoved';
 
-    record_name('InvoicePaymentAmountExceeded') ->
+record_name('InvoicePaymentAmountExceeded') ->
     'payproc_InvoicePaymentAmountExceeded';
 
-    record_name('InconsistentRefundCurrency') ->
+record_name('InconsistentRefundCurrency') ->
     'payproc_InconsistentRefundCurrency';
 
-    record_name('InconsistentChargebackCurrency') ->
+record_name('InconsistentChargebackCurrency') ->
     'payproc_InconsistentChargebackCurrency';
 
-    record_name('InconsistentCaptureCurrency') ->
+record_name('InconsistentCaptureCurrency') ->
     'payproc_InconsistentCaptureCurrency';
 
-    record_name('AmountExceededCaptureBalance') ->
+record_name('AmountExceededCaptureBalance') ->
     'payproc_AmountExceededCaptureBalance';
 
-    record_name('InvoicePaymentChargebackPending') ->
+record_name('InvoicePaymentChargebackPending') ->
     'payproc_InvoicePaymentChargebackPending';
 
-    record_name('InvalidCustomerStatus') ->
+record_name('InvalidCustomerStatus') ->
     'payproc_InvalidCustomerStatus';
 
-    record_name('CustomerNotFound') ->
+record_name('CustomerNotFound') ->
     'payproc_CustomerNotFound';
 
-    record_name('InvalidPaymentTool') ->
+record_name('InvalidPaymentTool') ->
     'payproc_InvalidPaymentTool';
 
-    record_name('InvalidBinding') ->
+record_name('InvalidBinding') ->
     'payproc_InvalidBinding';
 
-    record_name('BindingNotFound') ->
+record_name('BindingNotFound') ->
     'payproc_BindingNotFound';
 
-    record_name('RecurrentPaymentToolNotFound') ->
+record_name('RecurrentPaymentToolNotFound') ->
     'payproc_RecurrentPaymentToolNotFound';
 
-    record_name('InvalidPaymentMethod') ->
+record_name('InvalidPaymentMethod') ->
     'payproc_InvalidPaymentMethod';
 
-    record_name('InvalidRecurrentPaymentToolStatus') ->
+record_name('InvalidRecurrentPaymentToolStatus') ->
     'payproc_InvalidRecurrentPaymentToolStatus';
 
-    record_name('NoLastEvent') ->
+record_name('NoLastEvent') ->
     'payproc_NoLastEvent';
 
-    record_name('PartyExists') ->
+record_name('PartyExists') ->
     'payproc_PartyExists';
 
-    record_name('ContractNotFound') ->
+record_name('ContractNotFound') ->
     'payproc_ContractNotFound';
 
-    record_name('ClaimNotFound') ->
+record_name('ClaimNotFound') ->
     'payproc_ClaimNotFound';
 
-    record_name('InvalidClaimRevision') ->
+record_name('InvalidClaimRevision') ->
     'payproc_InvalidClaimRevision';
 
-    record_name('InvalidClaimStatus') ->
+record_name('InvalidClaimStatus') ->
     'payproc_InvalidClaimStatus';
 
-    record_name('ChangesetConflict') ->
+record_name('ChangesetConflict') ->
     'payproc_ChangesetConflict';
 
-    record_name('InvalidChangeset') ->
+record_name('InvalidChangeset') ->
     'payproc_InvalidChangeset';
 
-    record_name('AccountNotFound') ->
+record_name('AccountNotFound') ->
     'payproc_AccountNotFound';
 
-    record_name('ShopAccountNotFound') ->
+record_name('ShopAccountNotFound') ->
     'payproc_ShopAccountNotFound';
 
-    record_name('PartyMetaNamespaceNotFound') ->
+record_name('PartyMetaNamespaceNotFound') ->
     'payproc_PartyMetaNamespaceNotFound';
 
-    record_name('PaymentInstitutionNotFound') ->
+record_name('PaymentInstitutionNotFound') ->
     'payproc_PaymentInstitutionNotFound';
 
-    record_name('ContractTemplateNotFound') ->
+record_name('ContractTemplateNotFound') ->
     'payproc_ContractTemplateNotFound';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Invoicing') ->
     [
@@ -4278,13 +4289,13 @@ functions(_) -> error(badarg).
 
 function_info('Invoicing', 'Create', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'Create', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
-    function_info('Invoicing', 'Create', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
+function_info('Invoicing', 'Create', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex3', undefined},
@@ -4295,13 +4306,13 @@ function_info('Invoicing', 'Create', reply_type) ->
     ]};
 function_info('Invoicing', 'CreateWithTemplate', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceWithTemplateParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceWithTemplateParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'CreateWithTemplate', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
-    function_info('Invoicing', 'CreateWithTemplate', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
+function_info('Invoicing', 'CreateWithTemplate', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -4312,27 +4323,27 @@ function_info('Invoicing', 'CreateWithTemplate', reply_type) ->
     ]};
 function_info('Invoicing', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('Invoicing', 'Get', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
-    function_info('Invoicing', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Invoice'}};
+function_info('Invoicing', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined}
     ]};
 function_info('Invoicing', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('Invoicing', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
-    function_info('Invoicing', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
+function_info('Invoicing', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'ex3', undefined},
@@ -4340,27 +4351,27 @@ function_info('Invoicing', 'GetEvents', reply_type) ->
     ]};
 function_info('Invoicing', 'ComputeTerms', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
+    ]};
 function_info('Invoicing', 'ComputeTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('Invoicing', 'ComputeTerms', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('Invoicing', 'ComputeTerms', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined}
     ]};
 function_info('Invoicing', 'StartPayment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'StartPayment', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePayment'}};
-    function_info('Invoicing', 'StartPayment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePayment'}};
+function_info('Invoicing', 'StartPayment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidInvoiceStatus'}}, 'ex3', undefined},
@@ -4374,29 +4385,29 @@ function_info('Invoicing', 'StartPayment', reply_type) ->
     ]};
 function_info('Invoicing', 'GetPayment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined}
+    ]};
 function_info('Invoicing', 'GetPayment', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePayment'}};
-    function_info('Invoicing', 'GetPayment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePayment'}};
+function_info('Invoicing', 'GetPayment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined}
     ]};
 function_info('Invoicing', 'CancelPayment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'reason', undefined}
+    ]};
 function_info('Invoicing', 'CancelPayment', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'CancelPayment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'CancelPayment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4408,15 +4419,15 @@ function_info('Invoicing', 'CancelPayment', reply_type) ->
     ]};
 function_info('Invoicing', 'CapturePayment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'CapturePayment', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'CapturePayment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'CapturePayment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4430,15 +4441,15 @@ function_info('Invoicing', 'CapturePayment', reply_type) ->
     ]};
 function_info('Invoicing', 'CapturePaymentNew', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'CapturePaymentNew', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'CapturePaymentNew', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'CapturePaymentNew', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4452,15 +4463,15 @@ function_info('Invoicing', 'CapturePaymentNew', reply_type) ->
     ]};
 function_info('Invoicing', 'CreatePaymentAdjustment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'CreatePaymentAdjustment', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
-    function_info('Invoicing', 'CreatePaymentAdjustment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
+function_info('Invoicing', 'CreatePaymentAdjustment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4469,15 +4480,15 @@ function_info('Invoicing', 'CreatePaymentAdjustment', reply_type) ->
     ]};
 function_info('Invoicing', 'GetPaymentAdjustment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'adjustment_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'adjustment_id', undefined}
+    ]};
 function_info('Invoicing', 'GetPaymentAdjustment', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
-    function_info('Invoicing', 'GetPaymentAdjustment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
+function_info('Invoicing', 'GetPaymentAdjustment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4485,15 +4496,15 @@ function_info('Invoicing', 'GetPaymentAdjustment', reply_type) ->
     ]};
 function_info('Invoicing', 'CapturePaymentAdjustment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'adjustment_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'adjustment_id', undefined}
+    ]};
 function_info('Invoicing', 'CapturePaymentAdjustment', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'CapturePaymentAdjustment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'CapturePaymentAdjustment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4502,15 +4513,15 @@ function_info('Invoicing', 'CapturePaymentAdjustment', reply_type) ->
     ]};
 function_info('Invoicing', 'CancelPaymentAdjustment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'adjustment_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'adjustment_id', undefined}
+    ]};
 function_info('Invoicing', 'CancelPaymentAdjustment', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'CancelPaymentAdjustment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'CancelPaymentAdjustment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4519,15 +4530,15 @@ function_info('Invoicing', 'CancelPaymentAdjustment', reply_type) ->
     ]};
 function_info('Invoicing', 'CreateChargeback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'CreateChargeback', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
-    function_info('Invoicing', 'CreateChargeback', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
+function_info('Invoicing', 'CreateChargeback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4542,15 +4553,15 @@ function_info('Invoicing', 'CreateChargeback', reply_type) ->
     ]};
 function_info('Invoicing', 'GetPaymentChargeback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'chargeback_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined}
+    ]};
 function_info('Invoicing', 'GetPaymentChargeback', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
-    function_info('Invoicing', 'GetPaymentChargeback', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
+function_info('Invoicing', 'GetPaymentChargeback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4558,16 +4569,16 @@ function_info('Invoicing', 'GetPaymentChargeback', reply_type) ->
     ]};
 function_info('Invoicing', 'AcceptChargeback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'chargeback_id', undefined},
-    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackAcceptParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackAcceptParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'AcceptChargeback', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'AcceptChargeback', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'AcceptChargeback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4580,15 +4591,15 @@ function_info('Invoicing', 'AcceptChargeback', reply_type) ->
     ]};
 function_info('Invoicing', 'RejectChargeback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'chargeback_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined}
+    ]};
 function_info('Invoicing', 'RejectChargeback', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'RejectChargeback', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'RejectChargeback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4599,16 +4610,16 @@ function_info('Invoicing', 'RejectChargeback', reply_type) ->
     ]};
 function_info('Invoicing', 'ReopenChargeback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'chargeback_id', undefined},
-    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackReopenParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackReopenParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'ReopenChargeback', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'ReopenChargeback', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'ReopenChargeback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4622,15 +4633,15 @@ function_info('Invoicing', 'ReopenChargeback', reply_type) ->
     ]};
 function_info('Invoicing', 'CancelChargeback', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'chargeback_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined}
+    ]};
 function_info('Invoicing', 'CancelChargeback', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'CancelChargeback', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'CancelChargeback', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4640,15 +4651,15 @@ function_info('Invoicing', 'CancelChargeback', reply_type) ->
     ]};
 function_info('Invoicing', 'RefundPayment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'RefundPayment', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
-    function_info('Invoicing', 'RefundPayment', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
+function_info('Invoicing', 'RefundPayment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4665,15 +4676,15 @@ function_info('Invoicing', 'RefundPayment', reply_type) ->
     ]};
 function_info('Invoicing', 'CreateManualRefund', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'CreateManualRefund', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
-    function_info('Invoicing', 'CreateManualRefund', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
+function_info('Invoicing', 'CreateManualRefund', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4690,15 +4701,15 @@ function_info('Invoicing', 'CreateManualRefund', reply_type) ->
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'payment_id', undefined},
-    {4, undefined, string, 'refund_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'refund_id', undefined}
+    ]};
 function_info('Invoicing', 'GetPaymentRefund', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
-    function_info('Invoicing', 'GetPaymentRefund', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}};
+function_info('Invoicing', 'GetPaymentRefund', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
@@ -4706,14 +4717,14 @@ function_info('Invoicing', 'GetPaymentRefund', reply_type) ->
     ]};
 function_info('Invoicing', 'Fulfill', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'reason', undefined}
+    ]};
 function_info('Invoicing', 'Fulfill', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'Fulfill', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'Fulfill', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidInvoiceStatus'}}, 'ex3', undefined},
@@ -4723,14 +4734,14 @@ function_info('Invoicing', 'Fulfill', reply_type) ->
     ]};
 function_info('Invoicing', 'Rescind', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'reason', undefined}
+    ]};
 function_info('Invoicing', 'Rescind', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'Rescind', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'Rescind', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidInvoiceStatus'}}, 'ex3', undefined},
@@ -4741,30 +4752,30 @@ function_info('Invoicing', 'Rescind', reply_type) ->
     ]};
 function_info('Invoicing', 'Repair', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined},
-    {4, undefined, {struct, struct, {dmsl_repairing_thrift, 'ComplexAction'}}, 'action', undefined},
-    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceChange'}}}, 'changes', undefined},
+        {4, undefined, {struct, struct, {dmsl_repairing_thrift, 'ComplexAction'}}, 'action', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairParams'}}, 'params', undefined}
+    ]};
 function_info('Invoicing', 'Repair', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'Repair', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'Repair', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 function_info('Invoicing', 'RepairWithScenario', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceRepairScenario'}}, 'Scenario', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceRepairScenario'}}, 'Scenario', undefined}
+    ]};
 function_info('Invoicing', 'RepairWithScenario', reply_type) ->
-        {struct, struct, []};
-    function_info('Invoicing', 'RepairWithScenario', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Invoicing', 'RepairWithScenario', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
@@ -4772,13 +4783,13 @@ function_info('Invoicing', 'RepairWithScenario', reply_type) ->
 
 function_info('InvoiceTemplating', 'Create', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateCreateParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateCreateParams'}}, 'params', undefined}
+    ]};
 function_info('InvoiceTemplating', 'Create', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}};
-    function_info('InvoiceTemplating', 'Create', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}};
+function_info('InvoiceTemplating', 'Create', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -4788,27 +4799,27 @@ function_info('InvoiceTemplating', 'Create', reply_type) ->
     ]};
 function_info('InvoiceTemplating', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined}
+    ]};
 function_info('InvoiceTemplating', 'Get', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}};
-    function_info('InvoiceTemplating', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}};
+function_info('InvoiceTemplating', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined}
     ]};
 function_info('InvoiceTemplating', 'Update', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateUpdateParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceTemplateUpdateParams'}}, 'params', undefined}
+    ]};
 function_info('InvoiceTemplating', 'Update', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}};
-    function_info('InvoiceTemplating', 'Update', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplate'}};
+function_info('InvoiceTemplating', 'Update', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
@@ -4818,13 +4829,13 @@ function_info('InvoiceTemplating', 'Update', reply_type) ->
     ]};
 function_info('InvoiceTemplating', 'Delete', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined}
+    ]};
 function_info('InvoiceTemplating', 'Delete', reply_type) ->
-        {struct, struct, []};
-    function_info('InvoiceTemplating', 'Delete', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('InvoiceTemplating', 'Delete', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
@@ -4833,15 +4844,15 @@ function_info('InvoiceTemplating', 'Delete', reply_type) ->
     ]};
 function_info('InvoiceTemplating', 'ComputeTerms', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'id', undefined},
-    {3, undefined, string, 'timestamp', undefined},
-    {4, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'timestamp', undefined},
+        {4, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
+    ]};
 function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('InvoiceTemplating', 'ComputeTerms', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('InvoiceTemplating', 'ComputeTerms', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex3', undefined},
@@ -4850,12 +4861,12 @@ function_info('InvoiceTemplating', 'ComputeTerms', reply_type) ->
 
 function_info('CustomerManagement', 'Create', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerParams'}}, 'params', undefined}
+    ]};
 function_info('CustomerManagement', 'Create', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
-    function_info('CustomerManagement', 'Create', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
+function_info('CustomerManagement', 'Create', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
@@ -4865,24 +4876,24 @@ function_info('CustomerManagement', 'Create', reply_type) ->
     ]};
 function_info('CustomerManagement', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, string, 'id', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('CustomerManagement', 'Get', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
-    function_info('CustomerManagement', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Customer'}};
+function_info('CustomerManagement', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'not_found', undefined}
     ]};
 function_info('CustomerManagement', 'Delete', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 function_info('CustomerManagement', 'Delete', reply_type) ->
-        {struct, struct, []};
-    function_info('CustomerManagement', 'Delete', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('CustomerManagement', 'Delete', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
@@ -4890,13 +4901,13 @@ function_info('CustomerManagement', 'Delete', reply_type) ->
     ]};
 function_info('CustomerManagement', 'StartBinding', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'customer_id', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingParams'}}, 'params', undefined}
-]};
+        {1, undefined, string, 'customer_id', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBindingParams'}}, 'params', undefined}
+    ]};
 function_info('CustomerManagement', 'StartBinding', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}};
-    function_info('CustomerManagement', 'StartBinding', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}};
+function_info('CustomerManagement', 'StartBinding', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
@@ -4906,25 +4917,25 @@ function_info('CustomerManagement', 'StartBinding', reply_type) ->
     ]};
 function_info('CustomerManagement', 'GetActiveBinding', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'customer_id', undefined}
-]};
+        {1, undefined, string, 'customer_id', undefined}
+    ]};
 function_info('CustomerManagement', 'GetActiveBinding', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}};
-    function_info('CustomerManagement', 'GetActiveBinding', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'CustomerBinding'}};
+function_info('CustomerManagement', 'GetActiveBinding', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidCustomerStatus'}}, 'invalid_customer_status', undefined}
     ]};
 function_info('CustomerManagement', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'customer_id', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, string, 'customer_id', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('CustomerManagement', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
-    function_info('CustomerManagement', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
+function_info('CustomerManagement', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
@@ -4932,12 +4943,12 @@ function_info('CustomerManagement', 'GetEvents', reply_type) ->
 
 function_info('RecurrentPaymentTools', 'Create', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolParams'}}, 'params', undefined}
+    ]};
 function_info('RecurrentPaymentTools', 'Create', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
-    function_info('RecurrentPaymentTools', 'Create', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
+function_info('RecurrentPaymentTools', 'Create', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'invalid_party_status', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'invalid_shop_status', undefined},
@@ -4949,36 +4960,36 @@ function_info('RecurrentPaymentTools', 'Create', reply_type) ->
     ]};
 function_info('RecurrentPaymentTools', 'Abandon', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 function_info('RecurrentPaymentTools', 'Abandon', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
-    function_info('RecurrentPaymentTools', 'Abandon', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
+function_info('RecurrentPaymentTools', 'Abandon', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidRecurrentPaymentToolStatus'}}, 'invalid_rec_payment_tool_status', undefined}
     ]};
 function_info('RecurrentPaymentTools', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 function_info('RecurrentPaymentTools', 'Get', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
-    function_info('RecurrentPaymentTools', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentTool'}};
+function_info('RecurrentPaymentTools', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined}
     ]};
 function_info('RecurrentPaymentTools', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined},
-    {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, string, 'id', undefined},
+        {2, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('RecurrentPaymentTools', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
-    function_info('RecurrentPaymentTools', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
+function_info('RecurrentPaymentTools', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolNotFound'}}, 'rec_payment_tool_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
@@ -4986,223 +4997,223 @@ function_info('RecurrentPaymentTools', 'GetEvents', reply_type) ->
 
 function_info('RecurrentPaymentToolEventSink', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('RecurrentPaymentToolEventSink', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
-    function_info('RecurrentPaymentToolEventSink', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'RecurrentPaymentToolEvent'}}};
+function_info('RecurrentPaymentToolEventSink', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
     ]};
 function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', params_type) ->
     {struct, struct, []};
 function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', reply_type) ->
-        i64;
-    function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('RecurrentPaymentToolEventSink', 'GetLastEventID', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 
 function_info('PartyManagement', 'Create', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PartyParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PartyParams'}}, 'params', undefined}
+    ]};
 function_info('PartyManagement', 'Create', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'Create', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'Create', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyExists'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'Get', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'Party'}};
-    function_info('PartyManagement', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'Party'}};
+function_info('PartyManagement', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'GetRevision', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetRevision', reply_type) ->
-        i64;
-    function_info('PartyManagement', 'GetRevision', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('PartyManagement', 'GetRevision', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'Checkout', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'revision', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'revision', undefined}
+    ]};
 function_info('PartyManagement', 'Checkout', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'Party'}};
-    function_info('PartyManagement', 'Checkout', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'Party'}};
+function_info('PartyManagement', 'Checkout', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyRevision'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'Suspend', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'Suspend', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'Suspend', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'Suspend', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'Activate', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'Activate', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'Activate', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'Activate', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'Block', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'reason', undefined}
+    ]};
 function_info('PartyManagement', 'Block', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'Block', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'Block', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'Unblock', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'reason', undefined}
+    ]};
 function_info('PartyManagement', 'Unblock', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'Unblock', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'Unblock', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'GetStatus', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetStatus', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'PartyStatus'}};
-    function_info('PartyManagement', 'GetStatus', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'PartyStatus'}};
+function_info('PartyManagement', 'GetStatus', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'GetMeta', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetMeta', reply_type) ->
-        {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}};
-    function_info('PartyManagement', 'GetMeta', exceptions) ->
-        {struct, struct, [
+    {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}};
+function_info('PartyManagement', 'GetMeta', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'GetMetaData', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'ns', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'ns', undefined}
+    ]};
 function_info('PartyManagement', 'GetMetaData', reply_type) ->
-        {struct, union, {dmsl_msgpack_thrift, 'Value'}};
-    function_info('PartyManagement', 'GetMetaData', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_msgpack_thrift, 'Value'}};
+function_info('PartyManagement', 'GetMetaData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyMetaNamespaceNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'SetMetaData', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'ns', undefined},
-    {4, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'data', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'ns', undefined},
+        {4, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'data', undefined}
+    ]};
 function_info('PartyManagement', 'SetMetaData', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'SetMetaData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'SetMetaData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'RemoveMetaData', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'ns', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'ns', undefined}
+    ]};
 function_info('PartyManagement', 'RemoveMetaData', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'RemoveMetaData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'RemoveMetaData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyMetaNamespaceNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'GetContract', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'contract_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'contract_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetContract', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'Contract'}};
-    function_info('PartyManagement', 'GetContract', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'Contract'}};
+function_info('PartyManagement', 'GetContract', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'ComputeContractTerms', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'contract_id', undefined},
-    {4, undefined, string, 'timestamp', undefined},
-    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
-    {6, undefined, i64, 'domain_revision', undefined},
-    {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'contract_id', undefined},
+        {4, undefined, string, 'timestamp', undefined},
+        {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
+        {6, undefined, i64, 'domain_revision', undefined},
+        {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
 function_info('PartyManagement', 'ComputeContractTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('PartyManagement', 'ComputeContractTerms', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('PartyManagement', 'ComputeContractTerms', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
@@ -5210,28 +5221,28 @@ function_info('PartyManagement', 'ComputeContractTerms', reply_type) ->
     ]};
 function_info('PartyManagement', 'GetShop', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined}
+    ]};
 function_info('PartyManagement', 'GetShop', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'Shop'}};
-    function_info('PartyManagement', 'GetShop', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'Shop'}};
+function_info('PartyManagement', 'GetShop', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'SuspendShop', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined}
+    ]};
 function_info('PartyManagement', 'SuspendShop', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'SuspendShop', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'SuspendShop', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
@@ -5239,14 +5250,14 @@ function_info('PartyManagement', 'SuspendShop', reply_type) ->
     ]};
 function_info('PartyManagement', 'ActivateShop', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined}
+    ]};
 function_info('PartyManagement', 'ActivateShop', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'ActivateShop', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'ActivateShop', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
@@ -5254,15 +5265,15 @@ function_info('PartyManagement', 'ActivateShop', reply_type) ->
     ]};
 function_info('PartyManagement', 'BlockShop', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined},
+        {4, undefined, string, 'reason', undefined}
+    ]};
 function_info('PartyManagement', 'BlockShop', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'BlockShop', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'BlockShop', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
@@ -5270,15 +5281,15 @@ function_info('PartyManagement', 'BlockShop', reply_type) ->
     ]};
 function_info('PartyManagement', 'UnblockShop', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined},
+        {4, undefined, string, 'reason', undefined}
+    ]};
 function_info('PartyManagement', 'UnblockShop', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'UnblockShop', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'UnblockShop', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
@@ -5286,16 +5297,16 @@ function_info('PartyManagement', 'UnblockShop', reply_type) ->
     ]};
 function_info('PartyManagement', 'ComputeShopTerms', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'id', undefined},
-    {4, undefined, string, 'timestamp', undefined},
-    {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined},
+        {4, undefined, string, 'timestamp', undefined},
+        {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined}
+    ]};
 function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('PartyManagement', 'ComputeShopTerms', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('PartyManagement', 'ComputeShopTerms', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
@@ -5303,30 +5314,30 @@ function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
     ]};
 function_info('PartyManagement', 'ComputeWalletTermsNew', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'contract_id', undefined},
-    {4, undefined, string, 'timestamp', undefined},
-    {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'contract_id', undefined},
+        {4, undefined, string, 'timestamp', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
 function_info('PartyManagement', 'ComputeWalletTermsNew', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('PartyManagement', 'ComputeWalletTermsNew', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('PartyManagement', 'ComputeWalletTermsNew', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'CreateClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined}
+    ]};
 function_info('PartyManagement', 'CreateClaim', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
-    function_info('PartyManagement', 'CreateClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
+function_info('PartyManagement', 'CreateClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -5336,41 +5347,41 @@ function_info('PartyManagement', 'CreateClaim', reply_type) ->
     ]};
 function_info('PartyManagement', 'GetClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, i64, 'id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, i64, 'id', undefined}
+    ]};
 function_info('PartyManagement', 'GetClaim', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
-    function_info('PartyManagement', 'GetClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
+function_info('PartyManagement', 'GetClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'GetClaims', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetClaims', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}}};
-    function_info('PartyManagement', 'GetClaims', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}}};
+function_info('PartyManagement', 'GetClaims', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'AcceptClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, i64, 'id', undefined},
-    {4, undefined, i32, 'revision', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, i64, 'id', undefined},
+        {4, undefined, i32, 'revision', undefined}
+    ]};
 function_info('PartyManagement', 'AcceptClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'AcceptClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'AcceptClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined},
@@ -5380,16 +5391,16 @@ function_info('PartyManagement', 'AcceptClaim', reply_type) ->
     ]};
 function_info('PartyManagement', 'UpdateClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, i64, 'id', undefined},
-    {4, undefined, i32, 'revision', undefined},
-    {5, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, i64, 'id', undefined},
+        {4, undefined, i32, 'revision', undefined},
+        {5, undefined, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined}
+    ]};
 function_info('PartyManagement', 'UpdateClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'UpdateClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'UpdateClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -5402,16 +5413,16 @@ function_info('PartyManagement', 'UpdateClaim', reply_type) ->
     ]};
 function_info('PartyManagement', 'DenyClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, i64, 'id', undefined},
-    {4, undefined, i32, 'revision', undefined},
-    {5, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, i64, 'id', undefined},
+        {4, undefined, i32, 'revision', undefined},
+        {5, undefined, string, 'reason', undefined}
+    ]};
 function_info('PartyManagement', 'DenyClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'DenyClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'DenyClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined},
@@ -5420,16 +5431,16 @@ function_info('PartyManagement', 'DenyClaim', reply_type) ->
     ]};
 function_info('PartyManagement', 'RevokeClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, i64, 'id', undefined},
-    {4, undefined, i32, 'revision', undefined},
-    {5, undefined, string, 'reason', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, i64, 'id', undefined},
+        {4, undefined, i32, 'revision', undefined},
+        {5, undefined, string, 'reason', undefined}
+    ]};
 function_info('PartyManagement', 'RevokeClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('PartyManagement', 'RevokeClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PartyManagement', 'RevokeClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -5439,14 +5450,14 @@ function_info('PartyManagement', 'RevokeClaim', reply_type) ->
     ]};
 function_info('PartyManagement', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('PartyManagement', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
-    function_info('PartyManagement', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
+function_info('PartyManagement', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'ex3', undefined},
@@ -5454,14 +5465,14 @@ function_info('PartyManagement', 'GetEvents', reply_type) ->
     ]};
 function_info('PartyManagement', 'GetShopAccount', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, string, 'shop_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'shop_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetShopAccount', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}};
-    function_info('PartyManagement', 'GetShopAccount', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}};
+function_info('PartyManagement', 'GetShopAccount', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
@@ -5469,43 +5480,43 @@ function_info('PartyManagement', 'GetShopAccount', reply_type) ->
     ]};
 function_info('PartyManagement', 'GetAccountState', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, i64, 'account_id', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, i64, 'account_id', undefined}
+    ]};
 function_info('PartyManagement', 'GetAccountState', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'AccountState'}};
-    function_info('PartyManagement', 'GetAccountState', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'AccountState'}};
+function_info('PartyManagement', 'GetAccountState', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AccountNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
-    {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) ->
-        {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-    function_info('PartyManagement', 'ComputePaymentInstitutionTerms', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('PartyManagement', 'ComputePaymentInstitutionTerms', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PaymentInstitutionNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'ComputePayoutCashFlow', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutParams'}}, 'params', undefined}
+    ]};
 function_info('PartyManagement', 'ComputePayoutCashFlow', reply_type) ->
-        {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
-    function_info('PartyManagement', 'ComputePayoutCashFlow', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
+function_info('PartyManagement', 'ComputePayoutCashFlow', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
@@ -5516,21 +5527,21 @@ function_info('PartyManagement', 'ComputePayoutCashFlow', reply_type) ->
 
 function_info('EventSink', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('EventSink', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
-    function_info('EventSink', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}};
+function_info('EventSink', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
     ]};
 function_info('EventSink', 'GetLastEventID', params_type) ->
     {struct, struct, []};
 function_info('EventSink', 'GetLastEventID', reply_type) ->
-        i64;
-    function_info('EventSink', 'GetLastEventID', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('EventSink', 'GetLastEventID', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 

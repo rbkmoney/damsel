@@ -95,11 +95,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -162,14 +162,14 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Value') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_json_thrift, 'Null'}}, 'nl', undefined},
-    {2, optional, bool, 'b', undefined},
-    {3, optional, i32, 'i', undefined},
-    {4, optional, double, 'flt', undefined},
-    {5, optional, string, 'str', undefined},
-    {6, optional, {map, string, {struct, union, {dmsl_json_thrift, 'Value'}}}, 'obj', undefined},
-    {7, optional, {list, {struct, union, {dmsl_json_thrift, 'Value'}}}, 'arr', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_json_thrift, 'Null'}}, 'nl', undefined},
+        {2, optional, bool, 'b', undefined},
+        {3, optional, i32, 'i', undefined},
+        {4, optional, double, 'flt', undefined},
+        {5, optional, string, 'str', undefined},
+        {6, optional, {map, string, {struct, union, {dmsl_json_thrift, 'Value'}}}, 'obj', undefined},
+        {7, optional, {list, {struct, union, {dmsl_json_thrift, 'Value'}}}, 'arr', undefined}
+    ]};
 
 struct_info('Null') ->
     {struct, struct, []};
@@ -182,8 +182,8 @@ record_name('Null') ->
     'json_Null';
 
 record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

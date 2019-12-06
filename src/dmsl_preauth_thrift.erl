@@ -104,11 +104,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -166,38 +166,38 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Status') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_preauth_thrift, 'Granted'}}, 'granted', undefined},
-    {2, optional, {struct, struct, {dmsl_preauth_thrift, 'Denied'}}, 'denied', undefined},
-    {3, optional, {struct, struct, {dmsl_preauth_thrift, 'Unavailable'}}, 'unavailable', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_preauth_thrift, 'Granted'}}, 'granted', undefined},
+        {2, optional, {struct, struct, {dmsl_preauth_thrift, 'Denied'}}, 'denied', undefined},
+        {3, optional, {struct, struct, {dmsl_preauth_thrift, 'Unavailable'}}, 'unavailable', undefined}
+    ]};
 
 struct_info('Granted') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_preauth_thrift, 'State'}}, 'state', undefined}
-]};
+        {1, required, {struct, union, {dmsl_preauth_thrift, 'State'}}, 'state', undefined}
+    ]};
 
 struct_info('Denied') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_preauth_thrift, 'State'}}, 'state', undefined}
-]};
+        {1, required, {struct, union, {dmsl_preauth_thrift, 'State'}}, 'state', undefined}
+    ]};
 
 struct_info('Unavailable') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_preauth_thrift, 'State'}}, 'state', undefined}
-]};
+        {1, required, {struct, union, {dmsl_preauth_thrift, 'State'}}, 'state', undefined}
+    ]};
 
 struct_info('State') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_preauth_thrift, 'State3DSecure'}}, 'state_3dsecure', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_preauth_thrift, 'State3DSecure'}}, 'state_3dsecure', undefined}
+    ]};
 
 struct_info('State3DSecure') ->
     {struct, struct, [
-    {1, optional, byte, 'eci', undefined},
-    {2, optional, string, 'cavv', undefined},
-    {3, optional, byte, 'cavv_algo', undefined},
-    {4, optional, string, 'xid', undefined}
-]};
+        {1, optional, byte, 'eci', undefined},
+        {2, optional, string, 'cavv', undefined},
+        {3, optional, byte, 'cavv_algo', undefined},
+        {4, optional, string, 'xid', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -209,15 +209,15 @@ record_name('Granted') ->
 record_name('Denied') ->
     'preauth_Denied';
 
-    record_name('Unavailable') ->
+record_name('Unavailable') ->
     'preauth_Unavailable';
 
-    record_name('State3DSecure') ->
+record_name('State3DSecure') ->
     'preauth_State3DSecure';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

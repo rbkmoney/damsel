@@ -2383,11 +2383,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -3381,97 +3381,97 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('ContactInfo') ->
     {struct, struct, [
-    {1, optional, string, 'phone_number', undefined},
-    {2, optional, string, 'email', undefined}
-]};
+        {1, optional, string, 'phone_number', undefined},
+        {2, optional, string, 'email', undefined}
+    ]};
 
 struct_info('OperationFailure') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'OperationTimeout'}}, 'operation_timeout', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('OperationTimeout') ->
     {struct, struct, []};
 
 struct_info('Failure') ->
     {struct, struct, [
-    {1, required, string, 'code', undefined},
-    {2, optional, string, 'reason', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'SubFailure'}}, 'sub', undefined}
-]};
+        {1, required, string, 'code', undefined},
+        {2, optional, string, 'reason', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'SubFailure'}}, 'sub', undefined}
+    ]};
 
 struct_info('SubFailure') ->
     {struct, struct, [
-    {1, required, string, 'code', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'SubFailure'}}, 'sub', undefined}
-]};
+        {1, required, string, 'code', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'SubFailure'}}, 'sub', undefined}
+    ]};
 
 struct_info('Cash') ->
     {struct, struct, [
-    {1, required, i64, 'amount', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
-]};
+        {1, required, i64, 'amount', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+    ]};
 
 struct_info('TransactionInfo') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, optional, string, 'timestamp', undefined},
-    {3, required, {map, string, string}, 'extra', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_info', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, optional, string, 'timestamp', undefined},
+        {3, required, {map, string, string}, 'extra', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_info', undefined}
+    ]};
 
 struct_info('AdditionalTransactionInfo') ->
     {struct, struct, [
-    {1, optional, string, 'rrn', undefined},
-    {2, optional, string, 'approval_code', undefined},
-    {3, optional, string, 'acs_url', undefined},
-    {4, optional, string, 'pareq', undefined},
-    {5, optional, string, 'md', undefined},
-    {6, optional, string, 'term_url', undefined},
-    {7, optional, string, 'pares', undefined},
-    {8, optional, string, 'eci', undefined},
-    {9, optional, string, 'cavv', undefined},
-    {10, optional, string, 'xid', undefined},
-    {11, optional, string, 'cavv_algorithm', undefined},
-    {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerification'}}, 'three_ds_verification', undefined}
-]};
+        {1, optional, string, 'rrn', undefined},
+        {2, optional, string, 'approval_code', undefined},
+        {3, optional, string, 'acs_url', undefined},
+        {4, optional, string, 'pareq', undefined},
+        {5, optional, string, 'md', undefined},
+        {6, optional, string, 'term_url', undefined},
+        {7, optional, string, 'pares', undefined},
+        {8, optional, string, 'eci', undefined},
+        {9, optional, string, 'cavv', undefined},
+        {10, optional, string, 'xid', undefined},
+        {11, optional, string, 'cavv_algorithm', undefined},
+        {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerification'}}, 'three_ds_verification', undefined}
+    ]};
 
 struct_info('Invoice') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'owner_id', undefined},
-    {13, optional, i64, 'party_revision', undefined},
-    {3, required, string, 'shop_id', undefined},
-    {4, required, string, 'created_at', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'status', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
-    {8, required, string, 'due', undefined},
-    {10, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {12, optional, string, 'template_id', undefined},
-    {14, optional, string, 'external_id', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'owner_id', undefined},
+        {13, optional, i64, 'party_revision', undefined},
+        {3, required, string, 'shop_id', undefined},
+        {4, required, string, 'created_at', undefined},
+        {6, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'status', undefined},
+        {7, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
+        {8, required, string, 'due', undefined},
+        {10, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+        {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {12, optional, string, 'template_id', undefined},
+        {14, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoiceDetails') ->
     {struct, struct, [
-    {1, required, string, 'product', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
-]};
+        {1, required, string, 'product', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    ]};
 
 struct_info('InvoiceCart') ->
     {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoiceLine'}}}, 'lines', undefined}
-]};
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoiceLine'}}}, 'lines', undefined}
+    ]};
 
 struct_info('InvoiceLine') ->
     {struct, struct, [
-    {1, required, string, 'product', undefined},
-    {2, required, i32, 'quantity', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'price', undefined},
-    {4, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
-]};
+        {1, required, string, 'product', undefined},
+        {2, required, i32, 'quantity', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'price', undefined},
+        {4, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    ]};
 
 struct_info('InvoiceUnpaid') ->
     {struct, struct, []};
@@ -3481,40 +3481,39 @@ struct_info('InvoicePaid') ->
 
 struct_info('InvoiceCancelled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
-]};
+        {1, required, string, 'details', undefined}
+    ]};
 
 struct_info('InvoiceFulfilled') ->
     {struct, struct, [
-    {1, required, string, 'details', undefined}
-]};
+        {1, required, string, 'details', undefined}
+    ]};
 
 struct_info('InvoiceStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceUnpaid'}}, 'unpaid', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaid'}}, 'paid', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceFulfilled'}}, 'fulfilled', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceUnpaid'}}, 'unpaid', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaid'}}, 'paid', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceFulfilled'}}, 'fulfilled', undefined}
+    ]};
 
 struct_info('InvoicePayment') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
-    {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-    {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {10, required, i64, 'domain_revision', undefined},
-    {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
-    {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
-    {15, optional, i64, 'party_revision', undefined},
-    {16, optional, string, 'owner_id', undefined},
-    {17, optional, string, 'shop_id', undefined},
-    {18, optional, bool, 'make_recurrent', undefined},
-    {19, optional, string, 'external_id', undefined},
-    {20, optional, string, 'processing_deadline', undefined},
-    {21, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined},
+        {6, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {8, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+        {10, required, i64, 'domain_revision', undefined},
+        {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
+        {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+        {15, optional, i64, 'party_revision', undefined},
+        {16, optional, string, 'owner_id', undefined},
+        {17, optional, string, 'shop_id', undefined},
+        {18, optional, bool, 'make_recurrent', undefined},
+        {19, optional, string, 'external_id', undefined},
+        {20, optional, string, 'processing_deadline', undefined}
+    ]};
 
 struct_info('InvoicePaymentPending') ->
     {struct, struct, []};
@@ -3524,139 +3523,139 @@ struct_info('InvoicePaymentProcessed') ->
 
 struct_info('InvoicePaymentCaptured') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
-]};
+        {1, optional, string, 'reason', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+    ]};
 
 struct_info('InvoicePaymentCancelled') ->
     {struct, struct, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefunded') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargedBack') ->
     {struct, struct, []};
 
 struct_info('InvoiceTemplate') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'owner_id', undefined},
-    {3, required, string, 'shop_id', undefined},
-    {5, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
-    {9, required, string, 'product', undefined},
-    {10, optional, string, 'description', undefined},
-    {8, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
-    {7, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'owner_id', undefined},
+        {3, required, string, 'shop_id', undefined},
+        {5, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
+        {9, required, string, 'product', undefined},
+        {10, optional, string, 'description', undefined},
+        {8, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
+        {7, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    ]};
 
 struct_info('InvoiceTemplateDetails') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplateProduct'}}, 'product', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplateProduct'}}, 'product', undefined}
+    ]};
 
 struct_info('InvoiceTemplateProduct') ->
     {struct, struct, [
-    {1, required, string, 'product', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateProductPrice'}}, 'price', undefined},
-    {3, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
-]};
+        {1, required, string, 'product', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateProductPrice'}}, 'price', undefined},
+        {3, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    ]};
 
 struct_info('InvoiceTemplateProductPrice') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'fixed', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'range', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplateCostUnlimited'}}, 'unlim', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'fixed', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'range', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceTemplateCostUnlimited'}}, 'unlim', undefined}
+    ]};
 
 struct_info('InvoiceTemplateCostUnlimited') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargedBack'}}, 'charged_back', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargedBack'}}, 'charged_back', undefined}
+    ]};
 
 struct_info('TargetInvoicePaymentStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
+    ]};
 
 struct_info('Payer') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CustomerPayer'}}, 'customer', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentResourcePayer'}}, 'payment_resource', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CustomerPayer'}}, 'customer', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPayer'}}, 'recurrent', undefined}
+    ]};
 
 struct_info('PaymentResourcePayer') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'resource', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'resource', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('CustomerPayer') ->
     {struct, struct, [
-    {1, required, string, 'customer_id', undefined},
-    {2, required, string, 'customer_binding_id', undefined},
-    {3, required, string, 'rec_payment_tool_id', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {5, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, string, 'customer_id', undefined},
+        {2, required, string, 'customer_binding_id', undefined},
+        {3, required, string, 'rec_payment_tool_id', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {5, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('RecurrentPayer') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'RecurrentParentPayment'}}, 'recurrent_parent', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('ClientInfo') ->
     {struct, struct, [
-    {1, optional, string, 'ip_address', undefined},
-    {2, optional, string, 'fingerprint', undefined}
-]};
+        {1, optional, string, 'ip_address', undefined},
+        {2, optional, string, 'fingerprint', undefined}
+    ]};
 
 struct_info('PaymentRoute') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined}
+    ]};
 
 struct_info('RecurrentParentPayment') ->
     {struct, struct, [
-    {1, required, string, 'invoice_id', undefined},
-    {2, required, string, 'payment_id', undefined}
-]};
+        {1, required, string, 'invoice_id', undefined},
+        {2, required, string, 'payment_id', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustment') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, i64, 'domain_revision', undefined},
-    {5, required, string, 'reason', undefined},
-    {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'new_cash_flow', undefined},
-    {7, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'old_cash_flow_inverse', undefined},
-    {8, optional, i64, 'party_revision', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, i64, 'domain_revision', undefined},
+        {5, required, string, 'reason', undefined},
+        {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'new_cash_flow', undefined},
+        {7, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'old_cash_flow_inverse', undefined},
+        {8, optional, i64, 'party_revision', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentPending') ->
     {struct, struct, []};
@@ -3666,64 +3665,64 @@ struct_info('InvoicePaymentAdjustmentProcessed') ->
 
 struct_info('InvoicePaymentAdjustmentCaptured') ->
     {struct, struct, [
-    {1, required, string, 'at', undefined}
-]};
+        {1, required, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentCancelled') ->
     {struct, struct, [
-    {1, required, string, 'at', undefined}
-]};
+        {1, required, string, 'at', undefined}
+    ]};
 
 struct_info('InvoicePaymentAdjustmentStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCaptured'}}, 'captured', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentProcessed'}}, 'processed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCaptured'}}, 'captured', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentProcessed'}}, 'processed', undefined}
+    ]};
 
 struct_info('InvoicePaymentFlow') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowInstant'}}, 'instant', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFlowHold'}}, 'hold', undefined}
+    ]};
 
 struct_info('InvoicePaymentFlowInstant') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentFlowHold') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
-    {2, required, string, 'held_until', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
+        {2, required, string, 'held_until', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargeback') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
-    {5, required, bool, 'hold_funds', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
-    {7, required, i64, 'domain_revision', undefined},
-    {8, optional, i64, 'party_revision', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {11, optional, string, 'external_id', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
+        {5, required, bool, 'hold_funds', undefined},
+        {6, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
+        {7, required, i64, 'domain_revision', undefined},
+        {8, optional, i64, 'party_revision', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {11, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackReason') ->
     {struct, struct, [
-    {1, optional, string, 'code', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategory'}}, 'category', undefined}
-]};
+        {1, optional, string, 'code', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategory'}}, 'category', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackCategory') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryFraud'}}, 'fraud', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryDispute'}}, 'dispute', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryAuthorisation'}}, 'authorisation', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryProcessingError'}}, 'processing_error', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryFraud'}}, 'fraud', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryDispute'}}, 'dispute', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryAuthorisation'}}, 'authorisation', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryProcessingError'}}, 'processing_error', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackCategoryFraud') ->
     {struct, struct, []};
@@ -3739,10 +3738,10 @@ struct_info('InvoicePaymentChargebackCategoryProcessingError') ->
 
 struct_info('InvoicePaymentChargebackStage') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageChargeback'}}, 'chargeback', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStagePreArbitration'}}, 'pre_arbitration', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageArbitration'}}, 'arbitration', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageChargeback'}}, 'chargeback', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStagePreArbitration'}}, 'pre_arbitration', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageArbitration'}}, 'arbitration', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackStageChargeback') ->
     {struct, struct, []};
@@ -3755,21 +3754,21 @@ struct_info('InvoicePaymentChargebackStageArbitration') ->
 
 struct_info('InvoicePaymentChargebackStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackAccepted'}}, 'accepted', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackRejected'}}, 'rejected', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCancelled'}}, 'cancelled', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackAccepted'}}, 'accepted', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackRejected'}}, 'rejected', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCancelled'}}, 'cancelled', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackPending') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackAccepted') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+    ]};
 
 struct_info('InvoicePaymentChargebackRejected') ->
     {struct, struct, []};
@@ -3779,23 +3778,23 @@ struct_info('InvoicePaymentChargebackCancelled') ->
 
 struct_info('InvoicePaymentRefund') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, i64, 'domain_revision', undefined},
-    {7, optional, i64, 'party_revision', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-    {5, optional, string, 'reason', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-    {9, optional, string, 'external_id', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, i64, 'domain_revision', undefined},
+        {7, optional, i64, 'party_revision', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {5, optional, string, 'reason', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {9, optional, string, 'external_id', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundPending') ->
     {struct, struct, []};
@@ -3805,1608 +3804,1608 @@ struct_info('InvoicePaymentRefundSucceeded') ->
 
 struct_info('InvoicePaymentRefundFailed') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info('Blocking') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Unblocked'}}, 'unblocked', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Blocked'}}, 'blocked', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Unblocked'}}, 'unblocked', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Blocked'}}, 'blocked', undefined}
+    ]};
 
 struct_info('Unblocked') ->
     {struct, struct, [
-    {1, required, string, 'reason', undefined},
-    {2, required, string, 'since', undefined}
-]};
+        {1, required, string, 'reason', undefined},
+        {2, required, string, 'since', undefined}
+    ]};
 
 struct_info('Blocked') ->
     {struct, struct, [
-    {1, required, string, 'reason', undefined},
-    {2, required, string, 'since', undefined}
-]};
+        {1, required, string, 'reason', undefined},
+        {2, required, string, 'since', undefined}
+    ]};
 
 struct_info('Suspension') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Active'}}, 'active', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Suspended'}}, 'suspended', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Active'}}, 'active', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Suspended'}}, 'suspended', undefined}
+    ]};
 
 struct_info('Active') ->
     {struct, struct, [
-    {1, required, string, 'since', undefined}
-]};
+        {1, required, string, 'since', undefined}
+    ]};
 
 struct_info('Suspended') ->
     {struct, struct, [
-    {1, required, string, 'since', undefined}
-]};
+        {1, required, string, 'since', undefined}
+    ]};
 
 struct_info('Party') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined},
-    {8, required, string, 'created_at', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
-    {9, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}}, 'contractors', undefined},
-    {4, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Contract'}}}, 'contracts', undefined},
-    {5, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Shop'}}}, 'shops', undefined},
-    {10, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}}, 'wallets', undefined},
-    {6, required, i64, 'revision', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {7, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined},
+        {8, required, string, 'created_at', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+        {9, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}}, 'contractors', undefined},
+        {4, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Contract'}}}, 'contracts', undefined},
+        {5, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Shop'}}}, 'shops', undefined},
+        {10, required, {map, string, {struct, struct, {dmsl_domain_thrift, 'Wallet'}}}, 'wallets', undefined},
+        {6, required, i64, 'revision', undefined}
+    ]};
 
 struct_info('PartyStatus') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
-    {4, required, i64, 'revision', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+        {4, required, i64, 'revision', undefined}
+    ]};
 
 struct_info('PartyContactInfo') ->
     {struct, struct, [
-    {1, required, string, 'email', undefined}
-]};
+        {1, required, string, 'email', undefined}
+    ]};
 
 struct_info('Shop') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {11, required, string, 'created_at', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
-    {10, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined},
-    {5, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
-    {7, required, string, 'contract_id', undefined},
-    {8, optional, string, 'payout_tool_id', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'payout_schedule', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {11, required, string, 'created_at', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
+        {10, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined},
+        {5, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'ShopAccount'}}, 'account', undefined},
+        {7, required, string, 'contract_id', undefined},
+        {8, optional, string, 'payout_tool_id', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'payout_schedule', undefined}
+    ]};
 
 struct_info('ShopAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {2, required, i64, 'settlement', undefined},
-    {3, required, i64, 'guarantee', undefined},
-    {4, required, i64, 'payout', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {2, required, i64, 'settlement', undefined},
+        {3, required, i64, 'guarantee', undefined},
+        {4, required, i64, 'payout', undefined}
+    ]};
 
 struct_info('ShopDetails') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
+    ]};
 
 struct_info('ShopLocation') ->
     {struct, union, [
-    {1, optional, string, 'url', undefined}
-]};
+        {1, optional, string, 'url', undefined}
+    ]};
 
 struct_info('Wallet') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, optional, string, 'name', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
-    {5, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
-    {6, required, string, 'contract', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'WalletAccount'}}, 'account', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, optional, string, 'name', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+        {5, required, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined},
+        {6, required, string, 'contract', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'WalletAccount'}}, 'account', undefined}
+    ]};
 
 struct_info('WalletAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {2, required, i64, 'settlement', undefined},
-    {3, required, i64, 'payout', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {2, required, i64, 'settlement', undefined},
+        {3, required, i64, 'payout', undefined}
+    ]};
 
 struct_info('PartyContractor') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined},
-    {3, required, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'status', undefined},
-    {4, required, {list, string}, 'identity_documents', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined},
+        {3, required, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'status', undefined},
+        {4, required, {list, string}, 'identity_documents', undefined}
+    ]};
 
 struct_info('Contractor') ->
     {struct, union, [
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'RegisteredUser'}}, 'registered_user', undefined},
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'LegalEntity'}}, 'legal_entity', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'PrivateEntity'}}, 'private_entity', undefined}
-]};
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'RegisteredUser'}}, 'registered_user', undefined},
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'LegalEntity'}}, 'legal_entity', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'PrivateEntity'}}, 'private_entity', undefined}
+    ]};
 
 struct_info('RegisteredUser') ->
     {struct, struct, [
-    {1, required, string, 'email', undefined}
-]};
+        {1, required, string, 'email', undefined}
+    ]};
 
 struct_info('LegalEntity') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianLegalEntity'}}, 'russian_legal_entity', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalLegalEntity'}}, 'international_legal_entity', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianLegalEntity'}}, 'russian_legal_entity', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalLegalEntity'}}, 'international_legal_entity', undefined}
+    ]};
 
 struct_info('RussianLegalEntity') ->
     {struct, struct, [
-    {1, required, string, 'registered_name', undefined},
-    {2, required, string, 'registered_number', undefined},
-    {3, required, string, 'inn', undefined},
-    {4, required, string, 'actual_address', undefined},
-    {5, required, string, 'post_address', undefined},
-    {6, required, string, 'representative_position', undefined},
-    {7, required, string, 'representative_full_name', undefined},
-    {8, required, string, 'representative_document', undefined},
-    {9, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined}
-]};
+        {1, required, string, 'registered_name', undefined},
+        {2, required, string, 'registered_number', undefined},
+        {3, required, string, 'inn', undefined},
+        {4, required, string, 'actual_address', undefined},
+        {5, required, string, 'post_address', undefined},
+        {6, required, string, 'representative_position', undefined},
+        {7, required, string, 'representative_full_name', undefined},
+        {8, required, string, 'representative_document', undefined},
+        {9, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined}
+    ]};
 
 struct_info('InternationalLegalEntity') ->
     {struct, struct, [
-    {1, required, string, 'legal_name', undefined},
-    {2, optional, string, 'trading_name', undefined},
-    {3, required, string, 'registered_address', undefined},
-    {4, optional, string, 'actual_address', undefined},
-    {5, optional, string, 'registered_number', undefined}
-]};
+        {1, required, string, 'legal_name', undefined},
+        {2, optional, string, 'trading_name', undefined},
+        {3, required, string, 'registered_address', undefined},
+        {4, optional, string, 'actual_address', undefined},
+        {5, optional, string, 'registered_number', undefined}
+    ]};
 
 struct_info('RussianBankAccount') ->
     {struct, struct, [
-    {1, required, string, 'account', undefined},
-    {2, required, string, 'bank_name', undefined},
-    {3, required, string, 'bank_post_account', undefined},
-    {4, required, string, 'bank_bik', undefined}
-]};
+        {1, required, string, 'account', undefined},
+        {2, required, string, 'bank_name', undefined},
+        {3, required, string, 'bank_post_account', undefined},
+        {4, required, string, 'bank_bik', undefined}
+    ]};
 
 struct_info('InternationalBankAccount') ->
     {struct, struct, [
-    {6, optional, string, 'number', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
-    {4, optional, string, 'iban', undefined},
-    {1, optional, string, 'account_holder', undefined}
-]};
+        {6, optional, string, 'number', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
+        {4, optional, string, 'iban', undefined},
+        {1, optional, string, 'account_holder', undefined}
+    ]};
 
 struct_info('InternationalBankDetails') ->
     {struct, struct, [
-    {1, optional, string, 'bic', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
-    {3, optional, string, 'name', undefined},
-    {4, optional, string, 'address', undefined},
-    {5, optional, string, 'aba_rtn', undefined}
-]};
+        {1, optional, string, 'bic', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+        {3, optional, string, 'name', undefined},
+        {4, optional, string, 'address', undefined},
+        {5, optional, string, 'aba_rtn', undefined}
+    ]};
 
 struct_info('WalletInfo') ->
     {struct, struct, [
-    {1, required, string, 'wallet_id', undefined}
-]};
+        {1, required, string, 'wallet_id', undefined}
+    ]};
 
 struct_info('PrivateEntity') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianPrivateEntity'}}, 'russian_private_entity', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianPrivateEntity'}}, 'russian_private_entity', undefined}
+    ]};
 
 struct_info('RussianPrivateEntity') ->
     {struct, struct, [
-    {1, required, string, 'first_name', undefined},
-    {2, required, string, 'second_name', undefined},
-    {3, required, string, 'middle_name', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
-]};
+        {1, required, string, 'first_name', undefined},
+        {2, required, string, 'second_name', undefined},
+        {3, required, string, 'middle_name', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined}
+    ]};
 
 struct_info('PayoutTool') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {4, required, string, 'created_at', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {4, required, string, 'created_at', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined}
+    ]};
 
 struct_info('PayoutToolInfo') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'international_bank_account', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'WalletInfo'}}, 'wallet_info', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'international_bank_account', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'WalletInfo'}}, 'wallet_info', undefined}
+    ]};
 
 struct_info('Contract') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {14, optional, string, 'contractor_id', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
-    {11, required, string, 'created_at', undefined},
-    {4, optional, string, 'valid_since', undefined},
-    {5, optional, string, 'valid_until', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status', undefined},
-    {7, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined},
-    {8, required, {list, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}}, 'adjustments', undefined},
-    {9, required, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}}, 'payout_tools', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {14, optional, string, 'contractor_id', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
+        {11, required, string, 'created_at', undefined},
+        {4, optional, string, 'valid_since', undefined},
+        {5, optional, string, 'valid_until', undefined},
+        {6, required, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'status', undefined},
+        {7, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined},
+        {8, required, {list, {struct, struct, {dmsl_domain_thrift, 'ContractAdjustment'}}}, 'adjustments', undefined},
+        {9, required, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutTool'}}}, 'payout_tools', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined},
+        {13, optional, {struct, struct, {dmsl_domain_thrift, 'ReportPreferences'}}, 'report_preferences', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'Contractor'}}, 'contractor', undefined}
+    ]};
 
 struct_info('LegalAgreement') ->
     {struct, struct, [
-    {1, required, string, 'signed_at', undefined},
-    {2, required, string, 'legal_agreement_id', undefined},
-    {3, optional, string, 'valid_until', undefined}
-]};
+        {1, required, string, 'signed_at', undefined},
+        {2, required, string, 'legal_agreement_id', undefined},
+        {3, optional, string, 'valid_until', undefined}
+    ]};
 
 struct_info('ReportPreferences') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActPreferences'}}, 'service_acceptance_act_preferences', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActPreferences'}}, 'service_acceptance_act_preferences', undefined}
+    ]};
 
 struct_info('ServiceAcceptanceActPreferences') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'schedule', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Representative'}}, 'signer', undefined}
+    ]};
 
 struct_info('Representative') ->
     {struct, struct, [
-    {1, required, string, 'position', undefined},
-    {2, required, string, 'full_name', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'RepresentativeDocument'}}, 'document', undefined}
-]};
+        {1, required, string, 'position', undefined},
+        {2, required, string, 'full_name', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'RepresentativeDocument'}}, 'document', undefined}
+    ]};
 
 struct_info('RepresentativeDocument') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ArticlesOfAssociation'}}, 'articles_of_association', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'power_of_attorney', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'ArticlesOfAssociation'}}, 'articles_of_association', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'power_of_attorney', undefined}
+    ]};
 
 struct_info('ArticlesOfAssociation') ->
     {struct, struct, []};
 
 struct_info('ContractStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ContractActive'}}, 'active', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTerminated'}}, 'terminated', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractExpired'}}, 'expired', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'ContractActive'}}, 'active', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTerminated'}}, 'terminated', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ContractExpired'}}, 'expired', undefined}
+    ]};
 
 struct_info('ContractActive') ->
     {struct, struct, []};
 
 struct_info('ContractTerminated') ->
     {struct, struct, [
-    {1, required, string, 'terminated_at', undefined}
-]};
+        {1, required, string, 'terminated_at', undefined}
+    ]};
 
 struct_info('ContractExpired') ->
     {struct, struct, []};
 
 struct_info('CategoryRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('Category') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, optional, {enum, {dmsl_domain_thrift, 'CategoryType'}}, 'type', 'test'}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'CategoryType'}}, 'type', 'test'}
+    ]};
 
 struct_info('ContractTemplateRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('ContractTemplate') ->
     {struct, struct, [
-    {4, optional, string, 'name', undefined},
-    {5, optional, string, 'description', undefined},
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'valid_since', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'valid_until', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined}
-]};
+        {4, optional, string, 'name', undefined},
+        {5, optional, string, 'description', undefined},
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'valid_since', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'valid_until', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined}
+    ]};
 
 struct_info('Lifetime') ->
     {struct, union, [
-    {1, optional, string, 'timestamp', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'interval', undefined}
-]};
+        {1, optional, string, 'timestamp', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'interval', undefined}
+    ]};
 
 struct_info('LifetimeInterval') ->
     {struct, struct, [
-    {1, optional, i16, 'years', undefined},
-    {2, optional, i16, 'months', undefined},
-    {3, optional, i16, 'days', undefined},
-    {4, optional, i16, 'hours', undefined},
-    {5, optional, i16, 'minutes', undefined},
-    {6, optional, i16, 'seconds', undefined}
-]};
+        {1, optional, i16, 'years', undefined},
+        {2, optional, i16, 'months', undefined},
+        {3, optional, i16, 'days', undefined},
+        {4, optional, i16, 'hours', undefined},
+        {5, optional, i16, 'minutes', undefined},
+        {6, optional, i16, 'seconds', undefined}
+    ]};
 
 struct_info('ContractTemplateSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'value', undefined}
+    ]};
 
 struct_info('ContractTemplateDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('ContractAdjustment') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {5, required, string, 'created_at', undefined},
-    {2, optional, string, 'valid_since', undefined},
-    {3, optional, string, 'valid_until', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {5, required, string, 'created_at', undefined},
+        {2, optional, string, 'valid_since', undefined},
+        {3, optional, string, 'valid_until', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'terms', undefined}
+    ]};
 
 struct_info('TermSet') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsServiceTerms'}}, 'payments', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsServiceTerms'}}, 'recurrent_paytools', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutsServiceTerms'}}, 'payouts', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'ReportsServiceTerms'}}, 'reports', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'WalletServiceTerms'}}, 'wallets', undefined}
+    ]};
 
 struct_info('TimedTermSet') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_base_thrift, 'TimestampInterval'}}, 'action_time', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSet'}}, 'terms', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_base_thrift, 'TimestampInterval'}}, 'action_time', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSet'}}, 'terms', undefined}
+    ]};
 
 struct_info('TermSetHierarchy') ->
     {struct, struct, [
-    {3, optional, string, 'name', undefined},
-    {4, optional, string, 'description', undefined},
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'parent_terms', undefined},
-    {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'TimedTermSet'}}}, 'term_sets', undefined}
-]};
+        {3, optional, string, 'name', undefined},
+        {4, optional, string, 'description', undefined},
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'parent_terms', undefined},
+        {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'TimedTermSet'}}}, 'term_sets', undefined}
+    ]};
 
 struct_info('TermSetHierarchyRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('PaymentsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
+    ]};
 
 struct_info('PaymentHoldsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PartialCaptureServiceTerms'}}, 'partial_captures', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PartialCaptureServiceTerms'}}, 'partial_captures', undefined}
+    ]};
 
 struct_info('PartialCaptureServiceTerms') ->
     {struct, struct, []};
 
 struct_info('PaymentChargebackServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialChargebackServiceTerms'}}, 'partial_chargebacks', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialChargebackServiceTerms'}}, 'partial_chargebacks', undefined}
+    ]};
 
 struct_info('PartialChargebackServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
 
 struct_info('PaymentRefundsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsServiceTerms'}}, 'partial_refunds', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsServiceTerms'}}, 'partial_refunds', undefined}
+    ]};
 
 struct_info('PartialRefundsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
 
 struct_info('RecurrentPaytoolsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
+    ]};
 
 struct_info('PayoutsServiceTerms') ->
     {struct, struct, [
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'payout_schedules', undefined},
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
-]};
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'payout_schedules', undefined},
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined}
+    ]};
 
 struct_info('PayoutCompilationPolicy') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'assets_freeze_for', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'assets_freeze_for', undefined}
+    ]};
 
 struct_info('WalletServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'wallet_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalServiceTerms'}}, 'withdrawals', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PServiceTerms'}}, 'p2p', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'wallet_limit', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalServiceTerms'}}, 'withdrawals', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PServiceTerms'}}, 'p2p', undefined}
+    ]};
 
 struct_info('CumulativeLimitSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimitDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimit'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimitDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CumulativeLimit'}}}, 'value', undefined}
+    ]};
 
 struct_info('CumulativeLimitDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('CumulativeLimit') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'CumulativeLimitPeriod'}}, 'period', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cash', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'CumulativeLimitPeriod'}}, 'period', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cash', undefined}
+    ]};
 
 struct_info('WithdrawalServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('P2PServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'quote_lifetime', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined},
+        {6, optional, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'quote_lifetime', undefined}
+    ]};
 
 struct_info('PayoutMethodRef') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'PayoutMethod'}}, 'id', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'PayoutMethod'}}, 'id', undefined}
+    ]};
 
 struct_info('PayoutMethodDefinition') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined}
+    ]};
 
 struct_info('PayoutMethodSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('PayoutMethodDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('ReportsServiceTerms') ->
     {struct, struct, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActsTerms'}}, 'acts', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'ServiceAcceptanceActsTerms'}}, 'acts', undefined}
+    ]};
 
 struct_info('ServiceAcceptanceActsTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'schedules', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'schedules', undefined}
+    ]};
 
 struct_info('CurrencyRef') ->
     {struct, struct, [
-    {1, required, string, 'symbolic_code', undefined}
-]};
+        {1, required, string, 'symbolic_code', undefined}
+    ]};
 
 struct_info('Currency') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'symbolic_code', undefined},
-    {3, required, i16, 'numeric_code', undefined},
-    {4, required, i16, 'exponent', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'symbolic_code', undefined},
+        {3, required, i16, 'numeric_code', undefined},
+        {4, required, i16, 'exponent', undefined}
+    ]};
 
 struct_info('CurrencySelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CurrencyDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CurrencyDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('CurrencyDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('CategorySelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CategoryDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CategoryDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('CategoryDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('BusinessScheduleRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('BusinessSchedule') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_base_thrift, 'Schedule'}}, 'schedule', undefined},
-    {5, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'delay', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_base_thrift, 'Schedule'}}, 'schedule', undefined},
+        {5, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'delay', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutCompilationPolicy'}}, 'policy', undefined}
+    ]};
 
 struct_info('BusinessScheduleSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('BusinessScheduleDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'BusinessScheduleSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('CalendarRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('Calendar') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, required, string, 'timezone', undefined},
-    {4, required, {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}}, 'holidays', undefined},
-    {5, optional, {enum, {dmsl_base_thrift, 'DayOfWeek'}}, 'first_day_of_week', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, string, 'timezone', undefined},
+        {4, required, {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}}, 'holidays', undefined},
+        {5, optional, {enum, {dmsl_base_thrift, 'DayOfWeek'}}, 'first_day_of_week', undefined}
+    ]};
 
 struct_info('CalendarHoliday') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, required, byte, 'day', undefined},
-    {4, required, {enum, {dmsl_base_thrift, 'Month'}}, 'month', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, byte, 'day', undefined},
+        {4, required, {enum, {dmsl_base_thrift, 'Month'}}, 'month', undefined}
+    ]};
 
 struct_info('CashRange') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashBound'}}, 'upper', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashBound'}}, 'lower', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashBound'}}, 'upper', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CashBound'}}, 'lower', undefined}
+    ]};
 
 struct_info('CashBound') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'inclusive', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'exclusive', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'inclusive', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'exclusive', undefined}
+    ]};
 
 struct_info('CashLimitSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashLimitDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashLimitDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'value', undefined}
+    ]};
 
 struct_info('CashLimitDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('PaymentMethod') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
-    {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
-    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
-    {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-    {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
+        {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+        {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined}
+    ]};
 
 struct_info('TokenizedBankCard') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
+    ]};
 
 struct_info('P2PTool') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'sender', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'receiver', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'sender', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'receiver', undefined}
+    ]};
 
 struct_info('PaymentTool') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
+    ]};
 
 struct_info('DisposablePaymentResource') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-    {2, optional, string, 'payment_session_id', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {2, optional, string, 'payment_session_id', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ClientInfo'}}, 'client_info', undefined}
+    ]};
 
 struct_info('BankCard') ->
     {struct, struct, [
-    {1, required, string, 'token', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
-    {3, required, string, 'bin', undefined},
-    {4, required, string, 'masked_pan', undefined},
-    {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
-    {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
-    {7, optional, string, 'bank_name', undefined},
-    {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
-    {9, optional, bool, 'is_cvv_empty', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardExpDate'}}, 'exp_date', undefined},
-    {11, optional, string, 'cardholder_name', undefined}
-]};
+        {1, required, string, 'token', undefined},
+        {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {3, required, string, 'bin', undefined},
+        {4, required, string, 'masked_pan', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
+        {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
+        {7, optional, string, 'bank_name', undefined},
+        {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
+        {9, optional, bool, 'is_cvv_empty', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardExpDate'}}, 'exp_date', undefined},
+        {11, optional, string, 'cardholder_name', undefined}
+    ]};
 
 struct_info('BankCardExpDate') ->
     {struct, struct, [
-    {1, required, byte, 'month', undefined},
-    {2, required, i16, 'year', undefined}
-]};
+        {1, required, byte, 'month', undefined},
+        {2, required, i16, 'year', undefined}
+    ]};
 
 struct_info('CryptoWallet') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-    {3, optional, string, 'destination_tag', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+        {3, optional, string, 'destination_tag', undefined}
+    ]};
 
 struct_info('MobileCommerce') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'MobilePhone'}}, 'phone', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'MobilePhone'}}, 'phone', undefined}
+    ]};
 
 struct_info('MobilePhone') ->
     {struct, struct, [
-    {1, required, string, 'cc', undefined},
-    {2, required, string, 'ctn', undefined}
-]};
+        {1, required, string, 'cc', undefined},
+        {2, required, string, 'ctn', undefined}
+    ]};
 
 struct_info('PaymentTerminal') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
+    ]};
 
 struct_info('DigitalWallet') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
-    {2, required, string, 'id', undefined},
-    {3, optional, string, 'token', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
+        {2, required, string, 'id', undefined},
+        {3, optional, string, 'token', undefined}
+    ]};
 
 struct_info('BankRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('Bank') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {4, optional, {set, string}, 'binbase_id_patterns', undefined},
-    {3, required, {set, string}, 'bins', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {4, optional, {set, string}, 'binbase_id_patterns', undefined},
+        {3, required, {set, string}, 'bins', undefined}
+    ]};
 
 struct_info('PaymentMethodRef') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'id', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethod'}}, 'id', undefined}
+    ]};
 
 struct_info('PaymentMethodDefinition') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined}
+    ]};
 
 struct_info('PaymentMethodSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('PaymentMethodDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('HoldLifetime') ->
     {struct, struct, [
-    {1, required, i32, 'seconds', undefined}
-]};
+        {1, required, i32, 'seconds', undefined}
+    ]};
 
 struct_info('HoldLifetimeSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'HoldLifetimeDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'HoldLifetimeDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'HoldLifetime'}}, 'value', undefined}
+    ]};
 
 struct_info('HoldLifetimeDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('TimeSpanSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TimeSpanDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TimeSpanDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_base_thrift, 'TimeSpan'}}, 'value', undefined}
+    ]};
 
 struct_info('TimeSpanDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('LifetimeSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'LifetimeDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'LifetimeDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'Lifetime'}}, 'value', undefined}
+    ]};
 
 struct_info('LifetimeDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('CashFlowAccount') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'merchant', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'ProviderCashFlowAccount'}}, 'provider', undefined},
-    {3, optional, {enum, {dmsl_domain_thrift, 'SystemCashFlowAccount'}}, 'system', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'ExternalCashFlowAccount'}}, 'external', undefined},
-    {5, optional, {enum, {dmsl_domain_thrift, 'WalletCashFlowAccount'}}, 'wallet', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'merchant', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'ProviderCashFlowAccount'}}, 'provider', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'SystemCashFlowAccount'}}, 'system', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'ExternalCashFlowAccount'}}, 'external', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'WalletCashFlowAccount'}}, 'wallet', undefined}
+    ]};
 
 struct_info('Fees') ->
     {struct, struct, [
-    {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'fees', undefined}
-]};
+        {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'fees', undefined}
+    ]};
 
 struct_info('CashFlowPosting') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'destination', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}, 'volume', undefined},
-    {4, optional, string, 'details', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'destination', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}, 'volume', undefined},
+        {4, optional, string, 'details', undefined}
+    ]};
 
 struct_info('FinalCashFlowPosting') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowAccount'}}, 'source', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowAccount'}}, 'destination', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'volume', undefined},
-    {4, optional, string, 'details', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowAccount'}}, 'source', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowAccount'}}, 'destination', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'volume', undefined},
+        {4, optional, string, 'details', undefined}
+    ]};
 
 struct_info('FinalCashFlowAccount') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'account_type', undefined},
-    {2, required, i64, 'account_id', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'account_type', undefined},
+        {2, required, i64, 'account_id', undefined}
+    ]};
 
 struct_info('CashVolume') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CashVolumeFixed'}}, 'fixed', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashVolumeShare'}}, 'share', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashVolumeProduct'}}, 'product', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CashVolumeFixed'}}, 'fixed', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashVolumeShare'}}, 'share', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashVolumeProduct'}}, 'product', undefined}
+    ]};
 
 struct_info('CashVolumeFixed') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined}
+    ]};
 
 struct_info('CashVolumeShare') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
-    {2, required, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, 'of', undefined},
-    {3, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
+        {2, required, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, 'of', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
+    ]};
 
 struct_info('CashVolumeProduct') ->
     {struct, union, [
-    {1, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'min_of', undefined},
-    {2, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'max_of', undefined}
-]};
+        {1, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'min_of', undefined},
+        {2, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'max_of', undefined}
+    ]};
 
 struct_info('CashFlowSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowDecision'}}}, 'decisions', undefined},
-    {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowDecision'}}}, 'decisions', undefined},
+        {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashFlowPosting'}}}, 'value', undefined}
+    ]};
 
 struct_info('CashFlowDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('FeeSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FeeDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Fees'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FeeDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Fees'}}, 'value', undefined}
+    ]};
 
 struct_info('FeeDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('ProviderRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('Provider') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined},
-    {5, required, string, 'abs_account', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'payment_terms', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsProvisionTerms'}}, 'recurrent_paytool_terms', undefined},
-    {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined},
+        {5, required, string, 'abs_account', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'payment_terms', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsProvisionTerms'}}, 'recurrent_paytool_terms', undefined},
+        {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+    ]};
 
 struct_info('CashRegProviderRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('CashRegProvider') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+    ]};
 
 struct_info('WithdrawalProviderRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('WithdrawalProvider') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-    {4, optional, string, 'identity', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvisionTerms'}}, 'withdrawal_terms', undefined},
-    {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+        {4, optional, string, 'identity', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvisionTerms'}}, 'withdrawal_terms', undefined},
+        {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+    ]};
 
 struct_info('P2PProviderRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('P2PProvider') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-    {4, optional, string, 'identity', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p_terms', undefined},
-    {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+        {4, optional, string, 'identity', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p_terms', undefined},
+        {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+    ]};
 
 struct_info('PaymentsProvisionTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
-    {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined}
+    ]};
 
 struct_info('PaymentHoldsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialCaptureProvisionTerms'}}, 'partial_captures', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'HoldLifetimeSelector'}}, 'lifetime', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialCaptureProvisionTerms'}}, 'partial_captures', undefined}
+    ]};
 
 struct_info('PartialCaptureProvisionTerms') ->
     {struct, struct, []};
 
 struct_info('PaymentChargebackProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialChargebackProvisionTerms'}}, 'partial_chargebacks', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialChargebackProvisionTerms'}}, 'partial_chargebacks', undefined}
+    ]};
 
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsProvisionTerms'}}, 'partial_refunds', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsProvisionTerms'}}, 'partial_refunds', undefined}
+    ]};
 
 struct_info('PartialChargebackProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
 
 struct_info('PartialRefundsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
 
 struct_info('RecurrentPaytoolsProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'cash_value', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'cash_value', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
+    ]};
 
 struct_info('WithdrawalProvisionTerms') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+    ]};
 
 struct_info('P2PProvisionTerms') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
-    {4, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
+    ]};
 
 struct_info('CashValueSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashValueDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'CashValueDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'value', undefined}
+    ]};
 
 struct_info('CashValueDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('ProviderAccount') ->
     {struct, struct, [
-    {1, required, i64, 'settlement', undefined}
-]};
+        {1, required, i64, 'settlement', undefined}
+    ]};
 
 struct_info('ProviderSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ProviderDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ProviderDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('ProviderDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('WithdrawalProviderSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('WithdrawalProviderDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('P2PProviderSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PProviderDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PProviderDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('P2PProviderDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('InspectorRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('Inspector') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'fallback_risk_score', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'fallback_risk_score', undefined}
+    ]};
 
 struct_info('InspectorSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InspectorDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InspectorDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'value', undefined}
+    ]};
 
 struct_info('InspectorDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('P2PInspectorRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('P2PInspector') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-    {4, optional, {map, string, {enum, {dmsl_domain_thrift, 'RiskScore'}}}, 'fallback_risk_score', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
+        {4, optional, {map, string, {enum, {dmsl_domain_thrift, 'RiskScore'}}}, 'fallback_risk_score', undefined}
+    ]};
 
 struct_info('P2PInspectorSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'value', undefined}
+    ]};
 
 struct_info('P2PInspectorDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('Terminal') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {9, optional, {map, string, string}, 'options', undefined},
-    {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {9, optional, {map, string, string}, 'options', undefined},
+        {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
+    ]};
 
 struct_info('TerminalSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TerminalDecision'}}}, 'decisions', undefined},
-    {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'ProviderTerminalRef'}}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TerminalDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'ProviderTerminalRef'}}}, 'value', undefined}
+    ]};
 
 struct_info('TerminalDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('ProviderTerminalRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined},
-    {2, optional, i64, 'priority', 1000},
-    {3, optional, i64, 'weight', undefined}
-]};
+        {1, required, i32, 'id', undefined},
+        {2, optional, i64, 'priority', 1000},
+        {3, optional, i64, 'weight', undefined}
+    ]};
 
 struct_info('TerminalRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('Predicate') ->
     {struct, union, [
-    {5, optional, bool, 'constant', undefined},
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'Condition'}}, 'condition', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'is_not', undefined},
-    {3, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'all_of', undefined},
-    {4, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'any_of', undefined}
-]};
+        {5, optional, bool, 'constant', undefined},
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Condition'}}, 'condition', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'is_not', undefined},
+        {3, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'all_of', undefined},
+        {4, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'any_of', undefined}
+    ]};
 
 struct_info('Condition') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency_is', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cost_in', undefined},
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'payment_tool', undefined},
-    {5, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'shop_location_is', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
-    {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category_is', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency_is', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'CashRange'}}, 'cost_in', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'payment_tool', undefined},
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'shop_location_is', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
+        {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
+    ]};
 
 struct_info('P2PToolCondition') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender_is', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver_is', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender_is', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver_is', undefined}
+    ]};
 
 struct_info('PaymentToolCondition') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyCondition'}}, 'crypto_currency', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerceCondition'}}, 'mobile_commerce', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyCondition'}}, 'crypto_currency', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerceCondition'}}, 'mobile_commerce', undefined}
+    ]};
 
 struct_info('BankCardCondition') ->
     {struct, struct, [
-    {3, optional, {struct, union, {dmsl_domain_thrift, 'BankCardConditionDefinition'}}, 'definition', undefined}
-]};
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'BankCardConditionDefinition'}}, 'definition', undefined}
+    ]};
 
 struct_info('BankCardConditionDefinition') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
-    {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
-    {5, optional, bool, 'empty_cvv_is', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
+        {5, optional, bool, 'empty_cvv_is', undefined}
+    ]};
 
 struct_info('PaymentSystemCondition') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-    {2, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider_is', undefined}
-]};
+        {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider_is', undefined}
+    ]};
 
 struct_info('PaymentTerminalCondition') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTerminalConditionDefinition'}}, 'definition', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTerminalConditionDefinition'}}, 'definition', undefined}
+    ]};
 
 struct_info('PaymentTerminalConditionDefinition') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'provider_is', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'provider_is', undefined}
+    ]};
 
 struct_info('DigitalWalletCondition') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'DigitalWalletConditionDefinition'}}, 'definition', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'DigitalWalletConditionDefinition'}}, 'definition', undefined}
+    ]};
 
 struct_info('DigitalWalletConditionDefinition') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider_is', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider_is', undefined}
+    ]};
 
 struct_info('CryptoCurrencyCondition') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'CryptoCurrencyConditionDefinition'}}, 'definition', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CryptoCurrencyConditionDefinition'}}, 'definition', undefined}
+    ]};
 
 struct_info('CryptoCurrencyConditionDefinition') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency_is', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency_is', undefined}
+    ]};
 
 struct_info('MobileCommerceCondition') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'MobileCommerceConditionDefinition'}}, 'definition', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'MobileCommerceConditionDefinition'}}, 'definition', undefined}
+    ]};
 
 struct_info('MobileCommerceConditionDefinition') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator_is', undefined}
-]};
+        {1, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator_is', undefined}
+    ]};
 
 struct_info('PartyCondition') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, optional, {struct, union, {dmsl_domain_thrift, 'PartyConditionDefinition'}}, 'definition', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PartyConditionDefinition'}}, 'definition', undefined}
+    ]};
 
 struct_info('PartyConditionDefinition') ->
     {struct, union, [
-    {1, optional, string, 'shop_is', undefined},
-    {2, optional, string, 'wallet_is', undefined}
-]};
+        {1, optional, string, 'shop_is', undefined},
+        {2, optional, string, 'wallet_is', undefined}
+    ]};
 
 struct_info('ProxyRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('ProxyDefinition') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, string, 'url', undefined},
-    {4, required, {map, string, string}, 'options', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, string, 'url', undefined},
+        {4, required, {map, string, string}, 'options', undefined}
+    ]};
 
 struct_info('Proxy') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'ref', undefined},
-    {2, required, {map, string, string}, 'additional', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'ref', undefined},
+        {2, required, {map, string, string}, 'additional', undefined}
+    ]};
 
 struct_info('SystemAccountSetRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('SystemAccountSet') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'SystemAccount'}}}, 'accounts', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'SystemAccount'}}}, 'accounts', undefined}
+    ]};
 
 struct_info('SystemAccount') ->
     {struct, struct, [
-    {1, required, i64, 'settlement', undefined},
-    {2, optional, i64, 'subagent', undefined}
-]};
+        {1, required, i64, 'settlement', undefined},
+        {2, optional, i64, 'subagent', undefined}
+    ]};
 
 struct_info('SystemAccountSetSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'value', undefined}
+    ]};
 
 struct_info('SystemAccountSetDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('ExternalAccountSetRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('ExternalAccountSet') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, required, string, 'description', undefined},
-    {3, required, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ExternalAccount'}}}, 'accounts', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ExternalAccount'}}}, 'accounts', undefined}
+    ]};
 
 struct_info('ExternalAccount') ->
     {struct, struct, [
-    {1, required, i64, 'income', undefined},
-    {2, required, i64, 'outcome', undefined}
-]};
+        {1, required, i64, 'income', undefined},
+        {2, required, i64, 'outcome', undefined}
+    ]};
 
 struct_info('ExternalAccountSetSelector') ->
     {struct, union, [
-    {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetDecision'}}}, 'decisions', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'value', undefined}
-]};
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'value', undefined}
+    ]};
 
 struct_info('ExternalAccountSetDecision') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'then_', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'then_', undefined}
+    ]};
 
 struct_info('PaymentInstitutionRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('PaymentInstitution') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'description', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_contract_template', undefined},
-    {10, optional, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_wallet_contract_template', undefined},
-    {5, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
-    {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
-    {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
-    {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
-    {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
-    {12, optional, string, 'identity', undefined},
-    {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
-    {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined},
-    {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_contract_template', undefined},
+        {10, optional, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_wallet_contract_template', undefined},
+        {5, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
+        {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
+        {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
+        {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
+        {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
+        {12, optional, string, 'identity', undefined},
+        {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
+        {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined},
+        {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined}
+    ]};
 
 struct_info('ContractPaymentInstitutionDefaults') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'test', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'test', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
+    ]};
 
 struct_info('PartyPrototypeRef') ->
     {struct, struct, [
-    {1, required, i32, 'id', undefined}
-]};
+        {1, required, i32, 'id', undefined}
+    ]};
 
 struct_info('PartyPrototype') ->
     {struct, struct, []};
 
 struct_info('PartyPrototypeObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototype'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototype'}}, 'data', undefined}
+    ]};
 
 struct_info('GlobalsRef') ->
     {struct, struct, []};
 
 struct_info('Globals') ->
     {struct, struct, [
-    {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
-    {8, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}}, 'payment_institutions', undefined},
-    {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined}
-]};
+        {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
+        {8, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}}, 'payment_institutions', undefined},
+        {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined}
+    ]};
 
 struct_info('Dummy') ->
     {struct, struct, []};
 
 struct_info('DummyRef') ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 
 struct_info('DummyObject') ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'ref', undefined},
-    {2, undefined, {struct, struct, {dmsl_domain_thrift, 'Dummy'}}, 'data', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'ref', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'Dummy'}}, 'data', undefined}
+    ]};
 
 struct_info('DummyLink') ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'link', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'link', undefined}
+    ]};
 
 struct_info('DummyLinkRef') ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 
 struct_info('DummyLinkObject') ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'ref', undefined},
-    {2, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyLink'}}, 'data', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'ref', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'DummyLink'}}, 'data', undefined}
+    ]};
 
 struct_info('ContractTemplateObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplate'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplate'}}, 'data', undefined}
+    ]};
 
 struct_info('TermSetHierarchyObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchy'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchy'}}, 'data', undefined}
+    ]};
 
 struct_info('CategoryObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Category'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Category'}}, 'data', undefined}
+    ]};
 
 struct_info('CurrencyObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'data', undefined}
+    ]};
 
 struct_info('BusinessScheduleObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'BusinessSchedule'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'BusinessSchedule'}}, 'data', undefined}
+    ]};
 
 struct_info('CalendarObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Calendar'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Calendar'}}, 'data', undefined}
+    ]};
 
 struct_info('PaymentMethodObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodDefinition'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodDefinition'}}, 'data', undefined}
+    ]};
 
 struct_info('PayoutMethodObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodDefinition'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodDefinition'}}, 'data', undefined}
+    ]};
 
 struct_info('BankObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Bank'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Bank'}}, 'data', undefined}
+    ]};
 
 struct_info('ProviderObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Provider'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Provider'}}, 'data', undefined}
+    ]};
 
 struct_info('CashRegProviderObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRegProvider'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRegProvider'}}, 'data', undefined}
+    ]};
 
 struct_info('WithdrawalProviderObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvider'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvider'}}, 'data', undefined}
+    ]};
 
 struct_info('P2PProviderObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PProvider'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PProvider'}}, 'data', undefined}
+    ]};
 
 struct_info('TerminalObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Terminal'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Terminal'}}, 'data', undefined}
+    ]};
 
 struct_info('InspectorObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Inspector'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Inspector'}}, 'data', undefined}
+    ]};
 
 struct_info('P2PInspectorObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspector'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspector'}}, 'data', undefined}
+    ]};
 
 struct_info('PaymentInstitutionObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitution'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitution'}}, 'data', undefined}
+    ]};
 
 struct_info('SystemAccountSetObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSet'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSet'}}, 'data', undefined}
+    ]};
 
 struct_info('ExternalAccountSetObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSet'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSet'}}, 'data', undefined}
+    ]};
 
 struct_info('ProxyObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'ProxyDefinition'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ProxyDefinition'}}, 'data', undefined}
+    ]};
 
 struct_info('GlobalsObject') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'ref', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Globals'}}, 'data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Globals'}}, 'data', undefined}
+    ]};
 
 struct_info('Reference') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'business_schedule', undefined},
-    {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
-    {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'bank', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined},
-    {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'term_set_hierarchy', undefined},
-    {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined},
-    {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'inspector', undefined},
-    {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'p2p_inspector', undefined},
-    {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'system_account_set', undefined},
-    {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'external_account_set', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
-    {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
-    {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
-    {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderRef'}}, 'cashreg_provider', undefined},
-    {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'business_schedule', undefined},
+        {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
+        {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'bank', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined},
+        {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyRef'}}, 'term_set_hierarchy', undefined},
+        {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined},
+        {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'inspector', undefined},
+        {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'p2p_inspector', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetRef'}}, 'system_account_set', undefined},
+        {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetRef'}}, 'external_account_set', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
+        {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
+        {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderRef'}}, 'cashreg_provider', undefined},
+        {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
+        {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
+    ]};
 
 struct_info('DomainObject') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryObject'}}, 'category', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyObject'}}, 'currency', undefined},
-    {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleObject'}}, 'business_schedule', undefined},
-    {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
-    {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankObject'}}, 'bank', undefined},
-    {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateObject'}}, 'contract_template', undefined},
-    {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyObject'}}, 'term_set_hierarchy', undefined},
-    {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionObject'}}, 'payment_institution', undefined},
-    {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderObject'}}, 'provider', undefined},
-    {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalObject'}}, 'terminal', undefined},
-    {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorObject'}}, 'inspector', undefined},
-    {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorObject'}}, 'p2p_inspector', undefined},
-    {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetObject'}}, 'system_account_set', undefined},
-    {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetObject'}}, 'external_account_set', undefined},
-    {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
-    {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
-    {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderObject'}}, 'withdrawal_provider', undefined},
-    {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderObject'}}, 'cashreg_provider', undefined},
-    {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
-    {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
-    {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
-    {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryObject'}}, 'category', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyObject'}}, 'currency', undefined},
+        {19, optional, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleObject'}}, 'business_schedule', undefined},
+        {20, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarObject'}}, 'calendar', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodObject'}}, 'payment_method', undefined},
+        {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodObject'}}, 'payout_method', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankObject'}}, 'bank', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateObject'}}, 'contract_template', undefined},
+        {17, optional, {struct, struct, {dmsl_domain_thrift, 'TermSetHierarchyObject'}}, 'term_set_hierarchy', undefined},
+        {18, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionObject'}}, 'payment_institution', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderObject'}}, 'provider', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalObject'}}, 'terminal', undefined},
+        {15, optional, {struct, struct, {dmsl_domain_thrift, 'InspectorObject'}}, 'inspector', undefined},
+        {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorObject'}}, 'p2p_inspector', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'SystemAccountSetObject'}}, 'system_account_set', undefined},
+        {16, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalAccountSetObject'}}, 'external_account_set', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
+        {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderObject'}}, 'withdrawal_provider', undefined},
+        {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderObject'}}, 'cashreg_provider', undefined},
+        {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
+        {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -5418,735 +5417,735 @@ record_name('ContactInfo') ->
 record_name('OperationTimeout') ->
     'domain_OperationTimeout';
 
-    record_name('Failure') ->
+record_name('Failure') ->
     'domain_Failure';
 
-    record_name('SubFailure') ->
+record_name('SubFailure') ->
     'domain_SubFailure';
 
-    record_name('Cash') ->
+record_name('Cash') ->
     'domain_Cash';
 
-    record_name('TransactionInfo') ->
+record_name('TransactionInfo') ->
     'domain_TransactionInfo';
 
-    record_name('AdditionalTransactionInfo') ->
+record_name('AdditionalTransactionInfo') ->
     'domain_AdditionalTransactionInfo';
 
-    record_name('Invoice') ->
+record_name('Invoice') ->
     'domain_Invoice';
 
-    record_name('InvoiceDetails') ->
+record_name('InvoiceDetails') ->
     'domain_InvoiceDetails';
 
-    record_name('InvoiceCart') ->
+record_name('InvoiceCart') ->
     'domain_InvoiceCart';
 
-    record_name('InvoiceLine') ->
+record_name('InvoiceLine') ->
     'domain_InvoiceLine';
 
-    record_name('InvoiceUnpaid') ->
+record_name('InvoiceUnpaid') ->
     'domain_InvoiceUnpaid';
 
-    record_name('InvoicePaid') ->
+record_name('InvoicePaid') ->
     'domain_InvoicePaid';
 
-    record_name('InvoiceCancelled') ->
+record_name('InvoiceCancelled') ->
     'domain_InvoiceCancelled';
 
-    record_name('InvoiceFulfilled') ->
+record_name('InvoiceFulfilled') ->
     'domain_InvoiceFulfilled';
 
-    record_name('InvoicePayment') ->
+record_name('InvoicePayment') ->
     'domain_InvoicePayment';
 
-    record_name('InvoicePaymentPending') ->
+record_name('InvoicePaymentPending') ->
     'domain_InvoicePaymentPending';
 
-    record_name('InvoicePaymentProcessed') ->
+record_name('InvoicePaymentProcessed') ->
     'domain_InvoicePaymentProcessed';
 
-    record_name('InvoicePaymentCaptured') ->
+record_name('InvoicePaymentCaptured') ->
     'domain_InvoicePaymentCaptured';
 
-    record_name('InvoicePaymentCancelled') ->
+record_name('InvoicePaymentCancelled') ->
     'domain_InvoicePaymentCancelled';
 
-    record_name('InvoicePaymentRefunded') ->
+record_name('InvoicePaymentRefunded') ->
     'domain_InvoicePaymentRefunded';
 
-    record_name('InvoicePaymentFailed') ->
+record_name('InvoicePaymentFailed') ->
     'domain_InvoicePaymentFailed';
 
-    record_name('InvoicePaymentChargedBack') ->
+record_name('InvoicePaymentChargedBack') ->
     'domain_InvoicePaymentChargedBack';
 
-    record_name('InvoiceTemplate') ->
+record_name('InvoiceTemplate') ->
     'domain_InvoiceTemplate';
 
-    record_name('InvoiceTemplateProduct') ->
+record_name('InvoiceTemplateProduct') ->
     'domain_InvoiceTemplateProduct';
 
-    record_name('InvoiceTemplateCostUnlimited') ->
+record_name('InvoiceTemplateCostUnlimited') ->
     'domain_InvoiceTemplateCostUnlimited';
 
-    record_name('PaymentResourcePayer') ->
+record_name('PaymentResourcePayer') ->
     'domain_PaymentResourcePayer';
 
-    record_name('CustomerPayer') ->
+record_name('CustomerPayer') ->
     'domain_CustomerPayer';
 
-    record_name('RecurrentPayer') ->
+record_name('RecurrentPayer') ->
     'domain_RecurrentPayer';
 
-    record_name('ClientInfo') ->
+record_name('ClientInfo') ->
     'domain_ClientInfo';
 
-    record_name('PaymentRoute') ->
+record_name('PaymentRoute') ->
     'domain_PaymentRoute';
 
-    record_name('RecurrentParentPayment') ->
+record_name('RecurrentParentPayment') ->
     'domain_RecurrentParentPayment';
 
-    record_name('InvoicePaymentAdjustment') ->
+record_name('InvoicePaymentAdjustment') ->
     'domain_InvoicePaymentAdjustment';
 
-    record_name('InvoicePaymentAdjustmentPending') ->
+record_name('InvoicePaymentAdjustmentPending') ->
     'domain_InvoicePaymentAdjustmentPending';
 
-    record_name('InvoicePaymentAdjustmentProcessed') ->
+record_name('InvoicePaymentAdjustmentProcessed') ->
     'domain_InvoicePaymentAdjustmentProcessed';
 
-    record_name('InvoicePaymentAdjustmentCaptured') ->
+record_name('InvoicePaymentAdjustmentCaptured') ->
     'domain_InvoicePaymentAdjustmentCaptured';
 
-    record_name('InvoicePaymentAdjustmentCancelled') ->
+record_name('InvoicePaymentAdjustmentCancelled') ->
     'domain_InvoicePaymentAdjustmentCancelled';
 
-    record_name('InvoicePaymentFlowInstant') ->
+record_name('InvoicePaymentFlowInstant') ->
     'domain_InvoicePaymentFlowInstant';
 
-    record_name('InvoicePaymentFlowHold') ->
+record_name('InvoicePaymentFlowHold') ->
     'domain_InvoicePaymentFlowHold';
 
-    record_name('InvoicePaymentChargeback') ->
+record_name('InvoicePaymentChargeback') ->
     'domain_InvoicePaymentChargeback';
 
-    record_name('InvoicePaymentChargebackReason') ->
+record_name('InvoicePaymentChargebackReason') ->
     'domain_InvoicePaymentChargebackReason';
 
-    record_name('InvoicePaymentChargebackCategoryFraud') ->
+record_name('InvoicePaymentChargebackCategoryFraud') ->
     'domain_InvoicePaymentChargebackCategoryFraud';
 
-    record_name('InvoicePaymentChargebackCategoryDispute') ->
+record_name('InvoicePaymentChargebackCategoryDispute') ->
     'domain_InvoicePaymentChargebackCategoryDispute';
 
-    record_name('InvoicePaymentChargebackCategoryAuthorisation') ->
+record_name('InvoicePaymentChargebackCategoryAuthorisation') ->
     'domain_InvoicePaymentChargebackCategoryAuthorisation';
 
-    record_name('InvoicePaymentChargebackCategoryProcessingError') ->
+record_name('InvoicePaymentChargebackCategoryProcessingError') ->
     'domain_InvoicePaymentChargebackCategoryProcessingError';
 
-    record_name('InvoicePaymentChargebackStageChargeback') ->
+record_name('InvoicePaymentChargebackStageChargeback') ->
     'domain_InvoicePaymentChargebackStageChargeback';
 
-    record_name('InvoicePaymentChargebackStagePreArbitration') ->
+record_name('InvoicePaymentChargebackStagePreArbitration') ->
     'domain_InvoicePaymentChargebackStagePreArbitration';
 
-    record_name('InvoicePaymentChargebackStageArbitration') ->
+record_name('InvoicePaymentChargebackStageArbitration') ->
     'domain_InvoicePaymentChargebackStageArbitration';
 
-    record_name('InvoicePaymentChargebackPending') ->
+record_name('InvoicePaymentChargebackPending') ->
     'domain_InvoicePaymentChargebackPending';
 
-    record_name('InvoicePaymentChargebackAccepted') ->
+record_name('InvoicePaymentChargebackAccepted') ->
     'domain_InvoicePaymentChargebackAccepted';
 
-    record_name('InvoicePaymentChargebackRejected') ->
+record_name('InvoicePaymentChargebackRejected') ->
     'domain_InvoicePaymentChargebackRejected';
 
-    record_name('InvoicePaymentChargebackCancelled') ->
+record_name('InvoicePaymentChargebackCancelled') ->
     'domain_InvoicePaymentChargebackCancelled';
 
-    record_name('InvoicePaymentRefund') ->
+record_name('InvoicePaymentRefund') ->
     'domain_InvoicePaymentRefund';
 
-    record_name('InvoicePaymentRefundPending') ->
+record_name('InvoicePaymentRefundPending') ->
     'domain_InvoicePaymentRefundPending';
 
-    record_name('InvoicePaymentRefundSucceeded') ->
+record_name('InvoicePaymentRefundSucceeded') ->
     'domain_InvoicePaymentRefundSucceeded';
 
-    record_name('InvoicePaymentRefundFailed') ->
+record_name('InvoicePaymentRefundFailed') ->
     'domain_InvoicePaymentRefundFailed';
 
-    record_name('Unblocked') ->
+record_name('Unblocked') ->
     'domain_Unblocked';
 
-    record_name('Blocked') ->
+record_name('Blocked') ->
     'domain_Blocked';
 
-    record_name('Active') ->
+record_name('Active') ->
     'domain_Active';
 
-    record_name('Suspended') ->
+record_name('Suspended') ->
     'domain_Suspended';
 
-    record_name('Party') ->
+record_name('Party') ->
     'domain_Party';
 
-    record_name('PartyStatus') ->
+record_name('PartyStatus') ->
     'domain_PartyStatus';
 
-    record_name('PartyContactInfo') ->
+record_name('PartyContactInfo') ->
     'domain_PartyContactInfo';
 
-    record_name('Shop') ->
+record_name('Shop') ->
     'domain_Shop';
 
-    record_name('ShopAccount') ->
+record_name('ShopAccount') ->
     'domain_ShopAccount';
 
-    record_name('ShopDetails') ->
+record_name('ShopDetails') ->
     'domain_ShopDetails';
 
-    record_name('Wallet') ->
+record_name('Wallet') ->
     'domain_Wallet';
 
-    record_name('WalletAccount') ->
+record_name('WalletAccount') ->
     'domain_WalletAccount';
 
-    record_name('PartyContractor') ->
+record_name('PartyContractor') ->
     'domain_PartyContractor';
 
-    record_name('RegisteredUser') ->
+record_name('RegisteredUser') ->
     'domain_RegisteredUser';
 
-    record_name('RussianLegalEntity') ->
+record_name('RussianLegalEntity') ->
     'domain_RussianLegalEntity';
 
-    record_name('InternationalLegalEntity') ->
+record_name('InternationalLegalEntity') ->
     'domain_InternationalLegalEntity';
 
-    record_name('RussianBankAccount') ->
+record_name('RussianBankAccount') ->
     'domain_RussianBankAccount';
 
-    record_name('InternationalBankAccount') ->
+record_name('InternationalBankAccount') ->
     'domain_InternationalBankAccount';
 
-    record_name('InternationalBankDetails') ->
+record_name('InternationalBankDetails') ->
     'domain_InternationalBankDetails';
 
-    record_name('WalletInfo') ->
+record_name('WalletInfo') ->
     'domain_WalletInfo';
 
-    record_name('RussianPrivateEntity') ->
+record_name('RussianPrivateEntity') ->
     'domain_RussianPrivateEntity';
 
-    record_name('PayoutTool') ->
+record_name('PayoutTool') ->
     'domain_PayoutTool';
 
-    record_name('Contract') ->
+record_name('Contract') ->
     'domain_Contract';
 
-    record_name('LegalAgreement') ->
+record_name('LegalAgreement') ->
     'domain_LegalAgreement';
 
-    record_name('ReportPreferences') ->
+record_name('ReportPreferences') ->
     'domain_ReportPreferences';
 
-    record_name('ServiceAcceptanceActPreferences') ->
+record_name('ServiceAcceptanceActPreferences') ->
     'domain_ServiceAcceptanceActPreferences';
 
-    record_name('Representative') ->
+record_name('Representative') ->
     'domain_Representative';
 
-    record_name('ArticlesOfAssociation') ->
+record_name('ArticlesOfAssociation') ->
     'domain_ArticlesOfAssociation';
 
-    record_name('ContractActive') ->
+record_name('ContractActive') ->
     'domain_ContractActive';
 
-    record_name('ContractTerminated') ->
+record_name('ContractTerminated') ->
     'domain_ContractTerminated';
 
-    record_name('ContractExpired') ->
+record_name('ContractExpired') ->
     'domain_ContractExpired';
 
-    record_name('CategoryRef') ->
+record_name('CategoryRef') ->
     'domain_CategoryRef';
 
-    record_name('Category') ->
+record_name('Category') ->
     'domain_Category';
 
-    record_name('ContractTemplateRef') ->
+record_name('ContractTemplateRef') ->
     'domain_ContractTemplateRef';
 
-    record_name('ContractTemplate') ->
+record_name('ContractTemplate') ->
     'domain_ContractTemplate';
 
-    record_name('LifetimeInterval') ->
+record_name('LifetimeInterval') ->
     'domain_LifetimeInterval';
 
-    record_name('ContractTemplateDecision') ->
+record_name('ContractTemplateDecision') ->
     'domain_ContractTemplateDecision';
 
-    record_name('ContractAdjustment') ->
+record_name('ContractAdjustment') ->
     'domain_ContractAdjustment';
 
-    record_name('TermSet') ->
+record_name('TermSet') ->
     'domain_TermSet';
 
-    record_name('TimedTermSet') ->
+record_name('TimedTermSet') ->
     'domain_TimedTermSet';
 
-    record_name('TermSetHierarchy') ->
+record_name('TermSetHierarchy') ->
     'domain_TermSetHierarchy';
 
-    record_name('TermSetHierarchyRef') ->
+record_name('TermSetHierarchyRef') ->
     'domain_TermSetHierarchyRef';
 
-    record_name('PaymentsServiceTerms') ->
+record_name('PaymentsServiceTerms') ->
     'domain_PaymentsServiceTerms';
 
-    record_name('PaymentHoldsServiceTerms') ->
+record_name('PaymentHoldsServiceTerms') ->
     'domain_PaymentHoldsServiceTerms';
 
-    record_name('PartialCaptureServiceTerms') ->
+record_name('PartialCaptureServiceTerms') ->
     'domain_PartialCaptureServiceTerms';
 
-    record_name('PaymentChargebackServiceTerms') ->
+record_name('PaymentChargebackServiceTerms') ->
     'domain_PaymentChargebackServiceTerms';
 
-    record_name('PartialChargebackServiceTerms') ->
+record_name('PartialChargebackServiceTerms') ->
     'domain_PartialChargebackServiceTerms';
 
-    record_name('PaymentRefundsServiceTerms') ->
+record_name('PaymentRefundsServiceTerms') ->
     'domain_PaymentRefundsServiceTerms';
 
-    record_name('PartialRefundsServiceTerms') ->
+record_name('PartialRefundsServiceTerms') ->
     'domain_PartialRefundsServiceTerms';
 
-    record_name('RecurrentPaytoolsServiceTerms') ->
+record_name('RecurrentPaytoolsServiceTerms') ->
     'domain_RecurrentPaytoolsServiceTerms';
 
-    record_name('PayoutsServiceTerms') ->
+record_name('PayoutsServiceTerms') ->
     'domain_PayoutsServiceTerms';
 
-    record_name('PayoutCompilationPolicy') ->
+record_name('PayoutCompilationPolicy') ->
     'domain_PayoutCompilationPolicy';
 
-    record_name('WalletServiceTerms') ->
+record_name('WalletServiceTerms') ->
     'domain_WalletServiceTerms';
 
-    record_name('CumulativeLimitDecision') ->
+record_name('CumulativeLimitDecision') ->
     'domain_CumulativeLimitDecision';
 
-    record_name('CumulativeLimit') ->
+record_name('CumulativeLimit') ->
     'domain_CumulativeLimit';
 
-    record_name('WithdrawalServiceTerms') ->
+record_name('WithdrawalServiceTerms') ->
     'domain_WithdrawalServiceTerms';
 
-    record_name('P2PServiceTerms') ->
+record_name('P2PServiceTerms') ->
     'domain_P2PServiceTerms';
 
-    record_name('PayoutMethodRef') ->
+record_name('PayoutMethodRef') ->
     'domain_PayoutMethodRef';
 
-    record_name('PayoutMethodDefinition') ->
+record_name('PayoutMethodDefinition') ->
     'domain_PayoutMethodDefinition';
 
-    record_name('PayoutMethodDecision') ->
+record_name('PayoutMethodDecision') ->
     'domain_PayoutMethodDecision';
 
-    record_name('ReportsServiceTerms') ->
+record_name('ReportsServiceTerms') ->
     'domain_ReportsServiceTerms';
 
-    record_name('ServiceAcceptanceActsTerms') ->
+record_name('ServiceAcceptanceActsTerms') ->
     'domain_ServiceAcceptanceActsTerms';
 
-    record_name('CurrencyRef') ->
+record_name('CurrencyRef') ->
     'domain_CurrencyRef';
 
-    record_name('Currency') ->
+record_name('Currency') ->
     'domain_Currency';
 
-    record_name('CurrencyDecision') ->
+record_name('CurrencyDecision') ->
     'domain_CurrencyDecision';
 
-    record_name('CategoryDecision') ->
+record_name('CategoryDecision') ->
     'domain_CategoryDecision';
 
-    record_name('BusinessScheduleRef') ->
+record_name('BusinessScheduleRef') ->
     'domain_BusinessScheduleRef';
 
-    record_name('BusinessSchedule') ->
+record_name('BusinessSchedule') ->
     'domain_BusinessSchedule';
 
-    record_name('BusinessScheduleDecision') ->
+record_name('BusinessScheduleDecision') ->
     'domain_BusinessScheduleDecision';
 
-    record_name('CalendarRef') ->
+record_name('CalendarRef') ->
     'domain_CalendarRef';
 
-    record_name('Calendar') ->
+record_name('Calendar') ->
     'domain_Calendar';
 
-    record_name('CalendarHoliday') ->
+record_name('CalendarHoliday') ->
     'domain_CalendarHoliday';
 
-    record_name('CashRange') ->
+record_name('CashRange') ->
     'domain_CashRange';
 
-    record_name('CashLimitDecision') ->
+record_name('CashLimitDecision') ->
     'domain_CashLimitDecision';
 
-    record_name('TokenizedBankCard') ->
+record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
 
-    record_name('P2PTool') ->
+record_name('P2PTool') ->
     'domain_P2PTool';
 
-    record_name('DisposablePaymentResource') ->
+record_name('DisposablePaymentResource') ->
     'domain_DisposablePaymentResource';
 
-    record_name('BankCard') ->
+record_name('BankCard') ->
     'domain_BankCard';
 
-    record_name('BankCardExpDate') ->
+record_name('BankCardExpDate') ->
     'domain_BankCardExpDate';
 
-    record_name('CryptoWallet') ->
+record_name('CryptoWallet') ->
     'domain_CryptoWallet';
 
-    record_name('MobileCommerce') ->
+record_name('MobileCommerce') ->
     'domain_MobileCommerce';
 
-    record_name('MobilePhone') ->
+record_name('MobilePhone') ->
     'domain_MobilePhone';
 
-    record_name('PaymentTerminal') ->
+record_name('PaymentTerminal') ->
     'domain_PaymentTerminal';
 
-    record_name('DigitalWallet') ->
+record_name('DigitalWallet') ->
     'domain_DigitalWallet';
 
-    record_name('BankRef') ->
+record_name('BankRef') ->
     'domain_BankRef';
 
-    record_name('Bank') ->
+record_name('Bank') ->
     'domain_Bank';
 
-    record_name('PaymentMethodRef') ->
+record_name('PaymentMethodRef') ->
     'domain_PaymentMethodRef';
 
-    record_name('PaymentMethodDefinition') ->
+record_name('PaymentMethodDefinition') ->
     'domain_PaymentMethodDefinition';
 
-    record_name('PaymentMethodDecision') ->
+record_name('PaymentMethodDecision') ->
     'domain_PaymentMethodDecision';
 
-    record_name('HoldLifetime') ->
+record_name('HoldLifetime') ->
     'domain_HoldLifetime';
 
-    record_name('HoldLifetimeDecision') ->
+record_name('HoldLifetimeDecision') ->
     'domain_HoldLifetimeDecision';
 
-    record_name('TimeSpanDecision') ->
+record_name('TimeSpanDecision') ->
     'domain_TimeSpanDecision';
 
-    record_name('LifetimeDecision') ->
+record_name('LifetimeDecision') ->
     'domain_LifetimeDecision';
 
-    record_name('Fees') ->
+record_name('Fees') ->
     'domain_Fees';
 
-    record_name('CashFlowPosting') ->
+record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';
 
-    record_name('FinalCashFlowPosting') ->
+record_name('FinalCashFlowPosting') ->
     'domain_FinalCashFlowPosting';
 
-    record_name('FinalCashFlowAccount') ->
+record_name('FinalCashFlowAccount') ->
     'domain_FinalCashFlowAccount';
 
-    record_name('CashVolumeFixed') ->
+record_name('CashVolumeFixed') ->
     'domain_CashVolumeFixed';
 
-    record_name('CashVolumeShare') ->
+record_name('CashVolumeShare') ->
     'domain_CashVolumeShare';
 
-    record_name('CashFlowDecision') ->
+record_name('CashFlowDecision') ->
     'domain_CashFlowDecision';
 
-    record_name('FeeDecision') ->
+record_name('FeeDecision') ->
     'domain_FeeDecision';
 
-    record_name('ProviderRef') ->
+record_name('ProviderRef') ->
     'domain_ProviderRef';
 
-    record_name('Provider') ->
+record_name('Provider') ->
     'domain_Provider';
 
-    record_name('CashRegProviderRef') ->
+record_name('CashRegProviderRef') ->
     'domain_CashRegProviderRef';
 
-    record_name('CashRegProvider') ->
+record_name('CashRegProvider') ->
     'domain_CashRegProvider';
 
-    record_name('WithdrawalProviderRef') ->
+record_name('WithdrawalProviderRef') ->
     'domain_WithdrawalProviderRef';
 
-    record_name('WithdrawalProvider') ->
+record_name('WithdrawalProvider') ->
     'domain_WithdrawalProvider';
 
-    record_name('P2PProviderRef') ->
+record_name('P2PProviderRef') ->
     'domain_P2PProviderRef';
 
-    record_name('P2PProvider') ->
+record_name('P2PProvider') ->
     'domain_P2PProvider';
 
-    record_name('PaymentsProvisionTerms') ->
+record_name('PaymentsProvisionTerms') ->
     'domain_PaymentsProvisionTerms';
 
-    record_name('PaymentHoldsProvisionTerms') ->
+record_name('PaymentHoldsProvisionTerms') ->
     'domain_PaymentHoldsProvisionTerms';
 
-    record_name('PartialCaptureProvisionTerms') ->
+record_name('PartialCaptureProvisionTerms') ->
     'domain_PartialCaptureProvisionTerms';
 
-    record_name('PaymentChargebackProvisionTerms') ->
+record_name('PaymentChargebackProvisionTerms') ->
     'domain_PaymentChargebackProvisionTerms';
 
-    record_name('PaymentRefundsProvisionTerms') ->
+record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
 
-    record_name('PartialChargebackProvisionTerms') ->
+record_name('PartialChargebackProvisionTerms') ->
     'domain_PartialChargebackProvisionTerms';
 
-    record_name('PartialRefundsProvisionTerms') ->
+record_name('PartialRefundsProvisionTerms') ->
     'domain_PartialRefundsProvisionTerms';
 
-    record_name('RecurrentPaytoolsProvisionTerms') ->
+record_name('RecurrentPaytoolsProvisionTerms') ->
     'domain_RecurrentPaytoolsProvisionTerms';
 
-    record_name('WithdrawalProvisionTerms') ->
+record_name('WithdrawalProvisionTerms') ->
     'domain_WithdrawalProvisionTerms';
 
-    record_name('P2PProvisionTerms') ->
+record_name('P2PProvisionTerms') ->
     'domain_P2PProvisionTerms';
 
-    record_name('CashValueDecision') ->
+record_name('CashValueDecision') ->
     'domain_CashValueDecision';
 
-    record_name('ProviderAccount') ->
+record_name('ProviderAccount') ->
     'domain_ProviderAccount';
 
-    record_name('ProviderDecision') ->
+record_name('ProviderDecision') ->
     'domain_ProviderDecision';
 
-    record_name('WithdrawalProviderDecision') ->
+record_name('WithdrawalProviderDecision') ->
     'domain_WithdrawalProviderDecision';
 
-    record_name('P2PProviderDecision') ->
+record_name('P2PProviderDecision') ->
     'domain_P2PProviderDecision';
 
-    record_name('InspectorRef') ->
+record_name('InspectorRef') ->
     'domain_InspectorRef';
 
-    record_name('Inspector') ->
+record_name('Inspector') ->
     'domain_Inspector';
 
-    record_name('InspectorDecision') ->
+record_name('InspectorDecision') ->
     'domain_InspectorDecision';
 
-    record_name('P2PInspectorRef') ->
+record_name('P2PInspectorRef') ->
     'domain_P2PInspectorRef';
 
-    record_name('P2PInspector') ->
+record_name('P2PInspector') ->
     'domain_P2PInspector';
 
-    record_name('P2PInspectorDecision') ->
+record_name('P2PInspectorDecision') ->
     'domain_P2PInspectorDecision';
 
-    record_name('Terminal') ->
+record_name('Terminal') ->
     'domain_Terminal';
 
-    record_name('TerminalDecision') ->
+record_name('TerminalDecision') ->
     'domain_TerminalDecision';
 
-    record_name('ProviderTerminalRef') ->
+record_name('ProviderTerminalRef') ->
     'domain_ProviderTerminalRef';
 
-    record_name('TerminalRef') ->
+record_name('TerminalRef') ->
     'domain_TerminalRef';
 
-    record_name('P2PToolCondition') ->
+record_name('P2PToolCondition') ->
     'domain_P2PToolCondition';
 
-    record_name('BankCardCondition') ->
+record_name('BankCardCondition') ->
     'domain_BankCardCondition';
 
-    record_name('PaymentSystemCondition') ->
+record_name('PaymentSystemCondition') ->
     'domain_PaymentSystemCondition';
 
-    record_name('PaymentTerminalCondition') ->
+record_name('PaymentTerminalCondition') ->
     'domain_PaymentTerminalCondition';
 
-    record_name('DigitalWalletCondition') ->
+record_name('DigitalWalletCondition') ->
     'domain_DigitalWalletCondition';
 
-    record_name('CryptoCurrencyCondition') ->
+record_name('CryptoCurrencyCondition') ->
     'domain_CryptoCurrencyCondition';
 
-    record_name('MobileCommerceCondition') ->
+record_name('MobileCommerceCondition') ->
     'domain_MobileCommerceCondition';
 
-    record_name('PartyCondition') ->
+record_name('PartyCondition') ->
     'domain_PartyCondition';
 
-    record_name('ProxyRef') ->
+record_name('ProxyRef') ->
     'domain_ProxyRef';
 
-    record_name('ProxyDefinition') ->
+record_name('ProxyDefinition') ->
     'domain_ProxyDefinition';
 
-    record_name('Proxy') ->
+record_name('Proxy') ->
     'domain_Proxy';
 
-    record_name('SystemAccountSetRef') ->
+record_name('SystemAccountSetRef') ->
     'domain_SystemAccountSetRef';
 
-    record_name('SystemAccountSet') ->
+record_name('SystemAccountSet') ->
     'domain_SystemAccountSet';
 
-    record_name('SystemAccount') ->
+record_name('SystemAccount') ->
     'domain_SystemAccount';
 
-    record_name('SystemAccountSetDecision') ->
+record_name('SystemAccountSetDecision') ->
     'domain_SystemAccountSetDecision';
 
-    record_name('ExternalAccountSetRef') ->
+record_name('ExternalAccountSetRef') ->
     'domain_ExternalAccountSetRef';
 
-    record_name('ExternalAccountSet') ->
+record_name('ExternalAccountSet') ->
     'domain_ExternalAccountSet';
 
-    record_name('ExternalAccount') ->
+record_name('ExternalAccount') ->
     'domain_ExternalAccount';
 
-    record_name('ExternalAccountSetDecision') ->
+record_name('ExternalAccountSetDecision') ->
     'domain_ExternalAccountSetDecision';
 
-    record_name('PaymentInstitutionRef') ->
+record_name('PaymentInstitutionRef') ->
     'domain_PaymentInstitutionRef';
 
-    record_name('PaymentInstitution') ->
+record_name('PaymentInstitution') ->
     'domain_PaymentInstitution';
 
-    record_name('ContractPaymentInstitutionDefaults') ->
+record_name('ContractPaymentInstitutionDefaults') ->
     'domain_ContractPaymentInstitutionDefaults';
 
-    record_name('PartyPrototypeRef') ->
+record_name('PartyPrototypeRef') ->
     'domain_PartyPrototypeRef';
 
-    record_name('PartyPrototype') ->
+record_name('PartyPrototype') ->
     'domain_PartyPrototype';
 
-    record_name('PartyPrototypeObject') ->
+record_name('PartyPrototypeObject') ->
     'domain_PartyPrototypeObject';
 
-    record_name('GlobalsRef') ->
+record_name('GlobalsRef') ->
     'domain_GlobalsRef';
 
-    record_name('Globals') ->
+record_name('Globals') ->
     'domain_Globals';
 
-    record_name('Dummy') ->
+record_name('Dummy') ->
     'domain_Dummy';
 
-    record_name('DummyRef') ->
+record_name('DummyRef') ->
     'domain_DummyRef';
 
-    record_name('DummyObject') ->
+record_name('DummyObject') ->
     'domain_DummyObject';
 
-    record_name('DummyLink') ->
+record_name('DummyLink') ->
     'domain_DummyLink';
 
-    record_name('DummyLinkRef') ->
+record_name('DummyLinkRef') ->
     'domain_DummyLinkRef';
 
-    record_name('DummyLinkObject') ->
+record_name('DummyLinkObject') ->
     'domain_DummyLinkObject';
 
-    record_name('ContractTemplateObject') ->
+record_name('ContractTemplateObject') ->
     'domain_ContractTemplateObject';
 
-    record_name('TermSetHierarchyObject') ->
+record_name('TermSetHierarchyObject') ->
     'domain_TermSetHierarchyObject';
 
-    record_name('CategoryObject') ->
+record_name('CategoryObject') ->
     'domain_CategoryObject';
 
-    record_name('CurrencyObject') ->
+record_name('CurrencyObject') ->
     'domain_CurrencyObject';
 
-    record_name('BusinessScheduleObject') ->
+record_name('BusinessScheduleObject') ->
     'domain_BusinessScheduleObject';
 
-    record_name('CalendarObject') ->
+record_name('CalendarObject') ->
     'domain_CalendarObject';
 
-    record_name('PaymentMethodObject') ->
+record_name('PaymentMethodObject') ->
     'domain_PaymentMethodObject';
 
-    record_name('PayoutMethodObject') ->
+record_name('PayoutMethodObject') ->
     'domain_PayoutMethodObject';
 
-    record_name('BankObject') ->
+record_name('BankObject') ->
     'domain_BankObject';
 
-    record_name('ProviderObject') ->
+record_name('ProviderObject') ->
     'domain_ProviderObject';
 
-    record_name('CashRegProviderObject') ->
+record_name('CashRegProviderObject') ->
     'domain_CashRegProviderObject';
 
-    record_name('WithdrawalProviderObject') ->
+record_name('WithdrawalProviderObject') ->
     'domain_WithdrawalProviderObject';
 
-    record_name('P2PProviderObject') ->
+record_name('P2PProviderObject') ->
     'domain_P2PProviderObject';
 
-    record_name('TerminalObject') ->
+record_name('TerminalObject') ->
     'domain_TerminalObject';
 
-    record_name('InspectorObject') ->
+record_name('InspectorObject') ->
     'domain_InspectorObject';
 
-    record_name('P2PInspectorObject') ->
+record_name('P2PInspectorObject') ->
     'domain_P2PInspectorObject';
 
-    record_name('PaymentInstitutionObject') ->
+record_name('PaymentInstitutionObject') ->
     'domain_PaymentInstitutionObject';
 
-    record_name('SystemAccountSetObject') ->
+record_name('SystemAccountSetObject') ->
     'domain_SystemAccountSetObject';
 
-    record_name('ExternalAccountSetObject') ->
+record_name('ExternalAccountSetObject') ->
     'domain_ExternalAccountSetObject';
 
-    record_name('ProxyObject') ->
+record_name('ProxyObject') ->
     'domain_ProxyObject';
 
-    record_name('GlobalsObject') ->
+record_name('GlobalsObject') ->
     'domain_GlobalsObject';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

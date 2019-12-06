@@ -82,11 +82,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -144,9 +144,9 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('TimeoutBehaviour') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'operation_failure', undefined},
-    {2, optional, string, 'callback', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'operation_failure', undefined},
+        {2, optional, string, 'callback', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 

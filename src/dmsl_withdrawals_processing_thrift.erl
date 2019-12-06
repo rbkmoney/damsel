@@ -224,11 +224,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -333,19 +333,19 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('WithdrawalState') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Withdrawal'}}, 'withdrawal', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, optional, string, 'updated_at', undefined},
-    {5, required, {struct, union, {dmsl_withdrawals_processing_thrift, 'WithdrawalStatus'}}, 'status', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Withdrawal'}}, 'withdrawal', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, optional, string, 'updated_at', undefined},
+        {5, required, {struct, union, {dmsl_withdrawals_processing_thrift, 'WithdrawalStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('WithdrawalStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('WithdrawalPending') ->
     {struct, struct, []};
@@ -355,77 +355,77 @@ struct_info('WithdrawalSucceeded') ->
 
 struct_info('WithdrawalFailed') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('Event') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'occured_at', undefined},
-    {3, required, {list, {struct, union, {dmsl_withdrawals_processing_thrift, 'Change'}}}, 'changes', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, string, 'occured_at', undefined},
+        {3, required, {list, {struct, union, {dmsl_withdrawals_processing_thrift, 'Change'}}}, 'changes', undefined}
+    ]};
 
 struct_info('Change') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_withdrawals_processing_thrift, 'WithdrawalStatus'}}, 'status_changed', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionChange'}}, 'session', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_withdrawals_processing_thrift, 'WithdrawalStatus'}}, 'status_changed', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionChange'}}, 'session', undefined}
+    ]};
 
 struct_info('SessionChange') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, union, {dmsl_withdrawals_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_withdrawals_processing_thrift, 'SessionChangePayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('SessionChangePayload') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionStarted'}}, 'session_started', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionFinished'}}, 'session_finished', undefined},
-    {3, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionAdapterStateChanged'}}, 'session_adapter_state_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionStarted'}}, 'session_started', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionFinished'}}, 'session_finished', undefined},
+        {3, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionAdapterStateChanged'}}, 'session_adapter_state_changed', undefined}
+    ]};
 
 struct_info('SessionStarted') ->
     {struct, struct, []};
 
 struct_info('SessionFinished') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_withdrawals_processing_thrift, 'SessionResult'}}, 'result', undefined}
-]};
+        {1, required, {struct, union, {dmsl_withdrawals_processing_thrift, 'SessionResult'}}, 'result', undefined}
+    ]};
 
 struct_info('SessionResult') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionSucceeded'}}, 'succeeded', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionSucceeded'}}, 'succeeded', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SessionFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('SessionSucceeded') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx_info', undefined}
+    ]};
 
 struct_info('SessionFailed') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('SessionAdapterStateChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state', undefined}
-]};
+        {1, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state', undefined}
+    ]};
 
 struct_info('SinkEvent') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, string, 'source', undefined},
-    {4, required, {struct, struct, {dmsl_withdrawals_processing_thrift, 'Event'}}, 'payload', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, string, 'source', undefined},
+        {4, required, {struct, struct, {dmsl_withdrawals_processing_thrift, 'Event'}}, 'payload', undefined}
+    ]};
 
 struct_info('SinkEventRange') ->
     {struct, struct, [
-    {1, optional, i64, 'after', undefined},
-    {2, required, i32, 'limit', undefined}
-]};
+        {1, optional, i64, 'after', undefined},
+        {2, required, i32, 'limit', undefined}
+    ]};
 
 struct_info('WithdrawalNotFound') ->
     {struct, exception, []};
@@ -446,51 +446,51 @@ record_name('WithdrawalState') ->
 record_name('WithdrawalPending') ->
     'wthproc_WithdrawalPending';
 
-    record_name('WithdrawalSucceeded') ->
+record_name('WithdrawalSucceeded') ->
     'wthproc_WithdrawalSucceeded';
 
-    record_name('WithdrawalFailed') ->
+record_name('WithdrawalFailed') ->
     'wthproc_WithdrawalFailed';
 
-    record_name('Event') ->
+record_name('Event') ->
     'wthproc_Event';
 
-    record_name('SessionChange') ->
+record_name('SessionChange') ->
     'wthproc_SessionChange';
 
-    record_name('SessionStarted') ->
+record_name('SessionStarted') ->
     'wthproc_SessionStarted';
 
-    record_name('SessionFinished') ->
+record_name('SessionFinished') ->
     'wthproc_SessionFinished';
 
-    record_name('SessionSucceeded') ->
+record_name('SessionSucceeded') ->
     'wthproc_SessionSucceeded';
 
-    record_name('SessionFailed') ->
+record_name('SessionFailed') ->
     'wthproc_SessionFailed';
 
-    record_name('SessionAdapterStateChanged') ->
+record_name('SessionAdapterStateChanged') ->
     'wthproc_SessionAdapterStateChanged';
 
-    record_name('SinkEvent') ->
+record_name('SinkEvent') ->
     'wthproc_SinkEvent';
 
-    record_name('SinkEventRange') ->
+record_name('SinkEventRange') ->
     'wthproc_SinkEventRange';
 
-    record_name('WithdrawalNotFound') ->
+record_name('WithdrawalNotFound') ->
     'wthproc_WithdrawalNotFound';
 
-    record_name('SinkEventNotFound') ->
+record_name('SinkEventNotFound') ->
     'wthproc_SinkEventNotFound';
 
-    record_name('NoLastEvent') ->
+record_name('NoLastEvent') ->
     'wthproc_NoLastEvent';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Processing') ->
     [
@@ -511,39 +511,39 @@ functions(_) -> error(badarg).
 
 function_info('Processing', 'Start', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Withdrawal'}}, 'withdrawal', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Withdrawal'}}, 'withdrawal', undefined}
+    ]};
 function_info('Processing', 'Start', reply_type) ->
-        {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalState'}};
-    function_info('Processing', 'Start', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalState'}};
+function_info('Processing', 'Start', exceptions) ->
+    {struct, struct, []};
 function_info('Processing', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined}
-]};
+        {1, undefined, string, 'id', undefined}
+    ]};
 function_info('Processing', 'Get', reply_type) ->
-        {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalState'}};
-    function_info('Processing', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_withdrawals_processing_thrift, 'WithdrawalState'}};
+function_info('Processing', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_withdrawals_processing_thrift, 'WithdrawalNotFound'}}, 'ex1', undefined}
     ]};
 
 function_info('EventSink', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SinkEventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SinkEventRange'}}, 'range', undefined}
+    ]};
 function_info('EventSink', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SinkEvent'}}};
-    function_info('EventSink', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_withdrawals_processing_thrift, 'SinkEvent'}}};
+function_info('EventSink', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_withdrawals_processing_thrift, 'SinkEventNotFound'}}, 'ex1', undefined}
     ]};
 function_info('EventSink', 'GetLastEventID', params_type) ->
     {struct, struct, []};
 function_info('EventSink', 'GetLastEventID', reply_type) ->
-        i64;
-    function_info('EventSink', 'GetLastEventID', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('EventSink', 'GetLastEventID', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_withdrawals_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 

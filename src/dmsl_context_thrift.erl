@@ -112,11 +112,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -188,9 +188,9 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Change') ->
     {struct, union, [
-    {1, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'put', undefined},
-    {2, optional, string, 'deleted', undefined}
-]};
+        {1, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'put', undefined},
+        {2, optional, string, 'deleted', undefined}
+    ]};
 
 struct_info('ObjectNotFound') ->
     {struct, exception, []};
@@ -208,9 +208,9 @@ record_name('ObjectNotFound') ->
 record_name('Forbidden') ->
     'ctx_Forbidden';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Contexts') ->
     [
@@ -226,37 +226,37 @@ functions(_) -> error(badarg).
 
 function_info('Contexts', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined},
-    {2, undefined, string, 'ns', undefined}
-]};
+        {1, undefined, string, 'id', undefined},
+        {2, undefined, string, 'ns', undefined}
+    ]};
 function_info('Contexts', 'Get', reply_type) ->
-        {struct, union, {dmsl_msgpack_thrift, 'Value'}};
-    function_info('Contexts', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_msgpack_thrift, 'Value'}};
+function_info('Contexts', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_context_thrift, 'ObjectNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Contexts', 'Put', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined},
-    {2, undefined, string, 'ns', undefined},
-    {3, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'context', undefined}
-]};
+        {1, undefined, string, 'id', undefined},
+        {2, undefined, string, 'ns', undefined},
+        {3, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'context', undefined}
+    ]};
 function_info('Contexts', 'Put', reply_type) ->
-        {struct, struct, []};
-    function_info('Contexts', 'Put', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Contexts', 'Put', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_context_thrift, 'ObjectNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_context_thrift, 'Forbidden'}}, 'ex2', undefined}
     ]};
 function_info('Contexts', 'Delete', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'id', undefined},
-    {2, undefined, string, 'ns', undefined}
-]};
+        {1, undefined, string, 'id', undefined},
+        {2, undefined, string, 'ns', undefined}
+    ]};
 function_info('Contexts', 'Delete', reply_type) ->
-        {struct, struct, []};
-    function_info('Contexts', 'Delete', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Contexts', 'Delete', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_context_thrift, 'ObjectNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_context_thrift, 'Forbidden'}}, 'ex2', undefined}
     ]};

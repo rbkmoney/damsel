@@ -313,11 +313,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -448,68 +448,68 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Event') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, {struct, union, {dmsl_payout_processing_thrift, 'EventSource'}}, 'source', undefined},
-    {4, required, {struct, union, {dmsl_payout_processing_thrift, 'EventPayload'}}, 'payload', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, {struct, union, {dmsl_payout_processing_thrift, 'EventSource'}}, 'source', undefined},
+        {4, required, {struct, union, {dmsl_payout_processing_thrift, 'EventPayload'}}, 'payload', undefined}
+    ]};
 
 struct_info('EventSource') ->
     {struct, union, [
-    {1, optional, string, 'payout_id', undefined}
-]};
+        {1, optional, string, 'payout_id', undefined}
+    ]};
 
 struct_info('EventPayload') ->
     {struct, union, [
-    {1, optional, {list, {struct, union, {dmsl_payout_processing_thrift, 'PayoutChange'}}}, 'payout_changes', undefined}
-]};
+        {1, optional, {list, {struct, union, {dmsl_payout_processing_thrift, 'PayoutChange'}}}, 'payout_changes', undefined}
+    ]};
 
 struct_info('PayoutChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCreated'}}, 'payout_created', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutStatusChanged'}}, 'payout_status_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCreated'}}, 'payout_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutStatusChanged'}}, 'payout_status_changed', undefined}
+    ]};
 
 struct_info('PayoutCreated') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}}, 'payout', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}}, 'payout', undefined}
+    ]};
 
 struct_info('PayoutSummaryItem') ->
     {struct, struct, [
-    {1, required, i64, 'amount', undefined},
-    {2, required, i64, 'fee', undefined},
-    {3, required, string, 'currency_symbolic_code', undefined},
-    {4, required, string, 'from_time', undefined},
-    {5, required, string, 'to_time', undefined},
-    {6, required, {enum, {dmsl_payout_processing_thrift, 'OperationType'}}, 'operation_type', undefined},
-    {7, required, i32, 'count', undefined}
-]};
+        {1, required, i64, 'amount', undefined},
+        {2, required, i64, 'fee', undefined},
+        {3, required, string, 'currency_symbolic_code', undefined},
+        {4, required, string, 'from_time', undefined},
+        {5, required, string, 'to_time', undefined},
+        {6, required, {enum, {dmsl_payout_processing_thrift, 'OperationType'}}, 'operation_type', undefined},
+        {7, required, i32, 'count', undefined}
+    ]};
 
 struct_info('Payout') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'party_id', undefined},
-    {3, required, string, 'shop_id', undefined},
-    {9, required, string, 'contract_id', undefined},
-    {4, required, string, 'created_at', undefined},
-    {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
-    {11, required, i64, 'amount', undefined},
-    {12, required, i64, 'fee', undefined},
-    {13, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'payout_flow', undefined},
-    {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
-    {8, optional, {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined},
-    {10, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'party_id', undefined},
+        {3, required, string, 'shop_id', undefined},
+        {9, required, string, 'contract_id', undefined},
+        {4, required, string, 'created_at', undefined},
+        {5, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined},
+        {11, required, i64, 'amount', undefined},
+        {12, required, i64, 'fee', undefined},
+        {13, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'payout_flow', undefined},
+        {7, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutType'}}, 'type', undefined},
+        {8, optional, {list, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined},
+        {10, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    ]};
 
 struct_info('PayoutStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutUnpaid'}}, 'unpaid', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutPaid'}}, 'paid', undefined},
-    {3, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutConfirmed'}}, 'confirmed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutUnpaid'}}, 'unpaid', undefined},
+        {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutPaid'}}, 'paid', undefined},
+        {3, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutConfirmed'}}, 'confirmed', undefined}
+    ]};
 
 struct_info('PayoutUnpaid') ->
     {struct, struct, []};
@@ -519,111 +519,111 @@ struct_info('PayoutPaid') ->
 
 struct_info('PayoutCancelled') ->
     {struct, struct, [
-    {2, required, string, 'details', undefined}
-]};
+        {2, required, string, 'details', undefined}
+    ]};
 
 struct_info('PayoutConfirmed') ->
     {struct, struct, []};
 
 struct_info('PayoutType') ->
     {struct, union, [
-    {2, optional, {struct, union, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
-    {3, optional, {struct, struct, {dmsl_payout_processing_thrift, 'Wallet'}}, 'wallet', undefined}
-]};
+        {2, optional, {struct, union, {dmsl_payout_processing_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
+        {3, optional, {struct, struct, {dmsl_payout_processing_thrift, 'Wallet'}}, 'wallet', undefined}
+    ]};
 
 struct_info('Wallet') ->
     {struct, struct, [
-    {1, required, string, 'wallet_id', undefined}
-]};
+        {1, required, string, 'wallet_id', undefined}
+    ]};
 
 struct_info('PayoutAccount') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payout_processing_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
+        {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
+    ]};
 
 struct_info('RussianPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
-    {2, required, string, 'inn', undefined},
-    {3, required, string, 'purpose', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
+        {2, required, string, 'inn', undefined},
+        {3, required, string, 'purpose', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
+    ]};
 
 struct_info('InternationalPayoutAccount') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'InternationalLegalEntity'}}, 'legal_entity', undefined},
-    {3, required, string, 'purpose', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'InternationalLegalEntity'}}, 'legal_entity', undefined},
+        {3, required, string, 'purpose', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'LegalAgreement'}}, 'legal_agreement', undefined}
+    ]};
 
 struct_info('PayoutStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_payout_processing_thrift, 'PayoutStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('EventRange') ->
     {struct, struct, [
-    {1, optional, i64, 'after', undefined},
-    {2, required, i32, 'limit', undefined}
-]};
+        {1, optional, i64, 'after', undefined},
+        {2, required, i32, 'limit', undefined}
+    ]};
 
 struct_info('TimeRange') ->
     {struct, struct, [
-    {1, required, string, 'from_time', undefined},
-    {2, required, string, 'to_time', undefined}
-]};
+        {1, required, string, 'from_time', undefined},
+        {2, required, string, 'to_time', undefined}
+    ]};
 
 struct_info('AmountRange') ->
     {struct, struct, [
-    {1, optional, i64, 'min', undefined},
-    {2, optional, i64, 'max', undefined}
-]};
+        {1, optional, i64, 'min', undefined},
+        {2, optional, i64, 'max', undefined}
+    ]};
 
 struct_info('ShopParams') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, string, 'shop_id', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined}
+    ]};
 
 struct_info('PayoutParams') ->
     {struct, struct, [
-    {1, required, string, 'payout_id', undefined},
-    {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop', undefined},
-    {3, required, string, 'payout_tool_id', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
-    {5, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
-]};
+        {1, required, string, 'payout_id', undefined},
+        {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop', undefined},
+        {3, required, string, 'payout_tool_id', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+        {5, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    ]};
 
 struct_info('GeneratePayoutParams') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
-    {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop_params', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
+        {2, required, {struct, struct, {dmsl_payout_processing_thrift, 'ShopParams'}}, 'shop_params', undefined}
+    ]};
 
 struct_info('PayoutSearchCriteria') ->
     {struct, struct, [
-    {1, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchStatus'}}, 'status', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
-    {3, optional, {list, string}, 'payout_ids', undefined},
-    {4, optional, {struct, struct, {dmsl_payout_processing_thrift, 'AmountRange'}}, 'amount_range', undefined},
-    {5, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
-    {6, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchType'}}, 'type', undefined}
-]};
+        {1, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchStatus'}}, 'status', undefined},
+        {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'TimeRange'}}, 'time_range', undefined},
+        {3, optional, {list, string}, 'payout_ids', undefined},
+        {4, optional, {struct, struct, {dmsl_payout_processing_thrift, 'AmountRange'}}, 'amount_range', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
+        {6, optional, {enum, {dmsl_payout_processing_thrift, 'PayoutSearchType'}}, 'type', undefined}
+    ]};
 
 struct_info('PayoutSearchRequest') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'search_criteria', undefined},
-    {2, optional, i64, 'from_id', undefined},
-    {3, optional, i32, 'size', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchCriteria'}}, 'search_criteria', undefined},
+        {2, optional, i64, 'from_id', undefined},
+        {3, optional, i32, 'size', undefined}
+    ]};
 
 struct_info('PayoutSearchResponse') ->
     {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}}}, 'payouts', undefined},
-    {2, required, i64, 'last_id', undefined}
-]};
+        {1, required, {list, {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}}}, 'payouts', undefined},
+        {2, required, i64, 'last_id', undefined}
+    ]};
 
 struct_info('NoLastEvent') ->
     {struct, exception, []};
@@ -653,84 +653,84 @@ record_name('Event') ->
 record_name('PayoutCreated') ->
     'payout_processing_PayoutCreated';
 
-    record_name('PayoutSummaryItem') ->
+record_name('PayoutSummaryItem') ->
     'payout_processing_PayoutSummaryItem';
 
-    record_name('Payout') ->
+record_name('Payout') ->
     'payout_processing_Payout';
 
-    record_name('PayoutUnpaid') ->
+record_name('PayoutUnpaid') ->
     'payout_processing_PayoutUnpaid';
 
-    record_name('PayoutPaid') ->
+record_name('PayoutPaid') ->
     'payout_processing_PayoutPaid';
 
-    record_name('PayoutCancelled') ->
+record_name('PayoutCancelled') ->
     'payout_processing_PayoutCancelled';
 
-    record_name('PayoutConfirmed') ->
+record_name('PayoutConfirmed') ->
     'payout_processing_PayoutConfirmed';
 
-    record_name('Wallet') ->
+record_name('Wallet') ->
     'payout_processing_Wallet';
 
-    record_name('RussianPayoutAccount') ->
+record_name('RussianPayoutAccount') ->
     'payout_processing_RussianPayoutAccount';
 
-    record_name('InternationalPayoutAccount') ->
+record_name('InternationalPayoutAccount') ->
     'payout_processing_InternationalPayoutAccount';
 
-    record_name('PayoutStatusChanged') ->
+record_name('PayoutStatusChanged') ->
     'payout_processing_PayoutStatusChanged';
 
-    record_name('EventRange') ->
+record_name('EventRange') ->
     'payout_processing_EventRange';
 
-    record_name('TimeRange') ->
+record_name('TimeRange') ->
     'payout_processing_TimeRange';
 
-    record_name('AmountRange') ->
+record_name('AmountRange') ->
     'payout_processing_AmountRange';
 
-    record_name('ShopParams') ->
+record_name('ShopParams') ->
     'payout_processing_ShopParams';
 
-    record_name('PayoutParams') ->
+record_name('PayoutParams') ->
     'payout_processing_PayoutParams';
 
-    record_name('GeneratePayoutParams') ->
+record_name('GeneratePayoutParams') ->
     'payout_processing_GeneratePayoutParams';
 
-    record_name('PayoutSearchCriteria') ->
+record_name('PayoutSearchCriteria') ->
     'payout_processing_PayoutSearchCriteria';
 
-    record_name('PayoutSearchRequest') ->
+record_name('PayoutSearchRequest') ->
     'payout_processing_PayoutSearchRequest';
 
-    record_name('PayoutSearchResponse') ->
+record_name('PayoutSearchResponse') ->
     'payout_processing_PayoutSearchResponse';
 
-    record_name('NoLastEvent') ->
+record_name('NoLastEvent') ->
     'payout_processing_NoLastEvent';
 
-    record_name('EventNotFound') ->
+record_name('EventNotFound') ->
     'payout_processing_EventNotFound';
 
-    record_name('InvalidPayoutTool') ->
+record_name('InvalidPayoutTool') ->
     'payout_processing_InvalidPayoutTool';
 
-    record_name('PayoutNotFound') ->
+record_name('PayoutNotFound') ->
     'payout_processing_PayoutNotFound';
 
-    record_name('InsufficientFunds') ->
+record_name('InsufficientFunds') ->
     'payout_processing_InsufficientFunds';
 
-    record_name('LimitExceeded') ->
+record_name('LimitExceeded') ->
     'payout_processing_LimitExceeded';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('EventSink') ->
     [
@@ -756,95 +756,95 @@ functions(_) -> error(badarg).
 
 function_info('EventSink', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'EventRange'}}, 'range', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
 function_info('EventSink', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}};
-    function_info('EventSink', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}};
+function_info('EventSink', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'EventNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
     ]};
 function_info('EventSink', 'GetLastEventID', params_type) ->
     {struct, struct, []};
 function_info('EventSink', 'GetLastEventID', reply_type) ->
-        i64;
-    function_info('EventSink', 'GetLastEventID', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('EventSink', 'GetLastEventID', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'NoLastEvent'}}, 'ex1', undefined}
     ]};
 
 function_info('PayoutManagement', 'CreatePayout', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutParams'}}, 'params', undefined}
+    ]};
 function_info('PayoutManagement', 'CreatePayout', reply_type) ->
-        {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}};
-    function_info('PayoutManagement', 'CreatePayout', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}};
+function_info('PayoutManagement', 'CreatePayout', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'InvalidPayoutTool'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'InsufficientFunds'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 function_info('PayoutManagement', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'payout_id', undefined}
-]};
+        {1, undefined, string, 'payout_id', undefined}
+    ]};
 function_info('PayoutManagement', 'Get', reply_type) ->
-        {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}};
-    function_info('PayoutManagement', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payout_processing_thrift, 'Payout'}};
+function_info('PayoutManagement', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'PayoutNotFound'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'GeneratePayouts', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'GeneratePayoutParams'}}, 'params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'GeneratePayoutParams'}}, 'params', undefined}
+    ]};
 function_info('PayoutManagement', 'GeneratePayouts', reply_type) ->
-        {list, string};
-    function_info('PayoutManagement', 'GeneratePayouts', exceptions) ->
-        {struct, struct, [
+    {list, string};
+function_info('PayoutManagement', 'GeneratePayouts', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'ConfirmPayout', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'payout_id', undefined}
-]};
+        {1, undefined, string, 'payout_id', undefined}
+    ]};
 function_info('PayoutManagement', 'ConfirmPayout', reply_type) ->
-        {struct, struct, []};
-    function_info('PayoutManagement', 'ConfirmPayout', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PayoutManagement', 'ConfirmPayout', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'CancelPayout', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'payout_id', undefined},
-    {2, undefined, string, 'details', undefined}
-]};
+        {1, undefined, string, 'payout_id', undefined},
+        {2, undefined, string, 'details', undefined}
+    ]};
 function_info('PayoutManagement', 'CancelPayout', reply_type) ->
-        {struct, struct, []};
-    function_info('PayoutManagement', 'CancelPayout', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PayoutManagement', 'CancelPayout', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchRequest'}}, 'request', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchRequest'}}, 'request', undefined}
+    ]};
 function_info('PayoutManagement', 'GetPayoutsInfo', reply_type) ->
-        {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}};
-    function_info('PayoutManagement', 'GetPayoutsInfo', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payout_processing_thrift, 'PayoutSearchResponse'}};
+function_info('PayoutManagement', 'GetPayoutsInfo', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 function_info('PayoutManagement', 'GenerateReport', params_type) ->
     {struct, struct, [
-    {1, undefined, {set, string}, 'payout_ids', undefined}
-]};
+        {1, undefined, {set, string}, 'payout_ids', undefined}
+    ]};
 function_info('PayoutManagement', 'GenerateReport', reply_type) ->
-        {struct, struct, []};
-    function_info('PayoutManagement', 'GenerateReport', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('PayoutManagement', 'GenerateReport', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 

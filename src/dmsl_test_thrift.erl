@@ -89,11 +89,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -148,13 +148,13 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Shout') ->
     {struct, struct, [
-    {1, required, string, 'contents', undefined}
-]};
+        {1, required, string, 'contents', undefined}
+    ]};
 
 struct_info('Failure') ->
     {struct, exception, [
-    {1, required, string, 'reason', undefined}
-]};
+        {1, required, string, 'reason', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -166,9 +166,9 @@ record_name('Shout') ->
 record_name('Failure') ->
     'Failure';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Echo') ->
     [
@@ -182,12 +182,12 @@ functions(_) -> error(badarg).
 
 function_info('Echo', 'echo', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_test_thrift, 'Shout'}}, 'shout', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_test_thrift, 'Shout'}}, 'shout', undefined}
+    ]};
 function_info('Echo', 'echo', reply_type) ->
-        {struct, struct, {dmsl_test_thrift, 'Shout'}};
-    function_info('Echo', 'echo', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_test_thrift, 'Shout'}};
+function_info('Echo', 'echo', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_test_thrift, 'Failure'}}, 'ex', undefined}
     ]};
 

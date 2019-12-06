@@ -310,6 +310,8 @@
 %% struct 'InvoicePayment'
 -record('payproc_InvoicePayment', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
+    'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined,
     'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
@@ -320,7 +322,8 @@
 %% struct 'InvoicePaymentRefund'
 -record('payproc_InvoicePaymentRefund', {
     'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
-    'sessions' :: [dmsl_payment_processing_thrift:'InvoiceRefundSession'()]
+    'sessions' :: [dmsl_payment_processing_thrift:'InvoiceRefundSession'()],
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined
 }).
 
 %% struct 'InvoicePaymentSession'
@@ -545,6 +548,7 @@
     'id' :: dmsl_base_thrift:'EventID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'source' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
+    'sequence' :: dmsl_base_thrift:'SequenceID'() | undefined,
     'payload' :: [dmsl_payment_processing_thrift:'RecurrentPaymentToolChange'()]
 }).
 

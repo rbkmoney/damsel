@@ -118,11 +118,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -180,41 +180,41 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('WithdrawalFailure') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'AuthorizationFailure'}}, 'authorization_failed', undefined}
+    ]};
 
 struct_info('AuthorizationFailure') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
-    {3, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'operation_blocked', undefined},
-    {4, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'account_not_found', undefined},
-    {5, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'account_blocked', undefined},
-    {6, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'account_stolen', undefined},
-    {8, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'LimitExceeded'}}, 'account_limit_exceeded', undefined},
-    {9, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'LimitExceeded'}}, 'provider_limit_exceeded', undefined},
-    {10, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'DestinationReject'}}, 'destination_rejected', undefined},
-    {11, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'security_policy_violated', undefined},
-    {12, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'temporarily_unavailable', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+        {3, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'operation_blocked', undefined},
+        {4, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'account_not_found', undefined},
+        {5, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'account_blocked', undefined},
+        {6, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'account_stolen', undefined},
+        {8, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'LimitExceeded'}}, 'account_limit_exceeded', undefined},
+        {9, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'LimitExceeded'}}, 'provider_limit_exceeded', undefined},
+        {10, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'DestinationReject'}}, 'destination_rejected', undefined},
+        {11, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'security_policy_violated', undefined},
+        {12, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'temporarily_unavailable', undefined}
+    ]};
 
 struct_info('LimitExceeded') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'amount', undefined},
-    {3, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'number', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'amount', undefined},
+        {3, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'number', undefined}
+    ]};
 
 struct_info('DestinationReject') ->
     {struct, union, [
-    {2, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
-    {1, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'BankCardReject'}}, 'bank_card_rejected', undefined}
-]};
+        {2, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+        {1, optional, {struct, union, {dmsl_withdrawals_errors_thrift, 'BankCardReject'}}, 'bank_card_rejected', undefined}
+    ]};
 
 struct_info('BankCardReject') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'card_number_invalid', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_errors_thrift, 'GeneralFailure'}}, 'card_number_invalid', undefined}
+    ]};
 
 struct_info('GeneralFailure') ->
     {struct, struct, []};
@@ -227,8 +227,8 @@ record_name('GeneralFailure') ->
     'wtherr_GeneralFailure';
 
 record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

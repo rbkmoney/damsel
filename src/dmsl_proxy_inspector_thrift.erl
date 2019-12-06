@@ -107,11 +107,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -171,46 +171,46 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Context') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'PaymentInfo'}}, 'payment', undefined},
-    {2, optional, {map, string, string}, 'options', #{}}
-]};
+        {1, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'PaymentInfo'}}, 'payment', undefined},
+        {2, optional, {map, string, string}, 'options', #{}}
+    ]};
 
 struct_info('PaymentInfo') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'Shop'}}, 'shop', undefined},
-    {2, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'InvoicePayment'}}, 'payment', undefined},
-    {3, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'Invoice'}}, 'invoice', undefined},
-    {4, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'Party'}}, 'party', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'Shop'}}, 'shop', undefined},
+        {2, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'InvoicePayment'}}, 'payment', undefined},
+        {3, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'Invoice'}}, 'invoice', undefined},
+        {4, required, {struct, struct, {dmsl_proxy_inspector_thrift, 'Party'}}, 'party', undefined}
+    ]};
 
 struct_info('Party') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined}
-]};
+        {1, required, string, 'party_id', undefined}
+    ]};
 
 struct_info('Shop') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Category'}}, 'category', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
-    {4, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Category'}}, 'category', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location', undefined}
+    ]};
 
 struct_info('InvoicePayment') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
+    ]};
 
 struct_info('Invoice') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, string, 'due', undefined},
-    {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, string, 'due', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -222,21 +222,21 @@ record_name('Context') ->
 record_name('PaymentInfo') ->
     'proxy_inspector_PaymentInfo';
 
-    record_name('Party') ->
+record_name('Party') ->
     'proxy_inspector_Party';
 
-    record_name('Shop') ->
+record_name('Shop') ->
     'proxy_inspector_Shop';
 
-    record_name('InvoicePayment') ->
+record_name('InvoicePayment') ->
     'proxy_inspector_InvoicePayment';
 
-    record_name('Invoice') ->
+record_name('Invoice') ->
     'proxy_inspector_Invoice';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('InspectorProxy') ->
     [
@@ -250,12 +250,12 @@ functions(_) -> error(badarg).
 
 function_info('InspectorProxy', 'InspectPayment', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_proxy_inspector_thrift, 'Context'}}, 'context', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_proxy_inspector_thrift, 'Context'}}, 'context', undefined}
+    ]};
 function_info('InspectorProxy', 'InspectPayment', reply_type) ->
-        {enum, {dmsl_domain_thrift, 'RiskScore'}};
-    function_info('InspectorProxy', 'InspectPayment', exceptions) ->
-        {struct, struct, [
+    {enum, {dmsl_domain_thrift, 'RiskScore'}};
+function_info('InspectorProxy', 'InspectPayment', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 

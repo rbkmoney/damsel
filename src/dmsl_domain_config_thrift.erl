@@ -204,11 +204,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -294,83 +294,83 @@ struct_info('Head') ->
 
 struct_info('Reference') ->
     {struct, union, [
-    {1, optional, i64, 'version', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'Head'}}, 'head', undefined}
-]};
+        {1, optional, i64, 'version', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'Head'}}, 'head', undefined}
+    ]};
 
 struct_info('Snapshot') ->
     {struct, struct, [
-    {1, undefined, i64, 'version', undefined},
-    {2, undefined, {map, {struct, union, {dmsl_domain_thrift, 'Reference'}}, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}}, 'domain', undefined}
-]};
+        {1, undefined, i64, 'version', undefined},
+        {2, undefined, {map, {struct, union, {dmsl_domain_thrift, 'Reference'}}, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}}, 'domain', undefined}
+    ]};
 
 struct_info('Commit') ->
     {struct, struct, [
-    {1, required, {list, {struct, union, {dmsl_domain_config_thrift, 'Operation'}}}, 'ops', undefined}
-]};
+        {1, required, {list, {struct, union, {dmsl_domain_config_thrift, 'Operation'}}}, 'ops', undefined}
+    ]};
 
 struct_info('Operation') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'InsertOp'}}, 'insert', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'UpdateOp'}}, 'update', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_config_thrift, 'RemoveOp'}}, 'remove', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'InsertOp'}}, 'insert', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'UpdateOp'}}, 'update', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_config_thrift, 'RemoveOp'}}, 'remove', undefined}
+    ]};
 
 struct_info('InsertOp') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'object', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'object', undefined}
+    ]};
 
 struct_info('UpdateOp') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'old_object', undefined},
-    {2, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'new_object', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'old_object', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'new_object', undefined}
+    ]};
 
 struct_info('RemoveOp') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'object', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'object', undefined}
+    ]};
 
 struct_info('VersionedObject') ->
     {struct, struct, [
-    {1, undefined, i64, 'version', undefined},
-    {2, undefined, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'object', undefined}
-]};
+        {1, undefined, i64, 'version', undefined},
+        {2, undefined, {struct, union, {dmsl_domain_thrift, 'DomainObject'}}, 'object', undefined}
+    ]};
 
 struct_info('Conflict') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectAlreadyExistsConflict'}}, 'object_already_exists', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectNotFoundConflict'}}, 'object_not_found', undefined},
-    {3, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceMismatchConflict'}}, 'object_reference_mismatch', undefined},
-    {4, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectsNotExistConflict'}}, 'objects_not_exist', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectAlreadyExistsConflict'}}, 'object_already_exists', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectNotFoundConflict'}}, 'object_not_found', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceMismatchConflict'}}, 'object_reference_mismatch', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectsNotExistConflict'}}, 'objects_not_exist', undefined}
+    ]};
 
 struct_info('ObjectAlreadyExistsConflict') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
+    ]};
 
 struct_info('ObjectNotFoundConflict') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
+    ]};
 
 struct_info('ObjectReferenceMismatchConflict') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
+    ]};
 
 struct_info('ObjectsNotExistConflict') ->
     {struct, struct, [
-    {1, required, {list, {struct, struct, {dmsl_domain_config_thrift, 'NonexistantObject'}}}, 'object_refs', undefined}
-]};
+        {1, required, {list, {struct, struct, {dmsl_domain_config_thrift, 'NonexistantObject'}}}, 'object_refs', undefined}
+    ]};
 
 struct_info('NonexistantObject') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined},
-    {2, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'referenced_by', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined},
+        {2, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'referenced_by', undefined}
+    ]};
 
 struct_info('VersionNotFound') ->
     {struct, exception, []};
@@ -380,8 +380,8 @@ struct_info('ObjectNotFound') ->
 
 struct_info('OperationConflict') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_domain_config_thrift, 'Conflict'}}, 'conflict', undefined}
-]};
+        {1, required, {struct, union, {dmsl_domain_config_thrift, 'Conflict'}}, 'conflict', undefined}
+    ]};
 
 struct_info('ObsoleteCommitVersion') ->
     {struct, exception, []};
@@ -396,51 +396,51 @@ record_name('Head') ->
 record_name('Snapshot') ->
     'Snapshot';
 
-    record_name('Commit') ->
+record_name('Commit') ->
     'Commit';
 
-    record_name('InsertOp') ->
+record_name('InsertOp') ->
     'InsertOp';
 
-    record_name('UpdateOp') ->
+record_name('UpdateOp') ->
     'UpdateOp';
 
-    record_name('RemoveOp') ->
+record_name('RemoveOp') ->
     'RemoveOp';
 
-    record_name('VersionedObject') ->
+record_name('VersionedObject') ->
     'VersionedObject';
 
-    record_name('ObjectAlreadyExistsConflict') ->
+record_name('ObjectAlreadyExistsConflict') ->
     'ObjectAlreadyExistsConflict';
 
-    record_name('ObjectNotFoundConflict') ->
+record_name('ObjectNotFoundConflict') ->
     'ObjectNotFoundConflict';
 
-    record_name('ObjectReferenceMismatchConflict') ->
+record_name('ObjectReferenceMismatchConflict') ->
     'ObjectReferenceMismatchConflict';
 
-    record_name('ObjectsNotExistConflict') ->
+record_name('ObjectsNotExistConflict') ->
     'ObjectsNotExistConflict';
 
-    record_name('NonexistantObject') ->
+record_name('NonexistantObject') ->
     'NonexistantObject';
 
-    record_name('VersionNotFound') ->
+record_name('VersionNotFound') ->
     'VersionNotFound';
 
-    record_name('ObjectNotFound') ->
+record_name('ObjectNotFound') ->
     'ObjectNotFound';
 
-    record_name('OperationConflict') ->
+record_name('OperationConflict') ->
     'OperationConflict';
 
-    record_name('ObsoleteCommitVersion') ->
+record_name('ObsoleteCommitVersion') ->
     'ObsoleteCommitVersion';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('RepositoryClient') ->
     [
@@ -462,59 +462,59 @@ functions(_) -> error(badarg).
 
 function_info('RepositoryClient', 'checkoutObject', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, union, {dmsl_domain_config_thrift, 'Reference'}}, 'version_ref', undefined},
-    {2, undefined, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
-]};
+        {1, undefined, {struct, union, {dmsl_domain_config_thrift, 'Reference'}}, 'version_ref', undefined},
+        {2, undefined, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
+    ]};
 function_info('RepositoryClient', 'checkoutObject', reply_type) ->
-        {struct, struct, {dmsl_domain_config_thrift, 'VersionedObject'}};
-    function_info('RepositoryClient', 'checkoutObject', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_config_thrift, 'VersionedObject'}};
+function_info('RepositoryClient', 'checkoutObject', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_domain_config_thrift, 'ObjectNotFound'}}, 'ex2', undefined}
     ]};
 
 function_info('Repository', 'Commit', params_type) ->
     {struct, struct, [
-    {1, undefined, i64, 'version', undefined},
-    {2, undefined, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}, 'commit', undefined}
-]};
+        {1, undefined, i64, 'version', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}, 'commit', undefined}
+    ]};
 function_info('Repository', 'Commit', reply_type) ->
-        i64;
-    function_info('Repository', 'Commit', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('Repository', 'Commit', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_domain_config_thrift, 'OperationConflict'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_domain_config_thrift, 'ObsoleteCommitVersion'}}, 'ex3', undefined}
     ]};
 function_info('Repository', 'Checkout', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, union, {dmsl_domain_config_thrift, 'Reference'}}, 'reference', undefined}
-]};
+        {1, undefined, {struct, union, {dmsl_domain_config_thrift, 'Reference'}}, 'reference', undefined}
+    ]};
 function_info('Repository', 'Checkout', reply_type) ->
-        {struct, struct, {dmsl_domain_config_thrift, 'Snapshot'}};
-    function_info('Repository', 'Checkout', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_domain_config_thrift, 'Snapshot'}};
+function_info('Repository', 'Checkout', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Repository', 'PullRange', params_type) ->
     {struct, struct, [
-    {1, undefined, i64, 'after', undefined},
-    {2, undefined, i32, 'limit', undefined}
-]};
+        {1, undefined, i64, 'after', undefined},
+        {2, undefined, i32, 'limit', undefined}
+    ]};
 function_info('Repository', 'PullRange', reply_type) ->
-        {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}};
-    function_info('Repository', 'PullRange', exceptions) ->
-        {struct, struct, [
+    {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}};
+function_info('Repository', 'PullRange', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Repository', 'Pull', params_type) ->
     {struct, struct, [
-    {1, undefined, i64, 'version', undefined}
-]};
+        {1, undefined, i64, 'version', undefined}
+    ]};
 function_info('Repository', 'Pull', reply_type) ->
-        {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}};
-    function_info('Repository', 'Pull', exceptions) ->
-        {struct, struct, [
+    {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}};
+function_info('Repository', 'Pull', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined}
     ]};
 

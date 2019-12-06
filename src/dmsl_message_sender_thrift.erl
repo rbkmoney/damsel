@@ -103,11 +103,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -170,30 +170,30 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('MessageAttachment') ->
     {struct, struct, [
-    {1, required, string, 'name', undefined},
-    {2, optional, string, 'mime_type', undefined},
-    {3, required, string, 'data', undefined}
-]};
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'mime_type', undefined},
+        {3, required, string, 'data', undefined}
+    ]};
 
 struct_info('Message') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_message_sender_thrift, 'MessageMail'}}, 'message_mail', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_message_sender_thrift, 'MessageMail'}}, 'message_mail', undefined}
+    ]};
 
 struct_info('MailBody') ->
     {struct, struct, [
-    {1, optional, string, 'content_type', undefined},
-    {2, required, string, 'text', undefined}
-]};
+        {1, optional, string, 'content_type', undefined},
+        {2, required, string, 'text', undefined}
+    ]};
 
 struct_info('MessageMail') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_message_sender_thrift, 'MailBody'}}, 'mail_body', undefined},
-    {2, optional, string, 'subject', undefined},
-    {3, required, string, 'from_email', undefined},
-    {4, required, {list, string}, 'to_emails', undefined},
-    {5, optional, {list, {struct, struct, {dmsl_message_sender_thrift, 'MessageAttachment'}}}, 'attachments', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_message_sender_thrift, 'MailBody'}}, 'mail_body', undefined},
+        {2, optional, string, 'subject', undefined},
+        {3, required, string, 'from_email', undefined},
+        {4, required, {list, string}, 'to_emails', undefined},
+        {5, optional, {list, {struct, struct, {dmsl_message_sender_thrift, 'MessageAttachment'}}}, 'attachments', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -205,12 +205,12 @@ record_name('MessageAttachment') ->
 record_name('MailBody') ->
     'message_sender_MailBody';
 
-    record_name('MessageMail') ->
+record_name('MessageMail') ->
     'message_sender_MessageMail';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('MessageSender') ->
     [
@@ -224,12 +224,12 @@ functions(_) -> error(badarg).
 
 function_info('MessageSender', 'send', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, union, {dmsl_message_sender_thrift, 'Message'}}, 'message', undefined}
-]};
+        {1, undefined, {struct, union, {dmsl_message_sender_thrift, 'Message'}}, 'message', undefined}
+    ]};
 function_info('MessageSender', 'send', reply_type) ->
-        {struct, struct, []};
-    function_info('MessageSender', 'send', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('MessageSender', 'send', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
     ]};
 

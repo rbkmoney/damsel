@@ -107,11 +107,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -173,28 +173,28 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('IdentityDocument') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_identity_document_storage_thrift, 'RussianDomesticPassport'}}, 'russian_domestic_passport', undefined},
-    {2, optional, {struct, struct, {dmsl_identity_document_storage_thrift, 'RussianRetireeInsuranceCertificate'}}, 'russian_retiree_insurance_certificate', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_identity_document_storage_thrift, 'RussianDomesticPassport'}}, 'russian_domestic_passport', undefined},
+        {2, optional, {struct, struct, {dmsl_identity_document_storage_thrift, 'RussianRetireeInsuranceCertificate'}}, 'russian_retiree_insurance_certificate', undefined}
+    ]};
 
 struct_info('RussianDomesticPassport') ->
     {struct, struct, [
-    {1, required, string, 'series', undefined},
-    {2, required, string, 'number', undefined},
-    {3, required, string, 'issuer', undefined},
-    {4, required, string, 'issuer_code', undefined},
-    {5, required, string, 'issued_at', undefined},
-    {6, required, string, 'family_name', undefined},
-    {7, required, string, 'first_name', undefined},
-    {8, optional, string, 'patronymic', undefined},
-    {9, required, string, 'birth_date', undefined},
-    {10, required, string, 'birth_place', undefined}
-]};
+        {1, required, string, 'series', undefined},
+        {2, required, string, 'number', undefined},
+        {3, required, string, 'issuer', undefined},
+        {4, required, string, 'issuer_code', undefined},
+        {5, required, string, 'issued_at', undefined},
+        {6, required, string, 'family_name', undefined},
+        {7, required, string, 'first_name', undefined},
+        {8, optional, string, 'patronymic', undefined},
+        {9, required, string, 'birth_date', undefined},
+        {10, required, string, 'birth_place', undefined}
+    ]};
 
 struct_info('RussianRetireeInsuranceCertificate') ->
     {struct, struct, [
-    {1, required, string, 'number', undefined}
-]};
+        {1, required, string, 'number', undefined}
+    ]};
 
 struct_info('IdentityDocumentNotFound') ->
     {struct, exception, []};
@@ -209,12 +209,12 @@ record_name('RussianDomesticPassport') ->
 record_name('RussianRetireeInsuranceCertificate') ->
     'ident_doc_store_RussianRetireeInsuranceCertificate';
 
-    record_name('IdentityDocumentNotFound') ->
+record_name('IdentityDocumentNotFound') ->
     'ident_doc_store_IdentityDocumentNotFound';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('IdentityDocumentStorage') ->
     [
@@ -229,20 +229,20 @@ functions(_) -> error(badarg).
 
 function_info('IdentityDocumentStorage', 'Put', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, union, {dmsl_identity_document_storage_thrift, 'IdentityDocument'}}, 'identity_document', undefined}
-]};
+        {1, undefined, {struct, union, {dmsl_identity_document_storage_thrift, 'IdentityDocument'}}, 'identity_document', undefined}
+    ]};
 function_info('IdentityDocumentStorage', 'Put', reply_type) ->
-        string;
-    function_info('IdentityDocumentStorage', 'Put', exceptions) ->
-        {struct, struct, []};
+    string;
+function_info('IdentityDocumentStorage', 'Put', exceptions) ->
+    {struct, struct, []};
 function_info('IdentityDocumentStorage', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'token', undefined}
-]};
+        {1, undefined, string, 'token', undefined}
+    ]};
 function_info('IdentityDocumentStorage', 'Get', reply_type) ->
-        {struct, union, {dmsl_identity_document_storage_thrift, 'IdentityDocument'}};
-    function_info('IdentityDocumentStorage', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_identity_document_storage_thrift, 'IdentityDocument'}};
+function_info('IdentityDocumentStorage', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_identity_document_storage_thrift, 'IdentityDocumentNotFound'}}, 'not_found', undefined}
     ]};
 

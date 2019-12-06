@@ -307,11 +307,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -457,132 +457,132 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('EncryptedMasterKeyShare') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, string, 'owner', undefined},
-    {3, required, string, 'encrypted_share', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'owner', undefined},
+        {3, required, string, 'encrypted_share', undefined}
+    ]};
 
 struct_info('ExpDate') ->
     {struct, struct, [
-    {1, required, byte, 'month', undefined},
-    {2, required, i16, 'year', undefined}
-]};
+        {1, required, byte, 'month', undefined},
+        {2, required, i16, 'year', undefined}
+    ]};
 
 struct_info('CardData') ->
     {struct, struct, [
-    {1, required, string, 'pan', undefined},
-    {2, required, {struct, struct, {dmsl_cds_thrift, 'ExpDate'}}, 'exp_date', undefined},
-    {3, optional, string, 'cardholder_name', undefined},
-    {4, optional, string, 'cvv', undefined}
-]};
+        {1, required, string, 'pan', undefined},
+        {2, required, {struct, struct, {dmsl_cds_thrift, 'ExpDate'}}, 'exp_date', undefined},
+        {3, optional, string, 'cardholder_name', undefined},
+        {4, optional, string, 'cvv', undefined}
+    ]};
 
 struct_info('PutCardDataResult') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
-    {2, required, string, 'session_id', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
+        {2, required, string, 'session_id', undefined}
+    ]};
 
 struct_info('PutCardResult') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined}
+    ]};
 
 struct_info('CardSecurityCode') ->
     {struct, struct, [
-    {1, required, string, 'value', undefined}
-]};
+        {1, required, string, 'value', undefined}
+    ]};
 
 struct_info('Auth3DS') ->
     {struct, struct, [
-    {1, required, string, 'cryptogram', undefined},
-    {2, optional, string, 'eci', undefined}
-]};
+        {1, required, string, 'cryptogram', undefined},
+        {2, optional, string, 'eci', undefined}
+    ]};
 
 struct_info('AuthData') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_cds_thrift, 'CardSecurityCode'}}, 'card_security_code', undefined},
-    {2, optional, {struct, struct, {dmsl_cds_thrift, 'Auth3DS'}}, 'auth_3ds', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_cds_thrift, 'CardSecurityCode'}}, 'card_security_code', undefined},
+        {2, optional, {struct, struct, {dmsl_cds_thrift, 'Auth3DS'}}, 'auth_3ds', undefined}
+    ]};
 
 struct_info('SessionData') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_cds_thrift, 'AuthData'}}, 'auth_data', undefined}
-]};
+        {1, required, {struct, union, {dmsl_cds_thrift, 'AuthData'}}, 'auth_data', undefined}
+    ]};
 
 struct_info('Success') ->
     {struct, struct, []};
 
 struct_info('KeyringOperationStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_cds_thrift, 'Success'}}, 'success', undefined},
-    {2, optional, i16, 'more_keys_needed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_cds_thrift, 'Success'}}, 'success', undefined},
+        {2, optional, i16, 'more_keys_needed', undefined}
+    ]};
 
 struct_info('Activity') ->
     {struct, union, [
-    {1, optional, {enum, {dmsl_cds_thrift, 'Initialization'}}, 'initialization', undefined},
-    {2, optional, {enum, {dmsl_cds_thrift, 'Rekeying'}}, 'rekeying', undefined},
-    {3, optional, {enum, {dmsl_cds_thrift, 'Rotation'}}, 'rotation', undefined},
-    {4, optional, {enum, {dmsl_cds_thrift, 'Unlock'}}, 'unlock', undefined}
-]};
+        {1, optional, {enum, {dmsl_cds_thrift, 'Initialization'}}, 'initialization', undefined},
+        {2, optional, {enum, {dmsl_cds_thrift, 'Rekeying'}}, 'rekeying', undefined},
+        {3, optional, {enum, {dmsl_cds_thrift, 'Rotation'}}, 'rotation', undefined},
+        {4, optional, {enum, {dmsl_cds_thrift, 'Unlock'}}, 'unlock', undefined}
+    ]};
 
 struct_info('RotationState') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_cds_thrift, 'Rotation'}}, 'phase', undefined},
-    {2, optional, i32, 'lifetime', undefined},
-    {3, required, {map, i16, string}, 'confirmation_shares', undefined}
-]};
+        {1, required, {enum, {dmsl_cds_thrift, 'Rotation'}}, 'phase', undefined},
+        {2, optional, i32, 'lifetime', undefined},
+        {3, required, {map, i16, string}, 'confirmation_shares', undefined}
+    ]};
 
 struct_info('InitializationState') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_cds_thrift, 'Initialization'}}, 'phase', undefined},
-    {2, optional, i32, 'lifetime', undefined},
-    {3, required, {map, i16, string}, 'validation_shares', undefined}
-]};
+        {1, required, {enum, {dmsl_cds_thrift, 'Initialization'}}, 'phase', undefined},
+        {2, optional, i32, 'lifetime', undefined},
+        {3, required, {map, i16, string}, 'validation_shares', undefined}
+    ]};
 
 struct_info('UnlockState') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_cds_thrift, 'Unlock'}}, 'phase', undefined},
-    {2, optional, i32, 'lifetime', undefined},
-    {3, required, {map, i16, string}, 'confirmation_shares', undefined}
-]};
+        {1, required, {enum, {dmsl_cds_thrift, 'Unlock'}}, 'phase', undefined},
+        {2, optional, i32, 'lifetime', undefined},
+        {3, required, {map, i16, string}, 'confirmation_shares', undefined}
+    ]};
 
 struct_info('RekeyingState') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_cds_thrift, 'Rekeying'}}, 'phase', undefined},
-    {2, optional, i32, 'lifetime', undefined},
-    {3, required, {map, i16, string}, 'confirmation_shares', undefined},
-    {4, required, {map, i16, string}, 'validation_shares', undefined}
-]};
+        {1, required, {enum, {dmsl_cds_thrift, 'Rekeying'}}, 'phase', undefined},
+        {2, optional, i32, 'lifetime', undefined},
+        {3, required, {map, i16, string}, 'confirmation_shares', undefined},
+        {4, required, {map, i16, string}, 'validation_shares', undefined}
+    ]};
 
 struct_info('ActivitiesState') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_cds_thrift, 'InitializationState'}}, 'initialization', undefined},
-    {2, required, {struct, struct, {dmsl_cds_thrift, 'RotationState'}}, 'rotation', undefined},
-    {3, required, {struct, struct, {dmsl_cds_thrift, 'UnlockState'}}, 'unlock', undefined},
-    {4, required, {struct, struct, {dmsl_cds_thrift, 'RekeyingState'}}, 'rekeying', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_cds_thrift, 'InitializationState'}}, 'initialization', undefined},
+        {2, required, {struct, struct, {dmsl_cds_thrift, 'RotationState'}}, 'rotation', undefined},
+        {3, required, {struct, struct, {dmsl_cds_thrift, 'UnlockState'}}, 'unlock', undefined},
+        {4, required, {struct, struct, {dmsl_cds_thrift, 'RekeyingState'}}, 'rekeying', undefined}
+    ]};
 
 struct_info('KeyringState') ->
     {struct, struct, [
-    {1, required, {enum, {dmsl_cds_thrift, 'Status'}}, 'status', undefined},
-    {2, required, {struct, struct, {dmsl_cds_thrift, 'ActivitiesState'}}, 'activities', undefined}
-]};
+        {1, required, {enum, {dmsl_cds_thrift, 'Status'}}, 'status', undefined},
+        {2, required, {struct, struct, {dmsl_cds_thrift, 'ActivitiesState'}}, 'activities', undefined}
+    ]};
 
 struct_info('InvalidStatus') ->
     {struct, exception, [
-    {1, required, {enum, {dmsl_cds_thrift, 'Status'}}, 'status', undefined}
-]};
+        {1, required, {enum, {dmsl_cds_thrift, 'Status'}}, 'status', undefined}
+    ]};
 
 struct_info('InvalidActivity') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_cds_thrift, 'Activity'}}, 'activity', undefined}
-]};
+        {1, required, {struct, union, {dmsl_cds_thrift, 'Activity'}}, 'activity', undefined}
+    ]};
 
 struct_info('InvalidCardData') ->
     {struct, exception, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('CardDataNotFound') ->
     {struct, exception, []};
@@ -592,13 +592,13 @@ struct_info('SessionDataNotFound') ->
 
 struct_info('InvalidArguments') ->
     {struct, exception, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('OperationAborted') ->
     {struct, exception, [
-    {1, optional, string, 'reason', undefined}
-]};
+        {1, optional, string, 'reason', undefined}
+    ]};
 
 struct_info('VerificationFailed') ->
     {struct, exception, []};
@@ -613,72 +613,72 @@ record_name('EncryptedMasterKeyShare') ->
 record_name('ExpDate') ->
     'ExpDate';
 
-    record_name('CardData') ->
+record_name('CardData') ->
     'CardData';
 
-    record_name('PutCardDataResult') ->
+record_name('PutCardDataResult') ->
     'PutCardDataResult';
 
-    record_name('PutCardResult') ->
+record_name('PutCardResult') ->
     'PutCardResult';
 
-    record_name('CardSecurityCode') ->
+record_name('CardSecurityCode') ->
     'CardSecurityCode';
 
-    record_name('Auth3DS') ->
+record_name('Auth3DS') ->
     'Auth3DS';
 
-    record_name('SessionData') ->
+record_name('SessionData') ->
     'SessionData';
 
-    record_name('Success') ->
+record_name('Success') ->
     'Success';
 
-    record_name('RotationState') ->
+record_name('RotationState') ->
     'RotationState';
 
-    record_name('InitializationState') ->
+record_name('InitializationState') ->
     'InitializationState';
 
-    record_name('UnlockState') ->
+record_name('UnlockState') ->
     'UnlockState';
 
-    record_name('RekeyingState') ->
+record_name('RekeyingState') ->
     'RekeyingState';
 
-    record_name('ActivitiesState') ->
+record_name('ActivitiesState') ->
     'ActivitiesState';
 
-    record_name('KeyringState') ->
+record_name('KeyringState') ->
     'KeyringState';
 
-    record_name('InvalidStatus') ->
+record_name('InvalidStatus') ->
     'InvalidStatus';
 
-    record_name('InvalidActivity') ->
+record_name('InvalidActivity') ->
     'InvalidActivity';
 
-    record_name('InvalidCardData') ->
+record_name('InvalidCardData') ->
     'InvalidCardData';
 
-    record_name('CardDataNotFound') ->
+record_name('CardDataNotFound') ->
     'CardDataNotFound';
 
-    record_name('SessionDataNotFound') ->
+record_name('SessionDataNotFound') ->
     'SessionDataNotFound';
 
-    record_name('InvalidArguments') ->
+record_name('InvalidArguments') ->
     'InvalidArguments';
 
-    record_name('OperationAborted') ->
+record_name('OperationAborted') ->
     'OperationAborted';
 
-    record_name('VerificationFailed') ->
+record_name('VerificationFailed') ->
     'VerificationFailed';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Keyring') ->
     [
@@ -717,25 +717,25 @@ functions(_) -> error(badarg).
 
 function_info('Keyring', 'StartInit', params_type) ->
     {struct, struct, [
-    {1, undefined, i16, 'threshold', undefined}
-]};
+        {1, undefined, i16, 'threshold', undefined}
+    ]};
 function_info('Keyring', 'StartInit', reply_type) ->
-        {list, {struct, struct, {dmsl_cds_thrift, 'EncryptedMasterKeyShare'}}};
-    function_info('Keyring', 'StartInit', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_cds_thrift, 'EncryptedMasterKeyShare'}}};
+function_info('Keyring', 'StartInit', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidArguments'}}, 'invalid_args', undefined}
     ]};
 function_info('Keyring', 'ValidateInit', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'shareholder_id', undefined},
-    {2, undefined, string, 'key_share', undefined}
-]};
+        {1, undefined, string, 'shareholder_id', undefined},
+        {2, undefined, string, 'key_share', undefined}
+    ]};
 function_info('Keyring', 'ValidateInit', reply_type) ->
-        {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
-    function_info('Keyring', 'ValidateInit', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
+function_info('Keyring', 'ValidateInit', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'VerificationFailed'}}, 'verification_failed', undefined},
@@ -744,32 +744,32 @@ function_info('Keyring', 'ValidateInit', reply_type) ->
 function_info('Keyring', 'CancelInit', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'CancelInit', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'CancelInit', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'CancelInit', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined}
     ]};
 function_info('Keyring', 'StartRekey', params_type) ->
     {struct, struct, [
-    {1, undefined, i16, 'threshold', undefined}
-]};
+        {1, undefined, i16, 'threshold', undefined}
+    ]};
 function_info('Keyring', 'StartRekey', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'StartRekey', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'StartRekey', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidArguments'}}, 'invalid_args', undefined}
     ]};
 function_info('Keyring', 'ConfirmRekey', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'shareholder_id', undefined},
-    {2, undefined, string, 'key_share', undefined}
-]};
+        {1, undefined, string, 'shareholder_id', undefined},
+        {2, undefined, string, 'key_share', undefined}
+    ]};
 function_info('Keyring', 'ConfirmRekey', reply_type) ->
-        {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
-    function_info('Keyring', 'ConfirmRekey', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
+function_info('Keyring', 'ConfirmRekey', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'VerificationFailed'}}, 'verification_failed', undefined},
@@ -778,21 +778,21 @@ function_info('Keyring', 'ConfirmRekey', reply_type) ->
 function_info('Keyring', 'StartRekeyValidation', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'StartRekeyValidation', reply_type) ->
-        {list, {struct, struct, {dmsl_cds_thrift, 'EncryptedMasterKeyShare'}}};
-    function_info('Keyring', 'StartRekeyValidation', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_cds_thrift, 'EncryptedMasterKeyShare'}}};
+function_info('Keyring', 'StartRekeyValidation', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined}
     ]};
 function_info('Keyring', 'ValidateRekey', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'shareholder_id', undefined},
-    {2, undefined, string, 'key_share', undefined}
-]};
+        {1, undefined, string, 'shareholder_id', undefined},
+        {2, undefined, string, 'key_share', undefined}
+    ]};
 function_info('Keyring', 'ValidateRekey', reply_type) ->
-        {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
-    function_info('Keyring', 'ValidateRekey', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
+function_info('Keyring', 'ValidateRekey', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'VerificationFailed'}}, 'verification_failed', undefined},
@@ -801,35 +801,35 @@ function_info('Keyring', 'ValidateRekey', reply_type) ->
 function_info('Keyring', 'CancelRekey', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'CancelRekey', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'CancelRekey', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'CancelRekey', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined}
     ]};
 function_info('Keyring', 'GetState', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'GetState', reply_type) ->
-        {struct, struct, {dmsl_cds_thrift, 'KeyringState'}};
-    function_info('Keyring', 'GetState', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, {dmsl_cds_thrift, 'KeyringState'}};
+function_info('Keyring', 'GetState', exceptions) ->
+    {struct, struct, []};
 function_info('Keyring', 'StartUnlock', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'StartUnlock', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'StartUnlock', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'StartUnlock', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined}
     ]};
 function_info('Keyring', 'ConfirmUnlock', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'shareholder_id', undefined},
-    {2, undefined, string, 'key_share', undefined}
-]};
+        {1, undefined, string, 'shareholder_id', undefined},
+        {2, undefined, string, 'key_share', undefined}
+    ]};
 function_info('Keyring', 'ConfirmUnlock', reply_type) ->
-        {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
-    function_info('Keyring', 'ConfirmUnlock', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
+function_info('Keyring', 'ConfirmUnlock', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'VerificationFailed'}}, 'verification_failed', undefined},
@@ -838,37 +838,37 @@ function_info('Keyring', 'ConfirmUnlock', reply_type) ->
 function_info('Keyring', 'CancelUnlock', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'CancelUnlock', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'CancelUnlock', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'CancelUnlock', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined}
     ]};
 function_info('Keyring', 'Lock', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'Lock', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'Lock', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'Lock', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined}
     ]};
 function_info('Keyring', 'StartRotate', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'StartRotate', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'StartRotate', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'StartRotate', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined}
     ]};
 function_info('Keyring', 'ConfirmRotate', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'shareholder_id', undefined},
-    {2, undefined, string, 'key_share', undefined}
-]};
+        {1, undefined, string, 'shareholder_id', undefined},
+        {2, undefined, string, 'key_share', undefined}
+    ]};
 function_info('Keyring', 'ConfirmRotate', reply_type) ->
-        {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
-    function_info('Keyring', 'ConfirmRotate', exceptions) ->
-        {struct, struct, [
+    {struct, union, {dmsl_cds_thrift, 'KeyringOperationStatus'}};
+function_info('Keyring', 'ConfirmRotate', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
         {2, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidActivity'}}, 'invalid_activity', undefined},
         {3, undefined, {struct, exception, {dmsl_cds_thrift, 'VerificationFailed'}}, 'verification_failed', undefined},
@@ -877,72 +877,72 @@ function_info('Keyring', 'ConfirmRotate', reply_type) ->
 function_info('Keyring', 'CancelRotate', params_type) ->
     {struct, struct, []};
 function_info('Keyring', 'CancelRotate', reply_type) ->
-        {struct, struct, []};
-    function_info('Keyring', 'CancelRotate', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Keyring', 'CancelRotate', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidStatus'}}, 'invalid_status', undefined}
     ]};
 
 function_info('Storage', 'GetCardData', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'token', undefined}
-]};
+        {1, undefined, string, 'token', undefined}
+    ]};
 function_info('Storage', 'GetCardData', reply_type) ->
-        {struct, struct, {dmsl_cds_thrift, 'CardData'}};
-    function_info('Storage', 'GetCardData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_cds_thrift, 'CardData'}};
+function_info('Storage', 'GetCardData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'GetSessionCardData', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'token', undefined},
-    {2, undefined, string, 'session_id', undefined}
-]};
+        {1, undefined, string, 'token', undefined},
+        {2, undefined, string, 'session_id', undefined}
+    ]};
 function_info('Storage', 'GetSessionCardData', reply_type) ->
-        {struct, struct, {dmsl_cds_thrift, 'CardData'}};
-    function_info('Storage', 'GetSessionCardData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_cds_thrift, 'CardData'}};
+function_info('Storage', 'GetSessionCardData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'CardDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'GetSessionData', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'session_id', undefined}
-]};
+        {1, undefined, string, 'session_id', undefined}
+    ]};
 function_info('Storage', 'GetSessionData', reply_type) ->
-        {struct, struct, {dmsl_cds_thrift, 'SessionData'}};
-    function_info('Storage', 'GetSessionData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_cds_thrift, 'SessionData'}};
+function_info('Storage', 'GetSessionData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'SessionDataNotFound'}}, 'not_found', undefined}
     ]};
 function_info('Storage', 'PutCardData', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined},
-    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined},
+        {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
+    ]};
 function_info('Storage', 'PutCardData', reply_type) ->
-        {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
-    function_info('Storage', 'PutCardData', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
+function_info('Storage', 'PutCardData', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
     ]};
 function_info('Storage', 'PutCard', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined}
+    ]};
 function_info('Storage', 'PutCard', reply_type) ->
-        {struct, struct, {dmsl_cds_thrift, 'PutCardResult'}};
-    function_info('Storage', 'PutCard', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_cds_thrift, 'PutCardResult'}};
+function_info('Storage', 'PutCard', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
     ]};
 function_info('Storage', 'PutSession', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'session_id', undefined},
-    {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
-]};
+        {1, undefined, string, 'session_id', undefined},
+        {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
+    ]};
 function_info('Storage', 'PutSession', reply_type) ->
-        {struct, struct, []};
-    function_info('Storage', 'PutSession', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, []};
+function_info('Storage', 'PutSession', exceptions) ->
+    {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

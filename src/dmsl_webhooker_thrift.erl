@@ -388,11 +388,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -509,45 +509,45 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Webhook') ->
     {struct, struct, [
-    {1, required, i64, 'id', undefined},
-    {2, required, string, 'party_id', undefined},
-    {3, required, {struct, union, {dmsl_webhooker_thrift, 'EventFilter'}}, 'event_filter', undefined},
-    {4, required, string, 'url', undefined},
-    {5, required, string, 'pub_key', undefined},
-    {6, required, bool, 'enabled', undefined}
-]};
+        {1, required, i64, 'id', undefined},
+        {2, required, string, 'party_id', undefined},
+        {3, required, {struct, union, {dmsl_webhooker_thrift, 'EventFilter'}}, 'event_filter', undefined},
+        {4, required, string, 'url', undefined},
+        {5, required, string, 'pub_key', undefined},
+        {6, required, bool, 'enabled', undefined}
+    ]};
 
 struct_info('WebhookParams') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, {struct, union, {dmsl_webhooker_thrift, 'EventFilter'}}, 'event_filter', undefined},
-    {3, required, string, 'url', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, {struct, union, {dmsl_webhooker_thrift, 'EventFilter'}}, 'event_filter', undefined},
+        {3, required, string, 'url', undefined}
+    ]};
 
 struct_info('EventFilter') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'PartyEventFilter'}}, 'party', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceEventFilter'}}, 'invoice', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined},
-    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletEventFilter'}}, 'wallet', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'PartyEventFilter'}}, 'party', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceEventFilter'}}, 'invoice', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerEventFilter'}}, 'customer', undefined},
+        {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletEventFilter'}}, 'wallet', undefined}
+    ]};
 
 struct_info('PartyEventFilter') ->
     {struct, struct, [
-    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'PartyEventType'}}}, 'types', undefined}
-]};
+        {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'PartyEventType'}}}, 'types', undefined}
+    ]};
 
 struct_info('PartyEventType') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_webhooker_thrift, 'ClaimEventType'}}, 'claim', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_webhooker_thrift, 'ClaimEventType'}}, 'claim', undefined}
+    ]};
 
 struct_info('ClaimEventType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'ClaimCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'ClaimDenied'}}, 'denied', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'ClaimAccepted'}}, 'accepted', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'ClaimCreated'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'ClaimDenied'}}, 'denied', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'ClaimAccepted'}}, 'accepted', undefined}
+    ]};
 
 struct_info('ClaimCreated') ->
     {struct, struct, []};
@@ -560,32 +560,32 @@ struct_info('ClaimAccepted') ->
 
 struct_info('InvoiceEventFilter') ->
     {struct, struct, [
-    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'InvoiceEventType'}}}, 'types', undefined},
-    {2, optional, string, 'shop_id', undefined}
-]};
+        {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'InvoiceEventType'}}}, 'types', undefined},
+        {2, optional, string, 'shop_id', undefined}
+    ]};
 
 struct_info('InvoiceEventType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceStatusChanged'}}, 'status_changed', undefined},
-    {3, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentEventType'}}, 'payment', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceCreated'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceStatusChanged'}}, 'status_changed', undefined},
+        {3, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentEventType'}}, 'payment', undefined}
+    ]};
 
 struct_info('InvoiceCreated') ->
     {struct, struct, []};
 
 struct_info('InvoiceStatusChanged') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoiceStatus'}}, 'value', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoiceStatus'}}, 'value', undefined}
+    ]};
 
 struct_info('InvoiceStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceUnpaid'}}, 'unpaid', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaid'}}, 'paid', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceCancelled'}}, 'cancelled', undefined},
-    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceFulfilled'}}, 'fulfilled', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceUnpaid'}}, 'unpaid', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaid'}}, 'paid', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoiceFulfilled'}}, 'fulfilled', undefined}
+    ]};
 
 struct_info('InvoiceUnpaid') ->
     {struct, struct, []};
@@ -601,42 +601,42 @@ struct_info('InvoiceFulfilled') ->
 
 struct_info('InvoicePaymentEventType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined},
-    {3, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCreated'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentStatusChanged'}}, 'status_changed', undefined},
+        {3, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined}
+    ]};
 
 struct_info('InvoicePaymentCreated') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentStatusChanged') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentStatus'}}, 'value', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentStatus'}}, 'value', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundChange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundCreated') ->
     {struct, struct, []};
 
 struct_info('InvoicePaymentRefundStatusChanged') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatus'}}, 'value', undefined}
-]};
+        {1, required, {struct, union, {dmsl_webhooker_thrift, 'InvoicePaymentRefundStatus'}}, 'value', undefined}
+    ]};
 
 struct_info('InvoicePaymentStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
-    {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
-    {5, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
-    {6, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentPending'}}, 'pending', undefined},
+        {4, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentProcessed'}}, 'processed', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
+        {5, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
+        {6, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined}
+    ]};
 
 struct_info('InvoicePaymentPending') ->
     {struct, struct, []};
@@ -658,10 +658,10 @@ struct_info('InvoicePaymentRefunded') ->
 
 struct_info('InvoicePaymentRefundStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'InvoicePaymentRefundFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('InvoicePaymentRefundPending') ->
     {struct, struct, []};
@@ -674,17 +674,17 @@ struct_info('InvoicePaymentRefundFailed') ->
 
 struct_info('CustomerEventFilter') ->
     {struct, struct, [
-    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'CustomerEventType'}}}, 'types', undefined},
-    {2, optional, string, 'shop_id', undefined}
-]};
+        {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'CustomerEventType'}}}, 'types', undefined},
+        {2, optional, string, 'shop_id', undefined}
+    ]};
 
 struct_info('CustomerEventType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerCreated'}}, 'created', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerDeleted'}}, 'deleted', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerStatusReady'}}, 'ready', undefined},
-    {4, optional, {struct, union, {dmsl_webhooker_thrift, 'CustomerBindingEvent'}}, 'binding', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerCreated'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerDeleted'}}, 'deleted', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerStatusReady'}}, 'ready', undefined},
+        {4, optional, {struct, union, {dmsl_webhooker_thrift, 'CustomerBindingEvent'}}, 'binding', undefined}
+    ]};
 
 struct_info('CustomerCreated') ->
     {struct, struct, []};
@@ -697,10 +697,10 @@ struct_info('CustomerStatusReady') ->
 
 struct_info('CustomerBindingEvent') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingStarted'}}, 'started', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'CustomerBindingFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('CustomerBindingStarted') ->
     {struct, struct, []};
@@ -713,20 +713,20 @@ struct_info('CustomerBindingFailed') ->
 
 struct_info('WalletEventFilter') ->
     {struct, struct, [
-    {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'WalletEventType'}}}, 'types', undefined}
-]};
+        {1, required, {set, {struct, union, {dmsl_webhooker_thrift, 'WalletEventType'}}}, 'types', undefined}
+    ]};
 
 struct_info('WalletEventType') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_webhooker_thrift, 'WalletWithdrawalEventType'}}, 'withdrawal', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_webhooker_thrift, 'WalletWithdrawalEventType'}}, 'withdrawal', undefined}
+    ]};
 
 struct_info('WalletWithdrawalEventType') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalStarted'}}, 'started', undefined},
-    {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalSucceeded'}}, 'succeeded', undefined},
-    {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalFailed'}}, 'failed', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalStarted'}}, 'started', undefined},
+        {2, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalSucceeded'}}, 'succeeded', undefined},
+        {3, optional, {struct, struct, {dmsl_webhooker_thrift, 'WalletWithdrawalFailed'}}, 'failed', undefined}
+    ]};
 
 struct_info('WalletWithdrawalStarted') ->
     {struct, struct, []};
@@ -750,117 +750,117 @@ record_name('Webhook') ->
 record_name('WebhookParams') ->
     'webhooker_WebhookParams';
 
-    record_name('PartyEventFilter') ->
+record_name('PartyEventFilter') ->
     'webhooker_PartyEventFilter';
 
-    record_name('ClaimCreated') ->
+record_name('ClaimCreated') ->
     'webhooker_ClaimCreated';
 
-    record_name('ClaimDenied') ->
+record_name('ClaimDenied') ->
     'webhooker_ClaimDenied';
 
-    record_name('ClaimAccepted') ->
+record_name('ClaimAccepted') ->
     'webhooker_ClaimAccepted';
 
-    record_name('InvoiceEventFilter') ->
+record_name('InvoiceEventFilter') ->
     'webhooker_InvoiceEventFilter';
 
-    record_name('InvoiceCreated') ->
+record_name('InvoiceCreated') ->
     'webhooker_InvoiceCreated';
 
-    record_name('InvoiceStatusChanged') ->
+record_name('InvoiceStatusChanged') ->
     'webhooker_InvoiceStatusChanged';
 
-    record_name('InvoiceUnpaid') ->
+record_name('InvoiceUnpaid') ->
     'webhooker_InvoiceUnpaid';
 
-    record_name('InvoicePaid') ->
+record_name('InvoicePaid') ->
     'webhooker_InvoicePaid';
 
-    record_name('InvoiceCancelled') ->
+record_name('InvoiceCancelled') ->
     'webhooker_InvoiceCancelled';
 
-    record_name('InvoiceFulfilled') ->
+record_name('InvoiceFulfilled') ->
     'webhooker_InvoiceFulfilled';
 
-    record_name('InvoicePaymentCreated') ->
+record_name('InvoicePaymentCreated') ->
     'webhooker_InvoicePaymentCreated';
 
-    record_name('InvoicePaymentStatusChanged') ->
+record_name('InvoicePaymentStatusChanged') ->
     'webhooker_InvoicePaymentStatusChanged';
 
-    record_name('InvoicePaymentRefundCreated') ->
+record_name('InvoicePaymentRefundCreated') ->
     'webhooker_InvoicePaymentRefundCreated';
 
-    record_name('InvoicePaymentRefundStatusChanged') ->
+record_name('InvoicePaymentRefundStatusChanged') ->
     'webhooker_InvoicePaymentRefundStatusChanged';
 
-    record_name('InvoicePaymentPending') ->
+record_name('InvoicePaymentPending') ->
     'webhooker_InvoicePaymentPending';
 
-    record_name('InvoicePaymentProcessed') ->
+record_name('InvoicePaymentProcessed') ->
     'webhooker_InvoicePaymentProcessed';
 
-    record_name('InvoicePaymentCaptured') ->
+record_name('InvoicePaymentCaptured') ->
     'webhooker_InvoicePaymentCaptured';
 
-    record_name('InvoicePaymentCancelled') ->
+record_name('InvoicePaymentCancelled') ->
     'webhooker_InvoicePaymentCancelled';
 
-    record_name('InvoicePaymentFailed') ->
+record_name('InvoicePaymentFailed') ->
     'webhooker_InvoicePaymentFailed';
 
-    record_name('InvoicePaymentRefunded') ->
+record_name('InvoicePaymentRefunded') ->
     'webhooker_InvoicePaymentRefunded';
 
-    record_name('InvoicePaymentRefundPending') ->
+record_name('InvoicePaymentRefundPending') ->
     'webhooker_InvoicePaymentRefundPending';
 
-    record_name('InvoicePaymentRefundSucceeded') ->
+record_name('InvoicePaymentRefundSucceeded') ->
     'webhooker_InvoicePaymentRefundSucceeded';
 
-    record_name('InvoicePaymentRefundFailed') ->
+record_name('InvoicePaymentRefundFailed') ->
     'webhooker_InvoicePaymentRefundFailed';
 
-    record_name('CustomerEventFilter') ->
+record_name('CustomerEventFilter') ->
     'webhooker_CustomerEventFilter';
 
-    record_name('CustomerCreated') ->
+record_name('CustomerCreated') ->
     'webhooker_CustomerCreated';
 
-    record_name('CustomerDeleted') ->
+record_name('CustomerDeleted') ->
     'webhooker_CustomerDeleted';
 
-    record_name('CustomerStatusReady') ->
+record_name('CustomerStatusReady') ->
     'webhooker_CustomerStatusReady';
 
-    record_name('CustomerBindingStarted') ->
+record_name('CustomerBindingStarted') ->
     'webhooker_CustomerBindingStarted';
 
-    record_name('CustomerBindingSucceeded') ->
+record_name('CustomerBindingSucceeded') ->
     'webhooker_CustomerBindingSucceeded';
 
-    record_name('CustomerBindingFailed') ->
+record_name('CustomerBindingFailed') ->
     'webhooker_CustomerBindingFailed';
 
-    record_name('WalletEventFilter') ->
+record_name('WalletEventFilter') ->
     'webhooker_WalletEventFilter';
 
-    record_name('WalletWithdrawalStarted') ->
+record_name('WalletWithdrawalStarted') ->
     'webhooker_WalletWithdrawalStarted';
 
-    record_name('WalletWithdrawalSucceeded') ->
+record_name('WalletWithdrawalSucceeded') ->
     'webhooker_WalletWithdrawalSucceeded';
 
-    record_name('WalletWithdrawalFailed') ->
+record_name('WalletWithdrawalFailed') ->
     'webhooker_WalletWithdrawalFailed';
 
-    record_name('WebhookNotFound') ->
+record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('WebhookManager') ->
     [
@@ -877,38 +877,38 @@ functions(_) -> error(badarg).
 
 function_info('WebhookManager', 'GetList', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined}
+    ]};
 function_info('WebhookManager', 'GetList', reply_type) ->
-        {list, {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}}};
-    function_info('WebhookManager', 'GetList', exceptions) ->
-        {struct, struct, []};
+    {list, {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}}};
+function_info('WebhookManager', 'GetList', exceptions) ->
+    {struct, struct, []};
 function_info('WebhookManager', 'Get', params_type) ->
     {struct, struct, [
-    {1, undefined, i64, 'webhook_id', undefined}
-]};
+        {1, undefined, i64, 'webhook_id', undefined}
+    ]};
 function_info('WebhookManager', 'Get', reply_type) ->
-        {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}};
-    function_info('WebhookManager', 'Get', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}};
+function_info('WebhookManager', 'Get', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_webhooker_thrift, 'WebhookNotFound'}}, 'ex1', undefined}
     ]};
 function_info('WebhookManager', 'Create', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_webhooker_thrift, 'WebhookParams'}}, 'webhook_params', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_webhooker_thrift, 'WebhookParams'}}, 'webhook_params', undefined}
+    ]};
 function_info('WebhookManager', 'Create', reply_type) ->
-        {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}};
-    function_info('WebhookManager', 'Create', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}};
+function_info('WebhookManager', 'Create', exceptions) ->
+    {struct, struct, []};
 function_info('WebhookManager', 'Delete', params_type) ->
     {struct, struct, [
-    {1, undefined, i64, 'webhook_id', undefined}
-]};
+        {1, undefined, i64, 'webhook_id', undefined}
+    ]};
 function_info('WebhookManager', 'Delete', reply_type) ->
-        {struct, struct, []};
-    function_info('WebhookManager', 'Delete', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('WebhookManager', 'Delete', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_webhooker_thrift, 'WebhookNotFound'}}, 'ex1', undefined}
     ]};
 

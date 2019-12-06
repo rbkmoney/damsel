@@ -39,8 +39,8 @@
     'crypto_cash' :: dmsl_user_interaction_thrift:'CryptoCash'()
 }).
 
-%% struct 'QrCodeShowRequest'
--record('QrCodeShowRequest', {
+%% struct 'QrCodeDisplayRequest'
+-record('QrCodeDisplayRequest', {
     'qr_code' :: dmsl_user_interaction_thrift:'QrCode'()
 }).
 

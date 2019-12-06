@@ -21,18 +21,6 @@
 %% struct 'ExternalUser'
 -record('claim_management_ExternalUser', {}).
 
-%% struct 'ContractEffectUnit'
--record('claim_management_ContractEffectUnit', {
-    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
-    'effect' :: dmsl_claim_management_thrift:'ContractEffect'()
-}).
-
-%% struct 'ContractorEffectUnit'
--record('claim_management_ContractorEffectUnit', {
-    'id' :: dmsl_domain_thrift:'ContractorID'(),
-    'effect' :: dmsl_claim_management_thrift:'ContractorEffect'()
-}).
-
 %% struct 'ScheduleChanged'
 -record('claim_management_ScheduleChanged', {
     'schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'() | undefined
@@ -42,12 +30,6 @@
 -record('claim_management_PayoutToolInfoChanged', {
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
     'info' :: dmsl_domain_thrift:'PayoutToolInfo'()
-}).
-
-%% struct 'ShopEffectUnit'
--record('claim_management_ShopEffectUnit', {
-    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
-    'effect' :: dmsl_claim_management_thrift:'ShopEffect'()
 }).
 
 %% struct 'ShopContractChanged'
@@ -181,6 +163,7 @@
 %% struct 'Claim'
 -record('claim_management_Claim', {
     'id' :: dmsl_claim_management_thrift:'ClaimID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'status' :: dmsl_claim_management_thrift:'ClaimStatus'(),
     'changeset' :: dmsl_claim_management_thrift:'ClaimChangeset'(),
     'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),
@@ -213,10 +196,16 @@
 
 %% struct 'ClaimSearchQuery'
 -record('claim_management_ClaimSearchQuery', {
-    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
     'statuses' :: [dmsl_claim_management_thrift:'ClaimStatus'()] | undefined,
-    'token' :: dmsl_claim_management_thrift:'ContinuationToken'() | undefined,
+    'continuation_token' :: dmsl_claim_management_thrift:'ContinuationToken'() | undefined,
     'limit' :: integer()
+}).
+
+%% struct 'ClaimSearchResponse'
+-record('claim_management_ClaimSearchResponse', {
+    'result' :: [dmsl_claim_management_thrift:'Claim'()],
+    'continuation_token' :: dmsl_claim_management_thrift:'ContinuationToken'() | undefined
 }).
 
 %% exception 'ClaimNotFound'

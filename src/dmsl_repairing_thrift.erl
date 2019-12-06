@@ -97,11 +97,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -158,20 +158,20 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('ComplexAction') ->
     {struct, struct, [
-    {1, optional, {struct, union, {dmsl_repairing_thrift, 'TimerAction'}}, 'timer', undefined},
-    {3, optional, {struct, struct, {dmsl_repairing_thrift, 'RemoveAction'}}, 'remove', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_repairing_thrift, 'TimerAction'}}, 'timer', undefined},
+        {3, optional, {struct, struct, {dmsl_repairing_thrift, 'RemoveAction'}}, 'remove', undefined}
+    ]};
 
 struct_info('TimerAction') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_repairing_thrift, 'SetTimerAction'}}, 'set_timer', undefined},
-    {2, optional, {struct, struct, {dmsl_repairing_thrift, 'UnsetTimerAction'}}, 'unset_timer', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_repairing_thrift, 'SetTimerAction'}}, 'set_timer', undefined},
+        {2, optional, {struct, struct, {dmsl_repairing_thrift, 'UnsetTimerAction'}}, 'unset_timer', undefined}
+    ]};
 
 struct_info('SetTimerAction') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined}
-]};
+        {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined}
+    ]};
 
 struct_info('UnsetTimerAction') ->
     {struct, struct, []};
@@ -189,15 +189,15 @@ record_name('ComplexAction') ->
 record_name('SetTimerAction') ->
     'repair_SetTimerAction';
 
-    record_name('UnsetTimerAction') ->
+record_name('UnsetTimerAction') ->
     'repair_UnsetTimerAction';
 
-    record_name('RemoveAction') ->
+record_name('RemoveAction') ->
     'repair_RemoveAction';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

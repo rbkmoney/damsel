@@ -19,7 +19,7 @@
 -record('p2p_adapter_SleepIntent', {
     'timer' :: dmsl_base_thrift:'Timer'(),
     'user_interaction' :: dmsl_p2p_adapter_thrift:'UserInteraction'() | undefined,
-    'callback_tag' :: dmsl_p2p_adapter_thrift:'CallbackTag'()
+    'callback_tag' :: dmsl_p2p_adapter_thrift:'CallbackTag'() | undefined
 }).
 
 %% struct 'UserInteraction'

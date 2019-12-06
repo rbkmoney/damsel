@@ -75,11 +75,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -132,8 +132,8 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('HistoryWrapper') ->
     {struct, struct, [
-    {1, required, {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}}, 'history', undefined}
-]};
+        {1, required, {map, i64, {struct, struct, {dmsl_domain_config_thrift, 'Commit'}}}, 'history', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -143,8 +143,8 @@ record_name('HistoryWrapper') ->
     'papidmt_HistoryWrapper';
 
 record_name(_) -> error(badarg).
-    
-    -spec functions(_) -> no_return().
+
+-spec functions(_) -> no_return().
 
 functions(_) -> error(badarg).
 

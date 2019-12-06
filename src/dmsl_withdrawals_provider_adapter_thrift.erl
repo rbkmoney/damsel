@@ -177,11 +177,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -273,88 +273,88 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('Intent') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'FinishIntent'}}, 'finish', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'SleepIntent'}}, 'sleep', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'FinishIntent'}}, 'finish', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'SleepIntent'}}, 'sleep', undefined}
+    ]};
 
 struct_info('FinishIntent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'FinishStatus'}}, 'status', undefined}
-]};
+        {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'FinishStatus'}}, 'status', undefined}
+    ]};
 
 struct_info('FinishStatus') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Success'}}, 'success', undefined},
-    {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Success'}}, 'success', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+    ]};
 
 struct_info('Success') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx_info', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx_info', undefined}
+    ]};
 
 struct_info('SleepIntent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined}
-]};
+        {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined}
+    ]};
 
 struct_info('Withdrawal') ->
     {struct, struct, [
-    {1, required, string, 'id', undefined},
-    {2, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'body', undefined},
-    {3, required, {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}}, 'destination', undefined},
-    {4, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'sender', undefined},
-    {5, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'receiver', undefined},
-    {6, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}}, 'quote', undefined}
-]};
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'body', undefined},
+        {3, required, {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}}, 'destination', undefined},
+        {4, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'sender', undefined},
+        {5, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'receiver', undefined},
+        {6, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}}, 'quote', undefined}
+    ]};
 
 struct_info('Cash') ->
     {struct, struct, [
-    {1, required, i64, 'amount', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
-]};
+        {1, required, i64, 'amount', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
+    ]};
 
 struct_info('GetQuoteParams') ->
     {struct, struct, [
-    {1, optional, string, 'idempotency_id', undefined},
-    {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency_from', undefined},
-    {3, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency_to', undefined},
-    {4, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'exchange_cash', undefined}
-]};
+        {1, optional, string, 'idempotency_id', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency_from', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency_to', undefined},
+        {4, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'exchange_cash', undefined}
+    ]};
 
 struct_info('QuoteFailure') ->
     {struct, union, [
-    {1, optional, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'LimitExceededFailure'}}, 'limit_exceeded', undefined}
-]};
+        {1, optional, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'LimitExceededFailure'}}, 'limit_exceeded', undefined}
+    ]};
 
 struct_info('LimitExceededFailure') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GeneralFailure'}}, 'value_above_max_limit', undefined},
-    {2, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GeneralFailure'}}, 'value_below_min_limit', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GeneralFailure'}}, 'value_above_max_limit', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GeneralFailure'}}, 'value_below_min_limit', undefined}
+    ]};
 
 struct_info('GeneralFailure') ->
     {struct, struct, []};
 
 struct_info('ProcessResult') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'Intent'}}, 'intent', undefined},
-    {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined}
-]};
+        {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'Intent'}}, 'intent', undefined},
+        {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined}
+    ]};
 
 struct_info('Quote') ->
     {struct, struct, [
-    {1, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'cash_from', undefined},
-    {2, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'cash_to', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, string, 'expires_on', undefined},
-    {5, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'quote_data', undefined}
-]};
+        {1, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'cash_from', undefined},
+        {2, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'cash_to', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, string, 'expires_on', undefined},
+        {5, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'quote_data', undefined}
+    ]};
 
 struct_info('GetQuoteFailure') ->
     {struct, exception, [
-    {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'QuoteFailure'}}, 'failure', undefined}
-]};
+        {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'QuoteFailure'}}, 'failure', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -366,33 +366,33 @@ record_name('FinishIntent') ->
 record_name('Success') ->
     'wthadpt_Success';
 
-    record_name('SleepIntent') ->
+record_name('SleepIntent') ->
     'wthadpt_SleepIntent';
 
-    record_name('Withdrawal') ->
+record_name('Withdrawal') ->
     'wthadpt_Withdrawal';
 
-    record_name('Cash') ->
+record_name('Cash') ->
     'wthadpt_Cash';
 
-    record_name('GetQuoteParams') ->
+record_name('GetQuoteParams') ->
     'wthadpt_GetQuoteParams';
 
-    record_name('GeneralFailure') ->
+record_name('GeneralFailure') ->
     'wthadpt_GeneralFailure';
 
-    record_name('ProcessResult') ->
+record_name('ProcessResult') ->
     'wthadpt_ProcessResult';
 
-    record_name('Quote') ->
+record_name('Quote') ->
     'wthadpt_Quote';
 
-    record_name('GetQuoteFailure') ->
+record_name('GetQuoteFailure') ->
     'wthadpt_GetQuoteFailure';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Adapter') ->
     [
@@ -407,23 +407,23 @@ functions(_) -> error(badarg).
 
 function_info('Adapter', 'ProcessWithdrawal', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Withdrawal'}}, 'withdrawal', undefined},
-    {2, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state', undefined},
-    {3, undefined, {map, string, string}, 'opts', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Withdrawal'}}, 'withdrawal', undefined},
+        {2, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state', undefined},
+        {3, undefined, {map, string, string}, 'opts', undefined}
+    ]};
 function_info('Adapter', 'ProcessWithdrawal', reply_type) ->
-        {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ProcessResult'}};
-    function_info('Adapter', 'ProcessWithdrawal', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ProcessResult'}};
+function_info('Adapter', 'ProcessWithdrawal', exceptions) ->
+    {struct, struct, []};
 function_info('Adapter', 'GetQuote', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GetQuoteParams'}}, 'params', undefined},
-    {2, undefined, {map, string, string}, 'opts', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'GetQuoteParams'}}, 'params', undefined},
+        {2, undefined, {map, string, string}, 'opts', undefined}
+    ]};
 function_info('Adapter', 'GetQuote', reply_type) ->
-        {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}};
-    function_info('Adapter', 'GetQuote', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Quote'}};
+function_info('Adapter', 'GetQuote', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_withdrawals_provider_adapter_thrift, 'GetQuoteFailure'}}, 'ex1', undefined}
     ]};
 

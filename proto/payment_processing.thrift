@@ -552,10 +552,12 @@ struct Invoice {
 
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
+    6: optional domain.PaymentRoute route
+    7: optional FinalCashFlow cash_flow
     2: required list<InvoicePaymentAdjustment> adjustments
     4: required list<InvoicePaymentRefund> refunds
     5: required list<InvoicePaymentSession> sessions
-    6: optional list<InvoicePaymentChargeback> chargebacks
+    8: optional list<InvoicePaymentChargeback> chargebacks
     # deprecated
     3: required list<domain.InvoicePaymentRefund> legacy_refunds
 }
@@ -563,6 +565,7 @@ struct InvoicePayment {
 struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefund refund
     2: required list<InvoiceRefundSession> sessions
+    3: optional FinalCashFlow cash_flow
 }
 
 struct InvoicePaymentSession {
@@ -631,6 +634,8 @@ struct InvoicePaymentChargebackReopenParams {
      */
     2: optional bool hold_funds
 }
+
+typedef domain.FinalCashFlow FinalCashFlow
 
 /**
  * Параметры создаваемого возврата платежа.
@@ -1566,6 +1571,7 @@ struct RecurrentPaymentToolEvent {
     1: required base.EventID                     id
     2: required base.Timestamp                   created_at
     3: required RecurrentPaymentToolID           source
+    5: optional base.SequenceID                  sequence
     4: required list<RecurrentPaymentToolChange> payload
 }
 

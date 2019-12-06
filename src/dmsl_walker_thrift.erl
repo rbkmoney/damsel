@@ -161,11 +161,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -281,54 +281,54 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('PartyModificationUnit') ->
     {struct, struct, [
-    {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'modifications', undefined}
-]};
+        {1, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'modifications', undefined}
+    ]};
 
 struct_info('ClaimInfo') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, i64, 'claim_id', undefined},
-    {3, required, string, 'status', undefined},
-    {4, optional, string, 'assigned_user_id', undefined},
-    {5, optional, string, 'description', undefined},
-    {6, optional, string, 'reason', undefined},
-    {7, required, {struct, struct, {dmsl_walker_thrift, 'PartyModificationUnit'}}, 'modifications', undefined},
-    {8, required, string, 'revision', undefined},
-    {9, required, string, 'created_at', undefined},
-    {10, required, string, 'updated_at', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, i64, 'claim_id', undefined},
+        {3, required, string, 'status', undefined},
+        {4, optional, string, 'assigned_user_id', undefined},
+        {5, optional, string, 'description', undefined},
+        {6, optional, string, 'reason', undefined},
+        {7, required, {struct, struct, {dmsl_walker_thrift, 'PartyModificationUnit'}}, 'modifications', undefined},
+        {8, required, string, 'revision', undefined},
+        {9, required, string, 'created_at', undefined},
+        {10, required, string, 'updated_at', undefined}
+    ]};
 
 struct_info('ClaimSearchRequest') ->
     {struct, struct, [
-    {1, optional, string, 'party_id', undefined},
-    {2, optional, {set, i64}, 'claim_id', undefined},
-    {3, optional, string, 'contains', undefined},
-    {4, optional, string, 'assigned_user_id', undefined},
-    {5, optional, string, 'claim_status', undefined}
-]};
+        {1, optional, string, 'party_id', undefined},
+        {2, optional, {set, i64}, 'claim_id', undefined},
+        {3, optional, string, 'contains', undefined},
+        {4, optional, string, 'assigned_user_id', undefined},
+        {5, optional, string, 'claim_status', undefined}
+    ]};
 
 struct_info('Comment') ->
     {struct, struct, [
-    {1, required, string, 'text', undefined},
-    {2, required, string, 'created_at', undefined},
-    {3, required, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined}
-]};
+        {1, required, string, 'text', undefined},
+        {2, required, string, 'created_at', undefined},
+        {3, required, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined}
+    ]};
 
 struct_info('Action') ->
     {struct, struct, [
-    {1, required, string, 'created_at', undefined},
-    {2, required, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
-    {3, required, {enum, {dmsl_walker_thrift, 'ActionType'}}, 'type', undefined},
-    {4, optional, string, 'before', undefined},
-    {5, required, string, 'after', undefined}
-]};
+        {1, required, string, 'created_at', undefined},
+        {2, required, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
+        {3, required, {enum, {dmsl_walker_thrift, 'ActionType'}}, 'type', undefined},
+        {4, optional, string, 'before', undefined},
+        {5, required, string, 'after', undefined}
+    ]};
 
 struct_info('UserInformation') ->
     {struct, struct, [
-    {1, required, string, 'userID', undefined},
-    {2, optional, string, 'user_name', undefined},
-    {3, optional, string, 'email', undefined}
-]};
+        {1, required, string, 'userID', undefined},
+        {2, optional, string, 'user_name', undefined},
+        {3, optional, string, 'email', undefined}
+    ]};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -340,21 +340,21 @@ record_name('PartyModificationUnit') ->
 record_name('ClaimInfo') ->
     'walker_ClaimInfo';
 
-    record_name('ClaimSearchRequest') ->
+record_name('ClaimSearchRequest') ->
     'walker_ClaimSearchRequest';
 
-    record_name('Comment') ->
+record_name('Comment') ->
     'walker_Comment';
 
-    record_name('Action') ->
+record_name('Action') ->
     'walker_Action';
 
-    record_name('UserInformation') ->
+record_name('UserInformation') ->
     'walker_UserInformation';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Walker') ->
     [
@@ -376,15 +376,15 @@ functions(_) -> error(badarg).
 
 function_info('Walker', 'AcceptClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
-    {4, undefined, i32, 'revision', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
+        {4, undefined, i32, 'revision', undefined}
+    ]};
 function_info('Walker', 'AcceptClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('Walker', 'AcceptClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Walker', 'AcceptClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined},
@@ -394,16 +394,16 @@ function_info('Walker', 'AcceptClaim', reply_type) ->
     ]};
 function_info('Walker', 'DenyClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
-    {4, undefined, string, 'reason', undefined},
-    {5, undefined, i32, 'revision', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
+        {4, undefined, string, 'reason', undefined},
+        {5, undefined, i32, 'revision', undefined}
+    ]};
 function_info('Walker', 'DenyClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('Walker', 'DenyClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Walker', 'DenyClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex3', undefined},
@@ -412,25 +412,25 @@ function_info('Walker', 'DenyClaim', reply_type) ->
     ]};
 function_info('Walker', 'GetClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined}
+    ]};
 function_info('Walker', 'GetClaim', reply_type) ->
-        {struct, struct, {dmsl_walker_thrift, 'ClaimInfo'}};
-    function_info('Walker', 'GetClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_walker_thrift, 'ClaimInfo'}};
+function_info('Walker', 'GetClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ClaimNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Walker', 'CreateClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
-    {2, undefined, string, 'party_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_walker_thrift, 'PartyModificationUnit'}}, 'changeset', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_walker_thrift, 'PartyModificationUnit'}}, 'changeset', undefined}
+    ]};
 function_info('Walker', 'CreateClaim', reply_type) ->
-        {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
-    function_info('Walker', 'CreateClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_payment_processing_thrift, 'Claim'}};
+function_info('Walker', 'CreateClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -440,16 +440,16 @@ function_info('Walker', 'CreateClaim', reply_type) ->
     ]};
 function_info('Walker', 'UpdateClaim', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
-    {4, undefined, {struct, struct, {dmsl_walker_thrift, 'PartyModificationUnit'}}, 'changeset', undefined},
-    {5, undefined, i32, 'revision', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
+        {4, undefined, {struct, struct, {dmsl_walker_thrift, 'PartyModificationUnit'}}, 'changeset', undefined},
+        {5, undefined, i32, 'revision', undefined}
+    ]};
 function_info('Walker', 'UpdateClaim', reply_type) ->
-        {struct, struct, []};
-    function_info('Walker', 'UpdateClaim', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Walker', 'UpdateClaim', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex3', undefined},
@@ -462,40 +462,40 @@ function_info('Walker', 'UpdateClaim', reply_type) ->
     ]};
 function_info('Walker', 'SearchClaims', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_walker_thrift, 'ClaimSearchRequest'}}, 'request', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_walker_thrift, 'ClaimSearchRequest'}}, 'request', undefined}
+    ]};
 function_info('Walker', 'SearchClaims', reply_type) ->
-        {list, {struct, struct, {dmsl_walker_thrift, 'ClaimInfo'}}};
-    function_info('Walker', 'SearchClaims', exceptions) ->
-        {struct, struct, []};
+    {list, {struct, struct, {dmsl_walker_thrift, 'ClaimInfo'}}};
+function_info('Walker', 'SearchClaims', exceptions) ->
+    {struct, struct, []};
 function_info('Walker', 'AddComment', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined},
-    {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
-    {4, undefined, string, 'text', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined},
+        {3, undefined, {struct, struct, {dmsl_walker_thrift, 'UserInformation'}}, 'user', undefined},
+        {4, undefined, string, 'text', undefined}
+    ]};
 function_info('Walker', 'AddComment', reply_type) ->
-        {struct, struct, []};
-    function_info('Walker', 'AddComment', exceptions) ->
-        {struct, struct, []};
+    {struct, struct, []};
+function_info('Walker', 'AddComment', exceptions) ->
+    {struct, struct, []};
 function_info('Walker', 'GetComments', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined}
+    ]};
 function_info('Walker', 'GetComments', reply_type) ->
-        {list, {struct, struct, {dmsl_walker_thrift, 'Comment'}}};
-    function_info('Walker', 'GetComments', exceptions) ->
-        {struct, struct, []};
+    {list, {struct, struct, {dmsl_walker_thrift, 'Comment'}}};
+function_info('Walker', 'GetComments', exceptions) ->
+    {struct, struct, []};
 function_info('Walker', 'GetActions', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, i64, 'claim_id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'claim_id', undefined}
+    ]};
 function_info('Walker', 'GetActions', reply_type) ->
-        {list, {struct, struct, {dmsl_walker_thrift, 'Action'}}};
-    function_info('Walker', 'GetActions', exceptions) ->
-        {struct, struct, []};
+    {list, {struct, struct, {dmsl_walker_thrift, 'Action'}}};
+function_info('Walker', 'GetActions', exceptions) ->
+    {struct, struct, []};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).

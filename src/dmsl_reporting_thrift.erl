@@ -172,11 +172,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -281,44 +281,44 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('ReportTimeRange') ->
     {struct, struct, [
-    {1, required, string, 'from_time', undefined},
-    {2, required, string, 'to_time', undefined}
-]};
+        {1, required, string, 'from_time', undefined},
+        {2, required, string, 'to_time', undefined}
+    ]};
 
 struct_info('ReportRequest') ->
     {struct, struct, [
-    {1, required, string, 'party_id', undefined},
-    {2, required, string, 'shop_id', undefined},
-    {3, required, {struct, struct, {dmsl_reporting_thrift, 'ReportTimeRange'}}, 'time_range', undefined}
-]};
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {3, required, {struct, struct, {dmsl_reporting_thrift, 'ReportTimeRange'}}, 'time_range', undefined}
+    ]};
 
 struct_info('Report') ->
     {struct, struct, [
-    {1, required, i64, 'report_id', undefined},
-    {2, required, {struct, struct, {dmsl_reporting_thrift, 'ReportTimeRange'}}, 'time_range', undefined},
-    {3, required, string, 'created_at', undefined},
-    {4, required, {enum, {dmsl_reporting_thrift, 'ReportType'}}, 'report_type', undefined},
-    {5, required, {enum, {dmsl_reporting_thrift, 'ReportStatus'}}, 'status', undefined},
-    {6, optional, {list, {struct, struct, {dmsl_reporting_thrift, 'FileMeta'}}}, 'files', undefined}
-]};
+        {1, required, i64, 'report_id', undefined},
+        {2, required, {struct, struct, {dmsl_reporting_thrift, 'ReportTimeRange'}}, 'time_range', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {enum, {dmsl_reporting_thrift, 'ReportType'}}, 'report_type', undefined},
+        {5, required, {enum, {dmsl_reporting_thrift, 'ReportStatus'}}, 'status', undefined},
+        {6, optional, {list, {struct, struct, {dmsl_reporting_thrift, 'FileMeta'}}}, 'files', undefined}
+    ]};
 
 struct_info('FileMeta') ->
     {struct, struct, [
-    {1, required, string, 'file_id', undefined},
-    {2, required, string, 'filename', undefined},
-    {3, required, {struct, struct, {dmsl_reporting_thrift, 'Signature'}}, 'signature', undefined}
-]};
+        {1, required, string, 'file_id', undefined},
+        {2, required, string, 'filename', undefined},
+        {3, required, {struct, struct, {dmsl_reporting_thrift, 'Signature'}}, 'signature', undefined}
+    ]};
 
 struct_info('Signature') ->
     {struct, struct, [
-    {1, required, string, 'md5', undefined},
-    {2, required, string, 'sha256', undefined}
-]};
+        {1, required, string, 'md5', undefined},
+        {2, required, string, 'sha256', undefined}
+    ]};
 
 struct_info('DatasetTooBig') ->
     {struct, exception, [
-    {1, undefined, i32, 'limit', undefined}
-]};
+        {1, undefined, i32, 'limit', undefined}
+    ]};
 
 struct_info('PartyNotFound') ->
     {struct, exception, []};
@@ -342,33 +342,33 @@ record_name('ReportTimeRange') ->
 record_name('ReportRequest') ->
     'reports_ReportRequest';
 
-    record_name('Report') ->
+record_name('Report') ->
     'reports_Report';
 
-    record_name('FileMeta') ->
+record_name('FileMeta') ->
     'reports_FileMeta';
 
-    record_name('Signature') ->
+record_name('Signature') ->
     'reports_Signature';
 
-    record_name('DatasetTooBig') ->
+record_name('DatasetTooBig') ->
     'reports_DatasetTooBig';
 
-    record_name('PartyNotFound') ->
+record_name('PartyNotFound') ->
     'reports_PartyNotFound';
 
-    record_name('ShopNotFound') ->
+record_name('ShopNotFound') ->
     'reports_ShopNotFound';
 
-    record_name('ReportNotFound') ->
+record_name('ReportNotFound') ->
     'reports_ReportNotFound';
 
-    record_name('FileNotFound') ->
+record_name('FileNotFound') ->
     'reports_FileNotFound';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('Reporting') ->
     [
@@ -386,62 +386,62 @@ functions(_) -> error(badarg).
 
 function_info('Reporting', 'GetReports', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_reporting_thrift, 'ReportRequest'}}, 'request', undefined},
-    {2, undefined, {list, {enum, {dmsl_reporting_thrift, 'ReportType'}}}, 'report_types', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_reporting_thrift, 'ReportRequest'}}, 'request', undefined},
+        {2, undefined, {list, {enum, {dmsl_reporting_thrift, 'ReportType'}}}, 'report_types', undefined}
+    ]};
 function_info('Reporting', 'GetReports', reply_type) ->
-        {list, {struct, struct, {dmsl_reporting_thrift, 'Report'}}};
-    function_info('Reporting', 'GetReports', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_reporting_thrift, 'Report'}}};
+function_info('Reporting', 'GetReports', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'DatasetTooBig'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
     ]};
 function_info('Reporting', 'GenerateReport', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_reporting_thrift, 'ReportRequest'}}, 'request', undefined},
-    {2, undefined, {enum, {dmsl_reporting_thrift, 'ReportType'}}, 'report_type', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_reporting_thrift, 'ReportRequest'}}, 'request', undefined},
+        {2, undefined, {enum, {dmsl_reporting_thrift, 'ReportType'}}, 'report_type', undefined}
+    ]};
 function_info('Reporting', 'GenerateReport', reply_type) ->
-        i64;
-    function_info('Reporting', 'GenerateReport', exceptions) ->
-        {struct, struct, [
+    i64;
+function_info('Reporting', 'GenerateReport', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'PartyNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_reporting_thrift, 'ShopNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 function_info('Reporting', 'GetReport', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, string, 'shop_id', undefined},
-    {3, undefined, i64, 'report_id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, string, 'shop_id', undefined},
+        {3, undefined, i64, 'report_id', undefined}
+    ]};
 function_info('Reporting', 'GetReport', reply_type) ->
-        {struct, struct, {dmsl_reporting_thrift, 'Report'}};
-    function_info('Reporting', 'GetReport', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_reporting_thrift, 'Report'}};
+function_info('Reporting', 'GetReport', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'ReportNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Reporting', 'cancelReport', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'party_id', undefined},
-    {2, undefined, string, 'shop_id', undefined},
-    {3, undefined, i64, 'report_id', undefined}
-]};
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, string, 'shop_id', undefined},
+        {3, undefined, i64, 'report_id', undefined}
+    ]};
 function_info('Reporting', 'cancelReport', reply_type) ->
-        {struct, struct, []};
-    function_info('Reporting', 'cancelReport', exceptions) ->
-        {struct, struct, [
+    {struct, struct, []};
+function_info('Reporting', 'cancelReport', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'ReportNotFound'}}, 'ex1', undefined}
     ]};
 function_info('Reporting', 'GeneratePresignedUrl', params_type) ->
     {struct, struct, [
-    {1, undefined, string, 'file_id', undefined},
-    {2, undefined, string, 'expires_at', undefined}
-]};
+        {1, undefined, string, 'file_id', undefined},
+        {2, undefined, string, 'expires_at', undefined}
+    ]};
 function_info('Reporting', 'GeneratePresignedUrl', reply_type) ->
-        string;
-    function_info('Reporting', 'GeneratePresignedUrl', exceptions) ->
-        {struct, struct, [
+    string;
+function_info('Reporting', 'GeneratePresignedUrl', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_reporting_thrift, 'FileNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex2', undefined}
     ]};

@@ -159,11 +159,11 @@
 -type type_ref() :: {module(), atom()}.
 -type field_type() ::
     bool | byte | i16 | i32 | i64 | string | double |
-{enum, type_ref()} |
-{struct, struct_flavour(), type_ref()} |
-{list, field_type()} |
-{set, field_type()} |
-{map, field_type(), field_type()}.
+    {enum, type_ref()} |
+    {struct, struct_flavour(), type_ref()} |
+    {list, field_type()} |
+    {set, field_type()} |
+    {map, field_type(), field_type()}.
 
 -type struct_field_info() ::
     {field_num(), field_req(), field_type(), field_name(), any()}.
@@ -243,64 +243,64 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('SourceEvent') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}, 'processing_event', undefined},
-    {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}, 'payout_event', undefined},
-    {100, optional, {struct, struct, {dmsl_event_stock_thrift, 'RawEvent'}}, 'raw_event', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'Event'}}, 'processing_event', undefined},
+        {2, optional, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}, 'payout_event', undefined},
+        {100, optional, {struct, struct, {dmsl_event_stock_thrift, 'RawEvent'}}, 'raw_event', undefined}
+    ]};
 
 struct_info('StockEvent') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_event_stock_thrift, 'SourceEvent'}}, 'source_event', undefined},
-    {2, optional, i64, 'id', undefined},
-    {3, optional, string, 'time', undefined},
-    {4, optional, string, 'version', undefined}
-]};
+        {1, required, {struct, union, {dmsl_event_stock_thrift, 'SourceEvent'}}, 'source_event', undefined},
+        {2, optional, i64, 'id', undefined},
+        {3, optional, string, 'time', undefined},
+        {4, optional, string, 'version', undefined}
+    ]};
 
 struct_info('RawEvent') ->
     {struct, struct, [
-    {4, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'content', undefined}
-]};
+        {4, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'content', undefined}
+    ]};
 
 struct_info('EventIDBound') ->
     {struct, union, [
-    {1, optional, i64, 'inclusive', undefined},
-    {2, optional, i64, 'exclusive', undefined}
-]};
+        {1, optional, i64, 'inclusive', undefined},
+        {2, optional, i64, 'exclusive', undefined}
+    ]};
 
 struct_info('EventIDRange') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_event_stock_thrift, 'EventIDBound'}}, 'from_id', undefined},
-    {2, optional, {struct, union, {dmsl_event_stock_thrift, 'EventIDBound'}}, 'to_id', undefined}
-]};
+        {1, required, {struct, union, {dmsl_event_stock_thrift, 'EventIDBound'}}, 'from_id', undefined},
+        {2, optional, {struct, union, {dmsl_event_stock_thrift, 'EventIDBound'}}, 'to_id', undefined}
+    ]};
 
 struct_info('EventTimeBound') ->
     {struct, union, [
-    {1, optional, string, 'inclusive', undefined},
-    {2, optional, string, 'exclusive', undefined}
-]};
+        {1, optional, string, 'inclusive', undefined},
+        {2, optional, string, 'exclusive', undefined}
+    ]};
 
 struct_info('EventTimeRange') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_event_stock_thrift, 'EventTimeBound'}}, 'from_time', undefined},
-    {2, optional, {struct, union, {dmsl_event_stock_thrift, 'EventTimeBound'}}, 'to_time', undefined}
-]};
+        {1, required, {struct, union, {dmsl_event_stock_thrift, 'EventTimeBound'}}, 'from_time', undefined},
+        {2, optional, {struct, union, {dmsl_event_stock_thrift, 'EventTimeBound'}}, 'to_time', undefined}
+    ]};
 
 struct_info('EventRange') ->
     {struct, union, [
-    {1, optional, {struct, struct, {dmsl_event_stock_thrift, 'EventIDRange'}}, 'id_range', undefined},
-    {2, optional, {struct, struct, {dmsl_event_stock_thrift, 'EventTimeRange'}}, 'time_range', undefined}
-]};
+        {1, optional, {struct, struct, {dmsl_event_stock_thrift, 'EventIDRange'}}, 'id_range', undefined},
+        {2, optional, {struct, struct, {dmsl_event_stock_thrift, 'EventTimeRange'}}, 'time_range', undefined}
+    ]};
 
 struct_info('EventConstraint') ->
     {struct, struct, [
-    {1, required, {struct, union, {dmsl_event_stock_thrift, 'EventRange'}}, 'event_range', undefined},
-    {3, required, i32, 'limit', undefined}
-]};
+        {1, required, {struct, union, {dmsl_event_stock_thrift, 'EventRange'}}, 'event_range', undefined},
+        {3, required, i32, 'limit', undefined}
+    ]};
 
 struct_info('DatasetTooBig') ->
     {struct, exception, [
-    {1, undefined, i32, 'limit', undefined}
-]};
+        {1, undefined, i32, 'limit', undefined}
+    ]};
 
 struct_info('NoStockEvent') ->
     {struct, exception, []};
@@ -315,24 +315,24 @@ record_name('StockEvent') ->
 record_name('RawEvent') ->
     'event_stock_RawEvent';
 
-    record_name('EventIDRange') ->
+record_name('EventIDRange') ->
     'event_stock_EventIDRange';
 
-    record_name('EventTimeRange') ->
+record_name('EventTimeRange') ->
     'event_stock_EventTimeRange';
 
-    record_name('EventConstraint') ->
+record_name('EventConstraint') ->
     'event_stock_EventConstraint';
 
-    record_name('DatasetTooBig') ->
+record_name('DatasetTooBig') ->
     'event_stock_DatasetTooBig';
 
-    record_name('NoStockEvent') ->
+record_name('NoStockEvent') ->
     'event_stock_NoStockEvent';
 
-    record_name(_) -> error(badarg).
-    
-    -spec functions(service_name()) -> [function_name()] | no_return().
+record_name(_) -> error(badarg).
+
+-spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('EventRepository') ->
     [
@@ -348,29 +348,29 @@ functions(_) -> error(badarg).
 
 function_info('EventRepository', 'GetEvents', params_type) ->
     {struct, struct, [
-    {1, undefined, {struct, struct, {dmsl_event_stock_thrift, 'EventConstraint'}}, 'constraint', undefined}
-]};
+        {1, undefined, {struct, struct, {dmsl_event_stock_thrift, 'EventConstraint'}}, 'constraint', undefined}
+    ]};
 function_info('EventRepository', 'GetEvents', reply_type) ->
-        {list, {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}}};
-    function_info('EventRepository', 'GetEvents', exceptions) ->
-        {struct, struct, [
+    {list, {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}}};
+function_info('EventRepository', 'GetEvents', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_event_stock_thrift, 'DatasetTooBig'}}, 'ex2', undefined}
     ]};
 function_info('EventRepository', 'GetLastEvent', params_type) ->
     {struct, struct, []};
 function_info('EventRepository', 'GetLastEvent', reply_type) ->
-        {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}};
-    function_info('EventRepository', 'GetLastEvent', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}};
+function_info('EventRepository', 'GetLastEvent', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_event_stock_thrift, 'NoStockEvent'}}, 'ex1', undefined}
     ]};
 function_info('EventRepository', 'GetFirstEvent', params_type) ->
     {struct, struct, []};
 function_info('EventRepository', 'GetFirstEvent', reply_type) ->
-        {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}};
-    function_info('EventRepository', 'GetFirstEvent', exceptions) ->
-        {struct, struct, [
+    {struct, struct, {dmsl_event_stock_thrift, 'StockEvent'}};
+function_info('EventRepository', 'GetFirstEvent', exceptions) ->
+    {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_event_stock_thrift, 'NoStockEvent'}}, 'ex1', undefined}
     ]};
 
