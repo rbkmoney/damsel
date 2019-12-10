@@ -263,11 +263,11 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
+    'levy' :: dmsl_domain_thrift:'Cash'(),
     'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'held_funds' :: dmsl_domain_thrift:'Cash'() | undefined,
     'external_id' :: binary() | undefined
 }).
 

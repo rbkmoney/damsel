@@ -3678,11 +3678,11 @@ struct_info('InvoicePaymentChargeback') ->
         {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
         {3, required, string, 'created_at', undefined},
         {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
+        {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
         {6, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
         {7, required, i64, 'domain_revision', undefined},
         {8, optional, i64, 'party_revision', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'held_funds', undefined},
         {11, optional, string, 'external_id', undefined}
     ]};
 
