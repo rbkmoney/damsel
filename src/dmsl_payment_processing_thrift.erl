@@ -2501,7 +2501,8 @@ struct_info('InvoicePaymentChargebackParams') ->
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
         {5, optional, string, 'id', undefined},
-        {6, optional, string, 'external_id', undefined}
+        {6, optional, string, 'external_id', undefined},
+        {7, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackAcceptParams') ->

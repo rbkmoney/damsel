@@ -344,7 +344,8 @@
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackAcceptParams'

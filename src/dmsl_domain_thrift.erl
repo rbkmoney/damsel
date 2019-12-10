@@ -46,6 +46,7 @@
     'InvoicePaymentAdjustmentID'/0,
     'InvoiceContext'/0,
     'InvoicePaymentContext'/0,
+    'InvoicePaymentChargebackContext'/0,
     'PaymentSessionID'/0,
     'Fingerprint'/0,
     'IPAddress'/0,
@@ -427,6 +428,7 @@
     'InvoicePaymentAdjustmentID' |
     'InvoiceContext' |
     'InvoicePaymentContext' |
+    'InvoicePaymentChargebackContext' |
     'PaymentSessionID' |
     'Fingerprint' |
     'IPAddress' |
@@ -473,6 +475,7 @@
 -type 'InvoicePaymentAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoiceContext'() :: dmsl_base_thrift:'Content'().
 -type 'InvoicePaymentContext'() :: dmsl_base_thrift:'Content'().
+-type 'InvoicePaymentChargebackContext'() :: dmsl_base_thrift:'Content'().
 -type 'PaymentSessionID'() :: binary().
 -type 'Fingerprint'() :: binary().
 -type 'IPAddress'() :: binary().
@@ -2421,6 +2424,7 @@ typedefs() ->
         'InvoicePaymentAdjustmentID',
         'InvoiceContext',
         'InvoicePaymentContext',
+        'InvoicePaymentChargebackContext',
         'PaymentSessionID',
         'Fingerprint',
         'IPAddress',
@@ -2842,6 +2846,9 @@ typedef_info('InvoiceContext') ->
     {struct, struct, {dmsl_base_thrift, 'Content'}};
 
 typedef_info('InvoicePaymentContext') ->
+    {struct, struct, {dmsl_base_thrift, 'Content'}};
+
+typedef_info('InvoicePaymentChargebackContext') ->
     {struct, struct, {dmsl_base_thrift, 'Content'}};
 
 typedef_info('PaymentSessionID') ->
@@ -3683,6 +3690,7 @@ struct_info('InvoicePaymentChargeback') ->
         {7, required, i64, 'domain_revision', undefined},
         {8, optional, i64, 'party_revision', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {10, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {11, optional, string, 'external_id', undefined}
     ]};
 
