@@ -610,6 +610,10 @@ struct InvoicePaymentChargebackParams {
      * Внешний идентификатор объекта
      */
     6: optional string external_id
+    /**
+     * Дополнительные метаданные по чарджбэку
+     */
+    7: optional domain.InvoicePaymentChargebackContext context
 }
 
 struct InvoicePaymentChargebackAcceptParams {

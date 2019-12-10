@@ -115,6 +115,7 @@ typedef base.ID InvoicePaymentRefundID
 typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
+typedef base.Content InvoicePaymentChargebackContext
 typedef string PaymentSessionID
 typedef string Fingerprint
 typedef string IPAddress
@@ -387,6 +388,7 @@ struct InvoicePaymentChargeback {
      7: required DataRevision                    domain_revision
      8: optional PartyRevision                   party_revision
      9: optional Cash                            cash
+    10: optional InvoicePaymentChargebackContext context
     11: optional string                          external_id
 }
 
