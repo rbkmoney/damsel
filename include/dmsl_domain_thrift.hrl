@@ -659,8 +659,7 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsServiceTerms'() | undefined,
-    'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined,
-    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsServiceTerms'
@@ -672,19 +671,6 @@
 
 %% struct 'PartialCaptureServiceTerms'
 -record('domain_PartialCaptureServiceTerms', {}).
-
-%% struct 'PaymentChargebackServiceTerms'
--record('domain_PaymentChargebackServiceTerms', {
-    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
-    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
-    'eligibility_time' :: dmsl_domain_thrift:'TimeSpanSelector'() | undefined,
-    'partial_chargebacks' :: dmsl_domain_thrift:'PartialChargebackServiceTerms'() | undefined
-}).
-
-%% struct 'PartialChargebackServiceTerms'
--record('domain_PartialChargebackServiceTerms', {
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
-}).
 
 %% struct 'PaymentRefundsServiceTerms'
 -record('domain_PaymentRefundsServiceTerms', {
@@ -1103,8 +1089,7 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
-    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined,
-    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackProvisionTerms'() | undefined
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsProvisionTerms'
@@ -1116,21 +1101,10 @@
 %% struct 'PartialCaptureProvisionTerms'
 -record('domain_PartialCaptureProvisionTerms', {}).
 
-%% struct 'PaymentChargebackProvisionTerms'
--record('domain_PaymentChargebackProvisionTerms', {
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
-    'partial_chargebacks' :: dmsl_domain_thrift:'PartialChargebackProvisionTerms'() | undefined
-}).
-
 %% struct 'PaymentRefundsProvisionTerms'
 -record('domain_PaymentRefundsProvisionTerms', {
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
     'partial_refunds' :: dmsl_domain_thrift:'PartialRefundsProvisionTerms'() | undefined
-}).
-
-%% struct 'PartialChargebackProvisionTerms'
--record('domain_PartialChargebackProvisionTerms', {
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
 %% struct 'PartialRefundsProvisionTerms'
