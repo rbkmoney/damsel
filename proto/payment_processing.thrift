@@ -588,18 +588,11 @@ struct InvoicePaymentChargebackParams {
     * Код причины чарджбэка
     */
     1: required domain.InvoicePaymentChargebackReason reason
-    /*
-    /* * Необходимость удержания средств*/
-    /* * В случае, если операция считается рискованной, можно заблокировать средства*/
-    /* * на счёте мерчанта. По умолчанию мерчанту доверяем и средства не удерживаем.*/
-    /*
-    /*2: optional bool hold_funds = false*/
+
     /**
-     * TODO: perhaps do it differently?
-     * Сумма удержания.
-     * Если сумма не указана, то считаем, что средства удержанию не подлежат.
+     * Сумма списания.
      */
-    2: optional domain.Cash held_funds
+    2: required domain.Cash levy
     /**
      * Сумма возврата.
      * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
@@ -629,7 +622,7 @@ struct InvoicePaymentChargebackAcceptParams {
      * Сумма удержания.
      * Если сумма не указана, то считаем, что средства удержанию не подлежат.
      */
-    2: optional domain.Cash held_funds
+    2: optional domain.Cash levy
 }
 
 struct InvoicePaymentChargebackReopenParams {
@@ -638,18 +631,12 @@ struct InvoicePaymentChargebackReopenParams {
      * Если сумма не указана, то текущая сумма не меняется
      */
     1: optional domain.Cash cash
-    /*/
-    /* * Необходимость удержания средств*/
-    /* * В случае, если операция считается рискованной, можно заблокировать средства*/
-    /* * на счёте мерчанта.*/
-    /*
-    /*2: optional bool hold_funds*/
 
     /**
      * Сумма удержания.
      * Если сумма не указана, то считаем, что средства удержанию не подлежат.
      */
-    2: optional domain.Cash held_funds
+    2: optional domain.Cash levy
 }
 
 typedef domain.FinalCashFlow FinalCashFlow

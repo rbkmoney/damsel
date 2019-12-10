@@ -382,12 +382,11 @@ struct InvoicePaymentChargeback {
      2: required InvoicePaymentChargebackStatus  status
      3: required base.Timestamp                  created_at
      4: required InvoicePaymentChargebackReason  reason
-     /* 5: required bool                            hold_funds */
+     5: required Cash                            levy
      6: required InvoicePaymentChargebackStage   stage
      7: required DataRevision                    domain_revision
      8: optional PartyRevision                   party_revision
      9: optional Cash                            cash
-    10: optional Cash                            held_funds
     11: optional string                          external_id
 }
 
