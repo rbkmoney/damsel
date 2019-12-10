@@ -382,26 +382,16 @@ struct InvoicePaymentChargeback {
      2: required InvoicePaymentChargebackStatus  status
      3: required base.Timestamp                  created_at
      4: required InvoicePaymentChargebackReason  reason
-     5: required bool                            hold_funds
+     /* 5: required bool                            hold_funds */
      6: required InvoicePaymentChargebackStage   stage
      7: required DataRevision                    domain_revision
      8: optional PartyRevision                   party_revision
      9: optional Cash                            cash
+    10: optional Cash                            held_funds
     11: optional string                          external_id
 }
 
 typedef string ChargebackCode
-
-/*
-thought
-
-union InvoicePaymentChargebackReason {
-    1: ChargebackCode         fraud
-    2: ChargebackCode         dispute
-    3: ChargebackCode         authorisation
-    4: ChargebackCode         processing_error
-}
-*/
 
 struct InvoicePaymentChargebackReason {
     1: optional ChargebackCode code
