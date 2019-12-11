@@ -131,6 +131,7 @@
     'InvoicePaymentChargebackParams'/0,
     'InvoicePaymentChargebackAcceptParams'/0,
     'InvoicePaymentChargebackReopenParams'/0,
+    'InvoicePaymentChargebackRejectParams'/0,
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentCaptureParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
@@ -452,6 +453,7 @@
     'InvoicePaymentChargebackParams' |
     'InvoicePaymentChargebackAcceptParams' |
     'InvoicePaymentChargebackReopenParams' |
+    'InvoicePaymentChargebackRejectParams' |
     'InvoicePaymentRefundParams' |
     'InvoicePaymentCaptureParams' |
     'InvoicePaymentAdjustmentParams' |
@@ -905,6 +907,9 @@
 
 %% struct 'InvoicePaymentChargebackReopenParams'
 -type 'InvoicePaymentChargebackReopenParams'() :: #'payproc_InvoicePaymentChargebackReopenParams'{}.
+
+%% struct 'InvoicePaymentChargebackRejectParams'
+-type 'InvoicePaymentChargebackRejectParams'() :: #'payproc_InvoicePaymentChargebackRejectParams'{}.
 
 %% struct 'InvoicePaymentRefundParams'
 -type 'InvoicePaymentRefundParams'() :: #'payproc_InvoicePaymentRefundParams'{}.
@@ -1839,6 +1844,7 @@ structs() ->
         'InvoicePaymentChargebackParams',
         'InvoicePaymentChargebackAcceptParams',
         'InvoicePaymentChargebackReopenParams',
+        'InvoicePaymentChargebackRejectParams',
         'InvoicePaymentRefundParams',
         'InvoicePaymentCaptureParams',
         'InvoicePaymentAdjustmentParams',
@@ -2296,7 +2302,7 @@ struct_info('InvoicePaymentChargebackCashFlowChanged') ->
 
 struct_info('InvoicePaymentChargebackChanged') ->
     {struct, struct, [
-        {1, optional, bool, 'hold_funds', undefined},
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
         {2, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined}
     ]};
 
@@ -2498,7 +2504,7 @@ struct_info('InvoicePaymentChargebackParams') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'chargeback_amount', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
         {5, optional, string, 'id', undefined},
         {6, optional, string, 'external_id', undefined},
@@ -2514,7 +2520,12 @@ struct_info('InvoicePaymentChargebackAcceptParams') ->
 struct_info('InvoicePaymentChargebackReopenParams') ->
     {struct, struct, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackRejectParams') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundParams') ->
@@ -3718,6 +3729,9 @@ record_name('InvoicePaymentChargebackAcceptParams') ->
 
 record_name('InvoicePaymentChargebackReopenParams') ->
     'payproc_InvoicePaymentChargebackReopenParams';
+
+record_name('InvoicePaymentChargebackRejectParams') ->
+    'payproc_InvoicePaymentChargebackRejectParams';
 
 record_name('InvoicePaymentRefundParams') ->
     'payproc_InvoicePaymentRefundParams';

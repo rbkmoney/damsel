@@ -165,7 +165,7 @@
 
 %% struct 'InvoicePaymentChargebackChanged'
 -record('payproc_InvoicePaymentChargebackChanged', {
-    'hold_funds' :: boolean() | undefined,
+    'levy' :: dmsl_domain_thrift:'Cash'() | undefined,
     'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined
 }).
 
@@ -341,7 +341,7 @@
 -record('payproc_InvoicePaymentChargebackParams', {
     'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
     'levy' :: dmsl_domain_thrift:'Cash'(),
-    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'chargeback_amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
     'external_id' :: binary() | undefined,
@@ -357,7 +357,12 @@
 %% struct 'InvoicePaymentChargebackReopenParams'
 -record('payproc_InvoicePaymentChargebackReopenParams', {
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'levy' :: dmsl_domain_thrift:'Cash'() | undefined
+    'levy' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'InvoicePaymentChargebackRejectParams'
+-record('payproc_InvoicePaymentChargebackRejectParams', {
+    'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentRefundParams'

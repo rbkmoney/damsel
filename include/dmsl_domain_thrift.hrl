@@ -266,8 +266,8 @@
     'levy' :: dmsl_domain_thrift:'Cash'(),
     'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'(),
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'chargeback_amount' :: dmsl_domain_thrift:'Cash'(),
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
-    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined,
     'external_id' :: binary() | undefined
 }).
@@ -301,16 +301,20 @@
 
 %% struct 'InvoicePaymentChargebackPending'
 -record('domain_InvoicePaymentChargebackPending', {
-    'cash' :: dmsl_domain_thrift:'Cash'()
+    'chargeback_amount' :: dmsl_domain_thrift:'Cash'(),
+    'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentChargebackAccepted'
 -record('domain_InvoicePaymentChargebackAccepted', {
-    'cash' :: dmsl_domain_thrift:'Cash'()
+    'chargeback_amount' :: dmsl_domain_thrift:'Cash'(),
+    'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentChargebackRejected'
--record('domain_InvoicePaymentChargebackRejected', {}).
+-record('domain_InvoicePaymentChargebackRejected', {
+    'levy' :: dmsl_domain_thrift:'Cash'()
+}).
 
 %% struct 'InvoicePaymentChargebackCancelled'
 -record('domain_InvoicePaymentChargebackCancelled', {}).
