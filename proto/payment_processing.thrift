@@ -349,7 +349,7 @@ struct InvoicePaymentChargebackCashFlowChanged {
  * Событие об изменении чарджбека
  */
 struct InvoicePaymentChargebackChanged {
-    1: optional bool                                  hold_funds
+    1: optional Cash                                  levy
     2: optional domain.InvoicePaymentChargebackStatus target_status
 }
 
@@ -590,14 +590,16 @@ struct InvoicePaymentChargebackParams {
     1: required domain.InvoicePaymentChargebackReason reason
 
     /**
-     * Сумма списания.
+     * Сумма списания: количество денежных средств, подлежащих удержанию
+     * со счёта продавца.
      */
     2: required domain.Cash levy
     /**
-     * Сумма возврата.
-     * Если сумма не указана, то считаем, что это возврат на полную сумму платежа.
+     * Размер опротестования.
+     * Если не указан, то считаем, что это возврат на полную сумму платежа.
+     * Не может быть больше суммы платежа.
      */
-    3: optional domain.Cash cash
+    3: optional domain.Cash chargeback_amount
     /**
      * Данные проведённой вручную транзакции
      */
@@ -623,8 +625,8 @@ struct InvoicePaymentChargebackAcceptParams {
      */
     1: optional domain.Cash cash
     /**
-     * Сумма удержания.
-     * Если сумма не указана, то считаем, что средства удержанию не подлежат.
+     * Сумма списания.
+     * Если сумма не указана, то текущая сумма не меняется
      */
     2: optional domain.Cash levy
 }
@@ -637,10 +639,16 @@ struct InvoicePaymentChargebackReopenParams {
     1: optional domain.Cash cash
 
     /**
-     * Сумма удержания.
-     * Если сумма не указана, то считаем, что средства удержанию не подлежат.
+     * Сумма списания.
      */
-    2: optional domain.Cash levy
+    2: required domain.Cash levy
+}
+
+struct InvoicePaymentChargebackRejectParams {
+    /**
+     * Сумма списания.
+     */
+    1: required domain.Cash levy
 }
 
 typedef domain.FinalCashFlow FinalCashFlow

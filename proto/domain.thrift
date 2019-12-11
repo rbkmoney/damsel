@@ -386,8 +386,8 @@ struct InvoicePaymentChargeback {
      5: required Cash                            levy
      6: required InvoicePaymentChargebackStage   stage
      7: required DataRevision                    domain_revision
-     8: optional PartyRevision                   party_revision
-     9: optional Cash                            cash
+     8: required Cash                            chargeback_amount
+     9: optional PartyRevision                   party_revision
     10: optional InvoicePaymentChargebackContext context
     11: optional string                          external_id
 }
@@ -448,9 +448,17 @@ union InvoicePaymentChargebackStatus {
     4: InvoicePaymentChargebackCancelled cancelled
 }
 
-struct InvoicePaymentChargebackPending   { 1: required Cash cash }
-struct InvoicePaymentChargebackAccepted  { 1: required Cash cash }
-struct InvoicePaymentChargebackRejected  {}
+struct InvoicePaymentChargebackPending   {
+    1: required Cash chargeback_amount
+    2: required Cash levy
+}
+struct InvoicePaymentChargebackAccepted  {
+    1: required Cash chargeback_amount
+    2: required Cash levy
+}
+struct InvoicePaymentChargebackRejected  {
+    1: required Cash levy
+}
 struct InvoicePaymentChargebackCancelled {}
 
 /* Refunds */
