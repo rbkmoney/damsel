@@ -623,7 +623,7 @@ struct InvoicePaymentChargebackAcceptParams {
      * Сумма возврата.
      * Если сумма не указана, то текущая сумма не меняется
      */
-    1: optional domain.Cash cash
+    1: optional domain.Cash chargeback_amount
     /**
      * Сумма списания.
      * Если сумма не указана, то текущая сумма не меняется
@@ -636,7 +636,7 @@ struct InvoicePaymentChargebackReopenParams {
      * Сумма возврата.
      * Если сумма не указана, то текущая сумма не меняется
      */
-    1: optional domain.Cash cash
+    1: optional domain.Cash chargeback_amount
 
     /**
      * Сумма списания.

@@ -350,13 +350,13 @@
 
 %% struct 'InvoicePaymentChargebackAcceptParams'
 -record('payproc_InvoicePaymentChargebackAcceptParams', {
-    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'chargeback_amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'levy' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackReopenParams'
 -record('payproc_InvoicePaymentChargebackReopenParams', {
-    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'chargeback_amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
