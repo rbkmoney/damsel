@@ -2504,7 +2504,7 @@ struct_info('InvoicePaymentChargebackParams') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'chargeback_amount', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
         {5, optional, string, 'id', undefined},
         {6, optional, string, 'external_id', undefined},
@@ -2513,13 +2513,13 @@ struct_info('InvoicePaymentChargebackParams') ->
 
 struct_info('InvoicePaymentChargebackAcceptParams') ->
     {struct, struct, [
-        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'chargeback_amount', undefined},
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackReopenParams') ->
     {struct, struct, [
-        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'chargeback_amount', undefined},
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 

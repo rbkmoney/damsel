@@ -384,9 +384,9 @@ struct InvoicePaymentChargeback {
      3: required base.Timestamp                  created_at
      4: required InvoicePaymentChargebackReason  reason
      5: required Cash                            levy
-     6: required InvoicePaymentChargebackStage   stage
-     7: required DataRevision                    domain_revision
-     8: required Cash                            chargeback_amount
+     6: required Cash                            body
+     7: required InvoicePaymentChargebackStage   stage
+     8: required DataRevision                    domain_revision
      9: optional PartyRevision                   party_revision
     10: optional InvoicePaymentChargebackContext context
     11: optional string                          external_id
@@ -449,11 +449,11 @@ union InvoicePaymentChargebackStatus {
 }
 
 struct InvoicePaymentChargebackPending   {
-    1: required Cash chargeback_amount
+    1: required Cash body
     2: required Cash levy
 }
 struct InvoicePaymentChargebackAccepted  {
-    1: required Cash chargeback_amount
+    1: required Cash body
     2: required Cash levy
 }
 struct InvoicePaymentChargebackRejected  {

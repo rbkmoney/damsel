@@ -341,7 +341,7 @@
 -record('payproc_InvoicePaymentChargebackParams', {
     'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
     'levy' :: dmsl_domain_thrift:'Cash'(),
-    'chargeback_amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
     'external_id' :: binary() | undefined,
@@ -350,13 +350,13 @@
 
 %% struct 'InvoicePaymentChargebackAcceptParams'
 -record('payproc_InvoicePaymentChargebackAcceptParams', {
-    'chargeback_amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined,
     'levy' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackReopenParams'
 -record('payproc_InvoicePaymentChargebackReopenParams', {
-    'chargeback_amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined,
     'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
