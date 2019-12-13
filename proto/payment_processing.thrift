@@ -1106,6 +1106,7 @@ service Invoicing {
         2: domain.InvoiceID id
         3: domain.InvoicePaymentID payment_id
         4: domain.InvoicePaymentChargebackID chargeback_id
+        5: InvoicePaymentChargebackRejectParams params
     )
         throws (
             1:  InvalidUser ex1,
@@ -1113,6 +1114,7 @@ service Invoicing {
             3:  InvoicePaymentNotFound ex3,
             4:  InvoicePaymentChargebackNotFound ex4
             6:  OperationNotPermitted ex6,
+            9:  InconsistentChargebackCurrency ex9,
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
         )
