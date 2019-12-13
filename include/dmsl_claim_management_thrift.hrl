@@ -197,6 +197,7 @@
 %% struct 'ClaimSearchQuery'
 -record('claim_management_ClaimSearchQuery', {
     'party_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
+    'claim_id' :: dmsl_claim_management_thrift:'ClaimID'() | undefined,
     'statuses' :: [dmsl_claim_management_thrift:'ClaimStatus'()] | undefined,
     'continuation_token' :: dmsl_claim_management_thrift:'ContinuationToken'() | undefined,
     'limit' :: integer()
