@@ -4610,7 +4610,8 @@ function_info('Invoicing', 'RejectChargeback', params_type) ->
         {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
         {2, undefined, string, 'id', undefined},
         {3, undefined, string, 'payment_id', undefined},
-        {4, undefined, string, 'chargeback_id', undefined}
+        {4, undefined, string, 'chargeback_id', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackRejectParams'}}, 'params', undefined}
     ]};
 function_info('Invoicing', 'RejectChargeback', reply_type) ->
     {struct, struct, []};
@@ -4621,6 +4622,7 @@ function_info('Invoicing', 'RejectChargeback', exceptions) ->
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentChargebackCurrency'}}, 'ex9', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
     ]};
