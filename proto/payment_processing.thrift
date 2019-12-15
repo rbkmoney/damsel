@@ -349,8 +349,7 @@ struct InvoicePaymentChargebackCashFlowChanged {
  * Событие об изменении чарджбека
  */
 struct InvoicePaymentChargebackChanged {
-    1: optional domain.Cash                           levy
-    2: optional domain.InvoicePaymentChargebackStatus target_status
+    1: optional domain.InvoicePaymentChargebackStatus target_status
 }
 
 struct InvoicePaymentChargebackStageChanged {

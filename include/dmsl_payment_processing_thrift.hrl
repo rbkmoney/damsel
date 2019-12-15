@@ -165,7 +165,6 @@
 
 %% struct 'InvoicePaymentChargebackChanged'
 -record('payproc_InvoicePaymentChargebackChanged', {
-    'levy' :: dmsl_domain_thrift:'Cash'() | undefined,
     'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined
 }).
 
