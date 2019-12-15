@@ -350,8 +350,6 @@ struct InvoicePaymentChargebackCashFlowChanged {
  */
 struct InvoicePaymentChargebackChanged {
     1: optional domain.InvoicePaymentChargebackStatus target_status
-    2: optional domain.Cash                           levy
-    3: optional domain.Cash                           body
 }
 
 struct InvoicePaymentChargebackStageChanged {
