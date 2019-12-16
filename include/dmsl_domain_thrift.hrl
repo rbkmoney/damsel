@@ -301,20 +301,16 @@
 
 %% struct 'InvoicePaymentChargebackPending'
 -record('domain_InvoicePaymentChargebackPending', {
-    'body' :: dmsl_domain_thrift:'Cash'(),
-    'levy' :: dmsl_domain_thrift:'Cash'()
+    'body' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentChargebackAccepted'
 -record('domain_InvoicePaymentChargebackAccepted', {
-    'body' :: dmsl_domain_thrift:'Cash'(),
-    'levy' :: dmsl_domain_thrift:'Cash'()
+    'body' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentChargebackRejected'
--record('domain_InvoicePaymentChargebackRejected', {
-    'levy' :: dmsl_domain_thrift:'Cash'()
-}).
+-record('domain_InvoicePaymentChargebackRejected', {}).
 
 %% struct 'InvoicePaymentChargebackCancelled'
 -record('domain_InvoicePaymentChargebackCancelled', {}).
