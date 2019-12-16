@@ -448,17 +448,9 @@ union InvoicePaymentChargebackStatus {
     4: InvoicePaymentChargebackCancelled cancelled
 }
 
-struct InvoicePaymentChargebackPending   {
-    1: required Cash body
-    2: required Cash levy
-}
-struct InvoicePaymentChargebackAccepted  {
-    1: required Cash body
-    2: required Cash levy
-}
-struct InvoicePaymentChargebackRejected  {
-    1: required Cash levy
-}
+struct InvoicePaymentChargebackPending   { 1: required Cash body }
+struct InvoicePaymentChargebackAccepted  { 1: required Cash body }
+struct InvoicePaymentChargebackRejected  {}
 struct InvoicePaymentChargebackCancelled {}
 
 /* Refunds */
