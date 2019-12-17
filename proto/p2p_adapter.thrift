@@ -112,6 +112,10 @@ struct Cash {
     2: required domain.Currency currency
 }
 
+struct Fees {
+    1: required map<domain.CashFlowConstant, Cash> fees
+}
+
 /**
  * Данные операции, необходимые для обращения к провайдеру.
  */
@@ -127,6 +131,18 @@ struct ProcessOperationInfo {
      * Сумма является просто атрибутом операции, от которой могут вычисляться прочие величины.
      */
     1: required Cash body
+
+    /**
+     * Дополнительные значения различных комиссий по операции.
+     * Например:
+     * ```
+     * {'surplus': Cash{
+     *   amount = 42,
+     *   currency = Currency{name = 'Rubles', symbolic_code = 'RUB', ...}
+     * }}
+     * ```
+     */
+    5: optional Fees fees
 
     /** Платежный инструмент, с которого будут списываться деньги. */
     2: required PaymentResource sender
