@@ -163,7 +163,8 @@
 -type 'TerminalPaymentProvider'() ::
     'euroset' |
     'wechat' |
-    'alipay'.
+    'alipay' |
+    'zotapay'.
 
 %% enum 'DigitalWalletProvider'
 -type 'DigitalWalletProvider'() ::
@@ -656,7 +657,8 @@ enum_info('TerminalPaymentProvider') ->
     {enum, [
         {'euroset', 0},
         {'wechat', 1},
-        {'alipay', 2}
+        {'alipay', 2},
+        {'zotapay', 3}
     ]};
 
 enum_info('DigitalWalletProvider') ->
