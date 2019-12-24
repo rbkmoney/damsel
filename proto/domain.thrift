@@ -1480,6 +1480,7 @@ enum TerminalPaymentProvider {
     euroset
     wechat
     alipay
+    zotapay
 }
 
 typedef string DigitalWalletID
