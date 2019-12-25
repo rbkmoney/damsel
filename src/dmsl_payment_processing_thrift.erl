@@ -96,9 +96,9 @@
     'InvoicePaymentChargebackChangePayload'/0,
     'InvoicePaymentChargebackCreated'/0,
     'InvoicePaymentChargebackStatusChanged'/0,
-    'InvoicePaymentChargebackCashFlowCreated'/0,
     'InvoicePaymentChargebackCashFlowChanged'/0,
-    'InvoicePaymentChargebackChanged'/0,
+    'InvoicePaymentChargebackBodyChanged'/0,
+    'InvoicePaymentChargebackLevyChanged'/0,
     'InvoicePaymentChargebackStageChanged'/0,
     'InvoicePaymentRefundChange'/0,
     'InvoicePaymentRefundChangePayload'/0,
@@ -418,9 +418,9 @@
     'InvoicePaymentChargebackChangePayload' |
     'InvoicePaymentChargebackCreated' |
     'InvoicePaymentChargebackStatusChanged' |
-    'InvoicePaymentChargebackCashFlowCreated' |
     'InvoicePaymentChargebackCashFlowChanged' |
-    'InvoicePaymentChargebackChanged' |
+    'InvoicePaymentChargebackBodyChanged' |
+    'InvoicePaymentChargebackLevyChanged' |
     'InvoicePaymentChargebackStageChanged' |
     'InvoicePaymentRefundChange' |
     'InvoicePaymentRefundChangePayload' |
@@ -782,9 +782,9 @@
 -type 'InvoicePaymentChargebackChangePayload'() ::
     {'invoice_payment_chargeback_created', 'InvoicePaymentChargebackCreated'()} |
     {'invoice_payment_chargeback_status_changed', 'InvoicePaymentChargebackStatusChanged'()} |
-    {'invoice_payment_chargeback_cash_flow_created', 'InvoicePaymentChargebackCashFlowCreated'()} |
     {'invoice_payment_chargeback_cash_flow_changed', 'InvoicePaymentChargebackCashFlowChanged'()} |
-    {'invoice_payment_chargeback_changed', 'InvoicePaymentChargebackChanged'()} |
+    {'invoice_payment_chargeback_body_changed', 'InvoicePaymentChargebackBodyChanged'()} |
+    {'invoice_payment_chargeback_levy_changed', 'InvoicePaymentChargebackLevyChanged'()} |
     {'invoice_payment_chargeback_stage_changed', 'InvoicePaymentChargebackStageChanged'()}.
 
 %% struct 'InvoicePaymentChargebackCreated'
@@ -793,14 +793,14 @@
 %% struct 'InvoicePaymentChargebackStatusChanged'
 -type 'InvoicePaymentChargebackStatusChanged'() :: #'payproc_InvoicePaymentChargebackStatusChanged'{}.
 
-%% struct 'InvoicePaymentChargebackCashFlowCreated'
--type 'InvoicePaymentChargebackCashFlowCreated'() :: #'payproc_InvoicePaymentChargebackCashFlowCreated'{}.
-
 %% struct 'InvoicePaymentChargebackCashFlowChanged'
 -type 'InvoicePaymentChargebackCashFlowChanged'() :: #'payproc_InvoicePaymentChargebackCashFlowChanged'{}.
 
-%% struct 'InvoicePaymentChargebackChanged'
--type 'InvoicePaymentChargebackChanged'() :: #'payproc_InvoicePaymentChargebackChanged'{}.
+%% struct 'InvoicePaymentChargebackBodyChanged'
+-type 'InvoicePaymentChargebackBodyChanged'() :: #'payproc_InvoicePaymentChargebackBodyChanged'{}.
+
+%% struct 'InvoicePaymentChargebackLevyChanged'
+-type 'InvoicePaymentChargebackLevyChanged'() :: #'payproc_InvoicePaymentChargebackLevyChanged'{}.
 
 %% struct 'InvoicePaymentChargebackStageChanged'
 -type 'InvoicePaymentChargebackStageChanged'() :: #'payproc_InvoicePaymentChargebackStageChanged'{}.
@@ -1809,9 +1809,9 @@ structs() ->
         'InvoicePaymentChargebackChangePayload',
         'InvoicePaymentChargebackCreated',
         'InvoicePaymentChargebackStatusChanged',
-        'InvoicePaymentChargebackCashFlowCreated',
         'InvoicePaymentChargebackCashFlowChanged',
-        'InvoicePaymentChargebackChanged',
+        'InvoicePaymentChargebackBodyChanged',
+        'InvoicePaymentChargebackLevyChanged',
         'InvoicePaymentChargebackStageChanged',
         'InvoicePaymentRefundChange',
         'InvoicePaymentRefundChangePayload',
@@ -2274,9 +2274,9 @@ struct_info('InvoicePaymentChargebackChangePayload') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
         {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
-        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowCreated'}}, 'invoice_payment_chargeback_cash_flow_created', undefined},
-        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined},
-        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChanged'}}, 'invoice_payment_chargeback_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackBodyChanged'}}, 'invoice_payment_chargeback_body_changed', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackLevyChanged'}}, 'invoice_payment_chargeback_levy_changed', undefined},
         {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStageChanged'}}, 'invoice_payment_chargeback_stage_changed', undefined}
     ]};
 
@@ -2290,19 +2290,18 @@ struct_info('InvoicePaymentChargebackStatusChanged') ->
         {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
     ]};
 
-struct_info('InvoicePaymentChargebackCashFlowCreated') ->
-    {struct, struct, [
-        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
-    ]};
-
 struct_info('InvoicePaymentChargebackCashFlowChanged') ->
     {struct, struct, [
         {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
-struct_info('InvoicePaymentChargebackChanged') ->
+struct_info('InvoicePaymentChargebackBodyChanged') ->
     {struct, struct, [
-        {1, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'target_status', undefined},
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackLevyChanged') ->
+    {struct, struct, [
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
@@ -3637,14 +3636,14 @@ record_name('InvoicePaymentChargebackCreated') ->
 record_name('InvoicePaymentChargebackStatusChanged') ->
     'payproc_InvoicePaymentChargebackStatusChanged';
 
-record_name('InvoicePaymentChargebackCashFlowCreated') ->
-    'payproc_InvoicePaymentChargebackCashFlowCreated';
-
 record_name('InvoicePaymentChargebackCashFlowChanged') ->
     'payproc_InvoicePaymentChargebackCashFlowChanged';
 
-record_name('InvoicePaymentChargebackChanged') ->
-    'payproc_InvoicePaymentChargebackChanged';
+record_name('InvoicePaymentChargebackBodyChanged') ->
+    'payproc_InvoicePaymentChargebackBodyChanged';
+
+record_name('InvoicePaymentChargebackLevyChanged') ->
+    'payproc_InvoicePaymentChargebackLevyChanged';
 
 record_name('InvoicePaymentChargebackStageChanged') ->
     'payproc_InvoicePaymentChargebackStageChanged';

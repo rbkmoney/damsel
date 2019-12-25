@@ -153,19 +153,18 @@
     'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
 }).
 
-%% struct 'InvoicePaymentChargebackCashFlowCreated'
--record('payproc_InvoicePaymentChargebackCashFlowCreated', {
-    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
-}).
-
 %% struct 'InvoicePaymentChargebackCashFlowChanged'
 -record('payproc_InvoicePaymentChargebackCashFlowChanged', {
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
-%% struct 'InvoicePaymentChargebackChanged'
--record('payproc_InvoicePaymentChargebackChanged', {
-    'target_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'() | undefined,
+%% struct 'InvoicePaymentChargebackBodyChanged'
+-record('payproc_InvoicePaymentChargebackBodyChanged', {
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackLevyChanged'
+-record('payproc_InvoicePaymentChargebackLevyChanged', {
     'levy' :: dmsl_domain_thrift:'Cash'() | undefined
 }).
 

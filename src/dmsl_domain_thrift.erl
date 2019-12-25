@@ -3769,14 +3769,10 @@ struct_info('InvoicePaymentChargebackStatus') ->
     ]};
 
 struct_info('InvoicePaymentChargebackPending') ->
-    {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined}
-    ]};
+    {struct, struct, []};
 
 struct_info('InvoicePaymentChargebackAccepted') ->
-    {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined}
-    ]};
+    {struct, struct, []};
 
 struct_info('InvoicePaymentChargebackRejected') ->
     {struct, struct, []};

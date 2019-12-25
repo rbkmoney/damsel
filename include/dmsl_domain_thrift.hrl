@@ -300,14 +300,10 @@
 -record('domain_InvoicePaymentChargebackStageArbitration', {}).
 
 %% struct 'InvoicePaymentChargebackPending'
--record('domain_InvoicePaymentChargebackPending', {
-    'body' :: dmsl_domain_thrift:'Cash'()
-}).
+-record('domain_InvoicePaymentChargebackPending', {}).
 
 %% struct 'InvoicePaymentChargebackAccepted'
--record('domain_InvoicePaymentChargebackAccepted', {
-    'body' :: dmsl_domain_thrift:'Cash'()
-}).
+-record('domain_InvoicePaymentChargebackAccepted', {}).
 
 %% struct 'InvoicePaymentChargebackRejected'
 -record('domain_InvoicePaymentChargebackRejected', {}).
