@@ -310,10 +310,9 @@ struct InvoicePaymentChargebackChange {
 union InvoicePaymentChargebackChangePayload {
     1: InvoicePaymentChargebackCreated         invoice_payment_chargeback_created
     2: InvoicePaymentChargebackStatusChanged   invoice_payment_chargeback_status_changed
-    // maybe remove created
-    3: InvoicePaymentChargebackCashFlowCreated invoice_payment_chargeback_cash_flow_created
-    4: InvoicePaymentChargebackCashFlowChanged invoice_payment_chargeback_cash_flow_changed
-    5: InvoicePaymentChargebackChanged         invoice_payment_chargeback_changed
+    3: InvoicePaymentChargebackCashFlowChanged invoice_payment_chargeback_cash_flow_changed
+    4: InvoicePaymentChargebackBodyChanged     invoice_payment_chargeback_body_changed
+    5: InvoicePaymentChargebackLevyChanged     invoice_payment_chargeback_levy_changed
     6: InvoicePaymentChargebackStageChanged    invoice_payment_chargeback_stage_changed
 }
 
@@ -332,13 +331,6 @@ struct InvoicePaymentChargebackStatusChanged {
 }
 
 /**
- * Событие о создании кэшфлоу чарджбека
- */
-struct InvoicePaymentChargebackCashFlowCreated {
-    1: required domain.FinalCashFlow cash_flow
-}
-
-/**
  * Событие об изменении кэшфлоу чарджбека
  */
 struct InvoicePaymentChargebackCashFlowChanged {
@@ -346,15 +338,24 @@ struct InvoicePaymentChargebackCashFlowChanged {
 }
 
 /**
- * Событие об изменении чарджбека
+ * Событие об изменении объёма чарджбека
  */
-struct InvoicePaymentChargebackChanged {
-    1: optional domain.InvoicePaymentChargebackStatus target_status
-    2: optional domain.Cash                           levy
+struct InvoicePaymentChargebackBodyChanged {
+    1: optional domain.Cash body
 }
 
+/**
+ * Событие об изменении размера списываемых средств у чарджбека
+ */
+struct InvoicePaymentChargebackLevyChanged {
+    2: optional domain.Cash levy
+}
+
+/**
+ * Событие об изменении стадии чарджека
+ */
 struct InvoicePaymentChargebackStageChanged {
-    1: required domain.InvoicePaymentChargebackStage  stage
+    1: required domain.InvoicePaymentChargebackStage stage
 }
 
 /**
