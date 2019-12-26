@@ -293,77 +293,70 @@ service ClaimManagement {
 
         Claim CreateClaim (1: domain.PartyID party_id, 2: list<Modification> changeset)
             throws (
-                1: PartyNotFound ex1,
-                2: ChangesetConflict ex2,
-                3: InvalidChangeset ex3,
-                4: base.InvalidRequest ex4
+                1: ChangesetConflict ex,
+                2: InvalidChangeset ex,
+                3: base.InvalidRequest ex
             )
 
         Claim GetClaim (1: domain.PartyID party_id, 2: ClaimID id)
-            throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2)
+            throws (1: ClaimNotFound ex)
 
         ClaimSearchResponse SearchClaims (1: ClaimSearchQuery claim_request)
-                throws (1: PartyNotFound ex1, 2: LimitExceeded ex2, 3: BadContinuationToken ex3)
+                throws (1: LimitExceeded ex, 2: BadContinuationToken ex)
 
         void AcceptClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
-                    1: PartyNotFound ex1,
-                    2: ClaimNotFound ex2,
-                    3: InvalidClaimStatus ex3,
-                    4: InvalidClaimRevision ex4,
-                    5: InvalidChangeset ex5
+                    1: ClaimNotFound ex,
+                    2: InvalidClaimStatus ex,
+                    3: InvalidClaimRevision ex,
+                    4: InvalidChangeset ex
                 )
 
         void UpdateClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: list<Modification> changeset)
                 throws (
-                    1: PartyNotFound ex1,
-                    2: ClaimNotFound ex2,
-                    3: InvalidClaimStatus ex3,
-                    4: InvalidClaimRevision ex4,
-                    5: ChangesetConflict ex5,
-                    6: InvalidChangeset ex6
+                    1: ClaimNotFound ex,
+                    2: InvalidClaimStatus ex,
+                    3: InvalidClaimRevision ex,
+                    4: ChangesetConflict ex,
+                    5: InvalidChangeset ex
                 )
 
         void RequestClaimReview(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
-                    1: PartyNotFound ex1,
-                    2: ClaimNotFound ex2,
-                    3: InvalidClaimStatus ex3,
-                    4: InvalidClaimRevision ex4
+                    1: ClaimNotFound ex,
+                    2: InvalidClaimStatus ex,
+                    3: InvalidClaimRevision ex
                 )
 
         void RequestClaimChanges(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
-                    1: PartyNotFound ex1,
-                    2: ClaimNotFound ex2,
-                    3: InvalidClaimStatus ex3,
-                    4: InvalidClaimRevision ex4
+                    1: ClaimNotFound ex,
+                    2: InvalidClaimStatus ex,
+                    3: InvalidClaimRevision ex
                 )
 
         void DenyClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: string reason)
                 throws (
-                    1: PartyNotFound ex1,
-                    2: ClaimNotFound ex2,
-                    3: InvalidClaimStatus ex3,
-                    4: InvalidClaimRevision ex4
+                    1: ClaimNotFound ex,
+                    2: InvalidClaimStatus ex,
+                    3: InvalidClaimRevision ex
                 )
 
         void RevokeClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: string reason)
                 throws (
-                    1: PartyNotFound ex1,
-                    2: ClaimNotFound ex2,
-                    3: InvalidClaimStatus ex3,
-                    4: InvalidClaimRevision ex4
+                    1: ClaimNotFound ex,
+                    2: InvalidClaimStatus ex,
+                    3: InvalidClaimRevision ex
                 )
 
         MetadataValue GetMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
-                throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2, 3: MetadataKeyNotFound ex3)
+                throws (1: ClaimNotFound ex, 2: MetadataKeyNotFound ex)
 
         void SetMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key, 4: MetadataValue value)
-                throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2)
+                throws (1: ClaimNotFound ex)
 
         void RemoveMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
-                throws (1: PartyNotFound ex1, 2: ClaimNotFound ex2, 3: MetadataKeyNotFound ex3)
+                throws (1: ClaimNotFound ex, 2: MetadataKeyNotFound ex)
 
 }
 
