@@ -160,12 +160,12 @@
 
 %% struct 'InvoicePaymentChargebackBodyChanged'
 -record('payproc_InvoicePaymentChargebackBodyChanged', {
-    'body' :: dmsl_domain_thrift:'Cash'() | undefined
+    'body' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentChargebackLevyChanged'
 -record('payproc_InvoicePaymentChargebackLevyChanged', {
-    'levy' :: dmsl_domain_thrift:'Cash'() | undefined
+    'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentChargebackStageChanged'

@@ -2297,12 +2297,12 @@ struct_info('InvoicePaymentChargebackCashFlowChanged') ->
 
 struct_info('InvoicePaymentChargebackBodyChanged') ->
     {struct, struct, [
-        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined}
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackLevyChanged') ->
     {struct, struct, [
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackStageChanged') ->
