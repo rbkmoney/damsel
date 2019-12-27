@@ -341,14 +341,14 @@ struct InvoicePaymentChargebackCashFlowChanged {
  * Событие об изменении объёма чарджбека
  */
 struct InvoicePaymentChargebackBodyChanged {
-    1: optional domain.Cash body
+    1: required domain.Cash body
 }
 
 /**
  * Событие об изменении размера списываемых средств у чарджбека
  */
 struct InvoicePaymentChargebackLevyChanged {
-    2: optional domain.Cash levy
+    2: required domain.Cash levy
 }
 
 /**
