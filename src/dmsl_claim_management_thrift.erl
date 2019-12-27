@@ -1151,10 +1151,9 @@ function_info('ClaimManagement', 'CreateClaim', reply_type) ->
     {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
 function_info('ClaimManagement', 'CreateClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex4', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'GetClaim', params_type) ->
     {struct, struct, [
@@ -1165,8 +1164,7 @@ function_info('ClaimManagement', 'GetClaim', reply_type) ->
     {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
 function_info('ClaimManagement', 'GetClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined}
     ]};
 function_info('ClaimManagement', 'SearchClaims', params_type) ->
     {struct, struct, [
@@ -1176,9 +1174,8 @@ function_info('ClaimManagement', 'SearchClaims', reply_type) ->
     {struct, struct, {dmsl_claim_management_thrift, 'ClaimSearchResponse'}};
 function_info('ClaimManagement', 'SearchClaims', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'LimitExceeded'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'BadContinuationToken'}}, 'ex3', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'LimitExceeded'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'BadContinuationToken'}}, 'ex2', undefined}
     ]};
 function_info('ClaimManagement', 'AcceptClaim', params_type) ->
     {struct, struct, [
@@ -1190,11 +1187,10 @@ function_info('ClaimManagement', 'AcceptClaim', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'AcceptClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex5', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex4', undefined}
     ]};
 function_info('ClaimManagement', 'UpdateClaim', params_type) ->
     {struct, struct, [
@@ -1207,12 +1203,11 @@ function_info('ClaimManagement', 'UpdateClaim', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'UpdateClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex5', undefined},
-        {6, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex6', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex4', undefined},
+        {5, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex5', undefined}
     ]};
 function_info('ClaimManagement', 'RequestClaimReview', params_type) ->
     {struct, struct, [
@@ -1224,10 +1219,9 @@ function_info('ClaimManagement', 'RequestClaimReview', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'RequestClaimReview', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex4', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'RequestClaimChanges', params_type) ->
     {struct, struct, [
@@ -1239,10 +1233,9 @@ function_info('ClaimManagement', 'RequestClaimChanges', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'RequestClaimChanges', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex4', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'DenyClaim', params_type) ->
     {struct, struct, [
@@ -1255,10 +1248,9 @@ function_info('ClaimManagement', 'DenyClaim', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'DenyClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex4', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'RevokeClaim', params_type) ->
     {struct, struct, [
@@ -1271,10 +1263,9 @@ function_info('ClaimManagement', 'RevokeClaim', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'RevokeClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex4', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'GetMetadata', params_type) ->
     {struct, struct, [
@@ -1286,9 +1277,8 @@ function_info('ClaimManagement', 'GetMetadata', reply_type) ->
     {struct, union, {dmsl_msgpack_thrift, 'Value'}};
 function_info('ClaimManagement', 'GetMetadata', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex3', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex2', undefined}
     ]};
 function_info('ClaimManagement', 'SetMetadata', params_type) ->
     {struct, struct, [
@@ -1301,8 +1291,7 @@ function_info('ClaimManagement', 'SetMetadata', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'SetMetadata', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined}
     ]};
 function_info('ClaimManagement', 'RemoveMetadata', params_type) ->
     {struct, struct, [
@@ -1314,9 +1303,8 @@ function_info('ClaimManagement', 'RemoveMetadata', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'RemoveMetadata', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'PartyNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex3', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex2', undefined}
     ]};
 
 function_info('ClaimCommitter', 'Accept', params_type) ->

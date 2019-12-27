@@ -42,9 +42,16 @@
     'currency' :: dmsl_domain_thrift:'Currency'()
 }).
 
+%% struct 'Fees'
+-record('p2p_adapter_Fees', {
+    'fees' :: #{atom() => dmsl_p2p_adapter_thrift:'Cash'()}
+}).
+
 %% struct 'ProcessOperationInfo'
 -record('p2p_adapter_ProcessOperationInfo', {
     'body' :: dmsl_p2p_adapter_thrift:'Cash'(),
+    'merchant_fees' :: dmsl_p2p_adapter_thrift:'Fees'() | undefined,
+    'provider_fees' :: dmsl_p2p_adapter_thrift:'Fees'() | undefined,
     'sender' :: dmsl_p2p_adapter_thrift:'PaymentResource'(),
     'receiver' :: dmsl_p2p_adapter_thrift:'PaymentResource'(),
     'deadline' :: dmsl_base_thrift:'Timestamp'() | undefined

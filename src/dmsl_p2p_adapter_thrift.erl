@@ -49,6 +49,7 @@
     'UserInteractionCreate'/0,
     'UserInteractionFinish'/0,
     'Cash'/0,
+    'Fees'/0,
     'OperationInfo'/0,
     'ProcessOperationInfo'/0,
     'PaymentResource'/0,
@@ -103,6 +104,7 @@
     'UserInteractionCreate' |
     'UserInteractionFinish' |
     'Cash' |
+    'Fees' |
     'OperationInfo' |
     'ProcessOperationInfo' |
     'PaymentResource' |
@@ -154,6 +156,9 @@
 
 %% struct 'Cash'
 -type 'Cash'() :: #'p2p_adapter_Cash'{}.
+
+%% struct 'Fees'
+-type 'Fees'() :: #'p2p_adapter_Fees'{}.
 
 %% union 'OperationInfo'
 -type 'OperationInfo'() ::
@@ -277,6 +282,7 @@ structs() ->
         'UserInteractionCreate',
         'UserInteractionFinish',
         'Cash',
+        'Fees',
         'OperationInfo',
         'ProcessOperationInfo',
         'PaymentResource',
@@ -382,6 +388,11 @@ struct_info('Cash') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency', undefined}
     ]};
 
+struct_info('Fees') ->
+    {struct, struct, [
+        {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, struct, {dmsl_p2p_adapter_thrift, 'Cash'}}}, 'fees', undefined}
+    ]};
+
 struct_info('OperationInfo') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'ProcessOperationInfo'}}, 'process', undefined}
@@ -390,6 +401,8 @@ struct_info('OperationInfo') ->
 struct_info('ProcessOperationInfo') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_p2p_adapter_thrift, 'Cash'}}, 'body', undefined},
+        {5, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'Fees'}}, 'merchant_fees', undefined},
+        {6, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'Fees'}}, 'provider_fees', undefined},
         {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'sender', undefined},
         {3, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'receiver', undefined},
         {4, optional, string, 'deadline', undefined}
@@ -481,6 +494,9 @@ record_name('UserInteractionFinish') ->
 
 record_name('Cash') ->
     'p2p_adapter_Cash';
+
+record_name('Fees') ->
+    'p2p_adapter_Fees';
 
 record_name('ProcessOperationInfo') ->
     'p2p_adapter_ProcessOperationInfo';
