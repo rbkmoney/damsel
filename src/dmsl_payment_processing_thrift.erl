@@ -35,6 +35,7 @@
     'UserID'/0,
     'Events'/0,
     'InvoicePaymentAdjustment'/0,
+    'InvoicePaymentChargeback'/0,
     'FinalCashFlow'/0,
     'CustomerID'/0,
     'Metadata'/0,
@@ -91,6 +92,15 @@
     'SessionTransactionBound'/0,
     'SessionProxyStateChanged'/0,
     'SessionInteractionRequested'/0,
+    'InvoicePaymentChargebackChange'/0,
+    'InvoicePaymentChargebackChangePayload'/0,
+    'InvoicePaymentChargebackCreated'/0,
+    'InvoicePaymentChargebackStatusChanged'/0,
+    'InvoicePaymentChargebackCashFlowChanged'/0,
+    'InvoicePaymentChargebackBodyChanged'/0,
+    'InvoicePaymentChargebackLevyChanged'/0,
+    'InvoicePaymentChargebackStageChanged'/0,
+    'InvoicePaymentChargebackTargetStatusChanged'/0,
     'InvoicePaymentRefundChange'/0,
     'InvoicePaymentRefundChangePayload'/0,
     'InvoicePaymentRefundCreated'/0,
@@ -119,6 +129,10 @@
     'InvoicePaymentRefund'/0,
     'InvoicePaymentSession'/0,
     'InvoiceRefundSession'/0,
+    'InvoicePaymentChargebackParams'/0,
+    'InvoicePaymentChargebackAcceptParams'/0,
+    'InvoicePaymentChargebackReopenParams'/0,
+    'InvoicePaymentChargebackRejectParams'/0,
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentCaptureParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
@@ -255,6 +269,10 @@
     'InvoiceNotFound'/0,
     'InvoicePaymentNotFound'/0,
     'InvoicePaymentRefundNotFound'/0,
+    'InvoicePaymentChargebackNotFound'/0,
+    'InvoicePaymentChargebackCannotReopenAfterArbitration'/0,
+    'InvoicePaymentChargebackInvalidStage'/0,
+    'InvoicePaymentChargebackInvalidStatus'/0,
     'InvoicePaymentAdjustmentNotFound'/0,
     'EventNotFound'/0,
     'OperationNotPermitted'/0,
@@ -271,8 +289,10 @@
     'InvoiceTemplateRemoved'/0,
     'InvoicePaymentAmountExceeded'/0,
     'InconsistentRefundCurrency'/0,
+    'InconsistentChargebackCurrency'/0,
     'InconsistentCaptureCurrency'/0,
     'AmountExceededCaptureBalance'/0,
+    'InvoicePaymentChargebackPending'/0,
     'InvalidCustomerStatus'/0,
     'CustomerNotFound'/0,
     'InvalidPaymentTool'/0,
@@ -305,6 +325,7 @@
     'UserID' |
     'Events' |
     'InvoicePaymentAdjustment' |
+    'InvoicePaymentChargeback' |
     'FinalCashFlow' |
     'CustomerID' |
     'Metadata' |
@@ -329,6 +350,7 @@
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
+-type 'InvoicePaymentChargeback'() :: dmsl_domain_thrift:'InvoicePaymentChargeback'().
 -type 'FinalCashFlow'() :: dmsl_domain_thrift:'FinalCashFlow'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
@@ -393,6 +415,15 @@
     'SessionTransactionBound' |
     'SessionProxyStateChanged' |
     'SessionInteractionRequested' |
+    'InvoicePaymentChargebackChange' |
+    'InvoicePaymentChargebackChangePayload' |
+    'InvoicePaymentChargebackCreated' |
+    'InvoicePaymentChargebackStatusChanged' |
+    'InvoicePaymentChargebackCashFlowChanged' |
+    'InvoicePaymentChargebackBodyChanged' |
+    'InvoicePaymentChargebackLevyChanged' |
+    'InvoicePaymentChargebackStageChanged' |
+    'InvoicePaymentChargebackTargetStatusChanged' |
     'InvoicePaymentRefundChange' |
     'InvoicePaymentRefundChangePayload' |
     'InvoicePaymentRefundCreated' |
@@ -421,6 +452,10 @@
     'InvoicePaymentRefund' |
     'InvoicePaymentSession' |
     'InvoiceRefundSession' |
+    'InvoicePaymentChargebackParams' |
+    'InvoicePaymentChargebackAcceptParams' |
+    'InvoicePaymentChargebackReopenParams' |
+    'InvoicePaymentChargebackRejectParams' |
     'InvoicePaymentRefundParams' |
     'InvoicePaymentCaptureParams' |
     'InvoicePaymentAdjustmentParams' |
@@ -557,6 +592,10 @@
     'InvoiceNotFound' |
     'InvoicePaymentNotFound' |
     'InvoicePaymentRefundNotFound' |
+    'InvoicePaymentChargebackNotFound' |
+    'InvoicePaymentChargebackCannotReopenAfterArbitration' |
+    'InvoicePaymentChargebackInvalidStage' |
+    'InvoicePaymentChargebackInvalidStatus' |
     'InvoicePaymentAdjustmentNotFound' |
     'EventNotFound' |
     'OperationNotPermitted' |
@@ -573,8 +612,10 @@
     'InvoiceTemplateRemoved' |
     'InvoicePaymentAmountExceeded' |
     'InconsistentRefundCurrency' |
+    'InconsistentChargebackCurrency' |
     'InconsistentCaptureCurrency' |
     'AmountExceededCaptureBalance' |
+    'InvoicePaymentChargebackPending' |
     'InvalidCustomerStatus' |
     'CustomerNotFound' |
     'InvalidPaymentTool' |
@@ -664,7 +705,8 @@
     {'invoice_payment_refund_change', 'InvoicePaymentRefundChange'()} |
     {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()} |
     {'invoice_payment_rec_token_acquired', 'InvoicePaymentRecTokenAcquired'()} |
-    {'invoice_payment_capture_started', 'InvoicePaymentCaptureStarted'()}.
+    {'invoice_payment_capture_started', 'InvoicePaymentCaptureStarted'()} |
+    {'invoice_payment_chargeback_change', 'InvoicePaymentChargebackChange'()}.
 
 %% struct 'InvoicePaymentStarted'
 -type 'InvoicePaymentStarted'() :: #'payproc_InvoicePaymentStarted'{}.
@@ -734,6 +776,40 @@
 
 %% struct 'SessionInteractionRequested'
 -type 'SessionInteractionRequested'() :: #'payproc_SessionInteractionRequested'{}.
+
+%% struct 'InvoicePaymentChargebackChange'
+-type 'InvoicePaymentChargebackChange'() :: #'payproc_InvoicePaymentChargebackChange'{}.
+
+%% union 'InvoicePaymentChargebackChangePayload'
+-type 'InvoicePaymentChargebackChangePayload'() ::
+    {'invoice_payment_chargeback_created', 'InvoicePaymentChargebackCreated'()} |
+    {'invoice_payment_chargeback_status_changed', 'InvoicePaymentChargebackStatusChanged'()} |
+    {'invoice_payment_chargeback_cash_flow_changed', 'InvoicePaymentChargebackCashFlowChanged'()} |
+    {'invoice_payment_chargeback_body_changed', 'InvoicePaymentChargebackBodyChanged'()} |
+    {'invoice_payment_chargeback_levy_changed', 'InvoicePaymentChargebackLevyChanged'()} |
+    {'invoice_payment_chargeback_stage_changed', 'InvoicePaymentChargebackStageChanged'()} |
+    {'invoice_payment_chargeback_target_status_changed', 'InvoicePaymentChargebackTargetStatusChanged'()}.
+
+%% struct 'InvoicePaymentChargebackCreated'
+-type 'InvoicePaymentChargebackCreated'() :: #'payproc_InvoicePaymentChargebackCreated'{}.
+
+%% struct 'InvoicePaymentChargebackStatusChanged'
+-type 'InvoicePaymentChargebackStatusChanged'() :: #'payproc_InvoicePaymentChargebackStatusChanged'{}.
+
+%% struct 'InvoicePaymentChargebackCashFlowChanged'
+-type 'InvoicePaymentChargebackCashFlowChanged'() :: #'payproc_InvoicePaymentChargebackCashFlowChanged'{}.
+
+%% struct 'InvoicePaymentChargebackBodyChanged'
+-type 'InvoicePaymentChargebackBodyChanged'() :: #'payproc_InvoicePaymentChargebackBodyChanged'{}.
+
+%% struct 'InvoicePaymentChargebackLevyChanged'
+-type 'InvoicePaymentChargebackLevyChanged'() :: #'payproc_InvoicePaymentChargebackLevyChanged'{}.
+
+%% struct 'InvoicePaymentChargebackStageChanged'
+-type 'InvoicePaymentChargebackStageChanged'() :: #'payproc_InvoicePaymentChargebackStageChanged'{}.
+
+%% struct 'InvoicePaymentChargebackTargetStatusChanged'
+-type 'InvoicePaymentChargebackTargetStatusChanged'() :: #'payproc_InvoicePaymentChargebackTargetStatusChanged'{}.
 
 %% struct 'InvoicePaymentRefundChange'
 -type 'InvoicePaymentRefundChange'() :: #'payproc_InvoicePaymentRefundChange'{}.
@@ -828,6 +904,18 @@
 
 %% struct 'InvoiceRefundSession'
 -type 'InvoiceRefundSession'() :: #'payproc_InvoiceRefundSession'{}.
+
+%% struct 'InvoicePaymentChargebackParams'
+-type 'InvoicePaymentChargebackParams'() :: #'payproc_InvoicePaymentChargebackParams'{}.
+
+%% struct 'InvoicePaymentChargebackAcceptParams'
+-type 'InvoicePaymentChargebackAcceptParams'() :: #'payproc_InvoicePaymentChargebackAcceptParams'{}.
+
+%% struct 'InvoicePaymentChargebackReopenParams'
+-type 'InvoicePaymentChargebackReopenParams'() :: #'payproc_InvoicePaymentChargebackReopenParams'{}.
+
+%% struct 'InvoicePaymentChargebackRejectParams'
+-type 'InvoicePaymentChargebackRejectParams'() :: #'payproc_InvoicePaymentChargebackRejectParams'{}.
 
 %% struct 'InvoicePaymentRefundParams'
 -type 'InvoicePaymentRefundParams'() :: #'payproc_InvoicePaymentRefundParams'{}.
@@ -1359,6 +1447,18 @@
 %% exception 'InvoicePaymentRefundNotFound'
 -type 'InvoicePaymentRefundNotFound'() :: #'payproc_InvoicePaymentRefundNotFound'{}.
 
+%% exception 'InvoicePaymentChargebackNotFound'
+-type 'InvoicePaymentChargebackNotFound'() :: #'payproc_InvoicePaymentChargebackNotFound'{}.
+
+%% exception 'InvoicePaymentChargebackCannotReopenAfterArbitration'
+-type 'InvoicePaymentChargebackCannotReopenAfterArbitration'() :: #'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration'{}.
+
+%% exception 'InvoicePaymentChargebackInvalidStage'
+-type 'InvoicePaymentChargebackInvalidStage'() :: #'payproc_InvoicePaymentChargebackInvalidStage'{}.
+
+%% exception 'InvoicePaymentChargebackInvalidStatus'
+-type 'InvoicePaymentChargebackInvalidStatus'() :: #'payproc_InvoicePaymentChargebackInvalidStatus'{}.
+
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -type 'InvoicePaymentAdjustmentNotFound'() :: #'payproc_InvoicePaymentAdjustmentNotFound'{}.
 
@@ -1407,11 +1507,17 @@
 %% exception 'InconsistentRefundCurrency'
 -type 'InconsistentRefundCurrency'() :: #'payproc_InconsistentRefundCurrency'{}.
 
+%% exception 'InconsistentChargebackCurrency'
+-type 'InconsistentChargebackCurrency'() :: #'payproc_InconsistentChargebackCurrency'{}.
+
 %% exception 'InconsistentCaptureCurrency'
 -type 'InconsistentCaptureCurrency'() :: #'payproc_InconsistentCaptureCurrency'{}.
 
 %% exception 'AmountExceededCaptureBalance'
 -type 'AmountExceededCaptureBalance'() :: #'payproc_AmountExceededCaptureBalance'{}.
+
+%% exception 'InvoicePaymentChargebackPending'
+-type 'InvoicePaymentChargebackPending'() :: #'payproc_InvoicePaymentChargebackPending'{}.
 
 %% exception 'InvalidCustomerStatus'
 -type 'InvalidCustomerStatus'() :: #'payproc_InvalidCustomerStatus'{}.
@@ -1512,6 +1618,12 @@
     'GetPaymentAdjustment' |
     'CapturePaymentAdjustment' |
     'CancelPaymentAdjustment' |
+    'CreateChargeback' |
+    'GetPaymentChargeback' |
+    'AcceptChargeback' |
+    'RejectChargeback' |
+    'ReopenChargeback' |
+    'CancelChargeback' |
     'RefundPayment' |
     'CreateManualRefund' |
     'GetPaymentRefund' |
@@ -1633,6 +1745,7 @@ typedefs() ->
         'UserID',
         'Events',
         'InvoicePaymentAdjustment',
+        'InvoicePaymentChargeback',
         'FinalCashFlow',
         'CustomerID',
         'Metadata',
@@ -1698,6 +1811,15 @@ structs() ->
         'SessionTransactionBound',
         'SessionProxyStateChanged',
         'SessionInteractionRequested',
+        'InvoicePaymentChargebackChange',
+        'InvoicePaymentChargebackChangePayload',
+        'InvoicePaymentChargebackCreated',
+        'InvoicePaymentChargebackStatusChanged',
+        'InvoicePaymentChargebackCashFlowChanged',
+        'InvoicePaymentChargebackBodyChanged',
+        'InvoicePaymentChargebackLevyChanged',
+        'InvoicePaymentChargebackStageChanged',
+        'InvoicePaymentChargebackTargetStatusChanged',
         'InvoicePaymentRefundChange',
         'InvoicePaymentRefundChangePayload',
         'InvoicePaymentRefundCreated',
@@ -1726,6 +1848,10 @@ structs() ->
         'InvoicePaymentRefund',
         'InvoicePaymentSession',
         'InvoiceRefundSession',
+        'InvoicePaymentChargebackParams',
+        'InvoicePaymentChargebackAcceptParams',
+        'InvoicePaymentChargebackReopenParams',
+        'InvoicePaymentChargebackRejectParams',
         'InvoicePaymentRefundParams',
         'InvoicePaymentCaptureParams',
         'InvoicePaymentAdjustmentParams',
@@ -1877,6 +2003,9 @@ typedef_info('Events') ->
 
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
+
+typedef_info('InvoicePaymentChargeback') ->
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
 
 typedef_info('FinalCashFlow') ->
     {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
@@ -2034,7 +2163,8 @@ struct_info('InvoicePaymentChangePayload') ->
         {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundChange'}}, 'invoice_payment_refund_change', undefined},
         {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
         {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined},
-        {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined}
+        {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined},
+        {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}
     ]};
 
 struct_info('InvoicePaymentStarted') ->
@@ -2139,6 +2269,58 @@ struct_info('SessionProxyStateChanged') ->
 struct_info('SessionInteractionRequested') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_user_interaction_thrift, 'UserInteraction'}}, 'interaction', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackChange') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChangePayload'}}, 'payload', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackChangePayload') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCreated'}}, 'invoice_payment_chargeback_created', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStatusChanged'}}, 'invoice_payment_chargeback_status_changed', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCashFlowChanged'}}, 'invoice_payment_chargeback_cash_flow_changed', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackBodyChanged'}}, 'invoice_payment_chargeback_body_changed', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackLevyChanged'}}, 'invoice_payment_chargeback_levy_changed', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackStageChanged'}}, 'invoice_payment_chargeback_stage_changed', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackTargetStatusChanged'}}, 'invoice_payment_chargeback_target_status_changed', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackCreated') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackStatusChanged') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackCashFlowChanged') ->
+    {struct, struct, [
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackBodyChanged') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackLevyChanged') ->
+    {struct, struct, [
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackStageChanged') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackTargetStatusChanged') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundChange') ->
@@ -2308,6 +2490,7 @@ struct_info('InvoicePayment') ->
         {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
         {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
         {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
+        {8, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
         {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
     ]};
 
@@ -2327,6 +2510,34 @@ struct_info('InvoicePaymentSession') ->
 struct_info('InvoiceRefundSession') ->
     {struct, struct, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackParams') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
+        {5, optional, string, 'id', undefined},
+        {6, optional, string, 'external_id', undefined},
+        {7, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackAcceptParams') ->
+    {struct, struct, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackReopenParams') ->
+    {struct, struct, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackRejectParams') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundParams') ->
@@ -3172,6 +3383,22 @@ struct_info('InvoicePaymentNotFound') ->
 struct_info('InvoicePaymentRefundNotFound') ->
     {struct, exception, []};
 
+struct_info('InvoicePaymentChargebackNotFound') ->
+    {struct, exception, []};
+
+struct_info('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
+    {struct, exception, []};
+
+struct_info('InvoicePaymentChargebackInvalidStage') ->
+    {struct, exception, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackInvalidStatus') ->
+    {struct, exception, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
+    ]};
+
 struct_info('InvoicePaymentAdjustmentNotFound') ->
     {struct, exception, []};
 
@@ -3238,6 +3465,11 @@ struct_info('InconsistentRefundCurrency') ->
         {1, required, string, 'currency', undefined}
     ]};
 
+struct_info('InconsistentChargebackCurrency') ->
+    {struct, exception, [
+        {1, required, string, 'currency', undefined}
+    ]};
+
 struct_info('InconsistentCaptureCurrency') ->
     {struct, exception, [
         {1, required, string, 'payment_currency', undefined},
@@ -3249,6 +3481,9 @@ struct_info('AmountExceededCaptureBalance') ->
         {1, required, i64, 'payment_amount', undefined},
         {2, optional, i64, 'passed_amount', undefined}
     ]};
+
+struct_info('InvoicePaymentChargebackPending') ->
+    {struct, exception, []};
 
 struct_info('InvalidCustomerStatus') ->
     {struct, exception, [
@@ -3405,6 +3640,30 @@ record_name('SessionProxyStateChanged') ->
 record_name('SessionInteractionRequested') ->
     'payproc_SessionInteractionRequested';
 
+record_name('InvoicePaymentChargebackChange') ->
+    'payproc_InvoicePaymentChargebackChange';
+
+record_name('InvoicePaymentChargebackCreated') ->
+    'payproc_InvoicePaymentChargebackCreated';
+
+record_name('InvoicePaymentChargebackStatusChanged') ->
+    'payproc_InvoicePaymentChargebackStatusChanged';
+
+record_name('InvoicePaymentChargebackCashFlowChanged') ->
+    'payproc_InvoicePaymentChargebackCashFlowChanged';
+
+record_name('InvoicePaymentChargebackBodyChanged') ->
+    'payproc_InvoicePaymentChargebackBodyChanged';
+
+record_name('InvoicePaymentChargebackLevyChanged') ->
+    'payproc_InvoicePaymentChargebackLevyChanged';
+
+record_name('InvoicePaymentChargebackStageChanged') ->
+    'payproc_InvoicePaymentChargebackStageChanged';
+
+record_name('InvoicePaymentChargebackTargetStatusChanged') ->
+    'payproc_InvoicePaymentChargebackTargetStatusChanged';
+
 record_name('InvoicePaymentRefundChange') ->
     'payproc_InvoicePaymentRefundChange';
 
@@ -3476,6 +3735,18 @@ record_name('InvoicePaymentSession') ->
 
 record_name('InvoiceRefundSession') ->
     'payproc_InvoiceRefundSession';
+
+record_name('InvoicePaymentChargebackParams') ->
+    'payproc_InvoicePaymentChargebackParams';
+
+record_name('InvoicePaymentChargebackAcceptParams') ->
+    'payproc_InvoicePaymentChargebackAcceptParams';
+
+record_name('InvoicePaymentChargebackReopenParams') ->
+    'payproc_InvoicePaymentChargebackReopenParams';
+
+record_name('InvoicePaymentChargebackRejectParams') ->
+    'payproc_InvoicePaymentChargebackRejectParams';
 
 record_name('InvoicePaymentRefundParams') ->
     'payproc_InvoicePaymentRefundParams';
@@ -3795,6 +4066,18 @@ record_name('InvoicePaymentNotFound') ->
 record_name('InvoicePaymentRefundNotFound') ->
     'payproc_InvoicePaymentRefundNotFound';
 
+record_name('InvoicePaymentChargebackNotFound') ->
+    'payproc_InvoicePaymentChargebackNotFound';
+
+record_name('InvoicePaymentChargebackCannotReopenAfterArbitration') ->
+    'payproc_InvoicePaymentChargebackCannotReopenAfterArbitration';
+
+record_name('InvoicePaymentChargebackInvalidStage') ->
+    'payproc_InvoicePaymentChargebackInvalidStage';
+
+record_name('InvoicePaymentChargebackInvalidStatus') ->
+    'payproc_InvoicePaymentChargebackInvalidStatus';
+
 record_name('InvoicePaymentAdjustmentNotFound') ->
     'payproc_InvoicePaymentAdjustmentNotFound';
 
@@ -3843,11 +4126,17 @@ record_name('InvoicePaymentAmountExceeded') ->
 record_name('InconsistentRefundCurrency') ->
     'payproc_InconsistentRefundCurrency';
 
+record_name('InconsistentChargebackCurrency') ->
+    'payproc_InconsistentChargebackCurrency';
+
 record_name('InconsistentCaptureCurrency') ->
     'payproc_InconsistentCaptureCurrency';
 
 record_name('AmountExceededCaptureBalance') ->
     'payproc_AmountExceededCaptureBalance';
+
+record_name('InvoicePaymentChargebackPending') ->
+    'payproc_InvoicePaymentChargebackPending';
 
 record_name('InvalidCustomerStatus') ->
     'payproc_InvalidCustomerStatus';
@@ -3932,6 +4221,12 @@ functions('Invoicing') ->
         'GetPaymentAdjustment',
         'CapturePaymentAdjustment',
         'CancelPaymentAdjustment',
+        'CreateChargeback',
+        'GetPaymentChargeback',
+        'AcceptChargeback',
+        'RejectChargeback',
+        'ReopenChargeback',
+        'CancelChargeback',
         'RefundPayment',
         'CreateManualRefund',
         'GetPaymentRefund',
@@ -4264,6 +4559,129 @@ function_info('Invoicing', 'CancelPaymentAdjustment', exceptions) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentNotFound'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentAdjustmentStatus'}}, 'ex5', undefined}
     ]};
+function_info('Invoicing', 'CreateChargeback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackParams'}}, 'params', undefined}
+    ]};
+function_info('Invoicing', 'CreateChargeback', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
+function_info('Invoicing', 'CreateChargeback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InsufficientAccountBalance'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentChargebackCurrency'}}, 'ex9', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined}
+    ]};
+function_info('Invoicing', 'GetPaymentChargeback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined}
+    ]};
+function_info('Invoicing', 'GetPaymentChargeback', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
+function_info('Invoicing', 'GetPaymentChargeback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined}
+    ]};
+function_info('Invoicing', 'AcceptChargeback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackAcceptParams'}}, 'params', undefined}
+    ]};
+function_info('Invoicing', 'AcceptChargeback', reply_type) ->
+    {struct, struct, []};
+function_info('Invoicing', 'AcceptChargeback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentChargebackCurrency'}}, 'ex9', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
+    ]};
+function_info('Invoicing', 'RejectChargeback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackRejectParams'}}, 'params', undefined}
+    ]};
+function_info('Invoicing', 'RejectChargeback', reply_type) ->
+    {struct, struct, []};
+function_info('Invoicing', 'RejectChargeback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentChargebackCurrency'}}, 'ex9', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined}
+    ]};
+function_info('Invoicing', 'ReopenChargeback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackReopenParams'}}, 'params', undefined}
+    ]};
+function_info('Invoicing', 'ReopenChargeback', reply_type) ->
+    {struct, struct, []};
+function_info('Invoicing', 'ReopenChargeback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex6', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAmountExceeded'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentChargebackCurrency'}}, 'ex9', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCannotReopenAfterArbitration'}}, 'ex13', undefined}
+    ]};
+function_info('Invoicing', 'CancelChargeback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'id', undefined},
+        {3, undefined, string, 'payment_id', undefined},
+        {4, undefined, string, 'chargeback_id', undefined}
+    ]};
+function_info('Invoicing', 'CancelChargeback', reply_type) ->
+    {struct, struct, []};
+function_info('Invoicing', 'CancelChargeback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackNotFound'}}, 'ex4', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
+        {15, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStage'}}, 'ex15', undefined}
+    ]};
 function_info('Invoicing', 'RefundPayment', params_type) ->
     {struct, struct, [
         {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
@@ -4286,7 +4704,8 @@ function_info('Invoicing', 'RefundPayment', exceptions) ->
         {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentRefundCurrency'}}, 'ex10', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex12', undefined},
-        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex13', undefined}
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex13', undefined},
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined}
     ]};
 function_info('Invoicing', 'CreateManualRefund', params_type) ->
     {struct, struct, [
@@ -4310,7 +4729,8 @@ function_info('Invoicing', 'CreateManualRefund', exceptions) ->
         {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex10', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
-        {13, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex13', undefined}
+        {13, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex13', undefined},
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [

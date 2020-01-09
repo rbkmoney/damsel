@@ -155,6 +155,9 @@
     'failure' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
+%% struct 'InvoicePaymentChargedBack'
+-record('domain_InvoicePaymentChargedBack', {}).
+
 %% struct 'InvoiceTemplate'
 -record('domain_InvoiceTemplate', {
     'id' :: dmsl_domain_thrift:'InvoiceTemplateID'(),
@@ -253,6 +256,60 @@
     'on_hold_expiration' :: dmsl_domain_thrift:'OnHoldExpiration'(),
     'held_until' :: dmsl_base_thrift:'Timestamp'()
 }).
+
+%% struct 'InvoicePaymentChargeback'
+-record('domain_InvoicePaymentChargeback', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
+    'levy' :: dmsl_domain_thrift:'Cash'(),
+    'body' :: dmsl_domain_thrift:'Cash'(),
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
+    'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined,
+    'external_id' :: binary() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackReason'
+-record('domain_InvoicePaymentChargebackReason', {
+    'code' :: dmsl_domain_thrift:'ChargebackCode'() | undefined,
+    'category' :: dmsl_domain_thrift:'InvoicePaymentChargebackCategory'()
+}).
+
+%% struct 'InvoicePaymentChargebackCategoryFraud'
+-record('domain_InvoicePaymentChargebackCategoryFraud', {}).
+
+%% struct 'InvoicePaymentChargebackCategoryDispute'
+-record('domain_InvoicePaymentChargebackCategoryDispute', {}).
+
+%% struct 'InvoicePaymentChargebackCategoryAuthorisation'
+-record('domain_InvoicePaymentChargebackCategoryAuthorisation', {}).
+
+%% struct 'InvoicePaymentChargebackCategoryProcessingError'
+-record('domain_InvoicePaymentChargebackCategoryProcessingError', {}).
+
+%% struct 'InvoicePaymentChargebackStageChargeback'
+-record('domain_InvoicePaymentChargebackStageChargeback', {}).
+
+%% struct 'InvoicePaymentChargebackStagePreArbitration'
+-record('domain_InvoicePaymentChargebackStagePreArbitration', {}).
+
+%% struct 'InvoicePaymentChargebackStageArbitration'
+-record('domain_InvoicePaymentChargebackStageArbitration', {}).
+
+%% struct 'InvoicePaymentChargebackPending'
+-record('domain_InvoicePaymentChargebackPending', {}).
+
+%% struct 'InvoicePaymentChargebackAccepted'
+-record('domain_InvoicePaymentChargebackAccepted', {}).
+
+%% struct 'InvoicePaymentChargebackRejected'
+-record('domain_InvoicePaymentChargebackRejected', {}).
+
+%% struct 'InvoicePaymentChargebackCancelled'
+-record('domain_InvoicePaymentChargebackCancelled', {}).
 
 %% struct 'InvoicePaymentRefund'
 -record('domain_InvoicePaymentRefund', {
@@ -599,7 +656,8 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsServiceTerms'() | undefined,
-    'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined,
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsServiceTerms'
@@ -611,6 +669,19 @@
 
 %% struct 'PartialCaptureServiceTerms'
 -record('domain_PartialCaptureServiceTerms', {}).
+
+%% struct 'PaymentChargebackServiceTerms'
+-record('domain_PaymentChargebackServiceTerms', {
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'eligibility_time' :: dmsl_domain_thrift:'TimeSpanSelector'() | undefined,
+    'partial_chargebacks' :: dmsl_domain_thrift:'PartialChargebackServiceTerms'() | undefined
+}).
+
+%% struct 'PartialChargebackServiceTerms'
+-record('domain_PartialChargebackServiceTerms', {
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
+}).
 
 %% struct 'PaymentRefundsServiceTerms'
 -record('domain_PaymentRefundsServiceTerms', {
@@ -1029,7 +1100,8 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
-    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined
+    'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined,
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackProvisionTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsProvisionTerms'
@@ -1041,10 +1113,21 @@
 %% struct 'PartialCaptureProvisionTerms'
 -record('domain_PartialCaptureProvisionTerms', {}).
 
+%% struct 'PaymentChargebackProvisionTerms'
+-record('domain_PaymentChargebackProvisionTerms', {
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
+    'partial_chargebacks' :: dmsl_domain_thrift:'PartialChargebackProvisionTerms'() | undefined
+}).
+
 %% struct 'PaymentRefundsProvisionTerms'
 -record('domain_PaymentRefundsProvisionTerms', {
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'(),
     'partial_refunds' :: dmsl_domain_thrift:'PartialRefundsProvisionTerms'() | undefined
+}).
+
+%% struct 'PartialChargebackProvisionTerms'
+-record('domain_PartialChargebackProvisionTerms', {
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
 %% struct 'PartialRefundsProvisionTerms'

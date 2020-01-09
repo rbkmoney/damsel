@@ -155,6 +155,7 @@ union InvoicePaymentChangePayload {
     6: InvoicePaymentAdjustmentChange       invoice_payment_adjustment_change
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
+    13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
 }
 
 /**
@@ -293,6 +294,76 @@ struct SessionProxyStateChanged {
 struct SessionInteractionRequested {
     /** Необходимое взаимодействие */
     1: required user_interaction.UserInteraction interaction
+}
+
+/**
+ * Событие, касающееся определённого чарджбека.
+ */
+struct InvoicePaymentChargebackChange {
+    1: required domain.InvoicePaymentChargebackID id
+    2: required InvoicePaymentChargebackChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого чарджбеком платежа по инвойсу.
+ */
+union InvoicePaymentChargebackChangePayload {
+    1: InvoicePaymentChargebackCreated              invoice_payment_chargeback_created
+    2: InvoicePaymentChargebackStatusChanged        invoice_payment_chargeback_status_changed
+    3: InvoicePaymentChargebackCashFlowChanged      invoice_payment_chargeback_cash_flow_changed
+    4: InvoicePaymentChargebackBodyChanged          invoice_payment_chargeback_body_changed
+    5: InvoicePaymentChargebackLevyChanged          invoice_payment_chargeback_levy_changed
+    6: InvoicePaymentChargebackStageChanged         invoice_payment_chargeback_stage_changed
+    7: InvoicePaymentChargebackTargetStatusChanged  invoice_payment_chargeback_target_status_changed
+}
+
+/**
+ * Событие о создании чарджбека
+ */
+struct InvoicePaymentChargebackCreated {
+    1: required domain.InvoicePaymentChargeback chargeback
+}
+
+/**
+ * Событие об изменении статуса чарджбека
+ */
+struct InvoicePaymentChargebackStatusChanged {
+    1: required domain.InvoicePaymentChargebackStatus status
+}
+
+/**
+ * Событие об изменении кэшфлоу чарджбека
+ */
+struct InvoicePaymentChargebackCashFlowChanged {
+    1: required domain.FinalCashFlow cash_flow
+}
+
+/**
+ * Событие об изменении объёма чарджбека
+ */
+struct InvoicePaymentChargebackBodyChanged {
+    1: required domain.Cash body
+}
+
+/**
+ * Событие об изменении размера списываемых средств у чарджбека
+ */
+struct InvoicePaymentChargebackLevyChanged {
+    2: required domain.Cash levy
+}
+
+/**
+ * Событие об изменении стадии чарджека
+ */
+struct InvoicePaymentChargebackStageChanged {
+    1: required domain.InvoicePaymentChargebackStage stage
+}
+
+/**
+ * Событие об изменении целевого статуса чарджбека
+ */
+struct InvoicePaymentChargebackTargetStatusChanged {
+    1: required domain.InvoicePaymentChargebackStatus status
 }
 
 /**
@@ -495,6 +566,7 @@ struct InvoicePayment {
     2: required list<InvoicePaymentAdjustment> adjustments
     4: required list<InvoicePaymentRefund> refunds
     5: required list<InvoicePaymentSession> sessions
+    8: optional list<InvoicePaymentChargeback> chargebacks
     # deprecated
     3: required list<domain.InvoicePaymentRefund> legacy_refunds
 }
@@ -515,6 +587,79 @@ struct InvoiceRefundSession {
 }
 
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
+typedef domain.InvoicePaymentChargeback InvoicePaymentChargeback
+
+/**
+ * Параметры создаваемого чарджбэка.
+ */
+struct InvoicePaymentChargebackParams {
+    /**
+    * Код причины чарджбэка
+    */
+    1: required domain.InvoicePaymentChargebackReason reason
+
+    /**
+     * Сумма списания: количество денежных средств, подлежащих удержанию
+     * со счёта продавца.
+     */
+    2: required domain.Cash levy
+    /**
+     * Размер опротестования.
+     * Если не указан, то считаем, что это возврат на полную сумму платежа.
+     * Не может быть больше суммы платежа.
+     */
+    3: optional domain.Cash body
+    /**
+     * Данные проведённой вручную транзакции
+     */
+    4: optional domain.TransactionInfo transaction_info
+    /**
+     * Идентификатор чарджбэка
+     */
+    5: optional domain.InvoicePaymentChargebackID id
+    /**
+     * Внешний идентификатор объекта
+     */
+    6: optional string external_id
+    /**
+     * Дополнительные метаданные по чарджбэку
+     */
+    7: optional domain.InvoicePaymentChargebackContext context
+}
+
+struct InvoicePaymentChargebackAcceptParams {
+    /**
+     * Сумма возврата.
+     * Если сумма не указана, то текущая сумма не меняется
+     */
+    1: optional domain.Cash body
+    /**
+     * Сумма списания.
+     * Если сумма не указана, то текущая сумма не меняется
+     */
+    2: optional domain.Cash levy
+}
+
+struct InvoicePaymentChargebackReopenParams {
+    /**
+     * Сумма возврата.
+     * Если сумма не указана, то текущая сумма не меняется
+     */
+    1: optional domain.Cash body
+
+    /**
+     * Сумма списания.
+     */
+    2: required domain.Cash levy
+}
+
+struct InvoicePaymentChargebackRejectParams {
+    /**
+     * Сумма списания.
+     */
+    1: required domain.Cash levy
+}
+
 typedef domain.FinalCashFlow FinalCashFlow
 
 /**
@@ -615,8 +760,10 @@ struct InvoiceRepairParams {
 exception PartyNotFound {}
 exception PartyNotExistsYet {}
 exception InvalidPartyRevision {}
+
 exception ShopNotFound {}
 exception WalletNotFound {}
+
 exception InvalidPartyStatus { 1: required InvalidStatus status }
 exception InvalidShopStatus { 1: required InvalidStatus status }
 exception InvalidWalletStatus { 1: required InvalidStatus status }
@@ -631,7 +778,18 @@ exception InvalidUser {}
 exception InvoiceNotFound {}
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
+
+exception InvoicePaymentChargebackNotFound {}
+exception InvoicePaymentChargebackCannotReopenAfterArbitration {}
+exception InvoicePaymentChargebackInvalidStage {
+    1: required domain.InvoicePaymentChargebackStage stage
+}
+exception InvoicePaymentChargebackInvalidStatus {
+    1: required domain.InvoicePaymentChargebackStatus status
+}
+
 exception InvoicePaymentAdjustmentNotFound {}
+
 exception EventNotFound {}
 exception OperationNotPermitted {}
 exception PayoutToolNotFound {}
@@ -675,6 +833,10 @@ exception InconsistentRefundCurrency {
     1: required domain.CurrencySymbolicCode currency
 }
 
+exception InconsistentChargebackCurrency {
+    1: required domain.CurrencySymbolicCode currency
+}
+
 exception InconsistentCaptureCurrency {
     1: required domain.CurrencySymbolicCode payment_currency
     2: optional domain.CurrencySymbolicCode passed_currency
@@ -684,6 +846,8 @@ exception AmountExceededCaptureBalance {
     1: required domain.Amount payment_amount
     2: optional domain.Amount passed_amount
 }
+
+exception InvoicePaymentChargebackPending {}
 
 service Invoicing {
 
@@ -882,6 +1046,131 @@ service Invoicing {
         )
 
     /**
+     * Создать чарджбэк
+     */
+    InvoicePaymentChargeback CreateChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: InvoicePaymentChargebackParams params
+    )
+        throws (
+            1:  InvalidUser ex1,
+            2:  InvoiceNotFound ex2,
+            3:  InvoicePaymentNotFound ex3,
+            4:  InvalidPaymentStatus ex4,
+            6:  OperationNotPermitted ex6,
+            7:  InsufficientAccountBalance ex7,
+            8:  InvoicePaymentAmountExceeded ex8
+            9:  InconsistentChargebackCurrency ex9,
+            11: InvoicePaymentChargebackInvalidStatus ex11
+            12: InvalidContractStatus ex12
+            14: InvoicePaymentChargebackPending ex14
+            /* something else? */
+        )
+
+    /**
+     * Найти чарджбэк
+     */
+    InvoicePaymentChargeback GetPaymentChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvoicePaymentChargebackNotFound ex4
+        )
+
+    /**
+     * Принять чарджбэк
+     */
+    void AcceptChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
+        5: InvoicePaymentChargebackAcceptParams params
+    )
+        throws (
+            1:  InvalidUser ex1,
+            2:  InvoiceNotFound ex2,
+            3:  InvoicePaymentNotFound ex3,
+            4:  InvoicePaymentChargebackNotFound ex4
+            6:  OperationNotPermitted ex6,
+            8:  InvoicePaymentAmountExceeded ex8
+            9:  InconsistentChargebackCurrency ex9,
+            11: InvoicePaymentChargebackInvalidStatus ex11
+            12: InvalidContractStatus ex12
+        )
+
+    /**
+     * Отклонить чарджбэк
+     */
+    void RejectChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
+        5: InvoicePaymentChargebackRejectParams params
+    )
+        throws (
+            1:  InvalidUser ex1,
+            2:  InvoiceNotFound ex2,
+            3:  InvoicePaymentNotFound ex3,
+            4:  InvoicePaymentChargebackNotFound ex4
+            6:  OperationNotPermitted ex6,
+            9:  InconsistentChargebackCurrency ex9,
+            11: InvoicePaymentChargebackInvalidStatus ex11
+            12: InvalidContractStatus ex12
+        )
+
+    /**
+     * Открыть чарджбэк заново. Переход возможен из отклонённого состояния,
+     * если покупатель не согласен с результатом и хочет его оспорить.
+     */
+    void ReopenChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
+        5: InvoicePaymentChargebackReopenParams params
+    )
+        throws (
+            1:  InvalidUser ex1
+            2:  InvoiceNotFound ex2
+            3:  InvoicePaymentNotFound ex3
+            4:  InvoicePaymentChargebackNotFound ex4
+            6:  OperationNotPermitted ex6
+            8:  InvoicePaymentAmountExceeded ex8
+            9:  InconsistentChargebackCurrency ex9,
+            11: InvoicePaymentChargebackInvalidStatus ex11
+            12: InvalidContractStatus ex12
+            13: InvoicePaymentChargebackCannotReopenAfterArbitration ex13
+        )
+
+    /**
+     * Отмена чарджбэка. Комиссия с мерчанта не взимается.
+     */
+    void CancelChargeback (
+        1: UserInfo user
+        2: domain.InvoiceID id
+        3: domain.InvoicePaymentID payment_id
+        4: domain.InvoicePaymentChargebackID chargeback_id
+    )
+        throws (
+            1:  InvalidUser ex1
+            2:  InvoiceNotFound ex2
+            3:  InvoicePaymentNotFound ex3
+            4:  InvoicePaymentChargebackNotFound ex4
+            11: InvoicePaymentChargebackInvalidStatus ex11
+            15: InvoicePaymentChargebackInvalidStage ex15
+        )
+
+    /**
      * Сделать возврат платежа.
      */
     domain.InvoicePaymentRefund RefundPayment (
@@ -903,7 +1192,9 @@ service Invoicing {
             11: InvalidPartyStatus ex11
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
+            14: InvoicePaymentChargebackPending ex14
         )
+
 
     /**
      * Сделать ручной возврат.
@@ -927,6 +1218,7 @@ service Invoicing {
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
             13: base.InvalidRequest ex13
+            14: InvoicePaymentChargebackPending ex14
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (

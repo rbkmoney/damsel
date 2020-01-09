@@ -41,14 +41,17 @@
     'AccountID'/0,
     'InvoiceID'/0,
     'InvoicePaymentID'/0,
+    'InvoicePaymentChargebackID'/0,
     'InvoicePaymentRefundID'/0,
     'InvoicePaymentAdjustmentID'/0,
     'InvoiceContext'/0,
     'InvoicePaymentContext'/0,
+    'InvoicePaymentChargebackContext'/0,
     'PaymentSessionID'/0,
     'Fingerprint'/0,
     'IPAddress'/0,
     'InvoiceTemplateID'/0,
+    'ChargebackCode'/0,
     'PartyID'/0,
     'PartyRevision'/0,
     'PartyMetaNamespace'/0,
@@ -125,6 +128,7 @@
     'InvoicePaymentCancelled'/0,
     'InvoicePaymentRefunded'/0,
     'InvoicePaymentFailed'/0,
+    'InvoicePaymentChargedBack'/0,
     'InvoiceTemplate'/0,
     'InvoiceTemplateDetails'/0,
     'InvoiceTemplateProduct'/0,
@@ -148,6 +152,22 @@
     'InvoicePaymentFlow'/0,
     'InvoicePaymentFlowInstant'/0,
     'InvoicePaymentFlowHold'/0,
+    'InvoicePaymentChargeback'/0,
+    'InvoicePaymentChargebackReason'/0,
+    'InvoicePaymentChargebackCategory'/0,
+    'InvoicePaymentChargebackCategoryFraud'/0,
+    'InvoicePaymentChargebackCategoryDispute'/0,
+    'InvoicePaymentChargebackCategoryAuthorisation'/0,
+    'InvoicePaymentChargebackCategoryProcessingError'/0,
+    'InvoicePaymentChargebackStage'/0,
+    'InvoicePaymentChargebackStageChargeback'/0,
+    'InvoicePaymentChargebackStagePreArbitration'/0,
+    'InvoicePaymentChargebackStageArbitration'/0,
+    'InvoicePaymentChargebackStatus'/0,
+    'InvoicePaymentChargebackPending'/0,
+    'InvoicePaymentChargebackAccepted'/0,
+    'InvoicePaymentChargebackRejected'/0,
+    'InvoicePaymentChargebackCancelled'/0,
     'InvoicePaymentRefund'/0,
     'InvoicePaymentRefundStatus'/0,
     'InvoicePaymentRefundPending'/0,
@@ -209,6 +229,8 @@
     'PaymentsServiceTerms'/0,
     'PaymentHoldsServiceTerms'/0,
     'PartialCaptureServiceTerms'/0,
+    'PaymentChargebackServiceTerms'/0,
+    'PartialChargebackServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
     'PartialRefundsServiceTerms'/0,
     'RecurrentPaytoolsServiceTerms'/0,
@@ -292,7 +314,9 @@
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PartialCaptureProvisionTerms'/0,
+    'PaymentChargebackProvisionTerms'/0,
     'PaymentRefundsProvisionTerms'/0,
+    'PartialChargebackProvisionTerms'/0,
     'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
     'WithdrawalProvisionTerms'/0,
@@ -403,14 +427,17 @@
     'AccountID' |
     'InvoiceID' |
     'InvoicePaymentID' |
+    'InvoicePaymentChargebackID' |
     'InvoicePaymentRefundID' |
     'InvoicePaymentAdjustmentID' |
     'InvoiceContext' |
     'InvoicePaymentContext' |
+    'InvoicePaymentChargebackContext' |
     'PaymentSessionID' |
     'Fingerprint' |
     'IPAddress' |
     'InvoiceTemplateID' |
+    'ChargebackCode' |
     'PartyID' |
     'PartyRevision' |
     'PartyMetaNamespace' |
@@ -447,14 +474,17 @@
 -type 'AccountID'() :: integer().
 -type 'InvoiceID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentID'() :: dmsl_base_thrift:'ID'().
+-type 'InvoicePaymentChargebackID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentRefundID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoiceContext'() :: dmsl_base_thrift:'Content'().
 -type 'InvoicePaymentContext'() :: dmsl_base_thrift:'Content'().
+-type 'InvoicePaymentChargebackContext'() :: dmsl_base_thrift:'Content'().
 -type 'PaymentSessionID'() :: binary().
 -type 'Fingerprint'() :: binary().
 -type 'IPAddress'() :: binary().
 -type 'InvoiceTemplateID'() :: dmsl_base_thrift:'ID'().
+-type 'ChargebackCode'() :: binary().
 -type 'PartyID'() :: dmsl_base_thrift:'ID'().
 -type 'PartyRevision'() :: integer().
 -type 'PartyMetaNamespace'() :: binary().
@@ -926,6 +956,7 @@
     'InvoicePaymentCancelled' |
     'InvoicePaymentRefunded' |
     'InvoicePaymentFailed' |
+    'InvoicePaymentChargedBack' |
     'InvoiceTemplate' |
     'InvoiceTemplateDetails' |
     'InvoiceTemplateProduct' |
@@ -949,6 +980,22 @@
     'InvoicePaymentFlow' |
     'InvoicePaymentFlowInstant' |
     'InvoicePaymentFlowHold' |
+    'InvoicePaymentChargeback' |
+    'InvoicePaymentChargebackReason' |
+    'InvoicePaymentChargebackCategory' |
+    'InvoicePaymentChargebackCategoryFraud' |
+    'InvoicePaymentChargebackCategoryDispute' |
+    'InvoicePaymentChargebackCategoryAuthorisation' |
+    'InvoicePaymentChargebackCategoryProcessingError' |
+    'InvoicePaymentChargebackStage' |
+    'InvoicePaymentChargebackStageChargeback' |
+    'InvoicePaymentChargebackStagePreArbitration' |
+    'InvoicePaymentChargebackStageArbitration' |
+    'InvoicePaymentChargebackStatus' |
+    'InvoicePaymentChargebackPending' |
+    'InvoicePaymentChargebackAccepted' |
+    'InvoicePaymentChargebackRejected' |
+    'InvoicePaymentChargebackCancelled' |
     'InvoicePaymentRefund' |
     'InvoicePaymentRefundStatus' |
     'InvoicePaymentRefundPending' |
@@ -1010,6 +1057,8 @@
     'PaymentsServiceTerms' |
     'PaymentHoldsServiceTerms' |
     'PartialCaptureServiceTerms' |
+    'PaymentChargebackServiceTerms' |
+    'PartialChargebackServiceTerms' |
     'PaymentRefundsServiceTerms' |
     'PartialRefundsServiceTerms' |
     'RecurrentPaytoolsServiceTerms' |
@@ -1093,7 +1142,9 @@
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PartialCaptureProvisionTerms' |
+    'PaymentChargebackProvisionTerms' |
     'PaymentRefundsProvisionTerms' |
+    'PartialChargebackProvisionTerms' |
     'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
     'WithdrawalProvisionTerms' |
@@ -1268,6 +1319,9 @@
 %% struct 'InvoicePaymentFailed'
 -type 'InvoicePaymentFailed'() :: #'domain_InvoicePaymentFailed'{}.
 
+%% struct 'InvoicePaymentChargedBack'
+-type 'InvoicePaymentChargedBack'() :: #'domain_InvoicePaymentChargedBack'{}.
+
 %% struct 'InvoiceTemplate'
 -type 'InvoiceTemplate'() :: #'domain_InvoiceTemplate'{}.
 
@@ -1295,7 +1349,8 @@
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
     {'refunded', 'InvoicePaymentRefunded'()} |
-    {'failed', 'InvoicePaymentFailed'()}.
+    {'failed', 'InvoicePaymentFailed'()} |
+    {'charged_back', 'InvoicePaymentChargedBack'()}.
 
 %% union 'TargetInvoicePaymentStatus'
 -type 'TargetInvoicePaymentStatus'() ::
@@ -1360,6 +1415,65 @@
 
 %% struct 'InvoicePaymentFlowHold'
 -type 'InvoicePaymentFlowHold'() :: #'domain_InvoicePaymentFlowHold'{}.
+
+%% struct 'InvoicePaymentChargeback'
+-type 'InvoicePaymentChargeback'() :: #'domain_InvoicePaymentChargeback'{}.
+
+%% struct 'InvoicePaymentChargebackReason'
+-type 'InvoicePaymentChargebackReason'() :: #'domain_InvoicePaymentChargebackReason'{}.
+
+%% union 'InvoicePaymentChargebackCategory'
+-type 'InvoicePaymentChargebackCategory'() ::
+    {'fraud', 'InvoicePaymentChargebackCategoryFraud'()} |
+    {'dispute', 'InvoicePaymentChargebackCategoryDispute'()} |
+    {'authorisation', 'InvoicePaymentChargebackCategoryAuthorisation'()} |
+    {'processing_error', 'InvoicePaymentChargebackCategoryProcessingError'()}.
+
+%% struct 'InvoicePaymentChargebackCategoryFraud'
+-type 'InvoicePaymentChargebackCategoryFraud'() :: #'domain_InvoicePaymentChargebackCategoryFraud'{}.
+
+%% struct 'InvoicePaymentChargebackCategoryDispute'
+-type 'InvoicePaymentChargebackCategoryDispute'() :: #'domain_InvoicePaymentChargebackCategoryDispute'{}.
+
+%% struct 'InvoicePaymentChargebackCategoryAuthorisation'
+-type 'InvoicePaymentChargebackCategoryAuthorisation'() :: #'domain_InvoicePaymentChargebackCategoryAuthorisation'{}.
+
+%% struct 'InvoicePaymentChargebackCategoryProcessingError'
+-type 'InvoicePaymentChargebackCategoryProcessingError'() :: #'domain_InvoicePaymentChargebackCategoryProcessingError'{}.
+
+%% union 'InvoicePaymentChargebackStage'
+-type 'InvoicePaymentChargebackStage'() ::
+    {'chargeback', 'InvoicePaymentChargebackStageChargeback'()} |
+    {'pre_arbitration', 'InvoicePaymentChargebackStagePreArbitration'()} |
+    {'arbitration', 'InvoicePaymentChargebackStageArbitration'()}.
+
+%% struct 'InvoicePaymentChargebackStageChargeback'
+-type 'InvoicePaymentChargebackStageChargeback'() :: #'domain_InvoicePaymentChargebackStageChargeback'{}.
+
+%% struct 'InvoicePaymentChargebackStagePreArbitration'
+-type 'InvoicePaymentChargebackStagePreArbitration'() :: #'domain_InvoicePaymentChargebackStagePreArbitration'{}.
+
+%% struct 'InvoicePaymentChargebackStageArbitration'
+-type 'InvoicePaymentChargebackStageArbitration'() :: #'domain_InvoicePaymentChargebackStageArbitration'{}.
+
+%% union 'InvoicePaymentChargebackStatus'
+-type 'InvoicePaymentChargebackStatus'() ::
+    {'pending', 'InvoicePaymentChargebackPending'()} |
+    {'accepted', 'InvoicePaymentChargebackAccepted'()} |
+    {'rejected', 'InvoicePaymentChargebackRejected'()} |
+    {'cancelled', 'InvoicePaymentChargebackCancelled'()}.
+
+%% struct 'InvoicePaymentChargebackPending'
+-type 'InvoicePaymentChargebackPending'() :: #'domain_InvoicePaymentChargebackPending'{}.
+
+%% struct 'InvoicePaymentChargebackAccepted'
+-type 'InvoicePaymentChargebackAccepted'() :: #'domain_InvoicePaymentChargebackAccepted'{}.
+
+%% struct 'InvoicePaymentChargebackRejected'
+-type 'InvoicePaymentChargebackRejected'() :: #'domain_InvoicePaymentChargebackRejected'{}.
+
+%% struct 'InvoicePaymentChargebackCancelled'
+-type 'InvoicePaymentChargebackCancelled'() :: #'domain_InvoicePaymentChargebackCancelled'{}.
 
 %% struct 'InvoicePaymentRefund'
 -type 'InvoicePaymentRefund'() :: #'domain_InvoicePaymentRefund'{}.
@@ -1569,6 +1683,12 @@
 
 %% struct 'PartialCaptureServiceTerms'
 -type 'PartialCaptureServiceTerms'() :: #'domain_PartialCaptureServiceTerms'{}.
+
+%% struct 'PaymentChargebackServiceTerms'
+-type 'PaymentChargebackServiceTerms'() :: #'domain_PaymentChargebackServiceTerms'{}.
+
+%% struct 'PartialChargebackServiceTerms'
+-type 'PartialChargebackServiceTerms'() :: #'domain_PartialChargebackServiceTerms'{}.
 
 %% struct 'PaymentRefundsServiceTerms'
 -type 'PaymentRefundsServiceTerms'() :: #'domain_PaymentRefundsServiceTerms'{}.
@@ -1867,8 +1987,14 @@
 %% struct 'PartialCaptureProvisionTerms'
 -type 'PartialCaptureProvisionTerms'() :: #'domain_PartialCaptureProvisionTerms'{}.
 
+%% struct 'PaymentChargebackProvisionTerms'
+-type 'PaymentChargebackProvisionTerms'() :: #'domain_PaymentChargebackProvisionTerms'{}.
+
 %% struct 'PaymentRefundsProvisionTerms'
 -type 'PaymentRefundsProvisionTerms'() :: #'domain_PaymentRefundsProvisionTerms'{}.
+
+%% struct 'PartialChargebackProvisionTerms'
+-type 'PartialChargebackProvisionTerms'() :: #'domain_PartialChargebackProvisionTerms'{}.
 
 %% struct 'PartialRefundsProvisionTerms'
 -type 'PartialRefundsProvisionTerms'() :: #'domain_PartialRefundsProvisionTerms'{}.
@@ -2314,14 +2440,17 @@ typedefs() ->
         'AccountID',
         'InvoiceID',
         'InvoicePaymentID',
+        'InvoicePaymentChargebackID',
         'InvoicePaymentRefundID',
         'InvoicePaymentAdjustmentID',
         'InvoiceContext',
         'InvoicePaymentContext',
+        'InvoicePaymentChargebackContext',
         'PaymentSessionID',
         'Fingerprint',
         'IPAddress',
         'InvoiceTemplateID',
+        'ChargebackCode',
         'PartyID',
         'PartyRevision',
         'PartyMetaNamespace',
@@ -2406,6 +2535,7 @@ structs() ->
         'InvoicePaymentCancelled',
         'InvoicePaymentRefunded',
         'InvoicePaymentFailed',
+        'InvoicePaymentChargedBack',
         'InvoiceTemplate',
         'InvoiceTemplateDetails',
         'InvoiceTemplateProduct',
@@ -2429,6 +2559,22 @@ structs() ->
         'InvoicePaymentFlow',
         'InvoicePaymentFlowInstant',
         'InvoicePaymentFlowHold',
+        'InvoicePaymentChargeback',
+        'InvoicePaymentChargebackReason',
+        'InvoicePaymentChargebackCategory',
+        'InvoicePaymentChargebackCategoryFraud',
+        'InvoicePaymentChargebackCategoryDispute',
+        'InvoicePaymentChargebackCategoryAuthorisation',
+        'InvoicePaymentChargebackCategoryProcessingError',
+        'InvoicePaymentChargebackStage',
+        'InvoicePaymentChargebackStageChargeback',
+        'InvoicePaymentChargebackStagePreArbitration',
+        'InvoicePaymentChargebackStageArbitration',
+        'InvoicePaymentChargebackStatus',
+        'InvoicePaymentChargebackPending',
+        'InvoicePaymentChargebackAccepted',
+        'InvoicePaymentChargebackRejected',
+        'InvoicePaymentChargebackCancelled',
         'InvoicePaymentRefund',
         'InvoicePaymentRefundStatus',
         'InvoicePaymentRefundPending',
@@ -2490,6 +2636,8 @@ structs() ->
         'PaymentsServiceTerms',
         'PaymentHoldsServiceTerms',
         'PartialCaptureServiceTerms',
+        'PaymentChargebackServiceTerms',
+        'PartialChargebackServiceTerms',
         'PaymentRefundsServiceTerms',
         'PartialRefundsServiceTerms',
         'RecurrentPaytoolsServiceTerms',
@@ -2573,7 +2721,9 @@ structs() ->
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PartialCaptureProvisionTerms',
+        'PaymentChargebackProvisionTerms',
         'PaymentRefundsProvisionTerms',
+        'PartialChargebackProvisionTerms',
         'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
         'WithdrawalProvisionTerms',
@@ -2708,6 +2858,9 @@ typedef_info('InvoiceID') ->
 typedef_info('InvoicePaymentID') ->
     string;
 
+typedef_info('InvoicePaymentChargebackID') ->
+    string;
+
 typedef_info('InvoicePaymentRefundID') ->
     string;
 
@@ -2720,6 +2873,9 @@ typedef_info('InvoiceContext') ->
 typedef_info('InvoicePaymentContext') ->
     {struct, struct, {dmsl_base_thrift, 'Content'}};
 
+typedef_info('InvoicePaymentChargebackContext') ->
+    {struct, struct, {dmsl_base_thrift, 'Content'}};
+
 typedef_info('PaymentSessionID') ->
     string;
 
@@ -2730,6 +2886,9 @@ typedef_info('IPAddress') ->
     string;
 
 typedef_info('InvoiceTemplateID') ->
+    string;
+
+typedef_info('ChargebackCode') ->
     string;
 
 typedef_info('PartyID') ->
@@ -3391,6 +3550,9 @@ struct_info('InvoicePaymentFailed') ->
         {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'failure', undefined}
     ]};
 
+struct_info('InvoicePaymentChargedBack') ->
+    {struct, struct, []};
+
 struct_info('InvoiceTemplate') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
@@ -3433,7 +3595,8 @@ struct_info('InvoicePaymentStatus') ->
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargedBack'}}, 'charged_back', undefined}
     ]};
 
 struct_info('TargetInvoicePaymentStatus') ->
@@ -3541,6 +3704,83 @@ struct_info('InvoicePaymentFlowHold') ->
         {1, required, {enum, {dmsl_domain_thrift, 'OnHoldExpiration'}}, 'on_hold_expiration', undefined},
         {2, required, string, 'held_until', undefined}
     ]};
+
+struct_info('InvoicePaymentChargeback') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'reason', undefined},
+        {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
+        {6, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
+        {7, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
+        {8, required, i64, 'domain_revision', undefined},
+        {9, optional, i64, 'party_revision', undefined},
+        {10, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
+        {11, optional, string, 'external_id', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackReason') ->
+    {struct, struct, [
+        {1, optional, string, 'code', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategory'}}, 'category', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackCategory') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryFraud'}}, 'fraud', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryDispute'}}, 'dispute', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryAuthorisation'}}, 'authorisation', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCategoryProcessingError'}}, 'processing_error', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackCategoryFraud') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackCategoryDispute') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackCategoryAuthorisation') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackCategoryProcessingError') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackStage') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageChargeback'}}, 'chargeback', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStagePreArbitration'}}, 'pre_arbitration', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackStageArbitration'}}, 'arbitration', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackStageChargeback') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackStagePreArbitration') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackStageArbitration') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackStatus') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackAccepted'}}, 'accepted', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackRejected'}}, 'rejected', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackCancelled'}}, 'cancelled', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargebackPending') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackAccepted') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackRejected') ->
+    {struct, struct, []};
+
+struct_info('InvoicePaymentChargebackCancelled') ->
+    {struct, struct, []};
 
 struct_info('InvoicePaymentRefund') ->
     {struct, struct, [
@@ -3961,7 +4201,8 @@ struct_info('PaymentsServiceTerms') ->
         {5, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
         {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
-        {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined}
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
     ]};
 
 struct_info('PaymentHoldsServiceTerms') ->
@@ -3973,6 +4214,19 @@ struct_info('PaymentHoldsServiceTerms') ->
 
 struct_info('PartialCaptureServiceTerms') ->
     {struct, struct, []};
+
+struct_info('PaymentChargebackServiceTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'TimeSpanSelector'}}, 'eligibility_time', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PartialChargebackServiceTerms'}}, 'partial_chargebacks', undefined}
+    ]};
+
+struct_info('PartialChargebackServiceTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
 
 struct_info('PaymentRefundsServiceTerms') ->
     {struct, struct, [
@@ -4511,7 +4765,8 @@ struct_info('PaymentsProvisionTerms') ->
         {6, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
         {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
-        {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined}
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined}
     ]};
 
 struct_info('PaymentHoldsProvisionTerms') ->
@@ -4523,10 +4778,21 @@ struct_info('PaymentHoldsProvisionTerms') ->
 struct_info('PartialCaptureProvisionTerms') ->
     {struct, struct, []};
 
+struct_info('PaymentChargebackProvisionTerms') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialChargebackProvisionTerms'}}, 'partial_chargebacks', undefined}
+    ]};
+
 struct_info('PaymentRefundsProvisionTerms') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'PartialRefundsProvisionTerms'}}, 'partial_refunds', undefined}
+    ]};
+
+struct_info('PartialChargebackProvisionTerms') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
     ]};
 
 struct_info('PartialRefundsProvisionTerms') ->
@@ -5217,6 +5483,9 @@ record_name('InvoicePaymentRefunded') ->
 record_name('InvoicePaymentFailed') ->
     'domain_InvoicePaymentFailed';
 
+record_name('InvoicePaymentChargedBack') ->
+    'domain_InvoicePaymentChargedBack';
+
 record_name('InvoiceTemplate') ->
     'domain_InvoiceTemplate';
 
@@ -5264,6 +5533,45 @@ record_name('InvoicePaymentFlowInstant') ->
 
 record_name('InvoicePaymentFlowHold') ->
     'domain_InvoicePaymentFlowHold';
+
+record_name('InvoicePaymentChargeback') ->
+    'domain_InvoicePaymentChargeback';
+
+record_name('InvoicePaymentChargebackReason') ->
+    'domain_InvoicePaymentChargebackReason';
+
+record_name('InvoicePaymentChargebackCategoryFraud') ->
+    'domain_InvoicePaymentChargebackCategoryFraud';
+
+record_name('InvoicePaymentChargebackCategoryDispute') ->
+    'domain_InvoicePaymentChargebackCategoryDispute';
+
+record_name('InvoicePaymentChargebackCategoryAuthorisation') ->
+    'domain_InvoicePaymentChargebackCategoryAuthorisation';
+
+record_name('InvoicePaymentChargebackCategoryProcessingError') ->
+    'domain_InvoicePaymentChargebackCategoryProcessingError';
+
+record_name('InvoicePaymentChargebackStageChargeback') ->
+    'domain_InvoicePaymentChargebackStageChargeback';
+
+record_name('InvoicePaymentChargebackStagePreArbitration') ->
+    'domain_InvoicePaymentChargebackStagePreArbitration';
+
+record_name('InvoicePaymentChargebackStageArbitration') ->
+    'domain_InvoicePaymentChargebackStageArbitration';
+
+record_name('InvoicePaymentChargebackPending') ->
+    'domain_InvoicePaymentChargebackPending';
+
+record_name('InvoicePaymentChargebackAccepted') ->
+    'domain_InvoicePaymentChargebackAccepted';
+
+record_name('InvoicePaymentChargebackRejected') ->
+    'domain_InvoicePaymentChargebackRejected';
+
+record_name('InvoicePaymentChargebackCancelled') ->
+    'domain_InvoicePaymentChargebackCancelled';
 
 record_name('InvoicePaymentRefund') ->
     'domain_InvoicePaymentRefund';
@@ -5411,6 +5719,12 @@ record_name('PaymentHoldsServiceTerms') ->
 
 record_name('PartialCaptureServiceTerms') ->
     'domain_PartialCaptureServiceTerms';
+
+record_name('PaymentChargebackServiceTerms') ->
+    'domain_PaymentChargebackServiceTerms';
+
+record_name('PartialChargebackServiceTerms') ->
+    'domain_PartialChargebackServiceTerms';
 
 record_name('PaymentRefundsServiceTerms') ->
     'domain_PaymentRefundsServiceTerms';
@@ -5607,8 +5921,14 @@ record_name('PaymentHoldsProvisionTerms') ->
 record_name('PartialCaptureProvisionTerms') ->
     'domain_PartialCaptureProvisionTerms';
 
+record_name('PaymentChargebackProvisionTerms') ->
+    'domain_PaymentChargebackProvisionTerms';
+
 record_name('PaymentRefundsProvisionTerms') ->
     'domain_PaymentRefundsProvisionTerms';
+
+record_name('PartialChargebackProvisionTerms') ->
+    'domain_PartialChargebackProvisionTerms';
 
 record_name('PartialRefundsProvisionTerms') ->
     'domain_PartialRefundsProvisionTerms';

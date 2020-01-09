@@ -137,6 +137,47 @@
     'interaction' :: dmsl_user_interaction_thrift:'UserInteraction'()
 }).
 
+%% struct 'InvoicePaymentChargebackChange'
+-record('payproc_InvoicePaymentChargebackChange', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
+    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentChargebackChangePayload'()
+}).
+
+%% struct 'InvoicePaymentChargebackCreated'
+-record('payproc_InvoicePaymentChargebackCreated', {
+    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'()
+}).
+
+%% struct 'InvoicePaymentChargebackStatusChanged'
+-record('payproc_InvoicePaymentChargebackStatusChanged', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+}).
+
+%% struct 'InvoicePaymentChargebackCashFlowChanged'
+-record('payproc_InvoicePaymentChargebackCashFlowChanged', {
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
+}).
+
+%% struct 'InvoicePaymentChargebackBodyChanged'
+-record('payproc_InvoicePaymentChargebackBodyChanged', {
+    'body' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'InvoicePaymentChargebackLevyChanged'
+-record('payproc_InvoicePaymentChargebackLevyChanged', {
+    'levy' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'InvoicePaymentChargebackStageChanged'
+-record('payproc_InvoicePaymentChargebackStageChanged', {
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'()
+}).
+
+%% struct 'InvoicePaymentChargebackTargetStatusChanged'
+-record('payproc_InvoicePaymentChargebackTargetStatusChanged', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+}).
+
 %% struct 'InvoicePaymentRefundChange'
 -record('payproc_InvoicePaymentRefundChange', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'(),
@@ -278,6 +319,7 @@
     'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
+    'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined,
     'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
 }).
 
@@ -297,6 +339,34 @@
 %% struct 'InvoiceRefundSession'
 -record('payproc_InvoiceRefundSession', {
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackParams'
+-record('payproc_InvoicePaymentChargebackParams', {
+    'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
+    'levy' :: dmsl_domain_thrift:'Cash'(),
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
+    'external_id' :: binary() | undefined,
+    'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackAcceptParams'
+-record('payproc_InvoicePaymentChargebackAcceptParams', {
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'levy' :: dmsl_domain_thrift:'Cash'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackReopenParams'
+-record('payproc_InvoicePaymentChargebackReopenParams', {
+    'body' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'levy' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'InvoicePaymentChargebackRejectParams'
+-record('payproc_InvoicePaymentChargebackRejectParams', {
+    'levy' :: dmsl_domain_thrift:'Cash'()
 }).
 
 %% struct 'InvoicePaymentRefundParams'
@@ -902,6 +972,22 @@
 %% exception 'InvoicePaymentRefundNotFound'
 -record('payproc_InvoicePaymentRefundNotFound', {}).
 
+%% exception 'InvoicePaymentChargebackNotFound'
+-record('payproc_InvoicePaymentChargebackNotFound', {}).
+
+%% exception 'InvoicePaymentChargebackCannotReopenAfterArbitration'
+-record('payproc_InvoicePaymentChargebackCannotReopenAfterArbitration', {}).
+
+%% exception 'InvoicePaymentChargebackInvalidStage'
+-record('payproc_InvoicePaymentChargebackInvalidStage', {
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'()
+}).
+
+%% exception 'InvoicePaymentChargebackInvalidStatus'
+-record('payproc_InvoicePaymentChargebackInvalidStatus', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+}).
+
 %% exception 'InvoicePaymentAdjustmentNotFound'
 -record('payproc_InvoicePaymentAdjustmentNotFound', {}).
 
@@ -968,6 +1054,11 @@
     'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
 }).
 
+%% exception 'InconsistentChargebackCurrency'
+-record('payproc_InconsistentChargebackCurrency', {
+    'currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
+}).
+
 %% exception 'InconsistentCaptureCurrency'
 -record('payproc_InconsistentCaptureCurrency', {
     'payment_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
@@ -979,6 +1070,9 @@
     'payment_amount' :: dmsl_domain_thrift:'Amount'(),
     'passed_amount' :: dmsl_domain_thrift:'Amount'() | undefined
 }).
+
+%% exception 'InvoicePaymentChargebackPending'
+-record('payproc_InvoicePaymentChargebackPending', {}).
 
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {

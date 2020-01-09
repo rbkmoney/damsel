@@ -110,10 +110,12 @@ enum ThreeDsVerification {
 
 typedef base.ID InvoiceID
 typedef base.ID InvoicePaymentID
+typedef base.ID InvoicePaymentChargebackID
 typedef base.ID InvoicePaymentRefundID
 typedef base.ID InvoicePaymentAdjustmentID
 typedef base.Content InvoiceContext
 typedef base.Content InvoicePaymentContext
+typedef base.Content InvoicePaymentChargebackContext
 typedef string PaymentSessionID
 typedef string Fingerprint
 typedef string IPAddress
@@ -191,6 +193,8 @@ struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
 struct InvoicePaymentFailed    { 1: required OperationFailure failure }
 
+struct InvoicePaymentChargedBack {}
+
 /**
  * Шаблон инвойса.
  * Согласно https://github.com/rbkmoney/coredocs/blob/0a5ae1a79f977be3134c3b22028631da5225d407/docs/domain/entities/invoice.md#шаблон-инвойса
@@ -238,6 +242,7 @@ union InvoicePaymentStatus {
     5: InvoicePaymentCancelled cancelled
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
+    7: InvoicePaymentChargedBack charged_back
 }
 
 /**
@@ -284,7 +289,6 @@ union TargetInvoicePaymentStatus {
      * Если эта цель недостижима, взаимодействие в рамках сессии должно завершится с ошибкой.
      */
     4: InvoicePaymentRefunded refunded
-
 }
 
 union Payer {
@@ -371,6 +375,83 @@ enum OnHoldExpiration {
     cancel
     capture
 }
+
+/* Chargebacks */
+
+struct InvoicePaymentChargeback {
+     1: required InvoicePaymentChargebackID      id
+     2: required InvoicePaymentChargebackStatus  status
+     3: required base.Timestamp                  created_at
+     4: required InvoicePaymentChargebackReason  reason
+     5: required Cash                            levy
+     6: required Cash                            body
+     7: required InvoicePaymentChargebackStage   stage
+     8: required DataRevision                    domain_revision
+     9: optional PartyRevision                   party_revision
+    10: optional InvoicePaymentChargebackContext context
+    11: optional string                          external_id
+}
+
+typedef string ChargebackCode
+
+struct InvoicePaymentChargebackReason {
+    1: optional ChargebackCode code
+    2: required InvoicePaymentChargebackCategory category
+}
+
+union InvoicePaymentChargebackCategory {
+    /* The Fraud category is used for reason codes related to fraudulent transactions.
+       Reason codes related to no cardholder authorization, EMV liability, Card Present
+       and Card Not Present fraud are all found within the Fraud category. */
+    1: InvoicePaymentChargebackCategoryFraud           fraud
+
+    /* Consumer Disputes represent chargebacks initiated by the cardholder
+       in regards to product, service, or merchant issues.
+       Consumer Disputes are also referred to as Cardholder Disputes,
+       Card Member Disputes, and Service chargebacks.
+       The reasons for disputes categorized under Consumer Disputes are varied;
+       and can include circumstances like goods not received to cancelled recurring billing. */
+    2: InvoicePaymentChargebackCategoryDispute         dispute
+
+    /* Authorisation chargebacks represent disputes related to authorization issues.
+       For example, transactions where authorization was required, but not obtained.
+       They can also represent disputes where an Authorisation Request received a Decline
+       or Pickup Response and the merchant completed the transaction anyway. */
+    3: InvoicePaymentChargebackCategoryAuthorisation   authorisation
+
+    /* Processing Errors, also referred to as Point-of-Interaction Errors,
+       categorize reason codes representing disputes including duplicate processing,
+       late presentment, credit processed as charge, invalid card numbers,
+       addendum/“no show” disputes, incorrect charge amounts, and other similar situations. */
+    4: InvoicePaymentChargebackCategoryProcessingError processing_error
+}
+
+struct InvoicePaymentChargebackCategoryFraud           {}
+struct InvoicePaymentChargebackCategoryDispute         {}
+struct InvoicePaymentChargebackCategoryAuthorisation   {}
+struct InvoicePaymentChargebackCategoryProcessingError {}
+
+union InvoicePaymentChargebackStage {
+    1: InvoicePaymentChargebackStageChargeback     chargeback
+    2: InvoicePaymentChargebackStagePreArbitration pre_arbitration
+    3: InvoicePaymentChargebackStageArbitration    arbitration
+}
+
+struct InvoicePaymentChargebackStageChargeback     {}
+struct InvoicePaymentChargebackStagePreArbitration {}
+struct InvoicePaymentChargebackStageArbitration    {}
+
+union InvoicePaymentChargebackStatus {
+    1: InvoicePaymentChargebackPending   pending
+    2: InvoicePaymentChargebackAccepted  accepted
+    3: InvoicePaymentChargebackRejected  rejected
+    4: InvoicePaymentChargebackCancelled cancelled
+}
+
+struct InvoicePaymentChargebackPending   {}
+struct InvoicePaymentChargebackAccepted  {}
+struct InvoicePaymentChargebackRejected  {}
+struct InvoicePaymentChargebackCancelled {}
 
 /* Refunds */
 
@@ -834,17 +915,18 @@ struct TermSetHierarchyRef { 1: required ObjectID id }
 /* Payments service terms */
 
 struct PaymentsServiceTerms {
-    /* Shop level */
-    // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
-    1: optional CurrencySelector currencies
-    2: optional CategorySelector categories
-    /* Invoice level*/
-    4: optional PaymentMethodSelector payment_methods
-    5: optional CashLimitSelector cash_limit
-    /* Payment level */
-    6: optional CashFlowSelector fees
-    9: optional PaymentHoldsServiceTerms holds
-    8: optional PaymentRefundsServiceTerms refunds
+     /* Shop level */
+     // TODO It looks like you belong to the better place, something they call `AccountsServiceTerms`.
+     1: optional CurrencySelector currencies
+     2: optional CategorySelector categories
+     /* Invoice level*/
+     4: optional PaymentMethodSelector payment_methods
+     5: optional CashLimitSelector cash_limit
+     /* Payment level */
+     6: optional CashFlowSelector fees
+     9: optional PaymentHoldsServiceTerms holds
+     8: optional PaymentRefundsServiceTerms refunds
+    10: optional PaymentChargebackServiceTerms chargebacks
 }
 
 struct PaymentHoldsServiceTerms {
@@ -855,6 +937,17 @@ struct PaymentHoldsServiceTerms {
 }
 
 struct PartialCaptureServiceTerms {}
+
+struct PaymentChargebackServiceTerms {
+    1: optional PaymentMethodSelector payment_methods
+    2: optional CashFlowSelector fees
+    3: optional TimeSpanSelector eligibility_time
+    4: optional PartialChargebackServiceTerms partial_chargebacks
+}
+
+struct PartialChargebackServiceTerms {
+    1: optional CashLimitSelector cash_limit
+}
 
 struct PaymentRefundsServiceTerms {
     1: optional PaymentMethodSelector payment_methods
@@ -1816,6 +1909,7 @@ struct PaymentsProvisionTerms {
     4: optional CashFlowSelector cash_flow
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
+    10: optional PaymentChargebackProvisionTerms chargebacks
 }
 
 struct PaymentHoldsProvisionTerms {
@@ -1826,12 +1920,21 @@ struct PaymentHoldsProvisionTerms {
 
 struct PartialCaptureProvisionTerms {}
 
+struct PaymentChargebackProvisionTerms {
+    1: required CashFlowSelector cash_flow
+    2: optional PartialChargebackProvisionTerms partial_chargebacks
+}
+
 struct PaymentRefundsProvisionTerms {
     1: required CashFlowSelector cash_flow
     /**
      * Условия для частичных рефандов.
      */
     2: optional PartialRefundsProvisionTerms partial_refunds
+}
+
+struct PartialChargebackProvisionTerms {
+    1: required CashLimitSelector cash_limit
 }
 
 struct PartialRefundsProvisionTerms {
