@@ -308,12 +308,13 @@ struct InvoicePaymentChargebackChange {
  * Один из возможных вариантов события, порождённого чарджбеком платежа по инвойсу.
  */
 union InvoicePaymentChargebackChangePayload {
-    1: InvoicePaymentChargebackCreated         invoice_payment_chargeback_created
-    2: InvoicePaymentChargebackStatusChanged   invoice_payment_chargeback_status_changed
-    3: InvoicePaymentChargebackCashFlowChanged invoice_payment_chargeback_cash_flow_changed
-    4: InvoicePaymentChargebackBodyChanged     invoice_payment_chargeback_body_changed
-    5: InvoicePaymentChargebackLevyChanged     invoice_payment_chargeback_levy_changed
-    6: InvoicePaymentChargebackStageChanged    invoice_payment_chargeback_stage_changed
+    1: InvoicePaymentChargebackCreated              invoice_payment_chargeback_created
+    2: InvoicePaymentChargebackStatusChanged        invoice_payment_chargeback_status_changed
+    3: InvoicePaymentChargebackCashFlowChanged      invoice_payment_chargeback_cash_flow_changed
+    4: InvoicePaymentChargebackBodyChanged          invoice_payment_chargeback_body_changed
+    5: InvoicePaymentChargebackLevyChanged          invoice_payment_chargeback_levy_changed
+    6: InvoicePaymentChargebackStageChanged         invoice_payment_chargeback_stage_changed
+    7: InvoicePaymentChargebackTargetStatusChanged  invoice_payment_chargeback_target_status_changed
 }
 
 /**
@@ -356,6 +357,13 @@ struct InvoicePaymentChargebackLevyChanged {
  */
 struct InvoicePaymentChargebackStageChanged {
     1: required domain.InvoicePaymentChargebackStage stage
+}
+
+/**
+ * Событие об изменении целевого статуса чарджбека
+ */
+struct InvoicePaymentChargebackTargetStatusChanged {
+    1: required domain.InvoicePaymentChargebackStatus status
 }
 
 /**
