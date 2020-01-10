@@ -168,6 +168,7 @@ enum TerminalPaymentProvider {
     wechat
     alipay
     zotapay
+    qps
 }
 
 typedef string DigitalWalletID
