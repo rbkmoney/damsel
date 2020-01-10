@@ -1432,6 +1432,18 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
+/* Recurrents */
+
+union RecurrentSelector {
+    1: list<RecurrentDecision> decisions
+    2: bool value
+}
+
+struct RecurrentDecision {
+    1: required Predicate if_
+    2: required RecurrentSelector then_
+}
+
 /* Payment methods */
 
 union PaymentMethod {
@@ -1911,6 +1923,7 @@ struct PaymentsProvisionTerms {
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
+    11: optional RecurrentSelector cant_make_recurrent
 }
 
 struct PaymentHoldsProvisionTerms {
