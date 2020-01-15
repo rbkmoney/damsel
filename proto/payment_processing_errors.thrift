@@ -134,6 +134,7 @@ union BankCardReject {
 union NoRouteFoundFailure {
     1: GeneralFailure unknown
     2: GeneralFailure risk_score_is_too_high
+    3: GeneralFailure forbidden
 }
 
 union TermsViolated {
