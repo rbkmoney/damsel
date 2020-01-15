@@ -710,18 +710,31 @@ struct InvoicePaymentCaptureParams {
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
-    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
-    1: optional domain.DataRevision domain_revision
+    /** Deprecated! Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    1: optional domain.DataRevision legacy_domain_revision
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
-    /** Параметры для смены статуса платежа. */
-    3: optional InvoicePaymentAdjustmentParamsStatus status_params
+    /** Сценарий создаваемой поправки. */
+    3: optional InvoicePaymentAdjustmentScenario scenario
+}
+
+union InvoicePaymentAdjustmentScenario {
+    1: InvoicePaymentAdjustmentCashFlow cash_flow
+    2: InvoicePaymentAdjustmentStatusChange status_change
 }
 
 /**
- * Дополнительные параметры поправки к платежу, используемые для смены его статуса.
+ * Дополнительные параметры создаваемой поправки к платежу, используемые для пересчёта графа финансовых потоков.
  */
-struct InvoicePaymentAdjustmentParamsStatus {
+struct InvoicePaymentAdjustmentCashFlow {
+    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    1: optional domain.DataRevision domain_revision
+}
+
+/**
+ * Дополнительные параметры создаваемой поправки к платежу, используемые для смены его статуса.
+ */
+struct InvoicePaymentAdjustmentStatusChange {
     /** Статус, в который необходимо перевести платёж. */
     1: required domain.InvoicePaymentStatus target_status
 }
