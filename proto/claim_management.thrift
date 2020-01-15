@@ -75,7 +75,6 @@ struct PayoutToolParams {
     2: required domain.PayoutToolInfo tool_info
 }
 
-
 struct ContractParams {
     1: optional domain.ContractorID contractor_id
     2: optional domain.ContractTemplateRef template
@@ -287,6 +286,38 @@ struct ClaimSearchQuery {
 struct ClaimSearchResponse {
     1: required list<Claim> result
     2: optional ContinuationToken continuation_token
+}
+
+struct Event {
+    2: required base.Timestamp occured_at
+    3: required Change change
+}
+
+union Change {
+    1: ClaimCreated          created
+    2: ClaimUpdated          updated
+    3: ClaimStatusChanged    status_change
+}
+
+struct ClaimCreated {
+    1: required domain.PartyID     party_id
+    2: required Claim              claim
+    3: required list<Modification> changeset
+}
+
+struct ClaimUpdated {
+    1: required domain.PartyID     party_id
+    2: required ClaimID            id
+    3: required list<Modification> changeset
+    4: required ClaimRevision      revision
+}
+
+struct ClaimStatusChanged {
+    1: required domain.PartyID party_id
+    2: required ClaimID        id
+    3: required ClaimStatus    status
+    4: required ClaimRevision  revision
+    5: optional string         reason
 }
 
 service ClaimManagement {
