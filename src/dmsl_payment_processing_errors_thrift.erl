@@ -142,7 +142,8 @@
 %% union 'NoRouteFoundFailure'
 -type 'NoRouteFoundFailure'() ::
     {'unknown', 'GeneralFailure'()} |
-    {'risk_score_is_too_high', 'GeneralFailure'()}.
+    {'risk_score_is_too_high', 'GeneralFailure'()} |
+    {'forbidden', 'GeneralFailure'()}.
 
 %% union 'TermsViolated'
 -type 'TermsViolated'() ::
@@ -306,7 +307,8 @@ struct_info('BankCardReject') ->
 struct_info('NoRouteFoundFailure') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'unknown', undefined},
-        {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'risk_score_is_too_high', undefined}
+        {2, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'risk_score_is_too_high', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_errors_thrift, 'GeneralFailure'}}, 'forbidden', undefined}
     ]};
 
 struct_info('TermsViolated') ->
