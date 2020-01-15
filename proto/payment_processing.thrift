@@ -715,15 +715,15 @@ struct InvoicePaymentAdjustmentParams {
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
     /** Параметры для смены статуса платежа. */
-    3: optional InvoicePaymentAdjustmentParamsStatus status
+    3: optional InvoicePaymentAdjustmentParamsStatus status_params
 }
 
 /**
- * Дополнительные параметры поправки к платежу, используемые для смены его статуса. */
+ * Дополнительные параметры поправки к платежу, используемые для смены его статуса.
  */
 struct InvoicePaymentAdjustmentParamsStatus {
     /** Статус, в который необходимо перевести платёж. */
-    1: required domain.InvoicePaymentStatus
+    1: required domain.InvoicePaymentStatus target_status
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
