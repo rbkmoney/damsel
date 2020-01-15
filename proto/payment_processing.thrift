@@ -718,6 +718,9 @@ struct InvoicePaymentAdjustmentParams {
     3: optional InvoicePaymentAdjustmentScenario scenario
 }
 
+/**
+ * Сценарий поправки к платежу.
+ */
 union InvoicePaymentAdjustmentScenario {
     1: InvoicePaymentAdjustmentCashFlow cash_flow
     2: InvoicePaymentAdjustmentStatusChange status_change
