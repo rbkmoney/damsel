@@ -714,6 +714,16 @@ struct InvoicePaymentAdjustmentParams {
     1: optional domain.DataRevision domain_revision
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
+    /** Параметры для смены статуса платежа. */
+    3: optional InvoicePaymentAdjustmentParamsStatus status
+}
+
+/**
+ * Дополнительные параметры поправки к платежу, используемые для смены его статуса. */
+ */
+struct InvoicePaymentAdjustmentParamsStatus {
+    /** Статус, в который необходимо перевести платёж. */
+    1: required domain.InvoicePaymentStatus
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
