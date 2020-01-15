@@ -72,7 +72,6 @@ union PaymentFailure {
     2: PreAuthorizationFailure  preauthorization_failed
     3: AuthorizationFailure     authorization_failed
     4: NoRouteFoundFailure      no_route_found
-    5: GeneralFailure           recurrent_route_invalid
 }
 
 union RefundFailure {
@@ -135,6 +134,7 @@ union BankCardReject {
 union NoRouteFoundFailure {
     1: GeneralFailure unknown
     2: GeneralFailure risk_score_is_too_high
+    3: GeneralFailure recurrent_route_forbidden
 }
 
 union TermsViolated {
