@@ -739,7 +739,7 @@ struct InvoicePaymentAdjustmentCashFlow {
  */
 struct InvoicePaymentAdjustmentStatusChange {
     /** Статус, в который необходимо перевести платёж. */
-    1: required domain.InvoicePaymentStatus target_status
+    1: required domain.TargetInvoicePaymentStatus target_status
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
