@@ -96,7 +96,12 @@
     'ClaimDenied'/0,
     'ClaimRevoked'/0,
     'ClaimSearchQuery'/0,
-    'ClaimSearchResponse'/0
+    'ClaimSearchResponse'/0,
+    'Event'/0,
+    'Change'/0,
+    'ClaimCreated'/0,
+    'ClaimUpdated'/0,
+    'ClaimStatusChanged'/0
 ]).
 -export_type([
     'ClaimNotFound'/0,
@@ -201,7 +206,12 @@
     'ClaimDenied' |
     'ClaimRevoked' |
     'ClaimSearchQuery' |
-    'ClaimSearchResponse'.
+    'ClaimSearchResponse' |
+    'Event' |
+    'Change' |
+    'ClaimCreated' |
+    'ClaimUpdated' |
+    'ClaimStatusChanged'.
 
 -type exception_name() ::
     'ClaimNotFound' |
@@ -408,6 +418,24 @@
 %% struct 'ClaimSearchResponse'
 -type 'ClaimSearchResponse'() :: #'claim_management_ClaimSearchResponse'{}.
 
+%% struct 'Event'
+-type 'Event'() :: #'claim_management_Event'{}.
+
+%% union 'Change'
+-type 'Change'() ::
+    {'created', 'ClaimCreated'()} |
+    {'updated', 'ClaimUpdated'()} |
+    {'status_changed', 'ClaimStatusChanged'()}.
+
+%% struct 'ClaimCreated'
+-type 'ClaimCreated'() :: #'claim_management_ClaimCreated'{}.
+
+%% struct 'ClaimUpdated'
+-type 'ClaimUpdated'() :: #'claim_management_ClaimUpdated'{}.
+
+%% struct 'ClaimStatusChanged'
+-type 'ClaimStatusChanged'() :: #'claim_management_ClaimStatusChanged'{}.
+
 %% exception 'ClaimNotFound'
 -type 'ClaimNotFound'() :: #'claim_management_ClaimNotFound'{}.
 
@@ -572,7 +600,12 @@ structs() ->
         'ClaimDenied',
         'ClaimRevoked',
         'ClaimSearchQuery',
-        'ClaimSearchResponse'
+        'ClaimSearchResponse',
+        'Event',
+        'Change',
+        'ClaimCreated',
+        'ClaimUpdated',
+        'ClaimStatusChanged'
     ].
 
 -spec services() -> [service_name()].
@@ -933,6 +966,46 @@ struct_info('ClaimSearchResponse') ->
         {2, optional, string, 'continuation_token', undefined}
     ]};
 
+struct_info('Event') ->
+    {struct, struct, [
+        {1, required, string, 'occured_at', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'Change'}}, 'change', undefined}
+    ]};
+
+struct_info('Change') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimCreated'}}, 'created', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimUpdated'}}, 'updated', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ClaimStatusChanged'}}, 'status_changed', undefined}
+    ]};
+
+struct_info('ClaimCreated') ->
+    {struct, struct, [
+        {1, required, string, 'party_id', undefined},
+        {2, required, i64, 'id', undefined},
+        {3, required, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'changeset', undefined},
+        {4, required, i32, 'revision', undefined},
+        {5, required, string, 'created_at', undefined}
+    ]};
+
+struct_info('ClaimUpdated') ->
+    {struct, struct, [
+        {1, required, string, 'party_id', undefined},
+        {2, required, i64, 'id', undefined},
+        {3, required, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'changeset', undefined},
+        {4, required, i32, 'revision', undefined},
+        {5, required, string, 'updated_at', undefined}
+    ]};
+
+struct_info('ClaimStatusChanged') ->
+    {struct, struct, [
+        {1, required, string, 'party_id', undefined},
+        {2, required, i64, 'id', undefined},
+        {3, required, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}, 'status', undefined},
+        {4, required, i32, 'revision', undefined},
+        {5, required, string, 'updated_at', undefined}
+    ]};
+
 struct_info('ClaimNotFound') ->
     {struct, exception, []};
 
@@ -1083,6 +1156,18 @@ record_name('ClaimSearchQuery') ->
 
 record_name('ClaimSearchResponse') ->
     'claim_management_ClaimSearchResponse';
+
+record_name('Event') ->
+    'claim_management_Event';
+
+record_name('ClaimCreated') ->
+    'claim_management_ClaimCreated';
+
+record_name('ClaimUpdated') ->
+    'claim_management_ClaimUpdated';
+
+record_name('ClaimStatusChanged') ->
+    'claim_management_ClaimStatusChanged';
 
 record_name('ClaimNotFound') ->
     'claim_management_ClaimNotFound';

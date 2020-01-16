@@ -209,6 +209,39 @@
     'continuation_token' :: dmsl_claim_management_thrift:'ContinuationToken'() | undefined
 }).
 
+%% struct 'Event'
+-record('claim_management_Event', {
+    'occured_at' :: dmsl_base_thrift:'Timestamp'(),
+    'change' :: dmsl_claim_management_thrift:'Change'()
+}).
+
+%% struct 'ClaimCreated'
+-record('claim_management_ClaimCreated', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'id' :: dmsl_claim_management_thrift:'ClaimID'(),
+    'changeset' :: [dmsl_claim_management_thrift:'Modification'()],
+    'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'ClaimUpdated'
+-record('claim_management_ClaimUpdated', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'id' :: dmsl_claim_management_thrift:'ClaimID'(),
+    'changeset' :: [dmsl_claim_management_thrift:'Modification'()],
+    'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),
+    'updated_at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'ClaimStatusChanged'
+-record('claim_management_ClaimStatusChanged', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'id' :: dmsl_claim_management_thrift:'ClaimID'(),
+    'status' :: dmsl_claim_management_thrift:'ClaimStatus'(),
+    'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),
+    'updated_at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
 %% exception 'ClaimNotFound'
 -record('claim_management_ClaimNotFound', {}).
 
