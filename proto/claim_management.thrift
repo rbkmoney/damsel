@@ -326,12 +326,13 @@ struct ClaimStatusChanged {
 service ClaimManagement {
 
         Claim CreateClaim (1: domain.PartyID party_id, 2: list<Modification> changeset)
+            throws (1: InvalidChangeset ex1)
 
         Claim GetClaim (1: domain.PartyID party_id, 2: ClaimID id)
             throws (1: ClaimNotFound ex1)
 
         ClaimSearchResponse SearchClaims (1: ClaimSearchQuery claim_request)
-                throws (1: BadContinuationToken ex1)
+                throws (1: LimitExceeded ex1, 2: BadContinuationToken ex2)
 
         void AcceptClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
@@ -345,7 +346,8 @@ service ClaimManagement {
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3,
-                    4: ChangesetConflict ex4
+                    4: ChangesetConflict ex4,
+                    5: InvalidChangeset ex5
                 )
 
         void RequestClaimReview(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
