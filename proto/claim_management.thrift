@@ -296,13 +296,15 @@ struct Event {
 union Change {
     1: ClaimCreated          created
     2: ClaimUpdated          updated
-    3: ClaimStatusChanged    status_change
+    3: ClaimStatusChanged    status_changed
 }
 
 struct ClaimCreated {
     1: required domain.PartyID     party_id
-    2: required Claim              claim
+    2: required ClaimID            id
     3: required list<Modification> changeset
+    4: required ClaimRevision      revision
+    5: required base.Timestamp     created_at
 }
 
 struct ClaimUpdated {
@@ -310,6 +312,7 @@ struct ClaimUpdated {
     2: required ClaimID            id
     3: required list<Modification> changeset
     4: required ClaimRevision      revision
+    5: required base.Timestamp     updated_at
 }
 
 struct ClaimStatusChanged {
@@ -317,7 +320,7 @@ struct ClaimStatusChanged {
     2: required ClaimID        id
     3: required ClaimStatus    status
     4: required ClaimRevision  revision
-    5: optional string         reason
+    5: required base.Timestamp updated_at
 }
 
 service ClaimManagement {
