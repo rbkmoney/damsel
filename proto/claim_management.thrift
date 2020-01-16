@@ -15,7 +15,7 @@ exception PartyNotFound {}
 exception InvalidClaimRevision {}
 exception ChangesetConflict { 1: required ClaimID conflicted_id }
 exception BadContinuationToken { 1: string reason }
-exception LimitExceeded {}
+exception LimitExceeded { 1: string reason }
 
 exception InvalidChangeset {
     1: required string reason
