@@ -292,24 +292,18 @@ struct ClaimSearchResponse {
 service ClaimManagement {
 
         Claim CreateClaim (1: domain.PartyID party_id, 2: list<Modification> changeset)
-            throws (
-                1: ChangesetConflict ex1,
-                2: InvalidChangeset ex2,
-                3: base.InvalidRequest ex3
-            )
 
         Claim GetClaim (1: domain.PartyID party_id, 2: ClaimID id)
             throws (1: ClaimNotFound ex1)
 
         ClaimSearchResponse SearchClaims (1: ClaimSearchQuery claim_request)
-                throws (1: LimitExceeded ex1, 2: BadContinuationToken ex2)
+                throws (1: BadContinuationToken ex1)
 
         void AcceptClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
-                    3: InvalidClaimRevision ex3,
-                    4: InvalidChangeset ex4
+                    3: InvalidClaimRevision ex3
                 )
 
         void UpdateClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: list<Modification> changeset)
@@ -317,8 +311,7 @@ service ClaimManagement {
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
                     3: InvalidClaimRevision ex3,
-                    4: ChangesetConflict ex4,
-                    5: InvalidChangeset ex5
+                    4: ChangesetConflict ex4
                 )
 
         void RequestClaimReview(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
@@ -356,7 +349,7 @@ service ClaimManagement {
                 throws (1: ClaimNotFound ex1)
 
         void RemoveMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
-                throws (1: ClaimNotFound ex1, 2: MetadataKeyNotFound ex2)
+                throws (1: ClaimNotFound ex1)
 
 }
 
