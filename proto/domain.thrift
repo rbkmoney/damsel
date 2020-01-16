@@ -342,6 +342,7 @@ struct InvoicePaymentAdjustment {
     6: required FinalCashFlow new_cash_flow
     7: required FinalCashFlow old_cash_flow_inverse
     8: optional PartyRevision party_revision
+    9: optional TargetInvoicePaymentStatus target_payment_status
 }
 
 struct InvoicePaymentAdjustmentPending   {}
