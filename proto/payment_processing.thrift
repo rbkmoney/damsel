@@ -739,7 +739,7 @@ struct InvoicePaymentAdjustmentCashFlow {
  */
 struct InvoicePaymentAdjustmentStatusChange {
     /** Статус, в который необходимо перевести платёж. */
-    1: required domain.TargetInvoicePaymentStatus target_status
+    1: required domain.InvoicePaymentStatus target_status
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
@@ -844,8 +844,8 @@ exception InvalidPaymentStatus {
     1: required domain.InvoicePaymentStatus status
 }
 
-exception InvalidTargetInvoicePaymentStatus {
-    1: required domain.TargetInvoicePaymentStatus status
+exception InvalidInvoicePaymentTargetStatus {
+    1: required domain.InvoicePaymentStatus status
 }
 
 exception InvoicePaymentAlreadyHasStatus {
@@ -1036,7 +1036,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: InvoicePaymentAdjustmentPending ex5
-            6: InvalidTargetInvoicePaymentStatus ex6
+            6: InvalidInvoicePaymentTargetStatus ex6
             7: InvoicePaymentAlreadyHasStatus ex7
         )
 
