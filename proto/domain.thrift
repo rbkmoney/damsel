@@ -342,7 +342,7 @@ struct InvoicePaymentAdjustment {
     6: required FinalCashFlow new_cash_flow
     7: required FinalCashFlow old_cash_flow_inverse
     8: optional PartyRevision party_revision
-    9: optional InvoicePaymentAdjustmentScenario scenario
+    9: optional InvoicePaymentAdjustmentState state
 }
 
 struct InvoicePaymentAdjustmentPending   {}
@@ -358,11 +358,19 @@ union InvoicePaymentAdjustmentStatus {
 }
 
 /**
- * Сценарий поправки к платежу.
+ * Специфическое для выбранного сценария состояние поправки к платежу.
  */
-union InvoicePaymentAdjustmentScenario {
-    1: InvoicePaymentAdjustmentCashFlow cash_flow
-    2: InvoicePaymentAdjustmentStatusChange status_change
+union InvoicePaymentAdjustmentState {
+    1: InvoicePaymentAdjustmentCashFlowState cash_flow
+    2: InvoicePaymentAdjustmentStatusChangeState status_change
+}
+
+struct InvoicePaymentAdjustmentCashFlowState {
+    1: required InvoicePaymentAdjustmentCashFlow cash_flow_scenario
+}
+
+struct InvoicePaymentAdjustmentStatusChangeState {
+    1: required InvoicePaymentAdjustmentStatusChange status_change_scenario
 }
 
 /**

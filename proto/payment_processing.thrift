@@ -715,7 +715,15 @@ struct InvoicePaymentAdjustmentParams {
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
     /** Сценарий создаваемой поправки. */
-    3: optional domain.InvoicePaymentAdjustmentScenario scenario
+    3: optional InvoicePaymentAdjustmentScenario scenario
+}
+
+/**
+ * Сценарий поправки к платежу.
+ */
+union InvoicePaymentAdjustmentScenario {
+    1: domain.InvoicePaymentAdjustmentCashFlow cash_flow
+    2: domain.InvoicePaymentAdjustmentStatusChange status_change
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
