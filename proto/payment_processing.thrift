@@ -715,31 +715,7 @@ struct InvoicePaymentAdjustmentParams {
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
     /** Сценарий создаваемой поправки. */
-    3: optional InvoicePaymentAdjustmentScenario scenario
-}
-
-/**
- * Сценарий поправки к платежу.
- */
-union InvoicePaymentAdjustmentScenario {
-    1: InvoicePaymentAdjustmentCashFlow cash_flow
-    2: InvoicePaymentAdjustmentStatusChange status_change
-}
-
-/**
- * Дополнительные параметры создаваемой поправки к платежу, используемые для пересчёта графа финансовых потоков.
- */
-struct InvoicePaymentAdjustmentCashFlow {
-    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
-    1: optional domain.DataRevision domain_revision
-}
-
-/**
- * Дополнительные параметры создаваемой поправки к платежу, используемые для смены его статуса.
- */
-struct InvoicePaymentAdjustmentStatusChange {
-    /** Статус, в который необходимо перевести платёж. */
-    1: required domain.InvoicePaymentStatus target_status
+    3: optional domain.InvoicePaymentAdjustmentScenario scenario
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если

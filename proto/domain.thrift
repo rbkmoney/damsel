@@ -342,7 +342,7 @@ struct InvoicePaymentAdjustment {
     6: required FinalCashFlow new_cash_flow
     7: required FinalCashFlow old_cash_flow_inverse
     8: optional PartyRevision party_revision
-    9: optional TargetInvoicePaymentStatus target_payment_status
+    9: optional InvoicePaymentAdjustmentScenario scenario
 }
 
 struct InvoicePaymentAdjustmentPending   {}
@@ -355,6 +355,30 @@ union InvoicePaymentAdjustmentStatus {
     2: InvoicePaymentAdjustmentCaptured   captured
     3: InvoicePaymentAdjustmentCancelled cancelled
     4: InvoicePaymentAdjustmentProcessed processed
+}
+
+/**
+ * Сценарий поправки к платежу.
+ */
+union InvoicePaymentAdjustmentScenario {
+    1: InvoicePaymentAdjustmentCashFlow cash_flow
+    2: InvoicePaymentAdjustmentStatusChange status_change
+}
+
+/**
+ * Параметры поправки к платежу, используемые для пересчёта графа финансовых потоков.
+ */
+struct InvoicePaymentAdjustmentCashFlow {
+    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    1: optional DataRevision domain_revision
+}
+
+/**
+ * Параметры поправки к платежу, используемые для смены его статуса.
+ */
+struct InvoicePaymentAdjustmentStatusChange {
+    /** Статус, в который необходимо перевести платёж. */
+    1: required InvoicePaymentStatus target_status
 }
 
 /**
