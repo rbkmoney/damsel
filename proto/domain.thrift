@@ -366,11 +366,11 @@ union InvoicePaymentAdjustmentState {
 }
 
 struct InvoicePaymentAdjustmentCashFlowState {
-    1: required InvoicePaymentAdjustmentCashFlow cash_flow_scenario
+    1: required InvoicePaymentAdjustmentCashFlow scenario
 }
 
 struct InvoicePaymentAdjustmentStatusChangeState {
-    1: required InvoicePaymentAdjustmentStatusChange status_change_scenario
+    1: required InvoicePaymentAdjustmentStatusChange scenario
 }
 
 /**
