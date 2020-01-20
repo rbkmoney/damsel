@@ -828,7 +828,7 @@ exception InvalidPaymentStatus {
     1: required domain.InvoicePaymentStatus status
 }
 
-exception InvalidInvoicePaymentTargetStatus {
+exception InvalidPaymentTargetStatus {
     1: required domain.InvoicePaymentStatus status
 }
 
@@ -1020,7 +1020,7 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: InvoicePaymentAdjustmentPending ex5
-            6: InvalidInvoicePaymentTargetStatus ex6
+            6: InvalidPaymentTargetStatus ex6
             7: InvoicePaymentAlreadyHasStatus ex7
         )
 
