@@ -9,36 +9,32 @@ typedef i64 ClaimID
 typedef i64 ModificationID
 typedef i32 ClaimRevision
 typedef string ContinuationToken
-
-exception ClaimNotFound {}
-exception PartyNotFound {}
-exception InvalidClaimRevision {}
-exception ChangesetConflict { 1: required ClaimID conflicted_id }
-exception BadContinuationToken { 1: string reason }
-exception LimitExceeded {}
-
-exception InvalidChangeset {
-    1: required string reason
-    2: required ClaimChangeset invalid_changeset
-}
-
-exception InvalidClaimStatus {
-    1: required ClaimStatus status
-}
-
-
 typedef base.ID FileID
 typedef base.ID DocumentID
 typedef base.ID CommentID
+typedef base.ID UserID
 
 typedef string MetadataKey
 typedef msgpack.Value MetadataValue
 typedef map<MetadataKey, MetadataValue> Metadata
-exception MetadataKeyNotFound {}
 
 typedef list<ModificationUnit> ClaimChangeset
+typedef list<Modification> ModificationChangeset
 
-typedef base.ID UserID
+exception ClaimNotFound {}
+exception PartyNotFound {}
+exception InvalidClaimRevision {}
+exception BadContinuationToken { 1: string reason }
+exception LimitExceeded { 1: string reason }
+exception ChangesetConflict { 1: required ClaimID conflicted_id }
+exception InvalidChangeset {
+    1: required string reason
+    2: required ModificationChangeset invalid_changeset
+}
+exception InvalidClaimStatus {
+    1: required ClaimStatus status
+}
+exception MetadataKeyNotFound {}
 
 struct UserInfo {
     1: required UserID id
@@ -302,7 +298,7 @@ union Change {
 struct ClaimCreated {
     1: required domain.PartyID     party_id
     2: required ClaimID            id
-    3: required list<Modification> changeset
+    3: required ModificationChangeset changeset
     4: required ClaimRevision      revision
     5: required base.Timestamp     created_at
 }
@@ -310,7 +306,7 @@ struct ClaimCreated {
 struct ClaimUpdated {
     1: required domain.PartyID     party_id
     2: required ClaimID            id
-    3: required list<Modification> changeset
+    3: required ModificationChangeset changeset
     4: required ClaimRevision      revision
     5: required base.Timestamp     updated_at
 }
@@ -325,12 +321,8 @@ struct ClaimStatusChanged {
 
 service ClaimManagement {
 
-        Claim CreateClaim (1: domain.PartyID party_id, 2: list<Modification> changeset)
-            throws (
-                1: ChangesetConflict ex1,
-                2: InvalidChangeset ex2,
-                3: base.InvalidRequest ex3
-            )
+        Claim CreateClaim (1: domain.PartyID party_id, 2: ModificationChangeset changeset)
+            throws (1: InvalidChangeset ex1)
 
         Claim GetClaim (1: domain.PartyID party_id, 2: ClaimID id)
             throws (1: ClaimNotFound ex1)
@@ -342,11 +334,10 @@ service ClaimManagement {
                 throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
-                    3: InvalidClaimRevision ex3,
-                    4: InvalidChangeset ex4
+                    3: InvalidClaimRevision ex3
                 )
 
-        void UpdateClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: list<Modification> changeset)
+        void UpdateClaim (1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: ModificationChangeset changeset)
                 throws (
                     1: ClaimNotFound ex1,
                     2: InvalidClaimStatus ex2,
@@ -390,7 +381,7 @@ service ClaimManagement {
                 throws (1: ClaimNotFound ex1)
 
         void RemoveMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
-                throws (1: ClaimNotFound ex1, 2: MetadataKeyNotFound ex2)
+                throws (1: ClaimNotFound ex1)
 
 }
 

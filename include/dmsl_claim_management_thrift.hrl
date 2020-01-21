@@ -219,7 +219,7 @@
 -record('claim_management_ClaimCreated', {
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'id' :: dmsl_claim_management_thrift:'ClaimID'(),
-    'changeset' :: [dmsl_claim_management_thrift:'Modification'()],
+    'changeset' :: dmsl_claim_management_thrift:'ModificationChangeset'(),
     'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'()
 }).
@@ -228,7 +228,7 @@
 -record('claim_management_ClaimUpdated', {
     'party_id' :: dmsl_domain_thrift:'PartyID'(),
     'id' :: dmsl_claim_management_thrift:'ClaimID'(),
-    'changeset' :: [dmsl_claim_management_thrift:'Modification'()],
+    'changeset' :: dmsl_claim_management_thrift:'ModificationChangeset'(),
     'revision' :: dmsl_claim_management_thrift:'ClaimRevision'(),
     'updated_at' :: dmsl_base_thrift:'Timestamp'()
 }).
@@ -251,23 +251,25 @@
 %% exception 'InvalidClaimRevision'
 -record('claim_management_InvalidClaimRevision', {}).
 
-%% exception 'ChangesetConflict'
--record('claim_management_ChangesetConflict', {
-    'conflicted_id' :: dmsl_claim_management_thrift:'ClaimID'()
-}).
-
 %% exception 'BadContinuationToken'
 -record('claim_management_BadContinuationToken', {
     'reason' :: binary()
 }).
 
 %% exception 'LimitExceeded'
--record('claim_management_LimitExceeded', {}).
+-record('claim_management_LimitExceeded', {
+    'reason' :: binary()
+}).
+
+%% exception 'ChangesetConflict'
+-record('claim_management_ChangesetConflict', {
+    'conflicted_id' :: dmsl_claim_management_thrift:'ClaimID'()
+}).
 
 %% exception 'InvalidChangeset'
 -record('claim_management_InvalidChangeset', {
     'reason' :: binary(),
-    'invalid_changeset' :: dmsl_claim_management_thrift:'ClaimChangeset'()
+    'invalid_changeset' :: dmsl_claim_management_thrift:'ModificationChangeset'()
 }).
 
 %% exception 'InvalidClaimStatus'

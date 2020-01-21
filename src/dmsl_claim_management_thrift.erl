@@ -39,11 +39,12 @@
     'FileID'/0,
     'DocumentID'/0,
     'CommentID'/0,
+    'UserID'/0,
     'MetadataKey'/0,
     'MetadataValue'/0,
     'Metadata'/0,
     'ClaimChangeset'/0,
-    'UserID'/0
+    'ModificationChangeset'/0
 ]).
 -export_type([
     'UserInfo'/0,
@@ -107,9 +108,9 @@
     'ClaimNotFound'/0,
     'PartyNotFound'/0,
     'InvalidClaimRevision'/0,
-    'ChangesetConflict'/0,
     'BadContinuationToken'/0,
     'LimitExceeded'/0,
+    'ChangesetConflict'/0,
     'InvalidChangeset'/0,
     'InvalidClaimStatus'/0,
     'MetadataKeyNotFound'/0
@@ -128,11 +129,12 @@
     'FileID' |
     'DocumentID' |
     'CommentID' |
+    'UserID' |
     'MetadataKey' |
     'MetadataValue' |
     'Metadata' |
     'ClaimChangeset' |
-    'UserID'.
+    'ModificationChangeset'.
 
 -type 'ClaimID'() :: integer().
 -type 'ModificationID'() :: integer().
@@ -141,11 +143,12 @@
 -type 'FileID'() :: dmsl_base_thrift:'ID'().
 -type 'DocumentID'() :: dmsl_base_thrift:'ID'().
 -type 'CommentID'() :: dmsl_base_thrift:'ID'().
+-type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'MetadataKey'() :: binary().
 -type 'MetadataValue'() :: dmsl_msgpack_thrift:'Value'().
 -type 'Metadata'() :: #{'MetadataKey'() => 'MetadataValue'()}.
 -type 'ClaimChangeset'() :: ['ModificationUnit'()].
--type 'UserID'() :: dmsl_base_thrift:'ID'().
+-type 'ModificationChangeset'() :: ['Modification'()].
 
 %%
 %% enums
@@ -217,9 +220,9 @@
     'ClaimNotFound' |
     'PartyNotFound' |
     'InvalidClaimRevision' |
-    'ChangesetConflict' |
     'BadContinuationToken' |
     'LimitExceeded' |
+    'ChangesetConflict' |
     'InvalidChangeset' |
     'InvalidClaimStatus' |
     'MetadataKeyNotFound'.
@@ -445,14 +448,14 @@
 %% exception 'InvalidClaimRevision'
 -type 'InvalidClaimRevision'() :: #'claim_management_InvalidClaimRevision'{}.
 
-%% exception 'ChangesetConflict'
--type 'ChangesetConflict'() :: #'claim_management_ChangesetConflict'{}.
-
 %% exception 'BadContinuationToken'
 -type 'BadContinuationToken'() :: #'claim_management_BadContinuationToken'{}.
 
 %% exception 'LimitExceeded'
 -type 'LimitExceeded'() :: #'claim_management_LimitExceeded'{}.
+
+%% exception 'ChangesetConflict'
+-type 'ChangesetConflict'() :: #'claim_management_ChangesetConflict'{}.
 
 %% exception 'InvalidChangeset'
 -type 'InvalidChangeset'() :: #'claim_management_InvalidChangeset'{}.
@@ -534,11 +537,12 @@ typedefs() ->
         'FileID',
         'DocumentID',
         'CommentID',
+        'UserID',
         'MetadataKey',
         'MetadataValue',
         'Metadata',
         'ClaimChangeset',
-        'UserID'
+        'ModificationChangeset'
     ].
 
 -spec enums() -> [].
@@ -644,6 +648,9 @@ typedef_info('DocumentID') ->
 typedef_info('CommentID') ->
     string;
 
+typedef_info('UserID') ->
+    string;
+
 typedef_info('MetadataKey') ->
     string;
 
@@ -656,8 +663,8 @@ typedef_info('Metadata') ->
 typedef_info('ClaimChangeset') ->
     {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}};
 
-typedef_info('UserID') ->
-    string;
+typedef_info('ModificationChangeset') ->
+    {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}};
 
 typedef_info(_) -> erlang:error(badarg).
 
@@ -1015,23 +1022,25 @@ struct_info('PartyNotFound') ->
 struct_info('InvalidClaimRevision') ->
     {struct, exception, []};
 
-struct_info('ChangesetConflict') ->
-    {struct, exception, [
-        {1, required, i64, 'conflicted_id', undefined}
-    ]};
-
 struct_info('BadContinuationToken') ->
     {struct, exception, [
         {1, undefined, string, 'reason', undefined}
     ]};
 
 struct_info('LimitExceeded') ->
-    {struct, exception, []};
+    {struct, exception, [
+        {1, undefined, string, 'reason', undefined}
+    ]};
+
+struct_info('ChangesetConflict') ->
+    {struct, exception, [
+        {1, required, i64, 'conflicted_id', undefined}
+    ]};
 
 struct_info('InvalidChangeset') ->
     {struct, exception, [
         {1, required, string, 'reason', undefined},
-        {2, required, {list, {struct, struct, {dmsl_claim_management_thrift, 'ModificationUnit'}}}, 'invalid_changeset', undefined}
+        {2, required, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'invalid_changeset', undefined}
     ]};
 
 struct_info('InvalidClaimStatus') ->
@@ -1178,14 +1187,14 @@ record_name('PartyNotFound') ->
 record_name('InvalidClaimRevision') ->
     'claim_management_InvalidClaimRevision';
 
-record_name('ChangesetConflict') ->
-    'claim_management_ChangesetConflict';
-
 record_name('BadContinuationToken') ->
     'claim_management_BadContinuationToken';
 
 record_name('LimitExceeded') ->
     'claim_management_LimitExceeded';
+
+record_name('ChangesetConflict') ->
+    'claim_management_ChangesetConflict';
 
 record_name('InvalidChangeset') ->
     'claim_management_InvalidChangeset';
@@ -1236,9 +1245,7 @@ function_info('ClaimManagement', 'CreateClaim', reply_type) ->
     {struct, struct, {dmsl_claim_management_thrift, 'Claim'}};
 function_info('ClaimManagement', 'CreateClaim', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex1', undefined}
     ]};
 function_info('ClaimManagement', 'GetClaim', params_type) ->
     {struct, struct, [
@@ -1274,8 +1281,7 @@ function_info('ClaimManagement', 'AcceptClaim', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimStatus'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex4', undefined}
+        {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined}
     ]};
 function_info('ClaimManagement', 'UpdateClaim', params_type) ->
     {struct, struct, [
@@ -1388,8 +1394,7 @@ function_info('ClaimManagement', 'RemoveMetadata', reply_type) ->
     {struct, struct, []};
 function_info('ClaimManagement', 'RemoveMetadata', exceptions) ->
     {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'MetadataKeyNotFound'}}, 'ex2', undefined}
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ClaimNotFound'}}, 'ex1', undefined}
     ]};
 
 function_info('ClaimCommitter', 'Accept', params_type) ->
