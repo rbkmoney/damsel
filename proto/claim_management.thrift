@@ -321,6 +321,7 @@ struct ClaimStatusChanged {
     3: required ClaimStatus    status
     4: required ClaimRevision  revision
     5: required base.Timestamp updated_at
+    6: required string         reason
 }
 
 service ClaimManagement {
