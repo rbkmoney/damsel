@@ -147,4 +147,7 @@
 %% exception 'WebhookNotFound'
 -record('webhooker_WebhookNotFound', {}).
 
+%% exception 'LimitExceeded'
+-record('webhooker_LimitExceeded', {}).
+
 -endif.

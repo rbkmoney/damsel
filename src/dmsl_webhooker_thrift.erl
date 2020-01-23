@@ -89,7 +89,8 @@
     'WalletWithdrawalFailed'/0
 ]).
 -export_type([
-    'WebhookNotFound'/0
+    'WebhookNotFound'/0,
+    'LimitExceeded'/0
 ]).
 
 -type namespace() :: 'webhooker'.
@@ -167,7 +168,8 @@
     'WalletWithdrawalFailed'.
 
 -type exception_name() ::
-    'WebhookNotFound'.
+    'WebhookNotFound' |
+    'LimitExceeded'.
 
 %% struct 'Webhook'
 -type 'Webhook'() :: #'webhooker_Webhook'{}.
@@ -361,6 +363,9 @@
 
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
+
+%% exception 'LimitExceeded'
+-type 'LimitExceeded'() :: #'webhooker_LimitExceeded'{}.
 
 %%
 %% services and functions
@@ -740,6 +745,9 @@ struct_info('WalletWithdrawalFailed') ->
 struct_info('WebhookNotFound') ->
     {struct, exception, []};
 
+struct_info('LimitExceeded') ->
+    {struct, exception, []};
+
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -858,6 +866,9 @@ record_name('WalletWithdrawalFailed') ->
 record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';
 
+record_name('LimitExceeded') ->
+    'webhooker_LimitExceeded';
+
 record_name(_) -> error(badarg).
 
 -spec functions(service_name()) -> [function_name()] | no_return().
@@ -900,7 +911,9 @@ function_info('WebhookManager', 'Create', params_type) ->
 function_info('WebhookManager', 'Create', reply_type) ->
     {struct, struct, {dmsl_webhooker_thrift, 'Webhook'}};
 function_info('WebhookManager', 'Create', exceptions) ->
-    {struct, struct, []};
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_webhooker_thrift, 'LimitExceeded'}}, 'ex1', undefined}
+    ]};
 function_info('WebhookManager', 'Delete', params_type) ->
     {struct, struct, [
         {1, undefined, i64, 'webhook_id', undefined}
