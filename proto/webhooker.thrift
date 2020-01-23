@@ -8,6 +8,7 @@ typedef string Url
 typedef string Key
 typedef i64 WebhookID
 exception WebhookNotFound {}
+exception LimitExceeded {}
 
 struct Webhook {
     1: required WebhookID id
@@ -171,6 +172,6 @@ struct WalletWithdrawalFailed {}
 service WebhookManager {
     list<Webhook> GetList(1: domain.PartyID party_id)
     Webhook Get(1: WebhookID webhook_id) throws (1: WebhookNotFound ex1)
-    Webhook Create(1: WebhookParams webhook_params)
+    Webhook Create(1: WebhookParams webhook_params) throws (1: LimitExceeded ex1)
     void Delete(1: WebhookID webhook_id) throws (1: WebhookNotFound ex1)
 }
