@@ -882,7 +882,7 @@
     'token' :: dmsl_domain_thrift:'Token'(),
     'payment_system' :: atom(),
     'bin' :: binary(),
-    'masked_pan' :: binary(),
+    'last_digits' :: binary(),
     'token_provider' :: atom() | undefined,
     'issuer_country' :: atom() | undefined,
     'bank_name' :: binary() | undefined,
