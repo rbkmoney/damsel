@@ -292,7 +292,6 @@
     'GetCardData' |
     'GetSessionCardData' |
     'GetSessionData' |
-    'PutCardData' |
     'PutCard' |
     'PutSession'.
 
@@ -705,7 +704,6 @@ functions('Storage') ->
         'GetCardData',
         'GetSessionCardData',
         'GetSessionData',
-        'PutCardData',
         'PutCard',
         'PutSession'
     ];
@@ -913,17 +911,6 @@ function_info('Storage', 'GetSessionData', reply_type) ->
 function_info('Storage', 'GetSessionData', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_cds_thrift, 'SessionDataNotFound'}}, 'not_found', undefined}
-    ]};
-function_info('Storage', 'PutCardData', params_type) ->
-    {struct, struct, [
-        {1, undefined, {struct, struct, {dmsl_cds_thrift, 'CardData'}}, 'card_data', undefined},
-        {2, undefined, {struct, struct, {dmsl_cds_thrift, 'SessionData'}}, 'session_data', undefined}
-    ]};
-function_info('Storage', 'PutCardData', reply_type) ->
-    {struct, struct, {dmsl_cds_thrift, 'PutCardDataResult'}};
-function_info('Storage', 'PutCardData', exceptions) ->
-    {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_cds_thrift, 'InvalidCardData'}}, 'invalid', undefined}
     ]};
 function_info('Storage', 'PutCard', params_type) ->
     {struct, struct, [

@@ -316,12 +316,6 @@ service Storage {
     SessionData GetSessionData (1: domain.PaymentSessionID session_id)
         throws (1: SessionDataNotFound not_found)
 
-    /** Сохранить карточные и сессионные данные */
-    PutCardDataResult PutCardData (1: CardData card_data, 2: SessionData session_data)
-        throws (
-            1: InvalidCardData invalid
-        )
-
     /** Сохранить карточные данные */
     PutCardResult PutCard (1: CardData card_data)
         throws (
