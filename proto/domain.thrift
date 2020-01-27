@@ -1534,7 +1534,7 @@ struct BankCard {
     1: required Token token
     2: required BankCardPaymentSystem payment_system
     3: required string bin
-    4: required string masked_pan
+    4: required string last_digits
     5: optional BankCardTokenProvider token_provider
     6: optional Residence issuer_country
     7: optional string bank_name
