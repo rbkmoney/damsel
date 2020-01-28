@@ -136,6 +136,7 @@
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentCaptureParams'/0,
     'InvoicePaymentAdjustmentParams'/0,
+    'InvoicePaymentAdjustmentScenario'/0,
     'InvoiceRepairFailPreProcessing'/0,
     'InvoiceRepairSkipInspector'/0,
     'InvoiceRepairFailSession'/0,
@@ -284,6 +285,8 @@
     'InvoicePaymentAdjustmentPending'/0,
     'InvalidInvoiceStatus'/0,
     'InvalidPaymentStatus'/0,
+    'InvalidPaymentTargetStatus'/0,
+    'InvoicePaymentAlreadyHasStatus'/0,
     'InvalidPaymentAdjustmentStatus'/0,
     'InvoiceTemplateNotFound'/0,
     'InvoiceTemplateRemoved'/0,
@@ -459,6 +462,7 @@
     'InvoicePaymentRefundParams' |
     'InvoicePaymentCaptureParams' |
     'InvoicePaymentAdjustmentParams' |
+    'InvoicePaymentAdjustmentScenario' |
     'InvoiceRepairFailPreProcessing' |
     'InvoiceRepairSkipInspector' |
     'InvoiceRepairFailSession' |
@@ -607,6 +611,8 @@
     'InvoicePaymentAdjustmentPending' |
     'InvalidInvoiceStatus' |
     'InvalidPaymentStatus' |
+    'InvalidPaymentTargetStatus' |
+    'InvoicePaymentAlreadyHasStatus' |
     'InvalidPaymentAdjustmentStatus' |
     'InvoiceTemplateNotFound' |
     'InvoiceTemplateRemoved' |
@@ -925,6 +931,11 @@
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -type 'InvoicePaymentAdjustmentParams'() :: #'payproc_InvoicePaymentAdjustmentParams'{}.
+
+%% union 'InvoicePaymentAdjustmentScenario'
+-type 'InvoicePaymentAdjustmentScenario'() ::
+    {'cash_flow', dmsl_domain_thrift:'InvoicePaymentAdjustmentCashFlow'()} |
+    {'status_change', dmsl_domain_thrift:'InvoicePaymentAdjustmentStatusChange'()}.
 
 %% struct 'InvoiceRepairFailPreProcessing'
 -type 'InvoiceRepairFailPreProcessing'() :: #'payproc_InvoiceRepairFailPreProcessing'{}.
@@ -1492,6 +1503,12 @@
 %% exception 'InvalidPaymentStatus'
 -type 'InvalidPaymentStatus'() :: #'payproc_InvalidPaymentStatus'{}.
 
+%% exception 'InvalidPaymentTargetStatus'
+-type 'InvalidPaymentTargetStatus'() :: #'payproc_InvalidPaymentTargetStatus'{}.
+
+%% exception 'InvoicePaymentAlreadyHasStatus'
+-type 'InvoicePaymentAlreadyHasStatus'() :: #'payproc_InvoicePaymentAlreadyHasStatus'{}.
+
 %% exception 'InvalidPaymentAdjustmentStatus'
 -type 'InvalidPaymentAdjustmentStatus'() :: #'payproc_InvalidPaymentAdjustmentStatus'{}.
 
@@ -1855,6 +1872,7 @@ structs() ->
         'InvoicePaymentRefundParams',
         'InvoicePaymentCaptureParams',
         'InvoicePaymentAdjustmentParams',
+        'InvoicePaymentAdjustmentScenario',
         'InvoiceRepairFailPreProcessing',
         'InvoiceRepairSkipInspector',
         'InvoiceRepairFailSession',
@@ -2559,8 +2577,15 @@ struct_info('InvoicePaymentCaptureParams') ->
 
 struct_info('InvoicePaymentAdjustmentParams') ->
     {struct, struct, [
-        {1, optional, i64, 'domain_revision', undefined},
-        {2, required, string, 'reason', undefined}
+        {1, optional, i64, 'legacy_domain_revision', undefined},
+        {2, required, string, 'reason', undefined},
+        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentScenario'}}, 'scenario', undefined}
+    ]};
+
+struct_info('InvoicePaymentAdjustmentScenario') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCashFlow'}}, 'cash_flow', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatusChange'}}, 'status_change', undefined}
     ]};
 
 struct_info('InvoiceRepairFailPreProcessing') ->
@@ -3444,6 +3469,16 @@ struct_info('InvalidPaymentStatus') ->
         {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
     ]};
 
+struct_info('InvalidPaymentTargetStatus') ->
+    {struct, exception, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
+    ]};
+
+struct_info('InvoicePaymentAlreadyHasStatus') ->
+    {struct, exception, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'status', undefined}
+    ]};
+
 struct_info('InvalidPaymentAdjustmentStatus') ->
     {struct, exception, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatus'}}, 'status', undefined}
@@ -4111,6 +4146,12 @@ record_name('InvalidInvoiceStatus') ->
 record_name('InvalidPaymentStatus') ->
     'payproc_InvalidPaymentStatus';
 
+record_name('InvalidPaymentTargetStatus') ->
+    'payproc_InvalidPaymentTargetStatus';
+
+record_name('InvoicePaymentAlreadyHasStatus') ->
+    'payproc_InvoicePaymentAlreadyHasStatus';
+
 record_name('InvalidPaymentAdjustmentStatus') ->
     'payproc_InvalidPaymentAdjustmentStatus';
 
@@ -4507,7 +4548,9 @@ function_info('Invoicing', 'CreatePaymentAdjustment', exceptions) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentNotFound'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentPending'}}, 'ex5', undefined}
+        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentPending'}}, 'ex5', undefined},
+        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentTargetStatus'}}, 'ex6', undefined},
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAlreadyHasStatus'}}, 'ex7', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentAdjustment', params_type) ->
     {struct, struct, [

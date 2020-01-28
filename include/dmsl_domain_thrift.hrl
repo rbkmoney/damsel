@@ -229,7 +229,8 @@
     'reason' :: binary(),
     'new_cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
     'old_cash_flow_inverse' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
+    'state' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentState'() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentPending'
@@ -246,6 +247,26 @@
 %% struct 'InvoicePaymentAdjustmentCancelled'
 -record('domain_InvoicePaymentAdjustmentCancelled', {
     'at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'InvoicePaymentAdjustmentCashFlowState'
+-record('domain_InvoicePaymentAdjustmentCashFlowState', {
+    'scenario' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentCashFlow'()
+}).
+
+%% struct 'InvoicePaymentAdjustmentStatusChangeState'
+-record('domain_InvoicePaymentAdjustmentStatusChangeState', {
+    'scenario' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentStatusChange'()
+}).
+
+%% struct 'InvoicePaymentAdjustmentCashFlow'
+-record('domain_InvoicePaymentAdjustmentCashFlow', {
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined
+}).
+
+%% struct 'InvoicePaymentAdjustmentStatusChange'
+-record('domain_InvoicePaymentAdjustmentStatusChange', {
+    'target_status' :: dmsl_domain_thrift:'InvoicePaymentStatus'()
 }).
 
 %% struct 'InvoicePaymentFlowInstant'

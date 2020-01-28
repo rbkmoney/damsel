@@ -710,10 +710,20 @@ struct InvoicePaymentCaptureParams {
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
-    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
-    1: optional domain.DataRevision domain_revision
+    /** Deprecated! Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    1: optional domain.DataRevision legacy_domain_revision
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
+    /** Сценарий создаваемой поправки. */
+    3: optional InvoicePaymentAdjustmentScenario scenario
+}
+
+/**
+ * Сценарий поправки к платежу.
+ */
+union InvoicePaymentAdjustmentScenario {
+    1: domain.InvoicePaymentAdjustmentCashFlow cash_flow
+    2: domain.InvoicePaymentAdjustmentStatusChange status_change
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
@@ -815,6 +825,14 @@ exception InvalidInvoiceStatus {
 }
 
 exception InvalidPaymentStatus {
+    1: required domain.InvoicePaymentStatus status
+}
+
+exception InvalidPaymentTargetStatus {
+    1: required domain.InvoicePaymentStatus status
+}
+
+exception InvoicePaymentAlreadyHasStatus {
     1: required domain.InvoicePaymentStatus status
 }
 
@@ -1002,6 +1020,8 @@ service Invoicing {
             3: InvoicePaymentNotFound ex3,
             4: InvalidPaymentStatus ex4,
             5: InvoicePaymentAdjustmentPending ex5
+            6: InvalidPaymentTargetStatus ex6
+            7: InvoicePaymentAlreadyHasStatus ex7
         )
 
     InvoicePaymentAdjustment GetPaymentAdjustment (

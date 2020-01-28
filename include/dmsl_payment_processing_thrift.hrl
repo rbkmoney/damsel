@@ -388,8 +388,9 @@
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -record('payproc_InvoicePaymentAdjustmentParams', {
-    'domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
-    'reason' :: binary()
+    'legacy_domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
+    'reason' :: binary(),
+    'scenario' :: dmsl_payment_processing_thrift:'InvoicePaymentAdjustmentScenario'() | undefined
 }).
 
 %% struct 'InvoiceRepairFailPreProcessing'
@@ -1030,6 +1031,16 @@
 
 %% exception 'InvalidPaymentStatus'
 -record('payproc_InvalidPaymentStatus', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'()
+}).
+
+%% exception 'InvalidPaymentTargetStatus'
+-record('payproc_InvalidPaymentTargetStatus', {
+    'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'()
+}).
+
+%% exception 'InvoicePaymentAlreadyHasStatus'
+-record('payproc_InvoicePaymentAlreadyHasStatus', {
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'()
 }).
 

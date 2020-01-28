@@ -149,6 +149,11 @@
     'InvoicePaymentAdjustmentCaptured'/0,
     'InvoicePaymentAdjustmentCancelled'/0,
     'InvoicePaymentAdjustmentStatus'/0,
+    'InvoicePaymentAdjustmentState'/0,
+    'InvoicePaymentAdjustmentCashFlowState'/0,
+    'InvoicePaymentAdjustmentStatusChangeState'/0,
+    'InvoicePaymentAdjustmentCashFlow'/0,
+    'InvoicePaymentAdjustmentStatusChange'/0,
     'InvoicePaymentFlow'/0,
     'InvoicePaymentFlowInstant'/0,
     'InvoicePaymentFlowHold'/0,
@@ -978,6 +983,11 @@
     'InvoicePaymentAdjustmentCaptured' |
     'InvoicePaymentAdjustmentCancelled' |
     'InvoicePaymentAdjustmentStatus' |
+    'InvoicePaymentAdjustmentState' |
+    'InvoicePaymentAdjustmentCashFlowState' |
+    'InvoicePaymentAdjustmentStatusChangeState' |
+    'InvoicePaymentAdjustmentCashFlow' |
+    'InvoicePaymentAdjustmentStatusChange' |
     'InvoicePaymentFlow' |
     'InvoicePaymentFlowInstant' |
     'InvoicePaymentFlowHold' |
@@ -1405,6 +1415,23 @@
     {'captured', 'InvoicePaymentAdjustmentCaptured'()} |
     {'cancelled', 'InvoicePaymentAdjustmentCancelled'()} |
     {'processed', 'InvoicePaymentAdjustmentProcessed'()}.
+
+%% union 'InvoicePaymentAdjustmentState'
+-type 'InvoicePaymentAdjustmentState'() ::
+    {'cash_flow', 'InvoicePaymentAdjustmentCashFlowState'()} |
+    {'status_change', 'InvoicePaymentAdjustmentStatusChangeState'()}.
+
+%% struct 'InvoicePaymentAdjustmentCashFlowState'
+-type 'InvoicePaymentAdjustmentCashFlowState'() :: #'domain_InvoicePaymentAdjustmentCashFlowState'{}.
+
+%% struct 'InvoicePaymentAdjustmentStatusChangeState'
+-type 'InvoicePaymentAdjustmentStatusChangeState'() :: #'domain_InvoicePaymentAdjustmentStatusChangeState'{}.
+
+%% struct 'InvoicePaymentAdjustmentCashFlow'
+-type 'InvoicePaymentAdjustmentCashFlow'() :: #'domain_InvoicePaymentAdjustmentCashFlow'{}.
+
+%% struct 'InvoicePaymentAdjustmentStatusChange'
+-type 'InvoicePaymentAdjustmentStatusChange'() :: #'domain_InvoicePaymentAdjustmentStatusChange'{}.
 
 %% union 'InvoicePaymentFlow'
 -type 'InvoicePaymentFlow'() ::
@@ -2557,6 +2584,11 @@ structs() ->
         'InvoicePaymentAdjustmentCaptured',
         'InvoicePaymentAdjustmentCancelled',
         'InvoicePaymentAdjustmentStatus',
+        'InvoicePaymentAdjustmentState',
+        'InvoicePaymentAdjustmentCashFlowState',
+        'InvoicePaymentAdjustmentStatusChangeState',
+        'InvoicePaymentAdjustmentCashFlow',
+        'InvoicePaymentAdjustmentStatusChange',
         'InvoicePaymentFlow',
         'InvoicePaymentFlowInstant',
         'InvoicePaymentFlowHold',
@@ -3665,7 +3697,8 @@ struct_info('InvoicePaymentAdjustment') ->
         {5, required, string, 'reason', undefined},
         {6, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'new_cash_flow', undefined},
         {7, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'old_cash_flow_inverse', undefined},
-        {8, optional, i64, 'party_revision', undefined}
+        {8, optional, i64, 'party_revision', undefined},
+        {9, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentState'}}, 'state', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustmentPending') ->
@@ -3690,6 +3723,32 @@ struct_info('InvoicePaymentAdjustmentStatus') ->
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCaptured'}}, 'captured', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCancelled'}}, 'cancelled', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentProcessed'}}, 'processed', undefined}
+    ]};
+
+struct_info('InvoicePaymentAdjustmentState') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCashFlowState'}}, 'cash_flow', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatusChangeState'}}, 'status_change', undefined}
+    ]};
+
+struct_info('InvoicePaymentAdjustmentCashFlowState') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentCashFlow'}}, 'scenario', undefined}
+    ]};
+
+struct_info('InvoicePaymentAdjustmentStatusChangeState') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustmentStatusChange'}}, 'scenario', undefined}
+    ]};
+
+struct_info('InvoicePaymentAdjustmentCashFlow') ->
+    {struct, struct, [
+        {1, optional, i64, 'domain_revision', undefined}
+    ]};
+
+struct_info('InvoicePaymentAdjustmentStatusChange') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentStatus'}}, 'target_status', undefined}
     ]};
 
 struct_info('InvoicePaymentFlow') ->
@@ -5529,6 +5588,18 @@ record_name('InvoicePaymentAdjustmentCaptured') ->
 
 record_name('InvoicePaymentAdjustmentCancelled') ->
     'domain_InvoicePaymentAdjustmentCancelled';
+
+record_name('InvoicePaymentAdjustmentCashFlowState') ->
+    'domain_InvoicePaymentAdjustmentCashFlowState';
+
+record_name('InvoicePaymentAdjustmentStatusChangeState') ->
+    'domain_InvoicePaymentAdjustmentStatusChangeState';
+
+record_name('InvoicePaymentAdjustmentCashFlow') ->
+    'domain_InvoicePaymentAdjustmentCashFlow';
+
+record_name('InvoicePaymentAdjustmentStatusChange') ->
+    'domain_InvoicePaymentAdjustmentStatusChange';
 
 record_name('InvoicePaymentFlowInstant') ->
     'domain_InvoicePaymentFlowInstant';
