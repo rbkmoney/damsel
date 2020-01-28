@@ -110,6 +110,7 @@ struct RecurrentPaymentTool {
 struct RecurrentTokenInfo {
     1: required RecurrentPaymentTool   payment_tool
     2: optional domain.TransactionInfo trx
+    3: optional Shop                   shop
 }
 
 /**
