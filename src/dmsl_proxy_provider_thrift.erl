@@ -424,7 +424,8 @@ struct_info('RecurrentPaymentTool') ->
 struct_info('RecurrentTokenInfo') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_proxy_provider_thrift, 'RecurrentPaymentTool'}}, 'payment_tool', undefined},
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
+        {3, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Shop'}}, 'shop', undefined}
     ]};
 
 struct_info('RecurrentTokenSession') ->

@@ -43,7 +43,8 @@
 %% struct 'RecurrentTokenInfo'
 -record('prxprv_RecurrentTokenInfo', {
     'payment_tool' :: dmsl_proxy_provider_thrift:'RecurrentPaymentTool'(),
-    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'shop' :: dmsl_proxy_provider_thrift:'Shop'()
 }).
 
 %% struct 'RecurrentTokenSession'
