@@ -594,6 +594,10 @@ typedef domain.InvoicePaymentChargeback InvoicePaymentChargeback
  */
 struct InvoicePaymentChargebackParams {
     /**
+     * Идентификатор чарджбэка
+     */
+    5: required domain.InvoicePaymentChargebackID id
+    /**
     * Код причины чарджбэка
     */
     1: required domain.InvoicePaymentChargebackReason reason
@@ -613,10 +617,6 @@ struct InvoicePaymentChargebackParams {
      * Данные проведённой вручную транзакции
      */
     4: optional domain.TransactionInfo transaction_info
-    /**
-     * Идентификатор чарджбэка
-     */
-    5: optional domain.InvoicePaymentChargebackID id
     /**
      * Внешний идентификатор объекта
      */

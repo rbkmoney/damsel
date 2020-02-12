@@ -343,11 +343,11 @@
 
 %% struct 'InvoicePaymentChargebackParams'
 -record('payproc_InvoicePaymentChargebackParams', {
+    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
     'reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'(),
     'levy' :: dmsl_domain_thrift:'Cash'(),
     'body' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'() | undefined,
     'external_id' :: binary() | undefined,
     'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined
 }).
