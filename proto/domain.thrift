@@ -1024,8 +1024,7 @@ struct WalletServiceTerms {
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
     5: optional P2PServiceTerms p2p
-    6: optional DepositServiceTerms deposits
-    7: optional W2WServiceTerms w2w
+    6: optional W2WServiceTerms w2w
 }
 
 union CumulativeLimitSelector {
@@ -1054,14 +1053,6 @@ enum CumulativeLimitPeriod {
 /** Withdrawal service terms **/
 
 struct WithdrawalServiceTerms {
-    1: optional CurrencySelector currencies
-    2: optional CashLimitSelector cash_limit
-    3: optional CashFlowSelector cash_flow
-}
-
-/** Deposit service terms **/
-
-struct DepositServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
@@ -1933,17 +1924,6 @@ struct CashRegProvider {
     3: required Proxy proxy
 }
 
-struct DepositProviderRef { 1: required ObjectID id }
-
-struct DepositProvider {
-    1: required string name
-    2: optional string description
-    3: required Proxy proxy
-    4: optional string identity
-    5: optional DepositProvisionTerms deposit_terms
-    6: optional ProviderAccountSet accounts = {}
-}
-
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
 struct WithdrawalProvider {
@@ -2010,13 +1990,6 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
-}
-
-struct DepositProvisionTerms {
-    1: required CurrencySelector currencies
-    2: required PayoutMethodSelector payin_methods
-    3: required CashLimitSelector cash_limit
-    4: required CashFlowSelector cash_flow
 }
 
 struct WithdrawalProvisionTerms {
@@ -2454,11 +2427,6 @@ struct CashRegProviderObject {
     2: required CashRegProvider data
 }
 
-struct DepositProviderObject {
-    1: required DepositProviderRef ref
-    2: required DepositProvider data
-}
-
 struct WithdrawalProviderObject {
     1: required WithdrawalProviderRef ref
     2: required WithdrawalProvider data
@@ -2560,7 +2528,6 @@ union DomainObject {
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
-    26 : DepositProviderObject      deposit_provider
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegProviderObject      cashreg_provider
     24 : P2PProviderObject          p2p_provider
