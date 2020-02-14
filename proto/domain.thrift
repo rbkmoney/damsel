@@ -1024,6 +1024,8 @@ struct WalletServiceTerms {
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
     5: optional P2PServiceTerms p2p
+    6: optional DepositServiceTerms deposits
+    7: optional W2WServiceTerms w2w
 }
 
 union CumulativeLimitSelector {
@@ -1057,6 +1059,14 @@ struct WithdrawalServiceTerms {
     3: optional CashFlowSelector cash_flow
 }
 
+/** Deposit service terms **/
+
+struct DepositServiceTerms {
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional CashFlowSelector cash_flow
+}
+
 /** P2P service terms **/
 
 struct P2PServiceTerms {
@@ -1066,6 +1076,16 @@ struct P2PServiceTerms {
     4: optional CashFlowSelector cash_flow
     5: optional FeeSelector fees
     6: optional LifetimeSelector quote_lifetime
+}
+
+/** W2W service terms **/
+
+struct W2WServiceTerms {
+    1: optional Predicate allow
+    2: optional CurrencySelector currencies
+    3: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
+    5: optional FeeSelector fees
 }
 
 /* Payout methods */
@@ -1913,6 +1933,17 @@ struct CashRegProvider {
     3: required Proxy proxy
 }
 
+struct DepositProviderRef { 1: required ObjectID id }
+
+struct DepositProvider {
+    1: required string name
+    2: optional string description
+    3: required Proxy proxy
+    4: optional string identity
+    5: optional DepositProvisionTerms deposit_terms
+    6: optional ProviderAccountSet accounts = {}
+}
+
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
 struct WithdrawalProvider {
@@ -1932,6 +1963,17 @@ struct P2PProvider {
     3: required Proxy proxy
     4: optional string identity
     6: optional P2PProvisionTerms p2p_terms
+    7: optional ProviderAccountSet accounts = {}
+}
+
+struct W2WProviderRef { 1: required ObjectID id }
+
+struct W2WProvider {
+    1: required string name
+    2: optional string description
+    3: required Proxy proxy
+    4: optional string identity
+    6: optional W2WProvisionTerms w2w_terms
     7: optional ProviderAccountSet accounts = {}
 }
 
@@ -1981,6 +2023,13 @@ struct RecurrentPaytoolsProvisionTerms {
     3: required PaymentMethodSelector payment_methods
 }
 
+struct DepositProvisionTerms {
+    1: required CurrencySelector currencies
+    2: required PayoutMethodSelector payin_methods
+    3: required CashLimitSelector cash_limit
+    4: required CashFlowSelector cash_flow
+}
+
 struct WithdrawalProvisionTerms {
     1: required CurrencySelector currencies
     2: required PayoutMethodSelector payout_methods
@@ -1989,6 +2038,13 @@ struct WithdrawalProvisionTerms {
 }
 
 struct P2PProvisionTerms {
+    1: optional CurrencySelector currencies
+    2: optional CashLimitSelector cash_limit
+    3: optional CashFlowSelector cash_flow
+    4: optional FeeSelector fees
+}
+
+struct W2WProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
@@ -2416,6 +2472,11 @@ struct CashRegProviderObject {
     2: required CashRegProvider data
 }
 
+struct DepositProviderObject {
+    1: required DepositProviderRef ref
+    2: required DepositProvider data
+}
+
 struct WithdrawalProviderObject {
     1: required WithdrawalProviderRef ref
     2: required WithdrawalProvider data
@@ -2424,6 +2485,11 @@ struct WithdrawalProviderObject {
 struct P2PProviderObject {
     1: required P2PProviderRef ref
     2: required P2PProvider data
+}
+
+struct W2WProviderObject {
+    1: required W2WProviderRef ref
+    2: required W2WProvider data
 }
 
 struct TerminalObject {
@@ -2517,9 +2583,11 @@ union DomainObject {
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
+    26 : DepositProviderObject      deposit_provider
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegProviderObject      cashreg_provider
     24 : P2PProviderObject          p2p_provider
+    27 : W2WProviderObject          w2w_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
