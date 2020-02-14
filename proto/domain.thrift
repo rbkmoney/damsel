@@ -1966,17 +1966,6 @@ struct P2PProvider {
     7: optional ProviderAccountSet accounts = {}
 }
 
-struct W2WProviderRef { 1: required ObjectID id }
-
-struct W2WProvider {
-    1: required string name
-    2: optional string description
-    3: required Proxy proxy
-    4: optional string identity
-    6: optional W2WProvisionTerms w2w_terms
-    7: optional ProviderAccountSet accounts = {}
-}
-
 struct PaymentsProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
@@ -2038,13 +2027,6 @@ struct WithdrawalProvisionTerms {
 }
 
 struct P2PProvisionTerms {
-    1: optional CurrencySelector currencies
-    2: optional CashLimitSelector cash_limit
-    3: optional CashFlowSelector cash_flow
-    4: optional FeeSelector fees
-}
-
-struct W2WProvisionTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
@@ -2487,11 +2469,6 @@ struct P2PProviderObject {
     2: required P2PProvider data
 }
 
-struct W2WProviderObject {
-    1: required W2WProviderRef ref
-    2: required W2WProvider data
-}
-
 struct TerminalObject {
     1: required TerminalRef ref
     2: required Terminal data
@@ -2587,7 +2564,6 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegProviderObject      cashreg_provider
     24 : P2PProviderObject          p2p_provider
-    27 : W2WProviderObject          w2w_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
