@@ -741,7 +741,8 @@
     'wallet_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'turnover_limit' :: dmsl_domain_thrift:'CumulativeLimitSelector'() | undefined,
     'withdrawals' :: dmsl_domain_thrift:'WithdrawalServiceTerms'() | undefined,
-    'p2p' :: dmsl_domain_thrift:'P2PServiceTerms'() | undefined
+    'p2p' :: dmsl_domain_thrift:'P2PServiceTerms'() | undefined,
+    'w2w' :: dmsl_domain_thrift:'W2WServiceTerms'() | undefined
 }).
 
 %% struct 'CumulativeLimitDecision'
@@ -771,6 +772,15 @@
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined,
     'quote_lifetime' :: dmsl_domain_thrift:'LifetimeSelector'() | undefined
+}).
+
+%% struct 'W2WServiceTerms'
+-record('domain_W2WServiceTerms', {
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined,
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined
 }).
 
 %% struct 'PayoutMethodRef'

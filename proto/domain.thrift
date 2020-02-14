@@ -1024,6 +1024,7 @@ struct WalletServiceTerms {
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
     5: optional P2PServiceTerms p2p
+    6: optional W2WServiceTerms w2w
 }
 
 union CumulativeLimitSelector {
@@ -1066,6 +1067,16 @@ struct P2PServiceTerms {
     4: optional CashFlowSelector cash_flow
     5: optional FeeSelector fees
     6: optional LifetimeSelector quote_lifetime
+}
+
+/** W2W service terms **/
+
+struct W2WServiceTerms {
+    1: optional Predicate allow
+    2: optional CurrencySelector currencies
+    3: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
+    5: optional FeeSelector fees
 }
 
 /* Payout methods */

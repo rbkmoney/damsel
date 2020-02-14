@@ -247,6 +247,7 @@
     'CumulativeLimit'/0,
     'WithdrawalServiceTerms'/0,
     'P2PServiceTerms'/0,
+    'W2WServiceTerms'/0,
     'PayoutMethodRef'/0,
     'PayoutMethodDefinition'/0,
     'PayoutMethodSelector'/0,
@@ -1081,6 +1082,7 @@
     'CumulativeLimit' |
     'WithdrawalServiceTerms' |
     'P2PServiceTerms' |
+    'W2WServiceTerms' |
     'PayoutMethodRef' |
     'PayoutMethodDefinition' |
     'PayoutMethodSelector' |
@@ -1752,6 +1754,9 @@
 
 %% struct 'P2PServiceTerms'
 -type 'P2PServiceTerms'() :: #'domain_P2PServiceTerms'{}.
+
+%% struct 'W2WServiceTerms'
+-type 'W2WServiceTerms'() :: #'domain_W2WServiceTerms'{}.
 
 %% struct 'PayoutMethodRef'
 -type 'PayoutMethodRef'() :: #'domain_PayoutMethodRef'{}.
@@ -2682,6 +2687,7 @@ structs() ->
         'CumulativeLimit',
         'WithdrawalServiceTerms',
         'P2PServiceTerms',
+        'W2WServiceTerms',
         'PayoutMethodRef',
         'PayoutMethodDefinition',
         'PayoutMethodSelector',
@@ -4326,7 +4332,8 @@ struct_info('WalletServiceTerms') ->
         {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'wallet_limit', undefined},
         {3, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalServiceTerms'}}, 'withdrawals', undefined},
-        {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PServiceTerms'}}, 'p2p', undefined}
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'P2PServiceTerms'}}, 'p2p', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'W2WServiceTerms'}}, 'w2w', undefined}
     ]};
 
 struct_info('CumulativeLimitSelector') ->
@@ -4362,6 +4369,15 @@ struct_info('P2PServiceTerms') ->
         {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
         {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined},
         {6, optional, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'quote_lifetime', undefined}
+    ]};
+
+struct_info('W2WServiceTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined}
     ]};
 
 struct_info('PayoutMethodRef') ->
@@ -5828,6 +5844,9 @@ record_name('WithdrawalServiceTerms') ->
 
 record_name('P2PServiceTerms') ->
     'domain_P2PServiceTerms';
+
+record_name('W2WServiceTerms') ->
+    'domain_W2WServiceTerms';
 
 record_name('PayoutMethodRef') ->
     'domain_PayoutMethodRef';
