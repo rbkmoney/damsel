@@ -1519,6 +1519,7 @@ enum BankCardTokenProvider {
 typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
 typedef base.ID RecurrentPaymentToolID
+typedef base.ID PaymentToolTokenID
 
 struct P2PTool {
     1: required PaymentTool sender
@@ -1537,6 +1538,7 @@ struct DisposablePaymentResource {
     1: required PaymentTool        payment_tool
     2: optional PaymentSessionID   payment_session_id
     3: optional ClientInfo         client_info
+    4: optional PaymentToolTokenID payment_tool_token_id
 }
 
 typedef string Token
