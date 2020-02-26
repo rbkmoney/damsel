@@ -287,6 +287,7 @@ struct ClaimSearchResponse {
 struct Event {
     1: required base.Timestamp occured_at
     2: required Change         change
+    3: required UserInfo user_info
 }
 
 union Change {
@@ -394,7 +395,4 @@ service ClaimCommitter {
                 )
 
         void Commit (1: domain.PartyID party_id, 2: Claim claim)
-                throws (
-                )
-
 }
