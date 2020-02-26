@@ -159,6 +159,9 @@ struct ProcessOperationInfo {
      * Сессия может продолжаться и большее время, если нет возможности её прервать.
      */
     4: optional base.Timestamp deadline
+
+    /** Идентификатор передачи */
+    7: required base.ID        transfer_id
 }
 
 union PaymentResource {
