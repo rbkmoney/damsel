@@ -287,7 +287,7 @@ struct ClaimSearchResponse {
 struct Event {
     1: required base.Timestamp occured_at
     2: required Change         change
-    3: required UserInfo user_info
+    3: optional UserInfo user_info
 }
 
 union Change {
