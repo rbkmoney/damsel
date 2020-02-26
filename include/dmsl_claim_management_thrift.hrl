@@ -212,7 +212,8 @@
 %% struct 'Event'
 -record('claim_management_Event', {
     'occured_at' :: dmsl_base_thrift:'Timestamp'(),
-    'change' :: dmsl_claim_management_thrift:'Change'()
+    'change' :: dmsl_claim_management_thrift:'Change'(),
+    'user_info' :: dmsl_claim_management_thrift:'UserInfo'() | undefined
 }).
 
 %% struct 'ClaimCreated'

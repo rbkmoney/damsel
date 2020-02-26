@@ -976,7 +976,8 @@ struct_info('ClaimSearchResponse') ->
 struct_info('Event') ->
     {struct, struct, [
         {1, required, string, 'occured_at', undefined},
-        {2, required, {struct, union, {dmsl_claim_management_thrift, 'Change'}}, 'change', undefined}
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'Change'}}, 'change', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'UserInfo'}}, 'user_info', undefined}
     ]};
 
 struct_info('Change') ->
