@@ -19,6 +19,7 @@ typedef base.Opaque CallbackResponsePayload
 
 typedef base.Tag CallbackTag
 typedef base.ID UserInteractionID
+typedef base.ID P2PTransferID
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -160,8 +161,8 @@ struct ProcessOperationInfo {
      */
     4: optional base.Timestamp deadline
 
-    /** Идентификатор передачи */
-    7: required base.ID        transfer_id
+    /** Идентификатор операции */
+    7: required P2PTransferID  id
 }
 
 union PaymentResource {
