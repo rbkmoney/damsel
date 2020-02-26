@@ -20,6 +20,7 @@ typedef base.Opaque CallbackResponsePayload
 typedef base.Tag CallbackTag
 typedef base.ID UserInteractionID
 typedef base.ID P2POperationID
+typedef base.ID P2PSessionID
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -177,6 +178,11 @@ union PaymentResource {
  */
 struct Session {
     1: optional AdapterState state
+    /**
+     * Идентификатор сессии
+     * Уникален в рамках одной операции
+     */
+    2: required P2PSessionID id
 }
 
 /**
