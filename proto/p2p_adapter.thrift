@@ -19,8 +19,8 @@ typedef base.Opaque CallbackResponsePayload
 
 typedef base.Tag CallbackTag
 typedef base.ID UserInteractionID
-typedef base.ID P2POperationID
-typedef base.ID P2PSessionID
+typedef base.ID OperationID
+typedef base.ID SessionID
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -166,7 +166,7 @@ struct ProcessOperationInfo {
     * Идентификатор операции
     * Может повторяться между разными сессиями взаимодействия с провайдером
     **/
-    7: required P2POperationID  id
+    7: required OperationID  id
 }
 
 union PaymentResource {
@@ -182,7 +182,7 @@ struct Session {
      * Идентификатор сессии
      * Уникален в рамках одной операции
      */
-    2: required P2PSessionID id
+    2: required SessionID id
 }
 
 /**
