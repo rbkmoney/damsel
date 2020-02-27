@@ -36,7 +36,9 @@
     'CallbackPayload'/0,
     'CallbackResponsePayload'/0,
     'CallbackTag'/0,
-    'UserInteractionID'/0
+    'UserInteractionID'/0,
+    'OperationID'/0,
+    'SessionID'/0
 ]).
 -export_type([
     'Intent'/0,
@@ -77,13 +79,17 @@
     'CallbackPayload' |
     'CallbackResponsePayload' |
     'CallbackTag' |
-    'UserInteractionID'.
+    'UserInteractionID' |
+    'OperationID' |
+    'SessionID'.
 
 -type 'AdapterState'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackPayload'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackResponsePayload'() :: dmsl_base_thrift:'Opaque'().
 -type 'CallbackTag'() :: dmsl_base_thrift:'Tag'().
 -type 'UserInteractionID'() :: dmsl_base_thrift:'ID'().
+-type 'OperationID'() :: dmsl_base_thrift:'ID'().
+-type 'SessionID'() :: dmsl_base_thrift:'ID'().
 
 %%
 %% enums
@@ -260,7 +266,9 @@ typedefs() ->
         'CallbackPayload',
         'CallbackResponsePayload',
         'CallbackTag',
-        'UserInteractionID'
+        'UserInteractionID',
+        'OperationID',
+        'SessionID'
     ].
 
 -spec enums() -> [].
@@ -325,6 +333,12 @@ typedef_info('CallbackTag') ->
     string;
 
 typedef_info('UserInteractionID') ->
+    string;
+
+typedef_info('OperationID') ->
+    string;
+
+typedef_info('SessionID') ->
     string;
 
 typedef_info(_) -> erlang:error(badarg).
@@ -405,7 +419,8 @@ struct_info('ProcessOperationInfo') ->
         {6, optional, {struct, struct, {dmsl_p2p_adapter_thrift, 'Fees'}}, 'provider_fees', undefined},
         {2, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'sender', undefined},
         {3, required, {struct, union, {dmsl_p2p_adapter_thrift, 'PaymentResource'}}, 'receiver', undefined},
-        {4, optional, string, 'deadline', undefined}
+        {4, optional, string, 'deadline', undefined},
+        {7, required, string, 'id', undefined}
     ]};
 
 struct_info('PaymentResource') ->
@@ -415,7 +430,8 @@ struct_info('PaymentResource') ->
 
 struct_info('Session') ->
     {struct, struct, [
-        {1, optional, string, 'state', undefined}
+        {1, optional, string, 'state', undefined},
+        {2, required, string, 'id', undefined}
     ]};
 
 struct_info('Context') ->

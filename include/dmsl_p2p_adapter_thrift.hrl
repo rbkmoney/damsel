@@ -54,12 +54,14 @@
     'provider_fees' :: dmsl_p2p_adapter_thrift:'Fees'() | undefined,
     'sender' :: dmsl_p2p_adapter_thrift:'PaymentResource'(),
     'receiver' :: dmsl_p2p_adapter_thrift:'PaymentResource'(),
-    'deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'id' :: dmsl_p2p_adapter_thrift:'OperationID'()
 }).
 
 %% struct 'Session'
 -record('p2p_adapter_Session', {
-    'state' :: dmsl_p2p_adapter_thrift:'AdapterState'() | undefined
+    'state' :: dmsl_p2p_adapter_thrift:'AdapterState'() | undefined,
+    'id' :: dmsl_p2p_adapter_thrift:'SessionID'()
 }).
 
 %% struct 'Context'

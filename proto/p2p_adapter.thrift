@@ -19,6 +19,8 @@ typedef base.Opaque CallbackResponsePayload
 
 typedef base.Tag CallbackTag
 typedef base.ID UserInteractionID
+typedef base.ID OperationID
+typedef base.ID SessionID
 
 /**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -159,6 +161,12 @@ struct ProcessOperationInfo {
      * Сессия может продолжаться и большее время, если нет возможности её прервать.
      */
     4: optional base.Timestamp deadline
+
+    /**
+    * Идентификатор операции
+    * Может повторяться между разными сессиями взаимодействия с провайдером
+    **/
+    7: required OperationID  id
 }
 
 union PaymentResource {
@@ -170,6 +178,11 @@ union PaymentResource {
  */
 struct Session {
     1: optional AdapterState state
+    /**
+     * Идентификатор сессии
+     * Уникален в рамках одной операции
+     */
+    2: required SessionID id
 }
 
 /**
