@@ -650,14 +650,14 @@ struct InvoicePaymentChargebackReopenParams {
     /**
      * Сумма списания.
      */
-    2: required domain.Cash levy
+    2: optional domain.Cash levy
 }
 
 struct InvoicePaymentChargebackRejectParams {
     /**
      * Сумма списания.
      */
-    1: required domain.Cash levy
+    1: optional domain.Cash levy
 }
 
 typedef domain.FinalCashFlow FinalCashFlow
