@@ -1022,6 +1022,7 @@ service Invoicing {
             5: InvoicePaymentAdjustmentPending ex5
             6: InvalidPaymentTargetStatus ex6
             7: InvoicePaymentAlreadyHasStatus ex7
+            8: base.InvalidRequest ex8
         )
 
     InvoicePaymentAdjustment GetPaymentAdjustment (
