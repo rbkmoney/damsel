@@ -2550,12 +2550,12 @@ struct_info('InvoicePaymentChargebackAcceptParams') ->
 struct_info('InvoicePaymentChargebackReopenParams') ->
     {struct, struct, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
-        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackRejectParams') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundParams') ->
