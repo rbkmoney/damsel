@@ -4550,7 +4550,8 @@ function_info('Invoicing', 'CreatePaymentAdjustment', exceptions) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentStatus'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentPending'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPaymentTargetStatus'}}, 'ex6', undefined},
-        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAlreadyHasStatus'}}, 'ex7', undefined}
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentAlreadyHasStatus'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex8', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentAdjustment', params_type) ->
     {struct, struct, [
