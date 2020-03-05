@@ -972,10 +972,10 @@ struct PaymentHoldsServiceTerms {
 struct PartialCaptureServiceTerms {}
 
 struct PaymentChargebackServiceTerms {
-    1: optional PaymentMethodSelector payment_methods
-    2: optional CashFlowSelector fees
-    3: optional TimeSpanSelector eligibility_time
-    5: optional Predicate allow
+    1: optional Predicate allow
+    2: optional PaymentMethodSelector payment_methods
+    3: optional CashFlowSelector fees
+    4: optional TimeSpanSelector eligibility_time
 }
 
 struct PaymentRefundsServiceTerms {
