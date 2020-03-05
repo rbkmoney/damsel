@@ -976,6 +976,7 @@ struct PaymentChargebackServiceTerms {
     2: optional CashFlowSelector fees
     3: optional TimeSpanSelector eligibility_time
     4: optional PartialChargebackServiceTerms partial_chargebacks
+    5: optional Predicate allow
 }
 
 struct PartialChargebackServiceTerms {
@@ -1968,6 +1969,7 @@ struct PartialCaptureProvisionTerms {}
 struct PaymentChargebackProvisionTerms {
     1: required CashFlowSelector cash_flow
     2: optional PartialChargebackProvisionTerms partial_chargebacks
+    3: optional FeeSelector fees
 }
 
 struct PaymentRefundsProvisionTerms {
