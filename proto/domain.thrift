@@ -1572,6 +1572,7 @@ enum CryptoCurrency {
     ripple
     ethereum
     zcash
+    usdt
 }
 
 struct MobileCommerce {
