@@ -867,7 +867,8 @@
     'bitcoin_cash' |
     'ripple' |
     'ethereum' |
-    'zcash'.
+    'zcash' |
+    'usdt'.
 
 %% enum 'MobileOperator'
 -type 'MobileOperator'() ::
@@ -3334,7 +3335,8 @@ enum_info('CryptoCurrency') ->
         {'bitcoin_cash', 2},
         {'ripple', 3},
         {'ethereum', 4},
-        {'zcash', 5}
+        {'zcash', 5},
+        {'usdt', 6}
     ]};
 
 enum_info('MobileOperator') ->
