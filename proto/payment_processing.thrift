@@ -322,6 +322,7 @@ union InvoicePaymentChargebackChangePayload {
  */
 struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
+    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -329,6 +330,7 @@ struct InvoicePaymentChargebackCreated {
  */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
+    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -625,6 +627,10 @@ struct InvoicePaymentChargebackParams {
      * Дополнительные метаданные по чарджбэку
      */
     7: optional domain.InvoicePaymentChargebackContext context
+    /**
+     * Фактическое время создания
+     */
+    8: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackAcceptParams {
@@ -638,6 +644,10 @@ struct InvoicePaymentChargebackAcceptParams {
      * Если сумма не указана, то текущая сумма не меняется
      */
     2: optional domain.Cash levy
+    /**
+     * Фактическое время принятия
+     */
+    3: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackReopenParams {
@@ -651,6 +661,10 @@ struct InvoicePaymentChargebackReopenParams {
      * Сумма списания.
      */
     2: optional domain.Cash levy
+    /**
+     * Фактическое время опротестования
+     */
+    3: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackRejectParams {
@@ -658,6 +672,17 @@ struct InvoicePaymentChargebackRejectParams {
      * Сумма списания.
      */
     1: optional domain.Cash levy
+    /**
+     * Фактическое время отклонения
+     */
+    8: optional base.Timestamp occurred_at
+}
+
+struct InvoicePaymentChargebackCancelParams {
+    /**
+     * Фактическое время отмены
+     */
+    1: optional base.Timestamp occurred_at
 }
 
 typedef domain.FinalCashFlow FinalCashFlow
@@ -1181,6 +1206,7 @@ service Invoicing {
         2: domain.InvoiceID id
         3: domain.InvoicePaymentID payment_id
         4: domain.InvoicePaymentChargebackID chargeback_id
+        5: InvoicePaymentChargebackCancelParams params
     )
         throws (
             1:  InvalidUser ex1
