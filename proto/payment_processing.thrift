@@ -322,7 +322,7 @@ union InvoicePaymentChargebackChangePayload {
  */
 struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
-    2: optional base.Timestamp occured_at
+    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -330,7 +330,7 @@ struct InvoicePaymentChargebackCreated {
  */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
-    2: optional base.Timestamp occured_at
+    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -630,7 +630,7 @@ struct InvoicePaymentChargebackParams {
     /**
      * Фактическое время создания
      */
-    8: optional base.Timestamp occured_at
+    8: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackAcceptParams {
@@ -647,7 +647,7 @@ struct InvoicePaymentChargebackAcceptParams {
     /**
      * Фактическое время принятия
      */
-    3: optional base.Timestamp occured_at
+    3: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackReopenParams {
@@ -664,7 +664,7 @@ struct InvoicePaymentChargebackReopenParams {
     /**
      * Фактическое время опротестования
      */
-    3: optional base.Timestamp occured_at
+    3: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackRejectParams {
@@ -675,14 +675,14 @@ struct InvoicePaymentChargebackRejectParams {
     /**
      * Фактическое время отклонения
      */
-    8: optional base.Timestamp occured_at
+    8: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackCancelParams {
     /**
      * Фактическое время отмены
      */
-    1: optional base.Timestamp occured_at
+    1: optional base.Timestamp occurred_at
 }
 
 typedef domain.FinalCashFlow FinalCashFlow
