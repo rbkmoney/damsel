@@ -145,12 +145,14 @@
 
 %% struct 'InvoicePaymentChargebackCreated'
 -record('payproc_InvoicePaymentChargebackCreated', {
-    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'()
+    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'(),
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackStatusChanged'
 -record('payproc_InvoicePaymentChargebackStatusChanged', {
-    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackCashFlowChanged'
@@ -349,24 +351,33 @@
     'body' :: dmsl_domain_thrift:'Cash'() | undefined,
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'external_id' :: binary() | undefined,
-    'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined
+    'context' :: dmsl_domain_thrift:'InvoicePaymentChargebackContext'() | undefined,
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackAcceptParams'
 -record('payproc_InvoicePaymentChargebackAcceptParams', {
     'body' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'levy' :: dmsl_domain_thrift:'Cash'() | undefined
+    'levy' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackReopenParams'
 -record('payproc_InvoicePaymentChargebackReopenParams', {
     'body' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'levy' :: dmsl_domain_thrift:'Cash'() | undefined
+    'levy' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackRejectParams'
 -record('payproc_InvoicePaymentChargebackRejectParams', {
-    'levy' :: dmsl_domain_thrift:'Cash'() | undefined
+    'levy' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
+
+%% struct 'InvoicePaymentChargebackCancelParams'
+-record('payproc_InvoicePaymentChargebackCancelParams', {
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundParams'
