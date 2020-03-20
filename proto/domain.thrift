@@ -470,9 +470,9 @@ union InvoicePaymentChargebackStage {
     3: InvoicePaymentChargebackStageArbitration    arbitration
 }
 
-struct InvoicePaymentChargebackStageChargeback     {}
-struct InvoicePaymentChargebackStagePreArbitration {}
-struct InvoicePaymentChargebackStageArbitration    {}
+struct InvoicePaymentChargebackStageChargeback     { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackStagePreArbitration { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackStageArbitration    { 1: base.Timestamp occurred_at }
 
 union InvoicePaymentChargebackStatus {
     1: InvoicePaymentChargebackPending   pending
@@ -481,10 +481,10 @@ union InvoicePaymentChargebackStatus {
     4: InvoicePaymentChargebackCancelled cancelled
 }
 
-struct InvoicePaymentChargebackPending   {}
-struct InvoicePaymentChargebackAccepted  {}
-struct InvoicePaymentChargebackRejected  {}
-struct InvoicePaymentChargebackCancelled {}
+struct InvoicePaymentChargebackPending   { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackAccepted  { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackRejected  { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackCancelled { 1: base.Timestamp occurred_at }
 
 /* Refunds */
 
