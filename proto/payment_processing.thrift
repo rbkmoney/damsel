@@ -139,6 +139,7 @@ struct InvoiceStatusChanged {
 struct InvoicePaymentChange {
     1: required domain.InvoicePaymentID id
     2: required InvoicePaymentChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
@@ -302,7 +303,6 @@ struct SessionInteractionRequested {
 struct InvoicePaymentChargebackChange {
     1: required domain.InvoicePaymentChargebackID id
     2: required InvoicePaymentChargebackChangePayload payload
-    3: optional base.Timestamp occurred_at
 }
 
 /**
