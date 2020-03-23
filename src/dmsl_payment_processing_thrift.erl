@@ -2173,7 +2173,8 @@ struct_info('InvoiceStatusChanged') ->
 struct_info('InvoicePaymentChange') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
-        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChangePayload'}}, 'payload', undefined}
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentChangePayload'}}, 'payload', undefined},
+        {3, optional, string, 'occurred_at', undefined}
     ]};
 
 struct_info('InvoicePaymentChangePayload') ->
@@ -2314,14 +2315,12 @@ struct_info('InvoicePaymentChargebackChangePayload') ->
 
 struct_info('InvoicePaymentChargebackCreated') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined},
-        {2, optional, string, 'occurred_at', undefined}
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackStatusChanged') ->
     {struct, struct, [
-        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined},
-        {2, optional, string, 'occurred_at', undefined}
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackCashFlowChanged') ->

@@ -47,7 +47,8 @@
 %% struct 'InvoicePaymentChange'
 -record('payproc_InvoicePaymentChange', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
-    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentChangePayload'()
+    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentChangePayload'(),
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentStarted'
@@ -145,14 +146,12 @@
 
 %% struct 'InvoicePaymentChargebackCreated'
 -record('payproc_InvoicePaymentChargebackCreated', {
-    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'(),
-    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'()
 }).
 
 %% struct 'InvoicePaymentChargebackStatusChanged'
 -record('payproc_InvoicePaymentChargebackStatusChanged', {
-    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
-    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'()
 }).
 
 %% struct 'InvoicePaymentChargebackCashFlowChanged'
