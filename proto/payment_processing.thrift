@@ -302,6 +302,7 @@ struct SessionInteractionRequested {
 struct InvoicePaymentChargebackChange {
     1: required domain.InvoicePaymentChargebackID id
     2: required InvoicePaymentChargebackChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
@@ -322,7 +323,6 @@ union InvoicePaymentChargebackChangePayload {
  */
 struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
-    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -330,7 +330,6 @@ struct InvoicePaymentChargebackCreated {
  */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
-    2: optional base.Timestamp occurred_at
 }
 
 /**
