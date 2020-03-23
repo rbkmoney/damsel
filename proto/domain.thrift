@@ -481,10 +481,10 @@ union InvoicePaymentChargebackStatus {
     4: InvoicePaymentChargebackCancelled cancelled
 }
 
-struct InvoicePaymentChargebackPending   { 1: base.Timestamp occurred_at }
-struct InvoicePaymentChargebackAccepted  { 1: base.Timestamp occurred_at }
-struct InvoicePaymentChargebackRejected  { 1: base.Timestamp occurred_at }
-struct InvoicePaymentChargebackCancelled { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackPending   {}
+struct InvoicePaymentChargebackAccepted  {}
+struct InvoicePaymentChargebackRejected  {}
+struct InvoicePaymentChargebackCancelled {}
 
 /* Refunds */
 
