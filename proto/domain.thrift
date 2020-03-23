@@ -470,9 +470,9 @@ union InvoicePaymentChargebackStage {
     3: InvoicePaymentChargebackStageArbitration    arbitration
 }
 
-struct InvoicePaymentChargebackStageChargeback     { 1: base.Timestamp occurred_at }
-struct InvoicePaymentChargebackStagePreArbitration { 1: base.Timestamp occurred_at }
-struct InvoicePaymentChargebackStageArbitration    { 1: base.Timestamp occurred_at }
+struct InvoicePaymentChargebackStageChargeback     {}
+struct InvoicePaymentChargebackStagePreArbitration {}
+struct InvoicePaymentChargebackStageArbitration    {}
 
 union InvoicePaymentChargebackStatus {
     1: InvoicePaymentChargebackPending   pending
