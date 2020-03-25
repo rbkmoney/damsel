@@ -616,6 +616,14 @@ union ShopLocation {
     1: string url
 }
 
+/* Cash Registers */
+
+typedef base.ID CashRegID
+
+/** Контрольно-кассовая техника (ККТ) */
+struct CashReg {
+    1: required base.StringMap params
+}
 
 /** RBKM Wallets **/
 

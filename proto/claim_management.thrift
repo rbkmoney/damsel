@@ -104,6 +104,7 @@ union ShopModification {
     6: domain.ShopLocation location_modification
     7: ShopAccountParams shop_account_creation
     8: ScheduleModification payout_schedule_modification
+    9: CashRegModificationUnit cash_reg_modification_unit
 }
 
 struct ShopParams {
@@ -112,6 +113,15 @@ struct ShopParams {
     3: required domain.ShopDetails details
     4: required domain.ContractID contract_id
     5: required domain.PayoutToolID payout_tool_id
+}
+
+struct CashRegModificationUnit {
+    1: required domain.CashRegID id
+    2: required CashRegModification modification
+}
+
+union CashRegModification {
+    1: domain.CashReg creation
 }
 
 struct ContractorModificationUnit {
