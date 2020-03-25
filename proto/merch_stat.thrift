@@ -31,6 +31,7 @@ struct StatPayment {
     17: required domain.DataRevision domain_revision
     18: optional domain.InvoiceCart cart
     19: optional domain.AdditionalTransactionInfo additional_transaction_info
+    20: optional string invoice_details_product
 }
 
 union Payer {
@@ -348,6 +349,7 @@ struct StatRefund {
     10: required string currency_symbolic_code
     11: optional string reason
     12: optional domain.InvoiceCart cart
+    13: optional string invoice_details_product
 }
 
 union InvoicePaymentRefundStatus {
