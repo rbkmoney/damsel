@@ -13,6 +13,7 @@ typedef base.ID FileID
 typedef base.ID DocumentID
 typedef base.ID CommentID
 typedef base.ID UserID
+typedef base.ID CashRegisterID
 
 typedef string MetadataKey
 typedef msgpack.Value MetadataValue
@@ -104,6 +105,7 @@ union ShopModification {
     6: domain.ShopLocation location_modification
     7: ShopAccountParams shop_account_creation
     8: ScheduleModification payout_schedule_modification
+    9: CashRegisterModificationUnit cash_register_modification_unit
 }
 
 struct ShopParams {
@@ -112,6 +114,19 @@ struct ShopParams {
     3: required domain.ShopDetails details
     4: required domain.ContractID contract_id
     5: required domain.PayoutToolID payout_tool_id
+}
+
+struct CashRegisterModificationUnit {
+    1: required CashRegisterID id
+    2: required CashRegisterModification modification
+}
+
+union CashRegisterModification {
+    1: CashRegisterParams creation
+}
+
+struct CashRegisterParams {
+    1: required base.StringMap params
 }
 
 struct ContractorModificationUnit {

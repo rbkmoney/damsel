@@ -616,7 +616,6 @@ union ShopLocation {
     1: string url
 }
 
-
 /** RBKM Wallets **/
 
 typedef base.ID WalletID
