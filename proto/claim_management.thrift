@@ -104,7 +104,7 @@ union ShopModification {
     6: domain.ShopLocation location_modification
     7: ShopAccountParams shop_account_creation
     8: ScheduleModification payout_schedule_modification
-    9: CashRegisterModificationUnit cash_reg_modification_unit
+    9: CashRegisterModificationUnit cash_register_modification_unit
 }
 
 struct ShopParams {
