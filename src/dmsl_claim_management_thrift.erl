@@ -40,6 +40,7 @@
     'DocumentID'/0,
     'CommentID'/0,
     'UserID'/0,
+    'CashRegisterID'/0,
     'MetadataKey'/0,
     'MetadataValue'/0,
     'Metadata'/0,
@@ -62,6 +63,9 @@
     'ShopAccountParams'/0,
     'ShopModification'/0,
     'ShopParams'/0,
+    'CashRegisterModificationUnit'/0,
+    'CashRegisterModification'/0,
+    'CashRegisterParams'/0,
     'ContractorModificationUnit'/0,
     'ContractorModification'/0,
     'ContractModificationUnit'/0,
@@ -130,6 +134,7 @@
     'DocumentID' |
     'CommentID' |
     'UserID' |
+    'CashRegisterID' |
     'MetadataKey' |
     'MetadataValue' |
     'Metadata' |
@@ -144,6 +149,7 @@
 -type 'DocumentID'() :: dmsl_base_thrift:'ID'().
 -type 'CommentID'() :: dmsl_base_thrift:'ID'().
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
+-type 'CashRegisterID'() :: dmsl_base_thrift:'ID'().
 -type 'MetadataKey'() :: binary().
 -type 'MetadataValue'() :: dmsl_msgpack_thrift:'Value'().
 -type 'Metadata'() :: #{'MetadataKey'() => 'MetadataValue'()}.
@@ -174,6 +180,9 @@
     'ShopAccountParams' |
     'ShopModification' |
     'ShopParams' |
+    'CashRegisterModificationUnit' |
+    'CashRegisterModification' |
+    'CashRegisterParams' |
     'ContractorModificationUnit' |
     'ContractorModification' |
     'ContractModificationUnit' |
@@ -277,10 +286,21 @@
     {'payout_tool_modification', dmsl_domain_thrift:'PayoutToolID'()} |
     {'location_modification', dmsl_domain_thrift:'ShopLocation'()} |
     {'shop_account_creation', 'ShopAccountParams'()} |
-    {'payout_schedule_modification', 'ScheduleModification'()}.
+    {'payout_schedule_modification', 'ScheduleModification'()} |
+    {'cash_register_modification_unit', 'CashRegisterModificationUnit'()}.
 
 %% struct 'ShopParams'
 -type 'ShopParams'() :: #'claim_management_ShopParams'{}.
+
+%% struct 'CashRegisterModificationUnit'
+-type 'CashRegisterModificationUnit'() :: #'claim_management_CashRegisterModificationUnit'{}.
+
+%% union 'CashRegisterModification'
+-type 'CashRegisterModification'() ::
+    {'creation', 'CashRegisterParams'()}.
+
+%% struct 'CashRegisterParams'
+-type 'CashRegisterParams'() :: #'claim_management_CashRegisterParams'{}.
 
 %% struct 'ContractorModificationUnit'
 -type 'ContractorModificationUnit'() :: #'claim_management_ContractorModificationUnit'{}.
@@ -538,6 +558,7 @@ typedefs() ->
         'DocumentID',
         'CommentID',
         'UserID',
+        'CashRegisterID',
         'MetadataKey',
         'MetadataValue',
         'Metadata',
@@ -569,6 +590,9 @@ structs() ->
         'ShopAccountParams',
         'ShopModification',
         'ShopParams',
+        'CashRegisterModificationUnit',
+        'CashRegisterModification',
+        'CashRegisterParams',
         'ContractorModificationUnit',
         'ContractorModification',
         'ContractModificationUnit',
@@ -649,6 +673,9 @@ typedef_info('CommentID') ->
     string;
 
 typedef_info('UserID') ->
+    string;
+
+typedef_info('CashRegisterID') ->
     string;
 
 typedef_info('MetadataKey') ->
@@ -755,7 +782,8 @@ struct_info('ShopModification') ->
         {5, optional, string, 'payout_tool_modification', undefined},
         {6, optional, {struct, union, {dmsl_domain_thrift, 'ShopLocation'}}, 'location_modification', undefined},
         {7, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopAccountParams'}}, 'shop_account_creation', undefined},
-        {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined}
+        {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ScheduleModification'}}, 'payout_schedule_modification', undefined},
+        {9, optional, {struct, struct, {dmsl_claim_management_thrift, 'CashRegisterModificationUnit'}}, 'cash_register_modification_unit', undefined}
     ]};
 
 struct_info('ShopParams') ->
@@ -765,6 +793,22 @@ struct_info('ShopParams') ->
         {3, required, {struct, struct, {dmsl_domain_thrift, 'ShopDetails'}}, 'details', undefined},
         {4, required, string, 'contract_id', undefined},
         {5, required, string, 'payout_tool_id', undefined}
+    ]};
+
+struct_info('CashRegisterModificationUnit') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'CashRegisterModification'}}, 'modification', undefined}
+    ]};
+
+struct_info('CashRegisterModification') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'CashRegisterParams'}}, 'creation', undefined}
+    ]};
+
+struct_info('CashRegisterParams') ->
+    {struct, struct, [
+        {1, required, {map, string, string}, 'params', undefined}
     ]};
 
 struct_info('ContractorModificationUnit') ->
@@ -1094,6 +1138,12 @@ record_name('ShopAccountParams') ->
 
 record_name('ShopParams') ->
     'claim_management_ShopParams';
+
+record_name('CashRegisterModificationUnit') ->
+    'claim_management_CashRegisterModificationUnit';
+
+record_name('CashRegisterParams') ->
+    'claim_management_CashRegisterParams';
 
 record_name('ContractorModificationUnit') ->
     'claim_management_ContractorModificationUnit';

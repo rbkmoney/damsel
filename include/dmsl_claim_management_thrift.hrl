@@ -82,6 +82,17 @@
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
 }).
 
+%% struct 'CashRegisterModificationUnit'
+-record('claim_management_CashRegisterModificationUnit', {
+    'id' :: dmsl_claim_management_thrift:'CashRegisterID'(),
+    'modification' :: dmsl_claim_management_thrift:'CashRegisterModification'()
+}).
+
+%% struct 'CashRegisterParams'
+-record('claim_management_CashRegisterParams', {
+    'params' :: dmsl_base_thrift:'StringMap'()
+}).
+
 %% struct 'ContractorModificationUnit'
 -record('claim_management_ContractorModificationUnit', {
     'id' :: dmsl_domain_thrift:'ContractorID'(),
