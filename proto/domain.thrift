@@ -618,10 +618,10 @@ union ShopLocation {
 
 /* Cash Registers */
 
-typedef base.ID CashRegID
+typedef base.ID CashRegisterID
 
 /** Контрольно-кассовая техника (ККТ) */
-struct CashReg {
+struct CashRegister {
     1: required base.StringMap params
 }
 
