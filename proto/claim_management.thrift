@@ -14,7 +14,7 @@ typedef base.ID DocumentID
 typedef base.ID CommentID
 typedef base.ID UserID
 typedef base.ID CashRegisterID
-typedef base.ID CashRegisterProviderID
+typedef i32 CashRegisterProviderID
 
 typedef string MetadataKey
 typedef msgpack.Value MetadataValue
