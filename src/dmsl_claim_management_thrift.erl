@@ -41,6 +41,7 @@
     'CommentID'/0,
     'UserID'/0,
     'CashRegisterID'/0,
+    'CashRegisterProviderID'/0,
     'MetadataKey'/0,
     'MetadataValue'/0,
     'Metadata'/0,
@@ -135,6 +136,7 @@
     'CommentID' |
     'UserID' |
     'CashRegisterID' |
+    'CashRegisterProviderID' |
     'MetadataKey' |
     'MetadataValue' |
     'Metadata' |
@@ -150,6 +152,7 @@
 -type 'CommentID'() :: dmsl_base_thrift:'ID'().
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'CashRegisterID'() :: dmsl_base_thrift:'ID'().
+-type 'CashRegisterProviderID'() :: integer().
 -type 'MetadataKey'() :: binary().
 -type 'MetadataValue'() :: dmsl_msgpack_thrift:'Value'().
 -type 'Metadata'() :: #{'MetadataKey'() => 'MetadataValue'()}.
@@ -559,6 +562,7 @@ typedefs() ->
         'CommentID',
         'UserID',
         'CashRegisterID',
+        'CashRegisterProviderID',
         'MetadataKey',
         'MetadataValue',
         'Metadata',
@@ -677,6 +681,9 @@ typedef_info('UserID') ->
 
 typedef_info('CashRegisterID') ->
     string;
+
+typedef_info('CashRegisterProviderID') ->
+    i32;
 
 typedef_info('MetadataKey') ->
     string;
@@ -808,7 +815,8 @@ struct_info('CashRegisterModification') ->
 
 struct_info('CashRegisterParams') ->
     {struct, struct, [
-        {1, required, {map, string, string}, 'params', undefined}
+        {1, required, i32, 'cash_register_provider_id', undefined},
+        {2, required, {map, string, string}, 'cash_register_provider_params', undefined}
     ]};
 
 struct_info('ContractorModificationUnit') ->

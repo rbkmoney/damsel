@@ -90,7 +90,8 @@
 
 %% struct 'CashRegisterParams'
 -record('claim_management_CashRegisterParams', {
-    'params' :: dmsl_base_thrift:'StringMap'()
+    'cash_register_provider_id' :: dmsl_claim_management_thrift:'CashRegisterProviderID'(),
+    'cash_register_provider_params' :: dmsl_base_thrift:'StringMap'()
 }).
 
 %% struct 'ContractorModificationUnit'
