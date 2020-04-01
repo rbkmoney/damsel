@@ -765,7 +765,13 @@
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'fees' :: dmsl_domain_thrift:'FeeSelector'() | undefined,
-    'quote_lifetime' :: dmsl_domain_thrift:'LifetimeSelector'() | undefined
+    'quote_lifetime' :: dmsl_domain_thrift:'LifetimeSelector'() | undefined,
+    'templates' :: dmsl_domain_thrift:'P2PTemplateServiceTerms'() | undefined
+}).
+
+%% struct 'P2PTemplateServiceTerms'
+-record('domain_P2PTemplateServiceTerms', {
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined
 }).
 
 %% struct 'W2WServiceTerms'

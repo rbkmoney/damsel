@@ -246,6 +246,7 @@
     'CumulativeLimit'/0,
     'WithdrawalServiceTerms'/0,
     'P2PServiceTerms'/0,
+    'P2PTemplateServiceTerms'/0,
     'W2WServiceTerms'/0,
     'PayoutMethodRef'/0,
     'PayoutMethodDefinition'/0,
@@ -1080,6 +1081,7 @@
     'CumulativeLimit' |
     'WithdrawalServiceTerms' |
     'P2PServiceTerms' |
+    'P2PTemplateServiceTerms' |
     'W2WServiceTerms' |
     'PayoutMethodRef' |
     'PayoutMethodDefinition' |
@@ -1748,6 +1750,9 @@
 
 %% struct 'P2PServiceTerms'
 -type 'P2PServiceTerms'() :: #'domain_P2PServiceTerms'{}.
+
+%% struct 'P2PTemplateServiceTerms'
+-type 'P2PTemplateServiceTerms'() :: #'domain_P2PTemplateServiceTerms'{}.
 
 %% struct 'W2WServiceTerms'
 -type 'W2WServiceTerms'() :: #'domain_W2WServiceTerms'{}.
@@ -2677,6 +2682,7 @@ structs() ->
         'CumulativeLimit',
         'WithdrawalServiceTerms',
         'P2PServiceTerms',
+        'P2PTemplateServiceTerms',
         'W2WServiceTerms',
         'PayoutMethodRef',
         'PayoutMethodDefinition',
@@ -4352,7 +4358,13 @@ struct_info('P2PServiceTerms') ->
         {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
         {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
         {5, optional, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'fees', undefined},
-        {6, optional, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'quote_lifetime', undefined}
+        {6, optional, {struct, union, {dmsl_domain_thrift, 'LifetimeSelector'}}, 'quote_lifetime', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTemplateServiceTerms'}}, 'templates', undefined}
+    ]};
+
+struct_info('P2PTemplateServiceTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined}
     ]};
 
 struct_info('W2WServiceTerms') ->
@@ -5820,6 +5832,9 @@ record_name('WithdrawalServiceTerms') ->
 
 record_name('P2PServiceTerms') ->
     'domain_P2PServiceTerms';
+
+record_name('P2PTemplateServiceTerms') ->
+    'domain_P2PTemplateServiceTerms';
 
 record_name('W2WServiceTerms') ->
     'domain_W2WServiceTerms';

@@ -1061,6 +1061,13 @@ struct P2PServiceTerms {
     4: optional CashFlowSelector cash_flow
     5: optional FeeSelector fees
     6: optional LifetimeSelector quote_lifetime
+    7: optional P2PTemplateServiceTerms templates
+}
+
+/** P2P template service terms **/
+
+struct P2PTemplateServiceTerms {
+    1: optional Predicate allow
 }
 
 /** W2W service terms **/
