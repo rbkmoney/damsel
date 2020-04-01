@@ -291,6 +291,7 @@
     'InvalidPaymentAdjustmentStatus'/0,
     'InvoiceTemplateNotFound'/0,
     'InvoiceTemplateRemoved'/0,
+    'InvoiceCostOutOfRange'/0,
     'InvoicePaymentAmountExceeded'/0,
     'InconsistentRefundCurrency'/0,
     'InconsistentChargebackCurrency'/0,
@@ -618,6 +619,7 @@
     'InvalidPaymentAdjustmentStatus' |
     'InvoiceTemplateNotFound' |
     'InvoiceTemplateRemoved' |
+    'InvoiceCostOutOfRange' |
     'InvoicePaymentAmountExceeded' |
     'InconsistentRefundCurrency' |
     'InconsistentChargebackCurrency' |
@@ -1522,6 +1524,9 @@
 
 %% exception 'InvoiceTemplateRemoved'
 -type 'InvoiceTemplateRemoved'() :: #'payproc_InvoiceTemplateRemoved'{}.
+
+%% exception 'InvoiceCostOutOfRange'
+-type 'InvoiceCostOutOfRange'() :: #'payproc_InvoiceCostOutOfRange'{}.
 
 %% exception 'InvoicePaymentAmountExceeded'
 -type 'InvoicePaymentAmountExceeded'() :: #'payproc_InvoicePaymentAmountExceeded'{}.
@@ -3506,6 +3511,9 @@ struct_info('InvoiceTemplateNotFound') ->
 struct_info('InvoiceTemplateRemoved') ->
     {struct, exception, []};
 
+struct_info('InvoiceCostOutOfRange') ->
+    {struct, exception, []};
+
 struct_info('InvoicePaymentAmountExceeded') ->
     {struct, exception, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'maximum', undefined}
@@ -4180,6 +4188,9 @@ record_name('InvoiceTemplateNotFound') ->
 record_name('InvoiceTemplateRemoved') ->
     'payproc_InvoiceTemplateRemoved';
 
+record_name('InvoiceCostOutOfRange') ->
+    'payproc_InvoiceCostOutOfRange';
+
 record_name('InvoicePaymentAmountExceeded') ->
     'payproc_InvoicePaymentAmountExceeded';
 
@@ -4393,7 +4404,8 @@ function_info('Invoicing', 'Create', exceptions) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex6', undefined},
-        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex7', undefined}
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceCostOutOfRange'}}, 'ex8', undefined}
     ]};
 function_info('Invoicing', 'CreateWithTemplate', params_type) ->
     {struct, struct, [
@@ -4410,7 +4422,8 @@ function_info('Invoicing', 'CreateWithTemplate', exceptions) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateNotFound'}}, 'ex6', undefined},
-        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex7', undefined}
+        {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTemplateRemoved'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceCostOutOfRange'}}, 'ex8', undefined}
     ]};
 function_info('Invoicing', 'Get', params_type) ->
     {struct, struct, [

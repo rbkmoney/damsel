@@ -1065,6 +1065,9 @@
 %% exception 'InvoiceTemplateRemoved'
 -record('payproc_InvoiceTemplateRemoved', {}).
 
+%% exception 'InvoiceCostOutOfRange'
+-record('payproc_InvoiceCostOutOfRange', {}).
+
 %% exception 'InvoicePaymentAmountExceeded'
 -record('payproc_InvoicePaymentAmountExceeded', {
     'maximum' :: dmsl_domain_thrift:'Cash'()
