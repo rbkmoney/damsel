@@ -867,8 +867,10 @@ exception InvalidPaymentAdjustmentStatus {
 exception InvoiceTemplateNotFound {}
 exception InvoiceTemplateRemoved {}
 
-enum InvoiceTermsViolationReason {
-    invoice_unpayable
+struct InvoiceUnpayable {}
+
+union InvoiceTermsViolationReason {
+    1: InvoiceUnpayable invoice_unpayable
 }
 
 exception InvoiceTermsViolated {
