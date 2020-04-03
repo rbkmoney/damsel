@@ -428,6 +428,9 @@
     'validate_transitions' = true :: boolean() | undefined
 }).
 
+%% struct 'InvoiceUnpayable'
+-record('payproc_InvoiceUnpayable', {}).
+
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
@@ -1065,8 +1068,10 @@
 %% exception 'InvoiceTemplateRemoved'
 -record('payproc_InvoiceTemplateRemoved', {}).
 
-%% exception 'InvoiceCostOutOfRange'
--record('payproc_InvoiceCostOutOfRange', {}).
+%% exception 'InvoiceTermsViolated'
+-record('payproc_InvoiceTermsViolated', {
+    'reason' :: dmsl_payment_processing_thrift:'InvoiceTermsViolationReason'()
+}).
 
 %% exception 'InvoicePaymentAmountExceeded'
 -record('payproc_InvoicePaymentAmountExceeded', {
