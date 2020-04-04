@@ -1763,6 +1763,14 @@ struct RecurrentPaymentToolParams {
     3: required DisposablePaymentResource payment_resource
 }
 
+struct RecurrentPaymentToolUpdateParams {
+    1: optional PartyID                   party_id
+    4: optional PartyRevision             party_revision
+    6: optional domain.DataRevision       domain_revision
+    2: optional ShopID                    shop_id
+    3: optional DisposablePaymentResource payment_resource
+}
+
 // Statuses
 struct RecurrentPaymentToolCreated   {}
 struct RecurrentPaymentToolAcquired  {}
@@ -1897,6 +1905,15 @@ service RecurrentPaymentTools {
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
             3: EventNotFound                event_not_found
+        )
+
+    RecurrentPaymentTool Update (
+        1: RecurrentPaymentToolID id,
+        2: RecurrentPaymentToolUpdateParams params
+    )
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 }
 
