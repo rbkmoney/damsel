@@ -1761,6 +1761,7 @@ struct RecurrentPaymentToolParams {
     6: optional domain.DataRevision       domain_revision
     2: required ShopID                    shop_id
     3: required DisposablePaymentResource payment_resource
+    7: optional domain.PaymentRoute       route
 }
 
 struct RecurrentPaymentToolUpdateParams {
@@ -1769,6 +1770,8 @@ struct RecurrentPaymentToolUpdateParams {
     6: optional domain.DataRevision       domain_revision
     2: optional ShopID                    shop_id
     3: optional DisposablePaymentResource payment_resource
+    7: optional domain.PaymentRoute       route
+    9: optional domain.Token              rec_token
 }
 
 // Statuses
