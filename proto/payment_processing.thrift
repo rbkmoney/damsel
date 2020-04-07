@@ -1738,6 +1738,7 @@ service CustomerManagement {
 
 // Types
 typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
+typedef string RecurrentMeta
 
 // Model
 struct RecurrentPaymentTool {
@@ -1752,6 +1753,7 @@ struct RecurrentPaymentTool {
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
+    13: optional RecurrentMeta              metainformation
 }
 
 struct RecurrentPaymentToolParams {
@@ -1762,16 +1764,14 @@ struct RecurrentPaymentToolParams {
     2: required ShopID                    shop_id
     3: required DisposablePaymentResource payment_resource
     7: optional domain.PaymentRoute       route
+    8: optional RecurrentMeta             metainformation
 }
 
 struct RecurrentPaymentToolUpdateParams {
-    1: optional PartyID                   party_id
-    4: optional PartyRevision             party_revision
-    6: optional domain.DataRevision       domain_revision
-    2: optional ShopID                    shop_id
-    3: optional DisposablePaymentResource payment_resource
-    7: optional domain.PaymentRoute       route
-    9: optional domain.Token              rec_token
+    1: optional DisposablePaymentResource payment_resource
+    2: optional domain.PaymentRoute       route
+    3: optional domain.Token              rec_token
+    4: optional RecurrentMeta             metainformation
 }
 
 // Statuses
