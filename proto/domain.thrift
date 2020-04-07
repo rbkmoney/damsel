@@ -1934,8 +1934,8 @@ struct CashRegisterProviderParameter {
 }
 
 enum CashRegisterProviderParameterType {
-    String,
-    I32,
+    String
+    I32
     I64
 }
 
