@@ -1918,12 +1918,25 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 }
 
-struct CashRegProviderRef { 1: required ObjectID id }
+struct CashRegisterProviderRef { 1: required ObjectID id }
 
-struct CashRegProvider {
+struct CashRegisterProvider {
+    1: required string                              name
+    2: optional string                              description
+    3: required list<CashRegisterProviderParameter> params
+}
+
+struct CashRegisterProviderParameter {
     1: required string name
-    2: required string description
-    3: required Proxy proxy
+    2: optional string description
+    3: required string type
+    4: required bool   is_required
+}
+
+enum CashRegisterProviderParameterType {
+    String,
+    I32,
+    I64
 }
 
 struct WithdrawalProviderRef { 1: required ObjectID id }
@@ -2420,9 +2433,9 @@ struct ProviderObject {
     2: required Provider data
 }
 
-struct CashRegProviderObject {
-    1: required CashRegProviderRef ref
-    2: required CashRegProvider data
+struct CashRegisterProviderObject {
+    1: required CashRegisterProviderRef ref
+    2: required CashRegisterProvider data
 }
 
 struct WithdrawalProviderObject {
@@ -2496,7 +2509,7 @@ union Reference {
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
-    23 : CashRegProviderRef      cashreg_provider
+    23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
 
     12 : DummyRef                dummy
@@ -2527,7 +2540,7 @@ union DomainObject {
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
-    23 : CashRegProviderObject      cashreg_provider
+    23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
 
     12 : DummyObject                dummy
