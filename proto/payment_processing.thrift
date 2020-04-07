@@ -1818,6 +1818,12 @@ union RecurrentPaymentToolChange {
     3: RecurrentPaymentToolHasAbandoned     rec_payment_tool_abandoned
     4: RecurrentPaymentToolHasFailed        rec_payment_tool_failed
     5: RecurrentPaymentToolSessionChange    rec_payment_tool_session_changed
+    8: RecurrentPaymentToolUpdated          rec_payment_tool_updated
+}
+
+struct RecurrentPaymentToolUpdated {
+    1: required DisposablePaymentResource payment_resource
+    2: optional RecurrentMeta             metainformation
 }
 
 /*
