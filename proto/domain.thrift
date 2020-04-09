@@ -2375,6 +2375,7 @@ union RoutingRulesSetSelectorValue {
 union RoutingTerminalSetSelector {
     1: list<RoutingTerminalOrderedSetSelector> ordered_terminals
     2: set<RoutingTerminalWeightedSetSelector> weighted_terminals
+    3: set<RoutingTerminalPrioritizedSetSelector> proirotized_terminals
 }
 
 /* Допонительные условия выбора терминала из списка упорядоченных */
@@ -2382,15 +2383,16 @@ struct RoutingTerminalOrderedSetSelector {
     1: required list<RoutingTerminalDecision> decisions
 }
 
-/* Допонительные условия выбора терминала с предварительным упорядочиванием */
+/* Допонительные условия выбора терминала с предварительным упорядочиванием по весам */
 struct RoutingTerminalWeightedSetSelector {
-    1: required RoutingTerminalWeightSelector weight
+    1: required i64 weight
     2: required list<RoutingTerminalDecision> decisions
 }
 
-union RoutingTerminalWeightSelector {
-    1: i64 priority
-    2: i64 weight
+/* Допонительные условия выбора терминала с предварительным упорядочиванием по приоритетам */
+struct RoutingTerminalPrioritizedSetSelector {
+    1: required i64 priority
+    2: required list<RoutingTerminalDecision> decisions
 }
 
 struct RoutingTerminalDecision {
