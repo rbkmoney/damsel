@@ -2369,28 +2369,28 @@ union RoutingCondition {
 
 union RoutingRulesSetSelectorValue {
     1: RoutingRulesSetRef rules_set_ref
-    2: RoutingTerminalSetSelector terminals
+    2: RoutingTerminalSelector terminals
 }
 
-union RoutingTerminalSetSelector {
-    1: list<RoutingTerminalOrderedSetSelector> ordered_terminals
-    2: set<RoutingTerminalWeightedSetSelector> weighted_terminals
-    3: set<RoutingTerminalPrioritizedSetSelector> prioritized_terminals
+union RoutingTerminalSelector {
+    1: list<RoutingTerminalOrderedSelector> ordered_terminals
+    2: set<RoutingTerminalWeightedSelector> weighted_terminals
+    3: set<RoutingTerminalPrioritizedSelector> prioritized_terminals
 }
 
 /* Допонительные условия выбора терминала из списка упорядоченных */
-struct RoutingTerminalOrderedSetSelector {
+struct RoutingTerminalOrderedSelector {
     1: required list<RoutingTerminalDecision> decisions
 }
 
 /* Допонительные условия выбора терминала с предварительным упорядочиванием по весам */
-struct RoutingTerminalWeightedSetSelector {
+struct RoutingTerminalWeightedSelector {
     1: required i64 weight
     2: required list<RoutingTerminalDecision> decisions
 }
 
 /* Допонительные условия выбора терминала с предварительным упорядочиванием по приоритетам */
-struct RoutingTerminalPrioritizedSetSelector {
+struct RoutingTerminalPrioritizedSelector {
     1: required i64 priority
     2: required list<RoutingTerminalDecision> decisions
 }
