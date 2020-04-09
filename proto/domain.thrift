@@ -2379,14 +2379,18 @@ union RoutingTerminalSetSelector {
 
 /* Допонительные условия выбора терминала из списка упорядоченных */
 struct RoutingTerminalOrderedSetSelector {
-    1: list<RoutingTerminalDecision> decisions
+    1: required list<RoutingTerminalDecision> decisions
 }
 
 /* Допонительные условия выбора терминала с предварительным упорядочиванием */
 struct RoutingTerminalWeightedSetSelector {
-    1: list<RoutingTerminalDecision> decisions
-    2: optional i64 priority = 1000
-    3: optional i64 weight
+    1: required RoutingTerminalWeightSelector weight
+    2: required list<RoutingTerminalDecision> decisions
+}
+
+union RoutingTerminalWeightSelector {
+    1: i64 priority
+    2: i64 weight
 }
 
 struct RoutingTerminalDecision {
