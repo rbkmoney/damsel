@@ -1767,12 +1767,6 @@ struct RecurrentPaymentToolParams {
     8: optional RecurrentMeta             metainformation
 }
 
-struct RecurrentPaymentToolUpdateParams {
-    1: optional DisposablePaymentResource payment_resource
-    2: optional domain.Token              rec_token
-    3: optional RecurrentMeta             metainformation
-}
-
 // Statuses
 struct RecurrentPaymentToolCreated   {}
 struct RecurrentPaymentToolAcquired  {}
@@ -1817,12 +1811,21 @@ union RecurrentPaymentToolChange {
     3: RecurrentPaymentToolHasAbandoned     rec_payment_tool_abandoned
     4: RecurrentPaymentToolHasFailed        rec_payment_tool_failed
     5: RecurrentPaymentToolSessionChange    rec_payment_tool_session_changed
-    8: RecurrentPaymentToolUpdated          rec_payment_tool_updated
+    8: RecurrentPaymentToolResourceUpdated  rec_payment_tool_resource_updated
+    9: RecurrentPaymentToolTokenUpdated     rec_payment_tool_token_updated
+   10: RecurrentPaymentToolMetaUpdated      rec_payment_tool_meta_updated
 }
 
-struct RecurrentPaymentToolUpdated {
+struct RecurrentPaymentToolResourceUpdated {
     1: required DisposablePaymentResource payment_resource
-    2: optional RecurrentMeta             metainformation
+}
+
+struct RecurrentPaymentToolTokenUpdated {
+    1: required Token rec_token
+}
+
+struct RecurrentPaymentToolMetaUpdated {
+    1: required RecurrentMeta metainformation
 }
 
 /*
@@ -1915,9 +1918,27 @@ service RecurrentPaymentTools {
             3: EventNotFound                event_not_found
         )
 
-    RecurrentPaymentTool Update (
+    RecurrentPaymentTool UpdateResource (
+        1: RecurrentPaymentToolID    id,
+        2: DisposablePaymentResource payment_resource
+    )
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
+
+    RecurrentPaymentTool UpdateToken (
         1: RecurrentPaymentToolID id,
-        2: RecurrentPaymentToolUpdateParams params
+        2: optional domain.Token  rec_token
+    )
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
+
+    RecurrentPaymentTool UpdateMeta (
+        1: RecurrentPaymentToolID id,
+        2: RecurrentMeta          metainformation
     )
         throws (
             1: InvalidUser                  invalid_user
