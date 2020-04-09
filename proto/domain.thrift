@@ -2375,7 +2375,7 @@ union RoutingRulesSetSelectorValue {
 union RoutingTerminalSetSelector {
     1: list<RoutingTerminalOrderedSetSelector> ordered_terminals
     2: set<RoutingTerminalWeightedSetSelector> weighted_terminals
-    3: set<RoutingTerminalPrioritizedSetSelector> proirotized_terminals
+    3: set<RoutingTerminalPrioritizedSetSelector> prioritized_terminals
 }
 
 /* Допонительные условия выбора терминала из списка упорядоченных */
