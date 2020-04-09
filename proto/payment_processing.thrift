@@ -1769,9 +1769,8 @@ struct RecurrentPaymentToolParams {
 
 struct RecurrentPaymentToolUpdateParams {
     1: optional DisposablePaymentResource payment_resource
-    2: optional domain.PaymentRoute       route
-    3: optional domain.Token              rec_token
-    4: optional RecurrentMeta             metainformation
+    2: optional domain.Token              rec_token
+    3: optional RecurrentMeta             metainformation
 }
 
 // Statuses
