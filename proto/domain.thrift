@@ -2218,6 +2218,10 @@ union PartyConditionDefinition {
     2: WalletID wallet_is
 }
 
+struct ContractCondition {
+    1: required ContractID contract_id
+}
+
 /* Proxies */
 
 typedef base.StringMap ProxyOptions
@@ -2297,7 +2301,8 @@ struct PaymentInstitution {
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
     10: optional ContractTemplateSelector default_wallet_contract_template
-    5: required ProviderSelector providers
+    /* Deprecated. Use routing_rules_set instead */
+    5: optional ProviderSelector providers
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
     8: required set<Residence> residences
@@ -2307,6 +2312,7 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
+    16: optional RoutingRulesSetRef routing_rules_set
 }
 
 enum PaymentInstitutionRealm {
@@ -2317,6 +2323,110 @@ enum PaymentInstitutionRealm {
 struct ContractPaymentInstitutionDefaults {
     1: required PaymentInstitutionRef test
     2: required PaymentInstitutionRef live
+}
+
+/* Routing rule sets */
+
+struct RoutingRulesSetRef { 1: required ObjectID id }
+
+struct RoutingRulesSet {
+    1: required string name
+    2: optional string description
+    3: required list<RoutingRulesSetSelector> rules
+}
+
+/* Условие выбора правил роутинга */
+union RoutingRulesSetSelector {
+    1: list<RoutingRulesSetDecision> decisions
+    2: RoutingRulesSetSelectorValue value
+}
+
+struct RoutingRulesSetDecision {
+    1: required RoutingPredicate if_
+    2: required RoutingRulesSetSelector then_
+}
+
+union RoutingPredicate {
+    5: bool constant
+    1: RoutingCondition condition
+    2: RoutingPredicate is_not
+    3: set<RoutingPredicate> all_of
+    4: set<RoutingPredicate> any_of
+}
+
+union RoutingCondition {
+    1: CategoryRef category_is
+    2: CurrencyRef currency_is
+    4: CashRange cost_in
+    3: PaymentToolCondition payment_tool
+    5: ShopLocation shop_location_is
+    6: PartyCondition party
+    7: PayoutMethodRef payout_method_is
+    8: ContractorIdentificationLevel identification_level_is
+    9: P2PToolCondition p2p_tool
+   10: ContractCondition contract
+}
+
+union RoutingRulesSetSelectorValue {
+    1: RoutingRulesSetRef rules_set_ref
+    2: RoutingTerminalSetSelector terminals
+}
+
+union RoutingTerminalSetSelector {
+    1: list<RoutingTerminalOrderedSetSelector> ordered_terminals
+    2: set<RoutingTerminalWeightedSetSelector> weighted_terminals
+}
+
+/* Допонительные условия выбора терминала из списка упорядоченных */
+struct RoutingTerminalOrderedSetSelector {
+    1: list<RoutingTerminalDecision> decisions
+}
+
+/* Допонительные условия выбора терминала с предварительным упорядочиванием */
+struct RoutingTerminalWeightedSetSelector {
+    1: list<RoutingTerminalDecision> decisions
+    2: optional i64 priority = 1000
+    3: optional i64 weight
+}
+
+struct RoutingTerminalDecision {
+    1: required RoutingTerminalPredicate if_
+    2: required RoutingTerminalRef then_
+}
+
+union RoutingTerminalPredicate {
+    5: bool constant
+    1: RoutingTerminalCondition condition
+    2: RoutingTerminalPredicate is_not
+    3: set<RoutingTerminalPredicate> all_of
+    4: set<RoutingTerminalPredicate> any_of
+}
+
+/* TODO Добавить доп. условия ограничений для терминалов, например, ограничения количества/объёма сделок */
+union RoutingTerminalCondition {
+}
+
+struct RoutingTerminalRef { 1: required ObjectID id }
+
+struct RoutingTerminal {
+    1: required string name
+    2: required string description
+    3: optional ProxyOptions options
+    4: required RiskScore risk_coverage
+    5: optional RoutingProviderRef provider_ref
+}
+
+struct RoutingProviderRef { 1: required ObjectID id }
+
+struct RoutingProvider {
+    1: required string name
+    2: required string description
+    3: required Proxy proxy
+    /* Счет для платажей принятых эквайеромв АБС */
+    5: required string abs_account
+    6: optional PaymentsProvisionTerms payment_terms
+    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
+    7: optional ProviderAccountSet accounts = {}
 }
 
 /* legacy */
@@ -2475,6 +2585,16 @@ struct GlobalsObject {
     2: required Globals data
 }
 
+struct RoutingRulesObject {
+    1: required RoutingRulesSetRef ref
+    2: required RoutingRulesSet data
+}
+
+struct RoutingTerminalObject {
+    1: required RoutingTerminalRef ref
+    2: required RoutingTerminal data
+}
+
 union Reference {
 
     1  : CategoryRef             category
@@ -2498,6 +2618,8 @@ union Reference {
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : CashRegProviderRef      cashreg_provider
     24 : P2PProviderRef          p2p_provider
+    26 : RoutingRulesSetRef      routing_rules
+    27 : RoutingTerminalRef      routing_terminal_ref
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2529,6 +2651,8 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegProviderObject      cashreg_provider
     24 : P2PProviderObject          p2p_provider
+    26 : RoutingRulesObject         routing_rules
+    27 : RoutingTerminalObject      routing_terminal
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
