@@ -867,7 +867,15 @@ exception InvalidPaymentAdjustmentStatus {
 exception InvoiceTemplateNotFound {}
 exception InvoiceTemplateRemoved {}
 
-exception InvoiceCostOutOfRange {}
+struct InvoiceUnpayable {}
+
+union InvoiceTermsViolationReason {
+    1: InvoiceUnpayable invoice_unpayable
+}
+
+exception InvoiceTermsViolated {
+    1: required InvoiceTermsViolationReason reason
+}
 
 exception InvoicePaymentAmountExceeded {
     1: required domain.Cash maximum
@@ -904,7 +912,7 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7,
-            8: InvoiceCostOutOfRange ex8
+            8: InvoiceTermsViolated ex8
         )
 
     Invoice CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
@@ -916,7 +924,7 @@ service Invoicing {
             5: InvalidContractStatus ex5
             6: InvoiceTemplateNotFound ex6,
             7: InvoiceTemplateRemoved ex7,
-            8: InvoiceCostOutOfRange ex8
+            8: InvoiceTermsViolated ex8
         )
 
     Invoice Get (1: UserInfo user, 2: domain.InvoiceID id, 3: EventRange range)
