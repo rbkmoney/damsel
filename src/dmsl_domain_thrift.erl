@@ -311,8 +311,14 @@
     'FeeDecision'/0,
     'ProviderRef'/0,
     'Provider'/0,
-    'CashRegProviderRef'/0,
-    'CashRegProvider'/0,
+    'CashRegisterProviderRef'/0,
+    'CashRegisterProvider'/0,
+    'CashRegisterProviderParameter'/0,
+    'CashRegisterProviderParameterType'/0,
+    'CashRegisterProviderParameterString'/0,
+    'CashRegisterProviderParameterInteger'/0,
+    'CashRegisterProviderParameterUrl'/0,
+    'CashRegisterProviderParameterPassword'/0,
     'WithdrawalProviderRef'/0,
     'WithdrawalProvider'/0,
     'P2PProviderRef'/0,
@@ -402,7 +408,7 @@
     'PayoutMethodObject'/0,
     'BankObject'/0,
     'ProviderObject'/0,
-    'CashRegProviderObject'/0,
+    'CashRegisterProviderObject'/0,
     'WithdrawalProviderObject'/0,
     'P2PProviderObject'/0,
     'TerminalObject'/0,
@@ -1146,8 +1152,14 @@
     'FeeDecision' |
     'ProviderRef' |
     'Provider' |
-    'CashRegProviderRef' |
-    'CashRegProvider' |
+    'CashRegisterProviderRef' |
+    'CashRegisterProvider' |
+    'CashRegisterProviderParameter' |
+    'CashRegisterProviderParameterType' |
+    'CashRegisterProviderParameterString' |
+    'CashRegisterProviderParameterInteger' |
+    'CashRegisterProviderParameterUrl' |
+    'CashRegisterProviderParameterPassword' |
     'WithdrawalProviderRef' |
     'WithdrawalProvider' |
     'P2PProviderRef' |
@@ -1237,7 +1249,7 @@
     'PayoutMethodObject' |
     'BankObject' |
     'ProviderObject' |
-    'CashRegProviderObject' |
+    'CashRegisterProviderObject' |
     'WithdrawalProviderObject' |
     'P2PProviderObject' |
     'TerminalObject' |
@@ -1992,11 +2004,33 @@
 %% struct 'Provider'
 -type 'Provider'() :: #'domain_Provider'{}.
 
-%% struct 'CashRegProviderRef'
--type 'CashRegProviderRef'() :: #'domain_CashRegProviderRef'{}.
+%% struct 'CashRegisterProviderRef'
+-type 'CashRegisterProviderRef'() :: #'domain_CashRegisterProviderRef'{}.
 
-%% struct 'CashRegProvider'
--type 'CashRegProvider'() :: #'domain_CashRegProvider'{}.
+%% struct 'CashRegisterProvider'
+-type 'CashRegisterProvider'() :: #'domain_CashRegisterProvider'{}.
+
+%% struct 'CashRegisterProviderParameter'
+-type 'CashRegisterProviderParameter'() :: #'domain_CashRegisterProviderParameter'{}.
+
+%% union 'CashRegisterProviderParameterType'
+-type 'CashRegisterProviderParameterType'() ::
+    {'string_type', 'CashRegisterProviderParameterString'()} |
+    {'integer_type', 'CashRegisterProviderParameterInteger'()} |
+    {'url_type', 'CashRegisterProviderParameterUrl'()} |
+    {'password_type', 'CashRegisterProviderParameterPassword'()}.
+
+%% struct 'CashRegisterProviderParameterString'
+-type 'CashRegisterProviderParameterString'() :: #'domain_CashRegisterProviderParameterString'{}.
+
+%% struct 'CashRegisterProviderParameterInteger'
+-type 'CashRegisterProviderParameterInteger'() :: #'domain_CashRegisterProviderParameterInteger'{}.
+
+%% struct 'CashRegisterProviderParameterUrl'
+-type 'CashRegisterProviderParameterUrl'() :: #'domain_CashRegisterProviderParameterUrl'{}.
+
+%% struct 'CashRegisterProviderParameterPassword'
+-type 'CashRegisterProviderParameterPassword'() :: #'domain_CashRegisterProviderParameterPassword'{}.
 
 %% struct 'WithdrawalProviderRef'
 -type 'WithdrawalProviderRef'() :: #'domain_WithdrawalProviderRef'{}.
@@ -2313,8 +2347,8 @@
 %% struct 'ProviderObject'
 -type 'ProviderObject'() :: #'domain_ProviderObject'{}.
 
-%% struct 'CashRegProviderObject'
--type 'CashRegProviderObject'() :: #'domain_CashRegProviderObject'{}.
+%% struct 'CashRegisterProviderObject'
+-type 'CashRegisterProviderObject'() :: #'domain_CashRegisterProviderObject'{}.
 
 %% struct 'WithdrawalProviderObject'
 -type 'WithdrawalProviderObject'() :: #'domain_WithdrawalProviderObject'{}.
@@ -2367,7 +2401,7 @@
     {'proxy', 'ProxyRef'()} |
     {'globals', 'GlobalsRef'()} |
     {'withdrawal_provider', 'WithdrawalProviderRef'()} |
-    {'cashreg_provider', 'CashRegProviderRef'()} |
+    {'cash_register_provider', 'CashRegisterProviderRef'()} |
     {'p2p_provider', 'P2PProviderRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
@@ -2394,7 +2428,7 @@
     {'proxy', 'ProxyObject'()} |
     {'globals', 'GlobalsObject'()} |
     {'withdrawal_provider', 'WithdrawalProviderObject'()} |
-    {'cashreg_provider', 'CashRegProviderObject'()} |
+    {'cash_register_provider', 'CashRegisterProviderObject'()} |
     {'p2p_provider', 'P2PProviderObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
@@ -2747,8 +2781,14 @@ structs() ->
         'FeeDecision',
         'ProviderRef',
         'Provider',
-        'CashRegProviderRef',
-        'CashRegProvider',
+        'CashRegisterProviderRef',
+        'CashRegisterProvider',
+        'CashRegisterProviderParameter',
+        'CashRegisterProviderParameterType',
+        'CashRegisterProviderParameterString',
+        'CashRegisterProviderParameterInteger',
+        'CashRegisterProviderParameterUrl',
+        'CashRegisterProviderParameterPassword',
         'WithdrawalProviderRef',
         'WithdrawalProvider',
         'P2PProviderRef',
@@ -2838,7 +2878,7 @@ structs() ->
         'PayoutMethodObject',
         'BankObject',
         'ProviderObject',
-        'CashRegProviderObject',
+        'CashRegisterProviderObject',
         'WithdrawalProviderObject',
         'P2PProviderObject',
         'TerminalObject',
@@ -4788,17 +4828,45 @@ struct_info('Provider') ->
         {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
     ]};
 
-struct_info('CashRegProviderRef') ->
+struct_info('CashRegisterProviderRef') ->
     {struct, struct, [
         {1, required, i32, 'id', undefined}
     ]};
 
-struct_info('CashRegProvider') ->
+struct_info('CashRegisterProvider') ->
     {struct, struct, [
         {1, required, string, 'name', undefined},
-        {2, required, string, 'description', undefined},
-        {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
+        {2, optional, string, 'description', undefined},
+        {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameter'}}}, 'params_schema', undefined}
     ]};
+
+struct_info('CashRegisterProviderParameter') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'CashRegisterProviderParameterType'}}, 'type', undefined},
+        {4, required, bool, 'is_required', undefined}
+    ]};
+
+struct_info('CashRegisterProviderParameterType') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterString'}}, 'string_type', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterInteger'}}, 'integer_type', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterUrl'}}, 'url_type', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterPassword'}}, 'password_type', undefined}
+    ]};
+
+struct_info('CashRegisterProviderParameterString') ->
+    {struct, struct, []};
+
+struct_info('CashRegisterProviderParameterInteger') ->
+    {struct, struct, []};
+
+struct_info('CashRegisterProviderParameterUrl') ->
+    {struct, struct, []};
+
+struct_info('CashRegisterProviderParameterPassword') ->
+    {struct, struct, []};
 
 struct_info('WithdrawalProviderRef') ->
     {struct, struct, [
@@ -5359,10 +5427,10 @@ struct_info('ProviderObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Provider'}}, 'data', undefined}
     ]};
 
-struct_info('CashRegProviderObject') ->
+struct_info('CashRegisterProviderObject') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderRef'}}, 'ref', undefined},
-        {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRegProvider'}}, 'data', undefined}
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProvider'}}, 'data', undefined}
     ]};
 
 struct_info('WithdrawalProviderObject') ->
@@ -5446,7 +5514,7 @@ struct_info('Reference') ->
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyRef'}}, 'proxy', undefined},
         {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals', undefined},
         {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
-        {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderRef'}}, 'cashreg_provider', undefined},
+        {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderRef'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
@@ -5474,7 +5542,7 @@ struct_info('DomainObject') ->
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'ProxyObject'}}, 'proxy', undefined},
         {11, optional, {struct, struct, {dmsl_domain_thrift, 'GlobalsObject'}}, 'globals', undefined},
         {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderObject'}}, 'withdrawal_provider', undefined},
-        {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegProviderObject'}}, 'cashreg_provider', undefined},
+        {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderObject'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
@@ -5977,11 +6045,26 @@ record_name('ProviderRef') ->
 record_name('Provider') ->
     'domain_Provider';
 
-record_name('CashRegProviderRef') ->
-    'domain_CashRegProviderRef';
+record_name('CashRegisterProviderRef') ->
+    'domain_CashRegisterProviderRef';
 
-record_name('CashRegProvider') ->
-    'domain_CashRegProvider';
+record_name('CashRegisterProvider') ->
+    'domain_CashRegisterProvider';
+
+record_name('CashRegisterProviderParameter') ->
+    'domain_CashRegisterProviderParameter';
+
+record_name('CashRegisterProviderParameterString') ->
+    'domain_CashRegisterProviderParameterString';
+
+record_name('CashRegisterProviderParameterInteger') ->
+    'domain_CashRegisterProviderParameterInteger';
+
+record_name('CashRegisterProviderParameterUrl') ->
+    'domain_CashRegisterProviderParameterUrl';
+
+record_name('CashRegisterProviderParameterPassword') ->
+    'domain_CashRegisterProviderParameterPassword';
 
 record_name('WithdrawalProviderRef') ->
     'domain_WithdrawalProviderRef';
@@ -6196,8 +6279,8 @@ record_name('BankObject') ->
 record_name('ProviderObject') ->
     'domain_ProviderObject';
 
-record_name('CashRegProviderObject') ->
-    'domain_CashRegProviderObject';
+record_name('CashRegisterProviderObject') ->
+    'domain_CashRegisterProviderObject';
 
 record_name('WithdrawalProviderObject') ->
     'domain_WithdrawalProviderObject';

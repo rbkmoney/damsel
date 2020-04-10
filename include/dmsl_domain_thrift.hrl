@@ -1081,17 +1081,37 @@
     'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
 }).
 
-%% struct 'CashRegProviderRef'
--record('domain_CashRegProviderRef', {
+%% struct 'CashRegisterProviderRef'
+-record('domain_CashRegisterProviderRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
 }).
 
-%% struct 'CashRegProvider'
--record('domain_CashRegProvider', {
+%% struct 'CashRegisterProvider'
+-record('domain_CashRegisterProvider', {
     'name' :: binary(),
-    'description' :: binary(),
-    'proxy' :: dmsl_domain_thrift:'Proxy'()
+    'description' :: binary() | undefined,
+    'params_schema' :: [dmsl_domain_thrift:'CashRegisterProviderParameter'()]
 }).
+
+%% struct 'CashRegisterProviderParameter'
+-record('domain_CashRegisterProviderParameter', {
+    'id' :: binary(),
+    'description' :: binary() | undefined,
+    'type' :: dmsl_domain_thrift:'CashRegisterProviderParameterType'(),
+    'is_required' :: boolean()
+}).
+
+%% struct 'CashRegisterProviderParameterString'
+-record('domain_CashRegisterProviderParameterString', {}).
+
+%% struct 'CashRegisterProviderParameterInteger'
+-record('domain_CashRegisterProviderParameterInteger', {}).
+
+%% struct 'CashRegisterProviderParameterUrl'
+-record('domain_CashRegisterProviderParameterUrl', {}).
+
+%% struct 'CashRegisterProviderParameterPassword'
+-record('domain_CashRegisterProviderParameterPassword', {}).
 
 %% struct 'WithdrawalProviderRef'
 -record('domain_WithdrawalProviderRef', {
@@ -1532,10 +1552,10 @@
     'data' :: dmsl_domain_thrift:'Provider'()
 }).
 
-%% struct 'CashRegProviderObject'
--record('domain_CashRegProviderObject', {
-    'ref' :: dmsl_domain_thrift:'CashRegProviderRef'(),
-    'data' :: dmsl_domain_thrift:'CashRegProvider'()
+%% struct 'CashRegisterProviderObject'
+-record('domain_CashRegisterProviderObject', {
+    'ref' :: dmsl_domain_thrift:'CashRegisterProviderRef'(),
+    'data' :: dmsl_domain_thrift:'CashRegisterProvider'()
 }).
 
 %% struct 'WithdrawalProviderObject'
