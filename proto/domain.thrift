@@ -1927,17 +1927,23 @@ struct CashRegisterProvider {
 }
 
 struct CashRegisterProviderParameter {
-    1: required string                            name
+    1: required string                            id
     2: optional string                            description
     3: required CashRegisterProviderParameterType type
     4: required bool                              is_required
 }
 
-enum CashRegisterProviderParameterType {
-    string
-    integer
-    url
+union CashRegisterProviderParameterType {
+    1: CashRegisterProviderParameterString   string_type
+    2: CashRegisterProviderParameterInteger  integer_type
+    3: CashRegisterProviderParameterUrl      url_type
+    4: CashRegisterProviderParameterPassword password_type
 }
+
+struct CashRegisterProviderParameterString {}
+struct CashRegisterProviderParameterInteger {}
+struct CashRegisterProviderParameterUrl {}
+struct CashRegisterProviderParameterPassword {}
 
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
