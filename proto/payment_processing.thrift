@@ -1821,7 +1821,7 @@ struct RecurrentPaymentToolResourceUpdated {
 }
 
 struct RecurrentPaymentToolTokenUpdated {
-    1: required Token rec_token
+    1: required domain.Token rec_token
 }
 
 struct RecurrentPaymentToolDescUpdated {
