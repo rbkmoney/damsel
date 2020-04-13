@@ -1738,7 +1738,7 @@ service CustomerManagement {
 
 // Types
 typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
-typedef string RecurrentMeta
+typedef string RecurrentPaymentDesc
 
 // Model
 struct RecurrentPaymentTool {
@@ -1753,18 +1753,18 @@ struct RecurrentPaymentTool {
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
-    13: optional RecurrentMeta              metainformation
+    13: optional RecurrentPaymentDesc       description
 }
 
 struct RecurrentPaymentToolParams {
-    5: optional RecurrentPaymentToolID    id
-    1: required PartyID                   party_id
-    4: optional PartyRevision             party_revision
-    6: optional domain.DataRevision       domain_revision
-    2: required ShopID                    shop_id
-    3: required DisposablePaymentResource payment_resource
-    7: optional domain.PaymentRoute       route
-    8: optional RecurrentMeta             metainformation
+    5:  optional RecurrentPaymentToolID    id
+    1:  required PartyID                   party_id
+    4:  optional PartyRevision             party_revision
+    6:  optional domain.DataRevision       domain_revision
+    2:  required ShopID                    shop_id
+    3:  required DisposablePaymentResource payment_resource
+    7:  optional domain.PaymentRoute       route
+    13: optional RecurrentPaymentDesc      description
 }
 
 // Statuses
@@ -1813,7 +1813,7 @@ union RecurrentPaymentToolChange {
     5: RecurrentPaymentToolSessionChange    rec_payment_tool_session_changed
     8: RecurrentPaymentToolResourceUpdated  rec_payment_tool_resource_updated
     9: RecurrentPaymentToolTokenUpdated     rec_payment_tool_token_updated
-   10: RecurrentPaymentToolMetaUpdated      rec_payment_tool_meta_updated
+   10: RecurrentPaymentToolDescUpdated      rec_payment_tool_description_updated
 }
 
 struct RecurrentPaymentToolResourceUpdated {
@@ -1824,8 +1824,8 @@ struct RecurrentPaymentToolTokenUpdated {
     1: required Token rec_token
 }
 
-struct RecurrentPaymentToolMetaUpdated {
-    1: required RecurrentMeta metainformation
+struct RecurrentPaymentToolDescUpdated {
+    13: required RecurrentPaymentDesc description
 }
 
 /*
@@ -1936,9 +1936,9 @@ service RecurrentPaymentTools {
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    RecurrentPaymentTool UpdateMeta (
+    RecurrentPaymentTool UpdateDescription (
         1: RecurrentPaymentToolID id,
-        2: RecurrentMeta          metainformation
+        2: RecurrentPaymentDesc   description
     )
         throws (
             1: InvalidUser                  invalid_user
