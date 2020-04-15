@@ -1826,7 +1826,7 @@ struct RecurrentPaymentToolTokenUpdated {
 }
 
 struct RecurrentPaymentToolDescUpdated {
-    13: required RecurrentPaymentDesc description
+    1: required RecurrentPaymentDesc description
 }
 
 /*
