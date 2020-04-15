@@ -1766,6 +1766,7 @@ struct RecurrentPaymentToolParams {
     2:  required ShopID                    shop_id
     3:  required DisposablePaymentResource payment_resource
     7:  optional domain.PaymentRoute       route
+    8:  optional domain.Token              rec_token
     13: optional RecurrentPaymentDesc      description
 }
 
