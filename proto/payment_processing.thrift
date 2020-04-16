@@ -584,7 +584,6 @@ struct CustomerPayerParams {
 struct RecurrentPayerParams{
     1: required domain.RecurrentParentPayment recurrent_parent
     2: required domain.ContactInfo            contact_info
-    3: optional RecurrentPaymentDesc          description
 }
 
 union InvoicePaymentParamsFlow {

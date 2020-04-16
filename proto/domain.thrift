@@ -292,8 +292,6 @@ union TargetInvoicePaymentStatus {
     4: InvoicePaymentRefunded refunded
 }
 
-typedef string RecurrentPaymentDesc
-
 union Payer {
     1: PaymentResourcePayer payment_resource
     2: CustomerPayer        customer
