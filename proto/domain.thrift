@@ -319,6 +319,22 @@ struct RecurrentPayer {
 struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
+    3: optional Browser browser
+}
+
+/**
+* Обязательные поля для 3ds версии 2 и выше, если javascript включен
+**/
+struct Browser {
+    1: optional string accept_header
+    2: optional bool java_enabled
+    3: optional bool javascript_enabled
+    4: optional string language
+    5: optional string color_depth
+    6: optional string screen_height
+    7: optional string screen_width
+    8: optional string time_zone
+    9: optional string user_agent
 }
 
 struct PaymentRoute {
