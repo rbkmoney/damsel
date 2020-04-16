@@ -1918,13 +1918,32 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 }
 
-struct CashRegProviderRef { 1: required ObjectID id }
+struct CashRegisterProviderRef { 1: required ObjectID id }
 
-struct CashRegProvider {
-    1: required string name
-    2: required string description
-    3: required Proxy proxy
+struct CashRegisterProvider {
+    1: required string                              name
+    2: optional string                              description
+    3: required list<CashRegisterProviderParameter> params_schema
 }
+
+struct CashRegisterProviderParameter {
+    1: required string                            id
+    2: optional string                            description
+    3: required CashRegisterProviderParameterType type
+    4: required bool                              is_required
+}
+
+union CashRegisterProviderParameterType {
+    1: CashRegisterProviderParameterString   string_type
+    2: CashRegisterProviderParameterInteger  integer_type
+    3: CashRegisterProviderParameterUrl      url_type
+    4: CashRegisterProviderParameterPassword password_type
+}
+
+struct CashRegisterProviderParameterString {}
+struct CashRegisterProviderParameterInteger {}
+struct CashRegisterProviderParameterUrl {}
+struct CashRegisterProviderParameterPassword {}
 
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
@@ -2536,9 +2555,9 @@ struct ProviderObject {
     2: required Provider data
 }
 
-struct CashRegProviderObject {
-    1: required CashRegProviderRef ref
-    2: required CashRegProvider data
+struct CashRegisterProviderObject {
+    1: required CashRegisterProviderRef ref
+    2: required CashRegisterProvider data
 }
 
 struct WithdrawalProviderObject {
@@ -2622,7 +2641,7 @@ union Reference {
     9  : ProxyRef                proxy
     11 : GlobalsRef              globals
     22 : WithdrawalProviderRef   withdrawal_provider
-    23 : CashRegProviderRef      cashreg_provider
+    23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
     26 : RoutingRulesSetRef      routing_rules
     27 : RoutingTerminalRef      routing_terminal_ref
@@ -2655,7 +2674,7 @@ union DomainObject {
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
-    23 : CashRegProviderObject      cashreg_provider
+    23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
     26 : RoutingRulesObject         routing_rules
     27 : RoutingTerminalObject      routing_terminal
