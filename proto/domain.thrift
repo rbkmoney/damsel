@@ -2235,10 +2235,7 @@ struct PartyCondition {
 union PartyConditionDefinition {
     1: ShopID shop_is
     2: WalletID wallet_is
-}
-
-struct ContractCondition {
-    1: required ContractID contract_id
+    3: required ContractID contract_is
 }
 
 /* Proxies */
@@ -2331,7 +2328,7 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional RoutingRulesSetRef routing_rules_set
+    16: optional RoutingRulesetRef routing_rules_set
 }
 
 enum PaymentInstitutionRealm {
@@ -2346,23 +2343,23 @@ struct ContractPaymentInstitutionDefaults {
 
 /* Routing rule sets */
 
-struct RoutingRulesSetRef { 1: required ObjectID id }
+struct RoutingRulesetRef { 1: required ObjectID id }
 
-struct RoutingRulesSet {
+struct RoutingRuleset {
     1: required string name
     2: optional string description
-    3: required list<RoutingRulesSetSelector> rules
+    3: required list<RoutingRulesetSelector> rules
 }
 
 /* Условие выбора правил роутинга */
-union RoutingRulesSetSelector {
-    1: list<RoutingRulesSetDecision> decisions
-    2: RoutingRulesSetSelectorValue value
+union RoutingRulesetSelector {
+    1: list<RoutingRulesetDecision> decisions
+    2: RoutingRulesetSelectorValue value
 }
 
-struct RoutingRulesSetDecision {
+struct RoutingRulesetDecision {
     1: required RoutingPredicate if_
-    2: required RoutingRulesSetSelector then_
+    2: required RoutingRulesetSelector then_
 }
 
 union RoutingPredicate {
@@ -2383,11 +2380,10 @@ union RoutingCondition {
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
     9: P2PToolCondition p2p_tool
-   10: ContractCondition contract
 }
 
-union RoutingRulesSetSelectorValue {
-    1: RoutingRulesSetRef rules_set_ref
+union RoutingRulesetSelectorValue {
+    1: RoutingRulesetRef rules_set_ref
     2: RoutingTerminalSelector terminals
 }
 
@@ -2611,13 +2607,18 @@ struct GlobalsObject {
 }
 
 struct RoutingRulesObject {
-    1: required RoutingRulesSetRef ref
-    2: required RoutingRulesSet data
+    1: required RoutingRulesetRef ref
+    2: required RoutingRuleset data
 }
 
 struct RoutingTerminalObject {
     1: required RoutingTerminalRef ref
     2: required RoutingTerminal data
+}
+
+struct RoutingProviderObject {
+    1: required RoutingProviderRef ref
+    2: required RoutingProvider data
 }
 
 union Reference {
@@ -2643,7 +2644,7 @@ union Reference {
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
-    26 : RoutingRulesSetRef      routing_rules
+    26 : RoutingRulesetRef      routing_rules
     27 : RoutingTerminalRef      routing_terminal_ref
 
     12 : DummyRef                dummy
@@ -2678,6 +2679,7 @@ union DomainObject {
     24 : P2PProviderObject          p2p_provider
     26 : RoutingRulesObject         routing_rules
     27 : RoutingTerminalObject      routing_terminal
+    28 : RoutingProviderObject      routing_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
