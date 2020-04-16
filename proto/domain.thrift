@@ -317,7 +317,6 @@ struct RecurrentPayer {
     1: required PaymentTool            payment_tool
     2: required RecurrentParentPayment recurrent_parent
     3: required ContactInfo            contact_info
-    4: optional RecurrentPaymentDesc   description
 }
 
 struct ClientInfo {

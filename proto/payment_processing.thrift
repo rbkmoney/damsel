@@ -563,6 +563,7 @@ struct InvoicePaymentParams {
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
     7: optional base.Timestamp processing_deadline
+    8: optional RecurrentPaymentDesc   description
 }
 
 union PayerParams {
@@ -1739,7 +1740,7 @@ service CustomerManagement {
 
 // Types
 typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
-typedef domain.RecurrentPaymentDesc   RecurrentPaymentDesc
+typedef string                        RecurrentPaymentDesc
 
 // Model
 struct RecurrentPaymentTool {
