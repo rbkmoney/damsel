@@ -563,7 +563,7 @@ struct InvoicePaymentParams {
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
     7: optional base.Timestamp processing_deadline
-    8: optional SubscriptionDesc   description
+    8: optional SubscriptionDesc subscription_description
 }
 
 union PayerParams {
@@ -1754,7 +1754,7 @@ struct RecurrentPaymentTool {
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
-    13: optional SubscriptionDesc       description
+    13: optional SubscriptionDesc           subscription_description
 }
 
 struct RecurrentPaymentToolParams {
@@ -1766,7 +1766,7 @@ struct RecurrentPaymentToolParams {
     3:  required DisposablePaymentResource payment_resource
     7:  optional domain.PaymentRoute       route
     8:  optional domain.Token              rec_token
-    13: optional SubscriptionDesc      description
+    13: optional SubscriptionDesc          subscription_description
 }
 
 // Statuses
@@ -1827,7 +1827,7 @@ struct RecurrentPaymentToolTokenUpdated {
 }
 
 struct RecurrentPaymentToolDescUpdated {
-    1: required SubscriptionDesc description
+    1: required SubscriptionDesc subscription_description
 }
 
 /*
@@ -1940,7 +1940,7 @@ service RecurrentPaymentTools {
 
     RecurrentPaymentTool UpdateDescription (
         1: RecurrentPaymentToolID id,
-        2: SubscriptionDesc   description
+        2: SubscriptionDesc       subscription_description
     )
         throws (
             1: InvalidUser                  invalid_user
