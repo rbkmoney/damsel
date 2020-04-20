@@ -2236,7 +2236,7 @@ struct PartyCondition {
 union PartyConditionDefinition {
     1: ShopID shop_is
     2: WalletID wallet_is
-    3: required ContractID contract_is
+    3: ContractID contract_is
 }
 
 /* Proxies */
@@ -2329,7 +2329,7 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional RoutingRulesetRef routing_rules_set
+    16: optional RoutingRulesetRef routing_ruleset
 }
 
 enum PaymentInstitutionRealm {
