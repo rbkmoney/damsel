@@ -2165,6 +2165,13 @@ struct PayoutParams {
     4: optional domain.PayoutToolID payout_tool_id
 }
 
+struct Accounts {
+    1: required domain.ShopAccount shop_account
+    2: required domain.ProviderAccount provider_account
+    3: required domain.SystemAccount system_account
+    4: optional domain.ExternalAccount external_account
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -2258,6 +2265,8 @@ struct InvalidObjectReference {
 }
 
 exception AccountNotFound {}
+
+exception AccountsNotFound {}
 
 exception ShopAccountNotFound {}
 
@@ -2457,6 +2466,9 @@ service PartyManagement {
 
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
+
+    Accounts GetAccounts (1: UserInfo user, 2: PartyID party_id, 3: domain.InvoicePayment payment, 4: domain.ProviderAccountSet provider_account_set, 5: Varset varset)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountsNotFound ex3)
 
     /* Payment institutions */
 
