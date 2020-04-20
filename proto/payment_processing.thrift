@@ -1739,7 +1739,7 @@ service CustomerManagement {
 
 // Types
 typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
-typedef string                        SubscriptionDesc
+typedef domain.SubscriptionDesc       SubscriptionDesc
 
 // Model
 struct RecurrentPaymentTool {
