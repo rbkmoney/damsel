@@ -2352,7 +2352,8 @@ struct RoutingRulesetRef { 1: required ObjectID id }
 struct RoutingRuleset {
     1: required string name
     2: optional string description
-    3: required list<RoutingRule> rules
+    3: required list<RoutingRule> permissions
+    4: required list<RoutingRule> prohibitions
 }
 
 struct RoutingRule {
