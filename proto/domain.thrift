@@ -1917,7 +1917,7 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
 
     // Deprecated
-    4: required TerminalSelector terminal
+    4: optional TerminalSelector terminal
 }
 
 struct CashRegisterProviderRef { 1: required ObjectID id }
@@ -2563,7 +2563,7 @@ union Reference {
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
-    26 : RoutingRulesetRef      routing_rules
+    26 : RoutingRulesetRef       routing_rules
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
