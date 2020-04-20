@@ -2364,10 +2364,10 @@ struct RoutingRule {
 
 union RoutingDecision {
   1: RoutingRulesetRef delegate
-  2: Route route
+  2: RoutingCandidate candidate
 }
 
-struct Route {
+struct RoutingCandidate {
   1: required TerminalRef terminal
   2: optional i32 priority = 1000
   3: optional i32 weight
