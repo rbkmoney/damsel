@@ -2368,14 +2368,10 @@ union RoutingDecision {
 
 struct Route {
   1: required TerminalRef terminal
-  2: required RouteMetrics metrics
-//  TODO: Add conditions
-//  3: optional set<RouteCondition> conditions
-}
-
-struct RouteMetrics {
-  1: optional i32 priority
-  2: optional i32 weight
+  2: optional i32 priority = 1000
+  3: optional i32 weight
+  //  TODO: Add conditions
+  //  5: optional set<RouteCondition> conditions
 }
 
 // TODO Add route conditions (for example, amount limitation below
