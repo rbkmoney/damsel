@@ -2121,6 +2121,7 @@ struct Terminal {
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
     12: optional PaymentsProvisionTerms terms
+    13: optional ProviderRef provider_ref
 }
 
 union TerminalSelector {
@@ -2348,107 +2349,35 @@ struct RoutingRulesetRef { 1: required ObjectID id }
 struct RoutingRuleset {
     1: required string name
     2: optional string description
-    3: required list<RoutingRulesetSelector> rules
+    3: required list<RoutingRule> rules
 }
 
-/* Условие выбора правил роутинга */
-union RoutingRulesetSelector {
-    1: list<RoutingRulesetDecision> decisions
-    2: RoutingRulesetSelectorValue value
+struct RoutingRule {
+  1: optional string description
+  2: required Predicate allowed
+  3: required RoutingDecision decision
 }
 
-struct RoutingRulesetDecision {
-    1: required RoutingPredicate if_
-    2: required RoutingRulesetSelector then_
+union RoutingDecision {
+  1: RoutingRulesetRef delegate
+  2: Route route
 }
 
-union RoutingPredicate {
-    5: bool constant
-    1: RoutingCondition condition
-    2: RoutingPredicate is_not
-    3: set<RoutingPredicate> all_of
-    4: set<RoutingPredicate> any_of
+struct Route {
+  1: required TerminalRef terminal
+  2: required RouteMetrics metrics
+//  TODO: Add conditions
+//  3: optional set<RouteCondition> conditions
 }
 
-union RoutingCondition {
-    1: CategoryRef category_is
-    2: CurrencyRef currency_is
-    4: CashRange cost_in
-    3: PaymentToolCondition payment_tool
-    5: ShopLocation shop_location_is
-    6: PartyCondition party
-    7: PayoutMethodRef payout_method_is
-    8: ContractorIdentificationLevel identification_level_is
-    9: P2PToolCondition p2p_tool
+struct RouteMetrics {
+  1: optional i32 priority
+  2: optional i32 weight
 }
 
-union RoutingRulesetSelectorValue {
-    1: RoutingRulesetRef rules_set_ref
-    2: RoutingTerminalSelector terminals
-}
-
-union RoutingTerminalSelector {
-    1: list<RoutingTerminalOrderedSelector> ordered_terminals
-    2: set<RoutingTerminalWeightedSelector> weighted_terminals
-    3: set<RoutingTerminalPrioritizedSelector> prioritized_terminals
-}
-
-/* Допонительные условия выбора терминала из списка упорядоченных */
-struct RoutingTerminalOrderedSelector {
-    1: required list<RoutingTerminalDecision> decisions
-}
-
-/* Допонительные условия выбора терминала с предварительным упорядочиванием по весам */
-struct RoutingTerminalWeightedSelector {
-    1: required i64 weight
-    2: required list<RoutingTerminalDecision> decisions
-}
-
-/* Допонительные условия выбора терминала с предварительным упорядочиванием по приоритетам */
-struct RoutingTerminalPrioritizedSelector {
-    1: required i64 priority
-    2: required list<RoutingTerminalDecision> decisions
-}
-
-struct RoutingTerminalDecision {
-    1: required RoutingTerminalPredicate if_
-    2: required RoutingTerminalRef then_
-}
-
-union RoutingTerminalPredicate {
-    5: bool constant
-    1: RoutingTerminalCondition condition
-    2: RoutingTerminalPredicate is_not
-    3: set<RoutingTerminalPredicate> all_of
-    4: set<RoutingTerminalPredicate> any_of
-}
-
-/* TODO Добавить доп. условия ограничений для терминалов, например, ограничения количества/объёма сделок */
-union RoutingTerminalCondition {
-}
-
-struct RoutingTerminalRef { 1: required ObjectID id }
-
-struct RoutingTerminal {
-    1: required string name
-    2: required string description
-    3: optional ProxyOptions options
-    4: required RiskScore risk_coverage
-    5: optional RoutingProviderRef provider_ref
-}
-
-struct RoutingProviderRef { 1: required ObjectID id }
-
-struct RoutingProvider {
-    1: required string name
-    2: required string description
-    3: required Proxy proxy
-    /* Счет для платажей принятых эквайеромв АБС */
-    5: required string abs_account
-    6: optional PaymentsProvisionTerms payment_terms
-    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
-    7: optional ProviderAccountSet accounts = {}
-}
+// TODO Add route conditions (for example, amount limitation below
+//union RouteCondition {
+//}
 
 /* legacy */
 /* TODO rework (de)serializer to handle those cases more politely and then remove */
@@ -2611,16 +2540,6 @@ struct RoutingRulesObject {
     2: required RoutingRuleset data
 }
 
-struct RoutingTerminalObject {
-    1: required RoutingTerminalRef ref
-    2: required RoutingTerminal data
-}
-
-struct RoutingProviderObject {
-    1: required RoutingProviderRef ref
-    2: required RoutingProvider data
-}
-
 union Reference {
 
     1  : CategoryRef             category
@@ -2645,7 +2564,6 @@ union Reference {
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
     26 : RoutingRulesetRef      routing_rules
-    27 : RoutingTerminalRef      routing_terminal_ref
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2678,8 +2596,6 @@ union DomainObject {
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
     26 : RoutingRulesObject         routing_rules
-    27 : RoutingTerminalObject      routing_terminal
-    28 : RoutingProviderObject      routing_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
