@@ -2165,11 +2165,26 @@ struct PayoutParams {
     4: optional domain.PayoutToolID payout_tool_id
 }
 
-struct Accounts {
-    1: required domain.ShopAccount shop_account
-    2: required domain.ProviderAccount provider_account
-    3: required domain.SystemAccount system_account
-    4: optional domain.ExternalAccount external_account
+typedef i64 DomainRevision
+
+union Selector {
+    1: domain.CashFlowSelector cash_flow_selector
+    2: domain.FeeSelector fee_selector
+    3: domain.CurrencySelector currency_selector
+    4: domain.CategorySelector category_selector
+    5: domain.CashLimitSelector cash_limit_selector
+    6: domain.PaymentMethodSelector payment_method_selector
+    7: domain.ProviderSelector provider_selector
+    8: domain.TerminalSelector terminal_selector
+    9: domain.SystemAccountSetSelector system_account_selector
+    10: domain.ExternalAccountSetSelector external_account_set_selector
+    11: domain.HoldLifetimeSelector hold_lifetime_selector
+    12: domain.CashValueSelector cash_value_selector
+    13: domain.CumulativeLimitSelector cumulative_limit_selector
+    14: domain.WithdrawalProviderSelector withdrawal_provider_selector
+    15: domain.P2PProviderSelector p2p_provider_selector
+    16: domain.P2PInspectorSelector p2p_inspector_selector
+    17: domain.TimeSpanSelector time_span_selector
 }
 
 // Exceptions
@@ -2467,8 +2482,9 @@ service PartyManagement {
     AccountState GetAccountState (1: UserInfo user, 2: PartyID party_id, 3: domain.AccountID account_id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountNotFound ex3)
 
-    Accounts GetAccounts (1: UserInfo user, 2: PartyID party_id, 3: domain.InvoicePayment payment, 4: domain.ProviderAccountSet provider_account_set, 5: Varset varset)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: AccountsNotFound ex3)
+    /* Selector */
+
+    Selector ComputeSelector(1: UserInfo user, 2: Selector selector, 3: Varset varset, 4: DomainRevision revision)
 
     /* Payment institutions */
 
