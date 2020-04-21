@@ -2281,8 +2281,6 @@ struct InvalidObjectReference {
 
 exception AccountNotFound {}
 
-exception AccountsNotFound {}
-
 exception ShopAccountNotFound {}
 
 exception PartyMetaNamespaceNotFound {}
