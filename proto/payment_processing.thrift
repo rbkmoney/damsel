@@ -2486,9 +2486,9 @@ service PartyManagement {
 
     domain.P2PProvisionTerms ComputeP2PProvisionTerms (
         1: UserInfo party_id,
-        3: domain.P2PProvisionTerms p2p_provision_terms,
-        5: domain.DataRevision domain_revision,
-        6: Varset varset
+        2: domain.P2PProviderRef p2p_provider_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
     )
         throws (
             1: InvalidUser ex1,
