@@ -2484,6 +2484,20 @@ service PartyManagement {
 
     Selector ComputeSelector(1: UserInfo user, 2: Selector selector, 3: Varset varset, 4: DomainRevision revision)
 
+    domain.P2PProvisionTerms ComputeP2PProvisionTerms (
+        1: UserInfo party_id,
+        2: PartyID party_id,
+        3: domain.P2PProvisionTerms p2p_provision_terms,
+        4: PartyRevisionParam party_revision,
+        5: domain.DataRevision domain_revision,
+        6: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3
+        )
+
     /* Payment institutions */
 
     domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
