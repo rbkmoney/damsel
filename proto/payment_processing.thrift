@@ -2486,9 +2486,7 @@ service PartyManagement {
 
     domain.P2PProvisionTerms ComputeP2PProvisionTerms (
         1: UserInfo party_id,
-        2: PartyID party_id,
         3: domain.P2PProvisionTerms p2p_provision_terms,
-        4: PartyRevisionParam party_revision,
         5: domain.DataRevision domain_revision,
         6: Varset varset
     )
