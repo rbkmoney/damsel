@@ -1818,6 +1818,7 @@ union RecurrentPaymentToolChange {
     8: RecurrentPaymentToolResourceUpdated  rec_payment_tool_resource_updated
     9: RecurrentPaymentToolTokenUpdated     rec_payment_tool_token_updated
    10: RecurrentPaymentToolDescUpdated      rec_payment_tool_description_updated
+   11: RecurrentPaymentToolRegistered       rec_payment_tool_registered
 }
 
 struct RecurrentPaymentToolResourceUpdated {
@@ -1830,6 +1831,10 @@ struct RecurrentPaymentToolTokenUpdated {
 
 struct RecurrentPaymentToolDescUpdated {
     1: required SubscriptionDesc subscription_description
+}
+
+struct RecurrentPaymentToolRegistered {
+    1: required SubscriptionID subscription_id
 }
 
 /*
@@ -1920,6 +1925,12 @@ service RecurrentPaymentTools {
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
             3: EventNotFound                event_not_found
+        )
+
+    RecurrentPaymentTool Register (1: RecurrentPaymentToolID id)
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
     RecurrentPaymentTool UpdateResource (
