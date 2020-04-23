@@ -1740,6 +1740,7 @@ service CustomerManagement {
 // Types
 typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
 typedef domain.SubscriptionDesc       SubscriptionDesc
+typedef i64                           SubscriptionID
 
 // Model
 struct RecurrentPaymentTool {
@@ -1755,6 +1756,7 @@ struct RecurrentPaymentTool {
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
     13: optional SubscriptionDesc           subscription_description
+    13: optional SubscriptionID             subscription_id
 }
 
 struct RecurrentPaymentToolParams {
