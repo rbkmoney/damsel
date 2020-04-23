@@ -1756,7 +1756,7 @@ struct RecurrentPaymentTool {
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
     13: optional SubscriptionDesc           subscription_description
-    13: optional SubscriptionID             subscription_id
+    14: optional SubscriptionID             subscription_id
 }
 
 struct RecurrentPaymentToolParams {
