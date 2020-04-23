@@ -2289,6 +2289,8 @@ exception PaymentInstitutionNotFound {}
 
 exception ContractTemplateNotFound {}
 
+exception ProviderNotFound {}
+
 // Service
 
 service PartyManagement {
@@ -2485,15 +2487,14 @@ service PartyManagement {
     Selector ComputeSelector(1: UserInfo user, 2: Selector selector, 3: Varset varset, 4: DomainRevision revision)
 
     domain.P2PProvisionTerms ComputeP2PProvisionTerms (
-        1: UserInfo party_id,
+        1: UserInfo user,
         2: domain.P2PProviderRef p2p_provider_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )
         throws (
             1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: PartyNotExistsYet ex3
+            2: ProviderNotFound ex2
         )
 
     /* Payment institutions */
