@@ -2462,7 +2462,7 @@ service PartyManagement {
 
     /* Provider */
 
-    domain.P2PProvisionTerms ComputeP2PProvisionTerms (
+    domain.P2PProvider ComputeP2PProvider (
         1: UserInfo user,
         2: domain.P2PProviderRef p2p_provider_ref,
         3: domain.DataRevision domain_revision,
