@@ -2374,13 +2374,6 @@ struct RoutingCandidate {
   4: optional i32 weight
 }
 
-struct RoutingRule {
-  1: optional string description
-  2: required Predicate allowed
-  3: optional set<RoutingDelegate> delegates
-  4: optional set<RoutingCandidate> candidated
-}
-
 /* legacy */
 /* TODO rework (de)serializer to handle those cases more politely and then remove */
 
