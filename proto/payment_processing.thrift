@@ -2473,10 +2473,44 @@ service PartyManagement {
             2: ProviderNotFound ex2
         )
 
+    domain.WithdrawalProvider ComputeWithdrawalProvider (
+        1: UserInfo user,
+        2: domain.WithdrawalProviderRef withdrawal_provider_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: ProviderNotFound ex2
+        )
+
+    domain.Provider ComputeProvider (
+        1: UserInfo user,
+        2: domain.ProviderRef provider_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: ProviderNotFound ex2
+        )
+
     /* Payment institutions */
 
     domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
+
+    domain.PaymentInstitution ComputePaymentInstitution (
+        1: UserInfo user,
+        3: PaymentInstitutionRef ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PaymentInstitutionNotFound ex3
+        )
 
     /* Payouts */
     /* TODO looks like adhoc. Rework after feedback. Or not. */
