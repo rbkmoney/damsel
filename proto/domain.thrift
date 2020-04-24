@@ -2352,8 +2352,26 @@ struct RoutingRulesetRef { 1: required ObjectID id }
 struct RoutingRuleset {
     1: required string name
     2: optional string description
-    3: required list<RoutingRule> permissions
-    4: required list<RoutingRule> prohibitions
+    3: required list<RoutingDecisions> permissions
+    4: required list<RoutingDecisions> prohibitions
+}
+
+union RoutingDecisions {
+  1: list<RoutingDelegate> delegates
+  2: set<RoutingCandidate> candidates
+}
+
+struct RoutingDelegate {
+  1: optional string description
+  2: required Predicate allowed
+  3: required RoutingRulesetRef ruleset
+}
+
+struct RoutingCandidate {
+  1: optional string description
+  2: required Predicate allowed
+  3: required TerminalRef terminal
+  4: optional i32 weight
 }
 
 struct RoutingRule {
@@ -2362,26 +2380,6 @@ struct RoutingRule {
   3: optional set<RoutingDelegate> delegates
   4: optional set<RoutingCandidate> candidated
 }
-
-struct RoutingDelegate {
-  1: RoutingRulesetRef delegate
-  2: optional i32 priority = 1000
-  3: optional i32 weight
-  //  TODO: Add conditions
-  //  5: optional set<RouteCondition> conditions
-}
-
-struct RoutingCandidate {
-  1: required TerminalRef terminal
-  2: optional i32 priority = 1000
-  3: optional i32 weight
-  //  TODO: Add conditions
-  //  5: optional set<RouteCondition> conditions
-}
-
-// TODO Add route conditions (for example, amount limitation below
-//union RouteCondition {
-//}
 
 /* legacy */
 /* TODO rework (de)serializer to handle those cases more politely and then remove */
