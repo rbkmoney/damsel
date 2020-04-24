@@ -2359,12 +2359,16 @@ struct RoutingRuleset {
 struct RoutingRule {
   1: optional string description
   2: required Predicate allowed
-  3: required RoutingDecision decision
+  3: optional set<RoutingDelegate> delegates
+  4: optional set<RoutingCandidate> candidated
 }
 
-union RoutingDecision {
+struct RoutingDelegate {
   1: RoutingRulesetRef delegate
-  2: RoutingCandidate candidate
+  2: optional i32 priority = 1000
+  3: optional i32 weight
+  //  TODO: Add conditions
+  //  5: optional set<RouteCondition> conditions
 }
 
 struct RoutingCandidate {
