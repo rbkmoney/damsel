@@ -2484,9 +2484,9 @@ service PartyManagement {
             2: ProviderNotFound ex2
         )
 
-    domain.Provider ComputeProvider (
+    domain.Provider ComputePaymentProvider (
         1: UserInfo user,
-        2: domain.ProviderRef provider_ref,
+        2: domain.ProviderRef payment_provider_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )
