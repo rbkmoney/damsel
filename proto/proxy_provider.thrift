@@ -153,6 +153,7 @@ union RecurrentTokenFinishStatus {
 
 struct RecurrentTokenSuccess {
     1: required domain.Token token
+    2: optional domain.SubscriptionID subscription_id
 }
 
 struct RecurrentTokenCallbackResult {

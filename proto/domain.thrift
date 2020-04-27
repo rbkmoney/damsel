@@ -121,6 +121,7 @@ typedef string PaymentSessionID
 typedef string Fingerprint
 typedef string IPAddress
 typedef string SubscriptionDesc
+typedef string SubscriptionID
 
 struct Invoice {
     1 : required InvoiceID id

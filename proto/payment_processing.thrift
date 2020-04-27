@@ -1616,6 +1616,7 @@ typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
     1: required DisposablePaymentResource payment_resource
+    2: optional SubscriptionDesc          subscription_description
 }
 
 struct CustomerBinding {
@@ -1625,6 +1626,7 @@ struct CustomerBinding {
     4: required CustomerBindingStatus     status
     5: optional PartyRevision             party_revision
     6: optional domain.DataRevision       domain_revision
+    7: optional SubscriptionDesc          subscription_description
 }
 
 // Statuses
@@ -1740,7 +1742,7 @@ service CustomerManagement {
 // Types
 typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
 typedef domain.SubscriptionDesc       SubscriptionDesc
-typedef string                        SubscriptionID
+typedef domain.SubscriptionID         SubscriptionID
 
 // Model
 struct RecurrentPaymentTool {
