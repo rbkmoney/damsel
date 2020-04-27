@@ -128,6 +128,7 @@ struct RecurrentTokenContext {
     1: required RecurrentTokenSession session
     2: required RecurrentTokenInfo    token_info
     3: optional domain.ProxyOptions   options = {}
+    4: optional SubscriptionDesc      subscription_description
 }
 
 struct RecurrentTokenProxyResult {
