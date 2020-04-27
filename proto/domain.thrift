@@ -2329,7 +2329,7 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional RoutingRulesetRef routing_ruleset
+    16: optional PaymentRoutingRulesetRef payment_routing_ruleset
 
     // Deprecated
     5: optional ProviderSelector providers
@@ -2347,27 +2347,27 @@ struct ContractPaymentInstitutionDefaults {
 
 /* Routing rule sets */
 
-struct RoutingRulesetRef { 1: required ObjectID id }
+struct PaymentRoutingRulesetRef { 1: required ObjectID id }
 
-struct RoutingRuleset {
+struct PaymentRoutingRuleset {
     1: required string name
     2: optional string description
-    3: required list<RoutingDecisions> permissions
-    4: required list<RoutingDecisions> prohibitions
+    3: required list<PaymentRoutingDecisions> permissions
+    4: required list<PaymentRoutingDecisions> prohibitions
 }
 
-union RoutingDecisions {
-  1: list<RoutingDelegate> delegates
-  2: set<RoutingCandidate> candidates
+union PaymentRoutingDecisions {
+  1: list<PaymentRoutingDelegate> delegates
+  2: set<PaymentRoutingCandidate> candidates
 }
 
-struct RoutingDelegate {
+struct PaymentRoutingDelegate {
   1: optional string description
   2: required Predicate allowed
-  3: required RoutingRulesetRef ruleset
+  3: required PaymentRoutingRulesetRef ruleset
 }
 
-struct RoutingCandidate {
+struct PaymentRoutingCandidate {
   1: optional string description
   2: required Predicate allowed
   3: required TerminalRef terminal
@@ -2530,9 +2530,9 @@ struct GlobalsObject {
     2: required Globals data
 }
 
-struct RoutingRulesObject {
-    1: required RoutingRulesetRef ref
-    2: required RoutingRuleset data
+struct PaymentRoutingRulesObject {
+    1: required PaymentRoutingRulesetRef ref
+    2: required PaymentRoutingRuleset data
 }
 
 union Reference {
@@ -2558,7 +2558,7 @@ union Reference {
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
-    26 : RoutingRulesetRef       routing_rules
+    26 : PaymentRoutingRulesetRef payment_routing_rules
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2590,7 +2590,7 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
-    26 : RoutingRulesObject         routing_rules
+    26 : PaymentRoutingRulesObject  payment_routing_rules
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
