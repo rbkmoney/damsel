@@ -2269,6 +2269,8 @@ exception ContractTemplateNotFound {}
 
 exception ProviderNotFound {}
 
+exception TerminalNotFound {}
+
 // Service
 
 service PartyManagement {
@@ -2502,6 +2504,11 @@ service PartyManagement {
         4: domain.DataRevision domain_revision,
         5: Varset varset
     )
+        throws (
+            1: InvalidUser ex1,
+            2: ProviderNotFound ex2,
+            3: TerminalNotFound ex3
+        )
 
     /* Payment institutions */
 
