@@ -2357,21 +2357,21 @@ struct PaymentRoutingRuleset {
 }
 
 union PaymentRoutingDecisions {
-  1: list<PaymentRoutingDelegate> delegates
-  2: set<PaymentRoutingCandidate> candidates
+    1: list<PaymentRoutingDelegate> delegates
+    2: set<PaymentRoutingCandidate> candidates
 }
 
 struct PaymentRoutingDelegate {
-  1: optional string description
-  2: required Predicate allowed
-  3: required PaymentRoutingRulesetRef ruleset
+    1: optional string description
+    2: required Predicate allowed
+    3: required PaymentRoutingRulesetRef ruleset
 }
 
 struct PaymentRoutingCandidate {
-  1: optional string description
-  2: required Predicate allowed
-  3: required TerminalRef terminal
-  4: optional i32 weight
+    1: optional string description
+    2: required Predicate allowed
+    3: required TerminalRef terminal
+    4: optional i32 weight
 }
 
 /* legacy */
