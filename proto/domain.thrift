@@ -1924,6 +1924,7 @@ struct CashRegisterProvider {
     1: required string                              name
     2: optional string                              description
     3: required list<CashRegisterProviderParameter> params_schema
+    4: required Proxy                               proxy
 }
 
 struct CashRegisterProviderParameter {

@@ -4837,7 +4837,8 @@ struct_info('CashRegisterProvider') ->
     {struct, struct, [
         {1, required, string, 'name', undefined},
         {2, optional, string, 'description', undefined},
-        {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameter'}}}, 'params_schema', undefined}
+        {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameter'}}}, 'params_schema', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
     ]};
 
 struct_info('CashRegisterProviderParameter') ->

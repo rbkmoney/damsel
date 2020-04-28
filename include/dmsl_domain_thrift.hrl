@@ -1090,7 +1090,8 @@
 -record('domain_CashRegisterProvider', {
     'name' :: binary(),
     'description' :: binary() | undefined,
-    'params_schema' :: [dmsl_domain_thrift:'CashRegisterProviderParameter'()]
+    'params_schema' :: [dmsl_domain_thrift:'CashRegisterProviderParameter'()],
+    'proxy' :: dmsl_domain_thrift:'Proxy'()
 }).
 
 %% struct 'CashRegisterProviderParameter'
