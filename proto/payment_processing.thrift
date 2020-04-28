@@ -2495,6 +2495,14 @@ service PartyManagement {
             2: ProviderNotFound ex2
         )
 
+    domain.PaymentsProvisionTerms ComputePaymentProviderTerminalTerms(
+        1: UserInfo user,
+        2: domain.ProviderRef payment_provider_ref,
+        3: domain.TerminalRef terminal_ref,
+        4: domain.DataRevision domain_revision,
+        5: Varset varset
+    )
+
     /* Payment institutions */
 
     domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
