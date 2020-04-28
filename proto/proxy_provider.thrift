@@ -316,8 +316,21 @@ service ProviderProxy {
 }
 
 exception PaymentNotFound {}
+exception RecurrentPaymentToolNotFound {}
 
 service ProviderProxyHost {
+
+    void DeleteSubscription (1: SubscriptionID id)
+        throws (
+            1: base.InvalidRequest ex1
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
+
+    void UpdateSubscription (1: SubscriptionID id)
+        throws (
+            1: base.InvalidRequest ex1
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
 
     /**
      * Запрос к процессингу на обработку обратного вызова от провайдера

@@ -1929,12 +1929,6 @@ service RecurrentPaymentTools {
             3: EventNotFound                event_not_found
         )
 
-    RecurrentPaymentTool Register (1: RecurrentPaymentToolID id)
-        throws (
-            1: InvalidUser                  invalid_user
-            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
-        )
-
     RecurrentPaymentTool UpdateResource (
         1: RecurrentPaymentToolID    id,
         2: DisposablePaymentResource payment_resource
