@@ -1930,7 +1930,7 @@ service RecurrentPaymentTools {
         )
 
     RecurrentPaymentTool UpdateResource (
-        1: RecurrentPaymentToolID    id,
+        1: RecurrentPaymentToolID    id
         2: DisposablePaymentResource payment_resource
     )
         throws (
@@ -1939,8 +1939,8 @@ service RecurrentPaymentTools {
         )
 
     RecurrentPaymentTool UpdateToken (
-        1: RecurrentPaymentToolID id,
-        2: optional domain.Token  rec_token
+        1: RecurrentPaymentToolID id
+        2: domain.Token           rec_token
     )
         throws (
             1: InvalidUser                  invalid_user
@@ -1948,7 +1948,7 @@ service RecurrentPaymentTools {
         )
 
     RecurrentPaymentTool UpdateDescription (
-        1: RecurrentPaymentToolID id,
+        1: RecurrentPaymentToolID id
         2: SubscriptionDesc       subscription_description
     )
         throws (
