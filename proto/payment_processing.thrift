@@ -1771,6 +1771,7 @@ struct RecurrentPaymentToolParams {
     7:  optional domain.PaymentRoute       route
     8:  optional domain.Token              rec_token
     13: optional SubscriptionDesc          subscription_description
+    14: optional SubscriptionID            subscription_id
 }
 
 // Statuses
