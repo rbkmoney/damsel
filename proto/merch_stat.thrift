@@ -109,7 +109,7 @@ union InvoicePaymentStatus {
     5: InvoicePaymentCancelled cancelled
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
-    7: InvoicePaymentChargeback chargeback
+    7: InvoicePaymentChargedBack charged_back
 }
 
 union PaymentTool {
@@ -449,4 +449,3 @@ service DarkMessiahStatistics {
     StatResponse GetByQuery(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
 }
-
