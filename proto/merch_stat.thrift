@@ -96,6 +96,7 @@ struct InvoicePaymentProcessed { 1: optional base.Timestamp at }
 struct InvoicePaymentCaptured  { 1: optional base.Timestamp at }
 struct InvoicePaymentCancelled { 1: optional base.Timestamp at }
 struct InvoicePaymentRefunded  { 1: optional base.Timestamp at }
+struct InvoicePaymentChargeback { 1: optional base.Timestamp at }
 struct InvoicePaymentFailed    {
     1: required OperationFailure failure
     2: optional base.Timestamp at
@@ -108,6 +109,7 @@ union InvoicePaymentStatus {
     5: InvoicePaymentCancelled cancelled
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
+    7: InvoicePaymentChargeback chargeback
 }
 
 union PaymentTool {
