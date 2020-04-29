@@ -128,7 +128,7 @@ struct RecurrentTokenContext {
     1: required RecurrentTokenSession session
     2: required RecurrentTokenInfo    token_info
     3: optional domain.ProxyOptions   options = {}
-    4: optional SubscriptionDesc      subscription_description
+    4: optional domain.SubscriptionDesc      subscription_description
 }
 
 struct RecurrentTokenProxyResult {
@@ -320,13 +320,13 @@ exception RecurrentPaymentToolNotFound {}
 
 service ProviderProxyHost {
 
-    void DeleteSubscription (1: SubscriptionID id)
+    void DeleteSubscription (1: domain.SubscriptionID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    void UpdateSubscription (1: SubscriptionID id)
+    void UpdateSubscription (1: domain.SubscriptionID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
