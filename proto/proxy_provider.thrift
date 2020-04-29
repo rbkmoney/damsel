@@ -48,6 +48,7 @@ union FinishStatus {
 struct Success {
     /** Токен для последующих взаимодействий. */
     1: optional domain.Token token
+    2: optional domain.SubscriptionID subscription_id
 }
 
 /**
