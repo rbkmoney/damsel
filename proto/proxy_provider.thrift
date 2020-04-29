@@ -126,10 +126,10 @@ struct RecurrentTokenSession {
  * многоразового токена.
  */
 struct RecurrentTokenContext {
-    1: required RecurrentTokenSession session
-    2: required RecurrentTokenInfo    token_info
-    3: optional domain.ProxyOptions   options = {}
-    4: optional domain.SubscriptionDesc      subscription_description
+    1: required RecurrentTokenSession   session
+    2: required RecurrentTokenInfo      token_info
+    3: optional domain.ProxyOptions     options = {}
+    4: optional domain.SubscriptionDesc subscription_description
 }
 
 struct RecurrentTokenProxyResult {
@@ -287,6 +287,11 @@ struct PaymentCallbackProxyResult {
 }
 
 service ProviderProxy {
+
+    RecurrentTokenProxyResult UpdateSubscription (
+        1: domain.SubscriptionID id
+        2: RecurrentTokenContext context
+    )
 
     /**
      * Запрос к прокси на создание многоразового токена
