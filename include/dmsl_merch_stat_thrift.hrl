@@ -96,6 +96,11 @@
     'at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
+%% struct 'InvoicePaymentChargedBack'
+-record('merchstat_InvoicePaymentChargedBack', {
+    'at' :: dmsl_base_thrift:'Timestamp'() | undefined
+}).
+
 %% struct 'InvoicePaymentFailed'
 -record('merchstat_InvoicePaymentFailed', {
     'failure' :: dmsl_merch_stat_thrift:'OperationFailure'(),

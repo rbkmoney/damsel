@@ -63,6 +63,7 @@
     'InvoicePaymentCaptured'/0,
     'InvoicePaymentCancelled'/0,
     'InvoicePaymentRefunded'/0,
+    'InvoicePaymentChargedBack'/0,
     'InvoicePaymentFailed'/0,
     'InvoicePaymentStatus'/0,
     'PaymentTool'/0,
@@ -196,6 +197,7 @@
     'InvoicePaymentCaptured' |
     'InvoicePaymentCancelled' |
     'InvoicePaymentRefunded' |
+    'InvoicePaymentChargedBack' |
     'InvoicePaymentFailed' |
     'InvoicePaymentStatus' |
     'PaymentTool' |
@@ -295,6 +297,9 @@
 %% struct 'InvoicePaymentRefunded'
 -type 'InvoicePaymentRefunded'() :: #'merchstat_InvoicePaymentRefunded'{}.
 
+%% struct 'InvoicePaymentChargedBack'
+-type 'InvoicePaymentChargedBack'() :: #'merchstat_InvoicePaymentChargedBack'{}.
+
 %% struct 'InvoicePaymentFailed'
 -type 'InvoicePaymentFailed'() :: #'merchstat_InvoicePaymentFailed'{}.
 
@@ -305,7 +310,8 @@
     {'captured', 'InvoicePaymentCaptured'()} |
     {'cancelled', 'InvoicePaymentCancelled'()} |
     {'refunded', 'InvoicePaymentRefunded'()} |
-    {'failed', 'InvoicePaymentFailed'()}.
+    {'failed', 'InvoicePaymentFailed'()} |
+    {'charged_back', 'InvoicePaymentChargedBack'()}.
 
 %% union 'PaymentTool'
 -type 'PaymentTool'() ::
@@ -553,6 +559,7 @@ structs() ->
         'InvoicePaymentCaptured',
         'InvoicePaymentCancelled',
         'InvoicePaymentRefunded',
+        'InvoicePaymentChargedBack',
         'InvoicePaymentFailed',
         'InvoicePaymentStatus',
         'PaymentTool',
@@ -786,6 +793,11 @@ struct_info('InvoicePaymentRefunded') ->
         {1, optional, string, 'at', undefined}
     ]};
 
+struct_info('InvoicePaymentChargedBack') ->
+    {struct, struct, [
+        {1, optional, string, 'at', undefined}
+    ]};
+
 struct_info('InvoicePaymentFailed') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_merch_stat_thrift, 'OperationFailure'}}, 'failure', undefined},
@@ -799,7 +811,8 @@ struct_info('InvoicePaymentStatus') ->
         {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCaptured'}}, 'captured', undefined},
         {5, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentCancelled'}}, 'cancelled', undefined},
         {6, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
-        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined}
+        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
+        {7, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InvoicePaymentChargedBack'}}, 'charged_back', undefined}
     ]};
 
 struct_info('PaymentTool') ->
@@ -1117,6 +1130,9 @@ record_name('InvoicePaymentCancelled') ->
 
 record_name('InvoicePaymentRefunded') ->
     'merchstat_InvoicePaymentRefunded';
+
+record_name('InvoicePaymentChargedBack') ->
+    'merchstat_InvoicePaymentChargedBack';
 
 record_name('InvoicePaymentFailed') ->
     'merchstat_InvoicePaymentFailed';
