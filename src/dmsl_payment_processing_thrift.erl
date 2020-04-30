@@ -320,7 +320,9 @@
     'ShopAccountNotFound'/0,
     'PartyMetaNamespaceNotFound'/0,
     'PaymentInstitutionNotFound'/0,
-    'ContractTemplateNotFound'/0
+    'ContractTemplateNotFound'/0,
+    'ProviderNotFound'/0,
+    'TerminalNotFound'/0
 ]).
 
 -type namespace() :: 'payproc'.
@@ -650,7 +652,9 @@
     'ShopAccountNotFound' |
     'PartyMetaNamespaceNotFound' |
     'PaymentInstitutionNotFound' |
-    'ContractTemplateNotFound'.
+    'ContractTemplateNotFound' |
+    'ProviderNotFound' |
+    'TerminalNotFound'.
 
 %% struct 'UserInfo'
 -type 'UserInfo'() :: #'payproc_UserInfo'{}.
@@ -1620,6 +1624,12 @@
 %% exception 'ContractTemplateNotFound'
 -type 'ContractTemplateNotFound'() :: #'payproc_ContractTemplateNotFound'{}.
 
+%% exception 'ProviderNotFound'
+-type 'ProviderNotFound'() :: #'payproc_ProviderNotFound'{}.
+
+%% exception 'TerminalNotFound'
+-type 'TerminalNotFound'() :: #'payproc_TerminalNotFound'{}.
+
 %%
 %% services and functions
 %%
@@ -1738,7 +1748,12 @@
     'GetEvents' |
     'GetShopAccount' |
     'GetAccountState' |
+    'ComputeP2PProvider' |
+    'ComputeWithdrawalProvider' |
+    'ComputePaymentProvider' |
+    'ComputePaymentProviderTerminalTerms' |
     'ComputePaymentInstitutionTerms' |
+    'ComputePaymentInstitution' |
     'ComputePayoutCashFlow'.
 
 -export_type(['PartyManagement_service_functions'/0]).
@@ -3640,6 +3655,12 @@ struct_info('PaymentInstitutionNotFound') ->
 struct_info('ContractTemplateNotFound') ->
     {struct, exception, []};
 
+struct_info('ProviderNotFound') ->
+    {struct, exception, []};
+
+struct_info('TerminalNotFound') ->
+    {struct, exception, []};
+
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -4298,6 +4319,12 @@ record_name('PaymentInstitutionNotFound') ->
 record_name('ContractTemplateNotFound') ->
     'payproc_ContractTemplateNotFound';
 
+record_name('ProviderNotFound') ->
+    'payproc_ProviderNotFound';
+
+record_name('TerminalNotFound') ->
+    'payproc_TerminalNotFound';
+
 record_name(_) -> error(badarg).
 
 -spec functions(service_name()) -> [function_name()] | no_return().
@@ -4400,7 +4427,12 @@ functions('PartyManagement') ->
         'GetEvents',
         'GetShopAccount',
         'GetAccountState',
+        'ComputeP2PProvider',
+        'ComputeWithdrawalProvider',
+        'ComputePaymentProvider',
+        'ComputePaymentProviderTerminalTerms',
         'ComputePaymentInstitutionTerms',
+        'ComputePaymentInstitution',
         'ComputePayoutCashFlow'
     ];
 
@@ -5628,6 +5660,64 @@ function_info('PartyManagement', 'GetAccountState', exceptions) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AccountNotFound'}}, 'ex3', undefined}
     ]};
+function_info('PartyManagement', 'ComputeP2PProvider', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider_ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeP2PProvider', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'P2PProvider'}};
+function_info('PartyManagement', 'ComputeP2PProvider', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeWithdrawalProvider', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider_ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeWithdrawalProvider', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvider'}};
+function_info('PartyManagement', 'ComputeWithdrawalProvider', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentProvider', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'payment_provider_ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentProvider', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'Provider'}};
+function_info('PartyManagement', 'ComputePaymentProvider', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentProviderTerminalTerms', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'payment_provider_ref', undefined},
+        {3, undefined, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_ref', undefined},
+        {4, undefined, i64, 'domain_revision', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentProviderTerminalTerms', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}};
+function_info('PartyManagement', 'ComputePaymentProviderTerminalTerms', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'TerminalNotFound'}}, 'ex3', undefined}
+    ]};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) ->
     {struct, struct, [
         {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
@@ -5638,6 +5728,21 @@ function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) 
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', reply_type) ->
     {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PaymentInstitutionNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentInstitution', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentInstitution', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'PaymentInstitution'}};
+function_info('PartyManagement', 'ComputePaymentInstitution', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},

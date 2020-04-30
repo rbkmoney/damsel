@@ -1176,4 +1176,10 @@
 %% exception 'ContractTemplateNotFound'
 -record('payproc_ContractTemplateNotFound', {}).
 
+%% exception 'ProviderNotFound'
+-record('payproc_ProviderNotFound', {}).
+
+%% exception 'TerminalNotFound'
+-record('payproc_TerminalNotFound', {}).
+
 -endif.
