@@ -2352,8 +2352,8 @@ struct PaymentRoutingRulesetRef { 1: required ObjectID id }
 struct PaymentRoutingRuleset {
     1: required string name
     2: optional string description
-    3: required list<PaymentRoutingDecisions> permissions
-    4: required list<PaymentRoutingDecisions> prohibitions
+    3: required PaymentRoutingDecisions permissions
+    4: required PaymentRoutingDecisions prohibitions
 }
 
 union PaymentRoutingDecisions {
