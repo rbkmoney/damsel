@@ -2359,7 +2359,7 @@ struct PaymentRoutingRuleset {
 
 union PaymentRoutingDecisions {
     1: list<PaymentRoutingDelegate> delegates
-    2: set<PaymentRoutingCandidate> candidates
+    2: list<PaymentRoutingCandidate> candidates
 }
 
 struct PaymentRoutingDelegate {
