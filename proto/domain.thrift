@@ -1910,12 +1910,14 @@ struct Provider {
     1: required string name
     2: required string description
     3: required Proxy proxy
-    4: required TerminalSelector terminal
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
     6: optional PaymentsProvisionTerms payment_terms
     8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
     7: optional ProviderAccountSet accounts = {}
+
+    // Deprecated
+    4: optional TerminalSelector terminal
 }
 
 struct CashRegisterProviderRef { 1: required ObjectID id }
@@ -2122,6 +2124,7 @@ struct Terminal {
     9: optional ProxyOptions options
     10: required RiskScore risk_coverage
     12: optional PaymentsProvisionTerms terms
+    13: optional ProviderRef provider_ref
 }
 
 union TerminalSelector {
@@ -2236,6 +2239,7 @@ struct PartyCondition {
 union PartyConditionDefinition {
     1: ShopID shop_is
     2: WalletID wallet_is
+    3: ContractID contract_is
 }
 
 /* Proxies */
@@ -2317,7 +2321,6 @@ struct PaymentInstitution {
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
     10: optional ContractTemplateSelector default_wallet_contract_template
-    5: required ProviderSelector providers
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
     8: required set<Residence> residences
@@ -2327,6 +2330,10 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
+    16: optional PaymentRoutingRulesetRef payment_routing_ruleset
+
+    // Deprecated
+    5: optional ProviderSelector providers
 }
 
 enum PaymentInstitutionRealm {
@@ -2337,6 +2344,36 @@ enum PaymentInstitutionRealm {
 struct ContractPaymentInstitutionDefaults {
     1: required PaymentInstitutionRef test
     2: required PaymentInstitutionRef live
+}
+
+/* Routing rule sets */
+
+struct PaymentRoutingRulesetRef { 1: required ObjectID id }
+
+struct PaymentRoutingRuleset {
+    1: required string name
+    2: optional string description
+    3: required PaymentRoutingDecisions permissions
+    4: required PaymentRoutingDecisions prohibitions
+}
+
+union PaymentRoutingDecisions {
+    1: list<PaymentRoutingDelegate> delegates
+    2: list<PaymentRoutingCandidate> candidates
+}
+
+struct PaymentRoutingDelegate {
+    1: optional string description
+    2: required Predicate allowed
+    3: required PaymentRoutingRulesetRef ruleset
+}
+
+struct PaymentRoutingCandidate {
+    1: optional string description
+    2: required Predicate allowed
+    3: required TerminalRef terminal
+    4: optional i32 weight
+    5: optional i32 priority = 1000
 }
 
 /* legacy */
@@ -2495,6 +2532,11 @@ struct GlobalsObject {
     2: required Globals data
 }
 
+struct PaymentRoutingRulesObject {
+    1: required PaymentRoutingRulesetRef ref
+    2: required PaymentRoutingRuleset data
+}
+
 union Reference {
 
     1  : CategoryRef             category
@@ -2518,6 +2560,7 @@ union Reference {
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
+    26 : PaymentRoutingRulesetRef payment_routing_rules
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2549,6 +2592,7 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
+    26 : PaymentRoutingRulesObject  payment_routing_rules
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link

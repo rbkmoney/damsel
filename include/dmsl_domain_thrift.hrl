@@ -1074,11 +1074,11 @@
     'name' :: binary(),
     'description' :: binary(),
     'proxy' :: dmsl_domain_thrift:'Proxy'(),
-    'terminal' :: dmsl_domain_thrift:'TerminalSelector'(),
     'abs_account' :: binary(),
     'payment_terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined,
     'recurrent_paytool_terms' :: dmsl_domain_thrift:'RecurrentPaytoolsProvisionTerms'() | undefined,
-    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
+    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined,
+    'terminal' :: dmsl_domain_thrift:'TerminalSelector'() | undefined
 }).
 
 %% struct 'CashRegisterProviderRef'
@@ -1278,7 +1278,8 @@
     'description' :: binary(),
     'options' :: dmsl_domain_thrift:'ProxyOptions'() | undefined,
     'risk_coverage' :: atom(),
-    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
+    'terms' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined,
+    'provider_ref' :: dmsl_domain_thrift:'ProviderRef'() | undefined
 }).
 
 %% struct 'TerminalDecision'
@@ -1422,7 +1423,6 @@
     'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'(),
     'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'(),
     'default_wallet_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'() | undefined,
-    'providers' :: dmsl_domain_thrift:'ProviderSelector'(),
     'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
     'realm' :: dmsl_domain_thrift:'PaymentInstitutionRealm'(),
     'residences' :: ordsets:ordset(atom()),
@@ -1430,13 +1430,44 @@
     'identity' :: binary() | undefined,
     'withdrawal_providers' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
     'p2p_providers' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined,
-    'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined
+    'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined,
+    'payment_routing_ruleset' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'() | undefined,
+    'providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined
 }).
 
 %% struct 'ContractPaymentInstitutionDefaults'
 -record('domain_ContractPaymentInstitutionDefaults', {
     'test' :: dmsl_domain_thrift:'PaymentInstitutionRef'(),
     'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
+}).
+
+%% struct 'PaymentRoutingRulesetRef'
+-record('domain_PaymentRoutingRulesetRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'PaymentRoutingRuleset'
+-record('domain_PaymentRoutingRuleset', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'permissions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'(),
+    'prohibitions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'()
+}).
+
+%% struct 'PaymentRoutingDelegate'
+-record('domain_PaymentRoutingDelegate', {
+    'description' :: binary() | undefined,
+    'allowed' :: dmsl_domain_thrift:'Predicate'(),
+    'ruleset' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'()
+}).
+
+%% struct 'PaymentRoutingCandidate'
+-record('domain_PaymentRoutingCandidate', {
+    'description' :: binary() | undefined,
+    'allowed' :: dmsl_domain_thrift:'Predicate'(),
+    'terminal' :: dmsl_domain_thrift:'TerminalRef'(),
+    'weight' :: integer() | undefined,
+    'priority' = 1000 :: integer() | undefined
 }).
 
 %% struct 'PartyPrototypeRef'
@@ -1617,6 +1648,12 @@
 -record('domain_GlobalsObject', {
     'ref' :: dmsl_domain_thrift:'GlobalsRef'(),
     'data' :: dmsl_domain_thrift:'Globals'()
+}).
+
+%% struct 'PaymentRoutingRulesObject'
+-record('domain_PaymentRoutingRulesObject', {
+    'ref' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentRoutingRuleset'()
 }).
 
 -endif.

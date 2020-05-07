@@ -387,6 +387,11 @@
     'PaymentInstitutionRef'/0,
     'PaymentInstitution'/0,
     'ContractPaymentInstitutionDefaults'/0,
+    'PaymentRoutingRulesetRef'/0,
+    'PaymentRoutingRuleset'/0,
+    'PaymentRoutingDecisions'/0,
+    'PaymentRoutingDelegate'/0,
+    'PaymentRoutingCandidate'/0,
     'PartyPrototypeRef'/0,
     'PartyPrototype'/0,
     'PartyPrototypeObject'/0,
@@ -419,6 +424,7 @@
     'ExternalAccountSetObject'/0,
     'ProxyObject'/0,
     'GlobalsObject'/0,
+    'PaymentRoutingRulesObject'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -1228,6 +1234,11 @@
     'PaymentInstitutionRef' |
     'PaymentInstitution' |
     'ContractPaymentInstitutionDefaults' |
+    'PaymentRoutingRulesetRef' |
+    'PaymentRoutingRuleset' |
+    'PaymentRoutingDecisions' |
+    'PaymentRoutingDelegate' |
+    'PaymentRoutingCandidate' |
     'PartyPrototypeRef' |
     'PartyPrototype' |
     'PartyPrototypeObject' |
@@ -1260,6 +1271,7 @@
     'ExternalAccountSetObject' |
     'ProxyObject' |
     'GlobalsObject' |
+    'PaymentRoutingRulesObject' |
     'Reference' |
     'DomainObject'.
 
@@ -2230,7 +2242,8 @@
 %% union 'PartyConditionDefinition'
 -type 'PartyConditionDefinition'() ::
     {'shop_is', 'ShopID'()} |
-    {'wallet_is', 'WalletID'()}.
+    {'wallet_is', 'WalletID'()} |
+    {'contract_is', 'ContractID'()}.
 
 %% struct 'ProxyRef'
 -type 'ProxyRef'() :: #'domain_ProxyRef'{}.
@@ -2283,6 +2296,23 @@
 
 %% struct 'ContractPaymentInstitutionDefaults'
 -type 'ContractPaymentInstitutionDefaults'() :: #'domain_ContractPaymentInstitutionDefaults'{}.
+
+%% struct 'PaymentRoutingRulesetRef'
+-type 'PaymentRoutingRulesetRef'() :: #'domain_PaymentRoutingRulesetRef'{}.
+
+%% struct 'PaymentRoutingRuleset'
+-type 'PaymentRoutingRuleset'() :: #'domain_PaymentRoutingRuleset'{}.
+
+%% union 'PaymentRoutingDecisions'
+-type 'PaymentRoutingDecisions'() ::
+    {'delegates', ['PaymentRoutingDelegate'()]} |
+    {'candidates', ['PaymentRoutingCandidate'()]}.
+
+%% struct 'PaymentRoutingDelegate'
+-type 'PaymentRoutingDelegate'() :: #'domain_PaymentRoutingDelegate'{}.
+
+%% struct 'PaymentRoutingCandidate'
+-type 'PaymentRoutingCandidate'() :: #'domain_PaymentRoutingCandidate'{}.
 
 %% struct 'PartyPrototypeRef'
 -type 'PartyPrototypeRef'() :: #'domain_PartyPrototypeRef'{}.
@@ -2380,6 +2410,9 @@
 %% struct 'GlobalsObject'
 -type 'GlobalsObject'() :: #'domain_GlobalsObject'{}.
 
+%% struct 'PaymentRoutingRulesObject'
+-type 'PaymentRoutingRulesObject'() :: #'domain_PaymentRoutingRulesObject'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -2403,6 +2436,7 @@
     {'withdrawal_provider', 'WithdrawalProviderRef'()} |
     {'cash_register_provider', 'CashRegisterProviderRef'()} |
     {'p2p_provider', 'P2PProviderRef'()} |
+    {'payment_routing_rules', 'PaymentRoutingRulesetRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2430,6 +2464,7 @@
     {'withdrawal_provider', 'WithdrawalProviderObject'()} |
     {'cash_register_provider', 'CashRegisterProviderObject'()} |
     {'p2p_provider', 'P2PProviderObject'()} |
+    {'payment_routing_rules', 'PaymentRoutingRulesObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2857,6 +2892,11 @@ structs() ->
         'PaymentInstitutionRef',
         'PaymentInstitution',
         'ContractPaymentInstitutionDefaults',
+        'PaymentRoutingRulesetRef',
+        'PaymentRoutingRuleset',
+        'PaymentRoutingDecisions',
+        'PaymentRoutingDelegate',
+        'PaymentRoutingCandidate',
         'PartyPrototypeRef',
         'PartyPrototype',
         'PartyPrototypeObject',
@@ -2889,6 +2929,7 @@ structs() ->
         'ExternalAccountSetObject',
         'ProxyObject',
         'GlobalsObject',
+        'PaymentRoutingRulesObject',
         'Reference',
         'DomainObject'
     ].
@@ -4821,11 +4862,11 @@ struct_info('Provider') ->
         {1, required, string, 'name', undefined},
         {2, required, string, 'description', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-        {4, required, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined},
         {5, required, string, 'abs_account', undefined},
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'payment_terms', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsProvisionTerms'}}, 'recurrent_paytool_terms', undefined},
-        {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+        {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined}
     ]};
 
 struct_info('CashRegisterProviderRef') ->
@@ -5069,7 +5110,8 @@ struct_info('Terminal') ->
         {2, required, string, 'description', undefined},
         {9, optional, {map, string, string}, 'options', undefined},
         {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
-        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined}
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined},
+        {13, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined}
     ]};
 
 struct_info('TerminalSelector') ->
@@ -5202,7 +5244,8 @@ struct_info('PartyCondition') ->
 struct_info('PartyConditionDefinition') ->
     {struct, union, [
         {1, optional, string, 'shop_is', undefined},
-        {2, optional, string, 'wallet_is', undefined}
+        {2, optional, string, 'wallet_is', undefined},
+        {3, optional, string, 'contract_is', undefined}
     ]};
 
 struct_info('ProxyRef') ->
@@ -5297,7 +5340,6 @@ struct_info('PaymentInstitution') ->
         {3, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
         {4, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_contract_template', undefined},
         {10, optional, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_wallet_contract_template', undefined},
-        {5, required, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined},
         {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
         {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
         {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
@@ -5305,13 +5347,50 @@ struct_info('PaymentInstitution') ->
         {12, optional, string, 'identity', undefined},
         {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
         {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined},
-        {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined}
+        {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined},
+        {16, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'payment_routing_ruleset', undefined},
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined}
     ]};
 
 struct_info('ContractPaymentInstitutionDefaults') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'test', undefined},
         {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
+    ]};
+
+struct_info('PaymentRoutingRulesetRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('PaymentRoutingRuleset') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentRoutingDecisions'}}, 'permissions', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentRoutingDecisions'}}, 'prohibitions', undefined}
+    ]};
+
+struct_info('PaymentRoutingDecisions') ->
+    {struct, union, [
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingDelegate'}}}, 'delegates', undefined},
+        {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingCandidate'}}}, 'candidates', undefined}
+    ]};
+
+struct_info('PaymentRoutingDelegate') ->
+    {struct, struct, [
+        {1, optional, string, 'description', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allowed', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'ruleset', undefined}
+    ]};
+
+struct_info('PaymentRoutingCandidate') ->
+    {struct, struct, [
+        {1, optional, string, 'description', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allowed', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined},
+        {4, optional, i32, 'weight', undefined},
+        {5, optional, i32, 'priority', 1000}
     ]};
 
 struct_info('PartyPrototypeRef') ->
@@ -5494,6 +5573,12 @@ struct_info('GlobalsObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Globals'}}, 'data', undefined}
     ]};
 
+struct_info('PaymentRoutingRulesObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRuleset'}}, 'data', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -5517,6 +5602,7 @@ struct_info('Reference') ->
         {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
         {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderRef'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
+        {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'payment_routing_rules', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -5545,6 +5631,7 @@ struct_info('DomainObject') ->
         {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderObject'}}, 'withdrawal_provider', undefined},
         {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderObject'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
+        {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesObject'}}, 'payment_routing_rules', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -6217,6 +6304,18 @@ record_name('PaymentInstitution') ->
 record_name('ContractPaymentInstitutionDefaults') ->
     'domain_ContractPaymentInstitutionDefaults';
 
+record_name('PaymentRoutingRulesetRef') ->
+    'domain_PaymentRoutingRulesetRef';
+
+record_name('PaymentRoutingRuleset') ->
+    'domain_PaymentRoutingRuleset';
+
+record_name('PaymentRoutingDelegate') ->
+    'domain_PaymentRoutingDelegate';
+
+record_name('PaymentRoutingCandidate') ->
+    'domain_PaymentRoutingCandidate';
+
 record_name('PartyPrototypeRef') ->
     'domain_PartyPrototypeRef';
 
@@ -6312,6 +6411,9 @@ record_name('ProxyObject') ->
 
 record_name('GlobalsObject') ->
     'domain_GlobalsObject';
+
+record_name('PaymentRoutingRulesObject') ->
+    'domain_PaymentRoutingRulesObject';
 
 record_name(_) -> error(badarg).
 
