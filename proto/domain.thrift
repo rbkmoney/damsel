@@ -2373,6 +2373,7 @@ struct PaymentRoutingCandidate {
     2: required Predicate allowed
     3: required TerminalRef terminal
     4: optional i32 weight
+    5: optional i32 priority = 1000
 }
 
 /* legacy */
