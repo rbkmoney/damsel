@@ -82,6 +82,7 @@ enum OperationType {
     payment
     refund
     adjustment
+    chargeback
 }
 
 /**
