@@ -111,7 +111,8 @@
 -type 'OperationType'() ::
     'payment' |
     'refund' |
-    'adjustment'.
+    'adjustment' |
+    'chargeback'.
 
 %% enum 'PayoutSearchStatus'
 -type 'PayoutSearchStatus'() ::
@@ -425,7 +426,8 @@ enum_info('OperationType') ->
     {enum, [
         {'payment', 0},
         {'refund', 1},
-        {'adjustment', 2}
+        {'adjustment', 2},
+        {'chargeback', 3}
     ]};
 
 enum_info('PayoutSearchStatus') ->
