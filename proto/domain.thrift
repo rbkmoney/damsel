@@ -120,8 +120,8 @@ typedef base.Content InvoicePaymentChargebackContext
 typedef string PaymentSessionID
 typedef string Fingerprint
 typedef string IPAddress
-typedef string SubscriptionDesc
-typedef string SubscriptionID
+typedef string RecurrentPaymentToolDesc
+typedef string RecurrentPaymentToolResourceID
 
 struct Invoice {
     1 : required InvoiceID id
@@ -183,7 +183,7 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
-    21: optional SubscriptionDesc subscription_description
+    21: optional RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 struct InvoicePaymentPending   {}

@@ -48,7 +48,7 @@ union FinishStatus {
 struct Success {
     /** Токен для последующих взаимодействий. */
     1: optional domain.Token token
-    2: optional domain.SubscriptionID subscription_id
+    2: optional domain.RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 /**
@@ -129,7 +129,7 @@ struct RecurrentTokenContext {
     1: required RecurrentTokenSession   session
     2: required RecurrentTokenInfo      token_info
     3: optional domain.ProxyOptions     options = {}
-    4: optional domain.SubscriptionDesc subscription_description
+    4: optional domain.RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 struct RecurrentTokenProxyResult {
@@ -155,7 +155,7 @@ union RecurrentTokenFinishStatus {
 
 struct RecurrentTokenSuccess {
     1: required domain.Token token
-    2: optional domain.SubscriptionID subscription_id
+    2: optional domain.RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 struct RecurrentTokenCallbackResult {
@@ -208,7 +208,7 @@ struct InvoicePayment {
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
     9: optional base.Timestamp          processing_deadline
-   10: optional domain.SubscriptionDesc subscription_description
+   10: optional domain.RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 struct InvoicePaymentRefund {
@@ -288,8 +288,8 @@ struct PaymentCallbackProxyResult {
 
 service ProviderProxy {
 
-    RecurrentTokenProxyResult UpdateSubscription (
-        1: domain.SubscriptionID id
+    RecurrentTokenProxyResult UpdateRecurrentPaymentTool (
+        1: domain.RecurrentPaymentToolResourceID id
         2: RecurrentTokenContext context
     )
 
@@ -326,13 +326,13 @@ exception RecurrentPaymentToolNotFound {}
 
 service ProviderProxyHost {
 
-    void DeleteSubscription (1: domain.SubscriptionID id)
+    void DeleteRecurrentPaymentTool (1: domain.RecurrentPaymentToolResourceID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    void UpdateSubscription (1: domain.SubscriptionID id)
+    void UpdateRecurrentPaymentTool (1: domain.RecurrentPaymentToolResourceID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found

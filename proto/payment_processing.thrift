@@ -563,7 +563,7 @@ struct InvoicePaymentParams {
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
     7: optional base.Timestamp processing_deadline
-    8: optional SubscriptionDesc subscription_description
+    8: optional RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 union PayerParams {
@@ -1616,7 +1616,7 @@ typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
     1: required DisposablePaymentResource payment_resource
-    2: optional SubscriptionDesc          subscription_description
+    2: optional RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 struct CustomerBinding {
@@ -1626,7 +1626,7 @@ struct CustomerBinding {
     4: required CustomerBindingStatus     status
     5: optional PartyRevision             party_revision
     6: optional domain.DataRevision       domain_revision
-    7: optional SubscriptionDesc          subscription_description
+    7: optional RecurrentPaymentToolDesc  rec_payment_tool_description
 }
 
 // Statuses
@@ -1740,9 +1740,9 @@ service CustomerManagement {
 /* Recurrent Payment Tool */
 
 // Types
-typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
-typedef domain.SubscriptionDesc       SubscriptionDesc
-typedef domain.SubscriptionID         SubscriptionID
+typedef domain.RecurrentPaymentToolID         RecurrentPaymentToolID
+typedef domain.RecurrentPaymentToolDesc       RecurrentPaymentToolDesc
+typedef domain.RecurrentPaymentToolResourceID RecurrentPaymentToolResourceID
 
 // Model
 struct RecurrentPaymentTool {
@@ -1757,8 +1757,8 @@ struct RecurrentPaymentTool {
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
-    13: optional SubscriptionDesc           subscription_description
-    14: optional SubscriptionID             subscription_id
+    13: optional RecurrentPaymentToolDesc   rec_payment_tool_description
+    14: optional RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 struct RecurrentPaymentToolParams {
@@ -1770,8 +1770,8 @@ struct RecurrentPaymentToolParams {
     3:  required DisposablePaymentResource payment_resource
     7:  optional domain.PaymentRoute       route
     8:  optional domain.Token              rec_token
-    13: optional SubscriptionDesc          subscription_description
-    14: optional SubscriptionID            subscription_id
+    13: optional RecurrentPaymentToolDesc  rec_payment_tool_description
+    14: optional RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 // Statuses
@@ -1833,11 +1833,11 @@ struct RecurrentPaymentToolTokenUpdated {
 }
 
 struct RecurrentPaymentToolDescUpdated {
-    1: required SubscriptionDesc subscription_description
+    1: required RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 struct RecurrentPaymentToolRegistered {
-    1: required SubscriptionID subscription_id
+    1: required RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 /*
@@ -1950,7 +1950,7 @@ service RecurrentPaymentTools {
 
     RecurrentPaymentTool UpdateDescription (
         1: RecurrentPaymentToolID id
-        2: SubscriptionDesc       subscription_description
+        2: RecurrentPaymentToolDesc rec_payment_tool_description
     )
         throws (
             1: InvalidUser                  invalid_user
