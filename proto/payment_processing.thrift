@@ -157,7 +157,8 @@ union InvoicePaymentChangePayload {
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
-    14: InvoicePaymentFailed                invoice_payment_failed
+    14: InvoicePaymentProcessingResult      invoice_payment_processing_result
+    15: InvoicePaymentCaptureResult         invoice_payment_capture_result
 }
 
 /**
@@ -176,8 +177,14 @@ struct InvoicePaymentStarted {
     3: optional domain.FinalCashFlow cash_flow
 }
 
-struct InvoicePaymentFailed {
-    1: required domain.OperationFailure failure
+struct InvoicePaymentProcessingResult {
+    /* TODO: add payload */
+    /* 1: required domain.OperationFailure failure */
+}
+
+struct InvoicePaymentCaptureResult {
+    /* TODO: add payload */
+    /* 1: required domain.OperationFailure failure */
 }
 
 /**
@@ -387,7 +394,7 @@ union InvoicePaymentRefundChangePayload {
     1: InvoicePaymentRefundCreated       invoice_payment_refund_created
     2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
     3: InvoicePaymentSessionChange       invoice_payment_session_change
-    4: InvoicePaymentRefundFailed        invoice_payment_refund_failed
+    4: InvoicePaymentRefundResult        invoice_payment_refund_result
 }
 
 /**
@@ -405,8 +412,8 @@ struct InvoicePaymentRefundCreated {
     3: optional domain.TransactionInfo transaction_info
 }
 
-struct InvoicePaymentRefundFailed {
-    1: required domain.OperationFailure failure
+struct InvoicePaymentRefundResult {
+    /* TODO: add payload */
 }
 
 /**
