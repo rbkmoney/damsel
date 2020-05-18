@@ -292,6 +292,7 @@ struct ClaimSearchQuery {
     1: optional domain.PartyID party_id
     5: optional ClaimID claim_id
     2: optional list<ClaimStatus> statuses
+    6: optional string email
     3: optional ContinuationToken continuation_token
     4: required i32 limit
 }
