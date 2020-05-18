@@ -178,13 +178,19 @@ struct InvoicePaymentStarted {
 }
 
 struct InvoicePaymentProcessingResult {
-    /* TODO: add payload */
-    /* 1: required domain.OperationFailure failure */
+    1: required InvoicePaymentProcessingResultPayload payload
+}
+
+union InvoicePaymentProcessingResultPayload {
+    1: domain.OperationFailure failure
 }
 
 struct InvoicePaymentCaptureResult {
-    /* TODO: add payload */
-    /* 1: required domain.OperationFailure failure */
+    1: required InvoicePaymentCaptureResultPayload payload
+}
+
+union InvoicePaymentCaptureResultPayload {
+    1: domain.OperationFailure failure
 }
 
 /**
@@ -394,7 +400,6 @@ union InvoicePaymentRefundChangePayload {
     1: InvoicePaymentRefundCreated       invoice_payment_refund_created
     2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
     3: InvoicePaymentSessionChange       invoice_payment_session_change
-    4: InvoicePaymentRefundResult        invoice_payment_refund_result
 }
 
 /**
@@ -410,10 +415,6 @@ struct InvoicePaymentRefundCreated {
     * а эти данные будут использованы в качестве результата
     */
     3: optional domain.TransactionInfo transaction_info
-}
-
-struct InvoicePaymentRefundResult {
-    /* TODO: add payload */
 }
 
 /**
