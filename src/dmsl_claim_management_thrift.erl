@@ -1015,6 +1015,7 @@ struct_info('ClaimSearchQuery') ->
         {1, optional, string, 'party_id', undefined},
         {5, optional, i64, 'claim_id', undefined},
         {2, optional, {list, {struct, union, {dmsl_claim_management_thrift, 'ClaimStatus'}}}, 'statuses', undefined},
+        {6, optional, string, 'email', undefined},
         {3, optional, string, 'continuation_token', undefined},
         {4, required, i32, 'limit', undefined}
     ]};
