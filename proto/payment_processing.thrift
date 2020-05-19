@@ -416,7 +416,7 @@ struct InvoicePaymentRefundTargetResult {
     1: required InvoicePaymentCaptureResultPayload payload
 }
 
-union InvoicePaymentFailureEncountered {
+union InvoicePaymentRefundFailureEncountered {
     1: domain.OperationFailure failure
 }
 
