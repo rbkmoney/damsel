@@ -157,8 +157,7 @@ union InvoicePaymentChangePayload {
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
-    14: InvoicePaymentProcessingResult      invoice_payment_processing_result
-    15: InvoicePaymentCaptureResult         invoice_payment_capture_result
+    14: InvoicePaymentFailureEncountered    invoice_payment_failure_encountered
 }
 
 /**
@@ -177,19 +176,7 @@ struct InvoicePaymentStarted {
     3: optional domain.FinalCashFlow cash_flow
 }
 
-struct InvoicePaymentProcessingResult {
-    1: required InvoicePaymentProcessingResultPayload payload
-}
-
-union InvoicePaymentProcessingResultPayload {
-    1: domain.OperationFailure failure
-}
-
-struct InvoicePaymentCaptureResult {
-    1: required InvoicePaymentCaptureResultPayload payload
-}
-
-union InvoicePaymentCaptureResultPayload {
+struct InvoicePaymentFailureEncountered {
     1: domain.OperationFailure failure
 }
 
@@ -397,9 +384,10 @@ struct InvoicePaymentRefundChange {
  * Один из возможных вариантов события, порождённого возратом платежа по инвойсу.
  */
 union InvoicePaymentRefundChangePayload {
-    1: InvoicePaymentRefundCreated       invoice_payment_refund_created
-    2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
-    3: InvoicePaymentSessionChange       invoice_payment_session_change
+    1: InvoicePaymentRefundCreated            invoice_payment_refund_created
+    2: InvoicePaymentRefundStatusChanged      invoice_payment_refund_status_changed
+    3: InvoicePaymentSessionChange            invoice_payment_session_change
+    4: InvoicePaymentRefundFailureEncountered invoice_payment_refund_failure_encountered
 }
 
 /**
@@ -422,6 +410,14 @@ struct InvoicePaymentRefundCreated {
  */
 struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
+}
+
+struct InvoicePaymentRefundTargetResult {
+    1: required InvoicePaymentCaptureResultPayload payload
+}
+
+union InvoicePaymentFailureEncountered {
+    1: domain.OperationFailure failure
 }
 
 /**
