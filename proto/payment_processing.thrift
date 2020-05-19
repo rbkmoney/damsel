@@ -177,7 +177,7 @@ struct InvoicePaymentStarted {
 }
 
 struct InvoicePaymentFailureEncountered {
-    1: domain.OperationFailure failure
+    1: required domain.OperationFailure failure
 }
 
 /**
@@ -412,8 +412,8 @@ struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
 }
 
-union InvoicePaymentRefundFailureEncountered {
-    1: domain.OperationFailure failure
+struct InvoicePaymentRefundFailureEncountered {
+    1: required domain.OperationFailure failure
 }
 
 /**
