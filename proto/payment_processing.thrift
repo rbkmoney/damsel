@@ -412,10 +412,6 @@ struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
 }
 
-struct InvoicePaymentRefundTargetResult {
-    1: required InvoicePaymentCaptureResultPayload payload
-}
-
 union InvoicePaymentRefundFailureEncountered {
     1: domain.OperationFailure failure
 }
