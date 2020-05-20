@@ -24,6 +24,8 @@ typedef list<ModificationUnit> ClaimChangeset
 typedef list<Modification> ModificationChangeset
 
 exception ClaimNotFound {}
+exception CommentNotFound {}
+exception FileNotFound {}
 exception PartyNotFound {}
 exception InvalidClaimRevision {}
 exception BadContinuationToken { 1: string reason }
@@ -401,6 +403,12 @@ service ClaimManagement {
 
         void RemoveMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
                 throws (1: ClaimNotFound ex1)
+
+        void RemoveComment (1: domain.PartyID party_id, 2: ClaimID id, 3: CommentID comment_id)
+                throws (1: ClaimNotFound ex1, 2: CommentNotFound ex2)
+
+        void RemoveFile (1: domain.PartyID party_id, 2: ClaimID id, 3: FileID file_id)
+                throws (1: ClaimNotFound ex1, 2: FileNotFound ex2)
 
 }
 
