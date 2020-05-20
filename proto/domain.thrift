@@ -1957,6 +1957,7 @@ struct WithdrawalProvider {
     4: optional string identity
     5: optional WithdrawalProvisionTerms withdrawal_terms
     6: optional ProviderAccountSet accounts = {}
+    7: optional WithdrawalTerminalSelector terminal
 }
 
 struct P2PProviderRef { 1: required ObjectID id }
@@ -2145,6 +2146,36 @@ struct ProviderTerminalRef {
 
 struct TerminalRef {
     1: required ObjectID id
+}
+
+//
+
+struct WithdrawalTerminalRef {
+    1: required ObjectID id
+}
+
+struct WithdrawalProviderTerminalRef {
+    1: required ObjectID id
+    2: optional i64 priority = 1000
+    3: optional i64 weight
+}
+
+struct WithdrawalTerminal {
+    1: required string name
+    2: required string description
+    9: optional ProxyOptions options
+    12: optional WithdrawalProvisionTerms terms
+    13: optional WithdrawalProviderRef provider_ref
+}
+
+union WithdrawalTerminalSelector {
+    1: list<WithdrawalTerminalDecision> decisions
+    2: set<WithdrawalProviderTerminalRef> value
+}
+
+struct WithdrawalTerminalDecision {
+    1: required Predicate if_
+    2: required WithdrawalTerminalSelector then_
 }
 
 /* Predicates / conditions */
@@ -2497,6 +2528,11 @@ struct TerminalObject {
     2: required Terminal data
 }
 
+struct WithdrawalTerminalObject {
+    1: required WithdrawalTerminalRef ref
+    2: required WithdrawalTerminal data
+}
+
 struct InspectorObject {
     1: required InspectorRef ref
     2: required Inspector data
@@ -2561,6 +2597,7 @@ union Reference {
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
     26 : PaymentRoutingRulesetRef payment_routing_rules
+    27 : WithdrawalTerminalRef    withdrawal_terminal
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2593,6 +2630,7 @@ union DomainObject {
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
     26 : PaymentRoutingRulesObject  payment_routing_rules
+    27 : WithdrawalTerminalObject   withdrawal_terminal
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
