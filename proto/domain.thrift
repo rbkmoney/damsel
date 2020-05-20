@@ -1480,13 +1480,20 @@ struct CashLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
-    4: TokenizedBankCard tokenized_bank_card
-    5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
+    8: BankCardPaymentMethod bank_card
+}
+
+typedef BankCardProvider BankCardTokenProvider
+
+struct BankCardPaymentMethod {
+    1: required BankCardPaymentSystem payment_system
+    2: required bool                  has_cvv
+    3: optional BankCardTokenProvider token_provider
+    4: optional BankCardProvider      card_provider
 }
 
 struct TokenizedBankCard {
