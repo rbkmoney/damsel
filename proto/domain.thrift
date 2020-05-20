@@ -1487,7 +1487,7 @@ union PaymentMethod {
     8: BankCardPaymentMethod bank_card
 }
 
-typedef BankCardProvider BankCardTokenProvider
+typedef BankCardTokenProvider BankCardProvider
 
 struct BankCardPaymentMethod {
     1: required BankCardPaymentSystem payment_system
