@@ -73,6 +73,7 @@
     'InvoicePaymentChange'/0,
     'InvoicePaymentChangePayload'/0,
     'InvoicePaymentStarted'/0,
+    'InvoicePaymentRollbackStarted'/0,
     'InvoicePaymentRiskScoreChanged'/0,
     'InvoicePaymentRouteChanged'/0,
     'InvoicePaymentCashFlowChanged'/0,
@@ -105,6 +106,7 @@
     'InvoicePaymentRefundChangePayload'/0,
     'InvoicePaymentRefundCreated'/0,
     'InvoicePaymentRefundStatusChanged'/0,
+    'InvoicePaymentRefundRollbackStarted'/0,
     'InvoicePaymentAdjustmentChange'/0,
     'InvoicePaymentAdjustmentChangePayload'/0,
     'InvoicePaymentAdjustmentCreated'/0,
@@ -405,6 +407,7 @@
     'InvoicePaymentChange' |
     'InvoicePaymentChangePayload' |
     'InvoicePaymentStarted' |
+    'InvoicePaymentRollbackStarted' |
     'InvoicePaymentRiskScoreChanged' |
     'InvoicePaymentRouteChanged' |
     'InvoicePaymentCashFlowChanged' |
@@ -437,6 +440,7 @@
     'InvoicePaymentRefundChangePayload' |
     'InvoicePaymentRefundCreated' |
     'InvoicePaymentRefundStatusChanged' |
+    'InvoicePaymentRefundRollbackStarted' |
     'InvoicePaymentAdjustmentChange' |
     'InvoicePaymentAdjustmentChangePayload' |
     'InvoicePaymentAdjustmentCreated' |
@@ -724,10 +728,14 @@
     {'invoice_payment_adjustment_change', 'InvoicePaymentAdjustmentChange'()} |
     {'invoice_payment_rec_token_acquired', 'InvoicePaymentRecTokenAcquired'()} |
     {'invoice_payment_capture_started', 'InvoicePaymentCaptureStarted'()} |
-    {'invoice_payment_chargeback_change', 'InvoicePaymentChargebackChange'()}.
+    {'invoice_payment_chargeback_change', 'InvoicePaymentChargebackChange'()} |
+    {'invoice_payment_rollback_started', 'InvoicePaymentRollbackStarted'()}.
 
 %% struct 'InvoicePaymentStarted'
 -type 'InvoicePaymentStarted'() :: #'payproc_InvoicePaymentStarted'{}.
+
+%% struct 'InvoicePaymentRollbackStarted'
+-type 'InvoicePaymentRollbackStarted'() :: #'payproc_InvoicePaymentRollbackStarted'{}.
 
 %% struct 'InvoicePaymentRiskScoreChanged'
 -type 'InvoicePaymentRiskScoreChanged'() :: #'payproc_InvoicePaymentRiskScoreChanged'{}.
@@ -836,13 +844,17 @@
 -type 'InvoicePaymentRefundChangePayload'() ::
     {'invoice_payment_refund_created', 'InvoicePaymentRefundCreated'()} |
     {'invoice_payment_refund_status_changed', 'InvoicePaymentRefundStatusChanged'()} |
-    {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()}.
+    {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
+    {'invoice_payment_refund_rollback_started', 'InvoicePaymentRefundRollbackStarted'()}.
 
 %% struct 'InvoicePaymentRefundCreated'
 -type 'InvoicePaymentRefundCreated'() :: #'payproc_InvoicePaymentRefundCreated'{}.
 
 %% struct 'InvoicePaymentRefundStatusChanged'
 -type 'InvoicePaymentRefundStatusChanged'() :: #'payproc_InvoicePaymentRefundStatusChanged'{}.
+
+%% struct 'InvoicePaymentRefundRollbackStarted'
+-type 'InvoicePaymentRefundRollbackStarted'() :: #'payproc_InvoicePaymentRefundRollbackStarted'{}.
 
 %% struct 'InvoicePaymentAdjustmentChange'
 -type 'InvoicePaymentAdjustmentChange'() :: #'payproc_InvoicePaymentAdjustmentChange'{}.
@@ -1845,6 +1857,7 @@ structs() ->
         'InvoicePaymentChange',
         'InvoicePaymentChangePayload',
         'InvoicePaymentStarted',
+        'InvoicePaymentRollbackStarted',
         'InvoicePaymentRiskScoreChanged',
         'InvoicePaymentRouteChanged',
         'InvoicePaymentCashFlowChanged',
@@ -1877,6 +1890,7 @@ structs() ->
         'InvoicePaymentRefundChangePayload',
         'InvoicePaymentRefundCreated',
         'InvoicePaymentRefundStatusChanged',
+        'InvoicePaymentRefundRollbackStarted',
         'InvoicePaymentAdjustmentChange',
         'InvoicePaymentAdjustmentChangePayload',
         'InvoicePaymentAdjustmentCreated',
@@ -2222,7 +2236,8 @@ struct_info('InvoicePaymentChangePayload') ->
         {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentChange'}}, 'invoice_payment_adjustment_change', undefined},
         {11, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRecTokenAcquired'}}, 'invoice_payment_rec_token_acquired', undefined},
         {12, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureStarted'}}, 'invoice_payment_capture_started', undefined},
-        {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined}
+        {13, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackChange'}}, 'invoice_payment_chargeback_change', undefined},
+        {14, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRollbackStarted'}}, 'invoice_payment_rollback_started', undefined}
     ]};
 
 struct_info('InvoicePaymentStarted') ->
@@ -2231,6 +2246,11 @@ struct_info('InvoicePaymentStarted') ->
         {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
         {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
+    ]};
+
+struct_info('InvoicePaymentRollbackStarted') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'reason', undefined}
     ]};
 
 struct_info('InvoicePaymentRiskScoreChanged') ->
@@ -2391,7 +2411,8 @@ struct_info('InvoicePaymentRefundChangePayload') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundCreated'}}, 'invoice_payment_refund_created', undefined},
         {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined},
-        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined}
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundRollbackStarted'}}, 'invoice_payment_refund_rollback_started', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundCreated') ->
@@ -2404,6 +2425,11 @@ struct_info('InvoicePaymentRefundCreated') ->
 struct_info('InvoicePaymentRefundStatusChanged') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentRefundStatus'}}, 'status', undefined}
+    ]};
+
+struct_info('InvoicePaymentRefundRollbackStarted') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'reason', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustmentChange') ->
@@ -3692,6 +3718,9 @@ record_name('InvoicePaymentChange') ->
 record_name('InvoicePaymentStarted') ->
     'payproc_InvoicePaymentStarted';
 
+record_name('InvoicePaymentRollbackStarted') ->
+    'payproc_InvoicePaymentRollbackStarted';
+
 record_name('InvoicePaymentRiskScoreChanged') ->
     'payproc_InvoicePaymentRiskScoreChanged';
 
@@ -3775,6 +3804,9 @@ record_name('InvoicePaymentRefundCreated') ->
 
 record_name('InvoicePaymentRefundStatusChanged') ->
     'payproc_InvoicePaymentRefundStatusChanged';
+
+record_name('InvoicePaymentRefundRollbackStarted') ->
+    'payproc_InvoicePaymentRefundRollbackStarted';
 
 record_name('InvoicePaymentAdjustmentChange') ->
     'payproc_InvoicePaymentAdjustmentChange';

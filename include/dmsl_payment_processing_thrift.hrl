@@ -59,6 +59,11 @@
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'() | undefined
 }).
 
+%% struct 'InvoicePaymentRollbackStarted'
+-record('payproc_InvoicePaymentRollbackStarted', {
+    'reason' :: dmsl_domain_thrift:'OperationFailure'()
+}).
+
 %% struct 'InvoicePaymentRiskScoreChanged'
 -record('payproc_InvoicePaymentRiskScoreChanged', {
     'risk_score' :: atom()
@@ -195,6 +200,11 @@
 %% struct 'InvoicePaymentRefundStatusChanged'
 -record('payproc_InvoicePaymentRefundStatusChanged', {
     'status' :: dmsl_domain_thrift:'InvoicePaymentRefundStatus'()
+}).
+
+%% struct 'InvoicePaymentRefundRollbackStarted'
+-record('payproc_InvoicePaymentRefundRollbackStarted', {
+    'reason' :: dmsl_domain_thrift:'OperationFailure'()
 }).
 
 %% struct 'InvoicePaymentAdjustmentChange'
