@@ -2163,9 +2163,9 @@ struct WithdrawalProviderTerminalRef {
 struct WithdrawalTerminal {
     1: required string name
     2: required string description
-    9: optional ProxyOptions options
-    12: optional WithdrawalProvisionTerms terms
-    13: optional WithdrawalProviderRef provider_ref
+    3: optional ProxyOptions options
+    4: optional WithdrawalProvisionTerms terms
+    5: optional WithdrawalProviderRef provider_ref
 }
 
 union WithdrawalTerminalSelector {
