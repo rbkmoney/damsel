@@ -157,6 +157,7 @@ union InvoicePaymentChangePayload {
     11: InvoicePaymentRecTokenAcquired      invoice_payment_rec_token_acquired
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
+    14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
 }
 
 /**
@@ -173,6 +174,10 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
+}
+
+struct InvoicePaymentRollbackStarted {
+    1: required domain.OperationFailure reason
 }
 
 /**
@@ -379,9 +384,10 @@ struct InvoicePaymentRefundChange {
  * Один из возможных вариантов события, порождённого возратом платежа по инвойсу.
  */
 union InvoicePaymentRefundChangePayload {
-    1: InvoicePaymentRefundCreated       invoice_payment_refund_created
-    2: InvoicePaymentRefundStatusChanged invoice_payment_refund_status_changed
-    3: InvoicePaymentSessionChange       invoice_payment_session_change
+    1: InvoicePaymentRefundCreated         invoice_payment_refund_created
+    2: InvoicePaymentRefundStatusChanged   invoice_payment_refund_status_changed
+    3: InvoicePaymentSessionChange         invoice_payment_session_change
+    4: InvoicePaymentRefundRollbackStarted invoice_payment_refund_rollback_started
 }
 
 /**
@@ -404,6 +410,10 @@ struct InvoicePaymentRefundCreated {
  */
 struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
+}
+
+struct InvoicePaymentRefundRollbackStarted {
+    1: required domain.OperationFailure reason
 }
 
 /**
