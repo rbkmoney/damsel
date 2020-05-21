@@ -2154,15 +2154,9 @@ struct WithdrawalTerminalRef {
     1: required ObjectID id
 }
 
-struct WithdrawalProviderTerminalRef {
-    1: required ObjectID id
-    2: optional i64 priority = 1000
-    3: optional i64 weight
-}
-
 struct WithdrawalTerminal {
     1: required string name
-    2: required string description
+    2: optional string description
     3: optional ProxyOptions options
     4: optional WithdrawalProvisionTerms terms
     5: optional WithdrawalProviderRef provider_ref
@@ -2170,7 +2164,7 @@ struct WithdrawalTerminal {
 
 union WithdrawalTerminalSelector {
     1: list<WithdrawalTerminalDecision> decisions
-    2: set<WithdrawalProviderTerminalRef> value
+    2: set<WithdrawalTerminalRef> value
 }
 
 struct WithdrawalTerminalDecision {
