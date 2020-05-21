@@ -354,6 +354,10 @@
     'TerminalDecision'/0,
     'ProviderTerminalRef'/0,
     'TerminalRef'/0,
+    'WithdrawalTerminalRef'/0,
+    'WithdrawalTerminal'/0,
+    'WithdrawalTerminalSelector'/0,
+    'WithdrawalTerminalDecision'/0,
     'Predicate'/0,
     'Condition'/0,
     'P2PToolCondition'/0,
@@ -417,6 +421,7 @@
     'WithdrawalProviderObject'/0,
     'P2PProviderObject'/0,
     'TerminalObject'/0,
+    'WithdrawalTerminalObject'/0,
     'InspectorObject'/0,
     'P2PInspectorObject'/0,
     'PaymentInstitutionObject'/0,
@@ -1201,6 +1206,10 @@
     'TerminalDecision' |
     'ProviderTerminalRef' |
     'TerminalRef' |
+    'WithdrawalTerminalRef' |
+    'WithdrawalTerminal' |
+    'WithdrawalTerminalSelector' |
+    'WithdrawalTerminalDecision' |
     'Predicate' |
     'Condition' |
     'P2PToolCondition' |
@@ -1264,6 +1273,7 @@
     'WithdrawalProviderObject' |
     'P2PProviderObject' |
     'TerminalObject' |
+    'WithdrawalTerminalObject' |
     'InspectorObject' |
     'P2PInspectorObject' |
     'PaymentInstitutionObject' |
@@ -2163,6 +2173,20 @@
 %% struct 'TerminalRef'
 -type 'TerminalRef'() :: #'domain_TerminalRef'{}.
 
+%% struct 'WithdrawalTerminalRef'
+-type 'WithdrawalTerminalRef'() :: #'domain_WithdrawalTerminalRef'{}.
+
+%% struct 'WithdrawalTerminal'
+-type 'WithdrawalTerminal'() :: #'domain_WithdrawalTerminal'{}.
+
+%% union 'WithdrawalTerminalSelector'
+-type 'WithdrawalTerminalSelector'() ::
+    {'decisions', ['WithdrawalTerminalDecision'()]} |
+    {'value', ordsets:ordset('WithdrawalTerminalRef'())}.
+
+%% struct 'WithdrawalTerminalDecision'
+-type 'WithdrawalTerminalDecision'() :: #'domain_WithdrawalTerminalDecision'{}.
+
 %% union 'Predicate'
 -type 'Predicate'() ::
     {'constant', boolean()} |
@@ -2389,6 +2413,9 @@
 %% struct 'TerminalObject'
 -type 'TerminalObject'() :: #'domain_TerminalObject'{}.
 
+%% struct 'WithdrawalTerminalObject'
+-type 'WithdrawalTerminalObject'() :: #'domain_WithdrawalTerminalObject'{}.
+
 %% struct 'InspectorObject'
 -type 'InspectorObject'() :: #'domain_InspectorObject'{}.
 
@@ -2437,6 +2464,7 @@
     {'cash_register_provider', 'CashRegisterProviderRef'()} |
     {'p2p_provider', 'P2PProviderRef'()} |
     {'payment_routing_rules', 'PaymentRoutingRulesetRef'()} |
+    {'withdrawal_terminal', 'WithdrawalTerminalRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2465,6 +2493,7 @@
     {'cash_register_provider', 'CashRegisterProviderObject'()} |
     {'p2p_provider', 'P2PProviderObject'()} |
     {'payment_routing_rules', 'PaymentRoutingRulesObject'()} |
+    {'withdrawal_terminal', 'WithdrawalTerminalObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2859,6 +2888,10 @@ structs() ->
         'TerminalDecision',
         'ProviderTerminalRef',
         'TerminalRef',
+        'WithdrawalTerminalRef',
+        'WithdrawalTerminal',
+        'WithdrawalTerminalSelector',
+        'WithdrawalTerminalDecision',
         'Predicate',
         'Condition',
         'P2PToolCondition',
@@ -2922,6 +2955,7 @@ structs() ->
         'WithdrawalProviderObject',
         'P2PProviderObject',
         'TerminalObject',
+        'WithdrawalTerminalObject',
         'InspectorObject',
         'P2PInspectorObject',
         'PaymentInstitutionObject',
@@ -4922,7 +4956,8 @@ struct_info('WithdrawalProvider') ->
         {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
         {4, optional, string, 'identity', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvisionTerms'}}, 'withdrawal_terms', undefined},
-        {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+        {6, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}},
+        {7, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalTerminalSelector'}}, 'terminal', undefined}
     ]};
 
 struct_info('P2PProviderRef') ->
@@ -5136,6 +5171,32 @@ struct_info('ProviderTerminalRef') ->
 struct_info('TerminalRef') ->
     {struct, struct, [
         {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('WithdrawalTerminalRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('WithdrawalTerminal') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, optional, {map, string, string}, 'options', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvisionTerms'}}, 'terms', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'provider_ref', undefined}
+    ]};
+
+struct_info('WithdrawalTerminalSelector') ->
+    {struct, union, [
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}}, 'value', undefined}
+    ]};
+
+struct_info('WithdrawalTerminalDecision') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'WithdrawalTerminalSelector'}}, 'then_', undefined}
     ]};
 
 struct_info('Predicate') ->
@@ -5531,6 +5592,12 @@ struct_info('TerminalObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Terminal'}}, 'data', undefined}
     ]};
 
+struct_info('WithdrawalTerminalObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminal'}}, 'data', undefined}
+    ]};
+
 struct_info('InspectorObject') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InspectorRef'}}, 'ref', undefined},
@@ -5603,6 +5670,7 @@ struct_info('Reference') ->
         {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderRef'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
         {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'payment_routing_rules', undefined},
+        {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}, 'withdrawal_terminal', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -5632,6 +5700,7 @@ struct_info('DomainObject') ->
         {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderObject'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
         {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesObject'}}, 'payment_routing_rules', undefined},
+        {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalObject'}}, 'withdrawal_terminal', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -6238,6 +6307,15 @@ record_name('ProviderTerminalRef') ->
 record_name('TerminalRef') ->
     'domain_TerminalRef';
 
+record_name('WithdrawalTerminalRef') ->
+    'domain_WithdrawalTerminalRef';
+
+record_name('WithdrawalTerminal') ->
+    'domain_WithdrawalTerminal';
+
+record_name('WithdrawalTerminalDecision') ->
+    'domain_WithdrawalTerminalDecision';
+
 record_name('P2PToolCondition') ->
     'domain_P2PToolCondition';
 
@@ -6390,6 +6468,9 @@ record_name('P2PProviderObject') ->
 
 record_name('TerminalObject') ->
     'domain_TerminalObject';
+
+record_name('WithdrawalTerminalObject') ->
+    'domain_WithdrawalTerminalObject';
 
 record_name('InspectorObject') ->
     'domain_InspectorObject';

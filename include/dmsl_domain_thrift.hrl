@@ -1126,7 +1126,8 @@
     'proxy' :: dmsl_domain_thrift:'Proxy'(),
     'identity' :: binary() | undefined,
     'withdrawal_terms' :: dmsl_domain_thrift:'WithdrawalProvisionTerms'() | undefined,
-    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined
+    'accounts' = #{} :: dmsl_domain_thrift:'ProviderAccountSet'() | undefined,
+    'terminal' :: dmsl_domain_thrift:'WithdrawalTerminalSelector'() | undefined
 }).
 
 %% struct 'P2PProviderRef'
@@ -1298,6 +1299,26 @@
 %% struct 'TerminalRef'
 -record('domain_TerminalRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'WithdrawalTerminalRef'
+-record('domain_WithdrawalTerminalRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'WithdrawalTerminal'
+-record('domain_WithdrawalTerminal', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'options' :: dmsl_domain_thrift:'ProxyOptions'() | undefined,
+    'terms' :: dmsl_domain_thrift:'WithdrawalProvisionTerms'() | undefined,
+    'provider_ref' :: dmsl_domain_thrift:'WithdrawalProviderRef'() | undefined
+}).
+
+%% struct 'WithdrawalTerminalDecision'
+-record('domain_WithdrawalTerminalDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'WithdrawalTerminalSelector'()
 }).
 
 %% struct 'P2PToolCondition'
@@ -1606,6 +1627,12 @@
 -record('domain_TerminalObject', {
     'ref' :: dmsl_domain_thrift:'TerminalRef'(),
     'data' :: dmsl_domain_thrift:'Terminal'()
+}).
+
+%% struct 'WithdrawalTerminalObject'
+-record('domain_WithdrawalTerminalObject', {
+    'ref' :: dmsl_domain_thrift:'WithdrawalTerminalRef'(),
+    'data' :: dmsl_domain_thrift:'WithdrawalTerminal'()
 }).
 
 %% struct 'InspectorObject'
