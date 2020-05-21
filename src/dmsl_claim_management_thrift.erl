@@ -82,9 +82,11 @@
     'DocumentModificationUnit'/0,
     'FileModification'/0,
     'FileCreated'/0,
+    'FileDeleted'/0,
     'FileModificationUnit'/0,
     'CommentModification'/0,
     'CommentCreated'/0,
+    'CommentDeleted'/0,
     'CommentModificationUnit'/0,
     'StatusChanged'/0,
     'StatusModification'/0,
@@ -201,9 +203,11 @@
     'DocumentModificationUnit' |
     'FileModification' |
     'FileCreated' |
+    'FileDeleted' |
     'FileModificationUnit' |
     'CommentModification' |
     'CommentCreated' |
+    'CommentDeleted' |
     'CommentModificationUnit' |
     'StatusChanged' |
     'StatusModification' |
@@ -359,20 +363,28 @@
 
 %% union 'FileModification'
 -type 'FileModification'() ::
-    {'creation', 'FileCreated'()}.
+    {'creation', 'FileCreated'()} |
+    {'deletion', 'FileDeleted'()}.
 
 %% struct 'FileCreated'
 -type 'FileCreated'() :: #'claim_management_FileCreated'{}.
+
+%% struct 'FileDeleted'
+-type 'FileDeleted'() :: #'claim_management_FileDeleted'{}.
 
 %% struct 'FileModificationUnit'
 -type 'FileModificationUnit'() :: #'claim_management_FileModificationUnit'{}.
 
 %% union 'CommentModification'
 -type 'CommentModification'() ::
-    {'creation', 'CommentCreated'()}.
+    {'creation', 'CommentCreated'()} |
+    {'deletion', 'CommentDeleted'()}.
 
 %% struct 'CommentCreated'
 -type 'CommentCreated'() :: #'claim_management_CommentCreated'{}.
+
+%% struct 'CommentDeleted'
+-type 'CommentDeleted'() :: #'claim_management_CommentDeleted'{}.
 
 %% struct 'CommentModificationUnit'
 -type 'CommentModificationUnit'() :: #'claim_management_CommentModificationUnit'{}.
@@ -612,9 +624,11 @@ structs() ->
         'DocumentModificationUnit',
         'FileModification',
         'FileCreated',
+        'FileDeleted',
         'FileModificationUnit',
         'CommentModification',
         'CommentCreated',
+        'CommentDeleted',
         'CommentModificationUnit',
         'StatusChanged',
         'StatusModification',
@@ -897,10 +911,14 @@ struct_info('DocumentModificationUnit') ->
 
 struct_info('FileModification') ->
     {struct, union, [
-        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileCreated'}}, 'creation', undefined}
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileCreated'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileDeleted'}}, 'deletion', undefined}
     ]};
 
 struct_info('FileCreated') ->
+    {struct, struct, []};
+
+struct_info('FileDeleted') ->
     {struct, struct, []};
 
 struct_info('FileModificationUnit') ->
@@ -911,10 +929,14 @@ struct_info('FileModificationUnit') ->
 
 struct_info('CommentModification') ->
     {struct, union, [
-        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentCreated'}}, 'creation', undefined}
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentCreated'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentDeleted'}}, 'deletion', undefined}
     ]};
 
 struct_info('CommentCreated') ->
+    {struct, struct, []};
+
+struct_info('CommentDeleted') ->
     {struct, struct, []};
 
 struct_info('CommentModificationUnit') ->
@@ -1181,11 +1203,17 @@ record_name('DocumentModificationUnit') ->
 record_name('FileCreated') ->
     'claim_management_FileCreated';
 
+record_name('FileDeleted') ->
+    'claim_management_FileDeleted';
+
 record_name('FileModificationUnit') ->
     'claim_management_FileModificationUnit';
 
 record_name('CommentCreated') ->
     'claim_management_CommentCreated';
+
+record_name('CommentDeleted') ->
+    'claim_management_CommentDeleted';
 
 record_name('CommentModificationUnit') ->
     'claim_management_CommentModificationUnit';

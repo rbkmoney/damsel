@@ -140,6 +140,9 @@
 %% struct 'FileCreated'
 -record('claim_management_FileCreated', {}).
 
+%% struct 'FileDeleted'
+-record('claim_management_FileDeleted', {}).
+
 %% struct 'FileModificationUnit'
 -record('claim_management_FileModificationUnit', {
     'id' :: dmsl_claim_management_thrift:'FileID'(),
@@ -148,6 +151,9 @@
 
 %% struct 'CommentCreated'
 -record('claim_management_CommentCreated', {}).
+
+%% struct 'CommentDeleted'
+-record('claim_management_CommentDeleted', {}).
 
 %% struct 'CommentModificationUnit'
 -record('claim_management_CommentModificationUnit', {
