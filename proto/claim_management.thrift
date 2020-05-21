@@ -198,9 +198,11 @@ struct DocumentModificationUnit {
 
 union FileModification {
     1: FileCreated creation
+    2: FileDeleted deletion
 }
 
 struct FileCreated {}
+struct FileDeleted {}
 
 struct FileModificationUnit {
     1: required FileID id
@@ -209,9 +211,11 @@ struct FileModificationUnit {
 
 union CommentModification {
     1: CommentCreated creation
+    2: CommentDeleted deletion
 }
 
 struct CommentCreated {}
+struct CommentDeleted {}
 
 struct CommentModificationUnit {
     1: required CommentID id
@@ -403,12 +407,6 @@ service ClaimManagement {
 
         void RemoveMetadata (1: domain.PartyID party_id, 2: ClaimID id, 3: MetadataKey key)
                 throws (1: ClaimNotFound ex1)
-
-        void RemoveComment (1: domain.PartyID party_id, 2: ClaimID id, 3: CommentID comment_id)
-                throws (1: ClaimNotFound ex1, 2: CommentNotFound ex2)
-
-        void RemoveFile (1: domain.PartyID party_id, 2: ClaimID id, 3: FileID file_id)
-                throws (1: ClaimNotFound ex1, 2: FileNotFound ex2)
 
 }
 
