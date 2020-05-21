@@ -2208,6 +2208,7 @@ union BankCardConditionDefinition {
 struct PaymentSystemCondition {
     1: required BankCardPaymentSystem payment_system_is
     2: optional BankCardTokenProvider token_provider_is
+    3: optional BankCardProvider      card_provider_is
 }
 
 struct PaymentTerminalCondition {
