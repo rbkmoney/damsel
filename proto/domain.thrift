@@ -1480,11 +1480,14 @@ struct CashLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
+    1: BankCardPaymentSystem bank_card // Deprecated, use BankCardPaymentMethod instead
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
+    4: TokenizedBankCard tokenized_bank_card // Deprecated, use BankCardPaymentMethod instead
+    5: BankCardPaymentSystem empty_cvv_bank_card // Deprecated, use BankCardPaymentMethod instead
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
-    8: BankCardPaymentMethod bank_card
+    8: BankCardPaymentMethod new_bank_card
 }
 
 typedef BankCardTokenProvider BankCardProvider
