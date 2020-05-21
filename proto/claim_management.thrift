@@ -24,8 +24,6 @@ typedef list<ModificationUnit> ClaimChangeset
 typedef list<Modification> ModificationChangeset
 
 exception ClaimNotFound {}
-exception CommentNotFound {}
-exception FileNotFound {}
 exception PartyNotFound {}
 exception InvalidClaimRevision {}
 exception BadContinuationToken { 1: string reason }
