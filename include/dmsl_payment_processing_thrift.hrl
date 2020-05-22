@@ -352,6 +352,12 @@
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
+%% struct 'InvoicePaymentChargeback'
+-record('payproc_InvoicePaymentChargeback', {
+    'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'(),
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined
+}).
+
 %% struct 'InvoicePaymentChargebackParams'
 -record('payproc_InvoicePaymentChargebackParams', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),

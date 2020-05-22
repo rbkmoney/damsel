@@ -35,7 +35,6 @@
     'UserID'/0,
     'Events'/0,
     'InvoicePaymentAdjustment'/0,
-    'InvoicePaymentChargeback'/0,
     'FinalCashFlow'/0,
     'CustomerID'/0,
     'Metadata'/0,
@@ -131,6 +130,7 @@
     'InvoicePaymentRefund'/0,
     'InvoicePaymentSession'/0,
     'InvoiceRefundSession'/0,
+    'InvoicePaymentChargeback'/0,
     'InvoicePaymentChargebackParams'/0,
     'InvoicePaymentChargebackAcceptParams'/0,
     'InvoicePaymentChargebackReopenParams'/0,
@@ -336,7 +336,6 @@
     'UserID' |
     'Events' |
     'InvoicePaymentAdjustment' |
-    'InvoicePaymentChargeback' |
     'FinalCashFlow' |
     'CustomerID' |
     'Metadata' |
@@ -361,7 +360,6 @@
 -type 'UserID'() :: dmsl_base_thrift:'ID'().
 -type 'Events'() :: ['Event'()].
 -type 'InvoicePaymentAdjustment'() :: dmsl_domain_thrift:'InvoicePaymentAdjustment'().
--type 'InvoicePaymentChargeback'() :: dmsl_domain_thrift:'InvoicePaymentChargeback'().
 -type 'FinalCashFlow'() :: dmsl_domain_thrift:'FinalCashFlow'().
 -type 'CustomerID'() :: dmsl_domain_thrift:'CustomerID'().
 -type 'Metadata'() :: dmsl_domain_thrift:'Metadata'().
@@ -465,6 +463,7 @@
     'InvoicePaymentRefund' |
     'InvoicePaymentSession' |
     'InvoiceRefundSession' |
+    'InvoicePaymentChargeback' |
     'InvoicePaymentChargebackParams' |
     'InvoicePaymentChargebackAcceptParams' |
     'InvoicePaymentChargebackReopenParams' |
@@ -934,6 +933,9 @@
 
 %% struct 'InvoiceRefundSession'
 -type 'InvoiceRefundSession'() :: #'payproc_InvoiceRefundSession'{}.
+
+%% struct 'InvoicePaymentChargeback'
+-type 'InvoicePaymentChargeback'() :: #'payproc_InvoicePaymentChargeback'{}.
 
 %% struct 'InvoicePaymentChargebackParams'
 -type 'InvoicePaymentChargebackParams'() :: #'payproc_InvoicePaymentChargebackParams'{}.
@@ -1810,7 +1812,6 @@ typedefs() ->
         'UserID',
         'Events',
         'InvoicePaymentAdjustment',
-        'InvoicePaymentChargeback',
         'FinalCashFlow',
         'CustomerID',
         'Metadata',
@@ -1915,6 +1916,7 @@ structs() ->
         'InvoicePaymentRefund',
         'InvoicePaymentSession',
         'InvoiceRefundSession',
+        'InvoicePaymentChargeback',
         'InvoicePaymentChargebackParams',
         'InvoicePaymentChargebackAcceptParams',
         'InvoicePaymentChargebackReopenParams',
@@ -2074,9 +2076,6 @@ typedef_info('Events') ->
 
 typedef_info('InvoicePaymentAdjustment') ->
     {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}};
-
-typedef_info('InvoicePaymentChargeback') ->
-    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
 
 typedef_info('FinalCashFlow') ->
     {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
@@ -2574,7 +2573,7 @@ struct_info('InvoicePayment') ->
         {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
         {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
         {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
-        {8, optional, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
+        {8, optional, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
         {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
     ]};
 
@@ -2594,6 +2593,12 @@ struct_info('InvoicePaymentSession') ->
 struct_info('InvoiceRefundSession') ->
     {struct, struct, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
+    ]};
+
+struct_info('InvoicePaymentChargeback') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined},
+        {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackParams') ->
@@ -3871,6 +3876,9 @@ record_name('InvoicePaymentSession') ->
 record_name('InvoiceRefundSession') ->
     'payproc_InvoiceRefundSession';
 
+record_name('InvoicePaymentChargeback') ->
+    'payproc_InvoicePaymentChargeback';
+
 record_name('InvoicePaymentChargebackParams') ->
     'payproc_InvoicePaymentChargebackParams';
 
@@ -4733,7 +4741,7 @@ function_info('Invoicing', 'CreateChargeback', params_type) ->
         {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackParams'}}, 'params', undefined}
     ]};
 function_info('Invoicing', 'CreateChargeback', reply_type) ->
-    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
+    {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}};
 function_info('Invoicing', 'CreateChargeback', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
@@ -4756,7 +4764,7 @@ function_info('Invoicing', 'GetPaymentChargeback', params_type) ->
         {4, undefined, string, 'chargeback_id', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentChargeback', reply_type) ->
-    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
+    {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}};
 function_info('Invoicing', 'GetPaymentChargeback', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
