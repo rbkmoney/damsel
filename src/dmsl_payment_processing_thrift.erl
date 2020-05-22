@@ -4741,7 +4741,7 @@ function_info('Invoicing', 'CreateChargeback', params_type) ->
         {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackParams'}}, 'params', undefined}
     ]};
 function_info('Invoicing', 'CreateChargeback', reply_type) ->
-    {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}};
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
 function_info('Invoicing', 'CreateChargeback', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
@@ -4764,7 +4764,7 @@ function_info('Invoicing', 'GetPaymentChargeback', params_type) ->
         {4, undefined, string, 'chargeback_id', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentChargeback', reply_type) ->
-    {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}};
+    {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}};
 function_info('Invoicing', 'GetPaymentChargeback', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},

@@ -1119,7 +1119,7 @@ service Invoicing {
     /**
      * Создать чарджбэк
      */
-    InvoicePaymentChargeback CreateChargeback (
+    domain.InvoicePaymentChargeback CreateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -1143,7 +1143,7 @@ service Invoicing {
     /**
      * Найти чарджбэк
      */
-    InvoicePaymentChargeback GetPaymentChargeback (
+    domain.InvoicePaymentChargeback GetPaymentChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
