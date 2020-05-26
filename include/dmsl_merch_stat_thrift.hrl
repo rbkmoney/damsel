@@ -26,7 +26,8 @@
     'make_recurrent' :: boolean() | undefined,
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
-    'additional_transaction_info' :: dmsl_domain_thrift:'AdditionalTransactionInfo'() | undefined
+    'additional_transaction_info' :: dmsl_domain_thrift:'AdditionalTransactionInfo'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'RecurrentParentPayment'
@@ -178,7 +179,8 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
     'context' :: dmsl_base_thrift:'Content'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'EnrichedStatInvoice'
@@ -289,7 +291,8 @@
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
     'reason' :: binary() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundPending'
