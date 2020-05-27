@@ -1492,6 +1492,7 @@ union PaymentMethod {
 struct TokenizedBankCard {
     1: required BankCardPaymentSystem payment_system
     2: required BankCardTokenProvider token_provider
+    3: optional TokenizationMethod    tokenization_method
 }
 
 enum BankCardPaymentSystem {
@@ -1542,6 +1543,11 @@ struct DisposablePaymentResource {
 
 typedef string Token
 
+enum TokenizationMethod {
+    dpan
+    none
+}
+
 struct BankCard {
     1: required Token token
     2: required BankCardPaymentSystem payment_system
@@ -1554,6 +1560,7 @@ struct BankCard {
     9: optional bool is_cvv_empty
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
+   12: optional TokenizationMethod tokenization_method
 }
 
 /** Дата экспирации */
@@ -2222,6 +2229,7 @@ union BankCardConditionDefinition {
 struct PaymentSystemCondition {
     1: required BankCardPaymentSystem payment_system_is
     2: optional BankCardTokenProvider token_provider_is
+    3: optional TokenizationMethod    tokenization_method_is
 }
 
 struct PaymentTerminalCondition {
