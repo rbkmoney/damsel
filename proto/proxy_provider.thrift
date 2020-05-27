@@ -28,6 +28,9 @@ union Intent {
     3: SuspendIntent suspend
 }
 
+typedef domain.RecurrentPaymentToolDesc       RecurrentPaymentToolDesc
+typedef domain.RecurrentPaymentToolResourceID RecurrentPaymentToolToolResourceID
+
 /**
  * Требование завершить сессию взаимодействия с третьей стороной.
  */
@@ -48,7 +51,7 @@ union FinishStatus {
 struct Success {
     /** Токен для последующих взаимодействий. */
     1: optional domain.Token token
-    2: optional domain.RecurrentPaymentToolResourceID rec_payment_tool_resource_id
+    2: optional RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 /**
@@ -126,10 +129,10 @@ struct RecurrentTokenSession {
  * многоразового токена.
  */
 struct RecurrentTokenContext {
-    1: required RecurrentTokenSession   session
-    2: required RecurrentTokenInfo      token_info
-    3: optional domain.ProxyOptions     options = {}
-    4: optional domain.RecurrentPaymentToolDesc rec_payment_tool_description
+    1: required RecurrentTokenSession     session
+    2: required RecurrentTokenInfo        token_info
+    3: optional domain.ProxyOptions       options = {}
+    4: optional RecurrentPaymentToolDesc  rec_payment_tool_description
 }
 
 struct RecurrentTokenProxyResult {
@@ -155,7 +158,7 @@ union RecurrentTokenFinishStatus {
 
 struct RecurrentTokenSuccess {
     1: required domain.Token token
-    2: optional domain.RecurrentPaymentToolResourceID rec_payment_tool_resource_id
+    2: optional RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 struct RecurrentTokenCallbackResult {
@@ -200,15 +203,15 @@ struct RecurrentPaymentResource {
 }
 
 struct InvoicePayment {
-    1: required domain.InvoicePaymentID id
-    2: required base.Timestamp          created_at
-    3: optional domain.TransactionInfo  trx
-    6: required PaymentResource         payment_resource
-    5: required Cash                    cost
-    7: required domain.ContactInfo      contact_info
-    8: optional bool                    make_recurrent
-    9: optional base.Timestamp          processing_deadline
-   10: optional domain.RecurrentPaymentToolDesc rec_payment_tool_description
+    1: required domain.InvoicePaymentID   id
+    2: required base.Timestamp            created_at
+    3: optional domain.TransactionInfo    trx
+    6: required PaymentResource           payment_resource
+    5: required Cash                      cost
+    7: required domain.ContactInfo        contact_info
+    8: optional bool                      make_recurrent
+    9: optional base.Timestamp            processing_deadline
+   10: optional RecurrentPaymentToolDesc  rec_payment_tool_description
 }
 
 struct InvoicePaymentRefund {
@@ -289,7 +292,7 @@ struct PaymentCallbackProxyResult {
 service ProviderProxy {
 
     RecurrentTokenProxyResult UpdateRecurrentPaymentTool (
-        1: domain.RecurrentPaymentToolResourceID id
+        1: RecurrentPaymentToolResourceID id
         2: RecurrentTokenContext context
     )
 
@@ -326,13 +329,13 @@ exception RecurrentPaymentToolNotFound {}
 
 service ProviderProxyHost {
 
-    void DeleteRecurrentPaymentTool (1: domain.RecurrentPaymentToolResourceID id)
+    void DeleteRecurrentPaymentTool (1: RecurrentPaymentToolResourceID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    void UpdateRecurrentPaymentTool (1: domain.RecurrentPaymentToolResourceID id)
+    void UpdateRecurrentPaymentTool (1: .RecurrentPaymentToolResourceID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
