@@ -1554,13 +1554,13 @@ struct BankCard {
     3: required string bin
     4: required string last_digits
     5: optional BankCardTokenProvider token_provider
+   12: optional TokenizationMethod tokenization_method
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
     9: optional bool is_cvv_empty
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
-   12: optional TokenizationMethod tokenization_method
 }
 
 /** Дата экспирации */
