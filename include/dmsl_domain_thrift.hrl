@@ -892,7 +892,8 @@
 %% struct 'TokenizedBankCard'
 -record('domain_TokenizedBankCard', {
     'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
-    'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'()
+    'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'(),
+    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined
 }).
 
 %% struct 'P2PTool'
@@ -915,6 +916,7 @@
     'bin' :: binary(),
     'last_digits' :: binary(),
     'token_provider' :: atom() | undefined,
+    'tokenization_method' :: atom() | undefined,
     'issuer_country' :: atom() | undefined,
     'bank_name' :: binary() | undefined,
     'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()} | undefined,
@@ -1335,7 +1337,8 @@
 %% struct 'PaymentSystemCondition'
 -record('domain_PaymentSystemCondition', {
     'payment_system_is' :: atom(),
-    'token_provider_is' :: atom() | undefined
+    'token_provider_is' :: atom() | undefined,
+    'tokenization_method_is' :: atom() | undefined
 }).
 
 %% struct 'PaymentTerminalCondition'

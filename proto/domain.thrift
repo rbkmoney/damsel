@@ -1492,6 +1492,7 @@ union PaymentMethod {
 struct TokenizedBankCard {
     1: required BankCardPaymentSystem payment_system
     2: required BankCardTokenProvider token_provider
+    3: optional TokenizationMethod    tokenization_method
 }
 
 enum BankCardPaymentSystem {
@@ -1542,12 +1543,18 @@ struct DisposablePaymentResource {
 
 typedef string Token
 
+enum TokenizationMethod {
+    dpan
+    none
+}
+
 struct BankCard {
     1: required Token token
     2: required BankCardPaymentSystem payment_system
     3: required string bin
     4: required string last_digits
     5: optional BankCardTokenProvider token_provider
+   12: optional TokenizationMethod tokenization_method
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
@@ -2222,6 +2229,7 @@ union BankCardConditionDefinition {
 struct PaymentSystemCondition {
     1: required BankCardPaymentSystem payment_system_is
     2: optional BankCardTokenProvider token_provider_is
+    3: optional TokenizationMethod    tokenization_method_is
 }
 
 struct PaymentTerminalCondition {

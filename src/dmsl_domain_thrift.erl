@@ -90,6 +90,7 @@
     'Residence'/0,
     'BankCardPaymentSystem'/0,
     'BankCardTokenProvider'/0,
+    'TokenizationMethod'/0,
     'CryptoCurrency'/0,
     'MobileOperator'/0,
     'TerminalPaymentProvider'/0,
@@ -548,6 +549,7 @@
     'Residence' |
     'BankCardPaymentSystem' |
     'BankCardTokenProvider' |
+    'TokenizationMethod' |
     'CryptoCurrency' |
     'MobileOperator' |
     'TerminalPaymentProvider' |
@@ -877,6 +879,11 @@
     'applepay' |
     'googlepay' |
     'samsungpay'.
+
+%% enum 'TokenizationMethod'
+-type 'TokenizationMethod'() ::
+    'dpan' |
+    'none'.
 
 %% enum 'CryptoCurrency'
 -type 'CryptoCurrency'() ::
@@ -2536,6 +2543,7 @@
     'Residence'() |
     'BankCardPaymentSystem'() |
     'BankCardTokenProvider'() |
+    'TokenizationMethod'() |
     'CryptoCurrency'() |
     'MobileOperator'() |
     'TerminalPaymentProvider'() |
@@ -2620,6 +2628,7 @@ enums() ->
         'Residence',
         'BankCardPaymentSystem',
         'BankCardTokenProvider',
+        'TokenizationMethod',
         'CryptoCurrency',
         'MobileOperator',
         'TerminalPaymentProvider',
@@ -3447,6 +3456,12 @@ enum_info('BankCardTokenProvider') ->
         {'applepay', 0},
         {'googlepay', 1},
         {'samsungpay', 2}
+    ]};
+
+enum_info('TokenizationMethod') ->
+    {enum, [
+        {'dpan', 0},
+        {'none', 1}
     ]};
 
 enum_info('CryptoCurrency') ->
@@ -4647,7 +4662,8 @@ struct_info('PaymentMethod') ->
 struct_info('TokenizedBankCard') ->
     {struct, struct, [
         {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
-        {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
+        {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined}
     ]};
 
 struct_info('P2PTool') ->
@@ -4679,6 +4695,7 @@ struct_info('BankCard') ->
         {3, required, string, 'bin', undefined},
         {4, required, string, 'last_digits', undefined},
         {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
+        {12, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
         {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
         {7, optional, string, 'bank_name', undefined},
         {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
@@ -5253,7 +5270,8 @@ struct_info('BankCardConditionDefinition') ->
 struct_info('PaymentSystemCondition') ->
     {struct, struct, [
         {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-        {2, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider_is', undefined}
+        {2, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider_is', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method_is', undefined}
     ]};
 
 struct_info('PaymentTerminalCondition') ->
