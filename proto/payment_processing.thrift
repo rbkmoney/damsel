@@ -598,7 +598,11 @@ struct InvoiceRefundSession {
 }
 
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
-typedef domain.InvoicePaymentChargeback InvoicePaymentChargeback
+
+struct InvoicePaymentChargeback {
+    1: required domain.InvoicePaymentChargeback chargeback
+    2: optional FinalCashFlow cash_flow
+}
 
 /**
  * Параметры создаваемого чарджбэка.
@@ -1115,7 +1119,7 @@ service Invoicing {
     /**
      * Создать чарджбэк
      */
-    InvoicePaymentChargeback CreateChargeback (
+    domain.InvoicePaymentChargeback CreateChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -1139,7 +1143,7 @@ service Invoicing {
     /**
      * Найти чарджбэк
      */
-    InvoicePaymentChargeback GetPaymentChargeback (
+    domain.InvoicePaymentChargeback GetPaymentChargeback (
         1: UserInfo user
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
