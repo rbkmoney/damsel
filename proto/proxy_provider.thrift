@@ -29,7 +29,7 @@ union Intent {
 }
 
 typedef domain.RecurrentPaymentToolDesc       RecurrentPaymentToolDesc
-typedef domain.RecurrentPaymentToolResourceID RecurrentPaymentToolToolResourceID
+typedef domain.RecurrentPaymentToolResourceID RecurrentPaymentToolResourceID
 
 /**
  * Требование завершить сессию взаимодействия с третьей стороной.
