@@ -1480,13 +1480,22 @@ struct CashLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
-    4: TokenizedBankCard tokenized_bank_card
-    5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
+    8: BankCardPaymentMethod bank_card
+    // Deprecated, use BankCardPaymentMethod instead
+    1: BankCardPaymentSystem bank_card_deprecated
+    4: TokenizedBankCard tokenized_bank_card_deprecated
+    5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
+}
+
+struct BankCardPaymentMethod {
+    1: required BankCardPaymentSystem payment_system
+    2: required bool                  has_cvv
+    3: optional BankCardTokenProvider token_provider
+    4: optional TokenizationMethod    tokenization_method
 }
 
 struct TokenizedBankCard {
@@ -1561,6 +1570,7 @@ struct BankCard {
     9: optional bool is_cvv_empty
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
+   12: optional TokenizationMethod tokenization_method
 }
 
 /** Дата экспирации */
