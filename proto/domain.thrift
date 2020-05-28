@@ -1570,7 +1570,6 @@ struct BankCard {
     9: optional bool is_cvv_empty
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
-   12: optional TokenizationMethod tokenization_method
 }
 
 /** Дата экспирации */
