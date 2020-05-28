@@ -335,7 +335,7 @@ service ProviderProxyHost {
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 
-    void UpdateRecurrentPaymentTool (1: .RecurrentPaymentToolResourceID id)
+    void UpdateRecurrentPaymentTool (1: RecurrentPaymentToolResourceID id)
         throws (
             1: base.InvalidRequest ex1
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
