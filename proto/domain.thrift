@@ -2021,10 +2021,10 @@ struct RecurrentPaytoolsProvisionTerms {
 }
 
 struct WithdrawalProvisionTerms {
-    1: required CurrencySelector currencies
-    2: required PayoutMethodSelector payout_methods
-    3: required CashLimitSelector cash_limit
-    4: required CashFlowSelector cash_flow
+    1: optional CurrencySelector currencies
+    2: optional PayoutMethodSelector payout_methods
+    3: optional CashLimitSelector cash_limit
+    4: optional CashFlowSelector cash_flow
 }
 
 struct P2PProvisionTerms {

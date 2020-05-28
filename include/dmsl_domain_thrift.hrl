@@ -1194,10 +1194,10 @@
 
 %% struct 'WithdrawalProvisionTerms'
 -record('domain_WithdrawalProvisionTerms', {
-    'currencies' :: dmsl_domain_thrift:'CurrencySelector'(),
-    'payout_methods' :: dmsl_domain_thrift:'PayoutMethodSelector'(),
-    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'(),
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'()
+    'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
+    'payout_methods' :: dmsl_domain_thrift:'PayoutMethodSelector'() | undefined,
+    'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
 }).
 
 %% struct 'P2PProvisionTerms'
