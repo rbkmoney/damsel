@@ -2363,7 +2363,8 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional PaymentRoutingRulesetRef payment_routing_ruleset
+    16: optional PaymentRoutingRulesetRef payment_routing_permissions
+    17: optional PaymentRoutingRulesetRef payment_routing_prohobitions
 
     // Deprecated
     5: optional ProviderSelector providers
@@ -2386,8 +2387,7 @@ struct PaymentRoutingRulesetRef { 1: required ObjectID id }
 struct PaymentRoutingRuleset {
     1: required string name
     2: optional string description
-    3: required PaymentRoutingDecisions permissions
-    4: required PaymentRoutingDecisions prohibitions
+    3: required PaymentRoutingDecisions decisions
 }
 
 union PaymentRoutingDecisions {
