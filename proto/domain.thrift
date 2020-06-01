@@ -2383,7 +2383,7 @@ struct ContractPaymentInstitutionDefaults {
 
 struct PaymentRouting {
     1: required PaymentRoutingRulesetRef policies
-    2: required PaymentRoutingRulesetRef prohobitions
+    2: required PaymentRoutingRulesetRef prohibitions
 }
 
 struct PaymentRoutingRulesetRef { 1: required ObjectID id }
