@@ -1455,7 +1455,7 @@
     'withdrawal_providers' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
     'p2p_providers' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined,
     'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined,
-    'payment_routing_ruleset' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'() | undefined,
+    'payment_routing' :: dmsl_domain_thrift:'PaymentRouting'() | undefined,
     'providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined
 }).
 
@@ -1463,6 +1463,12 @@
 -record('domain_ContractPaymentInstitutionDefaults', {
     'test' :: dmsl_domain_thrift:'PaymentInstitutionRef'(),
     'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
+}).
+
+%% struct 'PaymentRouting'
+-record('domain_PaymentRouting', {
+    'policies' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
+    'prohibitions' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'()
 }).
 
 %% struct 'PaymentRoutingRulesetRef'
@@ -1474,8 +1480,7 @@
 -record('domain_PaymentRoutingRuleset', {
     'name' :: binary(),
     'description' :: binary() | undefined,
-    'permissions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'(),
-    'prohibitions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'()
+    'decisions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'()
 }).
 
 %% struct 'PaymentRoutingDelegate'

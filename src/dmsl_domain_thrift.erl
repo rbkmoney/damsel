@@ -392,6 +392,7 @@
     'PaymentInstitutionRef'/0,
     'PaymentInstitution'/0,
     'ContractPaymentInstitutionDefaults'/0,
+    'PaymentRouting'/0,
     'PaymentRoutingRulesetRef'/0,
     'PaymentRoutingRuleset'/0,
     'PaymentRoutingDecisions'/0,
@@ -1250,6 +1251,7 @@
     'PaymentInstitutionRef' |
     'PaymentInstitution' |
     'ContractPaymentInstitutionDefaults' |
+    'PaymentRouting' |
     'PaymentRoutingRulesetRef' |
     'PaymentRoutingRuleset' |
     'PaymentRoutingDecisions' |
@@ -2328,6 +2330,9 @@
 %% struct 'ContractPaymentInstitutionDefaults'
 -type 'ContractPaymentInstitutionDefaults'() :: #'domain_ContractPaymentInstitutionDefaults'{}.
 
+%% struct 'PaymentRouting'
+-type 'PaymentRouting'() :: #'domain_PaymentRouting'{}.
+
 %% struct 'PaymentRoutingRulesetRef'
 -type 'PaymentRoutingRulesetRef'() :: #'domain_PaymentRoutingRulesetRef'{}.
 
@@ -2934,6 +2939,7 @@ structs() ->
         'PaymentInstitutionRef',
         'PaymentInstitution',
         'ContractPaymentInstitutionDefaults',
+        'PaymentRouting',
         'PaymentRoutingRulesetRef',
         'PaymentRoutingRuleset',
         'PaymentRoutingDecisions',
@@ -5427,7 +5433,7 @@ struct_info('PaymentInstitution') ->
         {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
         {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined},
         {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined},
-        {16, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'payment_routing_ruleset', undefined},
+        {16, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRouting'}}, 'payment_routing', undefined},
         {5, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined}
     ]};
 
@@ -5435,6 +5441,12 @@ struct_info('ContractPaymentInstitutionDefaults') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'test', undefined},
         {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'live', undefined}
+    ]};
+
+struct_info('PaymentRouting') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'policies', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'prohibitions', undefined}
     ]};
 
 struct_info('PaymentRoutingRulesetRef') ->
@@ -5446,8 +5458,7 @@ struct_info('PaymentRoutingRuleset') ->
     {struct, struct, [
         {1, required, string, 'name', undefined},
         {2, optional, string, 'description', undefined},
-        {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentRoutingDecisions'}}, 'permissions', undefined},
-        {4, required, {struct, union, {dmsl_domain_thrift, 'PaymentRoutingDecisions'}}, 'prohibitions', undefined}
+        {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentRoutingDecisions'}}, 'decisions', undefined}
     ]};
 
 struct_info('PaymentRoutingDecisions') ->
@@ -6399,6 +6410,9 @@ record_name('PaymentInstitution') ->
 
 record_name('ContractPaymentInstitutionDefaults') ->
     'domain_ContractPaymentInstitutionDefaults';
+
+record_name('PaymentRouting') ->
+    'domain_PaymentRouting';
 
 record_name('PaymentRoutingRulesetRef') ->
     'domain_PaymentRoutingRulesetRef';
