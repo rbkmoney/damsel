@@ -1811,6 +1811,8 @@ struct Varset {
     5: optional domain.PayoutMethodRef payout_method
     6: optional domain.WalletID wallet_id
     7: optional domain.P2PTool p2p_tool
+    8: optional domain.ShopID shop_id
+    9: optional domain.ContractorIdentificationLevel identification_level
 }
 
 struct PartyParams {
