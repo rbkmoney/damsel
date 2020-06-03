@@ -636,7 +636,9 @@
     'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
     'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
     'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined,
-    'p2p_tool' :: dmsl_domain_thrift:'P2PTool'() | undefined
+    'p2p_tool' :: dmsl_domain_thrift:'P2PTool'() | undefined,
+    'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
+    'identification_level' :: atom() | undefined
 }).
 
 %% struct 'PartyParams'
