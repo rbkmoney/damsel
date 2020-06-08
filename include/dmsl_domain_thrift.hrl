@@ -922,13 +922,26 @@
     'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()} | undefined,
     'is_cvv_empty' :: boolean() | undefined,
     'exp_date' :: dmsl_domain_thrift:'BankCardExpDate'() | undefined,
-    'cardholder_name' :: binary() | undefined
+    'cardholder_name' :: binary() | undefined,
+    'category' :: binary() | undefined
 }).
 
 %% struct 'BankCardExpDate'
 -record('domain_BankCardExpDate', {
     'month' :: integer(),
     'year' :: integer()
+}).
+
+%% struct 'BankCardCategoryRef'
+-record('domain_BankCardCategoryRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'BankCardCategory'
+-record('domain_BankCardCategory', {
+    'name' :: binary(),
+    'description' :: binary(),
+    'category_patterns' :: ordsets:ordset(binary())
 }).
 
 %% struct 'CryptoWallet'
@@ -1605,6 +1618,12 @@
 -record('domain_BankObject', {
     'ref' :: dmsl_domain_thrift:'BankRef'(),
     'data' :: dmsl_domain_thrift:'Bank'()
+}).
+
+%% struct 'BankCardCategoryObject'
+-record('domain_BankCardCategoryObject', {
+    'ref' :: dmsl_domain_thrift:'BankCardCategoryRef'(),
+    'data' :: dmsl_domain_thrift:'BankCardCategory'()
 }).
 
 %% struct 'ProviderObject'

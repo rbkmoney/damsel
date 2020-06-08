@@ -279,6 +279,8 @@
     'DisposablePaymentResource'/0,
     'BankCard'/0,
     'BankCardExpDate'/0,
+    'BankCardCategoryRef'/0,
+    'BankCardCategory'/0,
     'CryptoWallet'/0,
     'MobileCommerce'/0,
     'MobilePhone'/0,
@@ -418,6 +420,7 @@
     'PaymentMethodObject'/0,
     'PayoutMethodObject'/0,
     'BankObject'/0,
+    'BankCardCategoryObject'/0,
     'ProviderObject'/0,
     'CashRegisterProviderObject'/0,
     'WithdrawalProviderObject'/0,
@@ -1138,6 +1141,8 @@
     'DisposablePaymentResource' |
     'BankCard' |
     'BankCardExpDate' |
+    'BankCardCategoryRef' |
+    'BankCardCategory' |
     'CryptoWallet' |
     'MobileCommerce' |
     'MobilePhone' |
@@ -1277,6 +1282,7 @@
     'PaymentMethodObject' |
     'PayoutMethodObject' |
     'BankObject' |
+    'BankCardCategoryObject' |
     'ProviderObject' |
     'CashRegisterProviderObject' |
     'WithdrawalProviderObject' |
@@ -1914,6 +1920,12 @@
 %% struct 'BankCardExpDate'
 -type 'BankCardExpDate'() :: #'domain_BankCardExpDate'{}.
 
+%% struct 'BankCardCategoryRef'
+-type 'BankCardCategoryRef'() :: #'domain_BankCardCategoryRef'{}.
+
+%% struct 'BankCardCategory'
+-type 'BankCardCategory'() :: #'domain_BankCardCategory'{}.
+
 %% struct 'CryptoWallet'
 -type 'CryptoWallet'() :: #'domain_CryptoWallet'{}.
 
@@ -2236,7 +2248,8 @@
     {'issuer_bank_is', 'BankRef'()} |
     {'payment_system', 'PaymentSystemCondition'()} |
     {'issuer_country_is', atom()} |
-    {'empty_cvv_is', boolean()}.
+    {'empty_cvv_is', boolean()} |
+    {'category_is', 'BankCardCategoryRef'()}.
 
 %% struct 'PaymentSystemCondition'
 -type 'PaymentSystemCondition'() :: #'domain_PaymentSystemCondition'{}.
@@ -2410,6 +2423,9 @@
 %% struct 'BankObject'
 -type 'BankObject'() :: #'domain_BankObject'{}.
 
+%% struct 'BankCardCategoryObject'
+-type 'BankCardCategoryObject'() :: #'domain_BankCardCategoryObject'{}.
+
 %% struct 'ProviderObject'
 -type 'ProviderObject'() :: #'domain_ProviderObject'{}.
 
@@ -2477,6 +2493,7 @@
     {'p2p_provider', 'P2PProviderRef'()} |
     {'payment_routing_rules', 'PaymentRoutingRulesetRef'()} |
     {'withdrawal_terminal', 'WithdrawalTerminalRef'()} |
+    {'bank_card_category', 'BankCardCategoryRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2506,6 +2523,7 @@
     {'p2p_provider', 'P2PProviderObject'()} |
     {'payment_routing_rules', 'PaymentRoutingRulesObject'()} |
     {'withdrawal_terminal', 'WithdrawalTerminalObject'()} |
+    {'bank_card_category', 'BankCardCategoryObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2826,6 +2844,8 @@ structs() ->
         'DisposablePaymentResource',
         'BankCard',
         'BankCardExpDate',
+        'BankCardCategoryRef',
+        'BankCardCategory',
         'CryptoWallet',
         'MobileCommerce',
         'MobilePhone',
@@ -2965,6 +2985,7 @@ structs() ->
         'PaymentMethodObject',
         'PayoutMethodObject',
         'BankObject',
+        'BankCardCategoryObject',
         'ProviderObject',
         'CashRegisterProviderObject',
         'WithdrawalProviderObject',
@@ -4707,13 +4728,26 @@ struct_info('BankCard') ->
         {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
         {9, optional, bool, 'is_cvv_empty', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardExpDate'}}, 'exp_date', undefined},
-        {11, optional, string, 'cardholder_name', undefined}
+        {11, optional, string, 'cardholder_name', undefined},
+        {13, optional, string, 'category', undefined}
     ]};
 
 struct_info('BankCardExpDate') ->
     {struct, struct, [
         {1, required, byte, 'month', undefined},
         {2, required, i16, 'year', undefined}
+    ]};
+
+struct_info('BankCardCategoryRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('BankCardCategory') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, required, string, 'description', undefined},
+        {3, required, {set, string}, 'category_patterns', undefined}
     ]};
 
 struct_info('CryptoWallet') ->
@@ -5270,7 +5304,8 @@ struct_info('BankCardConditionDefinition') ->
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
         {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
-        {5, optional, bool, 'empty_cvv_is', undefined}
+        {5, optional, bool, 'empty_cvv_is', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'category_is', undefined}
     ]};
 
 struct_info('PaymentSystemCondition') ->
@@ -5591,6 +5626,12 @@ struct_info('BankObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Bank'}}, 'data', undefined}
     ]};
 
+struct_info('BankCardCategoryObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCardCategory'}}, 'data', undefined}
+    ]};
+
 struct_info('ProviderObject') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'ref', undefined},
@@ -5700,6 +5741,7 @@ struct_info('Reference') ->
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
         {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'payment_routing_rules', undefined},
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}, 'withdrawal_terminal', undefined},
+        {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'bank_card_category', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -5730,6 +5772,7 @@ struct_info('DomainObject') ->
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
         {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesObject'}}, 'payment_routing_rules', undefined},
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalObject'}}, 'withdrawal_terminal', undefined},
+        {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryObject'}}, 'bank_card_category', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -6159,6 +6202,12 @@ record_name('BankCard') ->
 record_name('BankCardExpDate') ->
     'domain_BankCardExpDate';
 
+record_name('BankCardCategoryRef') ->
+    'domain_BankCardCategoryRef';
+
+record_name('BankCardCategory') ->
+    'domain_BankCardCategory';
+
 record_name('CryptoWallet') ->
     'domain_CryptoWallet';
 
@@ -6485,6 +6534,9 @@ record_name('PayoutMethodObject') ->
 
 record_name('BankObject') ->
     'domain_BankObject';
+
+record_name('BankCardCategoryObject') ->
+    'domain_BankCardCategoryObject';
 
 record_name('ProviderObject') ->
     'domain_ProviderObject';
