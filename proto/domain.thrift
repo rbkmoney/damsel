@@ -1577,7 +1577,7 @@ struct BankCardCategoryRef { 1: required ObjectID id }
 struct BankCardCategory {
     1: required string name
     2: required string description
-    3: optional set<string> category_patterns
+    3: required set<string> category_patterns
 }
 
 struct CryptoWallet {
