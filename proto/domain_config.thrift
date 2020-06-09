@@ -118,6 +118,16 @@ struct NonexistantObject {
     2: required list<domain.Reference> referenced_by
 }
 
+exception OperationInvalid { 1: required list<OperationError> errors }
+
+union OperationError {
+    1: ObjectReferenceCycle object_reference_cycle
+}
+
+struct ObjectReferenceCycle {
+    1: required list<domain.Reference> cycle
+}
+
 /**
  * Попытка совершить коммит на устаревшую версию
  */
@@ -143,7 +153,12 @@ service Repository {
      * Возвращает следующую версию
      */
     Version Commit (1: Version version, 2: Commit commit)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: ObsoleteCommitVersion ex3);
+        throws (
+            1: VersionNotFound ex1
+            2: OperationConflict ex2
+            4: OperationInvalid ex4
+            3: ObsoleteCommitVersion ex3
+        )
 
     /**
      * Получить снэпшот конкретной версии
