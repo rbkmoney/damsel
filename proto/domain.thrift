@@ -1493,7 +1493,7 @@ union PaymentMethod {
 
 struct BankCardPaymentMethod {
     1: required BankCardPaymentSystem payment_system
-    2: required bool                  has_cvv
+    2: required bool                  is_cvv_empty
     3: optional BankCardTokenProvider token_provider
     4: optional TokenizationMethod    tokenization_method
 }

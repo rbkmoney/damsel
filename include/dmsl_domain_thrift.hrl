@@ -892,7 +892,7 @@
 %% struct 'BankCardPaymentMethod'
 -record('domain_BankCardPaymentMethod', {
     'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
-    'has_cvv' :: boolean(),
+    'is_cvv_empty' :: boolean(),
     'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'() | undefined,
     'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined
 }).

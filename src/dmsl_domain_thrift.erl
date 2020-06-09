@@ -4670,7 +4670,7 @@ struct_info('PaymentMethod') ->
 struct_info('BankCardPaymentMethod') ->
     {struct, struct, [
         {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
-        {2, required, bool, 'has_cvv', undefined},
+        {2, required, bool, 'is_cvv_empty', undefined},
         {3, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
         {4, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined}
     ]};
