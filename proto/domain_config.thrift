@@ -21,8 +21,8 @@ typedef i32 Limit
  * версию либо на наиболее актуальную.
  */
 union Reference {
-    1: Version version;
-    2: Head head;
+    1: Version version
+    2: Head head
 }
 
 /**
@@ -48,25 +48,25 @@ struct Commit {
 typedef map<Version, Commit> History
 
 union Operation {
-    1: InsertOp insert;
-    2: UpdateOp update;
-    3: RemoveOp remove;
+    1: InsertOp insert
+    2: UpdateOp update
+    3: RemoveOp remove
 }
 
 struct InsertOp {
-    1: required domain.DomainObject object;
+    1: required domain.DomainObject object
 }
 
 /**
  * Содержит значения до и после внесенных изменений
  */
 struct UpdateOp {
-    1: required domain.DomainObject old_object;
-    2: required domain.DomainObject new_object;
+    1: required domain.DomainObject old_object
+    2: required domain.DomainObject new_object
 }
 
 struct RemoveOp {
-    1: required domain.DomainObject object;
+    1: required domain.DomainObject object
 }
 
 struct VersionedObject {
@@ -118,6 +118,16 @@ struct NonexistantObject {
     2: required list<domain.Reference> referenced_by
 }
 
+exception OperationInvalid { 1: required list<OperationError> errors }
+
+union OperationError {
+    1: ObjectReferenceCycle object_reference_cycle
+}
+
+struct ObjectReferenceCycle {
+    1: required list<domain.Reference> cycle
+}
+
 /**
  * Попытка совершить коммит на устаревшую версию
  */
@@ -143,7 +153,12 @@ service Repository {
      * Возвращает следующую версию
      */
     Version Commit (1: Version version, 2: Commit commit)
-        throws (1: VersionNotFound ex1, 2: OperationConflict ex2, 3: ObsoleteCommitVersion ex3);
+        throws (
+            1: VersionNotFound ex1
+            2: OperationConflict ex2
+            4: OperationInvalid ex4
+            3: ObsoleteCommitVersion ex3
+        )
 
     /**
      * Получить снэпшот конкретной версии
