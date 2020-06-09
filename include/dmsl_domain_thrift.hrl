@@ -1380,6 +1380,18 @@
     'definition' :: dmsl_domain_thrift:'PartyConditionDefinition'() | undefined
 }).
 
+%% struct 'CriterionRef'
+-record('domain_CriterionRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'Criterion'
+-record('domain_Criterion', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'predicate' :: dmsl_domain_thrift:'Predicate'()
+}).
+
 %% struct 'ProxyRef'
 -record('domain_ProxyRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -1708,6 +1720,12 @@
 -record('domain_PaymentRoutingRulesObject', {
     'ref' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
     'data' :: dmsl_domain_thrift:'PaymentRoutingRuleset'()
+}).
+
+%% struct 'CriterionObject'
+-record('domain_CriterionObject', {
+    'ref' :: dmsl_domain_thrift:'CriterionRef'(),
+    'data' :: dmsl_domain_thrift:'Criterion'()
 }).
 
 -endif.

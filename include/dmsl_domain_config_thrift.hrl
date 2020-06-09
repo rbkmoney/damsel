@@ -67,6 +67,11 @@
     'referenced_by' :: [dmsl_domain_thrift:'Reference'()]
 }).
 
+%% struct 'ObjectReferenceCycle'
+-record('ObjectReferenceCycle', {
+    'cycle' :: [dmsl_domain_thrift:'Reference'()]
+}).
+
 %% exception 'VersionNotFound'
 -record('VersionNotFound', {}).
 
@@ -76,6 +81,11 @@
 %% exception 'OperationConflict'
 -record('OperationConflict', {
     'conflict' :: dmsl_domain_config_thrift:'Conflict'()
+}).
+
+%% exception 'OperationInvalid'
+-record('OperationInvalid', {
+    'errors' :: [dmsl_domain_config_thrift:'OperationError'()]
 }).
 
 %% exception 'ObsoleteCommitVersion'

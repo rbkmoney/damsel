@@ -378,6 +378,8 @@
     'MobileCommerceConditionDefinition'/0,
     'PartyCondition'/0,
     'PartyConditionDefinition'/0,
+    'CriterionRef'/0,
+    'Criterion'/0,
     'ProxyRef'/0,
     'ProxyDefinition'/0,
     'Proxy'/0,
@@ -435,6 +437,7 @@
     'ProxyObject'/0,
     'GlobalsObject'/0,
     'PaymentRoutingRulesObject'/0,
+    'CriterionObject'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -1240,6 +1243,8 @@
     'MobileCommerceConditionDefinition' |
     'PartyCondition' |
     'PartyConditionDefinition' |
+    'CriterionRef' |
+    'Criterion' |
     'ProxyRef' |
     'ProxyDefinition' |
     'Proxy' |
@@ -1297,6 +1302,7 @@
     'ProxyObject' |
     'GlobalsObject' |
     'PaymentRoutingRulesObject' |
+    'CriterionObject' |
     'Reference' |
     'DomainObject'.
 
@@ -2214,7 +2220,8 @@
     {'condition', 'Condition'()} |
     {'is_not', 'Predicate'()} |
     {'all_of', ordsets:ordset('Predicate'())} |
-    {'any_of', ordsets:ordset('Predicate'())}.
+    {'any_of', ordsets:ordset('Predicate'())} |
+    {'criterion', 'CriterionRef'()}.
 
 %% union 'Condition'
 -type 'Condition'() ::
@@ -2290,6 +2297,12 @@
     {'shop_is', 'ShopID'()} |
     {'wallet_is', 'WalletID'()} |
     {'contract_is', 'ContractID'()}.
+
+%% struct 'CriterionRef'
+-type 'CriterionRef'() :: #'domain_CriterionRef'{}.
+
+%% struct 'Criterion'
+-type 'Criterion'() :: #'domain_Criterion'{}.
 
 %% struct 'ProxyRef'
 -type 'ProxyRef'() :: #'domain_ProxyRef'{}.
@@ -2468,6 +2481,9 @@
 %% struct 'PaymentRoutingRulesObject'
 -type 'PaymentRoutingRulesObject'() :: #'domain_PaymentRoutingRulesObject'{}.
 
+%% struct 'CriterionObject'
+-type 'CriterionObject'() :: #'domain_CriterionObject'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -2494,6 +2510,7 @@
     {'payment_routing_rules', 'PaymentRoutingRulesetRef'()} |
     {'withdrawal_terminal', 'WithdrawalTerminalRef'()} |
     {'bank_card_category', 'BankCardCategoryRef'()} |
+    {'criterion', 'CriterionRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2524,6 +2541,7 @@
     {'payment_routing_rules', 'PaymentRoutingRulesObject'()} |
     {'withdrawal_terminal', 'WithdrawalTerminalObject'()} |
     {'bank_card_category', 'BankCardCategoryObject'()} |
+    {'criterion', 'CriterionObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2943,6 +2961,8 @@ structs() ->
         'MobileCommerceConditionDefinition',
         'PartyCondition',
         'PartyConditionDefinition',
+        'CriterionRef',
+        'Criterion',
         'ProxyRef',
         'ProxyDefinition',
         'Proxy',
@@ -3000,6 +3020,7 @@ structs() ->
         'ProxyObject',
         'GlobalsObject',
         'PaymentRoutingRulesObject',
+        'CriterionObject',
         'Reference',
         'DomainObject'
     ].
@@ -5262,7 +5283,8 @@ struct_info('Predicate') ->
         {1, optional, {struct, union, {dmsl_domain_thrift, 'Condition'}}, 'condition', undefined},
         {2, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'is_not', undefined},
         {3, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'all_of', undefined},
-        {4, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'any_of', undefined}
+        {4, optional, {set, {struct, union, {dmsl_domain_thrift, 'Predicate'}}}, 'any_of', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionRef'}}, 'criterion', undefined}
     ]};
 
 struct_info('Condition') ->
@@ -5366,6 +5388,18 @@ struct_info('PartyConditionDefinition') ->
         {1, optional, string, 'shop_is', undefined},
         {2, optional, string, 'wallet_is', undefined},
         {3, optional, string, 'contract_is', undefined}
+    ]};
+
+struct_info('CriterionRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('Criterion') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'predicate', undefined}
     ]};
 
 struct_info('ProxyRef') ->
@@ -5716,6 +5750,12 @@ struct_info('PaymentRoutingRulesObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRuleset'}}, 'data', undefined}
     ]};
 
+struct_info('CriterionObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CriterionRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Criterion'}}, 'data', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -5742,6 +5782,7 @@ struct_info('Reference') ->
         {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'payment_routing_rules', undefined},
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}, 'withdrawal_terminal', undefined},
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'bank_card_category', undefined},
+        {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionRef'}}, 'criterion', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -5773,6 +5814,7 @@ struct_info('DomainObject') ->
         {26, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesObject'}}, 'payment_routing_rules', undefined},
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalObject'}}, 'withdrawal_terminal', undefined},
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryObject'}}, 'bank_card_category', undefined},
+        {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionObject'}}, 'criterion', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -6418,6 +6460,12 @@ record_name('MobileCommerceCondition') ->
 record_name('PartyCondition') ->
     'domain_PartyCondition';
 
+record_name('CriterionRef') ->
+    'domain_CriterionRef';
+
+record_name('Criterion') ->
+    'domain_Criterion';
+
 record_name('ProxyRef') ->
     'domain_ProxyRef';
 
@@ -6579,6 +6627,9 @@ record_name('GlobalsObject') ->
 
 record_name('PaymentRoutingRulesObject') ->
     'domain_PaymentRoutingRulesObject';
+
+record_name('CriterionObject') ->
+    'domain_CriterionObject';
 
 record_name(_) -> error(badarg).
 

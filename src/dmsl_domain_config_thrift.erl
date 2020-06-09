@@ -51,12 +51,15 @@
     'ObjectNotFoundConflict'/0,
     'ObjectReferenceMismatchConflict'/0,
     'ObjectsNotExistConflict'/0,
-    'NonexistantObject'/0
+    'NonexistantObject'/0,
+    'OperationError'/0,
+    'ObjectReferenceCycle'/0
 ]).
 -export_type([
     'VersionNotFound'/0,
     'ObjectNotFound'/0,
     'OperationConflict'/0,
+    'OperationInvalid'/0,
     'ObsoleteCommitVersion'/0
 ]).
 
@@ -97,12 +100,15 @@
     'ObjectNotFoundConflict' |
     'ObjectReferenceMismatchConflict' |
     'ObjectsNotExistConflict' |
-    'NonexistantObject'.
+    'NonexistantObject' |
+    'OperationError' |
+    'ObjectReferenceCycle'.
 
 -type exception_name() ::
     'VersionNotFound' |
     'ObjectNotFound' |
     'OperationConflict' |
+    'OperationInvalid' |
     'ObsoleteCommitVersion'.
 
 %% struct 'Head'
@@ -159,6 +165,13 @@
 %% struct 'NonexistantObject'
 -type 'NonexistantObject'() :: #'NonexistantObject'{}.
 
+%% union 'OperationError'
+-type 'OperationError'() ::
+    {'object_reference_cycle', 'ObjectReferenceCycle'()}.
+
+%% struct 'ObjectReferenceCycle'
+-type 'ObjectReferenceCycle'() :: #'ObjectReferenceCycle'{}.
+
 %% exception 'VersionNotFound'
 -type 'VersionNotFound'() :: #'VersionNotFound'{}.
 
@@ -167,6 +180,9 @@
 
 %% exception 'OperationConflict'
 -type 'OperationConflict'() :: #'OperationConflict'{}.
+
+%% exception 'OperationInvalid'
+-type 'OperationInvalid'() :: #'OperationInvalid'{}.
 
 %% exception 'ObsoleteCommitVersion'
 -type 'ObsoleteCommitVersion'() :: #'ObsoleteCommitVersion'{}.
@@ -254,7 +270,9 @@ structs() ->
         'ObjectNotFoundConflict',
         'ObjectReferenceMismatchConflict',
         'ObjectsNotExistConflict',
-        'NonexistantObject'
+        'NonexistantObject',
+        'OperationError',
+        'ObjectReferenceCycle'
     ].
 
 -spec services() -> [service_name()].
@@ -372,6 +390,16 @@ struct_info('NonexistantObject') ->
         {2, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'referenced_by', undefined}
     ]};
 
+struct_info('OperationError') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceCycle'}}, 'object_reference_cycle', undefined}
+    ]};
+
+struct_info('ObjectReferenceCycle') ->
+    {struct, struct, [
+        {1, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'cycle', undefined}
+    ]};
+
 struct_info('VersionNotFound') ->
     {struct, exception, []};
 
@@ -381,6 +409,11 @@ struct_info('ObjectNotFound') ->
 struct_info('OperationConflict') ->
     {struct, exception, [
         {1, required, {struct, union, {dmsl_domain_config_thrift, 'Conflict'}}, 'conflict', undefined}
+    ]};
+
+struct_info('OperationInvalid') ->
+    {struct, exception, [
+        {1, required, {list, {struct, union, {dmsl_domain_config_thrift, 'OperationError'}}}, 'errors', undefined}
     ]};
 
 struct_info('ObsoleteCommitVersion') ->
@@ -426,6 +459,9 @@ record_name('ObjectsNotExistConflict') ->
 record_name('NonexistantObject') ->
     'NonexistantObject';
 
+record_name('ObjectReferenceCycle') ->
+    'ObjectReferenceCycle';
+
 record_name('VersionNotFound') ->
     'VersionNotFound';
 
@@ -434,6 +470,9 @@ record_name('ObjectNotFound') ->
 
 record_name('OperationConflict') ->
     'OperationConflict';
+
+record_name('OperationInvalid') ->
+    'OperationInvalid';
 
 record_name('ObsoleteCommitVersion') ->
     'ObsoleteCommitVersion';
@@ -484,6 +523,7 @@ function_info('Repository', 'Commit', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_domain_config_thrift, 'VersionNotFound'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_domain_config_thrift, 'OperationConflict'}}, 'ex2', undefined},
+        {4, undefined, {struct, exception, {dmsl_domain_config_thrift, 'OperationInvalid'}}, 'ex4', undefined},
         {3, undefined, {struct, exception, {dmsl_domain_config_thrift, 'ObsoleteCommitVersion'}}, 'ex3', undefined}
     ]};
 function_info('Repository', 'Checkout', params_type) ->

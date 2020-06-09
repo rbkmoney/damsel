@@ -2196,6 +2196,7 @@ union Predicate {
     2: Predicate is_not
     3: set<Predicate> all_of
     4: set<Predicate> any_of
+    6: CriterionRef criterion
 }
 
 union Condition {
@@ -2283,6 +2284,14 @@ union PartyConditionDefinition {
     1: ShopID shop_is
     2: WalletID wallet_is
     3: ContractID contract_is
+}
+
+struct CriterionRef { 1: required ObjectID id }
+
+struct Criterion {
+    1: required string name
+    2: optional string description
+    3: required Predicate predicate
 }
 
 /* Proxies */
@@ -2594,6 +2603,11 @@ struct PaymentRoutingRulesObject {
     2: required PaymentRoutingRuleset data
 }
 
+struct CriterionObject {
+    1: required CriterionRef ref
+    2: required Criterion data
+}
+
 union Reference {
 
     1  : CategoryRef             category
@@ -2620,6 +2634,7 @@ union Reference {
     26 : PaymentRoutingRulesetRef payment_routing_rules
     27 : WithdrawalTerminalRef    withdrawal_terminal
     28 : BankCardCategoryRef      bank_card_category
+    29 : CriterionRef             criterion
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2654,6 +2669,7 @@ union DomainObject {
     26 : PaymentRoutingRulesObject  payment_routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
+    29 : CriterionObject            criterion
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
