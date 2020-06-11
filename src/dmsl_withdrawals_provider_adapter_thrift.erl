@@ -301,6 +301,7 @@ struct_info('SleepIntent') ->
 struct_info('Withdrawal') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
+        {7, optional, string, 'session_id', undefined},
         {2, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Cash'}}, 'body', undefined},
         {3, required, {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}}, 'destination', undefined},
         {4, optional, {struct, struct, {dmsl_withdrawals_domain_thrift, 'Identity'}}, 'sender', undefined},
