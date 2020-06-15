@@ -297,6 +297,7 @@
 -type 'PayoutManagement_service_functions'() ::
     'CreatePayout' |
     'Get' |
+    'GetEvents' |
     'GeneratePayouts' |
     'ConfirmPayout' |
     'CancelPayout' |
@@ -744,6 +745,7 @@ functions('PayoutManagement') ->
     [
         'CreatePayout',
         'Get',
+        'GetEvents',
         'GeneratePayouts',
         'ConfirmPayout',
         'CancelPayout',
@@ -797,6 +799,19 @@ function_info('PayoutManagement', 'Get', reply_type) ->
 function_info('PayoutManagement', 'Get', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'PayoutNotFound'}}, 'ex1', undefined}
+    ]};
+function_info('PayoutManagement', 'GetEvents', params_type) ->
+    {struct, struct, [
+        {1, undefined, string, 'payout_id', undefined},
+        {2, undefined, {struct, struct, {dmsl_payout_processing_thrift, 'EventRange'}}, 'range', undefined}
+    ]};
+function_info('PayoutManagement', 'GetEvents', reply_type) ->
+    {list, {struct, struct, {dmsl_payout_processing_thrift, 'Event'}}};
+function_info('PayoutManagement', 'GetEvents', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'PayoutNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payout_processing_thrift, 'EventNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex3', undefined}
     ]};
 function_info('PayoutManagement', 'GeneratePayouts', params_type) ->
     {struct, struct, [
