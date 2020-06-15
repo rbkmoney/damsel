@@ -374,11 +374,11 @@ service PayoutManagement {
     */
     Payout Get (1: PayoutID payout_id) throws (1: PayoutNotFound ex1)
 
-    Events GetEvents(1: PayoutID payout_id, EventRange range)
+    Events GetEvents (1: PayoutID payout_id, 2: EventRange range)
         throws (
-            1: PayoutNotFound ex2,
-            2: EventNotFound ex3,
-            3: base.InvalidRequest ex4
+            1: PayoutNotFound ex1,
+            2: EventNotFound ex2,
+            3: base.InvalidRequest ex3
         )
 
     /********************* Вывод на счет ************************/
