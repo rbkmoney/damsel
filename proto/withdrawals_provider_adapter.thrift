@@ -69,7 +69,11 @@ struct SleepIntent {
  * Данные вывода, необходимые для обращения к провайдеру.
  */
 struct Withdrawal {
+    // Поле id не является уникальным, может совпадать, в случае роутинга
+    // выплаты между провайдерами. Если нужна уникальность, используйте
+    // session_id
     1: required base.ID id
+    7: optional base.ID session_id
     2: required Cash body
     3: required Destination destination
     4: optional Identity sender
