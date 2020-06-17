@@ -1570,6 +1570,7 @@ struct BankCard {
     9: optional bool is_cvv_empty
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
+   13: optional string category
 }
 
 /** Дата экспирации */
@@ -1578,6 +1579,14 @@ struct BankCardExpDate {
     1: required i8 month
     /** Год 2015..∞ */
     2: required i16 year
+}
+
+struct BankCardCategoryRef { 1: required ObjectID id }
+
+struct BankCardCategory {
+    1: required string name
+    2: required string description
+    3: required set<string> category_patterns
 }
 
 struct CryptoWallet {
@@ -2196,6 +2205,7 @@ union Predicate {
     2: Predicate is_not
     3: set<Predicate> all_of
     4: set<Predicate> any_of
+    6: CriterionRef criterion
 }
 
 union Condition {
@@ -2233,6 +2243,7 @@ union BankCardConditionDefinition {
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
     5: bool empty_cvv_is
+    6: BankCardCategoryRef category_is
 }
 
 struct PaymentSystemCondition {
@@ -2282,6 +2293,14 @@ union PartyConditionDefinition {
     1: ShopID shop_is
     2: WalletID wallet_is
     3: ContractID contract_is
+}
+
+struct CriterionRef { 1: required ObjectID id }
+
+struct Criterion {
+    1: required string name
+    2: optional string description
+    3: required Predicate predicate
 }
 
 /* Proxies */
@@ -2372,7 +2391,7 @@ struct PaymentInstitution {
     13: optional WithdrawalProviderSelector withdrawal_providers
     14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional PaymentRoutingRulesetRef payment_routing_ruleset
+    16: optional PaymentRouting payment_routing
 
     // Deprecated
     5: optional ProviderSelector providers
@@ -2390,13 +2409,17 @@ struct ContractPaymentInstitutionDefaults {
 
 /* Routing rule sets */
 
+struct PaymentRouting {
+    1: required PaymentRoutingRulesetRef policies
+    2: required PaymentRoutingRulesetRef prohibitions
+}
+
 struct PaymentRoutingRulesetRef { 1: required ObjectID id }
 
 struct PaymentRoutingRuleset {
     1: required string name
     2: optional string description
-    3: required PaymentRoutingDecisions permissions
-    4: required PaymentRoutingDecisions prohibitions
+    3: required PaymentRoutingDecisions decisions
 }
 
 union PaymentRoutingDecisions {
@@ -2514,6 +2537,11 @@ struct BankObject {
     2: required Bank data
 }
 
+struct BankCardCategoryObject {
+    1: required BankCardCategoryRef ref
+    2: required BankCardCategory data
+}
+
 struct ProviderObject {
     1: required ProviderRef ref
     2: required Provider data
@@ -2584,6 +2612,11 @@ struct PaymentRoutingRulesObject {
     2: required PaymentRoutingRuleset data
 }
 
+struct CriterionObject {
+    1: required CriterionRef ref
+    2: required Criterion data
+}
+
 union Reference {
 
     1  : CategoryRef             category
@@ -2609,6 +2642,8 @@ union Reference {
     24 : P2PProviderRef          p2p_provider
     26 : PaymentRoutingRulesetRef payment_routing_rules
     27 : WithdrawalTerminalRef    withdrawal_terminal
+    28 : BankCardCategoryRef      bank_card_category
+    29 : CriterionRef             criterion
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2642,6 +2677,8 @@ union DomainObject {
     24 : P2PProviderObject          p2p_provider
     26 : PaymentRoutingRulesObject  payment_routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
+    28 : BankCardCategoryObject     bank_card_category
+    29 : CriterionObject            criterion
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link

@@ -26,6 +26,7 @@
 %% struct 'Withdrawal'
 -record('wthadpt_Withdrawal', {
     'id' :: dmsl_base_thrift:'ID'(),
+    'session_id' :: dmsl_base_thrift:'ID'() | undefined,
     'body' :: dmsl_withdrawals_provider_adapter_thrift:'Cash'(),
     'destination' :: dmsl_withdrawals_provider_adapter_thrift:'Destination'(),
     'sender' :: dmsl_withdrawals_provider_adapter_thrift:'Identity'() | undefined,

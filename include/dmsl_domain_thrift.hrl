@@ -930,13 +930,26 @@
     'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()} | undefined,
     'is_cvv_empty' :: boolean() | undefined,
     'exp_date' :: dmsl_domain_thrift:'BankCardExpDate'() | undefined,
-    'cardholder_name' :: binary() | undefined
+    'cardholder_name' :: binary() | undefined,
+    'category' :: binary() | undefined
 }).
 
 %% struct 'BankCardExpDate'
 -record('domain_BankCardExpDate', {
     'month' :: integer(),
     'year' :: integer()
+}).
+
+%% struct 'BankCardCategoryRef'
+-record('domain_BankCardCategoryRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'BankCardCategory'
+-record('domain_BankCardCategory', {
+    'name' :: binary(),
+    'description' :: binary(),
+    'category_patterns' :: ordsets:ordset(binary())
 }).
 
 %% struct 'CryptoWallet'
@@ -1375,6 +1388,18 @@
     'definition' :: dmsl_domain_thrift:'PartyConditionDefinition'() | undefined
 }).
 
+%% struct 'CriterionRef'
+-record('domain_CriterionRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'Criterion'
+-record('domain_Criterion', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'predicate' :: dmsl_domain_thrift:'Predicate'()
+}).
+
 %% struct 'ProxyRef'
 -record('domain_ProxyRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -1463,7 +1488,7 @@
     'withdrawal_providers' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
     'p2p_providers' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined,
     'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined,
-    'payment_routing_ruleset' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'() | undefined,
+    'payment_routing' :: dmsl_domain_thrift:'PaymentRouting'() | undefined,
     'providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined
 }).
 
@@ -1471,6 +1496,12 @@
 -record('domain_ContractPaymentInstitutionDefaults', {
     'test' :: dmsl_domain_thrift:'PaymentInstitutionRef'(),
     'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
+}).
+
+%% struct 'PaymentRouting'
+-record('domain_PaymentRouting', {
+    'policies' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
+    'prohibitions' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'()
 }).
 
 %% struct 'PaymentRoutingRulesetRef'
@@ -1482,8 +1513,7 @@
 -record('domain_PaymentRoutingRuleset', {
     'name' :: binary(),
     'description' :: binary() | undefined,
-    'permissions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'(),
-    'prohibitions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'()
+    'decisions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'()
 }).
 
 %% struct 'PaymentRoutingDelegate'
@@ -1610,6 +1640,12 @@
     'data' :: dmsl_domain_thrift:'Bank'()
 }).
 
+%% struct 'BankCardCategoryObject'
+-record('domain_BankCardCategoryObject', {
+    'ref' :: dmsl_domain_thrift:'BankCardCategoryRef'(),
+    'data' :: dmsl_domain_thrift:'BankCardCategory'()
+}).
+
 %% struct 'ProviderObject'
 -record('domain_ProviderObject', {
     'ref' :: dmsl_domain_thrift:'ProviderRef'(),
@@ -1692,6 +1728,12 @@
 -record('domain_PaymentRoutingRulesObject', {
     'ref' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
     'data' :: dmsl_domain_thrift:'PaymentRoutingRuleset'()
+}).
+
+%% struct 'CriterionObject'
+-record('domain_CriterionObject', {
+    'ref' :: dmsl_domain_thrift:'CriterionRef'(),
+    'data' :: dmsl_domain_thrift:'Criterion'()
 }).
 
 -endif.
