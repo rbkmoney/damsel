@@ -35,10 +35,11 @@ build('damsel', 'docker-host') {
     }
     pipeJava() {
         runStage('Generate Java lib') {
+            def make_env = "SETTINGS_XML=\"${env.SETTINGS_XML}\" MVN_PROFILE=\"${env.MVN_PROFILE}\""
             if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith('epic/')) {
-                sh 'make SETTINGS_XML=${SETTINGS_XML} BRANCH_NAME=${BRANCH_NAME} wc_java.deploy'
+                sh "make ${make_env} wc_java.deploy"
             } else {
-                sh 'make SETTINGS_XML=${SETTINGS_XML} wc_java.compile'
+                sh "make ${make_env} wc_java.compile"
             }
         }
     }
