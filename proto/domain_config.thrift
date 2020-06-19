@@ -115,7 +115,7 @@ exception OperationInvalid { 1: required list<OperationError> errors }
 
 union OperationError {
     1: ObjectReferenceCycle object_reference_cycle
-    2: NonexistantObject nonexistant_object
+    2: NonexistantObject object_not_exists
 }
 
 struct ObjectReferenceCycle {
