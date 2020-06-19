@@ -35,15 +35,16 @@ build('damsel', 'docker-host') {
         // Java
         runStage('Generate Java lib') {
             withMaven() {
-                if (env.BRANCH_NAME == 'master') {
-                    sh 'make wc_deploy_nexus SETTINGS_XML=$SETTINGS_XML'
-                } else if (env.BRANCH_NAME.startsWith('epic/')) {
-                    sh 'make wc_deploy_epic_nexus SETTINGS_XML=$SETTINGS_XML'
-                } else {
-                    sh 'make wc_java_compile SETTINGS_XML=$SETTINGS_XML'
+                withGPG() {
+                    if (env.BRANCH_NAME == 'master') {
+                        sh 'make wc_deploy_nexus SETTINGS_XML=$SETTINGS_XML'
+                    } else if (env.BRANCH_NAME.startsWith('epic/')) {
+                        sh 'make wc_deploy_epic_nexus SETTINGS_XML=$SETTINGS_XML'
+                    } else {
+                        sh 'make wc_java_compile SETTINGS_XML=$SETTINGS_XML'
+                    }
                 }
             }
         }
-
     }
 }
