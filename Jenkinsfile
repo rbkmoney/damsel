@@ -33,8 +33,8 @@ build('damsel', 'docker-host') {
         }
 
         // Java
-        runStage('Execute build container') {
-            withCredentials([[$class: 'FileBinding', credentialsId: 'java-maven-settings.xml', variable: 'SETTINGS_XML']]) {
+        runStage('Generate Java lib') {
+            withMaven() {
                 if (env.BRANCH_NAME == 'master') {
                     sh 'make wc_deploy_nexus SETTINGS_XML=$SETTINGS_XML'
                 } else if (env.BRANCH_NAME.startsWith('epic/')) {
