@@ -1923,8 +1923,8 @@ struct FeeDecision {
 /* Attempt limit */
 
 union AttemptLimitSelector {
-    1: required list<AttemptLimitDesision> decisions
-    2: required AttemptLimit value
+    1: list<AttemptLimitDesision> decisions
+    2: AttemptLimit value
 }
 
 struct AttemptLimitDesision {
