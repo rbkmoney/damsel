@@ -2418,7 +2418,7 @@ struct PaymentInstitution {
     15: optional P2PInspectorSelector p2p_inspector
     16: optional PaymentRouting payment_routing
     17: optional ProviderSelector withdrawal_providers
-    17: optional ProviderSelector p2p_providers
+    18: optional ProviderSelector p2p_providers
 
     // Deprecated
     13: optional WithdrawalProviderSelector withdrawal_providers_legacy
