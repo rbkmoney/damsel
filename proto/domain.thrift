@@ -1932,7 +1932,9 @@ struct AttemptLimitDesision {
     2: required AttemptLimitSelector then_
 }
 
-typedef i64 AttemptLimit
+struct AttemptLimit {
+    1: required i64 attempts
+}
 
 /* Providers */
 
