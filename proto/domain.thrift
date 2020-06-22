@@ -921,6 +921,11 @@ struct ContractAdjustment {
 //     ...
 //   Payouts
 //   ...
+// Provision
+//   Payments
+//   Wallets
+//     Withdrawals
+//     ...
 
 struct TermSet {
     1: optional PaymentsServiceTerms payments
@@ -928,6 +933,9 @@ struct TermSet {
     3: optional PayoutsServiceTerms payouts
     4: optional ReportsServiceTerms reports
     5: optional WalletServiceTerms wallets
+    6: optional PaymentsProvisionTerms payments_provision
+    7: optional RecurrentPaytoolsProvisionTerms recurrent_provision
+    8: optional WalletProvisionTerms wallet_provision
 }
 
 struct TimedTermSet {
@@ -1946,11 +1954,13 @@ struct Provider {
     3: required Proxy proxy
     /* Счет для платажей принятых эквайеромв АБС*/
     5: required string abs_account
-    6: optional PaymentsProvisionTerms payment_terms
-    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
+    9: optional string identity
     7: optional ProviderAccountSet accounts = {}
+    10: optional TermSet terms
 
     // Deprecated
+    6: optional PaymentsProvisionTerms payment_terms
+    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
     4: optional TerminalSelector terminal
 }
 
@@ -2045,6 +2055,11 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
+}
+
+struct WalletProvisionTerms {
+    1: optional CumulativeLimitSelector turnover_limit
+    2: optional WithdrawalProvisionTerms withdrawals
 }
 
 struct WithdrawalProvisionTerms {
@@ -2157,9 +2172,12 @@ struct Terminal {
     1: required string name
     2: required string description
     9: optional ProxyOptions options
-    10: required RiskScore risk_coverage
-    12: optional PaymentsProvisionTerms terms
+    10: optional RiskScore risk_coverage
     13: optional ProviderRef provider_ref
+    14: optional TermSet terms
+
+    // depreacated
+    12: optional PaymentsProvisionTerms terms
 }
 
 union TerminalSelector {
@@ -2397,12 +2415,14 @@ struct PaymentInstitution {
     /* TODO: separated system accounts for wallets look weird */
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
-    13: optional WithdrawalProviderSelector withdrawal_providers
-    14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
     16: optional PaymentRouting payment_routing
+    17: optional ProviderSelector withdrawal_providers
+    17: optional ProviderSelector p2p_providers
 
     // Deprecated
+    13: optional WithdrawalProviderSelector withdrawal_providers_legacy
+    14: optional P2PProviderSelector p2p_providers_legacy
     5: optional ProviderSelector providers
 }
 
