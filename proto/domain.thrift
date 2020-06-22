@@ -1050,6 +1050,7 @@ struct WithdrawalServiceTerms {
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
+    4: optional AttemptLimitSelector attempt_limit
 }
 
 /** P2P service terms **/
@@ -1918,6 +1919,23 @@ struct FeeDecision {
     1: required Predicate if_
     2: required FeeSelector then_
 }
+
+/* Attempt limit */
+
+union AttemptLimitSelector {
+    1: required list<AttemptLimitDesision> decisions
+    2: required AttemptLimit value
+}
+
+struct AttemptLimitDesision {
+    1: required Predicate if_
+    2: required AttemptLimitSelector then_
+}
+
+struct AttemptLimit {
+    1: required i64 attempts
+}
+
 /* Providers */
 
 struct ProviderRef { 1: required ObjectID id }
