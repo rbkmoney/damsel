@@ -94,7 +94,9 @@ union Conflict {
     1: ObjectAlreadyExistsConflict object_already_exists
     2: ObjectNotFoundConflict object_not_found
     3: ObjectReferenceMismatchConflict object_reference_mismatch
-    4: ObjectsNotExistConflict objects_not_exist
+
+    // deprecated
+    // 4: ObjectsNotExistConflict objects_not_exist
 }
 
 struct ObjectAlreadyExistsConflict {
@@ -109,23 +111,20 @@ struct ObjectReferenceMismatchConflict {
     1: required domain.Reference object_ref
 }
 
-struct ObjectsNotExistConflict {
-    1: required list<NonexistantObject> object_refs
+exception OperationInvalid { 1: required list<OperationError> errors }
+
+union OperationError {
+    1: ObjectReferenceCycle object_reference_cycle
+    2: NonexistantObject object_not_exists
+}
+
+struct ObjectReferenceCycle {
+    1: required list<domain.Reference> cycle
 }
 
 struct NonexistantObject {
     1: required domain.Reference object_ref
     2: required list<domain.Reference> referenced_by
-}
-
-exception OperationInvalid { 1: required list<OperationError> errors }
-
-union OperationError {
-    1: ObjectReferenceCycle object_reference_cycle
-}
-
-struct ObjectReferenceCycle {
-    1: required list<domain.Reference> cycle
 }
 
 /**
