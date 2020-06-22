@@ -312,6 +312,9 @@
     'CashFlowDecision'/0,
     'FeeSelector'/0,
     'FeeDecision'/0,
+    'AttemptLimitSelector'/0,
+    'AttemptLimitDesision'/0,
+    'AttemptLimit'/0,
     'ProviderRef'/0,
     'Provider'/0,
     'CashRegisterProviderRef'/0,
@@ -1177,6 +1180,9 @@
     'CashFlowDecision' |
     'FeeSelector' |
     'FeeDecision' |
+    'AttemptLimitSelector' |
+    'AttemptLimitDesision' |
+    'AttemptLimit' |
     'ProviderRef' |
     'Provider' |
     'CashRegisterProviderRef' |
@@ -2047,6 +2053,17 @@
 %% struct 'FeeDecision'
 -type 'FeeDecision'() :: #'domain_FeeDecision'{}.
 
+%% union 'AttemptLimitSelector'
+-type 'AttemptLimitSelector'() ::
+    {'decisions', ['AttemptLimitDesision'()]} |
+    {'value', 'AttemptLimit'()}.
+
+%% struct 'AttemptLimitDesision'
+-type 'AttemptLimitDesision'() :: #'domain_AttemptLimitDesision'{}.
+
+%% struct 'AttemptLimit'
+-type 'AttemptLimit'() :: #'domain_AttemptLimit'{}.
+
 %% struct 'ProviderRef'
 -type 'ProviderRef'() :: #'domain_ProviderRef'{}.
 
@@ -2895,6 +2912,9 @@ structs() ->
         'CashFlowDecision',
         'FeeSelector',
         'FeeDecision',
+        'AttemptLimitSelector',
+        'AttemptLimitDesision',
+        'AttemptLimit',
         'ProviderRef',
         'Provider',
         'CashRegisterProviderRef',
@@ -4526,7 +4546,8 @@ struct_info('WithdrawalServiceTerms') ->
     {struct, struct, [
         {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
         {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
-        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined}
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'AttemptLimitSelector'}}, 'attempt_limit', undefined}
     ]};
 
 struct_info('P2PServiceTerms') ->
@@ -4962,6 +4983,23 @@ struct_info('FeeDecision') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
         {2, required, {struct, union, {dmsl_domain_thrift, 'FeeSelector'}}, 'then_', undefined}
+    ]};
+
+struct_info('AttemptLimitSelector') ->
+    {struct, union, [
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'AttemptLimitDesision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'AttemptLimit'}}, 'value', undefined}
+    ]};
+
+struct_info('AttemptLimitDesision') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'AttemptLimitSelector'}}, 'then_', undefined}
+    ]};
+
+struct_info('AttemptLimit') ->
+    {struct, struct, [
+        {1, required, i64, 'attempts', undefined}
     ]};
 
 struct_info('ProviderRef') ->
@@ -6315,6 +6353,12 @@ record_name('CashFlowDecision') ->
 
 record_name('FeeDecision') ->
     'domain_FeeDecision';
+
+record_name('AttemptLimitDesision') ->
+    'domain_AttemptLimitDesision';
+
+record_name('AttemptLimit') ->
+    'domain_AttemptLimit';
 
 record_name('ProviderRef') ->
     'domain_ProviderRef';

@@ -755,7 +755,8 @@
 -record('domain_WithdrawalServiceTerms', {
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
-    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
+    'attempt_limit' :: dmsl_domain_thrift:'AttemptLimitSelector'() | undefined
 }).
 
 %% struct 'P2PServiceTerms'
@@ -1077,6 +1078,17 @@
 -record('domain_FeeDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
     'then_' :: dmsl_domain_thrift:'FeeSelector'()
+}).
+
+%% struct 'AttemptLimitDesision'
+-record('domain_AttemptLimitDesision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'AttemptLimitSelector'()
+}).
+
+%% struct 'AttemptLimit'
+-record('domain_AttemptLimit', {
+    'attempts' :: integer()
 }).
 
 %% struct 'ProviderRef'
