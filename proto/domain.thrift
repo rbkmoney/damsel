@@ -2177,7 +2177,7 @@ struct Terminal {
     14: optional TermSet terms
 
     // depreacated
-    12: optional PaymentsProvisionTerms terms
+    12: optional PaymentsProvisionTerms terms_legacy
 }
 
 union TerminalSelector {
