@@ -2060,6 +2060,7 @@ struct RecurrentPaytoolsProvisionTerms {
 struct WalletProvisionTerms {
     1: optional CumulativeLimitSelector turnover_limit
     2: optional WithdrawalProvisionTerms withdrawals
+    3: optional P2PProvisionTerms p2p
 }
 
 struct WithdrawalProvisionTerms {
@@ -2176,7 +2177,7 @@ struct Terminal {
     13: optional ProviderRef provider_ref
     14: optional TermSet terms
 
-    // depreacated
+    // deprecated
     12: optional PaymentsProvisionTerms terms_legacy
 }
 
