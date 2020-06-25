@@ -921,11 +921,6 @@ struct ContractAdjustment {
 //     ...
 //   Payouts
 //   ...
-// Provision
-//   Payments
-//   Wallets
-//     Withdrawals
-//     ...
 
 struct TermSet {
     1: optional PaymentsServiceTerms payments
@@ -933,9 +928,6 @@ struct TermSet {
     3: optional PayoutsServiceTerms payouts
     4: optional ReportsServiceTerms reports
     5: optional WalletServiceTerms wallets
-    6: optional PaymentsProvisionTerms payments_provision
-    7: optional RecurrentPaytoolsProvisionTerms recurrent_provision
-    8: optional WalletProvisionTerms wallet_provision
 }
 
 struct TimedTermSet {
@@ -1956,7 +1948,7 @@ struct Provider {
     5: required string abs_account
     9: optional string identity
     7: optional ProviderAccountSet accounts = {}
-    10: optional TermSet terms
+    10: optional ProvisionTermSet terms
 
     // Deprecated
     6: optional PaymentsProvisionTerms payment_terms
@@ -2013,6 +2005,12 @@ struct P2PProvider {
     4: optional string identity
     6: optional P2PProvisionTerms p2p_terms
     7: optional ProviderAccountSet accounts = {}
+}
+
+struct ProvisionTermSet {
+    1: optional PaymentsProvisionTerms payments
+    2: optional RecurrentPaytoolsProvisionTerms recurrent_paytools
+    3: optional WalletProvisionTerms wallet
 }
 
 struct PaymentsProvisionTerms {
@@ -2175,7 +2173,7 @@ struct Terminal {
     9: optional ProxyOptions options
     10: optional RiskScore risk_coverage
     13: optional ProviderRef provider_ref
-    14: optional TermSet terms
+    14: optional ProvisionTermSet terms
 
     // deprecated
     12: optional PaymentsProvisionTerms terms_legacy
