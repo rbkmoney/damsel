@@ -56,20 +56,15 @@
     'object_ref' :: dmsl_domain_thrift:'Reference'()
 }).
 
-%% struct 'ObjectsNotExistConflict'
--record('ObjectsNotExistConflict', {
-    'object_refs' :: [dmsl_domain_config_thrift:'NonexistantObject'()]
+%% struct 'ObjectReferenceCycle'
+-record('ObjectReferenceCycle', {
+    'cycle' :: [dmsl_domain_thrift:'Reference'()]
 }).
 
 %% struct 'NonexistantObject'
 -record('NonexistantObject', {
     'object_ref' :: dmsl_domain_thrift:'Reference'(),
     'referenced_by' :: [dmsl_domain_thrift:'Reference'()]
-}).
-
-%% struct 'ObjectReferenceCycle'
--record('ObjectReferenceCycle', {
-    'cycle' :: [dmsl_domain_thrift:'Reference'()]
 }).
 
 %% exception 'VersionNotFound'

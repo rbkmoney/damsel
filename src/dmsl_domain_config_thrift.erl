@@ -50,10 +50,9 @@
     'ObjectAlreadyExistsConflict'/0,
     'ObjectNotFoundConflict'/0,
     'ObjectReferenceMismatchConflict'/0,
-    'ObjectsNotExistConflict'/0,
-    'NonexistantObject'/0,
     'OperationError'/0,
-    'ObjectReferenceCycle'/0
+    'ObjectReferenceCycle'/0,
+    'NonexistantObject'/0
 ]).
 -export_type([
     'VersionNotFound'/0,
@@ -99,10 +98,9 @@
     'ObjectAlreadyExistsConflict' |
     'ObjectNotFoundConflict' |
     'ObjectReferenceMismatchConflict' |
-    'ObjectsNotExistConflict' |
-    'NonexistantObject' |
     'OperationError' |
-    'ObjectReferenceCycle'.
+    'ObjectReferenceCycle' |
+    'NonexistantObject'.
 
 -type exception_name() ::
     'VersionNotFound' |
@@ -147,8 +145,7 @@
 -type 'Conflict'() ::
     {'object_already_exists', 'ObjectAlreadyExistsConflict'()} |
     {'object_not_found', 'ObjectNotFoundConflict'()} |
-    {'object_reference_mismatch', 'ObjectReferenceMismatchConflict'()} |
-    {'objects_not_exist', 'ObjectsNotExistConflict'()}.
+    {'object_reference_mismatch', 'ObjectReferenceMismatchConflict'()}.
 
 %% struct 'ObjectAlreadyExistsConflict'
 -type 'ObjectAlreadyExistsConflict'() :: #'ObjectAlreadyExistsConflict'{}.
@@ -159,18 +156,16 @@
 %% struct 'ObjectReferenceMismatchConflict'
 -type 'ObjectReferenceMismatchConflict'() :: #'ObjectReferenceMismatchConflict'{}.
 
-%% struct 'ObjectsNotExistConflict'
--type 'ObjectsNotExistConflict'() :: #'ObjectsNotExistConflict'{}.
-
-%% struct 'NonexistantObject'
--type 'NonexistantObject'() :: #'NonexistantObject'{}.
-
 %% union 'OperationError'
 -type 'OperationError'() ::
-    {'object_reference_cycle', 'ObjectReferenceCycle'()}.
+    {'object_reference_cycle', 'ObjectReferenceCycle'()} |
+    {'object_not_exists', 'NonexistantObject'()}.
 
 %% struct 'ObjectReferenceCycle'
 -type 'ObjectReferenceCycle'() :: #'ObjectReferenceCycle'{}.
+
+%% struct 'NonexistantObject'
+-type 'NonexistantObject'() :: #'NonexistantObject'{}.
 
 %% exception 'VersionNotFound'
 -type 'VersionNotFound'() :: #'VersionNotFound'{}.
@@ -269,10 +264,9 @@ structs() ->
         'ObjectAlreadyExistsConflict',
         'ObjectNotFoundConflict',
         'ObjectReferenceMismatchConflict',
-        'ObjectsNotExistConflict',
-        'NonexistantObject',
         'OperationError',
-        'ObjectReferenceCycle'
+        'ObjectReferenceCycle',
+        'NonexistantObject'
     ].
 
 -spec services() -> [service_name()].
@@ -360,8 +354,7 @@ struct_info('Conflict') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectAlreadyExistsConflict'}}, 'object_already_exists', undefined},
         {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectNotFoundConflict'}}, 'object_not_found', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceMismatchConflict'}}, 'object_reference_mismatch', undefined},
-        {4, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectsNotExistConflict'}}, 'objects_not_exist', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceMismatchConflict'}}, 'object_reference_mismatch', undefined}
     ]};
 
 struct_info('ObjectAlreadyExistsConflict') ->
@@ -379,25 +372,21 @@ struct_info('ObjectReferenceMismatchConflict') ->
         {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined}
     ]};
 
-struct_info('ObjectsNotExistConflict') ->
+struct_info('OperationError') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceCycle'}}, 'object_reference_cycle', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_config_thrift, 'NonexistantObject'}}, 'object_not_exists', undefined}
+    ]};
+
+struct_info('ObjectReferenceCycle') ->
     {struct, struct, [
-        {1, required, {list, {struct, struct, {dmsl_domain_config_thrift, 'NonexistantObject'}}}, 'object_refs', undefined}
+        {1, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'cycle', undefined}
     ]};
 
 struct_info('NonexistantObject') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'object_ref', undefined},
         {2, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'referenced_by', undefined}
-    ]};
-
-struct_info('OperationError') ->
-    {struct, union, [
-        {1, optional, {struct, struct, {dmsl_domain_config_thrift, 'ObjectReferenceCycle'}}, 'object_reference_cycle', undefined}
-    ]};
-
-struct_info('ObjectReferenceCycle') ->
-    {struct, struct, [
-        {1, required, {list, {struct, union, {dmsl_domain_thrift, 'Reference'}}}, 'cycle', undefined}
     ]};
 
 struct_info('VersionNotFound') ->
@@ -453,14 +442,11 @@ record_name('ObjectNotFoundConflict') ->
 record_name('ObjectReferenceMismatchConflict') ->
     'ObjectReferenceMismatchConflict';
 
-record_name('ObjectsNotExistConflict') ->
-    'ObjectsNotExistConflict';
+record_name('ObjectReferenceCycle') ->
+    'ObjectReferenceCycle';
 
 record_name('NonexistantObject') ->
     'NonexistantObject';
-
-record_name('ObjectReferenceCycle') ->
-    'ObjectReferenceCycle';
 
 record_name('VersionNotFound') ->
     'VersionNotFound';
