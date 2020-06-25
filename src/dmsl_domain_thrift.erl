@@ -5291,7 +5291,8 @@ struct_info('TerminalRef') ->
 
 struct_info('WithdrawalTerminalRef') ->
     {struct, struct, [
-        {1, required, i32, 'id', undefined}
+        {1, required, i32, 'id', undefined},
+        {2, optional, i64, 'priority', 1000}
     ]};
 
 struct_info('WithdrawalTerminal') ->

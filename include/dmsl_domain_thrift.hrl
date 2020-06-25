@@ -1330,7 +1330,8 @@
 
 %% struct 'WithdrawalTerminalRef'
 -record('domain_WithdrawalTerminalRef', {
-    'id' :: dmsl_domain_thrift:'ObjectID'()
+    'id' :: dmsl_domain_thrift:'ObjectID'(),
+    'priority' = 1000 :: integer() | undefined
 }).
 
 %% struct 'WithdrawalTerminal'
