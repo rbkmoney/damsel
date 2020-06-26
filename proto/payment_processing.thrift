@@ -745,6 +745,23 @@ struct InvoicePaymentCaptureParams {
 }
 
 /**
+ * Параметры создаваемой поправки к инвойсу.
+ */
+struct InvoiceAdjustmentParams {
+    /** Причина, на основании которой создаётся поправка. */
+    1: required string reason
+    /** Сценарий создаваемой поправки. */
+    2: optional InvoiceAdjustmentScenario scenario
+}
+
+/**
+ * Сценарий поправки к инвойсу.
+ */
+union InvoicePaymentAdjustmentScenario {
+    2: domain.InvoiceAdjustmentStatusChange status_change
+}
+
+/**
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
@@ -953,6 +970,18 @@ service Invoicing {
             2: InvoiceNotFound ex2,
             3: EventNotFound ex3,
             4: base.InvalidRequest ex4
+        )
+
+    InvoiceAdjustment CreateInvoiceAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        4: InvoiceAdjustmentParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            7: InvoiceAlreadyHasStatus ex7
+            8: base.InvalidRequest ex8
         )
 
     /* Terms */
