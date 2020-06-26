@@ -1949,6 +1949,7 @@ struct Provider {
     9: optional string identity
     7: optional ProviderAccountSet accounts = {}
     10: optional ProvisionTermSet terms
+    11: optional list<ProviderParameter> params_schema
 
     // Deprecated
     6: optional PaymentsProvisionTerms payment_terms
@@ -1961,28 +1962,28 @@ struct CashRegisterProviderRef { 1: required ObjectID id }
 struct CashRegisterProvider {
     1: required string                              name
     2: optional string                              description
-    3: required list<CashRegisterProviderParameter> params_schema
+    3: required list<ProviderParameter>             params_schema
     4: required Proxy                               proxy
 }
 
-struct CashRegisterProviderParameter {
+struct ProviderParameter {
     1: required string                            id
     2: optional string                            description
-    3: required CashRegisterProviderParameterType type
+    3: required ProviderParameterType             type
     4: required bool                              is_required
 }
 
-union CashRegisterProviderParameterType {
-    1: CashRegisterProviderParameterString   string_type
-    2: CashRegisterProviderParameterInteger  integer_type
-    3: CashRegisterProviderParameterUrl      url_type
-    4: CashRegisterProviderParameterPassword password_type
+union ProviderParameterType {
+    1: ProviderParameterString   string_type
+    2: ProviderParameterInteger  integer_type
+    3: ProviderParameterUrl      url_type
+    4: ProviderParameterPassword password_type
 }
 
-struct CashRegisterProviderParameterString {}
-struct CashRegisterProviderParameterInteger {}
-struct CashRegisterProviderParameterUrl {}
-struct CashRegisterProviderParameterPassword {}
+struct ProviderParameterString {}
+struct ProviderParameterInteger {}
+struct ProviderParameterUrl {}
+struct ProviderParameterPassword {}
 
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
