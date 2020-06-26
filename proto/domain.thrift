@@ -1944,7 +1944,6 @@ struct Provider {
     1: required string name
     2: required string description
     3: required Proxy proxy
-    /* Счет для платажей принятых эквайеромв АБС*/
     9: optional string identity
     7: optional ProviderAccountSet accounts = {}
     10: optional ProvisionTermSet terms
