@@ -109,6 +109,7 @@ enum ThreeDsVerification {
 /* Invoices */
 
 typedef base.ID InvoiceID
+typedef base.ID InvoiceAdjustmentID
 typedef base.ID InvoicePaymentID
 typedef base.ID InvoicePaymentChargebackID
 typedef base.ID InvoicePaymentRefundID
