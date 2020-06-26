@@ -757,7 +757,7 @@ struct InvoiceAdjustmentParams {
 /**
  * Сценарий поправки к инвойсу.
  */
-union InvoicePaymentAdjustmentScenario {
+union InvoiceAdjustmentScenario {
     2: domain.InvoiceAdjustmentStatusChange status_change
 }
 
