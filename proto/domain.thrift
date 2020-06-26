@@ -344,6 +344,18 @@ struct InvoiceAdjustment {
     9: optional InvoiceAdjustmentState state
 }
 
+struct InvoiceAdjustmentPending   {}
+struct InvoiceAdjustmentProcessed {}
+struct InvoiceAdjustmentCaptured  { 1: required base.Timestamp at }
+struct InvoiceAdjustmentCancelled { 1: required base.Timestamp at }
+
+union InvoiceAdjustmentStatus {
+    1: InvoiceAdjustmentPending     pending
+    2: InvoiceAdjustmentCaptured   captured
+    3: InvoiceAdjustmentCancelled cancelled
+    4: InvoiceAdjustmentProcessed processed
+}
+
 /**
  * Специфическое для выбранного сценария состояние поправки к инвойсу.
  */
