@@ -1945,13 +1945,13 @@ struct Provider {
     2: required string description
     3: required Proxy proxy
     /* Счет для платажей принятых эквайеромв АБС*/
-    5: optional string abs_account
     9: optional string identity
     7: optional ProviderAccountSet accounts = {}
     10: optional ProvisionTermSet terms
     11: optional list<ProviderParameter> params_schema
 
     // Deprecated
+    5: optional string abs_account
     6: optional PaymentsProvisionTerms payment_terms
     8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
     4: optional TerminalSelector terminal
