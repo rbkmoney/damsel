@@ -887,6 +887,10 @@ exception InvalidPaymentTargetStatus {
     1: required domain.InvoicePaymentStatus status
 }
 
+exception InvoiceAlreadyHasStatus {
+    1: required domain.InvoiceStatus status
+}
+
 exception InvoicePaymentAlreadyHasStatus {
     1: required domain.InvoicePaymentStatus status
 }
