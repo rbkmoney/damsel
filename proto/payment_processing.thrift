@@ -597,6 +597,7 @@ struct InvoiceRefundSession {
     1: optional domain.TransactionInfo transaction_info
 }
 
+typedef domain.InvoiceAdjustment InvoiceAdjustment
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 struct InvoicePaymentChargeback {
