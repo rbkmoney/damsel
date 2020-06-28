@@ -877,6 +877,9 @@ exception InvoiceStateInvalid {}
 exception InvoiceAdjustmentNotFound {}
 exception InvoiceAdjustmentInProgress {}
 exception InvoiceAdjustmentStatusUnacceptable {}
+exception InvalidInvoiceAdjustmentStatus {
+    1: required domain.InvoiceAdjustmentStatus status
+}
 
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
@@ -1049,7 +1052,7 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             4: InvoiceAdjustmentNotFound ex4,
-            5: InvalidAdjustmentStatus ex5
+            5: InvalidInvoiceAdjustmentStatus ex5
         )
 
     void CancelAdjustment (
@@ -1061,7 +1064,7 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             4: InvoiceAdjustmentNotFound ex4,
-            5: InvalidAdjustmentStatus ex5
+            5: InvalidInvoiceAdjustmentStatus ex5
         )
 
     /* Terms */
