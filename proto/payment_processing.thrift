@@ -1019,7 +1019,7 @@ service Invoicing {
     InvoiceAdjustment CreateInvoiceAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
-        4: InvoiceAdjustmentParams params
+        3: InvoiceAdjustmentParams params
     )
         throws (
             1: InvalidUser ex1,
@@ -1034,36 +1034,36 @@ service Invoicing {
     InvoiceAdjustment GetAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
-        4: domain.InvoiceAdjustmentID adjustment_id
+        3: domain.InvoiceAdjustmentID adjustment_id
     )
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
-            4: InvoiceAdjustmentNotFound ex4
+            3: InvoiceAdjustmentNotFound ex3
         )
 
     void CaptureAdjustment (
         1: UserInfo user,
         2: domain.InvoiceID id,
-        4: domain.InvoiceAdjustmentID adjustment_id
+        3: domain.InvoiceAdjustmentID adjustment_id
     )
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
-            4: InvoiceAdjustmentNotFound ex4,
-            5: InvalidInvoiceAdjustmentStatus ex5
+            3: InvoiceAdjustmentNotFound ex3,
+            4: InvalidInvoiceAdjustmentStatus ex4
         )
 
     void CancelAdjustment (
         1: UserInfo user
         2: domain.InvoiceID id,
-        4: domain.InvoiceAdjustmentID adjustment_id
+        3: domain.InvoiceAdjustmentID adjustment_id
     )
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
-            4: InvoiceAdjustmentNotFound ex4,
-            5: InvalidInvoiceAdjustmentStatus ex5
+            3: InvoiceAdjustmentNotFound ex3,
+            4: InvalidInvoiceAdjustmentStatus ex4
         )
 
     /* Terms */
