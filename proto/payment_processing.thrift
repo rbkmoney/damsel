@@ -1027,9 +1027,8 @@ service Invoicing {
             3: InvoiceStateInvalid ex3,
             4: InvoiceAdjustmentInProgress ex4,
             5: InvoiceAdjustmentStatusUnacceptable ex5,
-            6: InvoiceAdjustmentInProgress ex6,
-            7: InvoiceAlreadyHasStatus ex7
-            8: base.InvalidRequest ex8
+            7: InvoiceAlreadyHasStatus ex6
+            8: base.InvalidRequest ex7
         )
 
     InvoiceAdjustment GetAdjustment (
