@@ -876,6 +876,7 @@ exception InvoiceNotFound {}
 exception InvoiceStateInvalid {}
 exception InvoiceAdjustmentNotFound {}
 exception InvoiceAdjustmentInProgress {}
+exception InvoiceAdjustmentStatusUnacceptable {}
 
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
