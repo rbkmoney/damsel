@@ -873,7 +873,9 @@ union InvalidStatus {
 
 exception InvalidUser {}
 exception InvoiceNotFound {}
+exception InvoiceStateInvalid {}
 exception InvoiceAdjustmentNotFound {}
+exception InvoiceAdjustmentInProgress {}
 
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
@@ -1019,8 +1021,9 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoiceStateInvalid ex3,
-            4: InvoiceAdjustmentStatusUnacceptable ex4,
-            5: InvoiceAdjustmentInProgress ex5,
+            4: InvoiceAdjustmentInProgress ex4,
+            5: InvoiceAdjustmentStatusUnacceptable ex5,
+            6: InvoiceAdjustmentInProgress ex6,
             7: InvoiceAlreadyHasStatus ex7
             8: base.InvalidRequest ex8
         )
