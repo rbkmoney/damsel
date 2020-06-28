@@ -336,12 +336,12 @@ struct RecurrentParentPayment {
 
 struct InvoiceAdjustment {
     1: required InvoiceAdjustmentID id
-    2: required InvoiceAdjustmentStatus status
+    2: required string reason
     3: required base.Timestamp created_at
-    4: required DataRevision domain_revision
-    5: required string reason
-    8: optional PartyRevision party_revision
-    9: optional InvoiceAdjustmentState state
+    4: required InvoiceAdjustmentStatus status
+    5: required DataRevision domain_revision
+    6: optional PartyRevision party_revision
+    7: optional InvoiceAdjustmentState state
 }
 
 struct InvoiceAdjustmentPending   {}
@@ -350,8 +350,8 @@ struct InvoiceAdjustmentCaptured  { 1: required base.Timestamp at }
 struct InvoiceAdjustmentCancelled { 1: required base.Timestamp at }
 
 union InvoiceAdjustmentStatus {
-    1: InvoiceAdjustmentPending     pending
-    2: InvoiceAdjustmentCaptured   captured
+    1: InvoiceAdjustmentPending   pending
+    2: InvoiceAdjustmentCaptured  captured
     3: InvoiceAdjustmentCancelled cancelled
     4: InvoiceAdjustmentProcessed processed
 }
