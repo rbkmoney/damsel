@@ -1025,7 +1025,7 @@ service Invoicing {
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
             3: InvoiceStateInvalid ex3,
-            4: InvoiceAdjustmentInProgress ex4,
+            4: InvoiceAdjustmentPending ex4,
             5: InvoiceAdjustmentStatusUnacceptable ex5,
             7: InvoiceAlreadyHasStatus ex6
             8: base.InvalidRequest ex7
