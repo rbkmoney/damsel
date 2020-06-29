@@ -875,7 +875,7 @@ exception InvalidUser {}
 exception InvoiceNotFound {}
 exception InvoiceStateInvalid {}
 exception InvoiceAdjustmentNotFound {}
-exception InvoiceAdjustmentInProgress {}
+exception InvoiceAdjustmentPending {}
 exception InvoiceAdjustmentStatusUnacceptable {}
 exception InvalidInvoiceAdjustmentStatus {
     1: required domain.InvoiceAdjustmentStatus status
