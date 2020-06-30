@@ -32,6 +32,7 @@ typedef msgpack.Value QuoteData
 union Intent {
     1: FinishIntent finish
     2: SleepIntent sleep
+    3: SuspendIntent suspend
 }
 
 /**
@@ -61,6 +62,32 @@ struct Success {
 struct SleepIntent {
     /** Таймер, определяющий когда следует продолжить взаимодействие. */
     1: required base.Timer timer
+}
+
+typedef base.Tag CallbackTag
+typedef base.Opaque Callback
+typedef base.Opaque CallbackResponse
+
+/**
+ * Требование приостановить сессию взаимодействия, с продолжением по факту прихода обратного
+ * запроса (callback), либо выполняет один из указаных вариантов timeout_behaviour.
+ */
+struct SuspendIntent {
+    /**
+     * Ассоциация, по которой обработчик обратного запроса сможет идентифицировать сессию
+     * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
+     */
+    1: required CallbackTag tag
+
+    /**
+     * Таймер, определяющий время, в течение которого процессинг ожидает обратный запрос.
+     */
+    2: required base.Timer timeout
+
+    /**
+    * Поведение процессинга в случае истечения заданного timeout
+    */
+    3: optional timeout_behaviour.TimeoutBehaviour timeout_behaviour
 }
 
 ///
@@ -140,6 +167,11 @@ struct Quote {
     5: required QuoteData           quote_data
 }
 
+struct WithdrawalCallbackResult {
+    1: required CallbackResponse response
+    2: required ProcessResult    result
+}
+
 service Adapter {
 
     /**
@@ -163,4 +195,27 @@ service Adapter {
     throws (
         1: GetQuoteFailure ex1
     )
+
+    /**
+     * Запрос к адаптеру на обработку обратного вызова.
+     */
+    WithdrawalCallbackResult HandleWithdrawalCallback (
+        1: Callback callback,
+        2: Withdrawal withdrawal
+        3: InternalState state
+        4: Options opts
+    )
+    throws (
+    )
+
+}
+
+service AdapterHost {
+
+    /**
+     * Запрос к процессингу на обработку обратного вызова.
+     */
+    CallbackResponse ProcessWithdrawalCallback (1: CallbackTag tag, 2: Callback callback)
+        throws (1: base.InvalidRequest ex1)
+
 }
