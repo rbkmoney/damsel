@@ -2,6 +2,7 @@ include "base.thrift"
 include "msgpack.thrift"
 include "domain.thrift"
 include "withdrawals_domain.thrift"
+include "timeout_behaviour.thrift"
 
 namespace java com.rbkmoney.damsel.withdrawals.provider_adapter
 namespace erlang wthadpt
