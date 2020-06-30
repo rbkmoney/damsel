@@ -27,13 +27,20 @@ typedef msgpack.Value InternalState
 typedef msgpack.Value QuoteData
 
 /**
+ * Запрос/ответ адаптера при обработке обратного вызова в рамках сессии.
+ */
+typedef base.Opaque CallbackPayload
+typedef base.Opaque CallbackResponsePayload
+
+typedef base.Tag CallbackTag
+
+/**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
  * стороной.
  */
 union Intent {
     1: FinishIntent finish
     2: SleepIntent sleep
-    3: SuspendIntent suspend
 }
 
 /**
@@ -63,32 +70,12 @@ struct Success {
 struct SleepIntent {
     /** Таймер, определяющий когда следует продолжить взаимодействие. */
     1: required base.Timer timer
-}
 
-typedef base.Tag CallbackTag
-typedef base.Opaque Callback
-typedef base.Opaque CallbackResponse
-
-/**
- * Требование приостановить сессию взаимодействия, с продолжением по факту прихода обратного
- * запроса (callback), либо выполняет один из указаных вариантов timeout_behaviour.
- */
-struct SuspendIntent {
     /**
      * Ассоциация, по которой обработчик обратного запроса сможет идентифицировать сессию
      * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
      */
-    1: required CallbackTag tag
-
-    /**
-     * Таймер, определяющий время, в течение которого процессинг ожидает обратный запрос.
-     */
-    2: required base.Timer timeout
-
-    /**
-    * Поведение процессинга в случае истечения заданного timeout
-    */
-    3: optional timeout_behaviour.TimeoutBehaviour timeout_behaviour
+    2: optional CallbackTag callback_tag
 }
 
 ///
@@ -168,9 +155,19 @@ struct Quote {
     5: required QuoteData           quote_data
 }
 
+struct Callback {
+    1: required CallbackTag tag
+    2: required CallbackPayload payload
+}
+
+struct CallbackResponse {
+    1: required CallbackResponsePayload payload
+}
+
 struct WithdrawalCallbackResult {
-    1: required CallbackResponse response
-    2: required ProcessResult    result
+    1: required Intent           intent
+    2: optional InternalState    next_state
+    3: required CallbackResponse response
 }
 
 service Adapter {
@@ -211,12 +208,37 @@ service Adapter {
 
 }
 
+exception SessionNotFound {}
+
+union ProcessCallbackResult {
+    /** Вызов был обработан в рамках сесии */
+    1: ProcessCallbackSucceeded succeeded
+
+    /** Сессия уже завершена, вызов обработать не удалось */
+    2: ProcessCallbackFinished finished
+}
+
+struct ProcessCallbackSucceeded {
+    1: required CallbackResponse response
+}
+
+struct ProcessCallbackFinished {
+    /**
+     * Состояние сессии после обработки последнего ответа адаптера.
+     */
+    1: required Withdrawal withdrawal
+    2: required InternalState state
+    3: required Options opts
+}
+
 service AdapterHost {
 
     /**
      * Запрос к процессингу на обработку обратного вызова.
      */
-    CallbackResponse ProcessWithdrawalCallback (1: CallbackTag tag, 2: Callback callback)
-        throws (1: base.InvalidRequest ex1)
+    ProcessCallbackResult ProcessWithdrawalCallback (1: Callback callback)
+        throws (
+            1: SessionNotFound ex1
+        )
 
 }
