@@ -381,7 +381,8 @@
 -record('payproc_InvoicePaymentChargebackReopenParams', {
     'body' :: dmsl_domain_thrift:'Cash'() | undefined,
     'levy' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'move_to_stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackRejectParams'

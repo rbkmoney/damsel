@@ -2624,7 +2624,8 @@ struct_info('InvoicePaymentChargebackReopenParams') ->
     {struct, struct, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'body', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'levy', undefined},
-        {3, optional, string, 'occurred_at', undefined}
+        {3, optional, string, 'occurred_at', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'move_to_stage', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackRejectParams') ->
@@ -4838,7 +4839,8 @@ function_info('Invoicing', 'ReopenChargeback', exceptions) ->
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentChargebackCurrency'}}, 'ex9', undefined},
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
-        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCannotReopenAfterArbitration'}}, 'ex13', undefined}
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackCannotReopenAfterArbitration'}}, 'ex13', undefined},
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackInvalidStage'}}, 'ex14', undefined}
     ]};
 function_info('Invoicing', 'CancelChargeback', params_type) ->
     {struct, struct, [
