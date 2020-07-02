@@ -678,6 +678,10 @@ struct InvoicePaymentChargebackReopenParams {
      * Фактическое время опротестования
      */
     3: optional base.Timestamp occurred_at
+    /**
+     * Возможность переместить стадию
+     */
+    3: optional domain.InvoicePaymentChargebackStage move_to_stage
 }
 
 struct InvoicePaymentChargebackRejectParams {
