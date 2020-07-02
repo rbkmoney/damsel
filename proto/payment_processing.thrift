@@ -681,7 +681,7 @@ struct InvoicePaymentChargebackReopenParams {
     /**
      * Возможность переместить стадию
      */
-    3: optional domain.InvoicePaymentChargebackStage move_to_stage
+    4: optional domain.InvoicePaymentChargebackStage move_to_stage
 }
 
 struct InvoicePaymentChargebackRejectParams {
