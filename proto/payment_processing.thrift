@@ -1225,6 +1225,7 @@ service Invoicing {
             11: InvoicePaymentChargebackInvalidStatus ex11
             12: InvalidContractStatus ex12
             13: InvoicePaymentChargebackCannotReopenAfterArbitration ex13
+            11: InvoicePaymentChargebackInvalidStage ex14
         )
 
     /**
