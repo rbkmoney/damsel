@@ -147,7 +147,7 @@ struct InvoicePaymentChange {
  * Событие, касающееся корректировки по инвойсу.
  */
 struct InvoiceAdjustmentChange {
-    1: required domain.InvoiceID id
+    1: required domain.InvoiceAdjustmentID id
     2: required InvoiceAdjustmentChangePayload payload
 }
 
@@ -878,9 +878,6 @@ union InvalidStatus {
 
 exception InvalidUser {}
 exception InvoiceNotFound {}
-exception InvoiceStateInvalid {
-    1: required Invoice state
-}
 
 exception InvoiceAdjustmentNotFound {}
 exception InvoiceAdjustmentPending {}
@@ -1032,7 +1029,7 @@ service Invoicing {
         throws (
             1: InvalidUser ex1,
             2: InvoiceNotFound ex2,
-            3: InvoiceStateInvalid ex3,
+            3: InvalidInvoiceStatus ex3,
             4: InvoiceAdjustmentPending ex4,
             5: InvoiceAdjustmentStatusUnacceptable ex5,
             7: InvoiceAlreadyHasStatus ex6
