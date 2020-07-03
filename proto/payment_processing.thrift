@@ -2485,9 +2485,9 @@ service PartyManagement {
 
     /* Provider */
 
-    domain.P2PProvider ComputeP2PProvider (
+    domain.Provider ComputeProvider (
         1: UserInfo user,
-        2: domain.P2PProviderRef p2p_provider_ref,
+        2: domain.ProviderRef provider_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )
@@ -2496,31 +2496,9 @@ service PartyManagement {
             2: ProviderNotFound ex2
         )
 
-    domain.WithdrawalProvider ComputeWithdrawalProvider (
+    domain.ProvisionTermSet ComputeProviderTerminalTerms(
         1: UserInfo user,
-        2: domain.WithdrawalProviderRef withdrawal_provider_ref,
-        3: domain.DataRevision domain_revision,
-        4: Varset varset
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: ProviderNotFound ex2
-        )
-
-    domain.Provider ComputePaymentProvider (
-        1: UserInfo user,
-        2: domain.ProviderRef payment_provider_ref,
-        3: domain.DataRevision domain_revision,
-        4: Varset varset
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: ProviderNotFound ex2
-        )
-
-    domain.PaymentsProvisionTerms ComputePaymentProviderTerminalTerms(
-        1: UserInfo user,
-        2: domain.ProviderRef payment_provider_ref,
+        2: domain.ProviderRef provider_ref,
         3: domain.TerminalRef terminal_ref,
         4: domain.DataRevision domain_revision,
         5: Varset varset
