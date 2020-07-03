@@ -147,8 +147,8 @@ struct InvoicePaymentChange {
  * Событие, касающееся корректировки по инвойсу.
  */
 struct InvoiceAdjustmentChange {
-    1: required InvoiceAdjustmentChangePayload payload
-    2: optional base.Timestamp occurred_at
+    1: required domain.InvoiceID id
+    2: required InvoiceAdjustmentChangePayload payload
 }
 
 /**
@@ -599,6 +599,7 @@ struct InvoicePaymentParamsFlowHold {
 struct Invoice {
     1: required domain.Invoice invoice
     2: required list<InvoicePayment> payments
+    3: optional list<InvoiceAdjustment> adjustments
 }
 
 struct InvoicePayment {
@@ -877,7 +878,10 @@ union InvalidStatus {
 
 exception InvalidUser {}
 exception InvoiceNotFound {}
-exception InvoiceStateInvalid {}
+exception InvoiceStateInvalid {
+    1: required Invoice state
+}
+
 exception InvoiceAdjustmentNotFound {}
 exception InvoiceAdjustmentPending {}
 exception InvoiceAdjustmentStatusUnacceptable {}
