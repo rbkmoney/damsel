@@ -71,8 +71,14 @@ struct SleepIntent {
     1: required base.Timer timer
 
     /**
-     * Ассоциация, по которой обработчик обратного запроса сможет идентифицировать сессию
+     * Идентификатор, по которому обработчик обратного запроса сможет идентифицировать сессию
      * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
+     * Единожды указанный, продолжает действовать до успешной обработки обратного
+     * запроса или завершения сессии.
+     * Должен быть уникальным среди всех сессий такого типа.
+     * Один и тот же идентификатор можно устанавливать для одной и той же сессии до тех пор, пока
+     * обратный вызов с таким идентификатором не будет успешно обработан. Попытка установить уже
+     * обработанный идентификатор приведет к ошибке.
      */
     2: optional CallbackTag callback_tag
 }
@@ -163,7 +169,10 @@ struct CallbackResponse {
     1: required CallbackResponsePayload payload
 }
 
-struct WithdrawalCallbackResult {
+/**
+ * Результат обработки адаптером обратного вызова в рамках сессии.
+ */
+struct CallbackResult {
     1: required Intent           intent
     2: optional InternalState    next_state
     3: required CallbackResponse response
@@ -196,7 +205,7 @@ service Adapter {
     /**
      * Запрос к адаптеру на обработку обратного вызова.
      */
-    WithdrawalCallbackResult HandleWithdrawalCallback (
+    CallbackResult HandleCallback (
         1: Callback callback,
         2: Withdrawal withdrawal
         3: InternalState state
@@ -233,9 +242,16 @@ struct ProcessCallbackFinished {
 service AdapterHost {
 
     /**
-     * Запрос к процессингу на обработку обратного вызова.
+     * Запрос к процессингу на обработку обратного вызова от провайдера.
+     * Обработка этого метода процессингом зависит от состояния сессии:
+     *  - будет вызван Adapter.HandleCallback с контекстом сессии, если сессия еще активна,
+     *    и вызов с таким идентификатором не обрабатывался; или
+     *  - будет возвращен прошлый ответ, если вызов с таким идентификатором уже обрабатывался
+     *    вне зависимости от того завершена сессия или нет; или
+     *  - будет возвращен ответ, что сессия уже завершена, если сессия завершена, и вызов с таким
+     *    идентификатором не был обработан успешно.
      */
-    ProcessCallbackResult ProcessWithdrawalCallback (1: Callback callback)
+    ProcessCallbackResult ProcessCallback (1: Callback callback)
         throws (
             1: SessionNotFound ex1
         )
