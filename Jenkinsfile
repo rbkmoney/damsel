@@ -10,7 +10,7 @@ build('damsel', 'docker-host') {
     runStage('load pipeline') {
         env.JENKINS_LIB = "build_utils/jenkins_lib"
         pipeDefault = load("${env.JENKINS_LIB}/pipeDefault.groovy")
-        pipeJava = load("${env.JENKINS_LIB}/pipeJavaProto.groovy")
+        pipeJavaProto = load("${env.JENKINS_LIB}/pipeJavaProto.groovy")
         gitUtils = load("${env.JENKINS_LIB}/gitUtils.groovy")
     }
 
@@ -33,14 +33,5 @@ build('damsel', 'docker-host') {
           }
         }
     }
-    pipeJava() {
-        runStage('Generate Java lib') {
-            def make_env = "SETTINGS_XML=\"${env.SETTINGS_XML}\" MVN_PROFILE=\"${env.MVN_PROFILE}\""
-            if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith('epic/')) {
-                sh "make ${make_env} wc_java.deploy"
-            } else {
-                sh "make ${make_env} wc_java.compile"
-            }
-        }
-    }
+    pipeJavaProto()
 }
