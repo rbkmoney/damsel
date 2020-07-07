@@ -109,6 +109,7 @@ union InvoiceChange {
     1: InvoiceCreated          invoice_created
     2: InvoiceStatusChanged    invoice_status_changed
     3: InvoicePaymentChange    invoice_payment_change
+    4: InvoiceAdjustmentChange invoice_adjustment_change
 }
 
 union InvoiceTemplateChange {
@@ -140,6 +141,36 @@ struct InvoicePaymentChange {
     1: required domain.InvoicePaymentID id
     2: required InvoicePaymentChangePayload payload
     3: optional base.Timestamp occurred_at
+}
+
+/**
+ * Событие, касающееся корректировки по инвойсу.
+ */
+struct InvoiceAdjustmentChange {
+    1: required domain.InvoiceAdjustmentID id
+    2: required InvoiceAdjustmentChangePayload payload
+}
+
+/**
+ * Один из возможных вариантов события, порождённого корректировкой по инвойсу.
+ */
+union InvoiceAdjustmentChangePayload {
+    1: InvoiceAdjustmentCreated       invoice_adjustment_created
+    2: InvoiceAdjustmentStatusChanged invoice_adjustment_status_changed
+}
+
+/**
+ * Событие о создании корректировки инвойса
+ */
+struct InvoiceAdjustmentCreated {
+    1: required domain.InvoiceAdjustment adjustment
+}
+
+/**
+ * Событие об изменении статуса корректировки платежа
+ */
+struct InvoiceAdjustmentStatusChanged {
+    1: required domain.InvoiceAdjustmentStatus status
 }
 
 /**
@@ -568,6 +599,7 @@ struct InvoicePaymentParamsFlowHold {
 struct Invoice {
     1: required domain.Invoice invoice
     2: required list<InvoicePayment> payments
+    3: optional list<InvoiceAdjustment> adjustments
 }
 
 struct InvoicePayment {
@@ -597,6 +629,7 @@ struct InvoiceRefundSession {
     1: optional domain.TransactionInfo transaction_info
 }
 
+typedef domain.InvoiceAdjustment InvoiceAdjustment
 typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 struct InvoicePaymentChargeback {
@@ -749,6 +782,23 @@ struct InvoicePaymentCaptureParams {
 }
 
 /**
+ * Параметры создаваемой поправки к инвойсу.
+ */
+struct InvoiceAdjustmentParams {
+    /** Причина, на основании которой создаётся поправка. */
+    1: required string reason
+    /** Сценарий создаваемой поправки. */
+    2: required InvoiceAdjustmentScenario scenario
+}
+
+/**
+ * Сценарий поправки к инвойсу.
+ */
+union InvoiceAdjustmentScenario {
+    1: domain.InvoiceAdjustmentStatusChange status_change
+}
+
+/**
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
@@ -828,6 +878,14 @@ union InvalidStatus {
 
 exception InvalidUser {}
 exception InvoiceNotFound {}
+
+exception InvoiceAdjustmentNotFound {}
+exception InvoiceAdjustmentPending {}
+exception InvoiceAdjustmentStatusUnacceptable {}
+exception InvalidInvoiceAdjustmentStatus {
+    1: required domain.InvoiceAdjustmentStatus status
+}
+
 exception InvoicePaymentNotFound {}
 exception InvoicePaymentRefundNotFound {}
 
@@ -872,6 +930,10 @@ exception InvalidPaymentStatus {
 
 exception InvalidPaymentTargetStatus {
     1: required domain.InvoicePaymentStatus status
+}
+
+exception InvoiceAlreadyHasStatus {
+    1: required domain.InvoiceStatus status
 }
 
 exception InvoicePaymentAlreadyHasStatus {
@@ -957,6 +1019,56 @@ service Invoicing {
             2: InvoiceNotFound ex2,
             3: EventNotFound ex3,
             4: base.InvalidRequest ex4
+        )
+
+    InvoiceAdjustment CreateInvoiceAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: InvoiceAdjustmentParams params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvalidInvoiceStatus ex3,
+            4: InvoiceAdjustmentPending ex4,
+            5: InvoiceAdjustmentStatusUnacceptable ex5,
+            6: InvoiceAlreadyHasStatus ex6
+            7: base.InvalidRequest ex7
+        )
+
+    InvoiceAdjustment GetAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoiceAdjustmentID adjustment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoiceAdjustmentNotFound ex3
+        )
+
+    void CaptureAdjustment (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoiceAdjustmentID adjustment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoiceAdjustmentNotFound ex3,
+            4: InvalidInvoiceAdjustmentStatus ex4
+        )
+
+    void CancelAdjustment (
+        1: UserInfo user
+        2: domain.InvoiceID id,
+        3: domain.InvoiceAdjustmentID adjustment_id
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoiceAdjustmentNotFound ex3,
+            4: InvalidInvoiceAdjustmentStatus ex4
         )
 
     /* Terms */

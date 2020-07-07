@@ -109,6 +109,7 @@ enum ThreeDsVerification {
 /* Invoices */
 
 typedef base.ID InvoiceID
+typedef base.ID InvoiceAdjustmentID
 typedef base.ID InvoicePaymentID
 typedef base.ID InvoicePaymentChargebackID
 typedef base.ID InvoicePaymentRefundID
@@ -332,6 +333,47 @@ struct RecurrentParentPayment {
 }
 
 /* Adjustments */
+
+struct InvoiceAdjustment {
+    1: required InvoiceAdjustmentID id
+    2: required string reason
+    3: required base.Timestamp created_at
+    4: required InvoiceAdjustmentStatus status
+    5: required DataRevision domain_revision
+    6: optional PartyRevision party_revision
+    7: optional InvoiceAdjustmentState state
+}
+
+struct InvoiceAdjustmentPending   {}
+struct InvoiceAdjustmentProcessed {}
+struct InvoiceAdjustmentCaptured  { 1: required base.Timestamp at }
+struct InvoiceAdjustmentCancelled { 1: required base.Timestamp at }
+
+union InvoiceAdjustmentStatus {
+    1: InvoiceAdjustmentPending   pending
+    2: InvoiceAdjustmentCaptured  captured
+    3: InvoiceAdjustmentCancelled cancelled
+    4: InvoiceAdjustmentProcessed processed
+}
+
+/**
+ * Специфическое для выбранного сценария состояние поправки к инвойсу.
+ */
+union InvoiceAdjustmentState {
+    1: InvoiceAdjustmentStatusChangeState status_change
+}
+
+struct InvoiceAdjustmentStatusChangeState {
+    1: required InvoiceAdjustmentStatusChange scenario
+}
+
+/**
+ * Параметры поправки к инвойсу, используемые для смены его статуса.
+ */
+struct InvoiceAdjustmentStatusChange {
+    /** Статус, в который необходимо перевести инвойс. */
+    1: required InvoiceStatus target_status
+}
 
 struct InvoicePaymentAdjustment {
     1: required InvoicePaymentAdjustmentID id
