@@ -40,6 +40,7 @@
     'Amount'/0,
     'AccountID'/0,
     'InvoiceID'/0,
+    'InvoiceAdjustmentID'/0,
     'InvoicePaymentID'/0,
     'InvoicePaymentChargebackID'/0,
     'InvoicePaymentRefundID'/0,
@@ -144,6 +145,15 @@
     'ClientInfo'/0,
     'PaymentRoute'/0,
     'RecurrentParentPayment'/0,
+    'InvoiceAdjustment'/0,
+    'InvoiceAdjustmentPending'/0,
+    'InvoiceAdjustmentProcessed'/0,
+    'InvoiceAdjustmentCaptured'/0,
+    'InvoiceAdjustmentCancelled'/0,
+    'InvoiceAdjustmentStatus'/0,
+    'InvoiceAdjustmentState'/0,
+    'InvoiceAdjustmentStatusChangeState'/0,
+    'InvoiceAdjustmentStatusChange'/0,
     'InvoicePaymentAdjustment'/0,
     'InvoicePaymentAdjustmentPending'/0,
     'InvoicePaymentAdjustmentProcessed'/0,
@@ -461,6 +471,7 @@
     'Amount' |
     'AccountID' |
     'InvoiceID' |
+    'InvoiceAdjustmentID' |
     'InvoicePaymentID' |
     'InvoicePaymentChargebackID' |
     'InvoicePaymentRefundID' |
@@ -508,6 +519,7 @@
 -type 'Amount'() :: integer().
 -type 'AccountID'() :: integer().
 -type 'InvoiceID'() :: dmsl_base_thrift:'ID'().
+-type 'InvoiceAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentChargebackID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentRefundID'() :: dmsl_base_thrift:'ID'().
@@ -1014,6 +1026,15 @@
     'ClientInfo' |
     'PaymentRoute' |
     'RecurrentParentPayment' |
+    'InvoiceAdjustment' |
+    'InvoiceAdjustmentPending' |
+    'InvoiceAdjustmentProcessed' |
+    'InvoiceAdjustmentCaptured' |
+    'InvoiceAdjustmentCancelled' |
+    'InvoiceAdjustmentStatus' |
+    'InvoiceAdjustmentState' |
+    'InvoiceAdjustmentStatusChangeState' |
+    'InvoiceAdjustmentStatusChange' |
     'InvoicePaymentAdjustment' |
     'InvoicePaymentAdjustmentPending' |
     'InvoicePaymentAdjustmentProcessed' |
@@ -1459,6 +1480,38 @@
 
 %% struct 'RecurrentParentPayment'
 -type 'RecurrentParentPayment'() :: #'domain_RecurrentParentPayment'{}.
+
+%% struct 'InvoiceAdjustment'
+-type 'InvoiceAdjustment'() :: #'domain_InvoiceAdjustment'{}.
+
+%% struct 'InvoiceAdjustmentPending'
+-type 'InvoiceAdjustmentPending'() :: #'domain_InvoiceAdjustmentPending'{}.
+
+%% struct 'InvoiceAdjustmentProcessed'
+-type 'InvoiceAdjustmentProcessed'() :: #'domain_InvoiceAdjustmentProcessed'{}.
+
+%% struct 'InvoiceAdjustmentCaptured'
+-type 'InvoiceAdjustmentCaptured'() :: #'domain_InvoiceAdjustmentCaptured'{}.
+
+%% struct 'InvoiceAdjustmentCancelled'
+-type 'InvoiceAdjustmentCancelled'() :: #'domain_InvoiceAdjustmentCancelled'{}.
+
+%% union 'InvoiceAdjustmentStatus'
+-type 'InvoiceAdjustmentStatus'() ::
+    {'pending', 'InvoiceAdjustmentPending'()} |
+    {'captured', 'InvoiceAdjustmentCaptured'()} |
+    {'cancelled', 'InvoiceAdjustmentCancelled'()} |
+    {'processed', 'InvoiceAdjustmentProcessed'()}.
+
+%% union 'InvoiceAdjustmentState'
+-type 'InvoiceAdjustmentState'() ::
+    {'status_change', 'InvoiceAdjustmentStatusChangeState'()}.
+
+%% struct 'InvoiceAdjustmentStatusChangeState'
+-type 'InvoiceAdjustmentStatusChangeState'() :: #'domain_InvoiceAdjustmentStatusChangeState'{}.
+
+%% struct 'InvoiceAdjustmentStatusChange'
+-type 'InvoiceAdjustmentStatusChange'() :: #'domain_InvoiceAdjustmentStatusChange'{}.
 
 %% struct 'InvoicePaymentAdjustment'
 -type 'InvoicePaymentAdjustment'() :: #'domain_InvoicePaymentAdjustment'{}.
@@ -2642,6 +2695,7 @@ typedefs() ->
         'Amount',
         'AccountID',
         'InvoiceID',
+        'InvoiceAdjustmentID',
         'InvoicePaymentID',
         'InvoicePaymentChargebackID',
         'InvoicePaymentRefundID',
@@ -2754,6 +2808,15 @@ structs() ->
         'ClientInfo',
         'PaymentRoute',
         'RecurrentParentPayment',
+        'InvoiceAdjustment',
+        'InvoiceAdjustmentPending',
+        'InvoiceAdjustmentProcessed',
+        'InvoiceAdjustmentCaptured',
+        'InvoiceAdjustmentCancelled',
+        'InvoiceAdjustmentStatus',
+        'InvoiceAdjustmentState',
+        'InvoiceAdjustmentStatusChangeState',
+        'InvoiceAdjustmentStatusChange',
         'InvoicePaymentAdjustment',
         'InvoicePaymentAdjustmentPending',
         'InvoicePaymentAdjustmentProcessed',
@@ -3091,6 +3154,9 @@ typedef_info('AccountID') ->
     i64;
 
 typedef_info('InvoiceID') ->
+    string;
+
+typedef_info('InvoiceAdjustmentID') ->
     string;
 
 typedef_info('InvoicePaymentID') ->
@@ -3898,6 +3964,56 @@ struct_info('RecurrentParentPayment') ->
     {struct, struct, [
         {1, required, string, 'invoice_id', undefined},
         {2, required, string, 'payment_id', undefined}
+    ]};
+
+struct_info('InvoiceAdjustment') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'reason', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'InvoiceAdjustmentStatus'}}, 'status', undefined},
+        {5, required, i64, 'domain_revision', undefined},
+        {6, optional, i64, 'party_revision', undefined},
+        {7, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceAdjustmentState'}}, 'state', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentPending') ->
+    {struct, struct, []};
+
+struct_info('InvoiceAdjustmentProcessed') ->
+    {struct, struct, []};
+
+struct_info('InvoiceAdjustmentCaptured') ->
+    {struct, struct, [
+        {1, required, string, 'at', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentCancelled') ->
+    {struct, struct, [
+        {1, required, string, 'at', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentStatus') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentCaptured'}}, 'captured', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentProcessed'}}, 'processed', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentState') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentStatusChangeState'}}, 'status_change', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentStatusChangeState') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentStatusChange'}}, 'scenario', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentStatusChange') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'target_status', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustment') ->
@@ -5990,6 +6106,27 @@ record_name('PaymentRoute') ->
 
 record_name('RecurrentParentPayment') ->
     'domain_RecurrentParentPayment';
+
+record_name('InvoiceAdjustment') ->
+    'domain_InvoiceAdjustment';
+
+record_name('InvoiceAdjustmentPending') ->
+    'domain_InvoiceAdjustmentPending';
+
+record_name('InvoiceAdjustmentProcessed') ->
+    'domain_InvoiceAdjustmentProcessed';
+
+record_name('InvoiceAdjustmentCaptured') ->
+    'domain_InvoiceAdjustmentCaptured';
+
+record_name('InvoiceAdjustmentCancelled') ->
+    'domain_InvoiceAdjustmentCancelled';
+
+record_name('InvoiceAdjustmentStatusChangeState') ->
+    'domain_InvoiceAdjustmentStatusChangeState';
+
+record_name('InvoiceAdjustmentStatusChange') ->
+    'domain_InvoiceAdjustmentStatusChange';
 
 record_name('InvoicePaymentAdjustment') ->
     'domain_InvoicePaymentAdjustment';

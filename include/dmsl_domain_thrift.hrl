@@ -220,6 +220,43 @@
     'payment_id' :: dmsl_domain_thrift:'InvoicePaymentID'()
 }).
 
+%% struct 'InvoiceAdjustment'
+-record('domain_InvoiceAdjustment', {
+    'id' :: dmsl_domain_thrift:'InvoiceAdjustmentID'(),
+    'reason' :: binary(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'status' :: dmsl_domain_thrift:'InvoiceAdjustmentStatus'(),
+    'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
+    'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
+    'state' :: dmsl_domain_thrift:'InvoiceAdjustmentState'() | undefined
+}).
+
+%% struct 'InvoiceAdjustmentPending'
+-record('domain_InvoiceAdjustmentPending', {}).
+
+%% struct 'InvoiceAdjustmentProcessed'
+-record('domain_InvoiceAdjustmentProcessed', {}).
+
+%% struct 'InvoiceAdjustmentCaptured'
+-record('domain_InvoiceAdjustmentCaptured', {
+    'at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'InvoiceAdjustmentCancelled'
+-record('domain_InvoiceAdjustmentCancelled', {
+    'at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'InvoiceAdjustmentStatusChangeState'
+-record('domain_InvoiceAdjustmentStatusChangeState', {
+    'scenario' :: dmsl_domain_thrift:'InvoiceAdjustmentStatusChange'()
+}).
+
+%% struct 'InvoiceAdjustmentStatusChange'
+-record('domain_InvoiceAdjustmentStatusChange', {
+    'target_status' :: dmsl_domain_thrift:'InvoiceStatus'()
+}).
+
 %% struct 'InvoicePaymentAdjustment'
 -record('domain_InvoicePaymentAdjustment', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentAdjustmentID'(),

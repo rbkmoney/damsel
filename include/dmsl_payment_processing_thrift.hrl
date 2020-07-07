@@ -51,6 +51,22 @@
     'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
+%% struct 'InvoiceAdjustmentChange'
+-record('payproc_InvoiceAdjustmentChange', {
+    'id' :: dmsl_domain_thrift:'InvoiceAdjustmentID'(),
+    'payload' :: dmsl_payment_processing_thrift:'InvoiceAdjustmentChangePayload'()
+}).
+
+%% struct 'InvoiceAdjustmentCreated'
+-record('payproc_InvoiceAdjustmentCreated', {
+    'adjustment' :: dmsl_domain_thrift:'InvoiceAdjustment'()
+}).
+
+%% struct 'InvoiceAdjustmentStatusChanged'
+-record('payproc_InvoiceAdjustmentStatusChanged', {
+    'status' :: dmsl_domain_thrift:'InvoiceAdjustmentStatus'()
+}).
+
 %% struct 'InvoicePaymentStarted'
 -record('payproc_InvoicePaymentStarted', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
@@ -319,7 +335,8 @@
 %% struct 'Invoice'
 -record('payproc_Invoice', {
     'invoice' :: dmsl_domain_thrift:'Invoice'(),
-    'payments' :: [dmsl_payment_processing_thrift:'InvoicePayment'()]
+    'payments' :: [dmsl_payment_processing_thrift:'InvoicePayment'()],
+    'adjustments' :: [dmsl_payment_processing_thrift:'InvoiceAdjustment'()] | undefined
 }).
 
 %% struct 'InvoicePayment'
@@ -411,6 +428,12 @@
     'reason' :: binary(),
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+}).
+
+%% struct 'InvoiceAdjustmentParams'
+-record('payproc_InvoiceAdjustmentParams', {
+    'reason' :: binary(),
+    'scenario' :: dmsl_payment_processing_thrift:'InvoiceAdjustmentScenario'()
 }).
 
 %% struct 'InvoicePaymentAdjustmentParams'
@@ -999,6 +1022,20 @@
 %% exception 'InvoiceNotFound'
 -record('payproc_InvoiceNotFound', {}).
 
+%% exception 'InvoiceAdjustmentNotFound'
+-record('payproc_InvoiceAdjustmentNotFound', {}).
+
+%% exception 'InvoiceAdjustmentPending'
+-record('payproc_InvoiceAdjustmentPending', {}).
+
+%% exception 'InvoiceAdjustmentStatusUnacceptable'
+-record('payproc_InvoiceAdjustmentStatusUnacceptable', {}).
+
+%% exception 'InvalidInvoiceAdjustmentStatus'
+-record('payproc_InvalidInvoiceAdjustmentStatus', {
+    'status' :: dmsl_domain_thrift:'InvoiceAdjustmentStatus'()
+}).
+
 %% exception 'InvoicePaymentNotFound'
 -record('payproc_InvoicePaymentNotFound', {}).
 
@@ -1069,6 +1106,11 @@
 %% exception 'InvalidPaymentTargetStatus'
 -record('payproc_InvalidPaymentTargetStatus', {
     'status' :: dmsl_domain_thrift:'InvoicePaymentStatus'()
+}).
+
+%% exception 'InvoiceAlreadyHasStatus'
+-record('payproc_InvoiceAlreadyHasStatus', {
+    'status' :: dmsl_domain_thrift:'InvoiceStatus'()
 }).
 
 %% exception 'InvoicePaymentAlreadyHasStatus'
