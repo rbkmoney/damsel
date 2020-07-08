@@ -33,5 +33,7 @@ build('damsel', 'docker-host') {
           }
         }
     }
+
+    env.skipSonar = 'true'
     pipeJavaProto()
 }
