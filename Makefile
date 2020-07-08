@@ -40,7 +40,7 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: all compile doc clean java.compile java.deploy java.install java.settings
+.PHONY: all compile doc clean
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
