@@ -40,6 +40,7 @@
     'Amount'/0,
     'AccountID'/0,
     'InvoiceID'/0,
+    'InvoiceAdjustmentID'/0,
     'InvoicePaymentID'/0,
     'InvoicePaymentChargebackID'/0,
     'InvoicePaymentRefundID'/0,
@@ -144,6 +145,15 @@
     'ClientInfo'/0,
     'PaymentRoute'/0,
     'RecurrentParentPayment'/0,
+    'InvoiceAdjustment'/0,
+    'InvoiceAdjustmentPending'/0,
+    'InvoiceAdjustmentProcessed'/0,
+    'InvoiceAdjustmentCaptured'/0,
+    'InvoiceAdjustmentCancelled'/0,
+    'InvoiceAdjustmentStatus'/0,
+    'InvoiceAdjustmentState'/0,
+    'InvoiceAdjustmentStatusChangeState'/0,
+    'InvoiceAdjustmentStatusChange'/0,
     'InvoicePaymentAdjustment'/0,
     'InvoicePaymentAdjustmentPending'/0,
     'InvoicePaymentAdjustmentProcessed'/0,
@@ -320,16 +330,17 @@
     'Provider'/0,
     'CashRegisterProviderRef'/0,
     'CashRegisterProvider'/0,
-    'CashRegisterProviderParameter'/0,
-    'CashRegisterProviderParameterType'/0,
-    'CashRegisterProviderParameterString'/0,
-    'CashRegisterProviderParameterInteger'/0,
-    'CashRegisterProviderParameterUrl'/0,
-    'CashRegisterProviderParameterPassword'/0,
+    'ProviderParameter'/0,
+    'ProviderParameterType'/0,
+    'ProviderParameterString'/0,
+    'ProviderParameterInteger'/0,
+    'ProviderParameterUrl'/0,
+    'ProviderParameterPassword'/0,
     'WithdrawalProviderRef'/0,
     'WithdrawalProvider'/0,
     'P2PProviderRef'/0,
     'P2PProvider'/0,
+    'ProvisionTermSet'/0,
     'PaymentsProvisionTerms'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PartialCaptureProvisionTerms'/0,
@@ -337,6 +348,7 @@
     'PaymentRefundsProvisionTerms'/0,
     'PartialRefundsProvisionTerms'/0,
     'RecurrentPaytoolsProvisionTerms'/0,
+    'WalletProvisionTerms'/0,
     'WithdrawalProvisionTerms'/0,
     'P2PProvisionTerms'/0,
     'CashValueSelector'/0,
@@ -460,6 +472,7 @@
     'Amount' |
     'AccountID' |
     'InvoiceID' |
+    'InvoiceAdjustmentID' |
     'InvoicePaymentID' |
     'InvoicePaymentChargebackID' |
     'InvoicePaymentRefundID' |
@@ -507,6 +520,7 @@
 -type 'Amount'() :: integer().
 -type 'AccountID'() :: integer().
 -type 'InvoiceID'() :: dmsl_base_thrift:'ID'().
+-type 'InvoiceAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentChargebackID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentRefundID'() :: dmsl_base_thrift:'ID'().
@@ -1013,6 +1027,15 @@
     'ClientInfo' |
     'PaymentRoute' |
     'RecurrentParentPayment' |
+    'InvoiceAdjustment' |
+    'InvoiceAdjustmentPending' |
+    'InvoiceAdjustmentProcessed' |
+    'InvoiceAdjustmentCaptured' |
+    'InvoiceAdjustmentCancelled' |
+    'InvoiceAdjustmentStatus' |
+    'InvoiceAdjustmentState' |
+    'InvoiceAdjustmentStatusChangeState' |
+    'InvoiceAdjustmentStatusChange' |
     'InvoicePaymentAdjustment' |
     'InvoicePaymentAdjustmentPending' |
     'InvoicePaymentAdjustmentProcessed' |
@@ -1189,16 +1212,17 @@
     'Provider' |
     'CashRegisterProviderRef' |
     'CashRegisterProvider' |
-    'CashRegisterProviderParameter' |
-    'CashRegisterProviderParameterType' |
-    'CashRegisterProviderParameterString' |
-    'CashRegisterProviderParameterInteger' |
-    'CashRegisterProviderParameterUrl' |
-    'CashRegisterProviderParameterPassword' |
+    'ProviderParameter' |
+    'ProviderParameterType' |
+    'ProviderParameterString' |
+    'ProviderParameterInteger' |
+    'ProviderParameterUrl' |
+    'ProviderParameterPassword' |
     'WithdrawalProviderRef' |
     'WithdrawalProvider' |
     'P2PProviderRef' |
     'P2PProvider' |
+    'ProvisionTermSet' |
     'PaymentsProvisionTerms' |
     'PaymentHoldsProvisionTerms' |
     'PartialCaptureProvisionTerms' |
@@ -1206,6 +1230,7 @@
     'PaymentRefundsProvisionTerms' |
     'PartialRefundsProvisionTerms' |
     'RecurrentPaytoolsProvisionTerms' |
+    'WalletProvisionTerms' |
     'WithdrawalProvisionTerms' |
     'P2PProvisionTerms' |
     'CashValueSelector' |
@@ -1457,6 +1482,38 @@
 
 %% struct 'RecurrentParentPayment'
 -type 'RecurrentParentPayment'() :: #'domain_RecurrentParentPayment'{}.
+
+%% struct 'InvoiceAdjustment'
+-type 'InvoiceAdjustment'() :: #'domain_InvoiceAdjustment'{}.
+
+%% struct 'InvoiceAdjustmentPending'
+-type 'InvoiceAdjustmentPending'() :: #'domain_InvoiceAdjustmentPending'{}.
+
+%% struct 'InvoiceAdjustmentProcessed'
+-type 'InvoiceAdjustmentProcessed'() :: #'domain_InvoiceAdjustmentProcessed'{}.
+
+%% struct 'InvoiceAdjustmentCaptured'
+-type 'InvoiceAdjustmentCaptured'() :: #'domain_InvoiceAdjustmentCaptured'{}.
+
+%% struct 'InvoiceAdjustmentCancelled'
+-type 'InvoiceAdjustmentCancelled'() :: #'domain_InvoiceAdjustmentCancelled'{}.
+
+%% union 'InvoiceAdjustmentStatus'
+-type 'InvoiceAdjustmentStatus'() ::
+    {'pending', 'InvoiceAdjustmentPending'()} |
+    {'captured', 'InvoiceAdjustmentCaptured'()} |
+    {'cancelled', 'InvoiceAdjustmentCancelled'()} |
+    {'processed', 'InvoiceAdjustmentProcessed'()}.
+
+%% union 'InvoiceAdjustmentState'
+-type 'InvoiceAdjustmentState'() ::
+    {'status_change', 'InvoiceAdjustmentStatusChangeState'()}.
+
+%% struct 'InvoiceAdjustmentStatusChangeState'
+-type 'InvoiceAdjustmentStatusChangeState'() :: #'domain_InvoiceAdjustmentStatusChangeState'{}.
+
+%% struct 'InvoiceAdjustmentStatusChange'
+-type 'InvoiceAdjustmentStatusChange'() :: #'domain_InvoiceAdjustmentStatusChange'{}.
 
 %% struct 'InvoicePaymentAdjustment'
 -type 'InvoicePaymentAdjustment'() :: #'domain_InvoicePaymentAdjustment'{}.
@@ -2082,27 +2139,27 @@
 %% struct 'CashRegisterProvider'
 -type 'CashRegisterProvider'() :: #'domain_CashRegisterProvider'{}.
 
-%% struct 'CashRegisterProviderParameter'
--type 'CashRegisterProviderParameter'() :: #'domain_CashRegisterProviderParameter'{}.
+%% struct 'ProviderParameter'
+-type 'ProviderParameter'() :: #'domain_ProviderParameter'{}.
 
-%% union 'CashRegisterProviderParameterType'
--type 'CashRegisterProviderParameterType'() ::
-    {'string_type', 'CashRegisterProviderParameterString'()} |
-    {'integer_type', 'CashRegisterProviderParameterInteger'()} |
-    {'url_type', 'CashRegisterProviderParameterUrl'()} |
-    {'password_type', 'CashRegisterProviderParameterPassword'()}.
+%% union 'ProviderParameterType'
+-type 'ProviderParameterType'() ::
+    {'string_type', 'ProviderParameterString'()} |
+    {'integer_type', 'ProviderParameterInteger'()} |
+    {'url_type', 'ProviderParameterUrl'()} |
+    {'password_type', 'ProviderParameterPassword'()}.
 
-%% struct 'CashRegisterProviderParameterString'
--type 'CashRegisterProviderParameterString'() :: #'domain_CashRegisterProviderParameterString'{}.
+%% struct 'ProviderParameterString'
+-type 'ProviderParameterString'() :: #'domain_ProviderParameterString'{}.
 
-%% struct 'CashRegisterProviderParameterInteger'
--type 'CashRegisterProviderParameterInteger'() :: #'domain_CashRegisterProviderParameterInteger'{}.
+%% struct 'ProviderParameterInteger'
+-type 'ProviderParameterInteger'() :: #'domain_ProviderParameterInteger'{}.
 
-%% struct 'CashRegisterProviderParameterUrl'
--type 'CashRegisterProviderParameterUrl'() :: #'domain_CashRegisterProviderParameterUrl'{}.
+%% struct 'ProviderParameterUrl'
+-type 'ProviderParameterUrl'() :: #'domain_ProviderParameterUrl'{}.
 
-%% struct 'CashRegisterProviderParameterPassword'
--type 'CashRegisterProviderParameterPassword'() :: #'domain_CashRegisterProviderParameterPassword'{}.
+%% struct 'ProviderParameterPassword'
+-type 'ProviderParameterPassword'() :: #'domain_ProviderParameterPassword'{}.
 
 %% struct 'WithdrawalProviderRef'
 -type 'WithdrawalProviderRef'() :: #'domain_WithdrawalProviderRef'{}.
@@ -2115,6 +2172,9 @@
 
 %% struct 'P2PProvider'
 -type 'P2PProvider'() :: #'domain_P2PProvider'{}.
+
+%% struct 'ProvisionTermSet'
+-type 'ProvisionTermSet'() :: #'domain_ProvisionTermSet'{}.
 
 %% struct 'PaymentsProvisionTerms'
 -type 'PaymentsProvisionTerms'() :: #'domain_PaymentsProvisionTerms'{}.
@@ -2136,6 +2196,9 @@
 
 %% struct 'RecurrentPaytoolsProvisionTerms'
 -type 'RecurrentPaytoolsProvisionTerms'() :: #'domain_RecurrentPaytoolsProvisionTerms'{}.
+
+%% struct 'WalletProvisionTerms'
+-type 'WalletProvisionTerms'() :: #'domain_WalletProvisionTerms'{}.
 
 %% struct 'WithdrawalProvisionTerms'
 -type 'WithdrawalProvisionTerms'() :: #'domain_WithdrawalProvisionTerms'{}.
@@ -2638,6 +2701,7 @@ typedefs() ->
         'Amount',
         'AccountID',
         'InvoiceID',
+        'InvoiceAdjustmentID',
         'InvoicePaymentID',
         'InvoicePaymentChargebackID',
         'InvoicePaymentRefundID',
@@ -2750,6 +2814,15 @@ structs() ->
         'ClientInfo',
         'PaymentRoute',
         'RecurrentParentPayment',
+        'InvoiceAdjustment',
+        'InvoiceAdjustmentPending',
+        'InvoiceAdjustmentProcessed',
+        'InvoiceAdjustmentCaptured',
+        'InvoiceAdjustmentCancelled',
+        'InvoiceAdjustmentStatus',
+        'InvoiceAdjustmentState',
+        'InvoiceAdjustmentStatusChangeState',
+        'InvoiceAdjustmentStatusChange',
         'InvoicePaymentAdjustment',
         'InvoicePaymentAdjustmentPending',
         'InvoicePaymentAdjustmentProcessed',
@@ -2926,16 +2999,17 @@ structs() ->
         'Provider',
         'CashRegisterProviderRef',
         'CashRegisterProvider',
-        'CashRegisterProviderParameter',
-        'CashRegisterProviderParameterType',
-        'CashRegisterProviderParameterString',
-        'CashRegisterProviderParameterInteger',
-        'CashRegisterProviderParameterUrl',
-        'CashRegisterProviderParameterPassword',
+        'ProviderParameter',
+        'ProviderParameterType',
+        'ProviderParameterString',
+        'ProviderParameterInteger',
+        'ProviderParameterUrl',
+        'ProviderParameterPassword',
         'WithdrawalProviderRef',
         'WithdrawalProvider',
         'P2PProviderRef',
         'P2PProvider',
+        'ProvisionTermSet',
         'PaymentsProvisionTerms',
         'PaymentHoldsProvisionTerms',
         'PartialCaptureProvisionTerms',
@@ -2943,6 +3017,7 @@ structs() ->
         'PaymentRefundsProvisionTerms',
         'PartialRefundsProvisionTerms',
         'RecurrentPaytoolsProvisionTerms',
+        'WalletProvisionTerms',
         'WithdrawalProvisionTerms',
         'P2PProvisionTerms',
         'CashValueSelector',
@@ -3086,6 +3161,9 @@ typedef_info('AccountID') ->
     i64;
 
 typedef_info('InvoiceID') ->
+    string;
+
+typedef_info('InvoiceAdjustmentID') ->
     string;
 
 typedef_info('InvoicePaymentID') ->
@@ -3893,6 +3971,56 @@ struct_info('RecurrentParentPayment') ->
     {struct, struct, [
         {1, required, string, 'invoice_id', undefined},
         {2, required, string, 'payment_id', undefined}
+    ]};
+
+struct_info('InvoiceAdjustment') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, string, 'reason', undefined},
+        {3, required, string, 'created_at', undefined},
+        {4, required, {struct, union, {dmsl_domain_thrift, 'InvoiceAdjustmentStatus'}}, 'status', undefined},
+        {5, required, i64, 'domain_revision', undefined},
+        {6, optional, i64, 'party_revision', undefined},
+        {7, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceAdjustmentState'}}, 'state', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentPending') ->
+    {struct, struct, []};
+
+struct_info('InvoiceAdjustmentProcessed') ->
+    {struct, struct, []};
+
+struct_info('InvoiceAdjustmentCaptured') ->
+    {struct, struct, [
+        {1, required, string, 'at', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentCancelled') ->
+    {struct, struct, [
+        {1, required, string, 'at', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentStatus') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentPending'}}, 'pending', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentCaptured'}}, 'captured', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentCancelled'}}, 'cancelled', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentProcessed'}}, 'processed', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentState') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentStatusChangeState'}}, 'status_change', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentStatusChangeState') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceAdjustmentStatusChange'}}, 'scenario', undefined}
+    ]};
+
+struct_info('InvoiceAdjustmentStatusChange') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceStatus'}}, 'target_status', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustment') ->
@@ -5028,10 +5156,13 @@ struct_info('Provider') ->
         {1, required, string, 'name', undefined},
         {2, required, string, 'description', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined},
-        {5, required, string, 'abs_account', undefined},
+        {9, optional, string, 'identity', undefined},
+        {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'ProvisionTermSet'}}, 'terms', undefined},
+        {11, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ProviderParameter'}}}, 'params_schema', undefined},
+        {5, optional, string, 'abs_account', undefined},
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'payment_terms', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsProvisionTerms'}}, 'recurrent_paytool_terms', undefined},
-        {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}},
         {4, optional, {struct, union, {dmsl_domain_thrift, 'TerminalSelector'}}, 'terminal', undefined}
     ]};
 
@@ -5044,36 +5175,36 @@ struct_info('CashRegisterProvider') ->
     {struct, struct, [
         {1, required, string, 'name', undefined},
         {2, optional, string, 'description', undefined},
-        {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameter'}}}, 'params_schema', undefined},
+        {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'ProviderParameter'}}}, 'params_schema', undefined},
         {4, required, {struct, struct, {dmsl_domain_thrift, 'Proxy'}}, 'proxy', undefined}
     ]};
 
-struct_info('CashRegisterProviderParameter') ->
+struct_info('ProviderParameter') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
         {2, optional, string, 'description', undefined},
-        {3, required, {struct, union, {dmsl_domain_thrift, 'CashRegisterProviderParameterType'}}, 'type', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'ProviderParameterType'}}, 'type', undefined},
         {4, required, bool, 'is_required', undefined}
     ]};
 
-struct_info('CashRegisterProviderParameterType') ->
+struct_info('ProviderParameterType') ->
     {struct, union, [
-        {1, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterString'}}, 'string_type', undefined},
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterInteger'}}, 'integer_type', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterUrl'}}, 'url_type', undefined},
-        {4, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderParameterPassword'}}, 'password_type', undefined}
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderParameterString'}}, 'string_type', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderParameterInteger'}}, 'integer_type', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderParameterUrl'}}, 'url_type', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderParameterPassword'}}, 'password_type', undefined}
     ]};
 
-struct_info('CashRegisterProviderParameterString') ->
+struct_info('ProviderParameterString') ->
     {struct, struct, []};
 
-struct_info('CashRegisterProviderParameterInteger') ->
+struct_info('ProviderParameterInteger') ->
     {struct, struct, []};
 
-struct_info('CashRegisterProviderParameterUrl') ->
+struct_info('ProviderParameterUrl') ->
     {struct, struct, []};
 
-struct_info('CashRegisterProviderParameterPassword') ->
+struct_info('ProviderParameterPassword') ->
     {struct, struct, []};
 
 struct_info('WithdrawalProviderRef') ->
@@ -5105,6 +5236,13 @@ struct_info('P2PProvider') ->
         {4, optional, string, 'identity', undefined},
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p_terms', undefined},
         {7, optional, {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}}, 'accounts', #{}}
+    ]};
+
+struct_info('ProvisionTermSet') ->
+    {struct, struct, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'payments', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'RecurrentPaytoolsProvisionTerms'}}, 'recurrent_paytools', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'WalletProvisionTerms'}}, 'wallet', undefined}
     ]};
 
 struct_info('PaymentsProvisionTerms') ->
@@ -5150,6 +5288,13 @@ struct_info('RecurrentPaytoolsProvisionTerms') ->
         {1, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'cash_value', undefined},
         {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
         {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
+    ]};
+
+struct_info('WalletProvisionTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'CumulativeLimitSelector'}}, 'turnover_limit', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProvisionTerms'}}, 'withdrawals', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProvisionTerms'}}, 'p2p', undefined}
     ]};
 
 struct_info('WithdrawalProvisionTerms') ->
@@ -5276,9 +5421,10 @@ struct_info('Terminal') ->
         {1, required, string, 'name', undefined},
         {2, required, string, 'description', undefined},
         {9, optional, {map, string, string}, 'options', undefined},
-        {10, required, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
-        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms', undefined},
-        {13, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined}
+        {10, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
+        {13, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'ProvisionTermSet'}}, 'terms', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms_legacy', undefined}
     ]};
 
 struct_info('TerminalSelector') ->
@@ -5307,7 +5453,8 @@ struct_info('TerminalRef') ->
 
 struct_info('WithdrawalTerminalRef') ->
     {struct, struct, [
-        {1, required, i32, 'id', undefined}
+        {1, required, i32, 'id', undefined},
+        {2, optional, i64, 'priority', 1000}
     ]};
 
 struct_info('WithdrawalTerminal') ->
@@ -5553,10 +5700,12 @@ struct_info('PaymentInstitution') ->
         {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
         {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
         {12, optional, string, 'identity', undefined},
-        {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers', undefined},
-        {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers', undefined},
         {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined},
         {16, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRouting'}}, 'payment_routing', undefined},
+        {17, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'withdrawal_providers', undefined},
+        {18, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'p2p_providers', undefined},
+        {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers_legacy', undefined},
+        {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers_legacy', undefined},
         {5, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined}
     ]};
 
@@ -5973,6 +6122,27 @@ record_name('PaymentRoute') ->
 
 record_name('RecurrentParentPayment') ->
     'domain_RecurrentParentPayment';
+
+record_name('InvoiceAdjustment') ->
+    'domain_InvoiceAdjustment';
+
+record_name('InvoiceAdjustmentPending') ->
+    'domain_InvoiceAdjustmentPending';
+
+record_name('InvoiceAdjustmentProcessed') ->
+    'domain_InvoiceAdjustmentProcessed';
+
+record_name('InvoiceAdjustmentCaptured') ->
+    'domain_InvoiceAdjustmentCaptured';
+
+record_name('InvoiceAdjustmentCancelled') ->
+    'domain_InvoiceAdjustmentCancelled';
+
+record_name('InvoiceAdjustmentStatusChangeState') ->
+    'domain_InvoiceAdjustmentStatusChangeState';
+
+record_name('InvoiceAdjustmentStatusChange') ->
+    'domain_InvoiceAdjustmentStatusChange';
 
 record_name('InvoicePaymentAdjustment') ->
     'domain_InvoicePaymentAdjustment';
@@ -6391,20 +6561,20 @@ record_name('CashRegisterProviderRef') ->
 record_name('CashRegisterProvider') ->
     'domain_CashRegisterProvider';
 
-record_name('CashRegisterProviderParameter') ->
-    'domain_CashRegisterProviderParameter';
+record_name('ProviderParameter') ->
+    'domain_ProviderParameter';
 
-record_name('CashRegisterProviderParameterString') ->
-    'domain_CashRegisterProviderParameterString';
+record_name('ProviderParameterString') ->
+    'domain_ProviderParameterString';
 
-record_name('CashRegisterProviderParameterInteger') ->
-    'domain_CashRegisterProviderParameterInteger';
+record_name('ProviderParameterInteger') ->
+    'domain_ProviderParameterInteger';
 
-record_name('CashRegisterProviderParameterUrl') ->
-    'domain_CashRegisterProviderParameterUrl';
+record_name('ProviderParameterUrl') ->
+    'domain_ProviderParameterUrl';
 
-record_name('CashRegisterProviderParameterPassword') ->
-    'domain_CashRegisterProviderParameterPassword';
+record_name('ProviderParameterPassword') ->
+    'domain_ProviderParameterPassword';
 
 record_name('WithdrawalProviderRef') ->
     'domain_WithdrawalProviderRef';
@@ -6417,6 +6587,9 @@ record_name('P2PProviderRef') ->
 
 record_name('P2PProvider') ->
     'domain_P2PProvider';
+
+record_name('ProvisionTermSet') ->
+    'domain_ProvisionTermSet';
 
 record_name('PaymentsProvisionTerms') ->
     'domain_PaymentsProvisionTerms';
@@ -6438,6 +6611,9 @@ record_name('PartialRefundsProvisionTerms') ->
 
 record_name('RecurrentPaytoolsProvisionTerms') ->
     'domain_RecurrentPaytoolsProvisionTerms';
+
+record_name('WalletProvisionTerms') ->
+    'domain_WalletProvisionTerms';
 
 record_name('WithdrawalProvisionTerms') ->
     'domain_WithdrawalProvisionTerms';

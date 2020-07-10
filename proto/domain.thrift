@@ -109,6 +109,7 @@ enum ThreeDsVerification {
 /* Invoices */
 
 typedef base.ID InvoiceID
+typedef base.ID InvoiceAdjustmentID
 typedef base.ID InvoicePaymentID
 typedef base.ID InvoicePaymentChargebackID
 typedef base.ID InvoicePaymentRefundID
@@ -332,6 +333,47 @@ struct RecurrentParentPayment {
 }
 
 /* Adjustments */
+
+struct InvoiceAdjustment {
+    1: required InvoiceAdjustmentID id
+    2: required string reason
+    3: required base.Timestamp created_at
+    4: required InvoiceAdjustmentStatus status
+    5: required DataRevision domain_revision
+    6: optional PartyRevision party_revision
+    7: optional InvoiceAdjustmentState state
+}
+
+struct InvoiceAdjustmentPending   {}
+struct InvoiceAdjustmentProcessed {}
+struct InvoiceAdjustmentCaptured  { 1: required base.Timestamp at }
+struct InvoiceAdjustmentCancelled { 1: required base.Timestamp at }
+
+union InvoiceAdjustmentStatus {
+    1: InvoiceAdjustmentPending   pending
+    2: InvoiceAdjustmentCaptured  captured
+    3: InvoiceAdjustmentCancelled cancelled
+    4: InvoiceAdjustmentProcessed processed
+}
+
+/**
+ * Специфическое для выбранного сценария состояние поправки к инвойсу.
+ */
+union InvoiceAdjustmentState {
+    1: InvoiceAdjustmentStatusChangeState status_change
+}
+
+struct InvoiceAdjustmentStatusChangeState {
+    1: required InvoiceAdjustmentStatusChange scenario
+}
+
+/**
+ * Параметры поправки к инвойсу, используемые для смены его статуса.
+ */
+struct InvoiceAdjustmentStatusChange {
+    /** Статус, в который необходимо перевести инвойс. */
+    1: required InvoiceStatus target_status
+}
 
 struct InvoicePaymentAdjustment {
     1: required InvoicePaymentAdjustmentID id
@@ -1953,13 +1995,15 @@ struct Provider {
     1: required string name
     2: required string description
     3: required Proxy proxy
-    /* Счет для платажей принятых эквайеромв АБС*/
-    5: required string abs_account
-    6: optional PaymentsProvisionTerms payment_terms
-    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
+    9: optional string identity
     7: optional ProviderAccountSet accounts = {}
+    10: optional ProvisionTermSet terms
+    11: optional list<ProviderParameter> params_schema
 
     // Deprecated
+    5: optional string abs_account
+    6: optional PaymentsProvisionTerms payment_terms
+    8: optional RecurrentPaytoolsProvisionTerms recurrent_paytool_terms
     4: optional TerminalSelector terminal
 }
 
@@ -1968,28 +2012,28 @@ struct CashRegisterProviderRef { 1: required ObjectID id }
 struct CashRegisterProvider {
     1: required string                              name
     2: optional string                              description
-    3: required list<CashRegisterProviderParameter> params_schema
+    3: required list<ProviderParameter>             params_schema
     4: required Proxy                               proxy
 }
 
-struct CashRegisterProviderParameter {
+struct ProviderParameter {
     1: required string                            id
     2: optional string                            description
-    3: required CashRegisterProviderParameterType type
+    3: required ProviderParameterType             type
     4: required bool                              is_required
 }
 
-union CashRegisterProviderParameterType {
-    1: CashRegisterProviderParameterString   string_type
-    2: CashRegisterProviderParameterInteger  integer_type
-    3: CashRegisterProviderParameterUrl      url_type
-    4: CashRegisterProviderParameterPassword password_type
+union ProviderParameterType {
+    1: ProviderParameterString   string_type
+    2: ProviderParameterInteger  integer_type
+    3: ProviderParameterUrl      url_type
+    4: ProviderParameterPassword password_type
 }
 
-struct CashRegisterProviderParameterString {}
-struct CashRegisterProviderParameterInteger {}
-struct CashRegisterProviderParameterUrl {}
-struct CashRegisterProviderParameterPassword {}
+struct ProviderParameterString {}
+struct ProviderParameterInteger {}
+struct ProviderParameterUrl {}
+struct ProviderParameterPassword {}
 
 struct WithdrawalProviderRef { 1: required ObjectID id }
 
@@ -2012,6 +2056,12 @@ struct P2PProvider {
     4: optional string identity
     6: optional P2PProvisionTerms p2p_terms
     7: optional ProviderAccountSet accounts = {}
+}
+
+struct ProvisionTermSet {
+    1: optional PaymentsProvisionTerms payments
+    2: optional RecurrentPaytoolsProvisionTerms recurrent_paytools
+    3: optional WalletProvisionTerms wallet
 }
 
 struct PaymentsProvisionTerms {
@@ -2054,6 +2104,12 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
+}
+
+struct WalletProvisionTerms {
+    1: optional CumulativeLimitSelector turnover_limit
+    2: optional WithdrawalProvisionTerms withdrawals
+    3: optional P2PProvisionTerms p2p
 }
 
 struct WithdrawalProvisionTerms {
@@ -2166,9 +2222,12 @@ struct Terminal {
     1: required string name
     2: required string description
     9: optional ProxyOptions options
-    10: required RiskScore risk_coverage
-    12: optional PaymentsProvisionTerms terms
+    10: optional RiskScore risk_coverage
     13: optional ProviderRef provider_ref
+    14: optional ProvisionTermSet terms
+
+    // deprecated
+    12: optional PaymentsProvisionTerms terms_legacy
 }
 
 union TerminalSelector {
@@ -2195,6 +2254,7 @@ struct TerminalRef {
 
 struct WithdrawalTerminalRef {
     1: required ObjectID id
+    2: optional i64 priority = 1000
 }
 
 struct WithdrawalTerminal {
@@ -2406,12 +2466,14 @@ struct PaymentInstitution {
     /* TODO: separated system accounts for wallets look weird */
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
-    13: optional WithdrawalProviderSelector withdrawal_providers
-    14: optional P2PProviderSelector p2p_providers
     15: optional P2PInspectorSelector p2p_inspector
     16: optional PaymentRouting payment_routing
+    17: optional ProviderSelector withdrawal_providers
+    18: optional ProviderSelector p2p_providers
 
     // Deprecated
+    13: optional WithdrawalProviderSelector withdrawal_providers_legacy
+    14: optional P2PProviderSelector p2p_providers_legacy
     5: optional ProviderSelector providers
 }
 
