@@ -20,7 +20,8 @@
 
 %% struct 'SleepIntent'
 -record('wthadpt_SleepIntent', {
-    'timer' :: dmsl_base_thrift:'Timer'()
+    'timer' :: dmsl_base_thrift:'Timer'(),
+    'callback_tag' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackTag'() | undefined
 }).
 
 %% struct 'Withdrawal'
@@ -66,9 +67,42 @@
     'quote_data' :: dmsl_withdrawals_provider_adapter_thrift:'QuoteData'()
 }).
 
+%% struct 'Callback'
+-record('wthadpt_Callback', {
+    'tag' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackTag'(),
+    'payload' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackPayload'()
+}).
+
+%% struct 'CallbackResponse'
+-record('wthadpt_CallbackResponse', {
+    'payload' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackResponsePayload'()
+}).
+
+%% struct 'CallbackResult'
+-record('wthadpt_CallbackResult', {
+    'intent' :: dmsl_withdrawals_provider_adapter_thrift:'Intent'(),
+    'next_state' :: dmsl_withdrawals_provider_adapter_thrift:'InternalState'() | undefined,
+    'response' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackResponse'()
+}).
+
+%% struct 'ProcessCallbackSucceeded'
+-record('wthadpt_ProcessCallbackSucceeded', {
+    'response' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackResponse'()
+}).
+
+%% struct 'ProcessCallbackFinished'
+-record('wthadpt_ProcessCallbackFinished', {
+    'withdrawal' :: dmsl_withdrawals_provider_adapter_thrift:'Withdrawal'(),
+    'state' :: dmsl_withdrawals_provider_adapter_thrift:'InternalState'(),
+    'opts' :: dmsl_withdrawals_provider_adapter_thrift:'Options'()
+}).
+
 %% exception 'GetQuoteFailure'
 -record('wthadpt_GetQuoteFailure', {
     'failure' :: dmsl_withdrawals_provider_adapter_thrift:'QuoteFailure'()
 }).
+
+%% exception 'SessionNotFound'
+-record('wthadpt_SessionNotFound', {}).
 
 -endif.
