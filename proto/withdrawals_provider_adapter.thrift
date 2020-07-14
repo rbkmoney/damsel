@@ -26,6 +26,14 @@ typedef msgpack.Value InternalState
 typedef msgpack.Value QuoteData
 
 /**
+ * Запрос/ответ адаптера при обработке обратного вызова в рамках сессии.
+ */
+typedef base.Opaque CallbackPayload
+typedef base.Opaque CallbackResponsePayload
+
+typedef base.Tag CallbackTag
+
+/**
  * Требование адаптера к процессингу, отражающее дальнейший прогресс сессии взаимодействия с третьей
  * стороной.
  */
@@ -61,6 +69,18 @@ struct Success {
 struct SleepIntent {
     /** Таймер, определяющий когда следует продолжить взаимодействие. */
     1: required base.Timer timer
+
+    /**
+     * Идентификатор, по которому обработчик обратного запроса сможет идентифицировать сессию
+     * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
+     * Единожды указанный, продолжает действовать до успешной обработки обратного
+     * запроса или завершения сессии.
+     * Должен быть уникальным среди всех сессий такого типа.
+     * Один и тот же идентификатор можно устанавливать для одной и той же сессии до тех пор, пока
+     * обратный вызов с таким идентификатором не будет успешно обработан. Попытка установить уже
+     * обработанный идентификатор приведет к ошибке.
+     */
+    2: optional CallbackTag callback_tag
 }
 
 ///
@@ -140,6 +160,24 @@ struct Quote {
     5: required QuoteData           quote_data
 }
 
+struct Callback {
+    1: required CallbackTag tag
+    2: required CallbackPayload payload
+}
+
+struct CallbackResponse {
+    1: required CallbackResponsePayload payload
+}
+
+/**
+ * Результат обработки адаптером обратного вызова в рамках сессии.
+ */
+struct CallbackResult {
+    1: required Intent           intent
+    2: optional InternalState    next_state
+    3: required CallbackResponse response
+}
+
 service Adapter {
 
     /**
@@ -163,4 +201,59 @@ service Adapter {
     throws (
         1: GetQuoteFailure ex1
     )
+
+    /**
+     * Запрос к адаптеру на обработку обратного вызова.
+     */
+    CallbackResult HandleCallback (
+        1: Callback callback,
+        2: Withdrawal withdrawal
+        3: InternalState state
+        4: Options opts
+    )
+    throws (
+    )
+
+}
+
+exception SessionNotFound {}
+
+union ProcessCallbackResult {
+    /** Вызов был обработан в рамках сесии */
+    1: ProcessCallbackSucceeded succeeded
+
+    /** Сессия уже завершена, вызов обработать не удалось */
+    2: ProcessCallbackFinished finished
+}
+
+struct ProcessCallbackSucceeded {
+    1: required CallbackResponse response
+}
+
+struct ProcessCallbackFinished {
+    /**
+     * Состояние сессии после обработки последнего ответа адаптера.
+     */
+    1: required Withdrawal withdrawal
+    2: required InternalState state
+    3: required Options opts
+}
+
+service AdapterHost {
+
+    /**
+     * Запрос к процессингу на обработку обратного вызова от провайдера.
+     * Обработка этого метода процессингом зависит от состояния сессии:
+     *  - будет вызван Adapter.HandleCallback с контекстом сессии, если сессия еще активна,
+     *    и вызов с таким идентификатором не обрабатывался; или
+     *  - будет возвращен прошлый ответ, если вызов с таким идентификатором уже обрабатывался
+     *    вне зависимости от того завершена сессия или нет; или
+     *  - будет возвращен ответ, что сессия уже завершена, если сессия завершена, и вызов с таким
+     *    идентификатором не был обработан успешно.
+     */
+    ProcessCallbackResult ProcessCallback (1: Callback callback)
+        throws (
+            1: SessionNotFound ex1
+        )
+
 }
