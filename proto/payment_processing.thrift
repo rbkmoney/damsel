@@ -1032,8 +1032,9 @@ service Invoicing {
             3: InvalidInvoiceStatus ex3,
             4: InvoiceAdjustmentPending ex4,
             5: InvoiceAdjustmentStatusUnacceptable ex5,
-            6: InvoiceAlreadyHasStatus ex6
-            7: base.InvalidRequest ex7
+            6: InvoiceAlreadyHasStatus ex6,
+            7: base.InvalidRequest ex7,
+            8: InvoicePaymentPending ex8
         )
 
     InvoiceAdjustment GetAdjustment (
@@ -1097,7 +1098,8 @@ service Invoicing {
             7: InvalidShopStatus ex7,
             8: InvalidContractStatus ex8,
             9: InvalidRecurrentParentPayment ex9,
-            10: OperationNotPermitted ex10
+            10: OperationNotPermitted ex10,
+            11: InvoiceAdjustmentPending ex11
         )
 
     InvoicePayment GetPayment (
