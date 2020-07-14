@@ -24,9 +24,7 @@ DESTDIR = _gen
 RELDIR = _release
 
 CALL_W_CONTAINER := \
-	all compile doc clean \
-	java_compile deploy_nexus deploy_epic_nexus java_install \
-	release-erlang
+	all compile doc clean release-erlang
 
 all: compile
 
@@ -42,7 +40,7 @@ endef
 
 CUTLINE = $(shell printf '=%.0s' $$(seq 1 80))
 
-.PHONY: all compile doc clean java_compile deploy_nexus deploy_epic_nexus java_install
+.PHONY: all compile doc clean
 
 LANGUAGE_TARGETS = $(foreach lang, $(THRIFT_LANGUAGES), verify-$(lang))
 
@@ -107,39 +105,4 @@ build-release:
 endif
 endif
 
-# Java
-
-MVN = mvn --no-transfer-progress
-
-ifdef SETTINGS_XML
-DOCKER_RUN_OPTS = -v $(SETTINGS_XML):$(SETTINGS_XML)
-DOCKER_RUN_OPTS += -e SETTINGS_XML=$(SETTINGS_XML)
-endif
-
-ifdef LOCAL_BUILD
-DOCKER_RUN_OPTS += -v $$HOME/.m2:/home/$(UNAME)/.m2:rw
-endif
-
-COMMIT_HASH = $(shell git --no-pager log -1 --pretty=format:"%h")
-NUMBER_COMMITS = $(shell git rev-list --count HEAD)
-
-java_compile:
-	$(if $(SETTINGS_XML),,echo "SETTINGS_XML not defined" ; exit 1)
-	$(MVN) compile -s $(SETTINGS_XML)
-
-deploy_nexus:
-	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
-	$(MVN) versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& $(MVN) deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
-
-deploy_epic_nexus:
-	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
-	$(MVN) versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)-epic" -s $(SETTINGS_XML) \
-	&& $(MVN) deploy -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
-
-
-java_install:
-	$(if $(SETTINGS_XML),, echo "SETTINGS_XML not defined"; exit 1)
-	$(MVN) clean -s $(SETTINGS_XML) && \
-	$(MVN) versions:set versions:commit -DnewVersion="1.$(NUMBER_COMMITS)-$(COMMIT_HASH)" -s $(SETTINGS_XML) \
-	&& $(MVN) install -s $(SETTINGS_XML) -Dpath_to_thrift="$(THRIFT)" -Dcommit.number="$(NUMBER_COMMITS)"
+include $(UTILS_PATH)/make_lib/java_proto.mk
