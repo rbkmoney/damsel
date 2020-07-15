@@ -880,7 +880,9 @@ exception InvalidUser {}
 exception InvoiceNotFound {}
 
 exception InvoiceAdjustmentNotFound {}
-exception InvoiceAdjustmentPending {}
+exception InvoiceAdjustmentPending {
+    1: required domain.InvoiceAdjustmentID id
+}
 exception InvoiceAdjustmentStatusUnacceptable {}
 exception InvalidInvoiceAdjustmentStatus {
     1: required domain.InvoiceAdjustmentStatus status
