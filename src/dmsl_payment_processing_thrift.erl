@@ -3606,7 +3606,9 @@ struct_info('InvoiceAdjustmentNotFound') ->
     {struct, exception, []};
 
 struct_info('InvoiceAdjustmentPending') ->
-    {struct, exception, []};
+    {struct, exception, [
+        {1, required, string, 'id', undefined}
+    ]};
 
 struct_info('InvoiceAdjustmentStatusUnacceptable') ->
     {struct, exception, []};
@@ -4727,7 +4729,8 @@ function_info('Invoicing', 'CreateInvoiceAdjustment', exceptions) ->
         {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentPending'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentStatusUnacceptable'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceAlreadyHasStatus'}}, 'ex6', undefined},
-        {7, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex7', undefined}
+        {7, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex7', undefined},
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentPending'}}, 'ex8', undefined}
     ]};
 function_info('Invoicing', 'GetAdjustment', params_type) ->
     {struct, struct, [
@@ -4805,7 +4808,8 @@ function_info('Invoicing', 'StartPayment', exceptions) ->
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex8', undefined},
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidRecurrentParentPayment'}}, 'ex9', undefined},
-        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex10', undefined}
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex10', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentPending'}}, 'ex11', undefined}
     ]};
 function_info('Invoicing', 'GetPayment', params_type) ->
     {struct, struct, [

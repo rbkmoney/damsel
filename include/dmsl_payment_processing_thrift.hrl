@@ -1026,7 +1026,9 @@
 -record('payproc_InvoiceAdjustmentNotFound', {}).
 
 %% exception 'InvoiceAdjustmentPending'
--record('payproc_InvoiceAdjustmentPending', {}).
+-record('payproc_InvoiceAdjustmentPending', {
+    'id' :: dmsl_domain_thrift:'InvoiceAdjustmentID'()
+}).
 
 %% exception 'InvoiceAdjustmentStatusUnacceptable'
 -record('payproc_InvoiceAdjustmentStatusUnacceptable', {}).
