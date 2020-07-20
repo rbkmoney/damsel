@@ -1934,6 +1934,7 @@ struct Varset {
     7: optional domain.P2PTool p2p_tool
     8: optional domain.ShopID shop_id
     9: optional domain.ContractorIdentificationLevel identification_level
+    10: optional domain.PaymentTool payment_tool
 }
 
 struct PartyParams {
