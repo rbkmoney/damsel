@@ -662,7 +662,8 @@
     'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined,
     'p2p_tool' :: dmsl_domain_thrift:'P2PTool'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
-    'identification_level' :: atom() | undefined
+    'identification_level' :: atom() | undefined,
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined
 }).
 
 %% struct 'PartyParams'
