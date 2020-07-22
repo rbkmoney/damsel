@@ -1878,6 +1878,26 @@ struct Fees {
     1: required map<CashFlowConstant, CashVolume> fees
 }
 
+/**
+* Структура, позволяющая установить причинно-следственную связь операций внутри сервиса
+**/
+union Clock {
+    // для новых операций
+    1: VectorClock vector
+    // для старых операций, для обратной совместимости. Не рекоммендуется к использованию.
+    2: LatestClock latest
+}
+
+/**
+ * https://en.wikipedia.org/wiki/Vector_clock
+ **/
+struct VectorClock {
+    1: required base.Opaque state
+}
+
+struct LatestClock {
+}
+
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
 /** Граф финансовых потоков. */
