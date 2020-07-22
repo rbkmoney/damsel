@@ -1246,4 +1246,10 @@
 %% exception 'TerminalNotFound'
 -record('payproc_TerminalNotFound', {}).
 
+%% exception 'GlobalsNotFound'
+-record('payproc_GlobalsNotFound', {}).
+
+%% exception 'RuleSetNotFound'
+-record('payproc_RuleSetNotFound', {}).
+
 -endif.
