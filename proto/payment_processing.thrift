@@ -2409,6 +2409,10 @@ exception ProviderNotFound {}
 
 exception TerminalNotFound {}
 
+exception GlobalsNotFound {}
+
+exception RuleSetNotFound {}
+
 // Service
 
 service PartyManagement {
@@ -2613,7 +2617,7 @@ service PartyManagement {
             2: ProviderNotFound ex2
         )
 
-    domain.ProvisionTermSet ComputeProviderTerminalTerms(
+    domain.ProvisionTermSet ComputeProviderTerminalTerms (
         1: UserInfo user,
         2: domain.ProviderRef provider_ref,
         3: domain.TerminalRef terminal_ref,
@@ -2624,6 +2628,32 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
             3: TerminalNotFound ex3
+        )
+
+    /* Globals */
+
+    domain.Globals ComputeGlobals (
+        1: UserInfo user,
+        2: domain.GlobalsRef globals_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: GlobalsNotFound ex2
+        )
+
+    /* RuleSet */
+
+    domain.PaymentRoutingRuleset ComputePaymentRoutingRuleset (
+        1: UserInfo user,
+        2: domain.PaymentRoutingRulesetRef ruleset_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: RuleSetNotFound ex2
         )
 
     /* Payment institutions */
