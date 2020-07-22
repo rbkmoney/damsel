@@ -36,6 +36,9 @@
     'Options'/0,
     'InternalState'/0,
     'QuoteData'/0,
+    'CallbackPayload'/0,
+    'CallbackResponsePayload'/0,
+    'CallbackTag'/0,
     'Destination'/0,
     'Identity'/0
 ]).
@@ -52,10 +55,17 @@
     'LimitExceededFailure'/0,
     'GeneralFailure'/0,
     'ProcessResult'/0,
-    'Quote'/0
+    'Quote'/0,
+    'Callback'/0,
+    'CallbackResponse'/0,
+    'CallbackResult'/0,
+    'ProcessCallbackResult'/0,
+    'ProcessCallbackSucceeded'/0,
+    'ProcessCallbackFinished'/0
 ]).
 -export_type([
-    'GetQuoteFailure'/0
+    'GetQuoteFailure'/0,
+    'SessionNotFound'/0
 ]).
 
 -type namespace() :: 'wthadpt'.
@@ -68,6 +78,9 @@
     'Options' |
     'InternalState' |
     'QuoteData' |
+    'CallbackPayload' |
+    'CallbackResponsePayload' |
+    'CallbackTag' |
     'Destination' |
     'Identity'.
 
@@ -75,6 +88,9 @@
 -type 'Options'() :: dmsl_domain_thrift:'ProxyOptions'().
 -type 'InternalState'() :: dmsl_msgpack_thrift:'Value'().
 -type 'QuoteData'() :: dmsl_msgpack_thrift:'Value'().
+-type 'CallbackPayload'() :: dmsl_base_thrift:'Opaque'().
+-type 'CallbackResponsePayload'() :: dmsl_base_thrift:'Opaque'().
+-type 'CallbackTag'() :: dmsl_base_thrift:'Tag'().
 -type 'Destination'() :: dmsl_withdrawals_domain_thrift:'Destination'().
 -type 'Identity'() :: dmsl_withdrawals_domain_thrift:'Identity'().
 
@@ -99,10 +115,17 @@
     'LimitExceededFailure' |
     'GeneralFailure' |
     'ProcessResult' |
-    'Quote'.
+    'Quote' |
+    'Callback' |
+    'CallbackResponse' |
+    'CallbackResult' |
+    'ProcessCallbackResult' |
+    'ProcessCallbackSucceeded' |
+    'ProcessCallbackFinished'.
 
 -type exception_name() ::
-    'GetQuoteFailure'.
+    'GetQuoteFailure' |
+    'SessionNotFound'.
 
 %% union 'Intent'
 -type 'Intent'() ::
@@ -150,23 +173,54 @@
 %% struct 'Quote'
 -type 'Quote'() :: #'wthadpt_Quote'{}.
 
+%% struct 'Callback'
+-type 'Callback'() :: #'wthadpt_Callback'{}.
+
+%% struct 'CallbackResponse'
+-type 'CallbackResponse'() :: #'wthadpt_CallbackResponse'{}.
+
+%% struct 'CallbackResult'
+-type 'CallbackResult'() :: #'wthadpt_CallbackResult'{}.
+
+%% union 'ProcessCallbackResult'
+-type 'ProcessCallbackResult'() ::
+    {'succeeded', 'ProcessCallbackSucceeded'()} |
+    {'finished', 'ProcessCallbackFinished'()}.
+
+%% struct 'ProcessCallbackSucceeded'
+-type 'ProcessCallbackSucceeded'() :: #'wthadpt_ProcessCallbackSucceeded'{}.
+
+%% struct 'ProcessCallbackFinished'
+-type 'ProcessCallbackFinished'() :: #'wthadpt_ProcessCallbackFinished'{}.
+
 %% exception 'GetQuoteFailure'
 -type 'GetQuoteFailure'() :: #'wthadpt_GetQuoteFailure'{}.
+
+%% exception 'SessionNotFound'
+-type 'SessionNotFound'() :: #'wthadpt_SessionNotFound'{}.
 
 %%
 %% services and functions
 %%
 -type service_name() ::
-    'Adapter'.
+    'Adapter' |
+    'AdapterHost'.
 
 -type function_name() ::
-    'Adapter_service_functions'().
+    'Adapter_service_functions'() |
+    'AdapterHost_service_functions'().
 
 -type 'Adapter_service_functions'() ::
     'ProcessWithdrawal' |
-    'GetQuote'.
+    'GetQuote' |
+    'HandleCallback'.
 
 -export_type(['Adapter_service_functions'/0]).
+
+-type 'AdapterHost_service_functions'() ::
+    'ProcessCallback'.
+
+-export_type(['AdapterHost_service_functions'/0]).
 
 
 -type struct_flavour() :: struct | exception | union.
@@ -203,6 +257,9 @@ typedefs() ->
         'Options',
         'InternalState',
         'QuoteData',
+        'CallbackPayload',
+        'CallbackResponsePayload',
+        'CallbackTag',
         'Destination',
         'Identity'
     ].
@@ -228,14 +285,21 @@ structs() ->
         'LimitExceededFailure',
         'GeneralFailure',
         'ProcessResult',
-        'Quote'
+        'Quote',
+        'Callback',
+        'CallbackResponse',
+        'CallbackResult',
+        'ProcessCallbackResult',
+        'ProcessCallbackSucceeded',
+        'ProcessCallbackFinished'
     ].
 
 -spec services() -> [service_name()].
 
 services() ->
     [
-        'Adapter'
+        'Adapter',
+        'AdapterHost'
     ].
 
 -spec namespace() -> namespace().
@@ -256,6 +320,15 @@ typedef_info('InternalState') ->
 
 typedef_info('QuoteData') ->
     {struct, union, {dmsl_msgpack_thrift, 'Value'}};
+
+typedef_info('CallbackPayload') ->
+    string;
+
+typedef_info('CallbackResponsePayload') ->
+    string;
+
+typedef_info('CallbackTag') ->
+    string;
 
 typedef_info('Destination') ->
     {struct, union, {dmsl_withdrawals_domain_thrift, 'Destination'}};
@@ -295,7 +368,8 @@ struct_info('Success') ->
 
 struct_info('SleepIntent') ->
     {struct, struct, [
-        {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined}
+        {1, required, {struct, union, {dmsl_base_thrift, 'Timer'}}, 'timer', undefined},
+        {2, optional, string, 'callback_tag', undefined}
     ]};
 
 struct_info('Withdrawal') ->
@@ -352,10 +426,49 @@ struct_info('Quote') ->
         {5, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'quote_data', undefined}
     ]};
 
+struct_info('Callback') ->
+    {struct, struct, [
+        {1, required, string, 'tag', undefined},
+        {2, required, string, 'payload', undefined}
+    ]};
+
+struct_info('CallbackResponse') ->
+    {struct, struct, [
+        {1, required, string, 'payload', undefined}
+    ]};
+
+struct_info('CallbackResult') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'Intent'}}, 'intent', undefined},
+        {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined},
+        {3, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
+    ]};
+
+struct_info('ProcessCallbackResult') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ProcessCallbackSucceeded'}}, 'succeeded', undefined},
+        {2, optional, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'ProcessCallbackFinished'}}, 'finished', undefined}
+    ]};
+
+struct_info('ProcessCallbackSucceeded') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
+    ]};
+
+struct_info('ProcessCallbackFinished') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Withdrawal'}}, 'withdrawal', undefined},
+        {2, required, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state', undefined},
+        {3, required, {map, string, string}, 'opts', undefined}
+    ]};
+
 struct_info('GetQuoteFailure') ->
     {struct, exception, [
         {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'QuoteFailure'}}, 'failure', undefined}
     ]};
+
+struct_info('SessionNotFound') ->
+    {struct, exception, []};
 
 struct_info(_) -> erlang:error(badarg).
 
@@ -388,8 +501,26 @@ record_name('ProcessResult') ->
 record_name('Quote') ->
     'wthadpt_Quote';
 
+record_name('Callback') ->
+    'wthadpt_Callback';
+
+record_name('CallbackResponse') ->
+    'wthadpt_CallbackResponse';
+
+record_name('CallbackResult') ->
+    'wthadpt_CallbackResult';
+
+record_name('ProcessCallbackSucceeded') ->
+    'wthadpt_ProcessCallbackSucceeded';
+
+record_name('ProcessCallbackFinished') ->
+    'wthadpt_ProcessCallbackFinished';
+
 record_name('GetQuoteFailure') ->
     'wthadpt_GetQuoteFailure';
+
+record_name('SessionNotFound') ->
+    'wthadpt_SessionNotFound';
 
 record_name(_) -> error(badarg).
 
@@ -398,7 +529,13 @@ record_name(_) -> error(badarg).
 functions('Adapter') ->
     [
         'ProcessWithdrawal',
-        'GetQuote'
+        'GetQuote',
+        'HandleCallback'
+    ];
+
+functions('AdapterHost') ->
+    [
+        'ProcessCallback'
     ];
 
 functions(_) -> error(badarg).
@@ -426,6 +563,28 @@ function_info('Adapter', 'GetQuote', reply_type) ->
 function_info('Adapter', 'GetQuote', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_withdrawals_provider_adapter_thrift, 'GetQuoteFailure'}}, 'ex1', undefined}
+    ]};
+function_info('Adapter', 'HandleCallback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Callback'}}, 'callback', undefined},
+        {2, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Withdrawal'}}, 'withdrawal', undefined},
+        {3, undefined, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'state', undefined},
+        {4, undefined, {map, string, string}, 'opts', undefined}
+    ]};
+function_info('Adapter', 'HandleCallback', reply_type) ->
+    {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'CallbackResult'}};
+function_info('Adapter', 'HandleCallback', exceptions) ->
+    {struct, struct, []};
+
+function_info('AdapterHost', 'ProcessCallback', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'Callback'}}, 'callback', undefined}
+    ]};
+function_info('AdapterHost', 'ProcessCallback', reply_type) ->
+    {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'ProcessCallbackResult'}};
+function_info('AdapterHost', 'ProcessCallback', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_withdrawals_provider_adapter_thrift, 'SessionNotFound'}}, 'ex1', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
