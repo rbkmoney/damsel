@@ -1879,8 +1879,9 @@ struct Fees {
 }
 
 /**
-* Структура, позволяющая установить причинно-следственную связь операций внутри сервиса
-**/
+ * Структура, позволяющая установить причинно-следственную связь операций внутри сервиса управления счетами
+ * https://en.wikipedia.org/wiki/Vector_clock
+ **/
 union Clock {
     // для новых операций
     1: VectorClock vector
@@ -1888,15 +1889,11 @@ union Clock {
     2: LatestClock latest
 }
 
-/**
- * https://en.wikipedia.org/wiki/Vector_clock
- **/
 struct VectorClock {
     1: required base.Opaque state
 }
 
-struct LatestClock {
-}
+struct LatestClock { }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
