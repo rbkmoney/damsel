@@ -880,7 +880,9 @@ exception InvalidUser {}
 exception InvoiceNotFound {}
 
 exception InvoiceAdjustmentNotFound {}
-exception InvoiceAdjustmentPending {}
+exception InvoiceAdjustmentPending {
+    1: required domain.InvoiceAdjustmentID id
+}
 exception InvoiceAdjustmentStatusUnacceptable {}
 exception InvalidInvoiceAdjustmentStatus {
     1: required domain.InvoiceAdjustmentStatus status
@@ -1032,8 +1034,9 @@ service Invoicing {
             3: InvalidInvoiceStatus ex3,
             4: InvoiceAdjustmentPending ex4,
             5: InvoiceAdjustmentStatusUnacceptable ex5,
-            6: InvoiceAlreadyHasStatus ex6
-            7: base.InvalidRequest ex7
+            6: InvoiceAlreadyHasStatus ex6,
+            7: base.InvalidRequest ex7,
+            8: InvoicePaymentPending ex8
         )
 
     InvoiceAdjustment GetAdjustment (
@@ -1097,7 +1100,8 @@ service Invoicing {
             7: InvalidShopStatus ex7,
             8: InvalidContractStatus ex8,
             9: InvalidRecurrentParentPayment ex9,
-            10: OperationNotPermitted ex10
+            10: OperationNotPermitted ex10,
+            11: InvoiceAdjustmentPending ex11
         )
 
     InvoicePayment GetPayment (
@@ -1930,6 +1934,7 @@ struct Varset {
     7: optional domain.P2PTool p2p_tool
     8: optional domain.ShopID shop_id
     9: optional domain.ContractorIdentificationLevel identification_level
+    10: optional domain.PaymentTool payment_tool
 }
 
 struct PartyParams {
