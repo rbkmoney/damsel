@@ -233,6 +233,7 @@ struct InvoicePaymentRouteChanged {
 struct InvoicePaymentCashFlowChanged {
     /** Данные финансового взаимодействия. */
     1: required domain.FinalCashFlow cash_flow
+    2: optional domain.Clock clock
 }
 
 /**
