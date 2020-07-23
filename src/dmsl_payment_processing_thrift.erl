@@ -336,7 +336,9 @@
     'PaymentInstitutionNotFound'/0,
     'ContractTemplateNotFound'/0,
     'ProviderNotFound'/0,
-    'TerminalNotFound'/0
+    'TerminalNotFound'/0,
+    'GlobalsNotFound'/0,
+    'RuleSetNotFound'/0
 ]).
 
 -type namespace() :: 'payproc'.
@@ -682,7 +684,9 @@
     'PaymentInstitutionNotFound' |
     'ContractTemplateNotFound' |
     'ProviderNotFound' |
-    'TerminalNotFound'.
+    'TerminalNotFound' |
+    'GlobalsNotFound' |
+    'RuleSetNotFound'.
 
 %% struct 'UserInfo'
 -type 'UserInfo'() :: #'payproc_UserInfo'{}.
@@ -1706,6 +1710,12 @@
 %% exception 'TerminalNotFound'
 -type 'TerminalNotFound'() :: #'payproc_TerminalNotFound'{}.
 
+%% exception 'GlobalsNotFound'
+-type 'GlobalsNotFound'() :: #'payproc_GlobalsNotFound'{}.
+
+%% exception 'RuleSetNotFound'
+-type 'RuleSetNotFound'() :: #'payproc_RuleSetNotFound'{}.
+
 %%
 %% services and functions
 %%
@@ -1830,6 +1840,8 @@
     'GetAccountState' |
     'ComputeProvider' |
     'ComputeProviderTerminalTerms' |
+    'ComputeGlobals' |
+    'ComputePaymentRoutingRuleset' |
     'ComputePaymentInstitutionTerms' |
     'ComputePaymentInstitution' |
     'ComputePayoutCashFlow'.
@@ -3826,6 +3838,12 @@ struct_info('ProviderNotFound') ->
 struct_info('TerminalNotFound') ->
     {struct, exception, []};
 
+struct_info('GlobalsNotFound') ->
+    {struct, exception, []};
+
+struct_info('RuleSetNotFound') ->
+    {struct, exception, []};
+
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -4526,6 +4544,12 @@ record_name('ProviderNotFound') ->
 record_name('TerminalNotFound') ->
     'payproc_TerminalNotFound';
 
+record_name('GlobalsNotFound') ->
+    'payproc_GlobalsNotFound';
+
+record_name('RuleSetNotFound') ->
+    'payproc_RuleSetNotFound';
+
 record_name(_) -> error(badarg).
 
 -spec functions(service_name()) -> [function_name()] | no_return().
@@ -4634,6 +4658,8 @@ functions('PartyManagement') ->
         'GetAccountState',
         'ComputeProvider',
         'ComputeProviderTerminalTerms',
+        'ComputeGlobals',
+        'ComputePaymentRoutingRuleset',
         'ComputePaymentInstitutionTerms',
         'ComputePaymentInstitution',
         'ComputePayoutCashFlow'
@@ -5957,6 +5983,34 @@ function_info('PartyManagement', 'ComputeProviderTerminalTerms', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'TerminalNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeGlobals', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals_ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeGlobals', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'Globals'}};
+function_info('PartyManagement', 'ComputeGlobals', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'GlobalsNotFound'}}, 'ex2', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentRoutingRuleset', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'ruleset_ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputePaymentRoutingRuleset', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRuleset'}};
+function_info('PartyManagement', 'ComputePaymentRoutingRuleset', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RuleSetNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'ComputePaymentInstitutionTerms', params_type) ->
     {struct, struct, [
