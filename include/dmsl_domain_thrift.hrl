@@ -927,6 +927,14 @@
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
+%% struct 'BankCardPaymentMethod'
+-record('domain_BankCardPaymentMethod', {
+    'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
+    'is_cvv_empty' = false :: boolean() | undefined,
+    'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'() | undefined,
+    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined
+}).
+
 %% struct 'TokenizedBankCard'
 -record('domain_TokenizedBankCard', {
     'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),

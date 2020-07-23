@@ -283,6 +283,7 @@
     'CashLimitSelector'/0,
     'CashLimitDecision'/0,
     'PaymentMethod'/0,
+    'BankCardPaymentMethod'/0,
     'TokenizedBankCard'/0,
     'P2PTool'/0,
     'PaymentTool'/0,
@@ -1164,6 +1165,7 @@
     'CashLimitSelector' |
     'CashLimitDecision' |
     'PaymentMethod' |
+    'BankCardPaymentMethod' |
     'TokenizedBankCard' |
     'P2PTool' |
     'PaymentTool' |
@@ -1958,13 +1960,17 @@
 
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
-    {'bank_card', 'BankCardPaymentSystem'()} |
     {'payment_terminal', 'TerminalPaymentProvider'()} |
     {'digital_wallet', 'DigitalWalletProvider'()} |
-    {'tokenized_bank_card', 'TokenizedBankCard'()} |
-    {'empty_cvv_bank_card', 'BankCardPaymentSystem'()} |
     {'crypto_currency', 'CryptoCurrency'()} |
-    {'mobile', 'MobileOperator'()}.
+    {'mobile', 'MobileOperator'()} |
+    {'bank_card', 'BankCardPaymentMethod'()} |
+    {'bank_card_deprecated', 'BankCardPaymentSystem'()} |
+    {'tokenized_bank_card_deprecated', 'TokenizedBankCard'()} |
+    {'empty_cvv_bank_card_deprecated', 'BankCardPaymentSystem'()}.
+
+%% struct 'BankCardPaymentMethod'
+-type 'BankCardPaymentMethod'() :: #'domain_BankCardPaymentMethod'{}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
@@ -2946,6 +2952,7 @@ structs() ->
         'CashLimitSelector',
         'CashLimitDecision',
         'PaymentMethod',
+        'BankCardPaymentMethod',
         'TokenizedBankCard',
         'P2PTool',
         'PaymentTool',
@@ -4847,13 +4854,22 @@ struct_info('CashLimitDecision') ->
 
 struct_info('PaymentMethod') ->
     {struct, union, [
-        {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card', undefined},
         {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
         {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
-        {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card', undefined},
-        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card', undefined},
         {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-        {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined}
+        {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardPaymentMethod'}}, 'bank_card', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card_deprecated', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card_deprecated', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card_deprecated', undefined}
+    ]};
+
+struct_info('BankCardPaymentMethod') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {2, optional, bool, 'is_cvv_empty', false},
+        {3, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined}
     ]};
 
 struct_info('TokenizedBankCard') ->
@@ -6436,6 +6452,9 @@ record_name('CashRange') ->
 
 record_name('CashLimitDecision') ->
     'domain_CashLimitDecision';
+
+record_name('BankCardPaymentMethod') ->
+    'domain_BankCardPaymentMethod';
 
 record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
