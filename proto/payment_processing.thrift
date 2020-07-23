@@ -2647,9 +2647,10 @@ service PartyManagement {
 
     domain.PaymentRoutingRuleset ComputePaymentRoutingRuleset (
         1: UserInfo user,
-        2: domain.PaymentRoutingRulesetRef ruleset_ref,
-        3: domain.DataRevision domain_revision,
-        4: Varset varset
+        2: PartyID party_id,
+        3: domain.PaymentRoutingRulesetRef ruleset_ref,
+        4: domain.DataRevision domain_revision,
+        5: Varset varset
     )
         throws (
             1: InvalidUser ex1,
