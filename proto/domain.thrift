@@ -2229,8 +2229,12 @@ struct Terminal {
     10: optional RiskScore risk_coverage
     13: optional ProviderRef provider_ref
     14: optional ProvisionTermSet terms
-    15: optional ExternalTerminalID terminal_id
-    16: optional MerchantID merchant_id
+
+    /* Идентификатор терминала во внешней системе провайдера.*/
+    15: optional ExternalTerminalID external_terminal_id
+    /* Идентификатор мерчанта во внешней системе провайдера.*/
+    16: optional MerchantID external_merchant_id
+    /* Код классификации вида деятельности мерчанта. */
     17: optional MerchantCategoryCode mcc
 
     // deprecated
