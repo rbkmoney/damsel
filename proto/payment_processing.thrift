@@ -1935,6 +1935,16 @@ struct Varset {
     8: optional domain.ShopID shop_id
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
+    11: optional domain.PartyID party_id
+    12: optional domain.RiskScore risk_score
+    13: optional VarsetFlow flow
+}
+
+struct Null {}
+
+union VarsetFlow {
+    1: Null instant
+    2: domain.HoldLifetime hold
 }
 
 struct PartyParams {
@@ -2647,10 +2657,9 @@ service PartyManagement {
 
     domain.PaymentRoutingRuleset ComputePaymentRoutingRuleset (
         1: UserInfo user,
-        2: PartyID party_id,
-        3: domain.PaymentRoutingRulesetRef ruleset_ref,
-        4: domain.DataRevision domain_revision,
-        5: Varset varset
+        2: domain.PaymentRoutingRulesetRef ruleset_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
     )
         throws (
             1: InvalidUser ex1,
