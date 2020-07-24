@@ -2212,9 +2212,9 @@ struct P2PInspectorDecision {
     2: required P2PInspectorSelector then_
 }
 
-typedef ExternalTerminalID string
-typedef MerchantID string
-typedef MerchantCategoryCode string
+typedef string ExternalTerminalID
+typedef string MerchantID
+typedef string MerchantCategoryCode
 
 /**
  * Обобщённый терминал у провайдера.
