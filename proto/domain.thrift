@@ -2213,8 +2213,8 @@ struct P2PInspectorDecision {
 }
 
 typedef ExternalTerminalID string
-typedef ExternalMerchantID string
-typedef ExternalMCC string
+typedef MerchantID string
+typedef MerchantCategoryCode string
 
 /**
  * Обобщённый терминал у провайдера.
@@ -2230,8 +2230,8 @@ struct Terminal {
     13: optional ProviderRef provider_ref
     14: optional ProvisionTermSet terms
     15: optional ExternalTerminalID terminal_id
-    16: optional ExternalMerchantID merchant_id
-    17: optional ExternalMCC mcc
+    16: optional MerchantID merchant_id
+    17: optional MerchantCategoryCode mcc
 
     // deprecated
     12: optional PaymentsProvisionTerms terms_legacy
