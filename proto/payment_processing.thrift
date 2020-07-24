@@ -1935,6 +1935,7 @@ struct Varset {
     8: optional domain.ShopID shop_id
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
+    11: optional domain.PartyID party_id
 }
 
 struct PartyParams {

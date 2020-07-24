@@ -3076,7 +3076,8 @@ struct_info('Varset') ->
         {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTool'}}, 'p2p_tool', undefined},
         {8, optional, string, 'shop_id', undefined},
         {9, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level', undefined},
-        {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined}
+        {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {11, optional, string, 'party_id', undefined}
     ]};
 
 struct_info('PartyParams') ->
