@@ -1370,6 +1370,9 @@
     'risk_coverage' :: atom() | undefined,
     'provider_ref' :: dmsl_domain_thrift:'ProviderRef'() | undefined,
     'terms' :: dmsl_domain_thrift:'ProvisionTermSet'() | undefined,
+    'external_terminal_id' :: dmsl_domain_thrift:'ExternalTerminalID'() | undefined,
+    'external_merchant_id' :: dmsl_domain_thrift:'MerchantID'() | undefined,
+    'mcc' :: dmsl_domain_thrift:'MerchantCategoryCode'() | undefined,
     'terms_legacy' :: dmsl_domain_thrift:'PaymentsProvisionTerms'() | undefined
 }).
 

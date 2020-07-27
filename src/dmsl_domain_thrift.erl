@@ -77,6 +77,9 @@
     'CashFlow'/0,
     'FinalCashFlow'/0,
     'ProviderAccountSet'/0,
+    'ExternalTerminalID'/0,
+    'MerchantID'/0,
+    'MerchantCategoryCode'/0,
     'ProxyOptions'/0,
     'Domain'/0
 ]).
@@ -509,6 +512,9 @@
     'CashFlow' |
     'FinalCashFlow' |
     'ProviderAccountSet' |
+    'ExternalTerminalID' |
+    'MerchantID' |
+    'MerchantCategoryCode' |
     'ProxyOptions' |
     'Domain'.
 
@@ -557,6 +563,9 @@
 -type 'CashFlow'() :: ['CashFlowPosting'()].
 -type 'FinalCashFlow'() :: ['FinalCashFlowPosting'()].
 -type 'ProviderAccountSet'() :: #{'CurrencyRef'() => 'ProviderAccount'()}.
+-type 'ExternalTerminalID'() :: binary().
+-type 'MerchantID'() :: binary().
+-type 'MerchantCategoryCode'() :: binary().
 -type 'ProxyOptions'() :: dmsl_base_thrift:'StringMap'().
 -type 'Domain'() :: #{'Reference'() => 'DomainObject'()}.
 
@@ -2738,6 +2747,9 @@ typedefs() ->
         'CashFlow',
         'FinalCashFlow',
         'ProviderAccountSet',
+        'ExternalTerminalID',
+        'MerchantID',
+        'MerchantCategoryCode',
         'ProxyOptions',
         'Domain'
     ].
@@ -3273,6 +3285,15 @@ typedef_info('FinalCashFlow') ->
 
 typedef_info('ProviderAccountSet') ->
     {map, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, {struct, struct, {dmsl_domain_thrift, 'ProviderAccount'}}};
+
+typedef_info('ExternalTerminalID') ->
+    string;
+
+typedef_info('MerchantID') ->
+    string;
+
+typedef_info('MerchantCategoryCode') ->
+    string;
 
 typedef_info('ProxyOptions') ->
     {map, string, string};
@@ -5424,6 +5445,9 @@ struct_info('Terminal') ->
         {10, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_coverage', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined},
         {14, optional, {struct, struct, {dmsl_domain_thrift, 'ProvisionTermSet'}}, 'terms', undefined},
+        {15, optional, string, 'external_terminal_id', undefined},
+        {16, optional, string, 'external_merchant_id', undefined},
+        {17, optional, string, 'mcc', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms_legacy', undefined}
     ]};
 
