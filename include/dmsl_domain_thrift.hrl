@@ -1229,6 +1229,7 @@
 
 %% struct 'PaymentsProvisionTerms'
 -record('domain_PaymentsProvisionTerms', {
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined,
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'categories' :: dmsl_domain_thrift:'CategorySelector'() | undefined,
     'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'() | undefined,
@@ -1281,6 +1282,7 @@
 
 %% struct 'WithdrawalProvisionTerms'
 -record('domain_WithdrawalProvisionTerms', {
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined,
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'payout_methods' :: dmsl_domain_thrift:'PayoutMethodSelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
@@ -1289,6 +1291,7 @@
 
 %% struct 'P2PProvisionTerms'
 -record('domain_P2PProvisionTerms', {
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined,
     'currencies' :: dmsl_domain_thrift:'CurrencySelector'() | undefined,
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined,
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,

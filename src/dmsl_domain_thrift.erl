@@ -5268,6 +5268,7 @@ struct_info('ProvisionTermSet') ->
 
 struct_info('PaymentsProvisionTerms') ->
     {struct, struct, [
+        {11, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
         {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
         {2, optional, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
         {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
@@ -5320,6 +5321,7 @@ struct_info('WalletProvisionTerms') ->
 
 struct_info('WithdrawalProvisionTerms') ->
     {struct, struct, [
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
         {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
         {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutMethodSelector'}}, 'payout_methods', undefined},
         {3, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
@@ -5328,6 +5330,7 @@ struct_info('WithdrawalProvisionTerms') ->
 
 struct_info('P2PProvisionTerms') ->
     {struct, struct, [
+        {5, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined},
         {1, optional, {struct, union, {dmsl_domain_thrift, 'CurrencySelector'}}, 'currencies', undefined},
         {2, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined},
         {3, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
