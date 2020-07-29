@@ -147,6 +147,9 @@
 %% exception 'WebhookNotFound'
 -record('webhooker_WebhookNotFound', {}).
 
+%% exception 'SourceNotFound'
+-record('webhooker_SourceNotFound', {}).
+
 %% exception 'LimitExceeded'
 -record('webhooker_LimitExceeded', {}).
 

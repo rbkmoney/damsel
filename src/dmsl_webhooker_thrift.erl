@@ -34,7 +34,8 @@
 -export_type([
     'Url'/0,
     'Key'/0,
-    'WebhookID'/0
+    'WebhookID'/0,
+    'SourceID'/0
 ]).
 -export_type([
     'Webhook'/0,
@@ -90,6 +91,7 @@
 ]).
 -export_type([
     'WebhookNotFound'/0,
+    'SourceNotFound'/0,
     'LimitExceeded'/0
 ]).
 
@@ -101,11 +103,13 @@
 -type typedef_name() ::
     'Url' |
     'Key' |
-    'WebhookID'.
+    'WebhookID' |
+    'SourceID'.
 
 -type 'Url'() :: binary().
 -type 'Key'() :: binary().
 -type 'WebhookID'() :: integer().
+-type 'SourceID'() :: binary().
 
 %%
 %% enums
@@ -169,6 +173,7 @@
 
 -type exception_name() ::
     'WebhookNotFound' |
+    'SourceNotFound' |
     'LimitExceeded'.
 
 %% struct 'Webhook'
@@ -364,6 +369,9 @@
 %% exception 'WebhookNotFound'
 -type 'WebhookNotFound'() :: #'webhooker_WebhookNotFound'{}.
 
+%% exception 'SourceNotFound'
+-type 'SourceNotFound'() :: #'webhooker_SourceNotFound'{}.
+
 %% exception 'LimitExceeded'
 -type 'LimitExceeded'() :: #'webhooker_LimitExceeded'{}.
 
@@ -371,10 +379,12 @@
 %% services and functions
 %%
 -type service_name() ::
-    'WebhookManager'.
+    'WebhookManager' |
+    'WebhookMessageService'.
 
 -type function_name() ::
-    'WebhookManager_service_functions'().
+    'WebhookManager_service_functions'() |
+    'WebhookMessageService_service_functions'().
 
 -type 'WebhookManager_service_functions'() ::
     'GetList' |
@@ -383,6 +393,11 @@
     'Delete'.
 
 -export_type(['WebhookManager_service_functions'/0]).
+
+-type 'WebhookMessageService_service_functions'() ::
+    'Send'.
+
+-export_type(['WebhookMessageService_service_functions'/0]).
 
 
 -type struct_flavour() :: struct | exception | union.
@@ -417,7 +432,8 @@ typedefs() ->
     [
         'Url',
         'Key',
-        'WebhookID'
+        'WebhookID',
+        'SourceID'
     ].
 
 -spec enums() -> [].
@@ -485,7 +501,8 @@ structs() ->
 
 services() ->
     [
-        'WebhookManager'
+        'WebhookManager',
+        'WebhookMessageService'
     ].
 
 -spec namespace() -> namespace().
@@ -503,6 +520,9 @@ typedef_info('Key') ->
 
 typedef_info('WebhookID') ->
     i64;
+
+typedef_info('SourceID') ->
+    string;
 
 typedef_info(_) -> erlang:error(badarg).
 
@@ -745,6 +765,9 @@ struct_info('WalletWithdrawalFailed') ->
 struct_info('WebhookNotFound') ->
     {struct, exception, []};
 
+struct_info('SourceNotFound') ->
+    {struct, exception, []};
+
 struct_info('LimitExceeded') ->
     {struct, exception, []};
 
@@ -866,6 +889,9 @@ record_name('WalletWithdrawalFailed') ->
 record_name('WebhookNotFound') ->
     'webhooker_WebhookNotFound';
 
+record_name('SourceNotFound') ->
+    'webhooker_SourceNotFound';
+
 record_name('LimitExceeded') ->
     'webhooker_LimitExceeded';
 
@@ -879,6 +905,11 @@ functions('WebhookManager') ->
         'Get',
         'Create',
         'Delete'
+    ];
+
+functions('WebhookMessageService') ->
+    [
+        'Send'
     ];
 
 functions(_) -> error(badarg).
@@ -923,6 +954,19 @@ function_info('WebhookManager', 'Delete', reply_type) ->
 function_info('WebhookManager', 'Delete', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_webhooker_thrift, 'WebhookNotFound'}}, 'ex1', undefined}
+    ]};
+
+function_info('WebhookMessageService', 'Send', params_type) ->
+    {struct, struct, [
+        {1, undefined, i64, 'hook_id', undefined},
+        {2, undefined, string, 'source_id', undefined}
+    ]};
+function_info('WebhookMessageService', 'Send', reply_type) ->
+    {struct, struct, []};
+function_info('WebhookMessageService', 'Send', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_webhooker_thrift, 'WebhookNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_webhooker_thrift, 'SourceNotFound'}}, 'ex2', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
