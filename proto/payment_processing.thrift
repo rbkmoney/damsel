@@ -374,6 +374,7 @@ struct InvoicePaymentChargebackStatusChanged {
  */
 struct InvoicePaymentChargebackCashFlowChanged {
     1: required domain.FinalCashFlow cash_flow
+    2: optional domain.Clock clock
 }
 
 /**
