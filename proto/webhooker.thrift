@@ -7,7 +7,9 @@ namespace erlang webhooker
 typedef string Url
 typedef string Key
 typedef i64 WebhookID
+typedef string SourceID
 exception WebhookNotFound {}
+exception SourceNotFound {}
 exception LimitExceeded {}
 
 struct Webhook {
@@ -174,4 +176,8 @@ service WebhookManager {
     Webhook Get(1: WebhookID webhook_id) throws (1: WebhookNotFound ex1)
     Webhook Create(1: WebhookParams webhook_params) throws (1: LimitExceeded ex1)
     void Delete(1: WebhookID webhook_id) throws (1: WebhookNotFound ex1)
+}
+
+service WebhookMessageService {
+    void send(1: WebhookID hook_id, 2: SourceID source_id) throws (1: WebhookNotFound ex1, 2: SourceNotFound ex2)
 }
