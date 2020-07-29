@@ -1523,13 +1523,22 @@ struct CashLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    1: BankCardPaymentSystem bank_card
     2: TerminalPaymentProvider payment_terminal
     3: DigitalWalletProvider digital_wallet
-    4: TokenizedBankCard tokenized_bank_card
-    5: BankCardPaymentSystem empty_cvv_bank_card
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
+    8: BankCardPaymentMethod bank_card
+    // Deprecated, use BankCardPaymentMethod instead
+    1: BankCardPaymentSystem bank_card_deprecated
+    4: TokenizedBankCard tokenized_bank_card_deprecated
+    5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
+}
+
+struct BankCardPaymentMethod {
+    1: required BankCardPaymentSystem payment_system
+    2: optional bool                  is_cvv_empty = false
+    3: optional BankCardTokenProvider token_provider
+    4: optional TokenizationMethod    tokenization_method
 }
 
 struct TokenizedBankCard {
@@ -2073,6 +2082,7 @@ struct ProvisionTermSet {
 }
 
 struct PaymentsProvisionTerms {
+    11: optional Predicate allow
     1: optional CurrencySelector currencies
     2: optional CategorySelector categories
     3: optional PaymentMethodSelector payment_methods
@@ -2121,6 +2131,7 @@ struct WalletProvisionTerms {
 }
 
 struct WithdrawalProvisionTerms {
+    5: optional Predicate allow
     1: optional CurrencySelector currencies
     2: optional PayoutMethodSelector payout_methods
     3: optional CashLimitSelector cash_limit
@@ -2128,6 +2139,7 @@ struct WithdrawalProvisionTerms {
 }
 
 struct P2PProvisionTerms {
+    5: optional Predicate allow
     1: optional CurrencySelector currencies
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
@@ -2220,6 +2232,10 @@ struct P2PInspectorDecision {
     2: required P2PInspectorSelector then_
 }
 
+typedef string ExternalTerminalID
+typedef string MerchantID
+typedef string MerchantCategoryCode
+
 /**
  * Обобщённый терминал у провайдера.
  *
@@ -2233,6 +2249,13 @@ struct Terminal {
     10: optional RiskScore risk_coverage
     13: optional ProviderRef provider_ref
     14: optional ProvisionTermSet terms
+
+    /* Идентификатор терминала во внешней системе провайдера.*/
+    15: optional ExternalTerminalID external_terminal_id
+    /* Идентификатор мерчанта во внешней системе провайдера.*/
+    16: optional MerchantID external_merchant_id
+    /* Код классификации вида деятельности мерчанта. */
+    17: optional MerchantCategoryCode mcc
 
     // deprecated
     12: optional PaymentsProvisionTerms terms_legacy
