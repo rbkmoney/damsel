@@ -5,6 +5,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "geo_ip.thrift"
+include "payment_processing.thrift"
 
 namespace java com.rbkmoney.damsel.merch_stat
 namespace erlang merchstat
@@ -336,9 +337,7 @@ struct PayoutPaid {}
 struct PayoutCancelled { 1: required string details }
 struct PayoutConfirmed {}
 
-/**
- * Информация о рефанде.
-  * **/
+/** Информация о рефанде **/
 struct StatRefund {
     1 : required domain.InvoicePaymentRefundID id
     2 : required domain.InvoicePaymentID payment_id
@@ -374,6 +373,29 @@ struct InvoicePaymentRefundFailed {
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
 
+struct StatChargeback {
+    1: required domain.InvoiceID                        invoice_id
+    2: required domain.InvoicePaymentID                 payment_id
+    3: required domain.InvoicePaymentChargebackID       chargeback_id
+    4: required domain.PartyID                          party_id
+    5: required domain.ShopID                           shop_id
+    6: required domain.InvoicePaymentChargebackStatus   chargeback_status
+    7: required base.Timestamp                          creted_at
+    8: optional domain.ChargebackCode                   chargeback_reason_code
+    9: required domain.InvoicePaymentChargebackCategory chargeback_reason_category
+    10: required domain.DataRevision                    domain_revision
+    11: optional domain.PartyRevision                   party_revision
+    12: required domain.Amount                          levy_amount
+    13: required domain.Currency                        levy_currency_code
+    14: required domain.Amount                          amount
+    15: required domain.Currency                        currency_code
+    16: optional domain.Amount                          fee
+    17: optional domain.Amount                          provider_fee
+    18: optional domain.Amount                          external_fee
+    19: optional domain.InvoicePaymentChargebackStage   stage
+    20: optional base.Content                           content
+}
+
 /**
 * Данные запроса к сервису. Формат и функциональность запроса зависят от DSL.
  * DSL содержит условия выборки, а также id мерчанта, по которому производится выборка.
@@ -382,6 +404,19 @@ typedef base.InvalidRequest InvalidRequest
 struct StatRequest {
     1: required string dsl
     2: optional string continuation_token
+}
+
+struct ChargebackRequest {
+    1: optional domain.InvoiceID                               invoice_id
+    2: optional domain.InvoicePaymentID                        payment_id
+    3: optional domain.InvoicePaymentChargebackID              chargeback_id
+    4: optional base.Timestamp                                 date_from
+    5: optional base.Timestamp                                 date_to
+    6: optional domain.PartyID                                 party_id
+    7: optional domain.ShopID                                  shop_id
+    8: optional list<domain.InvoicePaymentChargebackStage>     stages
+    9: optional list<domain.InvoicePaymentChargebackStatus>    statuses
+    10: optional list<domain.InvoicePaymentChargebackCategory> reason_categories
 }
 
 /**
@@ -408,6 +443,7 @@ union StatResponseData {
     5: list<StatPayout> payouts
     6: list<StatRefund> refunds
     7: list<EnrichedStatInvoice> enriched_invoices
+    8: list<StatChargeback>      chargebacks
 }
 
 /**
@@ -437,6 +473,11 @@ service MerchantStatistics {
      * Возвращает набор данных о выплатах
      */
     StatResponse GetPayouts(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+    /**
+     * Возвращает набор данных о чарджбэках
+     */
+    StatResponseData GetChargebacks(1: ChargebackRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
