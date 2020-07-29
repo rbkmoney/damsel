@@ -179,5 +179,5 @@ service WebhookManager {
 }
 
 service WebhookMessageService {
-    void send(1: WebhookID hook_id, 2: SourceID source_id) throws (1: WebhookNotFound ex1, 2: SourceNotFound ex2)
+    void Send(1: WebhookID hook_id, 2: SourceID source_id) throws (1: WebhookNotFound ex1, 2: SourceNotFound ex2)
 }
