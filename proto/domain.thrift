@@ -325,6 +325,7 @@ struct ClientInfo {
 struct PaymentRoute {
     1: required ProviderRef provider
     2: required TerminalRef terminal
+    3: optional ExternalTerminalID external_terminal_id
 }
 
 struct RecurrentParentPayment {
