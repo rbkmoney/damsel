@@ -5,7 +5,6 @@
 include "base.thrift"
 include "domain.thrift"
 include "geo_ip.thrift"
-include "payment_processing.thrift"
 
 namespace java com.rbkmoney.damsel.merch_stat
 namespace erlang merchstat
@@ -462,7 +461,7 @@ service MerchantStatistics {
     /**
      * Возвращает набор данных о чарджбэках
      */
-    StatResponseData GetChargebacks(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+    StatResponse GetChargebacks(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.

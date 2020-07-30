@@ -1342,7 +1342,7 @@ function_info('MerchantStatistics', 'GetChargebacks', params_type) ->
         {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
     ]};
 function_info('MerchantStatistics', 'GetChargebacks', reply_type) ->
-    {struct, union, {dmsl_merch_stat_thrift, 'StatResponseData'}};
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
 function_info('MerchantStatistics', 'GetChargebacks', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},

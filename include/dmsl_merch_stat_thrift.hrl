@@ -4,7 +4,6 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
 -include("dmsl_geo_ip_thrift.hrl").
--include("dmsl_payment_processing_thrift.hrl").
 
 
 
