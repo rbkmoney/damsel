@@ -2484,9 +2484,8 @@ struct PaymentInstitution {
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional PaymentRouting payment_routing
+    16: optional Routing payment_routing
     17: optional ProviderSelector withdrawal_providers
-    18: optional ProviderSelector p2p_providers
 
     // Deprecated
     13: optional WithdrawalProviderSelector withdrawal_providers_legacy
@@ -2506,31 +2505,31 @@ struct ContractPaymentInstitutionDefaults {
 
 /* Routing rule sets */
 
-struct PaymentRouting {
-    1: required PaymentRoutingRulesetRef policies
-    2: required PaymentRoutingRulesetRef prohibitions
+struct Routing {
+    1: required RoutingRulesetRef policies
+    2: required RoutingRulesetRef prohibitions
 }
 
-struct PaymentRoutingRulesetRef { 1: required ObjectID id }
+struct RoutingRulesetRef { 1: required ObjectID id }
 
-struct PaymentRoutingRuleset {
+struct RoutingRuleset {
     1: required string name
     2: optional string description
-    3: required PaymentRoutingDecisions decisions
+    3: required RoutingDecisions decisions
 }
 
-union PaymentRoutingDecisions {
-    1: list<PaymentRoutingDelegate> delegates
-    2: list<PaymentRoutingCandidate> candidates
+union RoutingDecisions {
+    1: list<RoutingDelegate> delegates
+    2: list<RoutingCandidate> candidates
 }
 
-struct PaymentRoutingDelegate {
+struct RoutingDelegate {
     1: optional string description
     2: required Predicate allowed
-    3: required PaymentRoutingRulesetRef ruleset
+    3: required RoutingRulesetRef ruleset
 }
 
-struct PaymentRoutingCandidate {
+struct RoutingCandidate {
     1: optional string description
     2: required Predicate allowed
     3: required TerminalRef terminal
@@ -2704,9 +2703,9 @@ struct GlobalsObject {
     2: required Globals data
 }
 
-struct PaymentRoutingRulesObject {
-    1: required PaymentRoutingRulesetRef ref
-    2: required PaymentRoutingRuleset data
+struct RoutingRulesObject {
+    1: required RoutingRulesetRef ref
+    2: required RoutingRuleset data
 }
 
 struct CriterionObject {
@@ -2737,10 +2736,10 @@ union Reference {
     22 : WithdrawalProviderRef   withdrawal_provider
     23 : CashRegisterProviderRef cash_register_provider
     24 : P2PProviderRef          p2p_provider
-    26 : PaymentRoutingRulesetRef payment_routing_rules
-    27 : WithdrawalTerminalRef    withdrawal_terminal
-    28 : BankCardCategoryRef      bank_card_category
-    29 : CriterionRef             criterion
+    26 : RoutingRulesetRef       routing_rules
+    27 : WithdrawalTerminalRef   withdrawal_terminal
+    28 : BankCardCategoryRef     bank_card_category
+    29 : CriterionRef            criterion
 
     12 : DummyRef                dummy
     13 : DummyLinkRef            dummy_link
@@ -2772,7 +2771,7 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
-    26 : PaymentRoutingRulesObject  payment_routing_rules
+    26 : RoutingRulesObject         routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion

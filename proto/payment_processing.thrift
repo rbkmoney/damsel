@@ -2704,9 +2704,9 @@ service PartyManagement {
 
     /* RuleSet */
 
-    domain.PaymentRoutingRuleset ComputePaymentRoutingRuleset (
+    domain.RoutingRuleset ComputePaymentRoutingRuleset (
         1: UserInfo user,
-        2: domain.PaymentRoutingRulesetRef ruleset_ref,
+        2: domain.RoutingRulesetRef ruleset_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )
