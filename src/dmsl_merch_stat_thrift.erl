@@ -101,6 +101,7 @@
     'InvoicePaymentRefundPending'/0,
     'InvoicePaymentRefundSucceeded'/0,
     'InvoicePaymentRefundFailed'/0,
+    'StatChargeback'/0,
     'StatRequest'/0,
     'StatResponse'/0,
     'StatResponseData'/0
@@ -235,6 +236,7 @@
     'InvoicePaymentRefundPending' |
     'InvoicePaymentRefundSucceeded' |
     'InvoicePaymentRefundFailed' |
+    'StatChargeback' |
     'StatRequest' |
     'StatResponse' |
     'StatResponseData'.
@@ -439,6 +441,9 @@
 %% struct 'InvoicePaymentRefundFailed'
 -type 'InvoicePaymentRefundFailed'() :: #'merchstat_InvoicePaymentRefundFailed'{}.
 
+%% struct 'StatChargeback'
+-type 'StatChargeback'() :: #'merchstat_StatChargeback'{}.
+
 %% struct 'StatRequest'
 -type 'StatRequest'() :: #'merchstat_StatRequest'{}.
 
@@ -453,7 +458,8 @@
     {'records', ['StatInfo'()]} |
     {'payouts', ['StatPayout'()]} |
     {'refunds', ['StatRefund'()]} |
-    {'enriched_invoices', ['EnrichedStatInvoice'()]}.
+    {'enriched_invoices', ['EnrichedStatInvoice'()]} |
+    {'chargebacks', ['StatChargeback'()]}.
 
 %% exception 'BadToken'
 -type 'BadToken'() :: #'merchstat_BadToken'{}.
@@ -474,6 +480,7 @@
     'GetInvoices' |
     'GetCustomers' |
     'GetPayouts' |
+    'GetChargebacks' |
     'GetStatistics'.
 
 -export_type(['MerchantStatistics_service_functions'/0]).
@@ -597,6 +604,7 @@ structs() ->
         'InvoicePaymentRefundPending',
         'InvoicePaymentRefundSucceeded',
         'InvoicePaymentRefundFailed',
+        'StatChargeback',
         'StatRequest',
         'StatResponse',
         'StatResponseData'
@@ -1062,6 +1070,27 @@ struct_info('InvoicePaymentRefundFailed') ->
         {2, required, string, 'at', undefined}
     ]};
 
+struct_info('StatChargeback') ->
+    {struct, struct, [
+        {1, required, string, 'invoice_id', undefined},
+        {2, required, string, 'payment_id', undefined},
+        {3, required, string, 'chargeback_id', undefined},
+        {4, required, string, 'party_id', undefined},
+        {5, required, string, 'shop_id', undefined},
+        {6, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStatus'}}, 'chargeback_status', undefined},
+        {7, required, string, 'created_at', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargebackReason'}}, 'chargeback_reason', undefined},
+        {10, required, i64, 'levy_amount', undefined},
+        {11, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'levy_currency_code', undefined},
+        {12, required, i64, 'amount', undefined},
+        {13, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'currency_code', undefined},
+        {14, optional, i64, 'fee', undefined},
+        {15, optional, i64, 'provider_fee', undefined},
+        {16, optional, i64, 'external_fee', undefined},
+        {17, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
+        {18, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'content', undefined}
+    ]};
+
 struct_info('StatRequest') ->
     {struct, struct, [
         {1, required, string, 'dsl', undefined},
@@ -1083,7 +1112,8 @@ struct_info('StatResponseData') ->
         {4, optional, {list, {map, string, string}}, 'records', undefined},
         {5, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatPayout'}}}, 'payouts', undefined},
         {6, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatRefund'}}}, 'refunds', undefined},
-        {7, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'EnrichedStatInvoice'}}}, 'enriched_invoices', undefined}
+        {7, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'EnrichedStatInvoice'}}}, 'enriched_invoices', undefined},
+        {8, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'StatChargeback'}}}, 'chargebacks', undefined}
     ]};
 
 struct_info('BadToken') ->
@@ -1227,6 +1257,9 @@ record_name('InvoicePaymentRefundSucceeded') ->
 record_name('InvoicePaymentRefundFailed') ->
     'merchstat_InvoicePaymentRefundFailed';
 
+record_name('StatChargeback') ->
+    'merchstat_StatChargeback';
+
 record_name('StatRequest') ->
     'merchstat_StatRequest';
 
@@ -1246,6 +1279,7 @@ functions('MerchantStatistics') ->
         'GetInvoices',
         'GetCustomers',
         'GetPayouts',
+        'GetChargebacks',
         'GetStatistics'
     ];
 
@@ -1299,6 +1333,17 @@ function_info('MerchantStatistics', 'GetPayouts', params_type) ->
 function_info('MerchantStatistics', 'GetPayouts', reply_type) ->
     {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
 function_info('MerchantStatistics', 'GetPayouts', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
+    ]};
+function_info('MerchantStatistics', 'GetChargebacks', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
+function_info('MerchantStatistics', 'GetChargebacks', reply_type) ->
+    {struct, union, {dmsl_merch_stat_thrift, 'StatResponseData'}};
+function_info('MerchantStatistics', 'GetChargebacks', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}

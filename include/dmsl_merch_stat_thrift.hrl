@@ -4,6 +4,7 @@
 -include("dmsl_base_thrift.hrl").
 -include("dmsl_domain_thrift.hrl").
 -include("dmsl_geo_ip_thrift.hrl").
+-include("dmsl_payment_processing_thrift.hrl").
 
 
 
@@ -307,6 +308,27 @@
 -record('merchstat_InvoicePaymentRefundFailed', {
     'failure' :: dmsl_merch_stat_thrift:'OperationFailure'(),
     'at' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'StatChargeback'
+-record('merchstat_StatChargeback', {
+    'invoice_id' :: dmsl_domain_thrift:'InvoiceID'(),
+    'payment_id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
+    'chargeback_id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'chargeback_status' :: dmsl_domain_thrift:'InvoicePaymentChargebackStatus'(),
+    'created_at' :: dmsl_base_thrift:'Timestamp'(),
+    'chargeback_reason' :: dmsl_domain_thrift:'InvoicePaymentChargebackReason'() | undefined,
+    'levy_amount' :: dmsl_domain_thrift:'Amount'(),
+    'levy_currency_code' :: dmsl_domain_thrift:'Currency'(),
+    'amount' :: dmsl_domain_thrift:'Amount'(),
+    'currency_code' :: dmsl_domain_thrift:'Currency'(),
+    'fee' :: dmsl_domain_thrift:'Amount'() | undefined,
+    'provider_fee' :: dmsl_domain_thrift:'Amount'() | undefined,
+    'external_fee' :: dmsl_domain_thrift:'Amount'() | undefined,
+    'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'() | undefined,
+    'content' :: dmsl_base_thrift:'Content'() | undefined
 }).
 
 %% struct 'StatRequest'
