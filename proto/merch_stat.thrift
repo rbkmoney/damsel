@@ -381,8 +381,7 @@ struct StatChargeback {
     5: required domain.ShopID                           shop_id
     6: required domain.InvoicePaymentChargebackStatus   chargeback_status
     7: required base.Timestamp                          created_at
-    8: optional domain.ChargebackCode                   chargeback_reason_code
-    9: required domain.InvoicePaymentChargebackCategory chargeback_reason_category
+    8: optional domain.InvoicePaymentChargebackReason   chargeback_reason
     10: required domain.Amount                          levy_amount
     11: required domain.Currency                        levy_currency_code
     12: required domain.Amount                          amount
@@ -422,12 +421,12 @@ struct StatResponse {
 * Возможные варианты возвращаемых данных
 */
 union StatResponseData {
-    1: list<StatPayment> payments
-    2: list<StatInvoice> invoices
-    3: list<StatCustomer> customers
-    4: list<StatInfo> records
-    5: list<StatPayout> payouts
-    6: list<StatRefund> refunds
+    1: list<StatPayment>         payments
+    2: list<StatInvoice>         invoices
+    3: list<StatCustomer>        customers
+    4: list<StatInfo>            records
+    5: list<StatPayout>          payouts
+    6: list<StatRefund>          refunds
     7: list<EnrichedStatInvoice> enriched_invoices
     8: list<StatChargeback>      chargebacks
 }
