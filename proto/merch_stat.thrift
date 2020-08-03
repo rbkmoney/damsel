@@ -390,6 +390,7 @@ struct StatChargeback {
     16: optional domain.Amount                          external_fee
     17: optional domain.InvoicePaymentChargebackStage   stage
     18: optional base.Content                           content
+    19: optional string                                 external_id
 }
 
 /**
