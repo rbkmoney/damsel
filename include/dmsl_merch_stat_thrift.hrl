@@ -327,7 +327,8 @@
     'provider_fee' :: dmsl_domain_thrift:'Amount'() | undefined,
     'external_fee' :: dmsl_domain_thrift:'Amount'() | undefined,
     'stage' :: dmsl_domain_thrift:'InvoicePaymentChargebackStage'() | undefined,
-    'content' :: dmsl_base_thrift:'Content'() | undefined
+    'content' :: dmsl_base_thrift:'Content'() | undefined,
+    'external_id' :: binary() | undefined
 }).
 
 %% struct 'StatRequest'

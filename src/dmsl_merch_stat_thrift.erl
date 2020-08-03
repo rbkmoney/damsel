@@ -1088,7 +1088,8 @@ struct_info('StatChargeback') ->
         {15, optional, i64, 'provider_fee', undefined},
         {16, optional, i64, 'external_fee', undefined},
         {17, optional, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentChargebackStage'}}, 'stage', undefined},
-        {18, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'content', undefined}
+        {18, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'content', undefined},
+        {19, optional, string, 'external_id', undefined}
     ]};
 
 struct_info('StatRequest') ->
