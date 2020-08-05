@@ -2414,7 +2414,10 @@ exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
 
-exception VarsetPartyNotEqual {}
+exception VarsetPartyNotMatch {
+    1: required PartyID varset_party_id
+    2: required PartyID agrument_party_id
+}
 
 // Service
 
