@@ -1253,4 +1253,10 @@
 %% exception 'RuleSetNotFound'
 -record('payproc_RuleSetNotFound', {}).
 
+%% exception 'VarsetPartyNotMatch'
+-record('payproc_VarsetPartyNotMatch', {
+    'varset_party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
+    'agrument_party_id' :: dmsl_payment_processing_thrift:'PartyID'()
+}).
+
 -endif.
