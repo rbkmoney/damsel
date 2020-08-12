@@ -1562,6 +1562,7 @@ enum BankCardPaymentSystem {
     nspkmir
     elo
     rupay
+    ebt
 }
 
 /** Тип платежного токена **/
