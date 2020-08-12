@@ -908,7 +908,8 @@
     'jcb' |
     'nspkmir' |
     'elo' |
-    'rupay'.
+    'rupay' |
+    'ebt'.
 
 %% enum 'BankCardTokenProvider'
 -type 'BankCardTokenProvider'() ::
@@ -3626,7 +3627,8 @@ enum_info('BankCardPaymentSystem') ->
         {'jcb', 10},
         {'nspkmir', 11},
         {'elo', 12},
-        {'rupay', 13}
+        {'rupay', 13},
+        {'ebt', 14}
     ]};
 
 enum_info('BankCardTokenProvider') ->
