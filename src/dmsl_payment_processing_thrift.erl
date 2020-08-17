@@ -2318,7 +2318,8 @@ struct_info('InvoicePaymentChange') ->
 struct_info('InvoiceAdjustmentChange') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
-        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentChangePayload'}}, 'payload', undefined}
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentChangePayload'}}, 'payload', undefined},
+        {3, optional, string, 'occurred_at', undefined}
     ]};
 
 struct_info('InvoiceAdjustmentChangePayload') ->

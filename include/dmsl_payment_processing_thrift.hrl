@@ -54,7 +54,8 @@
 %% struct 'InvoiceAdjustmentChange'
 -record('payproc_InvoiceAdjustmentChange', {
     'id' :: dmsl_domain_thrift:'InvoiceAdjustmentID'(),
-    'payload' :: dmsl_payment_processing_thrift:'InvoiceAdjustmentChangePayload'()
+    'payload' :: dmsl_payment_processing_thrift:'InvoiceAdjustmentChangePayload'(),
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoiceAdjustmentCreated'
