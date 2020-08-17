@@ -149,6 +149,7 @@ struct InvoicePaymentChange {
 struct InvoiceAdjustmentChange {
     1: required domain.InvoiceAdjustmentID id
     2: required InvoiceAdjustmentChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
