@@ -149,6 +149,7 @@ struct InvoicePaymentChange {
 struct InvoiceAdjustmentChange {
     1: required domain.InvoiceAdjustmentID id
     2: required InvoiceAdjustmentChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
@@ -164,7 +165,6 @@ union InvoiceAdjustmentChangePayload {
  */
 struct InvoiceAdjustmentCreated {
     1: required domain.InvoiceAdjustment adjustment
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -172,7 +172,6 @@ struct InvoiceAdjustmentCreated {
  */
 struct InvoiceAdjustmentStatusChanged {
     1: required domain.InvoiceAdjustmentStatus status
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -207,7 +206,6 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
-    5: optional base.Timestamp business_time
 }
 
 struct InvoicePaymentRollbackStarted {
@@ -236,7 +234,6 @@ struct InvoicePaymentRouteChanged {
 struct InvoicePaymentCashFlowChanged {
     /** Данные финансового взаимодействия. */
     1: required domain.FinalCashFlow cash_flow
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -245,7 +242,6 @@ struct InvoicePaymentCashFlowChanged {
 struct InvoicePaymentStatusChanged {
     /** Статус платежа по инвойсу. */
     1: required domain.InvoicePaymentStatus status
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -364,7 +360,6 @@ union InvoicePaymentChargebackChangePayload {
  */
 struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -372,7 +367,6 @@ struct InvoicePaymentChargebackCreated {
  */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -380,7 +374,6 @@ struct InvoicePaymentChargebackStatusChanged {
  */
 struct InvoicePaymentChargebackCashFlowChanged {
     1: required domain.FinalCashFlow cash_flow
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -435,7 +428,6 @@ union InvoicePaymentRefundChangePayload {
 struct InvoicePaymentRefundCreated {
     1: required domain.InvoicePaymentRefund refund
     2: required domain.FinalCashFlow cash_flow
-    4: optional base.Timestamp business_time
 
     /**
     * Данные проведённой вручную транзакции.
@@ -450,7 +442,6 @@ struct InvoicePaymentRefundCreated {
  */
 struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
-    2: optional base.Timestamp business_time
 }
 
 struct InvoicePaymentRefundRollbackStarted {
@@ -478,7 +469,6 @@ union InvoicePaymentAdjustmentChangePayload {
  */
 struct InvoicePaymentAdjustmentCreated {
     1: required domain.InvoicePaymentAdjustment adjustment
-    2: optional base.Timestamp business_time
 }
 
 /**
@@ -486,7 +476,6 @@ struct InvoicePaymentAdjustmentCreated {
  */
 struct InvoicePaymentAdjustmentStatusChanged {
     1: required domain.InvoicePaymentAdjustmentStatus status
-    2: optional base.Timestamp business_time
 }
 
 /**
