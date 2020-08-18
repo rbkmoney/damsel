@@ -5,6 +5,7 @@
 include "base.thrift"
 include "msgpack.thrift"
 include "json.thrift"
+include "payment_system_provider.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
@@ -628,6 +629,7 @@ struct PartyContactInfo {
 /* Shops */
 
 typedef base.ID ShopID
+typedef payment_system_provider.PaymentTokenProvider PaymentTokenProvider
 
 /** Магазин мерчанта. */
 struct Shop {
@@ -659,6 +661,35 @@ struct ShopDetails {
 
 union ShopLocation {
     1: string url
+}
+
+/** Данные, необходимые для идентификации и аутентификации в МПС API **/
+
+union PaymentTokenProviderInfo {
+    1: VisaPaymentTokenProviderInfo visa
+    2: MastercardPaymentTokenProviderInfo mastercard
+    3: NspkmirPaymentTokenProviderInfo nspkmir
+}
+
+struct VisaPaymentTokenProviderInfo {
+    1: required string clientWalletAccountId
+    2: required string clientWalletAccountEmailAddress
+    3: required string clientWalletAccountEmailAddressHash
+}
+
+struct MastercardPaymentTokenProviderInfo {
+    1: required string tokenRequestorId
+    2: required string fundingAccountInfo
+}
+
+struct NspkmirPaymentTokenProviderInfo {
+    1: required list<NspkmirPaymentProviderIdentification> indentifications
+}
+
+struct NspkmirPaymentProviderIdentification {
+    1: required string acquiringInstitutionIdentificationCode
+    2: required string forwardingInstitutionIdentificationCode
+    3: required string cardAcceptorIdentificationCode
 }
 
 /** RBKM Wallets **/
