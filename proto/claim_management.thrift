@@ -185,9 +185,11 @@ union PayoutToolModification {
 
 union DocumentModification {
     1: DocumentCreated creation
+    2: DocumentChanged changed
 }
 
 struct DocumentCreated {}
+struct DocumentChanged {}
 
 struct DocumentModificationUnit {
     1: required DocumentID id
@@ -197,10 +199,12 @@ struct DocumentModificationUnit {
 union FileModification {
     1: FileCreated creation
     2: FileDeleted deletion
+    3: FileChanged changed
 }
 
 struct FileCreated {}
 struct FileDeleted {}
+struct FileChanged {}
 
 struct FileModificationUnit {
     1: required FileID id
@@ -210,10 +214,12 @@ struct FileModificationUnit {
 union CommentModification {
     1: CommentCreated creation
     2: CommentDeleted deletion
+    3: CommentChanged changed
 }
 
 struct CommentCreated {}
 struct CommentDeleted {}
+struct CommentChanged {}
 
 struct CommentModificationUnit {
     1: required CommentID id
@@ -244,6 +250,18 @@ union PartyModification {
     3: ShopModificationUnit shop_modification
 }
 
+union PartyModificationChange {
+    1: ContractorModificationUnit contractor_modification
+    2: ContractModificationUnit contract_modification
+    3: ShopModificationUnit shop_modification
+}
+
+union ClaimModificationChange {
+    1: DocumentModificationUnit document_modification
+    2: FileModificationUnit file_modification
+    3: CommentModificationUnit comment_modification
+}
+
 struct ModificationUnit {
     1: required ModificationID modification_id
     2: required base.Timestamp created_at
@@ -254,6 +272,22 @@ struct ModificationUnit {
 union Modification {
     1: PartyModification party_modification
     2: ClaimModification claim_modification
+}
+
+union ModificationChange {
+    1: PartyModificationChange party_modification
+    2: ClaimModificationChange claim_modification
+}
+
+union ModificationChangeUnit {
+    1: required ModificationID modification_id
+    2: required base.Timestamp changed_at
+    3: required ModificationChange modification
+}
+
+union ModificationRemovalUnit {
+    1: required ModificationID modification_id
+    2: required base.Timestamp removed_at
 }
 
 struct Claim {
@@ -368,6 +402,10 @@ service ClaimManagement {
                     4: ChangesetConflict ex4,
                     5: InvalidChangeset ex5
                 )
+
+        void UpdateModification(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: ModificationChange modification_change)
+
+        void RemoveModification(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: ModificationID modification_id)
 
         void RequestClaimReview(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
