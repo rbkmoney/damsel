@@ -24,6 +24,8 @@ typedef list<ModificationUnit> ClaimChangeset
 typedef list<Modification> ModificationChangeset
 
 exception ClaimNotFound {}
+exception ModificationNotFound { 1: required i64 modification_id }
+exception ModificationWrongType {}
 exception PartyNotFound {}
 exception InvalidClaimRevision {}
 exception BadContinuationToken { 1: string reason }
@@ -400,8 +402,21 @@ service ClaimManagement {
                     3: ClaimRevision revision,
                     4: ModificationID modification_id,
                     5: ModificationChange modification_change)
+                throws (
+                    1: ModificationNotFound ex1,
+                    2: ModificationWrongType ex2
+                )
 
-        void RemoveModification(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision, 4: ModificationID modification_id)
+        void RemoveModification(
+                    1: domain.PartyID party_id,
+                    2: ClaimID id,
+                    3: ClaimRevision revision,
+                    4: ModificationID modification_id,
+                    5: bool soft)
+                throws (
+                    1: ModificationNotFound ex1,
+                    2: ModificationWrongType ex2
+                )
 
         void RequestClaimReview(1: domain.PartyID party_id, 2: ClaimID id, 3: ClaimRevision revision)
                 throws (
