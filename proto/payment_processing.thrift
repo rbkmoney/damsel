@@ -15,6 +15,8 @@ namespace erlang payproc
 /* Interface clients */
 
 typedef base.ID UserID
+typedef base.ID CashRegisterID
+typedef i32 CashRegisterProviderID
 
 struct UserInfo {
     1: required UserID id
@@ -2049,9 +2051,24 @@ union ShopModification {
     11: domain.ShopLocation location_modification
     12: ShopAccountParams shop_account_creation
     13: ScheduleModification payout_schedule_modification
+    14: CashRegisterModificationUnit cash_register_modification_unit
 
     /* deprecated */
     10: ProxyModification proxy_modification
+}
+
+struct CashRegisterModificationUnit {
+    1: required CashRegisterID id
+    2: required CashRegisterModification modification
+}
+
+union CashRegisterModification {
+    1: CashRegisterParams creation
+}
+
+struct CashRegisterParams {
+    1: required CashRegisterProviderID cash_register_provider_id
+    2: required base.StringMap cash_register_provider_params
 }
 
 struct ShopContractModification {
