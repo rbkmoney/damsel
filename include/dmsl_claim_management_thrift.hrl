@@ -131,6 +131,9 @@
 %% struct 'DocumentCreated'
 -record('claim_management_DocumentCreated', {}).
 
+%% struct 'DocumentChanged'
+-record('claim_management_DocumentChanged', {}).
+
 %% struct 'DocumentModificationUnit'
 -record('claim_management_DocumentModificationUnit', {
     'id' :: dmsl_claim_management_thrift:'DocumentID'(),
@@ -143,6 +146,9 @@
 %% struct 'FileDeleted'
 -record('claim_management_FileDeleted', {}).
 
+%% struct 'FileChanged'
+-record('claim_management_FileChanged', {}).
+
 %% struct 'FileModificationUnit'
 -record('claim_management_FileModificationUnit', {
     'id' :: dmsl_claim_management_thrift:'FileID'(),
@@ -154,6 +160,9 @@
 
 %% struct 'CommentDeleted'
 -record('claim_management_CommentDeleted', {}).
+
+%% struct 'CommentChanged'
+-record('claim_management_CommentChanged', {}).
 
 %% struct 'CommentModificationUnit'
 -record('claim_management_CommentModificationUnit', {
@@ -175,7 +184,9 @@
     'modification_id' :: dmsl_claim_management_thrift:'ModificationID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'modification' :: dmsl_claim_management_thrift:'Modification'(),
-    'user_info' :: dmsl_claim_management_thrift:'UserInfo'()
+    'user_info' :: dmsl_claim_management_thrift:'UserInfo'(),
+    'changed_at' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'removed_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'Claim'
@@ -264,6 +275,14 @@
 
 %% exception 'ClaimNotFound'
 -record('claim_management_ClaimNotFound', {}).
+
+%% exception 'ModificationNotFound'
+-record('claim_management_ModificationNotFound', {
+    'modification_id' :: integer()
+}).
+
+%% exception 'ModificationWrongType'
+-record('claim_management_ModificationWrongType', {}).
 
 %% exception 'PartyNotFound'
 -record('claim_management_PartyNotFound', {}).

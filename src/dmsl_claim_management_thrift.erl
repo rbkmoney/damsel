@@ -79,22 +79,28 @@
     'PayoutToolModification'/0,
     'DocumentModification'/0,
     'DocumentCreated'/0,
+    'DocumentChanged'/0,
     'DocumentModificationUnit'/0,
     'FileModification'/0,
     'FileCreated'/0,
     'FileDeleted'/0,
+    'FileChanged'/0,
     'FileModificationUnit'/0,
     'CommentModification'/0,
     'CommentCreated'/0,
     'CommentDeleted'/0,
+    'CommentChanged'/0,
     'CommentModificationUnit'/0,
     'StatusChanged'/0,
     'StatusModification'/0,
     'StatusModificationUnit'/0,
     'ClaimModification'/0,
     'PartyModification'/0,
+    'PartyModificationChange'/0,
+    'ClaimModificationChange'/0,
     'ModificationUnit'/0,
     'Modification'/0,
+    'ModificationChange'/0,
     'Claim'/0,
     'ClaimStatus'/0,
     'ClaimPending'/0,
@@ -113,6 +119,8 @@
 ]).
 -export_type([
     'ClaimNotFound'/0,
+    'ModificationNotFound'/0,
+    'ModificationWrongType'/0,
     'PartyNotFound'/0,
     'InvalidClaimRevision'/0,
     'BadContinuationToken'/0,
@@ -200,22 +208,28 @@
     'PayoutToolModification' |
     'DocumentModification' |
     'DocumentCreated' |
+    'DocumentChanged' |
     'DocumentModificationUnit' |
     'FileModification' |
     'FileCreated' |
     'FileDeleted' |
+    'FileChanged' |
     'FileModificationUnit' |
     'CommentModification' |
     'CommentCreated' |
     'CommentDeleted' |
+    'CommentChanged' |
     'CommentModificationUnit' |
     'StatusChanged' |
     'StatusModification' |
     'StatusModificationUnit' |
     'ClaimModification' |
     'PartyModification' |
+    'PartyModificationChange' |
+    'ClaimModificationChange' |
     'ModificationUnit' |
     'Modification' |
+    'ModificationChange' |
     'Claim' |
     'ClaimStatus' |
     'ClaimPending' |
@@ -234,6 +248,8 @@
 
 -type exception_name() ::
     'ClaimNotFound' |
+    'ModificationNotFound' |
+    'ModificationWrongType' |
     'PartyNotFound' |
     'InvalidClaimRevision' |
     'BadContinuationToken' |
@@ -353,10 +369,14 @@
 
 %% union 'DocumentModification'
 -type 'DocumentModification'() ::
-    {'creation', 'DocumentCreated'()}.
+    {'creation', 'DocumentCreated'()} |
+    {'changed', 'DocumentChanged'()}.
 
 %% struct 'DocumentCreated'
 -type 'DocumentCreated'() :: #'claim_management_DocumentCreated'{}.
+
+%% struct 'DocumentChanged'
+-type 'DocumentChanged'() :: #'claim_management_DocumentChanged'{}.
 
 %% struct 'DocumentModificationUnit'
 -type 'DocumentModificationUnit'() :: #'claim_management_DocumentModificationUnit'{}.
@@ -364,7 +384,8 @@
 %% union 'FileModification'
 -type 'FileModification'() ::
     {'creation', 'FileCreated'()} |
-    {'deletion', 'FileDeleted'()}.
+    {'deletion', 'FileDeleted'()} |
+    {'changed', 'FileChanged'()}.
 
 %% struct 'FileCreated'
 -type 'FileCreated'() :: #'claim_management_FileCreated'{}.
@@ -372,19 +393,26 @@
 %% struct 'FileDeleted'
 -type 'FileDeleted'() :: #'claim_management_FileDeleted'{}.
 
+%% struct 'FileChanged'
+-type 'FileChanged'() :: #'claim_management_FileChanged'{}.
+
 %% struct 'FileModificationUnit'
 -type 'FileModificationUnit'() :: #'claim_management_FileModificationUnit'{}.
 
 %% union 'CommentModification'
 -type 'CommentModification'() ::
     {'creation', 'CommentCreated'()} |
-    {'deletion', 'CommentDeleted'()}.
+    {'deletion', 'CommentDeleted'()} |
+    {'changed', 'CommentChanged'()}.
 
 %% struct 'CommentCreated'
 -type 'CommentCreated'() :: #'claim_management_CommentCreated'{}.
 
 %% struct 'CommentDeleted'
 -type 'CommentDeleted'() :: #'claim_management_CommentDeleted'{}.
+
+%% struct 'CommentChanged'
+-type 'CommentChanged'() :: #'claim_management_CommentChanged'{}.
 
 %% struct 'CommentModificationUnit'
 -type 'CommentModificationUnit'() :: #'claim_management_CommentModificationUnit'{}.
@@ -412,6 +440,18 @@
     {'contract_modification', 'ContractModificationUnit'()} |
     {'shop_modification', 'ShopModificationUnit'()}.
 
+%% union 'PartyModificationChange'
+-type 'PartyModificationChange'() ::
+    {'contractor_modification', 'ContractorModificationUnit'()} |
+    {'contract_modification', 'ContractModificationUnit'()} |
+    {'shop_modification', 'ShopModificationUnit'()}.
+
+%% union 'ClaimModificationChange'
+-type 'ClaimModificationChange'() ::
+    {'document_modification', 'DocumentModificationUnit'()} |
+    {'file_modification', 'FileModificationUnit'()} |
+    {'comment_modification', 'CommentModificationUnit'()}.
+
 %% struct 'ModificationUnit'
 -type 'ModificationUnit'() :: #'claim_management_ModificationUnit'{}.
 
@@ -419,6 +459,11 @@
 -type 'Modification'() ::
     {'party_modification', 'PartyModification'()} |
     {'claim_modification', 'ClaimModification'()}.
+
+%% union 'ModificationChange'
+-type 'ModificationChange'() ::
+    {'party_modification', 'PartyModificationChange'()} |
+    {'claim_modification', 'ClaimModificationChange'()}.
 
 %% struct 'Claim'
 -type 'Claim'() :: #'claim_management_Claim'{}.
@@ -477,6 +522,12 @@
 %% exception 'ClaimNotFound'
 -type 'ClaimNotFound'() :: #'claim_management_ClaimNotFound'{}.
 
+%% exception 'ModificationNotFound'
+-type 'ModificationNotFound'() :: #'claim_management_ModificationNotFound'{}.
+
+%% exception 'ModificationWrongType'
+-type 'ModificationWrongType'() :: #'claim_management_ModificationWrongType'{}.
+
 %% exception 'PartyNotFound'
 -type 'PartyNotFound'() :: #'claim_management_PartyNotFound'{}.
 
@@ -518,6 +569,8 @@
     'SearchClaims' |
     'AcceptClaim' |
     'UpdateClaim' |
+    'UpdateModification' |
+    'RemoveModification' |
     'RequestClaimReview' |
     'RequestClaimChanges' |
     'DenyClaim' |
@@ -621,22 +674,28 @@ structs() ->
         'PayoutToolModification',
         'DocumentModification',
         'DocumentCreated',
+        'DocumentChanged',
         'DocumentModificationUnit',
         'FileModification',
         'FileCreated',
         'FileDeleted',
+        'FileChanged',
         'FileModificationUnit',
         'CommentModification',
         'CommentCreated',
         'CommentDeleted',
+        'CommentChanged',
         'CommentModificationUnit',
         'StatusChanged',
         'StatusModification',
         'StatusModificationUnit',
         'ClaimModification',
         'PartyModification',
+        'PartyModificationChange',
+        'ClaimModificationChange',
         'ModificationUnit',
         'Modification',
+        'ModificationChange',
         'Claim',
         'ClaimStatus',
         'ClaimPending',
@@ -897,10 +956,14 @@ struct_info('PayoutToolModification') ->
 
 struct_info('DocumentModification') ->
     {struct, union, [
-        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentCreated'}}, 'creation', undefined}
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentCreated'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentChanged'}}, 'changed', undefined}
     ]};
 
 struct_info('DocumentCreated') ->
+    {struct, struct, []};
+
+struct_info('DocumentChanged') ->
     {struct, struct, []};
 
 struct_info('DocumentModificationUnit') ->
@@ -912,13 +975,17 @@ struct_info('DocumentModificationUnit') ->
 struct_info('FileModification') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileCreated'}}, 'creation', undefined},
-        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileDeleted'}}, 'deletion', undefined}
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileDeleted'}}, 'deletion', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileChanged'}}, 'changed', undefined}
     ]};
 
 struct_info('FileCreated') ->
     {struct, struct, []};
 
 struct_info('FileDeleted') ->
+    {struct, struct, []};
+
+struct_info('FileChanged') ->
     {struct, struct, []};
 
 struct_info('FileModificationUnit') ->
@@ -930,13 +997,17 @@ struct_info('FileModificationUnit') ->
 struct_info('CommentModification') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentCreated'}}, 'creation', undefined},
-        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentDeleted'}}, 'deletion', undefined}
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentDeleted'}}, 'deletion', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentChanged'}}, 'changed', undefined}
     ]};
 
 struct_info('CommentCreated') ->
     {struct, struct, []};
 
 struct_info('CommentDeleted') ->
+    {struct, struct, []};
+
+struct_info('CommentChanged') ->
     {struct, struct, []};
 
 struct_info('CommentModificationUnit') ->
@@ -974,18 +1045,40 @@ struct_info('PartyModification') ->
         {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined}
     ]};
 
+struct_info('PartyModificationChange') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined}
+    ]};
+
+struct_info('ClaimModificationChange') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentModificationUnit'}}, 'document_modification', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileModificationUnit'}}, 'file_modification', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentModificationUnit'}}, 'comment_modification', undefined}
+    ]};
+
 struct_info('ModificationUnit') ->
     {struct, struct, [
         {1, required, i64, 'modification_id', undefined},
         {2, required, string, 'created_at', undefined},
         {3, required, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}, 'modification', undefined},
-        {4, required, {struct, struct, {dmsl_claim_management_thrift, 'UserInfo'}}, 'user_info', undefined}
+        {4, required, {struct, struct, {dmsl_claim_management_thrift, 'UserInfo'}}, 'user_info', undefined},
+        {5, optional, string, 'changed_at', undefined},
+        {6, optional, string, 'removed_at', undefined}
     ]};
 
 struct_info('Modification') ->
     {struct, union, [
         {1, optional, {struct, union, {dmsl_claim_management_thrift, 'PartyModification'}}, 'party_modification', undefined},
         {2, optional, {struct, union, {dmsl_claim_management_thrift, 'ClaimModification'}}, 'claim_modification', undefined}
+    ]};
+
+struct_info('ModificationChange') ->
+    {struct, union, [
+        {1, optional, {struct, union, {dmsl_claim_management_thrift, 'PartyModificationChange'}}, 'party_modification', undefined},
+        {2, optional, {struct, union, {dmsl_claim_management_thrift, 'ClaimModificationChange'}}, 'claim_modification', undefined}
     ]};
 
 struct_info('Claim') ->
@@ -1090,6 +1183,14 @@ struct_info('ClaimStatusChanged') ->
     ]};
 
 struct_info('ClaimNotFound') ->
+    {struct, exception, []};
+
+struct_info('ModificationNotFound') ->
+    {struct, exception, [
+        {1, required, i64, 'modification_id', undefined}
+    ]};
+
+struct_info('ModificationWrongType') ->
     {struct, exception, []};
 
 struct_info('PartyNotFound') ->
@@ -1197,6 +1298,9 @@ record_name('PayoutToolModificationUnit') ->
 record_name('DocumentCreated') ->
     'claim_management_DocumentCreated';
 
+record_name('DocumentChanged') ->
+    'claim_management_DocumentChanged';
+
 record_name('DocumentModificationUnit') ->
     'claim_management_DocumentModificationUnit';
 
@@ -1206,6 +1310,9 @@ record_name('FileCreated') ->
 record_name('FileDeleted') ->
     'claim_management_FileDeleted';
 
+record_name('FileChanged') ->
+    'claim_management_FileChanged';
+
 record_name('FileModificationUnit') ->
     'claim_management_FileModificationUnit';
 
@@ -1214,6 +1321,9 @@ record_name('CommentCreated') ->
 
 record_name('CommentDeleted') ->
     'claim_management_CommentDeleted';
+
+record_name('CommentChanged') ->
+    'claim_management_CommentChanged';
 
 record_name('CommentModificationUnit') ->
     'claim_management_CommentModificationUnit';
@@ -1269,6 +1379,12 @@ record_name('ClaimStatusChanged') ->
 record_name('ClaimNotFound') ->
     'claim_management_ClaimNotFound';
 
+record_name('ModificationNotFound') ->
+    'claim_management_ModificationNotFound';
+
+record_name('ModificationWrongType') ->
+    'claim_management_ModificationWrongType';
+
 record_name('PartyNotFound') ->
     'claim_management_PartyNotFound';
 
@@ -1304,6 +1420,8 @@ functions('ClaimManagement') ->
         'SearchClaims',
         'AcceptClaim',
         'UpdateClaim',
+        'UpdateModification',
+        'RemoveModification',
         'RequestClaimReview',
         'RequestClaimChanges',
         'DenyClaim',
@@ -1387,6 +1505,35 @@ function_info('ClaimManagement', 'UpdateClaim', exceptions) ->
         {3, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidClaimRevision'}}, 'ex3', undefined},
         {4, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ChangesetConflict'}}, 'ex4', undefined},
         {5, undefined, {struct, exception, {dmsl_claim_management_thrift, 'InvalidChangeset'}}, 'ex5', undefined}
+    ]};
+function_info('ClaimManagement', 'UpdateModification', params_type) ->
+    {struct, struct, [
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, i32, 'revision', undefined},
+        {4, undefined, i64, 'modification_id', undefined},
+        {5, undefined, {struct, union, {dmsl_claim_management_thrift, 'ModificationChange'}}, 'modification_change', undefined}
+    ]};
+function_info('ClaimManagement', 'UpdateModification', reply_type) ->
+    {struct, struct, []};
+function_info('ClaimManagement', 'UpdateModification', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ModificationNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ModificationWrongType'}}, 'ex2', undefined}
+    ]};
+function_info('ClaimManagement', 'RemoveModification', params_type) ->
+    {struct, struct, [
+        {1, undefined, string, 'party_id', undefined},
+        {2, undefined, i64, 'id', undefined},
+        {3, undefined, i32, 'revision', undefined},
+        {4, undefined, i64, 'modification_id', undefined}
+    ]};
+function_info('ClaimManagement', 'RemoveModification', reply_type) ->
+    {struct, struct, []};
+function_info('ClaimManagement', 'RemoveModification', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ModificationNotFound'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_claim_management_thrift, 'ModificationWrongType'}}, 'ex2', undefined}
     ]};
 function_info('ClaimManagement', 'RequestClaimReview', params_type) ->
     {struct, struct, [
