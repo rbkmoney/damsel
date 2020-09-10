@@ -411,8 +411,7 @@ service ClaimManagement {
                     1: domain.PartyID party_id,
                     2: ClaimID id,
                     3: ClaimRevision revision,
-                    4: ModificationID modification_id,
-                    5: bool soft)
+                    4: ModificationID modification_id)
                 throws (
                     1: ModificationNotFound ex1,
                     2: ModificationWrongType ex2
