@@ -19,8 +19,8 @@ typedef domain.InvoicePayment InvoicePayment
 * Поддерживаемые платёжные системы
 **/
 enum PaymentTokenProvider {
-    visa,
-    mastercard,
+    visa
+    mastercard
     nspkmir
 }
 
