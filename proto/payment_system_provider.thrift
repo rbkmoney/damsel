@@ -8,12 +8,10 @@ namespace erlang paysys
 include "base.thrift"
 include "domain.thrift"
 include "msgpack.thrift"
-include "timeout_behaviour.thrift"
 
 typedef base.ID PaymentTokenID
-typedef base.ID ApiCallID
-typedef base.ID PaymentAccountReference
 typedef domain.InvoicePayment InvoicePayment
+typedef base.ID SessionID
 
 /**
 * Поддерживаемые платёжные системы
@@ -28,11 +26,10 @@ enum PaymentTokenProvider {
  * Непрозрачное для процессинга состояние прокси, связанное с определённой сессией взаимодействия
  * с третьей стороной.
  */
-typedef base.Opaque ProxyState
+typedef base.Opaque ProviderState
 
 /**
 * Необходимые для авторизации данные
-* NOTE: TokenCredentials не должен покидать PCIDSS зону
 **/
 typedef base.Opaque TokenCredentials
 
@@ -41,7 +38,7 @@ typedef base.Opaque TokenCredentials
 * Указывает на то, что дальше необходимо попробовать провести платёж
 * с карточными данными
 **/
-exception CardNotTokenizable{}
+struct CardNotTokenizable{}
 
 /**
 * Платёжная система не знает про токен
@@ -67,9 +64,9 @@ union FinishIntentFailure {
     2: domain.Failure failure
 }
 
-struct PaymentSystemProxyResult {
+struct PaymentSystemProviderResult {
     1: required PaymentSystemTokenIntent intent
-    2: optional ProxyState next_state
+    2: optional ProviderState next_state
 }
 
 union PaymentSystemTokenIntent {
@@ -100,17 +97,34 @@ struct SleepIntent {
     1: required base.Timer timer
 }
 
-service PaymentSystemProxy {
+/**
+* Сессия, в рамках которой производится взаимодействие с адаптером
+**/
+struct Session {
+    1: required SessionID id
+    2: optional ProviderState state
+}
+
+struct Context {
+    1: required Session session
+    2: optional domain.ProxyOptions options = {}
+}
+
+
+/**
+* NOTE: Данный сервис должен работать в PCIDSS-зоне
+**/
+service PaymentSystemAdapter {
 
     /**
     * Токенизация банковской карты.
     **/
-    PaymentSystemProxyResult Tokenize(1: InvoicePayment invoice_payment)
+    PaymentSystemProviderResult Tokenize(1: InvoicePayment invoice_payment, 2: Context context)
 
     /**
     * Получить данные (ключи, криптограммы) для авторизации платежа
     **/
-    PaymentSystemProxyResult GetTokenCredentials(1: PaymentTokenID token_id)
+    PaymentSystemProviderResult GetTokenCredentials(1: PaymentTokenID token_id, 2: Context context)
         throws (
             1: TokenNotFound not_found
         )
