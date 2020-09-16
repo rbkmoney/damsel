@@ -176,8 +176,8 @@ struct CallbackResponse {
 struct CallbackResult {
     1: required Intent           intent
     2: optional InternalState    next_state
-    3: optional domain.TransactionInfo trx
-    4: required CallbackResponse response
+    3: required CallbackResponse response
+    4: optional domain.TransactionInfo trx
 }
 
 service Adapter {
