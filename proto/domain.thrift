@@ -1560,6 +1560,9 @@ enum BankCardPaymentSystem {
     unionpay
     jcb
     nspkmir
+    elo
+    rupay
+    ebt
 }
 
 /** Тип платежного токена **/

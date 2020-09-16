@@ -149,6 +149,7 @@ struct InvoicePaymentChange {
 struct InvoiceAdjustmentChange {
     1: required domain.InvoiceAdjustmentID id
     2: required InvoiceAdjustmentChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
@@ -2416,6 +2417,11 @@ exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
 
+exception VarsetPartyNotMatch {
+    1: required PartyID varset_party_id
+    2: required PartyID agrument_party_id
+}
+
 // Service
 
 service PartyManagement {
@@ -2487,7 +2493,8 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: PartyNotExistsYet ex3
-            4: ContractNotFound ex4
+            4: ContractNotFound ex4,
+            5: VarsetPartyNotMatch ex5
         )
 
     /* Shop */
@@ -2527,7 +2534,12 @@ service PartyManagement {
         4: base.Timestamp timestamp
         5: Varset varset
     )
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3,
+            4: VarsetPartyNotMatch ex4
+        )
 
     /* Claim */
 
@@ -2661,7 +2673,11 @@ service PartyManagement {
 
     /* Payment institutions */
 
-    domain.TermSet ComputePaymentInstitutionTerms (1: UserInfo user, 2: PartyID party_id, 3: PaymentInstitutionRef ref, 4: Varset varset)
+    domain.TermSet ComputePaymentInstitutionTerms (
+        1: UserInfo user,
+        3: PaymentInstitutionRef ref,
+        4: Varset varset
+    )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PaymentInstitutionNotFound ex3)
 
     domain.PaymentInstitution ComputePaymentInstitution (

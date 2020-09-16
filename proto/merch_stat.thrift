@@ -336,9 +336,7 @@ struct PayoutPaid {}
 struct PayoutCancelled { 1: required string details }
 struct PayoutConfirmed {}
 
-/**
- * Информация о рефанде.
-  * **/
+/** Информация о рефанде **/
 struct StatRefund {
     1 : required domain.InvoicePaymentRefundID id
     2 : required domain.InvoicePaymentID payment_id
@@ -374,6 +372,27 @@ struct InvoicePaymentRefundFailed {
 typedef map<string, string> StatInfo
 typedef base.InvalidRequest InvalidRequest
 
+struct StatChargeback {
+    1: required domain.InvoiceID                        invoice_id
+    2: required domain.InvoicePaymentID                 payment_id
+    3: required domain.InvoicePaymentChargebackID       chargeback_id
+    4: required domain.PartyID                          party_id
+    5: required domain.ShopID                           shop_id
+    6: required domain.InvoicePaymentChargebackStatus   chargeback_status
+    7: required base.Timestamp                          created_at
+    8: optional domain.InvoicePaymentChargebackReason   chargeback_reason
+    10: required domain.Amount                          levy_amount
+    11: required domain.Currency                        levy_currency_code
+    12: required domain.Amount                          amount
+    13: required domain.Currency                        currency_code
+    14: optional domain.Amount                          fee
+    15: optional domain.Amount                          provider_fee
+    16: optional domain.Amount                          external_fee
+    17: optional domain.InvoicePaymentChargebackStage   stage
+    18: optional base.Content                           content
+    19: optional string                                 external_id
+}
+
 /**
 * Данные запроса к сервису. Формат и функциональность запроса зависят от DSL.
  * DSL содержит условия выборки, а также id мерчанта, по которому производится выборка.
@@ -383,6 +402,7 @@ struct StatRequest {
     1: required string dsl
     2: optional string continuation_token
 }
+
 
 /**
 * Данные ответа сервиса.
@@ -401,13 +421,14 @@ struct StatResponse {
 * Возможные варианты возвращаемых данных
 */
 union StatResponseData {
-    1: list<StatPayment> payments
-    2: list<StatInvoice> invoices
-    3: list<StatCustomer> customers
-    4: list<StatInfo> records
-    5: list<StatPayout> payouts
-    6: list<StatRefund> refunds
+    1: list<StatPayment>         payments
+    2: list<StatInvoice>         invoices
+    3: list<StatCustomer>        customers
+    4: list<StatInfo>            records
+    5: list<StatPayout>          payouts
+    6: list<StatRefund>          refunds
     7: list<EnrichedStatInvoice> enriched_invoices
+    8: list<StatChargeback>      chargebacks
 }
 
 /**
@@ -437,6 +458,11 @@ service MerchantStatistics {
      * Возвращает набор данных о выплатах
      */
     StatResponse GetPayouts(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+    /**
+     * Возвращает набор данных о чарджбэках
+     */
+    StatResponse GetChargebacks(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает аггрегированные данные в виде набора записей, формат возвращаемых данных зависит от целевой функции, указанной в DSL.
