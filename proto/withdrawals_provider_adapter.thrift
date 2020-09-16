@@ -60,7 +60,7 @@ union FinishStatus {
 }
 
 struct Success {
-    1: required domain.TransactionInfo trx_info
+    1: optional domain.TransactionInfo trx_info
 }
 
 /**
@@ -150,6 +150,7 @@ exception GetQuoteFailure {
 struct ProcessResult {
     1: required Intent                 intent
     2: optional InternalState          next_state
+    3: optional domain.TransactionInfo trx
 }
 
 struct Quote {
@@ -175,7 +176,8 @@ struct CallbackResponse {
 struct CallbackResult {
     1: required Intent           intent
     2: optional InternalState    next_state
-    3: required CallbackResponse response
+    3: optional domain.TransactionInfo trx
+    4: required CallbackResponse response
 }
 
 service Adapter {
