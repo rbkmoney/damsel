@@ -12,6 +12,10 @@ include "msgpack.thrift"
 typedef base.ID PaymentTokenID
 typedef domain.InvoicePayment InvoicePayment
 typedef base.ID SessionID
+typedef base.Tag CallbackTag
+typedef base.Opaque CallbackPayload
+typedef base.Opaque CallbackResponsePayload
+typedef base.Opaque CryptogrammPayload
 
 /**
 * Поддерживаемые платёжные системы
@@ -45,6 +49,8 @@ struct CardNotTokenizable{}
 **/
 exception TokenNotFound{}
 
+exception SessionNotFound {}
+
 /**
 * Другие исключения
 **/
@@ -65,11 +71,20 @@ union FinishIntentFailure {
 }
 
 struct PaymentSystemProviderResult {
-    1: required PaymentSystemTokenIntent intent
+    1: required Intent intent
     2: optional ProviderState next_state
 }
 
-union PaymentSystemTokenIntent {
+struct Callback {
+    1: required CallbackTag tag
+    2: required CallbackPayload payload
+}
+
+struct CallbackResponse {
+    1: required CallbackResponsePayload payload
+}
+
+union Intent {
     1: FinishIntent finish
     2: SleepIntent sleep
 }
@@ -84,8 +99,17 @@ union FinishIntentStatus {
 }
 
 union FinishIntentSuccess {
+    1: TokenizationSuccess tokenization_success
+    2: GetTokenCredentialsSuccess credential_success
+}
+
+struct TokenizationSuccess {
     1: PaymentTokenID token_id
     2: TokenCredentials credentials
+}
+
+struct GetTokenCredentialsSuccess {
+    1: required CryptogrammPayload crytpogramm
 }
 
 /**
@@ -95,6 +119,18 @@ union FinishIntentSuccess {
 struct SleepIntent {
     /** Таймер, определяющий когда следует продолжить взаимодействие. */
     1: required base.Timer timer
+
+    /**
+     * Идентификатор, по которому обработчик обратного запроса сможет идентифицировать сессию
+     * взаимодействия с третьей стороной, чтобы продолжить по ней взаимодействие.
+     * Единожды указанный, продолжает действовать до успешной обработки обратного
+     * запроса или завершения сессии.
+     * Должен быть уникальным среди всех сессий такого типа.
+     * Один и тот же идентификатор можно устанавливать для одной и той же сессии до тех пор, пока
+     * обратный вызов с таким идентификатором не будет успешно обработан. Попытка установить уже
+     * обработанный идентификатор приведет к ошибке.
+     */
+    2: optional CallbackTag callback_tag
 }
 
 /**
@@ -110,6 +146,33 @@ struct Context {
     2: optional domain.ProxyOptions options = {}
 }
 
+/**
+ * Результат обработки провайдером обратного вызова в рамках сессии.
+ */
+struct CallbackResult {
+    1: required Intent intent
+    2: optional ProviderState next_state
+    3: required CallbackResponse response
+}
+
+union ProcessCallbackResult {
+    /** Вызов был обработан в рамках сесии */
+    1: ProcessCallbackSucceeded succeeded
+
+    /** Сессия уже завершена, вызов обработать не удалось */
+    2: ProcessCallbackFinished finished
+}
+
+struct ProcessCallbackSucceeded {
+    1: required CallbackResponse response
+}
+
+struct ProcessCallbackFinished {
+    /**
+     * Состояние сессии после обработки последнего ответа адаптера.
+     */
+    1: required Context response
+}
 
 /**
 * NOTE: Данный сервис должен работать в PCIDSS-зоне
@@ -128,4 +191,28 @@ service PaymentSystemAdapter {
         throws (
             1: TokenNotFound not_found
         )
+
+    /**
+     * Запрос к провайдеру на обработку обратного вызова в рамках сессии.
+     */
+    CallbackResult HandleCallback (1: Callback callback, 2: Context context)
+
+}
+
+service PaymentSystemAdapterHost {
+    /**
+     * Запрос к процессингу на обработку обратного вызова от провайдера.
+     * Обработка этого метода процессингом зависит от состояния сессии:
+     *  - будет вызван PaymentSystemAdapter.HandleCallback с контекстом сессии, если сессия еще активна,
+     *    и вызов с таким идентификатором не обрабатывался; или
+     *  - будет возвращен прошлый ответ, если вызов с таким идентификатором уже обрабатывался
+     *    вне зависимости от того завершена сессия или нет; или
+     *  - будет возвращен ответ, что сессия уже завершена, если сессия завершена, и вызов с таким
+     *    идентификатором не был обработан успешно.
+     */
+    ProcessCallbackResult ProcessCallback (1: Callback callback)
+        throws (
+            1: SessionNotFound not_found
+        )
+
 }
