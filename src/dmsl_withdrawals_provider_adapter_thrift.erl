@@ -363,7 +363,7 @@ struct_info('FinishStatus') ->
 
 struct_info('Success') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx_info', undefined}
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx_info', undefined}
     ]};
 
 struct_info('SleepIntent') ->
@@ -414,7 +414,8 @@ struct_info('GeneralFailure') ->
 struct_info('ProcessResult') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'Intent'}}, 'intent', undefined},
-        {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined}
+        {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
     ]};
 
 struct_info('Quote') ->
@@ -441,7 +442,8 @@ struct_info('CallbackResult') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_withdrawals_provider_adapter_thrift, 'Intent'}}, 'intent', undefined},
         {2, optional, {struct, union, {dmsl_msgpack_thrift, 'Value'}}, 'next_state', undefined},
-        {3, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'CallbackResponse'}}, 'response', undefined}
+        {3, required, {struct, struct, {dmsl_withdrawals_provider_adapter_thrift, 'CallbackResponse'}}, 'response', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
     ]};
 
 struct_info('ProcessCallbackResult') ->

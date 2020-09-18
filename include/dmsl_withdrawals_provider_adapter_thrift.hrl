@@ -15,7 +15,7 @@
 
 %% struct 'Success'
 -record('wthadpt_Success', {
-    'trx_info' :: dmsl_domain_thrift:'TransactionInfo'()
+    'trx_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'SleepIntent'
@@ -55,7 +55,8 @@
 %% struct 'ProcessResult'
 -record('wthadpt_ProcessResult', {
     'intent' :: dmsl_withdrawals_provider_adapter_thrift:'Intent'(),
-    'next_state' :: dmsl_withdrawals_provider_adapter_thrift:'InternalState'() | undefined
+    'next_state' :: dmsl_withdrawals_provider_adapter_thrift:'InternalState'() | undefined,
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'Quote'
@@ -82,7 +83,8 @@
 -record('wthadpt_CallbackResult', {
     'intent' :: dmsl_withdrawals_provider_adapter_thrift:'Intent'(),
     'next_state' :: dmsl_withdrawals_provider_adapter_thrift:'InternalState'() | undefined,
-    'response' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackResponse'()
+    'response' :: dmsl_withdrawals_provider_adapter_thrift:'CallbackResponse'(),
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'ProcessCallbackSucceeded'
