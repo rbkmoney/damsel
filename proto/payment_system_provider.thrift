@@ -15,7 +15,7 @@ typedef base.ID SessionID
 typedef base.Tag CallbackTag
 typedef base.Opaque CallbackPayload
 typedef base.Opaque CallbackResponsePayload
-typedef base.Opaque CryptogrammPayload
+typedef base.Opaque PaymentTokenEnrollment
 
 /**
 * Поддерживаемые платёжные системы
@@ -105,11 +105,11 @@ union FinishIntentSuccess {
 
 struct TokenizationSuccess {
     1: PaymentTokenID token_id
-    2: TokenCredentials credentials
+    2: PaymentTokenEnrollment token_enrollment
 }
 
 struct GetTokenCredentialsSuccess {
-    1: required CryptogrammPayload crytpogramm
+    1: required TokenCredentials token_credentials
 }
 
 /**
