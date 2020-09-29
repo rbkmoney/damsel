@@ -398,7 +398,7 @@ struct InvoicePaymentChargebackLevyChanged {
 }
 
 /**
- * Событие об изменении стадии чарджека
+ * Событие об изменении стадии чарджбека
  */
 struct InvoicePaymentChargebackStageChanged {
     1: required domain.InvoicePaymentChargebackStage stage
