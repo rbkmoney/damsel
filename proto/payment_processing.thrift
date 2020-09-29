@@ -243,6 +243,7 @@ struct InvoicePaymentCashFlowChanged {
 struct InvoicePaymentStatusChanged {
     /** Статус платежа по инвойсу. */
     1: required domain.InvoicePaymentStatus status
+    2: optional domain.Clock clock
 }
 
 /**
@@ -266,7 +267,9 @@ union SessionChangePayload {
     7: SessionInteractionRequested session_interaction_requested
 }
 
-struct SessionStarted {}
+struct SessionStarted {
+    1: optional domain.Clock clock
+}
 
 struct SessionFinished {
     1: required SessionResult result
@@ -361,6 +364,7 @@ union InvoicePaymentChargebackChangePayload {
  */
 struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
+    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -368,6 +372,7 @@ struct InvoicePaymentChargebackCreated {
  */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
+    2: optional domain.Clock clock
 }
 
 /**
@@ -404,6 +409,7 @@ struct InvoicePaymentChargebackStageChanged {
  */
 struct InvoicePaymentChargebackTargetStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
+    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -437,6 +443,7 @@ struct InvoicePaymentRefundCreated {
     * а эти данные будут использованы в качестве результата
     */
     3: optional domain.TransactionInfo transaction_info
+    4: optional domain.Clock clock
 }
 
 /**
@@ -444,10 +451,12 @@ struct InvoicePaymentRefundCreated {
  */
 struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
+    2: optional domain.Clock clock
 }
 
 struct InvoicePaymentRefundRollbackStarted {
     1: required domain.OperationFailure reason
+    2: optional domain.Clock clock
 }
 
 /**
@@ -471,6 +480,7 @@ union InvoicePaymentAdjustmentChangePayload {
  */
 struct InvoicePaymentAdjustmentCreated {
     1: required domain.InvoicePaymentAdjustment adjustment
+    2: optional domain.Clock clock
 }
 
 /**
@@ -478,6 +488,7 @@ struct InvoicePaymentAdjustmentCreated {
  */
 struct InvoicePaymentAdjustmentStatusChanged {
     1: required domain.InvoicePaymentAdjustmentStatus status
+    2: optional domain.Clock clock
 }
 
 /**
