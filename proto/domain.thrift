@@ -1890,14 +1890,9 @@ struct Fees {
     1: required map<CashFlowConstant, CashVolume> fees
 }
 
-/**
- * Структура, позволяющая установить причинно-следственную связь операций внутри сервиса управления счетами
- * https://en.wikipedia.org/wiki/Vector_clock
- **/
-union Clock {
-    // для новых операций
+// See shumaich-proto for details
+union AccounterClock {
     1: VectorClock vector
-    // для старых операций, для обратной совместимости. Не рекоммендуется к использованию.
     2: LatestClock latest
 }
 

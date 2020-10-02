@@ -190,6 +190,7 @@ union InvoicePaymentChangePayload {
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
+    15: InvoicePaymentClockUpdate           invoice_payment_clock_update
 }
 
 /**
@@ -206,6 +207,10 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
+}
+
+struct InvoicePaymentClockUpdate {
+    1: required domain.AccounterClock clock
 }
 
 struct InvoicePaymentRollbackStarted {
@@ -234,7 +239,6 @@ struct InvoicePaymentRouteChanged {
 struct InvoicePaymentCashFlowChanged {
     /** Данные финансового взаимодействия. */
     1: required domain.FinalCashFlow cash_flow
-    2: optional domain.Clock clock
 }
 
 /**
@@ -243,7 +247,6 @@ struct InvoicePaymentCashFlowChanged {
 struct InvoicePaymentStatusChanged {
     /** Статус платежа по инвойсу. */
     1: required domain.InvoicePaymentStatus status
-    2: optional domain.Clock clock
 }
 
 /**
@@ -267,9 +270,7 @@ union SessionChangePayload {
     7: SessionInteractionRequested session_interaction_requested
 }
 
-struct SessionStarted {
-    1: optional domain.Clock clock
-}
+struct SessionStarted {}
 
 struct SessionFinished {
     1: required SessionResult result
@@ -357,6 +358,7 @@ union InvoicePaymentChargebackChangePayload {
     5: InvoicePaymentChargebackLevyChanged          invoice_payment_chargeback_levy_changed
     6: InvoicePaymentChargebackStageChanged         invoice_payment_chargeback_stage_changed
     7: InvoicePaymentChargebackTargetStatusChanged  invoice_payment_chargeback_target_status_changed
+    8: InvoicePaymentChargebackClockUpdate          invoice_payment_chargeback_clock_update
 }
 
 /**
@@ -372,7 +374,6 @@ struct InvoicePaymentChargebackCreated {
  */
 struct InvoicePaymentChargebackStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
-    2: optional domain.Clock clock
 }
 
 /**
@@ -380,7 +381,6 @@ struct InvoicePaymentChargebackStatusChanged {
  */
 struct InvoicePaymentChargebackCashFlowChanged {
     1: required domain.FinalCashFlow cash_flow
-    2: optional domain.Clock clock
 }
 
 /**
@@ -412,6 +412,10 @@ struct InvoicePaymentChargebackTargetStatusChanged {
     2: optional base.Timestamp occurred_at
 }
 
+struct InvoicePaymentChargebackClockUpdate {
+    1: required domain.AccounterClock clock
+}
+
 /**
  * Событие, касающееся определённого возврата платежа.
  */
@@ -428,6 +432,7 @@ union InvoicePaymentRefundChangePayload {
     2: InvoicePaymentRefundStatusChanged   invoice_payment_refund_status_changed
     3: InvoicePaymentSessionChange         invoice_payment_session_change
     4: InvoicePaymentRefundRollbackStarted invoice_payment_refund_rollback_started
+    5: InvoicePaymentRefundClockUpdate     invoice_payment_refund_clock_update
 }
 
 /**
@@ -443,7 +448,6 @@ struct InvoicePaymentRefundCreated {
     * а эти данные будут использованы в качестве результата
     */
     3: optional domain.TransactionInfo transaction_info
-    4: optional domain.Clock clock
 }
 
 /**
@@ -451,12 +455,14 @@ struct InvoicePaymentRefundCreated {
  */
 struct InvoicePaymentRefundStatusChanged {
     1: required domain.InvoicePaymentRefundStatus status
-    2: optional domain.Clock clock
 }
 
 struct InvoicePaymentRefundRollbackStarted {
     1: required domain.OperationFailure reason
-    2: optional domain.Clock clock
+}
+
+struct InvoicePaymentRefundClockUpdate {
+    1: required domain.AccounterClock clock
 }
 
 /**
@@ -473,6 +479,7 @@ struct InvoicePaymentAdjustmentChange {
 union InvoicePaymentAdjustmentChangePayload {
     1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
     2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
+    3: InvoicePaymentAdjustmentClockUpdate   invoice_payment_adjustment_clock_update
 }
 
 /**
@@ -480,7 +487,6 @@ union InvoicePaymentAdjustmentChangePayload {
  */
 struct InvoicePaymentAdjustmentCreated {
     1: required domain.InvoicePaymentAdjustment adjustment
-    2: optional domain.Clock clock
 }
 
 /**
@@ -488,7 +494,10 @@ struct InvoicePaymentAdjustmentCreated {
  */
 struct InvoicePaymentAdjustmentStatusChanged {
     1: required domain.InvoicePaymentAdjustmentStatus status
-    2: optional domain.Clock clock
+}
+
+struct InvoicePaymentAdjustmentClockUpdate {
+    1: required domain.AccounterClock clock
 }
 
 /**
