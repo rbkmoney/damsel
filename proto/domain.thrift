@@ -1892,15 +1892,12 @@ struct Fees {
 
 // See shumaich-proto for details
 union AccounterClock {
-    1: VectorClock vector
     2: LatestClock latest
 }
 
 struct VectorClock {
     1: required base.Opaque state
 }
-
-struct LatestClock { }
 
 typedef map<CashFlowConstant, Cash> CashFlowContext
 

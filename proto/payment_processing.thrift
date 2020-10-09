@@ -345,6 +345,7 @@ struct SessionInteractionRequested {
 struct InvoicePaymentChargebackChange {
     1: required domain.InvoicePaymentChargebackID id
     2: required InvoicePaymentChargebackChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
@@ -366,7 +367,6 @@ union InvoicePaymentChargebackChangePayload {
  */
 struct InvoicePaymentChargebackCreated {
     1: required domain.InvoicePaymentChargeback chargeback
-    2: optional base.Timestamp occurred_at
 }
 
 /**
@@ -409,7 +409,6 @@ struct InvoicePaymentChargebackStageChanged {
  */
 struct InvoicePaymentChargebackTargetStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
-    2: optional base.Timestamp occurred_at
 }
 
 struct InvoicePaymentChargebackClockUpdate {
@@ -479,7 +478,7 @@ struct InvoicePaymentAdjustmentChange {
 union InvoicePaymentAdjustmentChangePayload {
     1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
     2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
-    3: InvoicePaymentAdjustmentClockUpdate   invoice_payment_adjustment_clock_update
+    3: InvoicePaymentClockUpdate             invoice_payment_adjustment_clock_update
 }
 
 /**
@@ -494,10 +493,6 @@ struct InvoicePaymentAdjustmentCreated {
  */
 struct InvoicePaymentAdjustmentStatusChanged {
     1: required domain.InvoicePaymentAdjustmentStatus status
-}
-
-struct InvoicePaymentAdjustmentClockUpdate {
-    1: required domain.AccounterClock clock
 }
 
 /**
