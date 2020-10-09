@@ -1892,7 +1892,7 @@ struct Fees {
 
 // See shumaich-proto for details
 union AccounterClock {
-    2: LatestClock latest
+    1: VectorClock vector
 }
 
 struct VectorClock {
