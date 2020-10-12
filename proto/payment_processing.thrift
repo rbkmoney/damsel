@@ -359,7 +359,7 @@ union InvoicePaymentChargebackChangePayload {
     5: InvoicePaymentChargebackLevyChanged          invoice_payment_chargeback_levy_changed
     6: InvoicePaymentChargebackStageChanged         invoice_payment_chargeback_stage_changed
     7: InvoicePaymentChargebackTargetStatusChanged  invoice_payment_chargeback_target_status_changed
-    8: InvoicePaymentChargebackClockUpdate          invoice_payment_chargeback_clock_update
+    8: InvoicePaymentClockUpdate                    invoice_payment_chargeback_clock_update
 }
 
 /**
@@ -411,10 +411,6 @@ struct InvoicePaymentChargebackTargetStatusChanged {
     1: required domain.InvoicePaymentChargebackStatus status
 }
 
-struct InvoicePaymentChargebackClockUpdate {
-    1: required domain.AccounterClock clock
-}
-
 /**
  * Событие, касающееся определённого возврата платежа.
  */
@@ -431,7 +427,7 @@ union InvoicePaymentRefundChangePayload {
     2: InvoicePaymentRefundStatusChanged   invoice_payment_refund_status_changed
     3: InvoicePaymentSessionChange         invoice_payment_session_change
     4: InvoicePaymentRefundRollbackStarted invoice_payment_refund_rollback_started
-    5: InvoicePaymentRefundClockUpdate     invoice_payment_refund_clock_update
+    5: InvoicePaymentClockUpdate           invoice_payment_refund_clock_update
 }
 
 /**
@@ -458,10 +454,6 @@ struct InvoicePaymentRefundStatusChanged {
 
 struct InvoicePaymentRefundRollbackStarted {
     1: required domain.OperationFailure reason
-}
-
-struct InvoicePaymentRefundClockUpdate {
-    1: required domain.AccounterClock clock
 }
 
 /**
