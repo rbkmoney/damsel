@@ -1079,6 +1079,11 @@
     'fees' :: #{atom() => dmsl_domain_thrift:'CashVolume'()}
 }).
 
+%% struct 'VectorClock'
+-record('domain_VectorClock', {
+    'state' :: dmsl_base_thrift:'Opaque'()
+}).
+
 %% struct 'CashFlowPosting'
 -record('domain_CashFlowPosting', {
     'source' :: dmsl_domain_thrift:'CashFlowAccount'(),

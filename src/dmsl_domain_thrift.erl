@@ -315,6 +315,8 @@
     'LifetimeDecision'/0,
     'CashFlowAccount'/0,
     'Fees'/0,
+    'AccounterClock'/0,
+    'VectorClock'/0,
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
     'FinalCashFlowAccount'/0,
@@ -1206,6 +1208,8 @@
     'LifetimeDecision' |
     'CashFlowAccount' |
     'Fees' |
+    'AccounterClock' |
+    'VectorClock' |
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
     'FinalCashFlowAccount' |
@@ -2085,6 +2089,13 @@
 
 %% struct 'Fees'
 -type 'Fees'() :: #'domain_Fees'{}.
+
+%% union 'AccounterClock'
+-type 'AccounterClock'() ::
+    {'vector', 'VectorClock'()}.
+
+%% struct 'VectorClock'
+-type 'VectorClock'() :: #'domain_VectorClock'{}.
 
 %% struct 'CashFlowPosting'
 -type 'CashFlowPosting'() :: #'domain_CashFlowPosting'{}.
@@ -2996,6 +3007,8 @@ structs() ->
         'LifetimeDecision',
         'CashFlowAccount',
         'Fees',
+        'AccounterClock',
+        'VectorClock',
         'CashFlowPosting',
         'FinalCashFlowPosting',
         'FinalCashFlowAccount',
@@ -5085,6 +5098,16 @@ struct_info('Fees') ->
         {1, required, {map, {enum, {dmsl_domain_thrift, 'CashFlowConstant'}}, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'fees', undefined}
     ]};
 
+struct_info('AccounterClock') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'VectorClock'}}, 'vector', undefined}
+    ]};
+
+struct_info('VectorClock') ->
+    {struct, struct, [
+        {1, required, string, 'state', undefined}
+    ]};
+
 struct_info('CashFlowPosting') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'source', undefined},
@@ -6554,6 +6577,9 @@ record_name('LifetimeDecision') ->
 
 record_name('Fees') ->
     'domain_Fees';
+
+record_name('VectorClock') ->
+    'domain_VectorClock';
 
 record_name('CashFlowPosting') ->
     'domain_CashFlowPosting';

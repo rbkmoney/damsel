@@ -76,6 +76,11 @@
     'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'() | undefined
 }).
 
+%% struct 'InvoicePaymentClockUpdate'
+-record('payproc_InvoicePaymentClockUpdate', {
+    'clock' :: dmsl_domain_thrift:'AccounterClock'()
+}).
+
 %% struct 'InvoicePaymentRollbackStarted'
 -record('payproc_InvoicePaymentRollbackStarted', {
     'reason' :: dmsl_domain_thrift:'OperationFailure'()
@@ -163,7 +168,8 @@
 %% struct 'InvoicePaymentChargebackChange'
 -record('payproc_InvoicePaymentChargebackChange', {
     'id' :: dmsl_domain_thrift:'InvoicePaymentChargebackID'(),
-    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentChargebackChangePayload'()
+    'payload' :: dmsl_payment_processing_thrift:'InvoicePaymentChargebackChangePayload'(),
+    'occurred_at' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackCreated'
