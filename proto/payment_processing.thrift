@@ -190,6 +190,7 @@ union InvoicePaymentChangePayload {
     12: InvoicePaymentCaptureStarted        invoice_payment_capture_started
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
+    15: InvoicePaymentClockUpdate           invoice_payment_clock_update
 }
 
 /**
@@ -206,6 +207,10 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
+}
+
+struct InvoicePaymentClockUpdate {
+    1: required domain.AccounterClock clock
 }
 
 struct InvoicePaymentRollbackStarted {
@@ -340,6 +345,7 @@ struct SessionInteractionRequested {
 struct InvoicePaymentChargebackChange {
     1: required domain.InvoicePaymentChargebackID id
     2: required InvoicePaymentChargebackChangePayload payload
+    3: optional base.Timestamp occurred_at
 }
 
 /**
@@ -353,6 +359,7 @@ union InvoicePaymentChargebackChangePayload {
     5: InvoicePaymentChargebackLevyChanged          invoice_payment_chargeback_levy_changed
     6: InvoicePaymentChargebackStageChanged         invoice_payment_chargeback_stage_changed
     7: InvoicePaymentChargebackTargetStatusChanged  invoice_payment_chargeback_target_status_changed
+    8: InvoicePaymentClockUpdate                    invoice_payment_chargeback_clock_update
 }
 
 /**
@@ -391,7 +398,7 @@ struct InvoicePaymentChargebackLevyChanged {
 }
 
 /**
- * Событие об изменении стадии чарджека
+ * Событие об изменении стадии чарджбека
  */
 struct InvoicePaymentChargebackStageChanged {
     1: required domain.InvoicePaymentChargebackStage stage
@@ -420,6 +427,7 @@ union InvoicePaymentRefundChangePayload {
     2: InvoicePaymentRefundStatusChanged   invoice_payment_refund_status_changed
     3: InvoicePaymentSessionChange         invoice_payment_session_change
     4: InvoicePaymentRefundRollbackStarted invoice_payment_refund_rollback_started
+    5: InvoicePaymentClockUpdate           invoice_payment_refund_clock_update
 }
 
 /**
@@ -462,6 +470,7 @@ struct InvoicePaymentAdjustmentChange {
 union InvoicePaymentAdjustmentChangePayload {
     1: InvoicePaymentAdjustmentCreated       invoice_payment_adjustment_created
     2: InvoicePaymentAdjustmentStatusChanged invoice_payment_adjustment_status_changed
+    3: InvoicePaymentClockUpdate             invoice_payment_adjustment_clock_update
 }
 
 /**

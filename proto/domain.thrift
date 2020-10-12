@@ -1890,6 +1890,15 @@ struct Fees {
     1: required map<CashFlowConstant, CashVolume> fees
 }
 
+// See shumaich-proto for details
+union AccounterClock {
+    1: VectorClock vector
+}
+
+struct VectorClock {
+    1: required base.Opaque state
+}
+
 typedef map<CashFlowConstant, Cash> CashFlowContext
 
 /** Граф финансовых потоков. */
