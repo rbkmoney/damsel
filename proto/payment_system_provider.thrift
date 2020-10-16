@@ -30,7 +30,7 @@ enum PaymentTokenProvider {
  * Непрозрачное для процессинга состояние прокси, связанное с определённой сессией взаимодействия
  * с третьей стороной.
  */
-typedef base.Opaque ProviderState
+typedef base.Opaque ProxyState
 
 /**
 * Необходимые для авторизации данные
@@ -49,7 +49,7 @@ struct CardNotTokenizable{}
 **/
 exception TokenNotFound{}
 
-exception SessionNotFound {}
+exception SessionNotFound{}
 
 /**
 * Другие исключения
@@ -66,13 +66,12 @@ struct Failure {
 **/
 
 union FinishIntentFailure {
-    1: CardNotTokenizable card_not_tokenizable
-    2: domain.Failure failure
+    1: domain.Failure failure
 }
 
 struct PaymentSystemProviderResult {
     1: required Intent intent
-    2: optional ProviderState next_state
+    2: optional ProxyState next_state
 }
 
 struct Callback {
@@ -138,7 +137,7 @@ struct SleepIntent {
 **/
 struct Session {
     1: required SessionID id
-    2: optional ProviderState state
+    2: optional ProxyState state
 }
 
 struct Context {
@@ -151,7 +150,7 @@ struct Context {
  */
 struct CallbackResult {
     1: required Intent intent
-    2: optional ProviderState next_state
+    2: optional ProxyState next_state
     3: required CallbackResponse response
 }
 
@@ -174,15 +173,28 @@ struct ProcessCallbackFinished {
     1: required Context response
 }
 
-/**
-* NOTE: Данный сервис должен работать в PCIDSS-зоне
-**/
-service PaymentSystemAdapter {
+struct TokenizeData {
+    1: required InvoicePayment invoice_payment
+}
+
+service PaymentSystemProxy {
 
     /**
     * Токенизация банковской карты.
     **/
-    PaymentSystemProviderResult Tokenize(1: InvoicePayment invoice_payment, 2: Context context)
+    PaymentSystemProviderResult Tokenize(1: TokenizeData data, 2: Context context)
+
+    /**
+     * Запрос к провайдеру на обработку обратного вызова в рамках сессии.
+     */
+    CallbackResult HandleCallback (1: Callback callback, 2: Context context)
+
+}
+
+/**
+* NOTE: Данный сервис должен работать в PCIDSS-зоне
+**/
+service PaymentSystemAdapter {
 
     /**
     * Получить данные (ключи, криптограммы) для авторизации платежа
