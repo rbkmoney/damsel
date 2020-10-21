@@ -2525,6 +2525,7 @@ service PartyManagement {
         1: UserInfo user,
         2: PartyID party_id,
         3: ShopID id,
+        4: base.Timestamp timestamp
         5: PartyRevisionParam party_revision
         6: Varset varset
     )
