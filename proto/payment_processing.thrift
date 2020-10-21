@@ -2525,8 +2525,8 @@ service PartyManagement {
         1: UserInfo user,
         2: PartyID party_id,
         3: ShopID id,
-        4: base.Timestamp timestamp
         5: PartyRevisionParam party_revision
+        6: Varset varset
     )
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
 
@@ -2538,7 +2538,7 @@ service PartyManagement {
         1: UserInfo user,
         2: PartyID party_id,
         3: ContractID contract_id,
-        4: base.Timestamp timestamp
+        4: base.Timestamp timestamp,
         5: Varset varset
     )
         throws (
