@@ -2527,8 +2527,15 @@ service PartyManagement {
         3: ShopID id,
         4: base.Timestamp timestamp
         5: PartyRevisionParam party_revision
+        6: Varset varset
     )
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: PartyNotExistsYet ex3, 4: ShopNotFound ex4)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3,
+            4: ShopNotFound ex4,
+            5: VarsetPartyNotMatch ex5
+        )
 
     /* Wallet */
 
