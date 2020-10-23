@@ -33,6 +33,7 @@ struct UnwrappedPaymentTool {
     1: required CardInfo card_info
     2: required CardPaymentData payment_data
     3: required PaymentDetails details
+    4: optional base.Timestamp exp_date
 }
 
 union PaymentDetails {
