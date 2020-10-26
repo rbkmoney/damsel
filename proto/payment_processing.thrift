@@ -871,13 +871,13 @@ struct InvoiceRepairParams {
 exception Misconfiguration {}
 
 struct RejectedProvider {
-    1: required: domain.ProviderRef provider,
-    2: required: binary reason // or typed?
+    1: required domain.ProviderRef provider,
+    2: required binary reason // or typed?
 }
 
 struct RejectedRoute {
-    1: required: domain.PaymentRoute route,
-    2: required: binary reason // or typed?
+    1: required domain.PaymentRoute route,
+    2: required binary reason // or typed?
 }
 
 struct RejectionContext {
