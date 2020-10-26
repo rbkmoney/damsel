@@ -892,9 +892,9 @@ struct CollectedRoutes {
 }
 
 union Predestination {
-    1: PaymentPredestination{} payment
-    2: RecurrentPaytoolPredestination{} recurrent_paytool
-    3: RecurrentPaymentPredestination{} recurrent_payment
+    1: PaymentPredestination payment
+    2: RecurrentPaytoolPredestination recurrent_paytool
+    3: RecurrentPaymentPredestination recurrent_payment
 }
 
 struct PaymentPredestination {}
