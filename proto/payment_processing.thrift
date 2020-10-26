@@ -868,10 +868,45 @@ struct InvoiceRepairParams {
 
 // Exceptions
 
+exception Misconfiguration {}
+
+struct RejectedProvider {
+    1: required: domain.ProviderRef provider,
+    2: required: binary reason // or typed?
+}
+
+struct RejectedRoute {
+    1: required: domain.PaymentRoute route,
+    2: required: binary reason // or typed?
+}
+
+struct RejectionContext {
+    1: required Varset varset,
+    2: required list<RejectedProvider> rejected_providers,
+    3: required list<RejectedRoute> rejected_routes,
+}
+
+struct CollectedRoutes {
+    1: required list<domain.PaymentRoute> routes
+    2: required RejectionContext rejection_context
+}
+
+union Predestination {
+    1: PaymentPredestination{} payment
+    2: RecurrentPaytoolPredestination{} recurrent_paytool
+    3: RecurrentPaymentPredestination{} recurrent_payment
+}
+
+struct PaymentPredestination {}
+struct RecurrentPaytoolPredestination {}
+struct RecurrentPaymentPredestination {}
+
+
 // forward-declared
 exception PartyNotFound {}
 exception PartyNotExistsYet {}
 exception InvalidPartyRevision {}
+
 
 exception ShopNotFound {}
 exception WalletNotFound {}
@@ -2643,7 +2678,8 @@ service PartyManagement {
     )
         throws (
             1: InvalidUser ex1,
-            2: ProviderNotFound ex2
+            2: ProviderNotFound ex2,
+            3: Misconfiguration ex3
         )
 
     domain.ProvisionTermSet ComputeProviderTerminalTerms (
@@ -2656,7 +2692,21 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
-            3: TerminalNotFound ex3
+            3: TerminalNotFound ex3,
+            4: Misconfiguration ex4
+        )
+
+    /* Routing */
+
+    domain.CollectedRoutes CollectRoutes (
+        1: UserInfo user,
+        2: Predestination predestination,
+        3: domain.PaymentInstitution payment_institution,
+        4: domain.DataRevision domain_revision,
+        5: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
         )
 
     /* Globals */
