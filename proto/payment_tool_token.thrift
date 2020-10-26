@@ -1,3 +1,4 @@
+include "base.thrift"
 include "domain.thrift"
 
 namespace java com.rbkmoney.damsel.payment_tool_token
@@ -6,8 +7,16 @@ namespace erlang ptt
 /*
     Платежный токен, который передается плательщику. Платежный токен содержит
     чувствительные данные, которые сериализуются в thrift-binary и шифруются перед отправкой клиенту.
+    Платежный токен может иметь срок действия, по истечении которого становится недействительным.
 */
+struct PaymentToolTokenGap {
+    1: required PaymentToolToken payload
+    2: optional base.Timestamp expires_on
+}
 
+/*
+    Данные платежного токена. В v1 версии используется как платежный токен
+*/
 union PaymentToolToken {
     1: BankCardPayload bank_card_payload
     2: PaymentTerminalPayload payment_terminal_payload
