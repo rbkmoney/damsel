@@ -3880,7 +3880,8 @@ struct_info('InvoicePayment') ->
         {17, optional, string, 'shop_id', undefined},
         {18, optional, bool, 'make_recurrent', undefined},
         {19, optional, string, 'external_id', undefined},
-        {20, optional, string, 'processing_deadline', undefined}
+        {20, optional, string, 'processing_deadline', undefined},
+        {21, optional, string, 'short_payment_id', undefined}
     ]};
 
 struct_info('InvoicePaymentPending') ->
