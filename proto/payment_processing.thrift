@@ -2698,7 +2698,7 @@ service PartyManagement {
 
     /* Routing */
 
-    domain.CollectedRoutes CollectRoutes (
+    CollectedRoutes CollectRoutes (
         1: UserInfo user,
         2: Predestination predestination,
         3: domain.PaymentInstitution payment_institution,
