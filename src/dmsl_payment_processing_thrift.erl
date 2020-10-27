@@ -157,6 +157,7 @@
     'RejectedProvider'/0,
     'RejectedRoute'/0,
     'RejectionContext'/0,
+    'CollectedRoute'/0,
     'CollectedRoutes'/0,
     'Predestination'/0,
     'PaymentPredestination'/0,
@@ -516,6 +517,7 @@
     'RejectedProvider' |
     'RejectedRoute' |
     'RejectionContext' |
+    'CollectedRoute' |
     'CollectedRoutes' |
     'Predestination' |
     'PaymentPredestination' |
@@ -1076,6 +1078,9 @@
 
 %% struct 'RejectionContext'
 -type 'RejectionContext'() :: #'payproc_RejectionContext'{}.
+
+%% struct 'CollectedRoute'
+-type 'CollectedRoute'() :: #'payproc_CollectedRoute'{}.
 
 %% struct 'CollectedRoutes'
 -type 'CollectedRoutes'() :: #'payproc_CollectedRoutes'{}.
@@ -2082,6 +2087,7 @@ structs() ->
         'RejectedProvider',
         'RejectedRoute',
         'RejectionContext',
+        'CollectedRoute',
         'CollectedRoutes',
         'Predestination',
         'PaymentPredestination',
@@ -2925,9 +2931,18 @@ struct_info('RejectionContext') ->
         {3, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'RejectedRoute'}}}, 'rejected_routes', undefined}
     ]};
 
+struct_info('CollectedRoute') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Provider'}}, 'provider', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_ref', undefined},
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'Terminal'}}, 'terminal', undefined},
+        {5, required, i64, 'priority', undefined}
+    ]};
+
 struct_info('CollectedRoutes') ->
     {struct, struct, [
-        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}}, 'routes', undefined},
+        {1, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'CollectedRoute'}}}, 'routes', undefined},
         {2, required, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionContext'}}, 'rejection_context', undefined}
     ]};
 
@@ -4227,6 +4242,9 @@ record_name('RejectedRoute') ->
 
 record_name('RejectionContext') ->
     'payproc_RejectionContext';
+
+record_name('CollectedRoute') ->
+    'payproc_CollectedRoute';
 
 record_name('CollectedRoutes') ->
     'payproc_CollectedRoutes';

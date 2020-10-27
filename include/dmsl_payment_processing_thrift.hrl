@@ -494,9 +494,18 @@
     'rejected_routes' :: [dmsl_payment_processing_thrift:'RejectedRoute'()]
 }).
 
+%% struct 'CollectedRoute'
+-record('payproc_CollectedRoute', {
+    'provider_ref' :: dmsl_domain_thrift:'ProviderRef'(),
+    'provider' :: dmsl_domain_thrift:'Provider'(),
+    'terminal_ref' :: dmsl_domain_thrift:'TerminalRef'(),
+    'terminal' :: dmsl_domain_thrift:'Terminal'(),
+    'priority' :: integer()
+}).
+
 %% struct 'CollectedRoutes'
 -record('payproc_CollectedRoutes', {
-    'routes' :: [dmsl_domain_thrift:'PaymentRoute'()],
+    'routes' :: [dmsl_payment_processing_thrift:'CollectedRoute'()],
     'rejection_context' :: dmsl_payment_processing_thrift:'RejectionContext'()
 }).
 
