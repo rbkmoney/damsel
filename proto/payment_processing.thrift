@@ -886,8 +886,16 @@ struct RejectionContext {
     3: required list<RejectedRoute> rejected_routes,
 }
 
+struct CollectedRoute {
+    1: required domain.ProviderRef provider_ref,
+    2: required domain.Provider    provider,
+    3: required domain.TerminalRef terminal_ref,
+    4: required domain.Terminal    terminal,
+    5: required i64 priority
+}
+
 struct CollectedRoutes {
-    1: required list<domain.PaymentRoute> routes
+    1: required list<CollectedRoute> routes
     2: required RejectionContext rejection_context
 }
 
