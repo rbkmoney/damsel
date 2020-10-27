@@ -10,9 +10,14 @@ namespace erlang ptt
     Платежный токен может иметь срок действия, по истечении которого становится недействительным.
 */
 struct PaymentToolTokenGap {
-    1: required PaymentToolToken payload
+    1: required PaymentToolTokenPayload payload
     2: optional base.Timestamp expires_on
 }
+
+/*
+    Переходное определение PaymentToolTokenPayload как пседонима PaymentToolToken
+*/
+typedef PaymentToolToken PaymentToolTokenPayload
 
 /*
     Данные платежного токена. В v1 версии используется как платежный токен
