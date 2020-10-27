@@ -9,20 +9,15 @@ namespace erlang ptt
     чувствительные данные, которые сериализуются в thrift-binary и шифруются перед отправкой клиенту.
     Платежный токен может иметь срок действия, по истечении которого становится недействительным.
 */
-struct PaymentToolTokenGap {
+struct PaymentToolToken {
     1: required PaymentToolTokenPayload payload
-    2: optional base.Timestamp expires_on
+    2: optional base.Timestamp valid_until
 }
 
 /*
-    Переходное определение PaymentToolTokenPayload как пседонима PaymentToolToken
+    Данные платежного токена. В v1 версии используется как платежный токен.
 */
-typedef PaymentToolToken PaymentToolTokenPayload
-
-/*
-    Данные платежного токена. В v1 версии используется как платежный токен
-*/
-union PaymentToolToken {
+union PaymentToolTokenPayload {
     1: BankCardPayload bank_card_payload
     2: PaymentTerminalPayload payment_terminal_payload
     3: DigitalWalletPayload digital_wallet_payload
