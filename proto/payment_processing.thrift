@@ -891,7 +891,8 @@ struct CollectedRoute {
     2: required domain.Provider    provider,
     3: required domain.TerminalRef terminal_ref,
     4: required domain.Terminal    terminal,
-    5: required i64 priority
+    5: optional i64 priority
+    6: optional i64 weight
 }
 
 struct CollectedRoutes {
