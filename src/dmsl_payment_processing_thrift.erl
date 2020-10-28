@@ -2937,7 +2937,8 @@ struct_info('CollectedRoute') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Provider'}}, 'provider', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_ref', undefined},
         {4, required, {struct, struct, {dmsl_domain_thrift, 'Terminal'}}, 'terminal', undefined},
-        {5, required, i64, 'priority', undefined}
+        {5, optional, i64, 'priority', undefined},
+        {6, optional, i64, 'weight', undefined}
     ]};
 
 struct_info('CollectedRoutes') ->

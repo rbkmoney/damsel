@@ -500,7 +500,8 @@
     'provider' :: dmsl_domain_thrift:'Provider'(),
     'terminal_ref' :: dmsl_domain_thrift:'TerminalRef'(),
     'terminal' :: dmsl_domain_thrift:'Terminal'(),
-    'priority' :: integer()
+    'priority' :: integer() | undefined,
+    'weight' :: integer() | undefined
 }).
 
 %% struct 'CollectedRoutes'
