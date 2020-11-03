@@ -2087,6 +2087,17 @@ struct PaymentsProvisionTerms {
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
+    12: optional PaymentRiskScoreSelector risk_scores
+}
+
+union PaymentRiskScoreSelector {
+    1: list<PaymentRiskScoreDecision> decisions
+    2: RiskScore value
+}
+
+struct PaymentRiskScoreDecision {
+    1: required Predicate if_
+    2: required PaymentRiskScoreSelector then_
 }
 
 struct PaymentHoldsProvisionTerms {
