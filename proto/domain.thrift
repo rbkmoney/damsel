@@ -2087,7 +2087,7 @@ struct PaymentsProvisionTerms {
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
-    12: optional PaymentRiskScoreSelector risk_scores
+    12: optional PaymentRiskScoreSelector risk_coverage
 }
 
 union PaymentRiskScoreSelector {
