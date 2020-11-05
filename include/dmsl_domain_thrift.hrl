@@ -126,7 +126,8 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'make_recurrent' :: boolean() | undefined,
     'external_id' :: binary() | undefined,
-    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'short_payment_id' :: binary() | undefined
 }).
 
 %% struct 'InvoicePaymentPending'
@@ -1242,7 +1243,14 @@
     'cash_flow' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined,
-    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackProvisionTerms'() | undefined
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackProvisionTerms'() | undefined,
+    'risk_coverage' :: dmsl_domain_thrift:'RiskScoreSelector'() | undefined
+}).
+
+%% struct 'RiskScoreDecision'
+-record('domain_RiskScoreDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'RiskScoreSelector'()
 }).
 
 %% struct 'PaymentHoldsProvisionTerms'
@@ -1275,7 +1283,8 @@
 -record('domain_RecurrentPaytoolsProvisionTerms', {
     'cash_value' :: dmsl_domain_thrift:'CashValueSelector'(),
     'categories' :: dmsl_domain_thrift:'CategorySelector'(),
-    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'()
+    'payment_methods' :: dmsl_domain_thrift:'PaymentMethodSelector'(),
+    'risk_coverage' :: dmsl_domain_thrift:'RiskScoreSelector'() | undefined
 }).
 
 %% struct 'WalletProvisionTerms'

@@ -33,6 +33,7 @@
 
 -export_type([
     'PaymentToolToken'/0,
+    'PaymentToolTokenPayload'/0,
     'BankCardPayload'/0,
     'PaymentTerminalPayload'/0,
     'DigitalWalletPayload'/0,
@@ -58,6 +59,7 @@
 %%
 -type struct_name() ::
     'PaymentToolToken' |
+    'PaymentToolTokenPayload' |
     'BankCardPayload' |
     'PaymentTerminalPayload' |
     'DigitalWalletPayload' |
@@ -66,8 +68,11 @@
 
 -type exception_name() :: none().
 
-%% union 'PaymentToolToken'
--type 'PaymentToolToken'() ::
+%% struct 'PaymentToolToken'
+-type 'PaymentToolToken'() :: #'ptt_PaymentToolToken'{}.
+
+%% union 'PaymentToolTokenPayload'
+-type 'PaymentToolTokenPayload'() ::
     {'bank_card_payload', 'BankCardPayload'()} |
     {'payment_terminal_payload', 'PaymentTerminalPayload'()} |
     {'digital_wallet_payload', 'DigitalWalletPayload'()} |
@@ -138,6 +143,7 @@ enums() ->
 structs() ->
     [
         'PaymentToolToken',
+        'PaymentToolTokenPayload',
         'BankCardPayload',
         'PaymentTerminalPayload',
         'DigitalWalletPayload',
@@ -166,6 +172,12 @@ enum_info(_) -> erlang:error(badarg).
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
 
 struct_info('PaymentToolToken') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_payment_tool_token_thrift, 'PaymentToolTokenPayload'}}, 'payload', undefined},
+        {2, optional, string, 'valid_until', undefined}
+    ]};
+
+struct_info('PaymentToolTokenPayload') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_tool_token_thrift, 'BankCardPayload'}}, 'bank_card_payload', undefined},
         {2, optional, {struct, struct, {dmsl_payment_tool_token_thrift, 'PaymentTerminalPayload'}}, 'payment_terminal_payload', undefined},
@@ -202,6 +214,9 @@ struct_info('MobileCommercePayload') ->
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
+
+record_name('PaymentToolToken') ->
+    'ptt_PaymentToolToken';
 
 record_name('BankCardPayload') ->
     'ptt_BankCardPayload';

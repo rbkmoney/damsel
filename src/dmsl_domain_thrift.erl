@@ -347,6 +347,8 @@
     'P2PProvider'/0,
     'ProvisionTermSet'/0,
     'PaymentsProvisionTerms'/0,
+    'RiskScoreSelector'/0,
+    'RiskScoreDecision'/0,
     'PaymentHoldsProvisionTerms'/0,
     'PartialCaptureProvisionTerms'/0,
     'PaymentChargebackProvisionTerms'/0,
@@ -1240,6 +1242,8 @@
     'P2PProvider' |
     'ProvisionTermSet' |
     'PaymentsProvisionTerms' |
+    'RiskScoreSelector' |
+    'RiskScoreDecision' |
     'PaymentHoldsProvisionTerms' |
     'PartialCaptureProvisionTerms' |
     'PaymentChargebackProvisionTerms' |
@@ -2202,6 +2206,14 @@
 %% struct 'PaymentsProvisionTerms'
 -type 'PaymentsProvisionTerms'() :: #'domain_PaymentsProvisionTerms'{}.
 
+%% union 'RiskScoreSelector'
+-type 'RiskScoreSelector'() ::
+    {'decisions', ['RiskScoreDecision'()]} |
+    {'value', atom()}.
+
+%% struct 'RiskScoreDecision'
+-type 'RiskScoreDecision'() :: #'domain_RiskScoreDecision'{}.
+
 %% struct 'PaymentHoldsProvisionTerms'
 -type 'PaymentHoldsProvisionTerms'() :: #'domain_PaymentHoldsProvisionTerms'{}.
 
@@ -3039,6 +3051,8 @@ structs() ->
         'P2PProvider',
         'ProvisionTermSet',
         'PaymentsProvisionTerms',
+        'RiskScoreSelector',
+        'RiskScoreDecision',
         'PaymentHoldsProvisionTerms',
         'PartialCaptureProvisionTerms',
         'PaymentChargebackProvisionTerms',
@@ -3880,7 +3894,8 @@ struct_info('InvoicePayment') ->
         {17, optional, string, 'shop_id', undefined},
         {18, optional, bool, 'make_recurrent', undefined},
         {19, optional, string, 'external_id', undefined},
-        {20, optional, string, 'processing_deadline', undefined}
+        {20, optional, string, 'processing_deadline', undefined},
+        {21, optional, string, 'short_payment_id', undefined}
     ]};
 
 struct_info('InvoicePaymentPending') ->
@@ -5305,7 +5320,20 @@ struct_info('PaymentsProvisionTerms') ->
         {4, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'cash_flow', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
         {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined}
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined},
+        {12, optional, {struct, union, {dmsl_domain_thrift, 'RiskScoreSelector'}}, 'risk_coverage', undefined}
+    ]};
+
+struct_info('RiskScoreSelector') ->
+    {struct, union, [
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'RiskScoreDecision'}}}, 'decisions', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'value', undefined}
+    ]};
+
+struct_info('RiskScoreDecision') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'RiskScoreSelector'}}, 'then_', undefined}
     ]};
 
 struct_info('PaymentHoldsProvisionTerms') ->
@@ -5338,7 +5366,8 @@ struct_info('RecurrentPaytoolsProvisionTerms') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'CashValueSelector'}}, 'cash_value', undefined},
         {2, required, {struct, union, {dmsl_domain_thrift, 'CategorySelector'}}, 'categories', undefined},
-        {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined}
+        {3, required, {struct, union, {dmsl_domain_thrift, 'PaymentMethodSelector'}}, 'payment_methods', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'RiskScoreSelector'}}, 'risk_coverage', undefined}
     ]};
 
 struct_info('WalletProvisionTerms') ->
@@ -6652,6 +6681,9 @@ record_name('ProvisionTermSet') ->
 
 record_name('PaymentsProvisionTerms') ->
     'domain_PaymentsProvisionTerms';
+
+record_name('RiskScoreDecision') ->
+    'domain_RiskScoreDecision';
 
 record_name('PaymentHoldsProvisionTerms') ->
     'domain_PaymentHoldsProvisionTerms';
