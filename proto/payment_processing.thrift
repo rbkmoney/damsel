@@ -868,8 +868,6 @@ struct InvoiceRepairParams {
 
 // Exceptions
 
-exception Misconfiguration {}
-
 struct RejectedProvider {
     1: required domain.ProviderRef provider,
     2: required binary reason // or typed?
@@ -882,8 +880,8 @@ struct RejectedRoute {
 
 struct RejectionContext {
     1: required Varset varset,
-    2: required list<RejectedProvider> rejected_providers,
-    3: required list<RejectedRoute> rejected_routes,
+    2: required list<RejectedProvider> rejected_providers = [],
+    3: required list<RejectedRoute> rejected_routes = [],
 }
 
 struct CollectedRoute {
