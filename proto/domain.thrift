@@ -181,6 +181,7 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
+    21: optional string short_payment_id
 }
 
 struct InvoicePaymentPending   {}
@@ -2086,6 +2087,17 @@ struct PaymentsProvisionTerms {
     5: optional PaymentHoldsProvisionTerms holds
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
+    12: optional RiskScoreSelector risk_coverage
+}
+
+union RiskScoreSelector {
+    1: list<RiskScoreDecision> decisions
+    2: RiskScore value
+}
+
+struct RiskScoreDecision {
+    1: required Predicate if_
+    2: required RiskScoreSelector then_
 }
 
 struct PaymentHoldsProvisionTerms {
@@ -2117,6 +2129,7 @@ struct RecurrentPaytoolsProvisionTerms {
     1: required CashValueSelector     cash_value
     2: required CategorySelector      categories
     3: required PaymentMethodSelector payment_methods
+    4: optional RiskScoreSelector     risk_coverage
 }
 
 struct WalletProvisionTerms {
