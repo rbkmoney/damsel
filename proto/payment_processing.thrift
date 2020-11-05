@@ -879,9 +879,8 @@ struct RejectedRoute {
 }
 
 struct RejectionContext {
-    1: required Varset varset,
-    2: required list<RejectedProvider> rejected_providers = [],
-    3: required list<RejectedRoute> rejected_routes = [],
+    1: required list<RejectedProvider> rejected_providers = [],
+    2: required list<RejectedRoute> rejected_routes = [],
 }
 
 struct CollectedRoute {
