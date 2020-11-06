@@ -1956,6 +1956,7 @@
     'ComputeProvider' |
     'ComputeProviderTerminalTerms' |
     'CollectRoutes' |
+    'CollectRoutesWithRules' |
     'ComputeGlobals' |
     'ComputePaymentRoutingRuleset' |
     'ComputePaymentInstitutionTerms' |
@@ -4968,6 +4969,7 @@ functions('PartyManagement') ->
         'ComputeProvider',
         'ComputeProviderTerminalTerms',
         'CollectRoutes',
+        'CollectRoutesWithRules',
         'ComputeGlobals',
         'ComputePaymentRoutingRuleset',
         'ComputePaymentInstitutionTerms',
@@ -6309,6 +6311,20 @@ function_info('PartyManagement', 'CollectRoutes', params_type) ->
 function_info('PartyManagement', 'CollectRoutes', reply_type) ->
     {struct, struct, {dmsl_payment_processing_thrift, 'CollectedRoutes'}};
 function_info('PartyManagement', 'CollectRoutes', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined}
+    ]};
+function_info('PartyManagement', 'CollectRoutesWithRules', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, union, {dmsl_payment_processing_thrift, 'Predestination'}}, 'predestination', undefined},
+        {3, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitution'}}, 'payment_institution', undefined},
+        {4, undefined, i64, 'domain_revision', undefined},
+        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'CollectRoutesWithRules', reply_type) ->
+    {struct, struct, {dmsl_payment_processing_thrift, 'CollectedRoutes'}};
+function_info('PartyManagement', 'CollectRoutesWithRules', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined}
     ]};
