@@ -94,6 +94,7 @@ struct AdditionalTransactionInfo {
     10: optional string xid // 3D Secure transaction identifier
     11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
     12: optional ThreeDsVerification three_ds_verification
+    13: optional string short_payment_id
 }
 
 /**
@@ -181,7 +182,6 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
-    21: optional string short_payment_id
 }
 
 struct InvoicePaymentPending   {}
