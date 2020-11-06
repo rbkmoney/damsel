@@ -2709,7 +2709,6 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
-            3: Misconfiguration ex3
         )
 
     domain.ProvisionTermSet ComputeProviderTerminalTerms (
@@ -2723,7 +2722,6 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
             3: TerminalNotFound ex3,
-            4: Misconfiguration ex4
         )
 
     /* Routing */
