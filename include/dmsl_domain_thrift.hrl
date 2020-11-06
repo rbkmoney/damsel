@@ -56,7 +56,8 @@
     'cavv' :: binary() | undefined,
     'xid' :: binary() | undefined,
     'cavv_algorithm' :: binary() | undefined,
-    'three_ds_verification' :: dmsl_domain_thrift:'ThreeDsVerification'() | undefined
+    'three_ds_verification' :: dmsl_domain_thrift:'ThreeDsVerification'() | undefined,
+    'short_payment_id' :: binary() | undefined
 }).
 
 %% struct 'Invoice'
@@ -126,8 +127,7 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'make_recurrent' :: boolean() | undefined,
     'external_id' :: binary() | undefined,
-    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined,
-    'short_payment_id' :: binary() | undefined
+    'processing_deadline' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'InvoicePaymentPending'

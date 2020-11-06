@@ -3816,7 +3816,8 @@ struct_info('AdditionalTransactionInfo') ->
         {9, optional, string, 'cavv', undefined},
         {10, optional, string, 'xid', undefined},
         {11, optional, string, 'cavv_algorithm', undefined},
-        {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerification'}}, 'three_ds_verification', undefined}
+        {12, optional, {enum, {dmsl_domain_thrift, 'ThreeDsVerification'}}, 'three_ds_verification', undefined},
+        {13, optional, string, 'short_payment_id', undefined}
     ]};
 
 struct_info('Invoice') ->
@@ -3894,8 +3895,7 @@ struct_info('InvoicePayment') ->
         {17, optional, string, 'shop_id', undefined},
         {18, optional, bool, 'make_recurrent', undefined},
         {19, optional, string, 'external_id', undefined},
-        {20, optional, string, 'processing_deadline', undefined},
-        {21, optional, string, 'short_payment_id', undefined}
+        {20, optional, string, 'processing_deadline', undefined}
     ]};
 
 struct_info('InvoicePaymentPending') ->
