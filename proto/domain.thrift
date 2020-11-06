@@ -94,7 +94,7 @@ struct AdditionalTransactionInfo {
     10: optional string xid // 3D Secure transaction identifier
     11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
     12: optional ThreeDsVerification three_ds_verification
-    13: optional string short_payment_id
+    13: optional string short_payment_id // ID for terminal payments
 }
 
 /**
