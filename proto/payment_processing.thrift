@@ -2737,6 +2737,17 @@ service PartyManagement {
             1: InvalidUser ex1,
         )
 
+    CollectedRoutes CollectRoutesWithRules (
+        1: UserInfo user,
+        2: Predestination predestination,
+        3: domain.PaymentInstitution payment_institution,
+        4: domain.DataRevision domain_revision,
+        5: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+        )
+
     /* Globals */
 
     domain.Globals ComputeGlobals (
