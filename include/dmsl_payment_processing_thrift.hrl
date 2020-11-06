@@ -475,23 +475,62 @@
     'validate_transitions' = true :: boolean() | undefined
 }).
 
+%% struct 'RejectionMisconfiguration'
+-record('payproc_RejectionMisconfiguration', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionPaymentsProvisionTerms'
+-record('payproc_RejectionPaymentsProvisionTerms', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionPaymentHoldsProvisionTerms'
+-record('payproc_RejectionPaymentHoldsProvisionTerms', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionPaymentRefundsProvisionTerms'
+-record('payproc_RejectionPaymentRefundsProvisionTerms', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionProvisionTermSet'
+-record('payproc_RejectionProvisionTermSet', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionTermTestFailed'
+-record('payproc_RejectionTermTestFailed', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionRoutingRule'
+-record('payproc_RejectionRoutingRule', {
+    'details' :: binary() | undefined
+}).
+
+%% struct 'RejectionUnexpected'
+-record('payproc_RejectionUnexpected', {
+    'details' :: binary() | undefined
+}).
+
 %% struct 'RejectedProvider'
 -record('payproc_RejectedProvider', {
     'provider' :: dmsl_domain_thrift:'ProviderRef'(),
-    'reason' :: binary()
+    'reason' :: dmsl_payment_processing_thrift:'RejectionReason'()
 }).
 
 %% struct 'RejectedRoute'
 -record('payproc_RejectedRoute', {
     'route' :: dmsl_domain_thrift:'PaymentRoute'(),
-    'reason' :: binary()
+    'reason' :: dmsl_payment_processing_thrift:'RejectionReason'()
 }).
 
 %% struct 'RejectionContext'
 -record('payproc_RejectionContext', {
-    'varset' :: dmsl_payment_processing_thrift:'Varset'(),
-    'rejected_providers' :: [dmsl_payment_processing_thrift:'RejectedProvider'()],
-    'rejected_routes' :: [dmsl_payment_processing_thrift:'RejectedRoute'()]
+    'rejected_providers' = [] :: [dmsl_payment_processing_thrift:'RejectedProvider'()],
+    'rejected_routes' = [] :: [dmsl_payment_processing_thrift:'RejectedRoute'()]
 }).
 
 %% struct 'CollectedRoute'
@@ -1033,9 +1072,6 @@
 -record('payproc_InvalidObjectReference', {
     'ref' :: dmsl_domain_thrift:'Reference'() | undefined
 }).
-
-%% exception 'Misconfiguration'
--record('payproc_Misconfiguration', {}).
 
 %% exception 'PartyNotFound'
 -record('payproc_PartyNotFound', {}).

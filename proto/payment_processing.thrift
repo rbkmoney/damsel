@@ -866,24 +866,43 @@ struct InvoiceRepairParams {
     1: optional bool validate_transitions = true
 }
 
-// Exceptions
+/* Route collection */
 
-exception Misconfiguration {}
+union RejectionReason {
+    1: RejectionMisconfiguration misconfiguration
+    2: RejectionPaymentsProvisionTerms payments_provision_terms
+    3: RejectionPaymentHoldsProvisionTerms payment_holds_provision_terms
+    4: RejectionPaymentRefundsProvisionTerms payment_refunds_provision_terms
+    5: RejectionProvisionTermSet provision_term_set
+    6: RejectionTermTestFailed term_test_failed
+    7: RejectionRoutingRule routing_rule
+
+    20: RejectionUnexpected unexpected
+}
+
+struct RejectionMisconfiguration { 1: optional string details }
+struct RejectionPaymentsProvisionTerms { 1: optional string details }
+struct RejectionPaymentHoldsProvisionTerms { 1: optional string details }
+struct RejectionPaymentRefundsProvisionTerms { 1: optional string details }
+struct RejectionProvisionTermSet { 1: optional string details }
+struct RejectionTermTestFailed { 1: optional string details }
+struct RejectionRoutingRule { 1: optional string details }
+
+struct RejectionUnexpected { 1: optional string details }
 
 struct RejectedProvider {
     1: required domain.ProviderRef provider,
-    2: required binary reason // or typed?
+    2: required RejectionReason reason
 }
 
 struct RejectedRoute {
     1: required domain.PaymentRoute route,
-    2: required binary reason // or typed?
+    2: required RejectionReason reason
 }
 
 struct RejectionContext {
-    1: required Varset varset,
-    2: required list<RejectedProvider> rejected_providers,
-    3: required list<RejectedRoute> rejected_routes,
+    1: required list<RejectedProvider> rejected_providers = [],
+    2: required list<RejectedRoute> rejected_routes = [],
 }
 
 struct CollectedRoute {
@@ -910,6 +929,8 @@ struct PaymentPredestination {}
 struct RecurrentPaytoolPredestination {}
 struct RecurrentPaymentPredestination {}
 
+
+// Exceptions
 
 // forward-declared
 exception PartyNotFound {}
@@ -2688,7 +2709,6 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
-            3: Misconfiguration ex3
         )
 
     domain.ProvisionTermSet ComputeProviderTerminalTerms (
@@ -2702,7 +2722,6 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
             3: TerminalNotFound ex3,
-            4: Misconfiguration ex4
         )
 
     /* Routing */

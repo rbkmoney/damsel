@@ -154,6 +154,15 @@
     'InvoiceRepairComplex'/0,
     'InvoiceRepairScenario'/0,
     'InvoiceRepairParams'/0,
+    'RejectionReason'/0,
+    'RejectionMisconfiguration'/0,
+    'RejectionPaymentsProvisionTerms'/0,
+    'RejectionPaymentHoldsProvisionTerms'/0,
+    'RejectionPaymentRefundsProvisionTerms'/0,
+    'RejectionProvisionTermSet'/0,
+    'RejectionTermTestFailed'/0,
+    'RejectionRoutingRule'/0,
+    'RejectionUnexpected'/0,
     'RejectedProvider'/0,
     'RejectedRoute'/0,
     'RejectionContext'/0,
@@ -279,7 +288,6 @@
     'InvalidObjectReference'/0
 ]).
 -export_type([
-    'Misconfiguration'/0,
     'PartyNotFound'/0,
     'PartyNotExistsYet'/0,
     'InvalidPartyRevision'/0,
@@ -514,6 +522,15 @@
     'InvoiceRepairComplex' |
     'InvoiceRepairScenario' |
     'InvoiceRepairParams' |
+    'RejectionReason' |
+    'RejectionMisconfiguration' |
+    'RejectionPaymentsProvisionTerms' |
+    'RejectionPaymentHoldsProvisionTerms' |
+    'RejectionPaymentRefundsProvisionTerms' |
+    'RejectionProvisionTermSet' |
+    'RejectionTermTestFailed' |
+    'RejectionRoutingRule' |
+    'RejectionUnexpected' |
     'RejectedProvider' |
     'RejectedRoute' |
     'RejectionContext' |
@@ -639,7 +656,6 @@
     'InvalidObjectReference'.
 
 -type exception_name() ::
-    'Misconfiguration' |
     'PartyNotFound' |
     'PartyNotExistsYet' |
     'InvalidPartyRevision' |
@@ -1069,6 +1085,41 @@
 
 %% struct 'InvoiceRepairParams'
 -type 'InvoiceRepairParams'() :: #'payproc_InvoiceRepairParams'{}.
+
+%% union 'RejectionReason'
+-type 'RejectionReason'() ::
+    {'misconfiguration', 'RejectionMisconfiguration'()} |
+    {'payments_provision_terms', 'RejectionPaymentsProvisionTerms'()} |
+    {'payment_holds_provision_terms', 'RejectionPaymentHoldsProvisionTerms'()} |
+    {'payment_refunds_provision_terms', 'RejectionPaymentRefundsProvisionTerms'()} |
+    {'provision_term_set', 'RejectionProvisionTermSet'()} |
+    {'term_test_failed', 'RejectionTermTestFailed'()} |
+    {'routing_rule', 'RejectionRoutingRule'()} |
+    {'unexpected', 'RejectionUnexpected'()}.
+
+%% struct 'RejectionMisconfiguration'
+-type 'RejectionMisconfiguration'() :: #'payproc_RejectionMisconfiguration'{}.
+
+%% struct 'RejectionPaymentsProvisionTerms'
+-type 'RejectionPaymentsProvisionTerms'() :: #'payproc_RejectionPaymentsProvisionTerms'{}.
+
+%% struct 'RejectionPaymentHoldsProvisionTerms'
+-type 'RejectionPaymentHoldsProvisionTerms'() :: #'payproc_RejectionPaymentHoldsProvisionTerms'{}.
+
+%% struct 'RejectionPaymentRefundsProvisionTerms'
+-type 'RejectionPaymentRefundsProvisionTerms'() :: #'payproc_RejectionPaymentRefundsProvisionTerms'{}.
+
+%% struct 'RejectionProvisionTermSet'
+-type 'RejectionProvisionTermSet'() :: #'payproc_RejectionProvisionTermSet'{}.
+
+%% struct 'RejectionTermTestFailed'
+-type 'RejectionTermTestFailed'() :: #'payproc_RejectionTermTestFailed'{}.
+
+%% struct 'RejectionRoutingRule'
+-type 'RejectionRoutingRule'() :: #'payproc_RejectionRoutingRule'{}.
+
+%% struct 'RejectionUnexpected'
+-type 'RejectionUnexpected'() :: #'payproc_RejectionUnexpected'{}.
 
 %% struct 'RejectedProvider'
 -type 'RejectedProvider'() :: #'payproc_RejectedProvider'{}.
@@ -1566,9 +1617,6 @@
 
 %% struct 'InvalidObjectReference'
 -type 'InvalidObjectReference'() :: #'payproc_InvalidObjectReference'{}.
-
-%% exception 'Misconfiguration'
--type 'Misconfiguration'() :: #'payproc_Misconfiguration'{}.
 
 %% exception 'PartyNotFound'
 -type 'PartyNotFound'() :: #'payproc_PartyNotFound'{}.
@@ -2084,6 +2132,15 @@ structs() ->
         'InvoiceRepairComplex',
         'InvoiceRepairScenario',
         'InvoiceRepairParams',
+        'RejectionReason',
+        'RejectionMisconfiguration',
+        'RejectionPaymentsProvisionTerms',
+        'RejectionPaymentHoldsProvisionTerms',
+        'RejectionPaymentRefundsProvisionTerms',
+        'RejectionProvisionTermSet',
+        'RejectionTermTestFailed',
+        'RejectionRoutingRule',
+        'RejectionUnexpected',
         'RejectedProvider',
         'RejectedRoute',
         'RejectionContext',
@@ -2912,23 +2969,74 @@ struct_info('InvoiceRepairParams') ->
         {1, optional, bool, 'validate_transitions', true}
     ]};
 
+struct_info('RejectionReason') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionMisconfiguration'}}, 'misconfiguration', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionPaymentsProvisionTerms'}}, 'payments_provision_terms', undefined},
+        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionPaymentHoldsProvisionTerms'}}, 'payment_holds_provision_terms', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionPaymentRefundsProvisionTerms'}}, 'payment_refunds_provision_terms', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionProvisionTermSet'}}, 'provision_term_set', undefined},
+        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionTermTestFailed'}}, 'term_test_failed', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionRoutingRule'}}, 'routing_rule', undefined},
+        {20, optional, {struct, struct, {dmsl_payment_processing_thrift, 'RejectionUnexpected'}}, 'unexpected', undefined}
+    ]};
+
+struct_info('RejectionMisconfiguration') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionPaymentsProvisionTerms') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionPaymentHoldsProvisionTerms') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionPaymentRefundsProvisionTerms') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionProvisionTermSet') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionTermTestFailed') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionRoutingRule') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
+struct_info('RejectionUnexpected') ->
+    {struct, struct, [
+        {1, optional, string, 'details', undefined}
+    ]};
+
 struct_info('RejectedProvider') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider', undefined},
-        {2, required, string, 'reason', undefined}
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'RejectionReason'}}, 'reason', undefined}
     ]};
 
 struct_info('RejectedRoute') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-        {2, required, string, 'reason', undefined}
+        {2, required, {struct, union, {dmsl_payment_processing_thrift, 'RejectionReason'}}, 'reason', undefined}
     ]};
 
 struct_info('RejectionContext') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined},
-        {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'RejectedProvider'}}}, 'rejected_providers', undefined},
-        {3, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'RejectedRoute'}}}, 'rejected_routes', undefined}
+        {1, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'RejectedProvider'}}}, 'rejected_providers', []},
+        {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'RejectedRoute'}}}, 'rejected_routes', []}
     ]};
 
 struct_info('CollectedRoute') ->
@@ -3715,9 +3823,6 @@ struct_info('InvalidObjectReference') ->
         {1, optional, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'ref', undefined}
     ]};
 
-struct_info('Misconfiguration') ->
-    {struct, exception, []};
-
 struct_info('PartyNotFound') ->
     {struct, exception, []};
 
@@ -4235,6 +4340,30 @@ record_name('InvoiceRepairComplex') ->
 record_name('InvoiceRepairParams') ->
     'payproc_InvoiceRepairParams';
 
+record_name('RejectionMisconfiguration') ->
+    'payproc_RejectionMisconfiguration';
+
+record_name('RejectionPaymentsProvisionTerms') ->
+    'payproc_RejectionPaymentsProvisionTerms';
+
+record_name('RejectionPaymentHoldsProvisionTerms') ->
+    'payproc_RejectionPaymentHoldsProvisionTerms';
+
+record_name('RejectionPaymentRefundsProvisionTerms') ->
+    'payproc_RejectionPaymentRefundsProvisionTerms';
+
+record_name('RejectionProvisionTermSet') ->
+    'payproc_RejectionProvisionTermSet';
+
+record_name('RejectionTermTestFailed') ->
+    'payproc_RejectionTermTestFailed';
+
+record_name('RejectionRoutingRule') ->
+    'payproc_RejectionRoutingRule';
+
+record_name('RejectionUnexpected') ->
+    'payproc_RejectionUnexpected';
+
 record_name('RejectedProvider') ->
     'payproc_RejectedProvider';
 
@@ -4516,9 +4645,6 @@ record_name('ShopPayoutToolInvalid') ->
 
 record_name('InvalidObjectReference') ->
     'payproc_InvalidObjectReference';
-
-record_name('Misconfiguration') ->
-    'payproc_Misconfiguration';
 
 record_name('PartyNotFound') ->
     'payproc_PartyNotFound';
@@ -6154,8 +6280,7 @@ function_info('PartyManagement', 'ComputeProvider', reply_type) ->
 function_info('PartyManagement', 'ComputeProvider', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'Misconfiguration'}}, 'ex3', undefined}
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined}
     ]};
 function_info('PartyManagement', 'ComputeProviderTerminalTerms', params_type) ->
     {struct, struct, [
@@ -6171,8 +6296,7 @@ function_info('PartyManagement', 'ComputeProviderTerminalTerms', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'TerminalNotFound'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'Misconfiguration'}}, 'ex4', undefined}
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'TerminalNotFound'}}, 'ex3', undefined}
     ]};
 function_info('PartyManagement', 'CollectRoutes', params_type) ->
     {struct, struct, [
