@@ -866,16 +866,38 @@ struct InvoiceRepairParams {
     1: optional bool validate_transitions = true
 }
 
-// Exceptions
+/* Route collection */
+
+union RejectionReason {
+    1: RejectionMisconfiguration misconfiguration
+    2: RejectionPaymentsProvisionTerms payments_provision_terms
+    3: RejectionPaymentHoldsProvisionTerms payment_holds_provision_terms
+    4: RejectionPaymentRefundsProvisionTerms payment_refunds_provision_terms
+    5: RejectionProvisionTermSet provision_term_set
+    6: RejectionTermTestFailed term_test_failed
+    7: RejectionRoutingRule routing_rule
+
+    20: RejectionUnexpected unexpected
+}
+
+struct RejectionMisconfiguration { 1: optional string details }
+struct RejectionPaymentsProvisionTerms { 1: optional string details }
+struct RejectionPaymentHoldsProvisionTerms { 1: optional string details }
+struct RejectionPaymentRefundsProvisionTerms { 1: optional string details }
+struct RejectionProvisionTermSet { 1: optional string details }
+struct RejectionTermTestFailed { 1: optional string details }
+struct RejectionRoutingRule { 1: optional string details }
+
+struct RejectionUnexpected { 1: optional string details }
 
 struct RejectedProvider {
     1: required domain.ProviderRef provider,
-    2: required binary reason // or typed?
+    2: required RejectionReason reason
 }
 
 struct RejectedRoute {
     1: required domain.PaymentRoute route,
-    2: required binary reason // or typed?
+    2: required RejectionReason reason
 }
 
 struct RejectionContext {
@@ -907,6 +929,8 @@ struct PaymentPredestination {}
 struct RecurrentPaytoolPredestination {}
 struct RecurrentPaymentPredestination {}
 
+
+// Exceptions
 
 // forward-declared
 exception PartyNotFound {}
