@@ -32,6 +32,11 @@ struct StatPayment {
     18: optional domain.InvoiceCart cart
     19: optional domain.AdditionalTransactionInfo additional_transaction_info
     20: optional string external_id
+    21: required domain.CustomerID customer_id
+    22: required domain.ProviderRef provider_id
+    23: required domain.TerminalRef terminal_id
+    24: optional domain.FailureCode failure_code
+    25: optional domain.FailureReason failure_reason
 }
 
 union Payer {
@@ -351,6 +356,11 @@ struct StatRefund {
     11: optional string reason
     12: optional domain.InvoiceCart cart
     13: optional string external_id
+    14: required domain.CustomerID customer_id
+    15: required domain.ProviderRef provider_id
+    16: required domain.TerminalRef terminal_id
+    17: optional domain.FailureCode failure_code
+    18: optional domain.FailureReason failure_reason
 }
 
 union InvoicePaymentRefundStatus {
