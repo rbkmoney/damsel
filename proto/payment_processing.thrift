@@ -573,6 +573,7 @@ struct InvoicePaymentParams {
     5: optional string external_id
     6: optional domain.InvoicePaymentContext context
     7: optional base.Timestamp processing_deadline
+    8: optional RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 union PayerParams {
@@ -1625,6 +1626,7 @@ typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
     1: required DisposablePaymentResource payment_resource
+    2: optional RecurrentPaymentToolDesc rec_payment_tool_description
 }
 
 struct CustomerBinding {
@@ -1634,6 +1636,7 @@ struct CustomerBinding {
     4: required CustomerBindingStatus     status
     5: optional PartyRevision             party_revision
     6: optional domain.DataRevision       domain_revision
+    7: optional RecurrentPaymentToolDesc  rec_payment_tool_description
 }
 
 // Statuses
@@ -1747,7 +1750,9 @@ service CustomerManagement {
 /* Recurrent Payment Tool */
 
 // Types
-typedef domain.RecurrentPaymentToolID RecurrentPaymentToolID
+typedef domain.RecurrentPaymentToolID         RecurrentPaymentToolID
+typedef domain.RecurrentPaymentToolDesc       RecurrentPaymentToolDesc
+typedef domain.RecurrentPaymentToolResourceID RecurrentPaymentToolResourceID
 
 // Model
 struct RecurrentPaymentTool {
@@ -1762,15 +1767,21 @@ struct RecurrentPaymentTool {
     9:  optional domain.Token               rec_token
     10: optional domain.PaymentRoute        route
     12: optional domain.Cash                minimal_payment_cost
+    13: optional RecurrentPaymentToolDesc   rec_payment_tool_description
+    14: optional RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 struct RecurrentPaymentToolParams {
-    5: optional RecurrentPaymentToolID    id
-    1: required PartyID                   party_id
-    4: optional PartyRevision             party_revision
-    6: optional domain.DataRevision       domain_revision
-    2: required ShopID                    shop_id
-    3: required DisposablePaymentResource payment_resource
+    5:  optional RecurrentPaymentToolID    id
+    1:  required PartyID                   party_id
+    4:  optional PartyRevision             party_revision
+    6:  optional domain.DataRevision       domain_revision
+    2:  required ShopID                    shop_id
+    3:  required DisposablePaymentResource payment_resource
+    7:  optional domain.PaymentRoute       route
+    8:  optional domain.Token              rec_token
+    13: optional RecurrentPaymentToolDesc  rec_payment_tool_description
+    14: optional RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 // Statuses
@@ -1817,6 +1828,26 @@ union RecurrentPaymentToolChange {
     3: RecurrentPaymentToolHasAbandoned     rec_payment_tool_abandoned
     4: RecurrentPaymentToolHasFailed        rec_payment_tool_failed
     5: RecurrentPaymentToolSessionChange    rec_payment_tool_session_changed
+    8: RecurrentPaymentToolResourceUpdated  rec_payment_tool_resource_updated
+    9: RecurrentPaymentToolTokenUpdated     rec_payment_tool_token_updated
+   10: RecurrentPaymentToolDescUpdated      rec_payment_tool_description_updated
+   11: RecurrentPaymentToolRegistered       rec_payment_tool_registered
+}
+
+struct RecurrentPaymentToolResourceUpdated {
+    1: required DisposablePaymentResource payment_resource
+}
+
+struct RecurrentPaymentToolTokenUpdated {
+    1: required domain.Token rec_token
+}
+
+struct RecurrentPaymentToolDescUpdated {
+    1: required RecurrentPaymentToolDesc rec_payment_tool_description
+}
+
+struct RecurrentPaymentToolRegistered {
+    1: required RecurrentPaymentToolResourceID rec_payment_tool_resource_id
 }
 
 /*
@@ -1907,6 +1938,33 @@ service RecurrentPaymentTools {
             1: InvalidUser                  invalid_user
             2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
             3: EventNotFound                event_not_found
+        )
+
+    RecurrentPaymentTool UpdateResource (
+        1: RecurrentPaymentToolID    id
+        2: DisposablePaymentResource payment_resource
+    )
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
+
+    RecurrentPaymentTool UpdateToken (
+        1: RecurrentPaymentToolID id
+        2: domain.Token           rec_token
+    )
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
+        )
+
+    RecurrentPaymentTool UpdateDescription (
+        1: RecurrentPaymentToolID id
+        2: RecurrentPaymentToolDesc rec_payment_tool_description
+    )
+        throws (
+            1: InvalidUser                  invalid_user
+            2: RecurrentPaymentToolNotFound rec_payment_tool_not_found
         )
 }
 
@@ -2674,9 +2732,9 @@ service PartyManagement {
 
     /* RuleSet */
 
-    domain.PaymentRoutingRuleset ComputePaymentRoutingRuleset (
+    domain.RoutingRuleset ComputePaymentRoutingRuleset (
         1: UserInfo user,
-        2: domain.PaymentRoutingRulesetRef ruleset_ref,
+        2: domain.RoutingRulesetRef ruleset_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )
