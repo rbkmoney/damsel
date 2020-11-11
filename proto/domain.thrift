@@ -2508,6 +2508,8 @@ struct PaymentInstitution {
     12: optional string identity
     15: optional P2PInspectorSelector p2p_inspector
     16: optional PaymentRouting payment_routing
+    19: optional WithdrawalRouting withdrawal_routing
+    20: optional P2PTransferRouting p2p_transfer_routing
     17: optional ProviderSelector withdrawal_providers
     18: optional ProviderSelector p2p_providers
 
@@ -2559,6 +2561,66 @@ struct PaymentRoutingCandidate {
     3: required TerminalRef terminal
     4: optional i32 weight
     5: optional i32 priority = 1000
+}
+
+struct WithdrawalRouting {
+    1: required WithdrawalRoutingRulesetRef policies
+    2: required WithdrawalRoutingRulesetRef prohibitions
+}
+
+struct WithdrawalRoutingRulesetRef { 1: required ObjectID id }
+
+struct WithdrawalRoutingRuleset {
+    1: required string name
+    2: optional string description
+    3: required WithdrawalRoutingDecisions decisions
+}
+
+union WithdrawalRoutingDecisions {
+    1: list<WithdrawalRoutingDelegate> delegates
+    2: list<WithdrawalRoutingCandidate> candidates
+}
+
+struct WithdrawalRoutingDelegate {
+    1: optional string description
+    2: required Predicate allowed
+    3: required WithdrawalRoutingRulesetRef ruleset
+}
+
+struct WithdrawalRoutingCandidate {
+    1: optional string description
+    2: required Predicate allowed
+    3: required TerminalRef terminal
+}
+
+struct P2PTransferRouting {
+    1: required P2PTransferRoutingRulesetRef policies
+    2: required P2PTransferRoutingRulesetRef prohibitions
+}
+
+struct P2PTransferRoutingRulesetRef { 1: required ObjectID id }
+
+struct P2PTransferRoutingRuleset {
+    1: required string name
+    2: optional string description
+    3: required P2PTransferRoutingDecisions decisions
+}
+
+union P2PRoutingDecisions {
+    1: list<P2PTransferRoutingDelegate> delegates
+    2: list<P2PTransferRoutingCandidate> candidates
+}
+
+struct P2PTransferRoutingDelegate {
+    1: optional string description
+    2: required Predicate allowed
+    3: required P2PTransferRoutingRulesetRef ruleset
+}
+
+struct P2PTransferRoutingCandidate {
+    1: optional string description
+    2: required Predicate allowed
+    3: required TerminalRef terminal
 }
 
 /* legacy */
@@ -2732,6 +2794,16 @@ struct PaymentRoutingRulesObject {
     2: required PaymentRoutingRuleset data
 }
 
+struct WithdrawalRoutingRulesObject {
+    1: required WithdrawalRoutingRulesetRef ref
+    2: required WithdrawalRoutingRuleset data
+}
+
+struct P2PTransferRoutingRulesObject {
+    1: required P2PTransferRoutingRulesetRef ref
+    2: required P2PTransferRoutingRuleset data
+}
+
 struct CriterionObject {
     1: required CriterionRef ref
     2: required Criterion data
@@ -2739,72 +2811,76 @@ struct CriterionObject {
 
 union Reference {
 
-    1  : CategoryRef             category
-    2  : CurrencyRef             currency
-    19 : BusinessScheduleRef     business_schedule
-    20 : CalendarRef             calendar
-    3  : PaymentMethodRef        payment_method
-    21 : PayoutMethodRef         payout_method
-    5  : BankRef                 bank
-    6  : ContractTemplateRef     contract_template
-    17 : TermSetHierarchyRef     term_set_hierarchy
-    18 : PaymentInstitutionRef   payment_institution
-    7  : ProviderRef             provider
-    8  : TerminalRef             terminal
-    15 : InspectorRef            inspector
-    25 : P2PInspectorRef         p2p_inspector
-    14 : SystemAccountSetRef     system_account_set
-    16 : ExternalAccountSetRef   external_account_set
-    9  : ProxyRef                proxy
-    11 : GlobalsRef              globals
-    22 : WithdrawalProviderRef   withdrawal_provider
-    23 : CashRegisterProviderRef cash_register_provider
-    24 : P2PProviderRef          p2p_provider
-    26 : PaymentRoutingRulesetRef payment_routing_rules
-    27 : WithdrawalTerminalRef    withdrawal_terminal
-    28 : BankCardCategoryRef      bank_card_category
-    29 : CriterionRef             criterion
+    1  : CategoryRef                    category
+    2  : CurrencyRef                    currency
+    19 : BusinessScheduleRef            business_schedule
+    20 : CalendarRef                    calendar
+    3  : PaymentMethodRef               payment_method
+    21 : PayoutMethodRef                payout_method
+    5  : BankRef                        bank
+    6  : ContractTemplateRef            contract_template
+    17 : TermSetHierarchyRef            term_set_hierarchy
+    18 : PaymentInstitutionRef          payment_institution
+    7  : ProviderRef                    provider
+    8  : TerminalRef                    terminal
+    15 : InspectorRef                   inspector
+    25 : P2PInspectorRef                p2p_inspector
+    14 : SystemAccountSetRef            system_account_set
+    16 : ExternalAccountSetRef          external_account_set
+    9  : ProxyRef                       proxy
+    11 : GlobalsRef                     globals
+    22 : WithdrawalProviderRef          withdrawal_provider
+    23 : CashRegisterProviderRef        cash_register_provider
+    24 : P2PProviderRef                 p2p_provider
+    26 : PaymentRoutingRulesetRef       payment_routing_rules
+    30 : WithdrawalRoutingRulesetRef    withdrawal_routing_rules
+    31 : P2PTransferRoutingRulesetRef   p2p_transfer_routing_rules
+    27 : WithdrawalTerminalRef          withdrawal_terminal
+    28 : BankCardCategoryRef            bank_card_category
+    29 : CriterionRef                   criterion
 
-    12 : DummyRef                dummy
-    13 : DummyLinkRef            dummy_link
+    12 : DummyRef                       dummy
+    13 : DummyLinkRef                   dummy_link
 
     /* legacy */
-    10 : PartyPrototypeRef       party_prototype
+    10 : PartyPrototypeRef              party_prototype
 }
 
 union DomainObject {
 
-    1  : CategoryObject             category
-    2  : CurrencyObject             currency
-    19 : BusinessScheduleObject     business_schedule
-    20 : CalendarObject             calendar
-    3  : PaymentMethodObject        payment_method
-    21 : PayoutMethodObject         payout_method
-    5  : BankObject                 bank
-    6  : ContractTemplateObject     contract_template
-    17 : TermSetHierarchyObject     term_set_hierarchy
-    18 : PaymentInstitutionObject   payment_institution
-    7  : ProviderObject             provider
-    8  : TerminalObject             terminal
-    15 : InspectorObject            inspector
-    25 : P2PInspectorObject         p2p_inspector
-    14 : SystemAccountSetObject     system_account_set
-    16 : ExternalAccountSetObject   external_account_set
-    9  : ProxyObject                proxy
-    11 : GlobalsObject              globals
-    22 : WithdrawalProviderObject   withdrawal_provider
-    23 : CashRegisterProviderObject cash_register_provider
-    24 : P2PProviderObject          p2p_provider
-    26 : PaymentRoutingRulesObject  payment_routing_rules
-    27 : WithdrawalTerminalObject   withdrawal_terminal
-    28 : BankCardCategoryObject     bank_card_category
-    29 : CriterionObject            criterion
+    1  : CategoryObject                 category
+    2  : CurrencyObject                 currency
+    19 : BusinessScheduleObject         business_schedule
+    20 : CalendarObject                 calendar
+    3  : PaymentMethodObject            payment_method
+    21 : PayoutMethodObject             payout_method
+    5  : BankObject                     bank
+    6  : ContractTemplateObject         contract_template
+    17 : TermSetHierarchyObject         term_set_hierarchy
+    18 : PaymentInstitutionObject       payment_institution
+    7  : ProviderObject                 provider
+    8  : TerminalObject                 terminal
+    15 : InspectorObject                inspector
+    25 : P2PInspectorObject             p2p_inspector
+    14 : SystemAccountSetObject         system_account_set
+    16 : ExternalAccountSetObject       external_account_set
+    9  : ProxyObject                    proxy
+    11 : GlobalsObject                  globals
+    22 : WithdrawalProviderObject       withdrawal_provider
+    23 : CashRegisterProviderObject     cash_register_provider
+    24 : P2PProviderObject              p2p_provider
+    26 : PaymentRoutingRulesObject      payment_routing_rules
+    30 : WithdrawalRoutingRulesObject   withdrawal_routing_rules
+    31 : P2PTransferRoutingRulesObject  p2p_transfer_routing_rules
+    27 : WithdrawalTerminalObject       withdrawal_terminal
+    28 : BankCardCategoryObject         bank_card_category
+    29 : CriterionObject                criterion
 
-    12 : DummyObject                dummy
-    13 : DummyLinkObject            dummy_link
+    12 : DummyObject                    dummy
+    13 : DummyLinkObject                dummy_link
 
     /* legacy */
-    10 : PartyPrototypeObject       party_prototype
+    10 : PartyPrototypeObject           party_prototype
 }
 
 /* Domain */
