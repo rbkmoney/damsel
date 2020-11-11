@@ -174,6 +174,7 @@ enum TerminalPaymentProvider {
     alipay
     zotapay
     qps
+    uzcard
 }
 
 typedef string DigitalWalletID
