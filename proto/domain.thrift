@@ -2606,7 +2606,7 @@ struct P2PTransferRoutingRuleset {
     3: required P2PTransferRoutingDecisions decisions
 }
 
-union P2PRoutingDecisions {
+union P2PTransferRoutingDecisions {
     1: list<P2PTransferRoutingDelegate> delegates
     2: list<P2PTransferRoutingCandidate> candidates
 }
