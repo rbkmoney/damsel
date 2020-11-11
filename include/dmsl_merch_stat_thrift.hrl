@@ -27,7 +27,9 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'additional_transaction_info' :: dmsl_domain_thrift:'AdditionalTransactionInfo'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'provider_id' :: dmsl_domain_thrift:'ProviderRef'() | undefined,
+    'terminal_id' :: dmsl_domain_thrift:'TerminalRef'() | undefined
 }).
 
 %% struct 'RecurrentParentPayment'

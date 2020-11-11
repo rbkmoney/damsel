@@ -713,7 +713,9 @@ struct_info('StatPayment') ->
         {17, required, i64, 'domain_revision', undefined},
         {18, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
         {19, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_transaction_info', undefined},
-        {20, optional, string, 'external_id', undefined}
+        {20, optional, string, 'external_id', undefined},
+        {21, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_id', undefined},
+        {22, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_id', undefined}
     ]};
 
 struct_info('Payer') ->
