@@ -2674,7 +2674,19 @@ service PartyManagement {
 
     /* RuleSet */
 
+    // Deprecated, will be replaced by ComputeRoutingRuleset
     domain.RoutingRuleset ComputePaymentRoutingRuleset (
+        1: UserInfo user,
+        2: domain.RoutingRulesetRef ruleset_ref,
+        3: domain.DataRevision domain_revision,
+        4: Varset varset
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: RuleSetNotFound ex2
+        )
+
+    domain.RoutingRuleset ComputeRoutingRuleset (
         1: UserInfo user,
         2: domain.RoutingRulesetRef ruleset_ref,
         3: domain.DataRevision domain_revision,
