@@ -1574,7 +1574,9 @@
     'wallet_system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
     'identity' :: binary() | undefined,
     'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined,
-    'payment_routing' :: dmsl_domain_thrift:'PaymentRouting'() | undefined,
+    'payment_routing_rules' :: dmsl_domain_thrift:'RoutingRules'() | undefined,
+    'withdrawal_routing_rules' :: dmsl_domain_thrift:'RoutingRules'() | undefined,
+    'p2p_transfer_routing_rules' :: dmsl_domain_thrift:'RoutingRules'() | undefined,
     'withdrawal_providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined,
     'p2p_providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined,
     'withdrawal_providers_legacy' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
@@ -1588,33 +1590,33 @@
     'live' :: dmsl_domain_thrift:'PaymentInstitutionRef'()
 }).
 
-%% struct 'PaymentRouting'
--record('domain_PaymentRouting', {
-    'policies' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
-    'prohibitions' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'()
+%% struct 'RoutingRules'
+-record('domain_RoutingRules', {
+    'policies' :: dmsl_domain_thrift:'RoutingRulesetRef'(),
+    'prohibitions' :: dmsl_domain_thrift:'RoutingRulesetRef'()
 }).
 
-%% struct 'PaymentRoutingRulesetRef'
--record('domain_PaymentRoutingRulesetRef', {
+%% struct 'RoutingRulesetRef'
+-record('domain_RoutingRulesetRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
 }).
 
-%% struct 'PaymentRoutingRuleset'
--record('domain_PaymentRoutingRuleset', {
+%% struct 'RoutingRuleset'
+-record('domain_RoutingRuleset', {
     'name' :: binary(),
     'description' :: binary() | undefined,
-    'decisions' :: dmsl_domain_thrift:'PaymentRoutingDecisions'()
+    'decisions' :: dmsl_domain_thrift:'RoutingDecisions'()
 }).
 
-%% struct 'PaymentRoutingDelegate'
--record('domain_PaymentRoutingDelegate', {
+%% struct 'RoutingDelegate'
+-record('domain_RoutingDelegate', {
     'description' :: binary() | undefined,
     'allowed' :: dmsl_domain_thrift:'Predicate'(),
-    'ruleset' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'()
+    'ruleset' :: dmsl_domain_thrift:'RoutingRulesetRef'()
 }).
 
-%% struct 'PaymentRoutingCandidate'
--record('domain_PaymentRoutingCandidate', {
+%% struct 'RoutingCandidate'
+-record('domain_RoutingCandidate', {
     'description' :: binary() | undefined,
     'allowed' :: dmsl_domain_thrift:'Predicate'(),
     'terminal' :: dmsl_domain_thrift:'TerminalRef'(),
@@ -1814,10 +1816,10 @@
     'data' :: dmsl_domain_thrift:'Globals'()
 }).
 
-%% struct 'PaymentRoutingRulesObject'
--record('domain_PaymentRoutingRulesObject', {
-    'ref' :: dmsl_domain_thrift:'PaymentRoutingRulesetRef'(),
-    'data' :: dmsl_domain_thrift:'PaymentRoutingRuleset'()
+%% struct 'RoutingRulesObject'
+-record('domain_RoutingRulesObject', {
+    'ref' :: dmsl_domain_thrift:'RoutingRulesetRef'(),
+    'data' :: dmsl_domain_thrift:'RoutingRuleset'()
 }).
 
 %% struct 'CriterionObject'

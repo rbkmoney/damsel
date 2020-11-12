@@ -1856,6 +1856,7 @@
     'ComputeProviderTerminalTerms' |
     'ComputeGlobals' |
     'ComputePaymentRoutingRuleset' |
+    'ComputeRoutingRuleset' |
     'ComputePaymentInstitutionTerms' |
     'ComputePaymentInstitution' |
     'ComputePayoutCashFlow'.
@@ -4699,6 +4700,7 @@ functions('PartyManagement') ->
         'ComputeProviderTerminalTerms',
         'ComputeGlobals',
         'ComputePaymentRoutingRuleset',
+        'ComputeRoutingRuleset',
         'ComputePaymentInstitutionTerms',
         'ComputePaymentInstitution',
         'ComputePayoutCashFlow'
@@ -6044,13 +6046,27 @@ function_info('PartyManagement', 'ComputeGlobals', exceptions) ->
 function_info('PartyManagement', 'ComputePaymentRoutingRuleset', params_type) ->
     {struct, struct, [
         {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRulesetRef'}}, 'ruleset_ref', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'RoutingRulesetRef'}}, 'ruleset_ref', undefined},
         {3, undefined, i64, 'domain_revision', undefined},
         {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
     ]};
 function_info('PartyManagement', 'ComputePaymentRoutingRuleset', reply_type) ->
-    {struct, struct, {dmsl_domain_thrift, 'PaymentRoutingRuleset'}};
+    {struct, struct, {dmsl_domain_thrift, 'RoutingRuleset'}};
 function_info('PartyManagement', 'ComputePaymentRoutingRuleset', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RuleSetNotFound'}}, 'ex2', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeRoutingRuleset', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'RoutingRulesetRef'}}, 'ruleset_ref', undefined},
+        {3, undefined, i64, 'domain_revision', undefined},
+        {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+    ]};
+function_info('PartyManagement', 'ComputeRoutingRuleset', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'RoutingRuleset'}};
+function_info('PartyManagement', 'ComputeRoutingRuleset', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'RuleSetNotFound'}}, 'ex2', undefined}
