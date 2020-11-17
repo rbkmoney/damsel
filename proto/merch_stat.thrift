@@ -32,6 +32,8 @@ struct StatPayment {
     18: optional domain.InvoiceCart cart
     19: optional domain.AdditionalTransactionInfo additional_transaction_info
     20: optional string external_id
+    21: optional domain.ProviderRef provider_id
+    22: optional domain.TerminalRef terminal_id
 }
 
 union Payer {
@@ -172,6 +174,7 @@ enum TerminalPaymentProvider {
     alipay
     zotapay
     qps
+    uzcard
 }
 
 typedef string DigitalWalletID
