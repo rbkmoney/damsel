@@ -33,7 +33,8 @@ struct UnwrappedPaymentTool {
     1: required CardInfo card_info
     2: required CardPaymentData payment_data
     3: required PaymentDetails details
-    4: optional base.Timestamp exp_date
+    /** Время до окончания действия токена от провайдера токенизации */
+    4: optional base.Timestamp valid_until
 }
 
 union PaymentDetails {
