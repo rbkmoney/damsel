@@ -302,7 +302,8 @@ struct_info('UnwrappedPaymentTool') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'CardInfo'}}, 'card_info', undefined},
         {2, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'CardPaymentData'}}, 'payment_data', undefined},
-        {3, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentDetails'}}, 'details', undefined}
+        {3, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentDetails'}}, 'details', undefined},
+        {4, optional, string, 'valid_until', undefined}
     ]};
 
 struct_info('PaymentDetails') ->

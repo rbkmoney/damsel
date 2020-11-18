@@ -33,7 +33,8 @@
 -record('paytoolprv_UnwrappedPaymentTool', {
     'card_info' :: dmsl_payment_tool_provider_thrift:'CardInfo'(),
     'payment_data' :: dmsl_payment_tool_provider_thrift:'CardPaymentData'(),
-    'details' :: dmsl_payment_tool_provider_thrift:'PaymentDetails'()
+    'details' :: dmsl_payment_tool_provider_thrift:'PaymentDetails'(),
+    'valid_until' :: dmsl_base_thrift:'Timestamp'() | undefined
 }).
 
 %% struct 'ApplePayDetails'
