@@ -1488,6 +1488,17 @@
     'predicate' :: dmsl_domain_thrift:'Predicate'()
 }).
 
+%% struct 'DocumentTypeRef'
+-record('domain_DocumentTypeRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'DocumentType'
+-record('domain_DocumentType', {
+    'name' :: binary(),
+    'description' :: binary() | undefined
+}).
+
 %% struct 'ProxyRef'
 -record('domain_ProxyRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()
@@ -1826,6 +1837,12 @@
 -record('domain_CriterionObject', {
     'ref' :: dmsl_domain_thrift:'CriterionRef'(),
     'data' :: dmsl_domain_thrift:'Criterion'()
+}).
+
+%% struct 'DocumentTypeObject'
+-record('domain_DocumentTypeObject', {
+    'ref' :: dmsl_domain_thrift:'DocumentTypeRef'(),
+    'data' :: dmsl_domain_thrift:'DocumentType'()
 }).
 
 -endif.

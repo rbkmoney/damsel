@@ -196,6 +196,7 @@ struct DocumentChanged {}
 struct DocumentModificationUnit {
     1: required DocumentID id
     2: required DocumentModification modification
+    3: optional domain.DocumentTypeRef type
 }
 
 union FileModification {

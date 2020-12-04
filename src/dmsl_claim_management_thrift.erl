@@ -969,7 +969,8 @@ struct_info('DocumentChanged') ->
 struct_info('DocumentModificationUnit') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
-        {2, required, {struct, union, {dmsl_claim_management_thrift, 'DocumentModification'}}, 'modification', undefined}
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'DocumentModification'}}, 'modification', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeRef'}}, 'type', undefined}
     ]};
 
 struct_info('FileModification') ->

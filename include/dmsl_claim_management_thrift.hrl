@@ -137,7 +137,8 @@
 %% struct 'DocumentModificationUnit'
 -record('claim_management_DocumentModificationUnit', {
     'id' :: dmsl_claim_management_thrift:'DocumentID'(),
-    'modification' :: dmsl_claim_management_thrift:'DocumentModification'()
+    'modification' :: dmsl_claim_management_thrift:'DocumentModification'(),
+    'type' :: dmsl_domain_thrift:'DocumentTypeRef'() | undefined
 }).
 
 %% struct 'FileCreated'

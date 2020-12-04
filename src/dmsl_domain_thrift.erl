@@ -403,6 +403,8 @@
     'PartyConditionDefinition'/0,
     'CriterionRef'/0,
     'Criterion'/0,
+    'DocumentTypeRef'/0,
+    'DocumentType'/0,
     'ProxyRef'/0,
     'ProxyDefinition'/0,
     'Proxy'/0,
@@ -461,6 +463,7 @@
     'GlobalsObject'/0,
     'RoutingRulesObject'/0,
     'CriterionObject'/0,
+    'DocumentTypeObject'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -1300,6 +1303,8 @@
     'PartyConditionDefinition' |
     'CriterionRef' |
     'Criterion' |
+    'DocumentTypeRef' |
+    'DocumentType' |
     'ProxyRef' |
     'ProxyDefinition' |
     'Proxy' |
@@ -1358,6 +1363,7 @@
     'GlobalsObject' |
     'RoutingRulesObject' |
     'CriterionObject' |
+    'DocumentTypeObject' |
     'Reference' |
     'DomainObject'.
 
@@ -2427,6 +2433,12 @@
 %% struct 'Criterion'
 -type 'Criterion'() :: #'domain_Criterion'{}.
 
+%% struct 'DocumentTypeRef'
+-type 'DocumentTypeRef'() :: #'domain_DocumentTypeRef'{}.
+
+%% struct 'DocumentType'
+-type 'DocumentType'() :: #'domain_DocumentType'{}.
+
 %% struct 'ProxyRef'
 -type 'ProxyRef'() :: #'domain_ProxyRef'{}.
 
@@ -2607,6 +2619,9 @@
 %% struct 'CriterionObject'
 -type 'CriterionObject'() :: #'domain_CriterionObject'{}.
 
+%% struct 'DocumentTypeObject'
+-type 'DocumentTypeObject'() :: #'domain_DocumentTypeObject'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -2636,6 +2651,7 @@
     {'withdrawal_terminal', 'WithdrawalTerminalRef'()} |
     {'bank_card_category', 'BankCardCategoryRef'()} |
     {'criterion', 'CriterionRef'()} |
+    {'document_type', 'DocumentTypeRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2669,6 +2685,7 @@
     {'withdrawal_terminal', 'WithdrawalTerminalObject'()} |
     {'bank_card_category', 'BankCardCategoryObject'()} |
     {'criterion', 'CriterionObject'()} |
+    {'document_type', 'DocumentTypeObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -3113,6 +3130,8 @@ structs() ->
         'PartyConditionDefinition',
         'CriterionRef',
         'Criterion',
+        'DocumentTypeRef',
+        'DocumentType',
         'ProxyRef',
         'ProxyDefinition',
         'Proxy',
@@ -3171,6 +3190,7 @@ structs() ->
         'GlobalsObject',
         'RoutingRulesObject',
         'CriterionObject',
+        'DocumentTypeObject',
         'Reference',
         'DomainObject'
     ].
@@ -5696,6 +5716,17 @@ struct_info('Criterion') ->
         {3, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'predicate', undefined}
     ]};
 
+struct_info('DocumentTypeRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('DocumentType') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
+    ]};
+
 struct_info('ProxyRef') ->
     {struct, struct, [
         {1, required, i32, 'id', undefined}
@@ -6054,6 +6085,12 @@ struct_info('CriterionObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Criterion'}}, 'data', undefined}
     ]};
 
+struct_info('DocumentTypeObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'DocumentType'}}, 'data', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -6083,6 +6120,7 @@ struct_info('Reference') ->
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}, 'withdrawal_terminal', undefined},
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'bank_card_category', undefined},
         {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionRef'}}, 'criterion', undefined},
+        {32, optional, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeRef'}}, 'document_type', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -6117,6 +6155,7 @@ struct_info('DomainObject') ->
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalObject'}}, 'withdrawal_terminal', undefined},
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryObject'}}, 'bank_card_category', undefined},
         {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionObject'}}, 'criterion', undefined},
+        {32, optional, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeObject'}}, 'document_type', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -6810,6 +6849,12 @@ record_name('CriterionRef') ->
 record_name('Criterion') ->
     'domain_Criterion';
 
+record_name('DocumentTypeRef') ->
+    'domain_DocumentTypeRef';
+
+record_name('DocumentType') ->
+    'domain_DocumentType';
+
 record_name('ProxyRef') ->
     'domain_ProxyRef';
 
@@ -6974,6 +7019,9 @@ record_name('RoutingRulesObject') ->
 
 record_name('CriterionObject') ->
     'domain_CriterionObject';
+
+record_name('DocumentTypeObject') ->
+    'domain_DocumentTypeObject';
 
 record_name(_) -> error(badarg).
 
