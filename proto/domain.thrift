@@ -2422,6 +2422,13 @@ struct Criterion {
     3: required Predicate predicate
 }
 
+struct DocumentTypeRef { 1: required ObjectID id }
+
+struct DocumentType {
+    1: required string name
+    2: optional string description
+}
+
 /* Proxies */
 
 typedef base.StringMap ProxyOptions
@@ -2740,6 +2747,11 @@ struct CriterionObject {
     2: required Criterion data
 }
 
+struct DocumentTypeObject {
+    1: required DocumentTypeRef ref
+    2: required DocumentType data
+}
+
 union Reference {
 
     1  : CategoryRef                category
@@ -2769,6 +2781,7 @@ union Reference {
     27 : WithdrawalTerminalRef      withdrawal_terminal
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
+    32 : DocumentTypeRef            document_type
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2806,6 +2819,7 @@ union DomainObject {
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
+    32 : DocumentTypeObject         document_type
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
