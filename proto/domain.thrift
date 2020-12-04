@@ -94,6 +94,7 @@ struct AdditionalTransactionInfo {
     10: optional string xid // 3D Secure transaction identifier
     11: optional string cavv_algorithm // Indicates algorithm used to generate CAVV
     12: optional ThreeDsVerification three_ds_verification
+    13: optional string short_payment_id // ID for terminal payments
 }
 
 /**
@@ -181,7 +182,6 @@ struct InvoicePayment {
     18: optional bool make_recurrent
     19: optional string external_id
     20: optional base.Timestamp processing_deadline
-    21: optional string short_payment_id
 }
 
 struct InvoicePaymentPending   {}
@@ -1564,6 +1564,7 @@ enum BankCardPaymentSystem {
     elo
     rupay
     ebt
+    dummy  // Несуществующая платежная система для использования в непродовом окружении
 }
 
 /** Тип платежного токена **/
@@ -1693,6 +1694,7 @@ enum TerminalPaymentProvider {
     alipay
     zotapay
     qps
+    uzcard
 }
 
 typedef string DigitalWalletID
@@ -2420,6 +2422,13 @@ struct Criterion {
     3: required Predicate predicate
 }
 
+struct DocumentTypeRef { 1: required ObjectID id }
+
+struct DocumentType {
+    1: required string name
+    2: optional string description
+}
+
 /* Proxies */
 
 typedef base.StringMap ProxyOptions
@@ -2506,7 +2515,9 @@ struct PaymentInstitution {
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
     15: optional P2PInspectorSelector p2p_inspector
-    16: optional PaymentRouting payment_routing
+    16: optional RoutingRules payment_routing_rules
+    19: optional RoutingRules withdrawal_routing_rules
+    20: optional RoutingRules p2p_transfer_routing_rules
     17: optional ProviderSelector withdrawal_providers
     18: optional ProviderSelector p2p_providers
 
@@ -2528,31 +2539,31 @@ struct ContractPaymentInstitutionDefaults {
 
 /* Routing rule sets */
 
-struct PaymentRouting {
-    1: required PaymentRoutingRulesetRef policies
-    2: required PaymentRoutingRulesetRef prohibitions
+struct RoutingRules {
+    1: required RoutingRulesetRef policies
+    2: required RoutingRulesetRef prohibitions
 }
 
-struct PaymentRoutingRulesetRef { 1: required ObjectID id }
+struct RoutingRulesetRef { 1: required ObjectID id }
 
-struct PaymentRoutingRuleset {
+struct RoutingRuleset {
     1: required string name
     2: optional string description
-    3: required PaymentRoutingDecisions decisions
+    3: required RoutingDecisions decisions
 }
 
-union PaymentRoutingDecisions {
-    1: list<PaymentRoutingDelegate> delegates
-    2: list<PaymentRoutingCandidate> candidates
+union RoutingDecisions {
+    1: list<RoutingDelegate> delegates
+    2: list<RoutingCandidate> candidates
 }
 
-struct PaymentRoutingDelegate {
+struct RoutingDelegate {
     1: optional string description
     2: required Predicate allowed
-    3: required PaymentRoutingRulesetRef ruleset
+    3: required RoutingRulesetRef ruleset
 }
 
-struct PaymentRoutingCandidate {
+struct RoutingCandidate {
     1: optional string description
     2: required Predicate allowed
     3: required TerminalRef terminal
@@ -2726,9 +2737,9 @@ struct GlobalsObject {
     2: required Globals data
 }
 
-struct PaymentRoutingRulesObject {
-    1: required PaymentRoutingRulesetRef ref
-    2: required PaymentRoutingRuleset data
+struct RoutingRulesObject {
+    1: required RoutingRulesetRef ref
+    2: required RoutingRuleset data
 }
 
 struct CriterionObject {
@@ -2736,39 +2747,47 @@ struct CriterionObject {
     2: required Criterion data
 }
 
+struct DocumentTypeObject {
+    1: required DocumentTypeRef ref
+    2: required DocumentType data
+}
+
 union Reference {
 
-    1  : CategoryRef             category
-    2  : CurrencyRef             currency
-    19 : BusinessScheduleRef     business_schedule
-    20 : CalendarRef             calendar
-    3  : PaymentMethodRef        payment_method
-    21 : PayoutMethodRef         payout_method
-    5  : BankRef                 bank
-    6  : ContractTemplateRef     contract_template
-    17 : TermSetHierarchyRef     term_set_hierarchy
-    18 : PaymentInstitutionRef   payment_institution
-    7  : ProviderRef             provider
-    8  : TerminalRef             terminal
-    15 : InspectorRef            inspector
-    25 : P2PInspectorRef         p2p_inspector
-    14 : SystemAccountSetRef     system_account_set
-    16 : ExternalAccountSetRef   external_account_set
-    9  : ProxyRef                proxy
-    11 : GlobalsRef              globals
-    22 : WithdrawalProviderRef   withdrawal_provider
-    23 : CashRegisterProviderRef cash_register_provider
-    24 : P2PProviderRef          p2p_provider
-    26 : PaymentRoutingRulesetRef payment_routing_rules
-    27 : WithdrawalTerminalRef    withdrawal_terminal
-    28 : BankCardCategoryRef      bank_card_category
-    29 : CriterionRef             criterion
+    1  : CategoryRef                category
+    2  : CurrencyRef                currency
+    19 : BusinessScheduleRef        business_schedule
+    20 : CalendarRef                calendar
+    3  : PaymentMethodRef           payment_method
+    21 : PayoutMethodRef            payout_method
+    5  : BankRef                    bank
+    6  : ContractTemplateRef        contract_template
+    17 : TermSetHierarchyRef        term_set_hierarchy
+    18 : PaymentInstitutionRef      payment_institution
+    7  : ProviderRef                provider
+    8  : TerminalRef                terminal
+    15 : InspectorRef               inspector
+    25 : P2PInspectorRef            p2p_inspector
+    14 : SystemAccountSetRef        system_account_set
+    16 : ExternalAccountSetRef      external_account_set
+    9  : ProxyRef                   proxy
+    11 : GlobalsRef                 globals
+    22 : WithdrawalProviderRef      withdrawal_provider
+    23 : CashRegisterProviderRef    cash_register_provider
+    24 : P2PProviderRef             p2p_provider
+    26 : RoutingRulesetRef          payment_routing_rules
+    30 : RoutingRulesetRef          withdrawal_routing_rules
+    31 : RoutingRulesetRef          p2p_transfer_routing_rules
+    27 : WithdrawalTerminalRef      withdrawal_terminal
+    28 : BankCardCategoryRef        bank_card_category
+    29 : CriterionRef               criterion
+    32 : DocumentTypeRef            document_type
 
-    12 : DummyRef                dummy
-    13 : DummyLinkRef            dummy_link
+    12 : DummyRef                   dummy
+    13 : DummyLinkRef               dummy_link
 
     /* legacy */
-    10 : PartyPrototypeRef       party_prototype
+    10 : PartyPrototypeRef          party_prototype
 }
 
 union DomainObject {
@@ -2794,10 +2813,13 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
-    26 : PaymentRoutingRulesObject  payment_routing_rules
+    26 : RoutingRulesObject         payment_routing_rules
+    30 : RoutingRulesObject         withdrawal_routing_rules
+    31 : RoutingRulesObject         p2p_transfer_routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
+    32 : DocumentTypeObject         document_type
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
