@@ -923,7 +923,8 @@
 -type 'BankCardTokenProvider'() ::
     'applepay' |
     'googlepay' |
-    'samsungpay'.
+    'samsungpay' |
+    'yandexpay'.
 
 %% enum 'TokenizationMethod'
 -type 'TokenizationMethod'() ::
@@ -3689,7 +3690,8 @@ enum_info('BankCardTokenProvider') ->
     {enum, [
         {'applepay', 0},
         {'googlepay', 1},
-        {'samsungpay', 2}
+        {'samsungpay', 2},
+        {'yandexpay', 3}
     ]};
 
 enum_info('TokenizationMethod') ->
