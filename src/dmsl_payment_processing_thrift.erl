@@ -2711,6 +2711,7 @@ struct_info('InvoicePayment') ->
         {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
         {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
         {8, optional, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'last_transaction_info', undefined},
         {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
     ]};
 

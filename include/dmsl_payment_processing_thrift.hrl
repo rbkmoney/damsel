@@ -355,6 +355,7 @@
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
     'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined,
+    'last_transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
 }).
 
