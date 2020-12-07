@@ -2777,12 +2777,10 @@ union Reference {
     23 : CashRegisterProviderRef    cash_register_provider
     24 : P2PProviderRef             p2p_provider
     26 : RoutingRulesetRef          payment_routing_rules
-    30 : RoutingRulesetRef          withdrawal_routing_rules
-    31 : RoutingRulesetRef          p2p_transfer_routing_rules
     27 : WithdrawalTerminalRef      withdrawal_terminal
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
-    32 : DocumentTypeRef            document_type
+    30 : DocumentTypeRef            document_type
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2815,12 +2813,10 @@ union DomainObject {
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
     26 : RoutingRulesObject         payment_routing_rules
-    30 : RoutingRulesObject         withdrawal_routing_rules
-    31 : RoutingRulesObject         p2p_transfer_routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
-    32 : DocumentTypeObject         document_type
+    30 : DocumentTypeObject         document_type
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
