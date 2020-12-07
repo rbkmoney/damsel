@@ -29,6 +29,12 @@
     'payment_token' :: dmsl_base_thrift:'Content'()
 }).
 
+%% struct 'YandexPayRequest'
+-record('paytoolprv_YandexPayRequest', {
+    'gateway_merchant_id' :: binary(),
+    'payment_token' :: dmsl_base_thrift:'Content'()
+}).
+
 %% struct 'UnwrappedPaymentTool'
 -record('paytoolprv_UnwrappedPaymentTool', {
     'card_info' :: dmsl_payment_tool_provider_thrift:'CardInfo'(),
@@ -52,6 +58,12 @@
 
 %% struct 'GooglePayDetails'
 -record('paytoolprv_GooglePayDetails', {
+    'message_id' :: binary(),
+    'message_expiration' :: dmsl_base_thrift:'Timestamp'()
+}).
+
+%% struct 'YandexPayDetails'
+-record('paytoolprv_YandexPayDetails', {
     'message_id' :: binary(),
     'message_expiration' :: dmsl_base_thrift:'Timestamp'()
 }).

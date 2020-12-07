@@ -40,11 +40,13 @@
     'ApplePayRequest'/0,
     'SamsungPayRequest'/0,
     'GooglePayRequest'/0,
+    'YandexPayRequest'/0,
     'UnwrappedPaymentTool'/0,
     'PaymentDetails'/0,
     'ApplePayDetails'/0,
     'SamsungPayDetails'/0,
     'GooglePayDetails'/0,
+    'YandexPayDetails'/0,
     'CardInfo'/0,
     'CardPaymentData'/0,
     'TokenizedCard'/0,
@@ -85,11 +87,13 @@
     'ApplePayRequest' |
     'SamsungPayRequest' |
     'GooglePayRequest' |
+    'YandexPayRequest' |
     'UnwrappedPaymentTool' |
     'PaymentDetails' |
     'ApplePayDetails' |
     'SamsungPayDetails' |
     'GooglePayDetails' |
+    'YandexPayDetails' |
     'CardInfo' |
     'CardPaymentData' |
     'TokenizedCard' |
@@ -107,7 +111,8 @@
 -type 'PaymentRequest'() ::
     {'apple', 'ApplePayRequest'()} |
     {'samsung', 'SamsungPayRequest'()} |
-    {'google', 'GooglePayRequest'()}.
+    {'google', 'GooglePayRequest'()} |
+    {'yandex', 'YandexPayRequest'()}.
 
 %% struct 'ApplePayRequest'
 -type 'ApplePayRequest'() :: #'paytoolprv_ApplePayRequest'{}.
@@ -118,6 +123,9 @@
 %% struct 'GooglePayRequest'
 -type 'GooglePayRequest'() :: #'paytoolprv_GooglePayRequest'{}.
 
+%% struct 'YandexPayRequest'
+-type 'YandexPayRequest'() :: #'paytoolprv_YandexPayRequest'{}.
+
 %% struct 'UnwrappedPaymentTool'
 -type 'UnwrappedPaymentTool'() :: #'paytoolprv_UnwrappedPaymentTool'{}.
 
@@ -125,7 +133,8 @@
 -type 'PaymentDetails'() ::
     {'apple', 'ApplePayDetails'()} |
     {'samsung', 'SamsungPayDetails'()} |
-    {'google', 'GooglePayDetails'()}.
+    {'google', 'GooglePayDetails'()} |
+    {'yandex', 'YandexPayDetails'()}.
 
 %% struct 'ApplePayDetails'
 -type 'ApplePayDetails'() :: #'paytoolprv_ApplePayDetails'{}.
@@ -135,6 +144,9 @@
 
 %% struct 'GooglePayDetails'
 -type 'GooglePayDetails'() :: #'paytoolprv_GooglePayDetails'{}.
+
+%% struct 'YandexPayDetails'
+-type 'YandexPayDetails'() :: #'paytoolprv_YandexPayDetails'{}.
 
 %% struct 'CardInfo'
 -type 'CardInfo'() :: #'paytoolprv_CardInfo'{}.
@@ -223,11 +235,13 @@ structs() ->
         'ApplePayRequest',
         'SamsungPayRequest',
         'GooglePayRequest',
+        'YandexPayRequest',
         'UnwrappedPaymentTool',
         'PaymentDetails',
         'ApplePayDetails',
         'SamsungPayDetails',
         'GooglePayDetails',
+        'YandexPayDetails',
         'CardInfo',
         'CardPaymentData',
         'TokenizedCard',
@@ -277,7 +291,8 @@ struct_info('PaymentRequest') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ApplePayRequest'}}, 'apple', undefined},
         {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'SamsungPayRequest'}}, 'samsung', undefined},
-        {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayRequest'}}, 'google', undefined}
+        {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayRequest'}}, 'google', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'YandexPayRequest'}}, 'yandex', undefined}
     ]};
 
 struct_info('ApplePayRequest') ->
@@ -298,6 +313,12 @@ struct_info('GooglePayRequest') ->
         {2, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'payment_token', undefined}
     ]};
 
+struct_info('YandexPayRequest') ->
+    {struct, struct, [
+        {1, required, string, 'gateway_merchant_id', undefined},
+        {2, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'payment_token', undefined}
+    ]};
+
 struct_info('UnwrappedPaymentTool') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_payment_tool_provider_thrift, 'CardInfo'}}, 'card_info', undefined},
@@ -310,7 +331,8 @@ struct_info('PaymentDetails') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'ApplePayDetails'}}, 'apple', undefined},
         {2, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'SamsungPayDetails'}}, 'samsung', undefined},
-        {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayDetails'}}, 'google', undefined}
+        {3, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'GooglePayDetails'}}, 'google', undefined},
+        {4, optional, {struct, struct, {dmsl_payment_tool_provider_thrift, 'YandexPayDetails'}}, 'yandex', undefined}
     ]};
 
 struct_info('ApplePayDetails') ->
@@ -327,6 +349,12 @@ struct_info('SamsungPayDetails') ->
     ]};
 
 struct_info('GooglePayDetails') ->
+    {struct, struct, [
+        {1, required, string, 'message_id', undefined},
+        {2, required, string, 'message_expiration', undefined}
+    ]};
+
+struct_info('YandexPayDetails') ->
     {struct, struct, [
         {1, required, string, 'message_id', undefined},
         {2, required, string, 'message_expiration', undefined}
@@ -393,6 +421,9 @@ record_name('SamsungPayRequest') ->
 record_name('GooglePayRequest') ->
     'paytoolprv_GooglePayRequest';
 
+record_name('YandexPayRequest') ->
+    'paytoolprv_YandexPayRequest';
+
 record_name('UnwrappedPaymentTool') ->
     'paytoolprv_UnwrappedPaymentTool';
 
@@ -404,6 +435,9 @@ record_name('SamsungPayDetails') ->
 
 record_name('GooglePayDetails') ->
     'paytoolprv_GooglePayDetails';
+
+record_name('YandexPayDetails') ->
+    'paytoolprv_YandexPayDetails';
 
 record_name('CardInfo') ->
     'paytoolprv_CardInfo';
