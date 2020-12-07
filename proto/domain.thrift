@@ -1573,6 +1573,7 @@ enum BankCardTokenProvider {
     applepay
     googlepay
     samsungpay
+    yandexpay
 }
 
 typedef base.ID CustomerID

@@ -12,6 +12,7 @@ union PaymentRequest {
     1: ApplePayRequest apple
     2: SamsungPayRequest samsung
     3: GooglePayRequest google
+    4: YandexPayRequest yandex
 }
 
 struct ApplePayRequest {
@@ -29,6 +30,11 @@ struct GooglePayRequest {
     2: required base.Content payment_token
 }
 
+struct YandexPayRequest {
+    1: required string gateway_merchant_id
+    2: required base.Content payment_token
+}
+
 struct UnwrappedPaymentTool {
     1: required CardInfo card_info
     2: required CardPaymentData payment_data
@@ -41,6 +47,7 @@ union PaymentDetails {
     1: ApplePayDetails apple
     2: SamsungPayDetails samsung
     3: GooglePayDetails google
+    4: YandexPayDetails yandex
 }
 
 struct ApplePayDetails {
@@ -55,6 +62,11 @@ struct SamsungPayDetails {
 }
 
 struct GooglePayDetails {
+    1: required string message_id
+    2: required base.Timestamp message_expiration
+}
+
+struct YandexPayDetails {
     1: required string message_id
     2: required base.Timestamp message_expiration
 }
