@@ -1521,6 +1521,27 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
+/* Provider limits */
+
+enum ProviderLimitID {
+    mounth
+}
+
+struct ProviderLimit {
+    1: required ProviderLimitID limit_id
+    2: required Cash limit_amount
+}
+
+union ProviderLimitSelector {
+    1: list<ProviderLimitDecision> decisions
+    2: ProviderLimit value
+}
+
+struct ProviderLimitDecision {
+    1: required Predicate if_
+    2: required ProviderLimitSelector then_
+}
+
 /* Payment methods */
 
 union PaymentMethod {
@@ -2015,6 +2036,7 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
     10: optional ProvisionTermSet terms
     11: optional list<ProviderParameter> params_schema
+    12: optional ProviderLimitTermSet limit_terms
 
     // Deprecated
     5: optional string abs_account
@@ -2155,6 +2177,10 @@ struct P2PProvisionTerms {
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
     4: optional FeeSelector fees
+}
+
+struct ProviderLimitTermSet {
+    1: optional ProviderLimitSelector provider_limit
 }
 
 union CashValueSelector {
