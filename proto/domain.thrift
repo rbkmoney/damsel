@@ -2776,9 +2776,7 @@ union Reference {
     22 : WithdrawalProviderRef      withdrawal_provider
     23 : CashRegisterProviderRef    cash_register_provider
     24 : P2PProviderRef             p2p_provider
-    26 : RoutingRulesetRef          payment_routing_rules
-    30 : RoutingRulesetRef          withdrawal_routing_rules
-    31 : RoutingRulesetRef          p2p_transfer_routing_rules
+    26 : RoutingRulesetRef          routing_ruleset
     27 : WithdrawalTerminalRef      withdrawal_terminal
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
@@ -2814,9 +2812,7 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
-    26 : RoutingRulesObject         payment_routing_rules
-    30 : RoutingRulesObject         withdrawal_routing_rules
-    31 : RoutingRulesObject         p2p_transfer_routing_rules
+    26 : RoutingRulesObject         routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
