@@ -11,7 +11,7 @@ namespace erlang proto_limiter
 */
 
 typedef base.ID LimitChangeID
-typedef domain.OperationLimitID LimitID
+typedef domain.TurnoverLimitID LimitID
 
 struct Limit {
     1: required LimitID id
