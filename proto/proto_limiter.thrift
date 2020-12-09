@@ -25,11 +25,7 @@ struct LimitChange {
    1: required LimitID id
    2: required LimitChangeID change_id
    3: required domain.Cash cash
-   4: required LimitTimestamp operation_timestamp
-}
-
-union LimitTimestamp {
-    1: base.Timestamp base
+   4: required base.Timestamp operation_timestamp
 }
 
 exception LimitNotFound {}
@@ -44,11 +40,7 @@ exception ForbiddenOperationAmount {
 }
 
 service Limiter {
-    Limit Get(1: LimitID id) throws (
-        1: LimitNotFound e1,
-        2: base.InvalidRequest e3
-    )
-    LimitChange GetChange(1: LimitID id, 2: LimitChangeID change_id) throws (
+    Limit Get(1: LimitID id, 2: base.Timestamp timestamp) throws (
         1: LimitNotFound e1,
         2: base.InvalidRequest e3
     )
