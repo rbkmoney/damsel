@@ -928,6 +928,18 @@
     'then_' :: dmsl_domain_thrift:'CashLimitSelector'()
 }).
 
+%% struct 'TurnoverLimit'
+-record('domain_TurnoverLimit', {
+    'id' :: dmsl_domain_thrift:'TurnoverLimitID'(),
+    'upper_boundary' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'TurnoverLimitDecision'
+-record('domain_TurnoverLimitDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'TurnoverLimitSelector'()
+}).
+
 %% struct 'BankCardPaymentMethod'
 -record('domain_BankCardPaymentMethod', {
     'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
@@ -1244,7 +1256,8 @@
     'holds' :: dmsl_domain_thrift:'PaymentHoldsProvisionTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsProvisionTerms'() | undefined,
     'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackProvisionTerms'() | undefined,
-    'risk_coverage' :: dmsl_domain_thrift:'RiskScoreSelector'() | undefined
+    'risk_coverage' :: dmsl_domain_thrift:'RiskScoreSelector'() | undefined,
+    'turnover_limits' :: dmsl_domain_thrift:'TurnoverLimitSelector'() | undefined
 }).
 
 %% struct 'RiskScoreDecision'

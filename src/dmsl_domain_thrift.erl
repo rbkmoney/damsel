@@ -68,6 +68,7 @@
     'ContractAdjustmentID'/0,
     'CurrencySymbolicCode'/0,
     'CalendarHolidaySet'/0,
+    'TurnoverLimitID'/0,
     'CustomerID'/0,
     'CustomerBindingID'/0,
     'RecurrentPaymentToolID'/0,
@@ -285,6 +286,9 @@
     'CashBound'/0,
     'CashLimitSelector'/0,
     'CashLimitDecision'/0,
+    'TurnoverLimit'/0,
+    'TurnoverLimitSelector'/0,
+    'TurnoverLimitDecision'/0,
     'PaymentMethod'/0,
     'BankCardPaymentMethod'/0,
     'TokenizedBankCard'/0,
@@ -510,6 +514,7 @@
     'ContractAdjustmentID' |
     'CurrencySymbolicCode' |
     'CalendarHolidaySet' |
+    'TurnoverLimitID' |
     'CustomerID' |
     'CustomerBindingID' |
     'RecurrentPaymentToolID' |
@@ -561,6 +566,7 @@
 -type 'ContractAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'CurrencySymbolicCode'() :: binary().
 -type 'CalendarHolidaySet'() :: #{dmsl_base_thrift:'Year'() => ordsets:ordset('CalendarHoliday'())}.
+-type 'TurnoverLimitID'() :: dmsl_base_thrift:'ID'().
 -type 'CustomerID'() :: dmsl_base_thrift:'ID'().
 -type 'CustomerBindingID'() :: dmsl_base_thrift:'ID'().
 -type 'RecurrentPaymentToolID'() :: dmsl_base_thrift:'ID'().
@@ -1186,6 +1192,9 @@
     'CashBound' |
     'CashLimitSelector' |
     'CashLimitDecision' |
+    'TurnoverLimit' |
+    'TurnoverLimitSelector' |
+    'TurnoverLimitDecision' |
     'PaymentMethod' |
     'BankCardPaymentMethod' |
     'TokenizedBankCard' |
@@ -1987,6 +1996,17 @@
 %% struct 'CashLimitDecision'
 -type 'CashLimitDecision'() :: #'domain_CashLimitDecision'{}.
 
+%% struct 'TurnoverLimit'
+-type 'TurnoverLimit'() :: #'domain_TurnoverLimit'{}.
+
+%% union 'TurnoverLimitSelector'
+-type 'TurnoverLimitSelector'() ::
+    {'decisions', ['TurnoverLimitDecision'()]} |
+    {'value', ordsets:ordset('TurnoverLimit'())}.
+
+%% struct 'TurnoverLimitDecision'
+-type 'TurnoverLimitDecision'() :: #'domain_TurnoverLimitDecision'{}.
+
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
     {'payment_terminal', 'TerminalPaymentProvider'()} |
@@ -2784,6 +2804,7 @@ typedefs() ->
         'ContractAdjustmentID',
         'CurrencySymbolicCode',
         'CalendarHolidaySet',
+        'TurnoverLimitID',
         'CustomerID',
         'CustomerBindingID',
         'RecurrentPaymentToolID',
@@ -3009,6 +3030,9 @@ structs() ->
         'CashBound',
         'CashLimitSelector',
         'CashLimitDecision',
+        'TurnoverLimit',
+        'TurnoverLimitSelector',
+        'TurnoverLimitDecision',
         'PaymentMethod',
         'BankCardPaymentMethod',
         'TokenizedBankCard',
@@ -3311,6 +3335,9 @@ typedef_info('CurrencySymbolicCode') ->
 
 typedef_info('CalendarHolidaySet') ->
     {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}};
+
+typedef_info('TurnoverLimitID') ->
+    string;
 
 typedef_info('CustomerID') ->
     string;
@@ -4933,6 +4960,24 @@ struct_info('CashLimitDecision') ->
         {2, required, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'then_', undefined}
     ]};
 
+struct_info('TurnoverLimit') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'upper_boundary', undefined}
+    ]};
+
+struct_info('TurnoverLimitSelector') ->
+    {struct, union, [
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'TurnoverLimitDecision'}}}, 'decisions', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'TurnoverLimit'}}}, 'value', undefined}
+    ]};
+
+struct_info('TurnoverLimitDecision') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'TurnoverLimitSelector'}}, 'then_', undefined}
+    ]};
+
 struct_info('PaymentMethod') ->
     {struct, union, [
         {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
@@ -5347,7 +5392,8 @@ struct_info('PaymentsProvisionTerms') ->
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsProvisionTerms'}}, 'holds', undefined},
         {7, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsProvisionTerms'}}, 'refunds', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackProvisionTerms'}}, 'chargebacks', undefined},
-        {12, optional, {struct, union, {dmsl_domain_thrift, 'RiskScoreSelector'}}, 'risk_coverage', undefined}
+        {12, optional, {struct, union, {dmsl_domain_thrift, 'RiskScoreSelector'}}, 'risk_coverage', undefined},
+        {13, optional, {struct, union, {dmsl_domain_thrift, 'TurnoverLimitSelector'}}, 'turnover_limits', undefined}
     ]};
 
 struct_info('RiskScoreSelector') ->
@@ -6584,6 +6630,12 @@ record_name('CashRange') ->
 
 record_name('CashLimitDecision') ->
     'domain_CashLimitDecision';
+
+record_name('TurnoverLimit') ->
+    'domain_TurnoverLimit';
+
+record_name('TurnoverLimitDecision') ->
+    'domain_TurnoverLimitDecision';
 
 record_name('BankCardPaymentMethod') ->
     'domain_BankCardPaymentMethod';
