@@ -1521,24 +1521,24 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
-/* Operation limits */
+/* Turnover limits */
 
-typedef base.ID OperationLimitID
+typedef base.ID TurnoverLimitID
 
-struct OperationLimit {
-    1: required OperationLimitID id
+struct TurnoverLimit {
+    1: required TurnoverLimitID id
     // В полной версии планируется использовать CashRange
     2: required Cash upper_boundary
 }
 
-union OperationLimitSelector {
-    1: list<OperationLimitDecision> decisions
-    2: set<OperationLimit> value
+union TurnoverLimitSelector {
+    1: list<TurnoverLimitDecision> decisions
+    2: set<TurnoverLimit> value
 }
 
-struct OperationLimitDecision {
+struct TurnoverLimitDecision {
     1: required Predicate if_
-    2: required OperationLimitSelector then_
+    2: required TurnoverLimitSelector then_
 }
 
 /* Payment methods */
@@ -2111,7 +2111,7 @@ struct PaymentsProvisionTerms {
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
     12: optional RiskScoreSelector risk_coverage
-    13: optional OperationLimitSelector operation_limits
+    13: optional TurnoverLimitSelector operation_limits
 }
 
 union RiskScoreSelector {

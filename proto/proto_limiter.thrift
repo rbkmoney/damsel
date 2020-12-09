@@ -7,7 +7,7 @@ namespace erlang proto_limiter
 /**
 * Протокол разрабатывался в рамках https://rbkmoney.atlassian.net/browse/MSPF-626
 * как временное решение для закрытия задачи https://rbkmoney.atlassian.net/browse/MSPF-623
-* лимиты существуют только как часть микросервиса proto-limiter
+* Описание сущностей лимитов является частью микросервиса proto-limiter
 */
 
 typedef base.ID LimitChangeID
@@ -25,7 +25,11 @@ struct LimitChange {
    1: required LimitID id
    2: required LimitChangeID change_id
    3: required domain.Cash cash
-   4: required base.Timestamp operation_timestamp
+   4: required LimitTimestamp operation_timestamp
+}
+
+union LimitTimestamp {
+    1: base.Timestamp base
 }
 
 exception LimitNotFound {}
@@ -44,7 +48,7 @@ service Limiter {
         1: LimitNotFound e1,
         2: base.InvalidRequest e3
     )
-    Limit GetChange(1: LimitID id, 2: LimitChangeID change_id) throws (
+    LimitChange GetChange(1: LimitID id, 2: LimitChangeID change_id) throws (
         1: LimitNotFound e1,
         2: base.InvalidRequest e3
     )
