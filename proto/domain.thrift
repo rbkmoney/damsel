@@ -1521,25 +1521,24 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
-/* Provider limits */
+/* Operation limits */
 
-enum ProviderLimitID {
-    mounth
+typedef base.ID OperationLimitID
+
+struct OperationLimit {
+    1: required OperationLimitID id
+    // В полной версии планируется использовать CashRange
+    2: required Cash upper_boundary
 }
 
-struct ProviderLimit {
-    1: required ProviderLimitID limit_id
-    2: required Cash limit_amount
+union OperationLimitSelector {
+    1: list<OperationLimitDecision> decisions
+    2: set<OperationLimit> value
 }
 
-union ProviderLimitSelector {
-    1: list<ProviderLimitDecision> decisions
-    2: ProviderLimit value
-}
-
-struct ProviderLimitDecision {
+struct OperationLimitDecision {
     1: required Predicate if_
-    2: required ProviderLimitSelector then_
+    2: required OperationLimitSelector then_
 }
 
 /* Payment methods */
@@ -2036,7 +2035,6 @@ struct Provider {
     7: optional ProviderAccountSet accounts = {}
     10: optional ProvisionTermSet terms
     11: optional list<ProviderParameter> params_schema
-    12: optional ProviderLimitTermSet limit_terms
 
     // Deprecated
     5: optional string abs_account
@@ -2113,6 +2111,7 @@ struct PaymentsProvisionTerms {
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
     12: optional RiskScoreSelector risk_coverage
+    13: optional OperationLimitSelector operation_limits
 }
 
 union RiskScoreSelector {
@@ -2177,10 +2176,6 @@ struct P2PProvisionTerms {
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
     4: optional FeeSelector fees
-}
-
-struct ProviderLimitTermSet {
-    1: optional ProviderLimitSelector provider_limit
 }
 
 union CashValueSelector {
