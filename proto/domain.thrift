@@ -1521,6 +1521,26 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
+/* Turnover limits */
+
+typedef base.ID TurnoverLimitID
+
+struct TurnoverLimit {
+    1: required TurnoverLimitID id
+    // В полной версии планируется использовать CashRange
+    2: required Cash upper_boundary
+}
+
+union TurnoverLimitSelector {
+    1: list<TurnoverLimitDecision> decisions
+    2: set<TurnoverLimit> value
+}
+
+struct TurnoverLimitDecision {
+    1: required Predicate if_
+    2: required TurnoverLimitSelector then_
+}
+
 /* Payment methods */
 
 union PaymentMethod {
@@ -2091,6 +2111,7 @@ struct PaymentsProvisionTerms {
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
     12: optional RiskScoreSelector risk_coverage
+    13: optional TurnoverLimitSelector turnover_limits
 }
 
 union RiskScoreSelector {
