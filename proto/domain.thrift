@@ -2774,6 +2774,12 @@ struct DocumentTypeObject {
     2: required DocumentType data
 }
 
+/* Due to optimizations in the dmt_core library code
+ * all types in Reference and DomainObject must be unique.
+ * Also, all field names must match in both types.
+ * See https://github.com/rbkmoney/dmt_core/pull/24 for details.
+ */
+
 union Reference {
 
     1  : CategoryRef                category
@@ -2797,7 +2803,7 @@ union Reference {
     22 : WithdrawalProviderRef      withdrawal_provider
     23 : CashRegisterProviderRef    cash_register_provider
     24 : P2PProviderRef             p2p_provider
-    26 : RoutingRulesetRef          routing_ruleset
+    26 : RoutingRulesetRef          routing_rules
     27 : WithdrawalTerminalRef      withdrawal_terminal
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion

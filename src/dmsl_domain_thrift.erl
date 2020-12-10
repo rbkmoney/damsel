@@ -2666,7 +2666,7 @@
     {'withdrawal_provider', 'WithdrawalProviderRef'()} |
     {'cash_register_provider', 'CashRegisterProviderRef'()} |
     {'p2p_provider', 'P2PProviderRef'()} |
-    {'routing_ruleset', 'RoutingRulesetRef'()} |
+    {'routing_rules', 'RoutingRulesetRef'()} |
     {'withdrawal_terminal', 'WithdrawalTerminalRef'()} |
     {'bank_card_category', 'BankCardCategoryRef'()} |
     {'criterion', 'CriterionRef'()} |
@@ -6158,7 +6158,7 @@ struct_info('Reference') ->
         {22, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalProviderRef'}}, 'withdrawal_provider', undefined},
         {23, optional, {struct, struct, {dmsl_domain_thrift, 'CashRegisterProviderRef'}}, 'cash_register_provider', undefined},
         {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
-        {26, optional, {struct, struct, {dmsl_domain_thrift, 'RoutingRulesetRef'}}, 'routing_ruleset', undefined},
+        {26, optional, {struct, struct, {dmsl_domain_thrift, 'RoutingRulesetRef'}}, 'routing_rules', undefined},
         {27, optional, {struct, struct, {dmsl_domain_thrift, 'WithdrawalTerminalRef'}}, 'withdrawal_terminal', undefined},
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'bank_card_category', undefined},
         {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionRef'}}, 'criterion', undefined},
