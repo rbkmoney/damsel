@@ -2777,7 +2777,7 @@ struct DocumentTypeObject {
 /* Due to optimizations in the dmt_core library code
  * all types in Reference and DomainObject must be unique.
  * Also, all field names must match in both types.
- * See https://github.com/rbkmoney/dmt_core/pull/24 for deails.
+ * See https://github.com/rbkmoney/dmt_core/pull/24 for details.
  */
 
 union Reference {
