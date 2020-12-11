@@ -1544,13 +1544,14 @@ struct TurnoverLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    2: TerminalPaymentProvider payment_terminal
+    9: TerminalPaymentProviderRef payment_terminal
     3: DigitalWalletProvider digital_wallet
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
     8: BankCardPaymentMethod bank_card
     // Deprecated, use BankCardPaymentMethod instead
     1: BankCardPaymentSystem bank_card_deprecated
+    2: LegacyTerminalPaymentProvider payment_terminal_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
     5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
 }
@@ -1701,7 +1702,10 @@ struct MobilePhone {
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
-    1: required TerminalPaymentProvider terminal_type
+    2: optional TerminalPaymentProviderRef terminal_type
+
+    /** Deprecated **/
+    1: optional LegacyTerminalPaymentProvider terminal_type_deprecated
 }
 
 /**
@@ -1709,7 +1713,9 @@ struct PaymentTerminal {
 *
 *  например Евросеть
 **/
-enum TerminalPaymentProvider {
+
+/** Deprecated **/
+enum LegacyTerminalPaymentProvider {
     euroset
     wechat
     alipay
@@ -1717,6 +1723,26 @@ enum TerminalPaymentProvider {
     qps
     uzcard
 }
+
+struct TerminalPaymentProviderRef {
+    1: required TerminalPaymentProvider id
+}
+
+union TerminalPaymentProvider {
+    1: EurosetTerminalPaymentProvider euroset
+    2: WechatTerminalPaymentProvider wechat
+    3: AlipayTerminalPaymentProvider alipay
+    4: ZotapayTerminalPaymentProvider zotapay
+    5: QpsTerminalPaymentProvider qps
+    6: UzcardTerminalPaymentProvider uzcard
+}
+
+struct EurosetTerminalPaymentProvider {}
+struct WechatTerminalPaymentProvider {}
+struct AlipayTerminalPaymentProvider {}
+struct ZotapayTerminalPaymentProvider {}
+struct QpsTerminalPaymentProvider {}
+struct UzcardTerminalPaymentProvider {}
 
 typedef string DigitalWalletID
 
@@ -2398,7 +2424,9 @@ struct PaymentTerminalCondition {
 }
 
 union PaymentTerminalConditionDefinition {
-    1: TerminalPaymentProvider provider_is
+    2: TerminalPaymentProviderRef provider_is
+    /** Deprecated **/
+    1: LegacyTerminalPaymentProvider provider_is_deprecated
 }
 
 struct DigitalWalletCondition {
@@ -2774,6 +2802,11 @@ struct DocumentTypeObject {
     2: required DocumentType data
 }
 
+struct TerminalPaymentProviderObject {
+    1: required TerminalPaymentProviderRef ref
+    2: required TerminalPaymentProvider data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -2810,6 +2843,7 @@ union Reference {
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
     32 : DocumentTypeRef            document_type
+    33 : TerminalPaymentProviderRef payment_provider
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2846,6 +2880,7 @@ union DomainObject {
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
     32 : DocumentTypeObject         document_type
+    33 : TerminalPaymentProviderObject payment_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
