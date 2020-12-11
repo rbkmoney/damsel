@@ -1521,6 +1521,26 @@ struct CashLimitDecision {
     2: required CashLimitSelector then_
 }
 
+/* Turnover limits */
+
+typedef base.ID TurnoverLimitID
+
+struct TurnoverLimit {
+    1: required TurnoverLimitID id
+    // В полной версии планируется использовать CashRange
+    2: required Cash upper_boundary
+}
+
+union TurnoverLimitSelector {
+    1: list<TurnoverLimitDecision> decisions
+    2: set<TurnoverLimit> value
+}
+
+struct TurnoverLimitDecision {
+    1: required Predicate if_
+    2: required TurnoverLimitSelector then_
+}
+
 /* Payment methods */
 
 union PaymentMethod {
@@ -1573,6 +1593,7 @@ enum BankCardTokenProvider {
     applepay
     googlepay
     samsungpay
+    yandexpay
 }
 
 typedef base.ID CustomerID
@@ -2090,6 +2111,7 @@ struct PaymentsProvisionTerms {
     7: optional PaymentRefundsProvisionTerms refunds
     10: optional PaymentChargebackProvisionTerms chargebacks
     12: optional RiskScoreSelector risk_coverage
+    13: optional TurnoverLimitSelector turnover_limits
 }
 
 union RiskScoreSelector {
@@ -2752,6 +2774,14 @@ struct DocumentTypeObject {
     2: required DocumentType data
 }
 
+/* There are 2 requirements on Reference and DomainObject unions:
+ * - all field types must be unique,
+ * - all corresponding field names in both unions must match.
+ *
+ * Otherwise [dmt_core](https://github.com/rbkmoney/dmt_core)'s
+ * integrity verification mechanism would break.
+ */
+
 union Reference {
 
     1  : CategoryRef                category
@@ -2775,9 +2805,7 @@ union Reference {
     22 : WithdrawalProviderRef      withdrawal_provider
     23 : CashRegisterProviderRef    cash_register_provider
     24 : P2PProviderRef             p2p_provider
-    26 : RoutingRulesetRef          payment_routing_rules
-    30 : RoutingRulesetRef          withdrawal_routing_rules
-    31 : RoutingRulesetRef          p2p_transfer_routing_rules
+    26 : RoutingRulesetRef          routing_rules
     27 : WithdrawalTerminalRef      withdrawal_terminal
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
@@ -2813,9 +2841,7 @@ union DomainObject {
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
     24 : P2PProviderObject          p2p_provider
-    26 : RoutingRulesObject         payment_routing_rules
-    30 : RoutingRulesObject         withdrawal_routing_rules
-    31 : RoutingRulesObject         p2p_transfer_routing_rules
+    26 : RoutingRulesObject         routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
