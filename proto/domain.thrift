@@ -1725,24 +1725,13 @@ enum LegacyTerminalPaymentProvider {
 }
 
 struct TerminalPaymentProviderRef {
-    1: required TerminalPaymentProvider id
+    1: required string id
 }
 
-union TerminalPaymentProvider {
-    1: EurosetTerminalPaymentProvider euroset
-    2: WechatTerminalPaymentProvider wechat
-    3: AlipayTerminalPaymentProvider alipay
-    4: ZotapayTerminalPaymentProvider zotapay
-    5: QpsTerminalPaymentProvider qps
-    6: UzcardTerminalPaymentProvider uzcard
+struct TerminalPaymentProvider {
+  1: required string name
+  2: optional string description
 }
-
-struct EurosetTerminalPaymentProvider {}
-struct WechatTerminalPaymentProvider {}
-struct AlipayTerminalPaymentProvider {}
-struct ZotapayTerminalPaymentProvider {}
-struct QpsTerminalPaymentProvider {}
-struct UzcardTerminalPaymentProvider {}
 
 typedef string DigitalWalletID
 
