@@ -107,6 +107,7 @@
     'Get' |
     'Hold' |
     'Commit' |
+    'PartialCommit' |
     'Rollback'.
 
 -export_type(['Limiter_service_functions'/0]).
@@ -253,6 +254,7 @@ functions('Limiter') ->
         'Get',
         'Hold',
         'Commit',
+        'PartialCommit',
         'Rollback'
     ];
 
@@ -292,6 +294,18 @@ function_info('Limiter', 'Commit', params_type) ->
 function_info('Limiter', 'Commit', reply_type) ->
     {struct, struct, []};
 function_info('Limiter', 'Commit', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitNotFound'}}, 'e1', undefined},
+        {2, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitChangeNotFound'}}, 'e2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e3', undefined}
+    ]};
+function_info('Limiter', 'PartialCommit', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_proto_limiter_thrift, 'LimitChange'}}, 'change', undefined}
+    ]};
+function_info('Limiter', 'PartialCommit', reply_type) ->
+    {struct, struct, []};
+function_info('Limiter', 'PartialCommit', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitNotFound'}}, 'e1', undefined},
         {2, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitChangeNotFound'}}, 'e2', undefined},
