@@ -49,8 +49,12 @@ service Limiter {
         2: InconsistentLimitCurrency e2,
         3: base.InvalidRequest e3
     )
-    // Для частичных коммитов можно указывать сумму меньше начальной (указанной в Hold)
     void Commit(1: LimitChange change) throws (
+        1: LimitNotFound e1,
+        2: LimitChangeNotFound e2,
+        3: base.InvalidRequest e3
+    )
+    void PartialCommit(1: LimitChange change) throws (
         1: LimitNotFound e1,
         2: LimitChangeNotFound e2,
         3: ForbiddenOperationAmount e3,
