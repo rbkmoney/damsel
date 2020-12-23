@@ -38,6 +38,8 @@ struct InvoicePayment {
     2: required base.Timestamp created_at
     3: required domain.Payer payer
     4: required domain.Cash cost
+    /** Признак прямого рекуррента */
+    5: optional bool direct_recurring
 }
 
 struct Invoice {
@@ -47,7 +49,31 @@ struct Invoice {
     4: required domain.InvoiceDetails details
 }
 
+/**
+ * Данные привязки платежного средства для взаимодействия с инспекторским прокси.
+ */
+struct BindingContext {
+    1: required BindingInfo binding
+    2: optional domain.ProxyOptions options = {}
+}
+
+/**
+ * Данные платежного стредства для инспекции привязки.
+ */
+struct BindingInfo {
+    1: required Party party
+    2: required Shop shop
+    3: required domain.PaymentTool payment_tool
+    /** пробросить из Customer state */
+    4: required domain.CustomerID customer_id
+    /** пробросить из Customer state */
+    5: optional domain.ContactInfo contact_info
+}
+
 service InspectorProxy {
     domain.RiskScore InspectPayment (1: Context context)
+        throws (1: base.InvalidRequest ex1)
+
+    domain.RiskScore InspectBinding (1: BindingContext context)
         throws (1: base.InvalidRequest ex1)
 }
