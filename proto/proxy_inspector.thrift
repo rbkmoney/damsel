@@ -38,8 +38,6 @@ struct InvoicePayment {
     2: required base.Timestamp created_at
     3: required domain.Payer payer
     4: required domain.Cash cost
-    /** Признак прямого рекуррента */
-    5: optional bool direct_recurring
 }
 
 struct Invoice {
