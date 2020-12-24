@@ -38,6 +38,7 @@ struct InvoicePayment {
     2: required base.Timestamp created_at
     3: required domain.Payer payer
     4: required domain.Cash cost
+    5: optional bool make_recurrent
 }
 
 struct Invoice {
