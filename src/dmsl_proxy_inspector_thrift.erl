@@ -201,7 +201,8 @@ struct_info('InvoicePayment') ->
         {1, required, string, 'id', undefined},
         {2, required, string, 'created_at', undefined},
         {3, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
-        {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined}
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
+        {5, optional, bool, 'make_recurrent', undefined}
     ]};
 
 struct_info('Invoice') ->

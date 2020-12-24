@@ -38,7 +38,8 @@
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
-    'cost' :: dmsl_domain_thrift:'Cash'()
+    'cost' :: dmsl_domain_thrift:'Cash'(),
+    'make_recurrent' :: boolean() | undefined
 }).
 
 %% struct 'Invoice'
