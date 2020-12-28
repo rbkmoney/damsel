@@ -1545,7 +1545,6 @@ struct TurnoverLimitDecision {
 
 union PaymentMethod {
     9: TerminalPaymentProviderRef payment_terminal
-    3: DigitalWalletProvider digital_wallet
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
     8: BankCardPaymentMethod bank_card
@@ -1554,6 +1553,7 @@ union PaymentMethod {
     2: LegacyTerminalPaymentProvider payment_terminal_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
     5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
+    3: DigitalWalletProvider digital_wallet_deprecated
 }
 
 struct BankCardPaymentMethod {
@@ -1736,11 +1736,14 @@ struct TerminalPaymentProvider {
 typedef string DigitalWalletID
 
 struct DigitalWallet {
-    1: required DigitalWalletProvider provider
+    4: optional TerminalPaymentProviderRef provider
     2: required DigitalWalletID       id
     3: optional Token                 token
+    // Deprecated
+    1: optional DigitalWalletProvider provider_deprecated
 }
 
+/** Deprecated **/
 enum DigitalWalletProvider {
     qiwi
     rbkmoney
@@ -2384,9 +2387,10 @@ struct P2PToolCondition {
 union PaymentToolCondition {
     1: BankCardCondition bank_card
     2: PaymentTerminalCondition payment_terminal
-    3: DigitalWalletCondition digital_wallet
     4: CryptoCurrencyCondition crypto_currency
     5: MobileCommerceCondition mobile_commerce
+    // Deprecated
+    3: DigitalWalletCondition digital_wallet_deprecated
 }
 
 struct BankCardCondition {
