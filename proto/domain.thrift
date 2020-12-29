@@ -2386,11 +2386,10 @@ struct P2PToolCondition {
 
 union PaymentToolCondition {
     1: BankCardCondition bank_card
+    3: DigitalWalletCondition digital_wallet
     2: PaymentTerminalCondition payment_terminal
     4: CryptoCurrencyCondition crypto_currency
     5: MobileCommerceCondition mobile_commerce
-    // Deprecated
-    3: DigitalWalletCondition digital_wallet_deprecated
 }
 
 struct BankCardCondition {
@@ -2427,7 +2426,9 @@ struct DigitalWalletCondition {
 }
 
 union DigitalWalletConditionDefinition {
-    1: DigitalWalletProvider provider_is
+    2: TerminalPaymentProviderRef provider_is
+    /** Deprecated **/
+    1: DigitalWalletProvider provider_is_deprecated
 }
 
 struct CryptoCurrencyCondition {
