@@ -1551,9 +1551,9 @@ union PaymentMethod {
     // Deprecated, use BankCardPaymentMethod instead
     1: BankCardPaymentSystem bank_card_deprecated
     2: LegacyTerminalPaymentProvider payment_terminal_deprecated
+    3: DigitalWalletProvider digital_wallet_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
     5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
-    3: DigitalWalletProvider digital_wallet_deprecated
 }
 
 struct BankCardPaymentMethod {
