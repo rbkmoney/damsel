@@ -1544,7 +1544,7 @@ struct TurnoverLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    9: TerminalPaymentProviderRef payment_terminal
+    9: PaymentServiceRef payment_service
     6: CryptoCurrency crypto_currency
     7: MobileOperator mobile
     8: BankCardPaymentMethod bank_card
@@ -1702,7 +1702,7 @@ struct MobilePhone {
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
-    2: optional TerminalPaymentProviderRef terminal_type
+    2: optional PaymentServiceRef payment_service
 
     /** Deprecated **/
     1: optional LegacyTerminalPaymentProvider terminal_type_deprecated
@@ -1724,11 +1724,11 @@ enum LegacyTerminalPaymentProvider {
     uzcard
 }
 
-struct TerminalPaymentProviderRef {
+struct PaymentServiceRef {
     1: required string id
 }
 
-struct TerminalPaymentProvider {
+struct PaymentService {
   1: required string name
   2: optional string description
 }
@@ -1736,7 +1736,7 @@ struct TerminalPaymentProvider {
 typedef string DigitalWalletID
 
 struct DigitalWallet {
-    4: optional TerminalPaymentProviderRef provider
+    4: optional PaymentServiceRef     payment_service
     2: required DigitalWalletID       id
     3: optional Token                 token
     // Deprecated
@@ -2416,7 +2416,7 @@ struct PaymentTerminalCondition {
 }
 
 union PaymentTerminalConditionDefinition {
-    2: TerminalPaymentProviderRef provider_is
+    2: PaymentServiceRef payment_service_is
     /** Deprecated **/
     1: LegacyTerminalPaymentProvider provider_is_deprecated
 }
@@ -2426,7 +2426,7 @@ struct DigitalWalletCondition {
 }
 
 union DigitalWalletConditionDefinition {
-    2: TerminalPaymentProviderRef provider_is
+    2: PaymentServiceRef payment_service_is
     /** Deprecated **/
     1: DigitalWalletProvider provider_is_deprecated
 }
@@ -2796,9 +2796,9 @@ struct DocumentTypeObject {
     2: required DocumentType data
 }
 
-struct TerminalPaymentProviderObject {
-    1: required TerminalPaymentProviderRef ref
-    2: required TerminalPaymentProvider data
+struct PaymentServiceObject {
+    1: required PaymentServiceRef ref
+    2: required PaymentService data
 }
 
 /* There are 2 requirements on Reference and DomainObject unions:
@@ -2837,7 +2837,7 @@ union Reference {
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
     32 : DocumentTypeRef            document_type
-    33 : TerminalPaymentProviderRef payment_provider
+    33 : PaymentServiceRef          payment_provider
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2874,7 +2874,7 @@ union DomainObject {
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
     32 : DocumentTypeObject         document_type
-    33 : TerminalPaymentProviderObject payment_provider
+    33 : PaymentServiceObject       payment_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
