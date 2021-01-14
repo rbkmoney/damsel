@@ -149,10 +149,12 @@ struct MobilePhone {
 
 struct BankCard {
     1: required domain.Token token
-    2: required domain.BankCardPaymentSystem payment_system
+    6: optional domain.PaymentSystemRef payment_system
     3: required string bin
     4: required string masked_pan
     5: optional domain.BankCardTokenProvider token_provider
+    /** Deprecated **/
+    2: optional domain.LegacyBankCardPaymentSystem payment_system_deprecated
 }
 
 enum CryptoCurrency {

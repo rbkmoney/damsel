@@ -1549,27 +1549,32 @@ union PaymentMethod {
     7: MobileOperator mobile
     8: BankCardPaymentMethod bank_card
     // Deprecated, use BankCardPaymentMethod instead
-    1: BankCardPaymentSystem bank_card_deprecated
+    1: LegacyBankCardPaymentSystem bank_card_deprecated
     2: LegacyTerminalPaymentProvider payment_terminal_deprecated
     3: DigitalWalletProvider digital_wallet_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
-    5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
+    5: LegacyBankCardPaymentSystem empty_cvv_bank_card_deprecated
 }
 
 struct BankCardPaymentMethod {
-    1: required BankCardPaymentSystem payment_system
+    5: optional PaymentSystemRef      payment_system
     2: optional bool                  is_cvv_empty = false
     3: optional BankCardTokenProvider token_provider
     4: optional TokenizationMethod    tokenization_method
+    /** Deprecated **/
+    1: optional LegacyBankCardPaymentSystem payment_system_deprecated
 }
 
 struct TokenizedBankCard {
-    1: required BankCardPaymentSystem payment_system
+    4: optional PaymentSystemRef      payment_system
     2: required BankCardTokenProvider token_provider
     3: optional TokenizationMethod    tokenization_method
+    /** Deprecated **/
+    1: optional LegacyBankCardPaymentSystem payment_system_deprecated
 }
 
-enum BankCardPaymentSystem {
+/** Deprecated **/
+enum LegacyBankCardPaymentSystem {
     visa
     mastercard
     visaelectron
@@ -1586,6 +1591,15 @@ enum BankCardPaymentSystem {
     rupay
     ebt
     dummy  // Несуществующая платежная система для использования в непродовом окружении
+}
+
+struct PaymentSystemRef {
+    1: required string id
+}
+
+struct PaymentSystem {
+  1: required string name
+  2: optional string description
 }
 
 /** Тип платежного токена **/
@@ -1629,7 +1643,7 @@ enum TokenizationMethod {
 
 struct BankCard {
     1: required Token token
-    2: required BankCardPaymentSystem payment_system
+   14: optional PaymentSystemRef payment_system
     3: required string bin
     4: required string last_digits
     5: optional BankCardTokenProvider token_provider
@@ -1641,6 +1655,8 @@ struct BankCard {
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
    13: optional string category
+   /** Deprecated **/
+   2: required LegacyBankCardPaymentSystem payment_system_deprecated
 }
 
 /** Дата экспирации */
@@ -2397,7 +2413,7 @@ struct BankCardCondition {
 }
 
 union BankCardConditionDefinition {
-    1: BankCardPaymentSystem payment_system_is // deprecated
+    1: LegacyBankCardPaymentSystem payment_system_is // deprecated
     2: BankRef issuer_bank_is
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
@@ -2406,9 +2422,11 @@ union BankCardConditionDefinition {
 }
 
 struct PaymentSystemCondition {
-    1: required BankCardPaymentSystem payment_system_is
+    4: optional PaymentSystemRef      payment_system_is
     2: optional BankCardTokenProvider token_provider_is
     3: optional TokenizationMethod    tokenization_method_is
+    /** Deprecated **/
+    1: required LegacyBankCardPaymentSystem payment_system_is_deprecated
 }
 
 struct PaymentTerminalCondition {
