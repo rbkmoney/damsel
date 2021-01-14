@@ -2855,7 +2855,8 @@ union Reference {
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
     32 : DocumentTypeRef            document_type
-    33 : PaymentServiceRef          payment_provider
+    33 : PaymentServiceRef          payment_service
+    34 : PaymentSystemRef           payment_system
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2892,7 +2893,8 @@ union DomainObject {
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
     32 : DocumentTypeObject         document_type
-    33 : PaymentServiceObject       payment_provider
+    33 : PaymentServiceObject       payment_service
+    34 : PaymentSystemRef           payment_system
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
