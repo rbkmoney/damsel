@@ -2901,7 +2901,7 @@ union Reference {
     33 : PaymentServiceRef          payment_service
     34 : PaymentSystemRef           payment_system
     35 : PaymentTokenRef            payment_token
-    37 : MobileOperatorRef          mobile_operator
+    36 : MobileOperatorRef          mobile_operator
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2941,7 +2941,7 @@ union DomainObject {
     33 : PaymentServiceObject       payment_service
     34 : PaymentSystemObject        payment_system
     35 : PaymentTokenObject         payment_token
-    37 : MobileOperatorObject       mobile_operator
+    36 : MobileOperatorObject       mobile_operator
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
