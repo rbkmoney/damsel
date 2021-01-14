@@ -1551,7 +1551,7 @@ union PaymentMethod {
     // Deprecated, use BankCardPaymentMethod instead
     1: LegacyBankCardPaymentSystem bank_card_deprecated
     2: LegacyTerminalPaymentProvider payment_terminal_deprecated
-    3: DigitalWalletProvider digital_wallet_deprecated
+    3: LegacyDigitalWalletProvider digital_wallet_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
     5: LegacyBankCardPaymentSystem empty_cvv_bank_card_deprecated
 }
@@ -1756,11 +1756,11 @@ struct DigitalWallet {
     2: required DigitalWalletID       id
     3: optional Token                 token
     // Deprecated
-    1: optional DigitalWalletProvider provider_deprecated
+    1: optional LegacyDigitalWalletProvider provider_deprecated
 }
 
 /** Deprecated **/
-enum DigitalWalletProvider {
+enum LegacyDigitalWalletProvider {
     qiwi
     rbkmoney
     yandex_money
@@ -2446,7 +2446,7 @@ struct DigitalWalletCondition {
 union DigitalWalletConditionDefinition {
     2: PaymentServiceRef payment_service_is
     /** Deprecated **/
-    1: DigitalWalletProvider provider_is_deprecated
+    1: LegacyDigitalWalletProvider provider_is_deprecated
 }
 
 struct CryptoCurrencyCondition {
