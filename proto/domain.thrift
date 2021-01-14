@@ -1546,7 +1546,7 @@ struct TurnoverLimitDecision {
 union PaymentMethod {
     9: PaymentServiceRef payment_service
     6: CryptoCurrency crypto_currency
-    7: MobileOperator mobile
+   10: MobileOperatorRef mobile
     8: BankCardPaymentMethod bank_card
     // Deprecated, use BankCardPaymentMethod instead
     1: LegacyBankCardPaymentSystem bank_card_deprecated
@@ -1554,6 +1554,7 @@ union PaymentMethod {
     3: LegacyDigitalWalletProvider digital_wallet_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
     5: LegacyBankCardPaymentSystem empty_cvv_bank_card_deprecated
+    7: LegacyMobileOperator mobile_deprecated
 }
 
 struct BankCardPaymentMethod {
@@ -1706,16 +1707,27 @@ enum CryptoCurrency {
 }
 
 struct MobileCommerce {
-    1: required MobileOperator operator
+    3: optional MobileOperatorRef operator
     2: required MobilePhone    phone
+    /** Deprecated **/
+    1: optional LegacyMobileOperator operator_deprecated
 }
 
-enum MobileOperator {
+enum LegacyMobileOperator {
     mts      = 1
     beeline  = 2
     megafone = 3
     tele2    = 4
     yota     = 5
+}
+
+struct MobileOperatorRef {
+    1: required string id
+}
+
+struct MobileOperator {
+  1: required string name
+  2: optional string description
 }
 
 /**
@@ -2476,7 +2488,9 @@ struct MobileCommerceCondition {
 }
 
 union MobileCommerceConditionDefinition {
-    1: MobileOperator operator_is
+    2: MobileOperatorRef operator_is
+    /** Deprecated **/
+    1: LegacyMobileOperator operator_is_deprecated
 }
 
 struct PartyCondition {
@@ -2843,6 +2857,11 @@ struct PaymentTokenObject {
     2: required PaymentToken data
 }
 
+struct MobileOperatorObject {
+    1: required MobileOperatorRef ref
+    2: required MobileOperator data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -2882,6 +2901,7 @@ union Reference {
     33 : PaymentServiceRef          payment_service
     34 : PaymentSystemRef           payment_system
     35 : PaymentTokenRef            payment_token
+    37 : MobileOperatorRef          mobile_operator
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2921,6 +2941,7 @@ union DomainObject {
     33 : PaymentServiceObject       payment_service
     34 : PaymentSystemObject        payment_system
     35 : PaymentTokenObject         payment_token
+    37 : MobileOperatorObject       mobile_operator
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
