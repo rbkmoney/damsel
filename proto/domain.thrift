@@ -1559,18 +1559,20 @@ union PaymentMethod {
 struct BankCardPaymentMethod {
     5: optional PaymentSystemRef      payment_system
     2: optional bool                  is_cvv_empty = false
-    3: optional BankCardTokenProvider token_provider
+    6: optional PaymentTokenRef       payment_token
     4: optional TokenizationMethod    tokenization_method
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
+    3: optional LegacyBankCardTokenProvider token_provider_deprecated
 }
 
 struct TokenizedBankCard {
     4: optional PaymentSystemRef      payment_system
-    2: required BankCardTokenProvider token_provider
+    5: optional PaymentTokenRef       payment_token
     3: optional TokenizationMethod    tokenization_method
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
+    2: optional LegacyBankCardTokenProvider token_provider_deprecated
 }
 
 /** Deprecated **/
@@ -1604,12 +1606,22 @@ struct PaymentSystem {
 
 /** Тип платежного токена **/
 
-enum BankCardTokenProvider {
+enum LegacyBankCardTokenProvider {
     applepay
     googlepay
     samsungpay
     yandexpay
 }
+
+struct PaymentTokenRef {
+    1: required string id
+}
+
+struct PaymentToken {
+  1: required string name
+  2: optional string description
+}
+
 
 typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
@@ -1646,7 +1658,7 @@ struct BankCard {
    14: optional PaymentSystemRef payment_system
     3: required string bin
     4: required string last_digits
-    5: optional BankCardTokenProvider token_provider
+   15: optional PaymentTokenRef payment_token
    12: optional TokenizationMethod tokenization_method
     6: optional Residence issuer_country
     7: optional string bank_name
@@ -1656,7 +1668,8 @@ struct BankCard {
    11: optional string cardholder_name
    13: optional string category
    /** Deprecated **/
-   2: required LegacyBankCardPaymentSystem payment_system_deprecated
+   2: optional LegacyBankCardPaymentSystem payment_system_deprecated
+   5: optional LegacyBankCardTokenProvider token_provider_deprecated
 }
 
 /** Дата экспирации */
@@ -2423,10 +2436,11 @@ union BankCardConditionDefinition {
 
 struct PaymentSystemCondition {
     4: optional PaymentSystemRef      payment_system_is
-    2: optional BankCardTokenProvider token_provider_is
+    5: optional PaymentTokenRef       payment_token_is
     3: optional TokenizationMethod    tokenization_method_is
     /** Deprecated **/
-    1: required LegacyBankCardPaymentSystem payment_system_is_deprecated
+    1: optional LegacyBankCardPaymentSystem payment_system_is_deprecated
+    2: optional LegacyBankCardTokenProvider token_provider_is_deprecated
 }
 
 struct PaymentTerminalCondition {
@@ -2819,6 +2833,16 @@ struct PaymentServiceObject {
     2: required PaymentService data
 }
 
+struct PaymentSystemObject {
+    1: required PaymentSystemRef ref
+    2: required PaymentSystem data
+}
+
+struct PaymentTokenObject {
+    1: required PaymentTokenRef ref
+    2: required PaymentToken data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -2857,6 +2881,7 @@ union Reference {
     32 : DocumentTypeRef            document_type
     33 : PaymentServiceRef          payment_service
     34 : PaymentSystemRef           payment_system
+    35 : PaymentTokenRef            payment_token
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2894,7 +2919,8 @@ union DomainObject {
     29 : CriterionObject            criterion
     32 : DocumentTypeObject         document_type
     33 : PaymentServiceObject       payment_service
-    34 : PaymentSystemRef           payment_system
+    34 : PaymentSystemObject        payment_system
+    35 : PaymentTokenObject         payment_token
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
