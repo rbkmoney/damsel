@@ -1544,9 +1544,10 @@ struct TurnoverLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    9: PaymentServiceRef payment_service
+    9: PaymentServiceRef payment_terminal
+   10: PaymentServiceRef digital_wallet
     6: CryptoCurrency crypto_currency
-   10: MobileOperatorRef mobile
+   11: MobileOperatorRef mobile
     8: BankCardPaymentMethod bank_card
     // Deprecated, use BankCardPaymentMethod instead
     1: LegacyBankCardPaymentSystem bank_card_deprecated
