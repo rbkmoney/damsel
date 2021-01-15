@@ -152,7 +152,7 @@ struct BankCard {
     6: optional domain.PaymentSystemRef payment_system
     3: required string bin
     4: required string masked_pan
-    7: optional domain.PaymentTokenRef payment_token
+    7: optional domain.BankCardTokenRef payment_token
     /** Deprecated **/
     2: optional domain.LegacyBankCardPaymentSystem payment_system_deprecated
     5: optional domain.LegacyBankCardTokenProvider token_provider_deprecated
