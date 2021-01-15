@@ -1561,7 +1561,7 @@ union PaymentMethod {
 struct BankCardPaymentMethod {
     5: optional PaymentSystemRef      payment_system
     2: optional bool                  is_cvv_empty = false
-    6: optional BankCardTokenRef       payment_token
+    6: optional BankCardTokenServiceRef payment_token
     4: optional TokenizationMethod    tokenization_method
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
@@ -1570,7 +1570,7 @@ struct BankCardPaymentMethod {
 
 struct TokenizedBankCard {
     4: optional PaymentSystemRef      payment_system
-    5: optional BankCardTokenRef       payment_token
+    5: optional BankCardTokenServiceRef payment_token
     3: optional TokenizationMethod    tokenization_method
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
@@ -1615,11 +1615,11 @@ enum LegacyBankCardTokenProvider {
     yandexpay
 }
 
-struct BankCardTokenRef {
+struct BankCardTokenServiceRef {
     1: required string id
 }
 
-struct BankCardToken {
+struct BankCardTokenService {
   1: required string name
   2: optional string description
 }
@@ -1660,7 +1660,7 @@ struct BankCard {
    14: optional PaymentSystemRef payment_system
     3: required string bin
     4: required string last_digits
-   15: optional BankCardTokenRef payment_token
+   15: optional BankCardTokenServiceRef payment_token
    12: optional TokenizationMethod tokenization_method
     6: optional Residence issuer_country
     7: optional string bank_name
@@ -2449,7 +2449,7 @@ union BankCardConditionDefinition {
 
 struct PaymentSystemCondition {
     4: optional PaymentSystemRef      payment_system_is
-    5: optional BankCardTokenRef       payment_token_is
+    5: optional BankCardTokenServiceRef payment_token_is
     3: optional TokenizationMethod    tokenization_method_is
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_is_deprecated
@@ -2853,9 +2853,9 @@ struct PaymentSystemObject {
     2: required PaymentSystem data
 }
 
-struct PaymentTokenObject {
-    1: required BankCardTokenRef ref
-    2: required BankCardToken data
+struct BankCardTokenServiceObject {
+    1: required BankCardTokenServiceRef ref
+    2: required BankCardTokenService data
 }
 
 struct MobileOperatorObject {
@@ -2901,7 +2901,7 @@ union Reference {
     32 : DocumentTypeRef            document_type
     33 : PaymentServiceRef          payment_service
     34 : PaymentSystemRef           payment_system
-    35 : BankCardTokenRef            payment_token
+    35 : BankCardTokenServiceRef    payment_token
     36 : MobileOperatorRef          mobile_operator
 
     12 : DummyRef                   dummy
@@ -2941,7 +2941,7 @@ union DomainObject {
     32 : DocumentTypeObject         document_type
     33 : PaymentServiceObject       payment_service
     34 : PaymentSystemObject        payment_system
-    35 : PaymentTokenObject         payment_token
+    35 : BankCardTokenServiceObject payment_token
     36 : MobileOperatorObject       mobile_operator
 
     12 : DummyObject                dummy
