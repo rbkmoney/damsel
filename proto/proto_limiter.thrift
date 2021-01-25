@@ -30,10 +30,11 @@ struct LimitChange {
 
 exception LimitNotFound {}
 exception LimitChangeNotFound {}
-exception InconsistentLimitCurrency {
+exception RateCurrencyNotFound {
     1: required domain.CurrencySymbolicCode limit_currency
-    2: required domain.CurrencySymbolicCode change_currency
+    2: required domain.CurrencySymbolicCode rate_currency
 }
+exception RateQuoteNotFound {}
 exception ForbiddenOperationAmount {
     1: required domain.Cash amount
     2: required domain.CashRange allowed_range
@@ -46,8 +47,9 @@ service Limiter {
     )
     void Hold(1: LimitChange change) throws (
         1: LimitNotFound e1,
-        2: InconsistentLimitCurrency e2,
-        3: base.InvalidRequest e3
+        2: RateCurrencyNotFound e2,
+        3: base.InvalidRequest e3,
+        4: RateQuoteNotFound e4
     )
     void Commit(1: LimitChange change) throws (
         1: LimitNotFound e1,
@@ -59,6 +61,8 @@ service Limiter {
         2: LimitChangeNotFound e2,
         3: ForbiddenOperationAmount e3,
         4: base.InvalidRequest e4
+        5: RateCurrencyNotFound e5,
+        6: RateQuoteNotFound e6
     )
     void Rollback(1: LimitChange change) throws (
         1: LimitNotFound e1,
