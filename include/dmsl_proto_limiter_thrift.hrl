@@ -29,11 +29,14 @@
 %% exception 'LimitChangeNotFound'
 -record('proto_limiter_LimitChangeNotFound', {}).
 
-%% exception 'InconsistentLimitCurrency'
--record('proto_limiter_InconsistentLimitCurrency', {
+%% exception 'RateCurrencyNotFound'
+-record('proto_limiter_RateCurrencyNotFound', {
     'limit_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'(),
-    'change_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
+    'rate_currency' :: dmsl_domain_thrift:'CurrencySymbolicCode'()
 }).
+
+%% exception 'RateQuoteNotFound'
+-record('proto_limiter_RateQuoteNotFound', {}).
 
 %% exception 'ForbiddenOperationAmount'
 -record('proto_limiter_ForbiddenOperationAmount', {

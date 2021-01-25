@@ -42,7 +42,8 @@
 -export_type([
     'LimitNotFound'/0,
     'LimitChangeNotFound'/0,
-    'InconsistentLimitCurrency'/0,
+    'RateCurrencyNotFound'/0,
+    'RateQuoteNotFound'/0,
     'ForbiddenOperationAmount'/0
 ]).
 
@@ -73,7 +74,8 @@
 -type exception_name() ::
     'LimitNotFound' |
     'LimitChangeNotFound' |
-    'InconsistentLimitCurrency' |
+    'RateCurrencyNotFound' |
+    'RateQuoteNotFound' |
     'ForbiddenOperationAmount'.
 
 %% struct 'Limit'
@@ -88,8 +90,11 @@
 %% exception 'LimitChangeNotFound'
 -type 'LimitChangeNotFound'() :: #'proto_limiter_LimitChangeNotFound'{}.
 
-%% exception 'InconsistentLimitCurrency'
--type 'InconsistentLimitCurrency'() :: #'proto_limiter_InconsistentLimitCurrency'{}.
+%% exception 'RateCurrencyNotFound'
+-type 'RateCurrencyNotFound'() :: #'proto_limiter_RateCurrencyNotFound'{}.
+
+%% exception 'RateQuoteNotFound'
+-type 'RateQuoteNotFound'() :: #'proto_limiter_RateQuoteNotFound'{}.
 
 %% exception 'ForbiddenOperationAmount'
 -type 'ForbiddenOperationAmount'() :: #'proto_limiter_ForbiddenOperationAmount'{}.
@@ -211,11 +216,14 @@ struct_info('LimitNotFound') ->
 struct_info('LimitChangeNotFound') ->
     {struct, exception, []};
 
-struct_info('InconsistentLimitCurrency') ->
+struct_info('RateCurrencyNotFound') ->
     {struct, exception, [
         {1, required, string, 'limit_currency', undefined},
-        {2, required, string, 'change_currency', undefined}
+        {2, required, string, 'rate_currency', undefined}
     ]};
+
+struct_info('RateQuoteNotFound') ->
+    {struct, exception, []};
 
 struct_info('ForbiddenOperationAmount') ->
     {struct, exception, [
@@ -239,8 +247,11 @@ record_name('LimitNotFound') ->
 record_name('LimitChangeNotFound') ->
     'proto_limiter_LimitChangeNotFound';
 
-record_name('InconsistentLimitCurrency') ->
-    'proto_limiter_InconsistentLimitCurrency';
+record_name('RateCurrencyNotFound') ->
+    'proto_limiter_RateCurrencyNotFound';
+
+record_name('RateQuoteNotFound') ->
+    'proto_limiter_RateQuoteNotFound';
 
 record_name('ForbiddenOperationAmount') ->
     'proto_limiter_ForbiddenOperationAmount';
@@ -284,8 +295,9 @@ function_info('Limiter', 'Hold', reply_type) ->
 function_info('Limiter', 'Hold', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitNotFound'}}, 'e1', undefined},
-        {2, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'InconsistentLimitCurrency'}}, 'e2', undefined},
-        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e3', undefined}
+        {2, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'RateCurrencyNotFound'}}, 'e2', undefined},
+        {3, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e3', undefined},
+        {4, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'RateQuoteNotFound'}}, 'e4', undefined}
     ]};
 function_info('Limiter', 'Commit', params_type) ->
     {struct, struct, [
@@ -310,7 +322,9 @@ function_info('Limiter', 'PartialCommit', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitNotFound'}}, 'e1', undefined},
         {2, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'LimitChangeNotFound'}}, 'e2', undefined},
         {3, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'ForbiddenOperationAmount'}}, 'e3', undefined},
-        {4, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e4', undefined}
+        {4, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'e4', undefined},
+        {5, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'RateCurrencyNotFound'}}, 'e5', undefined},
+        {6, undefined, {struct, exception, {dmsl_proto_limiter_thrift, 'RateQuoteNotFound'}}, 'e6', undefined}
     ]};
 function_info('Limiter', 'Rollback', params_type) ->
     {struct, struct, [
