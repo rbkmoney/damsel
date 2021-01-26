@@ -1604,6 +1604,8 @@ struct PaymentSystemRef {
 struct PaymentSystem {
   1: required string name
   2: optional string description
+  3: optional list<string> patterns
+  4: optional list<PaymentCardElement> card_params
 }
 
 /** Тип платежного токена **/
@@ -1798,10 +1800,75 @@ struct Bank {
     1: required string name
     2: required string description
     4: optional set<string> binbase_id_patterns
+    5: optional list<BankCardElement> card_params
 
     /* legacy */
     3: required set<string> bins
 }
+
+union BankCardElement {
+    1: PaymentCardNumber card_number
+    2: BankCardExpirationDate exp_date
+    3: PaymentCardCVC cvc
+}
+
+union BankCardExpirationDate {
+    1: PaymentCardExactExpirationDate exact_exp_date
+    2: PaymentCardExtendedExpirationDate extended_exp_date
+}
+
+union PaymentCardExtendedExpirationDate {
+    1: required PaymentCardAbsoluteExpirationDate absolute_exp_date
+    2: required PaymentCardRelativeExpirationDate relative_exp_date
+}
+
+struct PaymentCardAbsoluteExpirationDate {
+    /** Месяц 1..12 */
+    1: required i8 month
+    /** Год 2015..∞ */
+    2: required i16 year
+}
+
+struct PaymentCardRelativeExpirationDate {
+    1: required i8 delta_days
+}
+
+union PaymentCardElement {
+    1: PaymentCardNumber card_number
+    2: PaymentCardExpirationDate exp_date
+    3: PaymentCardCVC cvc
+}
+
+struct PaymentCardNumber {
+    1: required list<PaymentCardElementLength> length
+    2: optional PaymentCardNumberVerifyAlgorithm verify_algorithm
+}
+
+union PaymentCardNumberVerifyAlgorithm {
+    1: PaymentCardNumberVerifyAlgorithmLuhn luhn
+}
+
+struct PaymentCardNumberVerifyAlgorithmLuhn {}
+
+union PaymentCardElementLength {
+    1: i8 length
+    2: PaymentCardElementLengthRange range
+}
+
+struct PaymentCardElementLengthRange {
+    1: required i8 from
+    2: required i8 to
+}
+
+struct PaymentCardCVC {
+    1: required PaymentCardElementLength length
+}
+
+union PaymentCardExpirationDate {
+    1: PaymentCardExactExpirationDate exact_exp_date
+}
+
+struct PaymentCardExactExpirationDate {}
 
 struct PaymentMethodRef { 1: required PaymentMethod id }
 
