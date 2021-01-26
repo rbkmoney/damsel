@@ -1818,8 +1818,8 @@ union BankCardExpirationDate {
 }
 
 union PaymentCardExtendedExpirationDate {
-    1: required PaymentCardAbsoluteExpirationDate absolute_exp_date
-    2: required PaymentCardRelativeExpirationDate relative_exp_date
+    1: PaymentCardAbsoluteExpirationDate absolute_exp_date
+    2: PaymentCardRelativeExpirationDate relative_exp_date
 }
 
 struct PaymentCardAbsoluteExpirationDate {
@@ -1856,8 +1856,8 @@ union PaymentCardElementLength {
 }
 
 struct PaymentCardElementLengthRange {
-    1: required i8 from
-    2: required i8 to
+    1: required i8 begin
+    2: required i8 end
 }
 
 struct PaymentCardCVC {
