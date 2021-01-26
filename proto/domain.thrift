@@ -1856,8 +1856,8 @@ union PaymentCardElementLength {
 }
 
 struct PaymentCardElementLengthRange {
-    1: required i8 begin
-    2: required i8 end
+    1: required i8 start
+    2: required i8 finish
 }
 
 struct PaymentCardCVC {
