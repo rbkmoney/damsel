@@ -923,7 +923,8 @@
     'elo' |
     'rupay' |
     'ebt' |
-    'dummy'.
+    'dummy' |
+    'uzcard'.
 
 %% enum 'BankCardTokenProvider'
 -type 'BankCardTokenProvider'() ::
@@ -3706,7 +3707,8 @@ enum_info('BankCardPaymentSystem') ->
         {'elo', 12},
         {'rupay', 13},
         {'ebt', 14},
-        {'dummy', 15}
+        {'dummy', 15},
+        {'uzcard', 16}
     ]};
 
 enum_info('BankCardTokenProvider') ->
