@@ -135,6 +135,7 @@ struct Invoice {
     11: optional InvoiceContext context
     12: optional InvoiceTemplateID template_id
     14: optional string external_id
+    15: optional bool   trusted_client  /* мерчант передаёт сведения о надёжности плательщика */
 }
 
 struct InvoiceDetails {

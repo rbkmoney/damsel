@@ -537,6 +537,7 @@ struct InvoiceParams {
     6: required domain.InvoiceContext context
     7: optional domain.InvoiceID id
     8: optional string external_id
+    9: optional bool   trusted_client  /* мерчант передаёт сведения о надёжности плательщика */
 }
 
 struct InvoiceWithTemplateParams {
