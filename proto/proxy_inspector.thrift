@@ -46,6 +46,7 @@ struct Invoice {
     2: required base.Timestamp created_at
     3: required base.Timestamp due
     4: required domain.InvoiceDetails details
+    5: optional bool trusted_client  /* мерчант передаёт сведения о надёжности плательщика */
 }
 
 service InspectorProxy {
