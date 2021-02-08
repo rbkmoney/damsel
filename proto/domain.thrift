@@ -1800,21 +1800,10 @@ struct Bank {
     1: required string name
     2: required string description
     4: optional set<string> binbase_id_patterns
-    5: optional list<BankCardElement> card_params
+    5: optional list<PaymentCardElement> card_params
 
     /* legacy */
     3: required set<string> bins
-}
-
-union BankCardElement {
-    1: PaymentCardNumber card_number
-    2: BankCardExpirationDate exp_date
-    3: PaymentCardCVC cvc
-}
-
-union BankCardExpirationDate {
-    1: PaymentCardExactExpirationDate exact_exp_date
-    2: PaymentCardExtendedExpirationDate extended_exp_date
 }
 
 union PaymentCardExtendedExpirationDate {
