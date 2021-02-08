@@ -1807,11 +1807,11 @@ struct Bank {
 }
 
 union PaymentCardExtendedExpirationDate {
-    1: PaymentCardAbsoluteExpirationDate absolute_exp_date
+    1: PaymentCardRedefinedExpirationDate redefined_exp_date
     2: PaymentCardRelativeExpirationDate relative_exp_date
 }
 
-struct PaymentCardAbsoluteExpirationDate {
+struct PaymentCardRedefinedExpirationDate {
     /** Месяц 1..12 */
     1: required i8 month
     /** Год 2015..∞ */
