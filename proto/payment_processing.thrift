@@ -537,6 +537,7 @@ struct InvoiceParams {
     6: required domain.InvoiceContext context
     7: optional domain.InvoiceID id
     8: optional string external_id
+    9: optional domain.InvoiceClientInfo client_info
 }
 
 struct InvoiceWithTemplateParams {

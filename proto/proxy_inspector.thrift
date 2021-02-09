@@ -46,6 +46,7 @@ struct Invoice {
     2: required base.Timestamp created_at
     3: required base.Timestamp due
     4: required domain.InvoiceDetails details
+    5: optional domain.InvoiceClientInfo client_info
 }
 
 service InspectorProxy {
