@@ -2080,8 +2080,8 @@ struct ProviderParameterInteger {}
 struct ProviderParameterUrl {}
 struct ProviderParameterPassword {}
 
+// WithdrawalProvider is deprecated, use Provider instead
 struct WithdrawalProviderRef { 1: required ObjectID id }
-
 struct WithdrawalProvider {
     1: required string name
     2: optional string description
@@ -2092,8 +2092,8 @@ struct WithdrawalProvider {
     7: optional WithdrawalTerminalSelector terminal
 }
 
+// P2PProvider is deprecated, use Provider instead
 struct P2PProviderRef { 1: required ObjectID id }
-
 struct P2PProvider {
     1: required string name
     2: optional string description
@@ -2324,11 +2324,13 @@ struct TerminalRef {
 
 //
 
+// WithdrawalTerminalRef is deprecated, use TerminalRef instead
 struct WithdrawalTerminalRef {
     1: required ObjectID id
     2: optional i64 priority = 1000
 }
 
+// WithdrawalTerminal is deprecated, use Terminal instead
 struct WithdrawalTerminal {
     1: required string name
     2: optional string description
