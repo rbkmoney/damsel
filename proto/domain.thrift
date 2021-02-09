@@ -1800,15 +1800,9 @@ struct Bank {
     1: required string name
     2: required string description
     4: optional set<string> binbase_id_patterns
-    5: optional list<PaymentCardElement> card_params
 
     /* legacy */
     3: required set<string> bins
-}
-
-union PaymentCardExtendedExpirationDate {
-    1: PaymentCardRedefinedExpirationDate redefined_exp_date
-    2: PaymentCardRelativeExpirationDate relative_exp_date
 }
 
 struct PaymentCardRedefinedExpirationDate {
@@ -2310,6 +2304,16 @@ struct ProviderAccount {
     1: required AccountID settlement
 }
 
+union PaymentSystemSelector {
+    1: list<PaymentSystemDecision> decisions
+    2: PaymentSystemRef value
+}
+
+struct PaymentSystemDecision {
+    1: required Predicate if_
+    2: required PaymentSystemSelector then_
+}
+
 union ProviderSelector {
     1: list<ProviderDecision> decisions
     2: set<ProviderRef> value
@@ -2475,6 +2479,20 @@ union Condition {
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
     9: P2PToolCondition p2p_tool
+   10: PaymentSystemCondition payment_system
+}
+
+union PaymentSystemCondition {
+    1: PaymentSystemMatches matches
+    2: PaymentSystemEquals equals
+}
+
+struct PaymentSystemMatches {
+    1: required set<string> values
+}
+
+struct PaymentSystemEquals {
+    1: required set<string> values
 }
 
 struct P2PToolCondition {
@@ -2497,13 +2515,13 @@ struct BankCardCondition {
 union BankCardConditionDefinition {
     1: LegacyBankCardPaymentSystem payment_system_is // deprecated
     2: BankRef issuer_bank_is
-    3: PaymentSystemCondition payment_system
+    3: BankCardPaymentSystemCondition payment_system
     4: Residence issuer_country_is
     5: bool empty_cvv_is
     6: BankCardCategoryRef category_is
 }
 
-struct PaymentSystemCondition {
+struct BankCardPaymentSystemCondition {
     4: optional PaymentSystemRef      payment_system_is
     5: optional BankCardTokenServiceRef payment_token_is
     3: optional TokenizationMethod    tokenization_method_is
@@ -2667,6 +2685,7 @@ struct PaymentInstitution {
     20: optional RoutingRules p2p_transfer_routing_rules
     17: optional ProviderSelector withdrawal_providers
     18: optional ProviderSelector p2p_providers
+    21: optional PaymentSystemSelector payment_system
 
     // Deprecated
     13: optional WithdrawalProviderSelector withdrawal_providers_legacy
