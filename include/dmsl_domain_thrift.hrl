@@ -73,7 +73,8 @@
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined,
     'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined
 }).
 
 %% struct 'InvoiceDetails'
@@ -180,6 +181,11 @@
 
 %% struct 'InvoiceTemplateCostUnlimited'
 -record('domain_InvoiceTemplateCostUnlimited', {}).
+
+%% struct 'InvoiceClientInfo'
+-record('domain_InvoiceClientInfo', {
+    'is_trusted' :: boolean() | undefined
+}).
 
 %% struct 'PaymentResourcePayer'
 -record('domain_PaymentResourcePayer', {

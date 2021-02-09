@@ -141,6 +141,7 @@
     'InvoiceTemplateProductPrice'/0,
     'InvoiceTemplateCostUnlimited'/0,
     'InvoicePaymentStatus'/0,
+    'InvoiceClientInfo'/0,
     'TargetInvoicePaymentStatus'/0,
     'Payer'/0,
     'PaymentResourcePayer'/0,
@@ -1048,6 +1049,7 @@
     'InvoiceTemplateProductPrice' |
     'InvoiceTemplateCostUnlimited' |
     'InvoicePaymentStatus' |
+    'InvoiceClientInfo' |
     'TargetInvoicePaymentStatus' |
     'Payer' |
     'PaymentResourcePayer' |
@@ -1490,6 +1492,9 @@
     {'refunded', 'InvoicePaymentRefunded'()} |
     {'failed', 'InvoicePaymentFailed'()} |
     {'charged_back', 'InvoicePaymentChargedBack'()}.
+
+%% struct 'InvoiceClientInfo'
+-type 'InvoiceClientInfo'() :: #'domain_InvoiceClientInfo'{}.
 
 %% union 'TargetInvoicePaymentStatus'
 -type 'TargetInvoicePaymentStatus'() ::
@@ -2886,6 +2891,7 @@ structs() ->
         'InvoiceTemplateProductPrice',
         'InvoiceTemplateCostUnlimited',
         'InvoicePaymentStatus',
+        'InvoiceClientInfo',
         'TargetInvoicePaymentStatus',
         'Payer',
         'PaymentResourcePayer',
@@ -3888,7 +3894,8 @@ struct_info('Invoice') ->
         {10, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
         {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {12, optional, string, 'template_id', undefined},
-        {14, optional, string, 'external_id', undefined}
+        {14, optional, string, 'external_id', undefined},
+        {15, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined}
     ]};
 
 struct_info('InvoiceDetails') ->
@@ -4026,6 +4033,11 @@ struct_info('InvoicePaymentStatus') ->
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefunded'}}, 'refunded', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentFailed'}}, 'failed', undefined},
         {7, optional, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargedBack'}}, 'charged_back', undefined}
+    ]};
+
+struct_info('InvoiceClientInfo') ->
+    {struct, struct, [
+        {1, optional, bool, 'is_trusted', undefined}
     ]};
 
 struct_info('TargetInvoicePaymentStatus') ->
@@ -6284,6 +6296,9 @@ record_name('InvoiceTemplateProduct') ->
 
 record_name('InvoiceTemplateCostUnlimited') ->
     'domain_InvoiceTemplateCostUnlimited';
+
+record_name('InvoiceClientInfo') ->
+    'domain_InvoiceClientInfo';
 
 record_name('PaymentResourcePayer') ->
     'domain_PaymentResourcePayer';

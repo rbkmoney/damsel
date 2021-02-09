@@ -47,7 +47,8 @@
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'due' :: dmsl_base_thrift:'Timestamp'(),
-    'details' :: dmsl_domain_thrift:'InvoiceDetails'()
+    'details' :: dmsl_domain_thrift:'InvoiceDetails'(),
+    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined
 }).
 
 -endif.

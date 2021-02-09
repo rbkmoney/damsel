@@ -210,7 +210,8 @@ struct_info('Invoice') ->
         {1, required, string, 'id', undefined},
         {2, required, string, 'created_at', undefined},
         {3, required, string, 'due', undefined},
-        {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined}
+        {4, required, {struct, struct, {dmsl_domain_thrift, 'InvoiceDetails'}}, 'details', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined}
     ]};
 
 struct_info(_) -> erlang:error(badarg).

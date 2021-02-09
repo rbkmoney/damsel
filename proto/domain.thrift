@@ -135,6 +135,7 @@ struct Invoice {
     11: optional InvoiceContext context
     12: optional InvoiceTemplateID template_id
     14: optional string external_id
+    15: optional InvoiceClientInfo client_info
 }
 
 struct InvoiceDetails {
@@ -245,6 +246,13 @@ union InvoicePaymentStatus {
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
     7: InvoicePaymentChargedBack charged_back
+}
+
+/**
+ * Информация о клиенте, которую передал мерчант
+ */
+struct InvoiceClientInfo {
+    1: optional bool is_trusted
 }
 
 /**
