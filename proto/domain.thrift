@@ -1604,8 +1604,7 @@ struct PaymentSystemRef {
 struct PaymentSystem {
   1: required string name
   2: optional string description
-  3: optional list<string> patterns
-  4: optional list<PaymentCardElement> card_params
+  3: optional list<PaymentCardElement> card_params
 }
 
 /** Тип платежного токена **/
@@ -2479,20 +2478,12 @@ union Condition {
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
     9: P2PToolCondition p2p_tool
-   10: PaymentSystemCondition payment_system
+   10: BinDataCondition bin_data
 }
 
-union PaymentSystemCondition {
-    1: PaymentSystemMatches matches
-    2: PaymentSystemEquals equals
-}
-
-struct PaymentSystemMatches {
-    1: required set<string> values
-}
-
-struct PaymentSystemEquals {
-    1: required set<string> values
+union BinDataCondition {
+    1: string payment_system_matches
+    2: string payment_system_equals
 }
 
 struct P2PToolCondition {
