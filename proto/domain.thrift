@@ -2481,9 +2481,14 @@ union Condition {
    10: BinDataCondition bin_data
 }
 
-union BinDataCondition {
-    1: string payment_system_matches
-    2: string payment_system_equals
+struct BinDataCondition {
+    1: optional StringCondition payment_system
+    2: optional StringCondition bank_name
+}
+
+union StringCondition {
+    1: string matches
+    2: string equals
 }
 
 struct P2PToolCondition {
