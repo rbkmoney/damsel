@@ -1823,7 +1823,7 @@ struct PaymentCardNumberChecksumLuhn {}
 
 
 union PaymentCardCVC {
-    1: required base.IntegerRange length
+    1: base.IntegerRange length
 }
 
 union PaymentCardExpirationDate {
