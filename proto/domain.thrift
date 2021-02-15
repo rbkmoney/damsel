@@ -2511,13 +2511,13 @@ struct BankCardCondition {
 union BankCardConditionDefinition {
     1: LegacyBankCardPaymentSystem payment_system_is // deprecated
     2: BankRef issuer_bank_is
-    3: BankCardPaymentSystemCondition payment_system
+    3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
     5: bool empty_cvv_is
     6: BankCardCategoryRef category_is
 }
 
-struct BankCardPaymentSystemCondition {
+struct PaymentSystemCondition {
     4: optional PaymentSystemRef      payment_system_is
     5: optional BankCardTokenServiceRef payment_token_is
     3: optional TokenizationMethod    tokenization_method_is
