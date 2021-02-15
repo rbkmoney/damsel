@@ -1604,7 +1604,7 @@ struct PaymentSystemRef {
 struct PaymentSystem {
   1: required string name
   2: optional string description
-  3: optional list<PaymentCardValidationRule> card_params
+  3: optional list<PaymentCardValidationRule> validation_rules
 }
 
 /** Тип платежного токена **/
