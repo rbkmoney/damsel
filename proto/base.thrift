@@ -209,5 +209,5 @@ exception InvalidRequest {
 **/
 struct IntegerRange {
     1: optional i64 lower
-    2: optional i16 upper
+    2: optional i64 upper
 }
