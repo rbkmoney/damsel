@@ -208,6 +208,6 @@ exception InvalidRequest {
 * Диапазон допустимых целых значений, lower =< upper.
 **/
 struct IntegerRange {
-    1: optional i16 lower
+    1: optional i64 lower
     2: optional i16 upper
 }
