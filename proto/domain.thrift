@@ -1822,7 +1822,7 @@ union PaymentCardNumberChecksum {
 struct PaymentCardNumberChecksumLuhn {}
 
 
-struct PaymentCardCVC {
+union PaymentCardCVC {
     1: required base.IntegerRange length
 }
 
