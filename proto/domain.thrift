@@ -1604,7 +1604,7 @@ struct PaymentSystemRef {
 struct PaymentSystem {
   1: required string name
   2: optional string description
-  3: optional list<PaymentCardElement> card_params
+  3: optional list<PaymentCardValidationRule> card_params
 }
 
 /** Тип платежного токена **/
@@ -1804,33 +1804,22 @@ struct Bank {
     3: required set<string> bins
 }
 
-struct PaymentCardRedefinedExpirationDate {
-    /** Месяц 1..12 */
-    1: required i8 month
-    /** Год 2015..∞ */
-    2: required i16 year
-}
-
-struct PaymentCardRelativeExpirationDate {
-    1: required i16 delta_days
-}
-
-union PaymentCardElement {
+union PaymentCardValidationRule {
     1: PaymentCardNumber card_number
     2: PaymentCardExpirationDate exp_date
     3: PaymentCardCVC cvc
 }
 
-struct PaymentCardNumber {
-    1: required list<base.IntegerRange> length
-    2: optional PaymentCardNumberVerifyAlgorithm verify_algorithm
+union PaymentCardNumber {
+    1: base.IntegerRange range
+    2: PaymentCardNumberChecksum checksum
 }
 
-union PaymentCardNumberVerifyAlgorithm {
-    1: PaymentCardNumberVerifyAlgorithmLuhn luhn
+union PaymentCardNumberChecksum {
+    1: PaymentCardNumberChecksumLuhn luhn
 }
 
-struct PaymentCardNumberVerifyAlgorithmLuhn {}
+struct PaymentCardNumberChecksumLuhn {}
 
 
 struct PaymentCardCVC {
