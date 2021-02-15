@@ -1811,7 +1811,7 @@ union PaymentCardValidationRule {
 }
 
 union PaymentCardNumber {
-    1: base.IntegerRange range
+    1: set<base.IntegerRange> ranges
     2: PaymentCardNumberChecksum checksum
 }
 
