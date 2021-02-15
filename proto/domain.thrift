@@ -1812,7 +1812,7 @@ struct PaymentCardRedefinedExpirationDate {
 }
 
 struct PaymentCardRelativeExpirationDate {
-    1: required i8 delta_days
+    1: required i16 delta_days
 }
 
 union PaymentCardElement {
@@ -1822,7 +1822,7 @@ union PaymentCardElement {
 }
 
 struct PaymentCardNumber {
-    1: required list<PaymentCardElementLength> length
+    1: required list<base.IntegerRange> length
     2: optional PaymentCardNumberVerifyAlgorithm verify_algorithm
 }
 
@@ -1832,18 +1832,9 @@ union PaymentCardNumberVerifyAlgorithm {
 
 struct PaymentCardNumberVerifyAlgorithmLuhn {}
 
-union PaymentCardElementLength {
-    1: i8 length
-    2: PaymentCardElementLengthRange range
-}
-
-struct PaymentCardElementLengthRange {
-    1: required i8 start
-    2: required i8 finish
-}
 
 struct PaymentCardCVC {
-    1: required PaymentCardElementLength length
+    1: required base.IntegerRange length
 }
 
 union PaymentCardExpirationDate {
