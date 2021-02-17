@@ -2510,7 +2510,7 @@ union BankCardConditionDefinition {
 
 struct PaymentSystemCondition {
     4: optional PaymentSystemRef      payment_system_is
-    5: optional BankCardTokenServiceRef payment_token_is
+    5: optional BankCardTokenServiceRef token_service_is
     3: optional TokenizationMethod    tokenization_method_is
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_is_deprecated
