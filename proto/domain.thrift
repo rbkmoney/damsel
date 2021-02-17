@@ -1602,9 +1602,9 @@ struct PaymentSystemRef {
 }
 
 struct PaymentSystem {
-  1: required string name
-  2: optional string description
-  3: optional set<PaymentCardValidationRule> validation_rules
+    1: required string name
+    2: optional string description
+    3: optional set<PaymentCardValidationRule> validation_rules
 }
 
 /** Тип платежного токена **/
@@ -1728,8 +1728,8 @@ struct MobileOperatorRef {
 }
 
 struct MobileOperator {
-  1: required string name
-  2: optional string description
+    1: required string name
+    2: optional string description
 }
 
 /**
@@ -1772,8 +1772,8 @@ struct PaymentServiceRef {
 }
 
 struct PaymentService {
-  1: required string name
-  2: optional string description
+    1: required string name
+    2: optional string description
 }
 
 typedef string DigitalWalletID
