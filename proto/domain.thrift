@@ -1715,8 +1715,6 @@ struct PaymentTerminal {
 
 /**
 *  Вид платежного терминала
-*
-*  например Евросеть
 **/
 enum TerminalPaymentProvider {
     euroset
@@ -1725,6 +1723,7 @@ enum TerminalPaymentProvider {
     zotapay
     qps
     uzcard
+    rbs // Рунет Бизнес Системы
 }
 
 typedef string DigitalWalletID

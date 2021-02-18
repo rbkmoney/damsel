@@ -175,6 +175,7 @@ enum TerminalPaymentProvider {
     zotapay
     qps
     uzcard
+    rbs // Рунет Бизнес Системы
 }
 
 typedef string DigitalWalletID
