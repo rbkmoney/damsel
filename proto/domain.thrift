@@ -1535,7 +1535,6 @@ typedef base.ID TurnoverLimitID
 
 struct TurnoverLimit {
     1: required TurnoverLimitID id
-    // В полной версии планируется использовать CashRange
     2: required Amount upper_boundary
 }
 
