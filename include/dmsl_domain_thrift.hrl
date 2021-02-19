@@ -937,7 +937,7 @@
 %% struct 'TurnoverLimit'
 -record('domain_TurnoverLimit', {
     'id' :: dmsl_domain_thrift:'TurnoverLimitID'(),
-    'upper_boundary' :: dmsl_domain_thrift:'Cash'()
+    'upper_boundary' :: dmsl_domain_thrift:'Amount'()
 }).
 
 %% struct 'TurnoverLimitDecision'

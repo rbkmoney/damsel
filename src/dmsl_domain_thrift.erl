@@ -4979,7 +4979,7 @@ struct_info('CashLimitDecision') ->
 struct_info('TurnoverLimit') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
-        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'upper_boundary', undefined}
+        {2, required, i64, 'upper_boundary', undefined}
     ]};
 
 struct_info('TurnoverLimitSelector') ->
