@@ -191,6 +191,7 @@ union InvoicePaymentChangePayload {
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
     15: InvoicePaymentClockUpdate           invoice_payment_clock_update
+    16: InvoicePaymentLimitOverflow         invoice_payment_limit_overflow
 }
 
 /**
@@ -239,6 +240,12 @@ struct InvoicePaymentRouteChanged {
 struct InvoicePaymentCashFlowChanged {
     /** Данные финансового взаимодействия. */
     1: required domain.FinalCashFlow cash_flow
+}
+
+/**
+ * Событие о переполнение лимита, доступного для провайдера.
+ */
+struct InvoicePaymentLimitOverflow {
 }
 
 /**
