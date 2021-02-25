@@ -2808,7 +2808,6 @@ struct_info('InvoiceAdjustmentScenario') ->
 
 struct_info('InvoicePaymentAdjustmentParams') ->
     {struct, struct, [
-        {1, optional, i64, 'legacy_domain_revision', undefined},
         {2, required, string, 'reason', undefined},
         {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentScenario'}}, 'scenario', undefined}
     ]};

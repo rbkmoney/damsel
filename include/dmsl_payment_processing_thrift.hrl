@@ -447,7 +447,6 @@
 
 %% struct 'InvoicePaymentAdjustmentParams'
 -record('payproc_InvoicePaymentAdjustmentParams', {
-    'legacy_domain_revision' :: dmsl_domain_thrift:'DataRevision'() | undefined,
     'reason' :: binary(),
     'scenario' :: dmsl_payment_processing_thrift:'InvoicePaymentAdjustmentScenario'() | undefined
 }).
