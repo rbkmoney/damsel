@@ -2809,7 +2809,7 @@ struct_info('InvoiceAdjustmentScenario') ->
 struct_info('InvoicePaymentAdjustmentParams') ->
     {struct, struct, [
         {2, required, string, 'reason', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentScenario'}}, 'scenario', undefined}
+        {3, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentAdjustmentScenario'}}, 'scenario', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustmentScenario') ->

@@ -448,7 +448,7 @@
 %% struct 'InvoicePaymentAdjustmentParams'
 -record('payproc_InvoicePaymentAdjustmentParams', {
     'reason' :: binary(),
-    'scenario' :: dmsl_payment_processing_thrift:'InvoicePaymentAdjustmentScenario'() | undefined
+    'scenario' :: dmsl_payment_processing_thrift:'InvoicePaymentAdjustmentScenario'()
 }).
 
 %% struct 'InvoiceRepairFailPreProcessing'
