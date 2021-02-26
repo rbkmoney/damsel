@@ -817,7 +817,7 @@ struct InvoicePaymentAdjustmentParams {
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
     /** Сценарий создаваемой поправки. */
-    3: optional InvoicePaymentAdjustmentScenario scenario
+    3: required InvoicePaymentAdjustmentScenario scenario
 }
 
 /**
