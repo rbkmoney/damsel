@@ -814,12 +814,10 @@ union InvoiceAdjustmentScenario {
  * Параметры создаваемой поправки к платежу.
  */
 struct InvoicePaymentAdjustmentParams {
-    /** Deprecated! Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
-    1: optional domain.DataRevision legacy_domain_revision
     /** Причина, на основании которой создаётся поправка. */
     2: required string reason
     /** Сценарий создаваемой поправки. */
-    3: optional InvoicePaymentAdjustmentScenario scenario
+    3: required InvoicePaymentAdjustmentScenario scenario
 }
 
 /**
