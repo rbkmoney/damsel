@@ -135,6 +135,7 @@ struct Invoice {
     11: optional InvoiceContext context
     12: optional InvoiceTemplateID template_id
     14: optional string external_id
+    15: optional InvoiceClientInfo client_info
 }
 
 struct InvoiceDetails {
@@ -245,6 +246,13 @@ union InvoicePaymentStatus {
     6: InvoicePaymentRefunded refunded
     3: InvoicePaymentFailed failed
     7: InvoicePaymentChargedBack charged_back
+}
+
+/**
+ * Информация о клиенте, которую передал мерчант
+ */
+struct InvoiceClientInfo {
+    1: optional bool is_trusted
 }
 
 /**
@@ -1527,8 +1535,7 @@ typedef base.ID TurnoverLimitID
 
 struct TurnoverLimit {
     1: required TurnoverLimitID id
-    // В полной версии планируется использовать CashRange
-    2: required Cash upper_boundary
+    2: required Amount upper_boundary
 }
 
 union TurnoverLimitSelector {
@@ -1595,6 +1602,7 @@ enum LegacyBankCardPaymentSystem {
     rupay
     ebt
     dummy  // Несуществующая платежная система для использования в непродовом окружении
+    uzcard
 }
 
 struct PaymentSystemRef {
@@ -1753,8 +1761,6 @@ struct PaymentTerminal {
 
 /**
 *  Вид платежного терминала
-*
-*  например Евросеть
 **/
 
 /** Deprecated **/
@@ -1765,6 +1771,7 @@ enum LegacyTerminalPaymentProvider {
     zotapay
     qps
     uzcard
+    rbs // Рунет Бизнес Системы
 }
 
 struct PaymentServiceRef {
@@ -2160,8 +2167,8 @@ struct ProviderParameterInteger {}
 struct ProviderParameterUrl {}
 struct ProviderParameterPassword {}
 
+// WithdrawalProvider is deprecated, use Provider instead
 struct WithdrawalProviderRef { 1: required ObjectID id }
-
 struct WithdrawalProvider {
     1: required string name
     2: optional string description
@@ -2172,8 +2179,8 @@ struct WithdrawalProvider {
     7: optional WithdrawalTerminalSelector terminal
 }
 
+// P2PProvider is deprecated, use Provider instead
 struct P2PProviderRef { 1: required ObjectID id }
-
 struct P2PProvider {
     1: required string name
     2: optional string description
@@ -2414,11 +2421,13 @@ struct TerminalRef {
 
 //
 
+// WithdrawalTerminalRef is deprecated, use TerminalRef instead
 struct WithdrawalTerminalRef {
     1: required ObjectID id
     2: optional i64 priority = 1000
 }
 
+// WithdrawalTerminal is deprecated, use Terminal instead
 struct WithdrawalTerminal {
     1: required string name
     2: optional string description
