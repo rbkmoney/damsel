@@ -184,7 +184,7 @@
 
 %% struct 'InvoiceClientInfo'
 -record('domain_InvoiceClientInfo', {
-    'is_trusted' :: boolean() | undefined
+    'trust_level' :: dmsl_domain_thrift:'ClientTrustLevel'() | undefined
 }).
 
 %% struct 'PaymentResourcePayer'

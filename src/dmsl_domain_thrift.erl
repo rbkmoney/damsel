@@ -86,6 +86,7 @@
 ]).
 -export_type([
     'ThreeDsVerification'/0,
+    'ClientTrustLevel'/0,
     'OnHoldExpiration'/0,
     'RiskScore'/0,
     'ContractorIdentificationLevel'/0,
@@ -588,6 +589,7 @@
 %%
 -type enum_name() ::
     'ThreeDsVerification' |
+    'ClientTrustLevel' |
     'OnHoldExpiration' |
     'RiskScore' |
     'ContractorIdentificationLevel' |
@@ -617,6 +619,11 @@
     'attempts_processing_performed' |
     'authentication_failed' |
     'authentication_could_not_be_performed'.
+
+%% enum 'ClientTrustLevel'
+-type 'ClientTrustLevel'() ::
+    'well_known' |
+    'unknown'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
@@ -2743,6 +2750,7 @@
 
 -type enum_choice() ::
     'ThreeDsVerification'() |
+    'ClientTrustLevel'() |
     'OnHoldExpiration'() |
     'RiskScore'() |
     'ContractorIdentificationLevel'() |
@@ -2833,6 +2841,7 @@ typedefs() ->
 enums() ->
     [
         'ThreeDsVerification',
+        'ClientTrustLevel',
         'OnHoldExpiration',
         'RiskScore',
         'ContractorIdentificationLevel',
@@ -3399,6 +3408,12 @@ enum_info('ThreeDsVerification') ->
         {'attempts_processing_performed', 1},
         {'authentication_failed', 2},
         {'authentication_could_not_be_performed', 3}
+    ]};
+
+enum_info('ClientTrustLevel') ->
+    {enum, [
+        {'well_known', 0},
+        {'unknown', 1}
     ]};
 
 enum_info('OnHoldExpiration') ->
@@ -4039,7 +4054,7 @@ struct_info('InvoicePaymentStatus') ->
 
 struct_info('InvoiceClientInfo') ->
     {struct, struct, [
-        {1, optional, bool, 'is_trusted', undefined}
+        {2, optional, {enum, {dmsl_domain_thrift, 'ClientTrustLevel'}}, 'trust_level', undefined}
     ]};
 
 struct_info('TargetInvoicePaymentStatus') ->
