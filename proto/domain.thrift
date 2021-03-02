@@ -2923,6 +2923,51 @@ struct MobileOperatorObject {
     2: required MobileOperator data
 }
 
+struct MobileOperatorLegacyRef {
+    1: required LegacyMobileOperator id
+}
+
+struct MobileOperatorLegacyObject {
+    1: required MobileOperatorLegacyRef ref
+    2: required MobileOperatorRef data
+}
+
+struct LegacyBankCardPaymentSystemRef {
+    1: required LegacyBankCardPaymentSystem id
+}
+
+struct LegacyBankCardPaymentSystemObject {
+    1: required LegacyBankCardPaymentSystemRef ref
+    2: required PaymentSystemRef data
+}
+
+struct LegacyBankCardTokenProviderRef {
+    1: required LegacyBankCardTokenProvider id
+}
+
+struct LegacyBankCardTokenProviderObject {
+    1: required LegacyBankCardTokenProviderRef ref
+    2: required BankCardTokenServiceRef data
+}
+
+struct LegacyTerminalPaymentProviderRef {
+    1: required LegacyTerminalPaymentProvider id
+}
+
+struct LegacyTerminalPaymentProviderObject {
+    1: required LegacyTerminalPaymentProviderRef ref
+    2: required PaymentServiceRef data
+}
+
+struct LegacyDigitalWalletProviderRef {
+    1: required LegacyDigitalWalletProvider id
+}
+
+struct LegacyDigitalWalletProviderObject {
+    1: required LegacyDigitalWalletProviderRef ref
+    2: required PaymentServiceRef data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -2964,6 +3009,12 @@ union Reference {
     35 : BankCardTokenServiceRef    payment_token
     36 : MobileOperatorRef          mobile_operator
 
+    37 : MobileOperatorLegacyRef    mobile_operator_legacy
+    38 : LegacyBankCardPaymentSystemRef payment_system_legacy
+    39 : LegacyBankCardTokenProviderRef payment_token_legacy
+    40 : LegacyTerminalPaymentProviderRef terminal_provider_legacy
+    41 : LegacyDigitalWalletProviderRef payment_service_legacy
+
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
 
@@ -3003,6 +3054,12 @@ union DomainObject {
     34 : PaymentSystemObject        payment_system
     35 : BankCardTokenServiceObject payment_token
     36 : MobileOperatorObject       mobile_operator
+
+    37 : MobileOperatorLegacyObject mobile_operator_legacy
+    38 : LegacyBankCardPaymentSystemObject payment_system_legacy
+    39 : LegacyBankCardTokenProviderObject payment_token_legacy
+    40 : LegacyTerminalPaymentProviderObject terminal_provider_legacy
+    41 : LegacyDigitalWalletProviderObject payment_service_legacy
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
