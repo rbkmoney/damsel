@@ -256,6 +256,22 @@ union InvoiceStatus {
 }
 
 /**
+* Информация об расщепленном инвойсе.
+*/
+struct StatSplitInvoice {
+    1 : required domain.InvoiceID id
+    2 : required base.Timestamp created_at
+    3 : required InvoiceStatus status
+    4 : required string product
+    5 : optional string description
+    6 : required base.Timestamp due
+    7 : required string currency_symbolic_code
+    8 : optional base.Content context
+    9 : optional domain.PartialInvoiceCart cart
+    10: optional string external_id
+}
+
+/**
 * Информация о клиенте. Уникальность клиента определяется по fingerprint.
 */
 struct StatCustomer {
@@ -433,6 +449,7 @@ union StatResponseData {
     6: list<StatRefund>          refunds
     7: list<EnrichedStatInvoice> enriched_invoices
     8: list<StatChargeback>      chargebacks
+    9: list<StatSplitInvoice>    split_invoices
 }
 
 /**
@@ -452,6 +469,11 @@ service MerchantStatistics {
      *  Возвращает набор данных об инвойсах
      */
     StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+    /**
+     *  Возвращает набор данных об инвойсах
+     */
+    StatResponse GetSplitInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      * Возвращает набор данных о покупателях

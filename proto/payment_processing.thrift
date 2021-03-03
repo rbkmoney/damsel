@@ -8,6 +8,7 @@ include "user_interaction.thrift"
 include "timeout_behaviour.thrift"
 include "repairing.thrift"
 include "msgpack.thrift"
+include "cash_flow.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -207,6 +208,7 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
+    5: optional cash_flow.CashFlowID cash_flow_id
 }
 
 struct InvoicePaymentClockUpdate {
@@ -239,6 +241,7 @@ struct InvoicePaymentRouteChanged {
 struct InvoicePaymentCashFlowChanged {
     /** Данные финансового взаимодействия. */
     1: required domain.FinalCashFlow cash_flow
+    2: optional cash_flow.CashFlowID cash_flow_id
 }
 
 /**
@@ -381,6 +384,7 @@ struct InvoicePaymentChargebackStatusChanged {
  */
 struct InvoicePaymentChargebackCashFlowChanged {
     1: required domain.FinalCashFlow cash_flow
+    2: optional cash_flow.CashFlowID cash_flow_id
 }
 
 /**
@@ -436,6 +440,7 @@ union InvoicePaymentRefundChangePayload {
 struct InvoicePaymentRefundCreated {
     1: required domain.InvoicePaymentRefund refund
     2: required domain.FinalCashFlow cash_flow
+    4: optional cash_flow.CashFlowID cash_flow_id
 
     /**
     * Данные проведённой вручную транзакции.
@@ -617,6 +622,7 @@ struct InvoicePayment {
     1: required domain.InvoicePayment payment
     6: optional domain.PaymentRoute route
     7: optional FinalCashFlow cash_flow
+    10: optional cash_flow.CashFlowID cash_flow_id
     2: required list<InvoicePaymentAdjustment> adjustments
     4: required list<InvoicePaymentRefund> refunds
     5: required list<InvoicePaymentSession> sessions
@@ -630,6 +636,7 @@ struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefund refund
     2: required list<InvoiceRefundSession> sessions
     3: optional FinalCashFlow cash_flow
+    4: optional cash_flow.CashFlowID cash_flow_id
 }
 
 struct InvoicePaymentSession {
@@ -647,6 +654,7 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 struct InvoicePaymentChargeback {
     1: required domain.InvoicePaymentChargeback chargeback
     2: optional FinalCashFlow cash_flow
+    3: optional cash_flow.CashFlowID cash_flow_id
 }
 
 /**
@@ -2721,6 +2729,16 @@ service PartyManagement {
     /* Payouts */
     /* TODO looks like adhoc. Rework after feedback. Or not. */
     domain.FinalCashFlow ComputePayoutCashFlow (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
+        throws (
+            1: InvalidUser ex1,
+            2: PartyNotFound ex2,
+            3: PartyNotExistsYet ex3,
+            4: ShopNotFound ex4,
+            5: OperationNotPermitted ex5,
+            6: PayoutToolNotFound ex6
+        )
+
+    cash_flow.CashFlow ComputePayoutCashFlow2 (1: UserInfo user, 2: PartyID party_id, 3: PayoutParams params)
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,

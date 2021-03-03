@@ -16,7 +16,6 @@ typedef domain.MerchantCashFlowAccount MerchantCashFlowAccount
 typedef domain.ProviderCashFlowAccount ProviderCashFlowAccount
 typedef domain.SystemCashFlowAccount SystemCashFlowAccount
 typedef domain.ExternalCashFlowAccount ExternalCashFlowAccount
-typedef domain.WalletCashFlowAccount WalletCashFlowAccount
 
 struct CashFlow {
     1: required CashFlowID id
@@ -28,6 +27,8 @@ struct CashFlow {
 union CashFlowSource {
     1: PaymentCashFlowSource payment
     2: RefundCashFlowSource refund
+    3: AdjustmentCashFlowSource adjustment
+    4: ChargebackCashFlowSource chargeback
 }
 
 struct PaymentCashFlowSource {
@@ -39,6 +40,18 @@ struct RefundCashFlowSource {
     1: required domain.InvoiceID invoice_id
     2: required domain.InvoicePaymentID payment_id
     3: required domain.InvoicePaymentRefundID refund_id
+}
+
+struct AdjustmentCashFlowSource {
+    1: required domain.InvoiceID invoice_id
+    2: required domain.InvoicePaymentID payment_id
+    3: required domain.InvoicePaymentAdjustmentID adjustment_id
+}
+
+struct ChargebackCashFlowSource {
+    1: required domain.InvoiceID invoice_id
+    2: required domain.InvoicePaymentID payment_id
+    3: required domain.InvoicePaymentChargebackID chargeback_id
 }
 
 struct CashFlowTransaction {
@@ -56,9 +69,9 @@ struct CashFlowTransactionAccount {
 /** Счёт в графе финансовых потоков. */
 union TransactionAccount {
     1: MerchantTransactionAccount merchant
-    // 2: ProviderTransactionAccount provider
-    // 3: SystemTransactionAccount system
-    // 4: ExternalTransactionAccount external
+    2: ProviderTransactionAccount provider
+    3: SystemTransactionAccount system
+    4: ExternalTransactionAccount external
 }
 
 struct MerchantTransactionAccount {
@@ -69,14 +82,44 @@ struct MerchantTransactionAccount {
     2: required MerchantTransactionAccountOwner account_owner
 }
 
-union MerchantTransactionAccountOwner {
-    1: domain.PartyID party_id
-    2: domain.ShopID shop_id
+struct MerchantTransactionAccountOwner {
+    1: required domain.PartyID party_id
+    2: optional domain.ShopID shop_id
+}
+
+struct ProviderTransactionAccount {
+    1: required ProviderCashFlowAccount account_type
+    /**
+     * Идентификатор бизнес-объекта, владельца аккаунта.
+     */
+    2: required ProviderTransactionAccountOwner account_owner
+}
+
+struct ProviderTransactionAccountOwner {
+    1: required domain.ProviderRef provider_ref
+    2: optional domain.ProviderTerminalRef terminal_ref
+}
+
+struct SystemTransactionAccount {
+    1: required SystemCashFlowAccount account_type
+}
+
+struct ExternalTransactionAccount {
+    1: required ExternalCashFlowAccount account_type
 }
 
 /**
  * Один из возможных вариантов события, порождённого графом финансовых потоков.
  */
 union Change {
-    1: CashFlow created
+    1: CreatedChange created
+    2: UpdatedChange updated
+}
+
+struct CreatedChange {
+    1: CashFlow cash_flow
+}
+
+struct UpdatedChange {
+    1: CashFlow updated_cash_flow
 }

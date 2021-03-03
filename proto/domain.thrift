@@ -142,6 +142,7 @@ struct InvoiceDetails {
     1: required string product
     2: optional string description
     3: optional InvoiceCart cart
+    4: optional SplitInvoiceCart split_cart
 }
 
 struct InvoiceCart {
@@ -154,6 +155,22 @@ struct InvoiceLine {
     3: required Cash price
     /* Taxes and other stuff goes here */
     4: required map<string, msgpack.Value> metadata
+}
+
+struct SplitInvoiceCart {
+    1: required list<PartialInvoiceCart> partial_carts
+    3: required Cash fees
+}
+
+struct PartialInvoiceCart {
+    1: required list<InvoiceLine> lines
+    2: required PartialInvoiceCartOwner owner
+    3: required Cash cost
+}
+
+struct PartialInvoiceCartOwner {
+    1 : required PartyID owner_id
+    2 : required ShopID shop_id
 }
 
 struct InvoiceUnpaid    {}
@@ -191,6 +208,7 @@ struct InvoicePaymentCaptured  {
     1: optional string reason
     2: optional Cash cost
     3: optional InvoiceCart cart
+    4: optional SplitInvoiceCart split_cart
 }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
@@ -219,6 +237,7 @@ struct InvoiceTemplate {
 union InvoiceTemplateDetails {
     1: InvoiceCart cart
     2: InvoiceTemplateProduct product
+    3: SplitInvoiceCart split_cart
 }
 
 struct InvoiceTemplateProduct {
@@ -545,15 +564,16 @@ struct InvoicePaymentChargebackCancelled {}
 /* Refunds */
 
 struct InvoicePaymentRefund {
-    1: required InvoicePaymentRefundID id
-    2: required InvoicePaymentRefundStatus status
-    3: required base.Timestamp created_at
-    4: required DataRevision domain_revision
-    7: optional PartyRevision party_revision
-    6: optional Cash cash
-    5: optional string reason
-    8: optional InvoiceCart cart
-    9: optional string external_id
+    1 : required InvoicePaymentRefundID id
+    2 : required InvoicePaymentRefundStatus status
+    3 : required base.Timestamp created_at
+    4 : required DataRevision domain_revision
+    7 : optional PartyRevision party_revision
+    6 : optional Cash cash
+    5 : optional string reason
+    8 : optional InvoiceCart cart
+    9 : optional string external_id
+    10: optional SplitInvoiceCart split_cart
 }
 
 union InvoicePaymentRefundStatus {
