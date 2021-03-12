@@ -2923,12 +2923,12 @@ struct MobileOperatorObject {
     2: required MobileOperator data
 }
 
-struct MobileOperatorLegacyRef {
+struct LegacyMobileOperatorMappingRef {
     1: required LegacyMobileOperator id
 }
 
-struct MobileOperatorLegacyObject {
-    1: required MobileOperatorLegacyRef ref
+struct LegacyMobileOperatorObject {
+    1: required LegacyMobileOperatorMappingRef ref
     2: required MobileOperatorRef data
 }
 
@@ -3009,7 +3009,7 @@ union Reference {
     35 : BankCardTokenServiceRef    payment_token
     36 : MobileOperatorRef          mobile_operator
 
-    37 : MobileOperatorLegacyRef    mobile_operator_legacy
+    37 : LegacyMobileOperatorMappingRef    mobile_operator_legacy
     38 : LegacyBankCardPaymentSystemRef payment_system_legacy
     39 : LegacyBankCardTokenProviderRef payment_token_legacy
     40 : LegacyTerminalPaymentProviderRef terminal_provider_legacy
@@ -3055,7 +3055,7 @@ union DomainObject {
     35 : BankCardTokenServiceObject payment_token
     36 : MobileOperatorObject       mobile_operator
 
-    37 : MobileOperatorLegacyObject mobile_operator_legacy
+    37 : LegacyMobileOperatorObject mobile_operator_legacy
     38 : LegacyBankCardPaymentSystemObject payment_system_legacy
     39 : LegacyBankCardTokenProviderObject payment_token_legacy
     40 : LegacyTerminalPaymentProviderObject terminal_provider_legacy
