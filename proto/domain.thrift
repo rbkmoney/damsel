@@ -252,7 +252,12 @@ union InvoicePaymentStatus {
  * Информация о клиенте, которую передал мерчант
  */
 struct InvoiceClientInfo {
-    1: optional bool is_trusted
+    2: optional ClientTrustLevel trust_level
+}
+
+enum ClientTrustLevel {
+    well_known
+    unknown
 }
 
 /**
