@@ -123,6 +123,8 @@
     'InvoiceDetails'/0,
     'InvoiceCart'/0,
     'InvoiceLine'/0,
+    'InvoiceBankAccount'/0,
+    'InvoiceRussianBankAccount'/0,
     'InvoiceUnpaid'/0,
     'InvoicePaid'/0,
     'InvoiceCancelled'/0,
@@ -1038,6 +1040,8 @@
     'InvoiceDetails' |
     'InvoiceCart' |
     'InvoiceLine' |
+    'InvoiceBankAccount' |
+    'InvoiceRussianBankAccount' |
     'InvoiceUnpaid' |
     'InvoicePaid' |
     'InvoiceCancelled' |
@@ -1427,6 +1431,13 @@
 
 %% struct 'InvoiceLine'
 -type 'InvoiceLine'() :: #'domain_InvoiceLine'{}.
+
+%% union 'InvoiceBankAccount'
+-type 'InvoiceBankAccount'() ::
+    {'russian', 'InvoiceRussianBankAccount'()}.
+
+%% struct 'InvoiceRussianBankAccount'
+-type 'InvoiceRussianBankAccount'() :: #'domain_InvoiceRussianBankAccount'{}.
 
 %% struct 'InvoiceUnpaid'
 -type 'InvoiceUnpaid'() :: #'domain_InvoiceUnpaid'{}.
@@ -2882,6 +2893,8 @@ structs() ->
         'InvoiceDetails',
         'InvoiceCart',
         'InvoiceLine',
+        'InvoiceBankAccount',
+        'InvoiceRussianBankAccount',
         'InvoiceUnpaid',
         'InvoicePaid',
         'InvoiceCancelled',
@@ -3919,7 +3932,8 @@ struct_info('InvoiceDetails') ->
     {struct, struct, [
         {1, required, string, 'product', undefined},
         {2, optional, string, 'description', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {4, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceBankAccount'}}, 'bank_account', undefined}
     ]};
 
 struct_info('InvoiceCart') ->
@@ -3933,6 +3947,17 @@ struct_info('InvoiceLine') ->
         {2, required, i32, 'quantity', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'price', undefined},
         {4, required, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined}
+    ]};
+
+struct_info('InvoiceBankAccount') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceRussianBankAccount'}}, 'russian', undefined}
+    ]};
+
+struct_info('InvoiceRussianBankAccount') ->
+    {struct, struct, [
+        {1, required, string, 'account', undefined},
+        {2, required, string, 'bank_bik', undefined}
     ]};
 
 struct_info('InvoiceUnpaid') ->
@@ -6268,6 +6293,9 @@ record_name('InvoiceCart') ->
 
 record_name('InvoiceLine') ->
     'domain_InvoiceLine';
+
+record_name('InvoiceRussianBankAccount') ->
+    'domain_InvoiceRussianBankAccount';
 
 record_name('InvoiceUnpaid') ->
     'domain_InvoiceUnpaid';

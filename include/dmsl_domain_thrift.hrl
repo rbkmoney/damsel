@@ -81,7 +81,8 @@
 -record('domain_InvoiceDetails', {
     'product' :: binary(),
     'description' :: binary() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'bank_account' :: dmsl_domain_thrift:'InvoiceBankAccount'() | undefined
 }).
 
 %% struct 'InvoiceCart'
@@ -95,6 +96,12 @@
     'quantity' :: integer(),
     'price' :: dmsl_domain_thrift:'Cash'(),
     'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()}
+}).
+
+%% struct 'InvoiceRussianBankAccount'
+-record('domain_InvoiceRussianBankAccount', {
+    'account' :: binary(),
+    'bank_bik' :: binary()
 }).
 
 %% struct 'InvoiceUnpaid'
