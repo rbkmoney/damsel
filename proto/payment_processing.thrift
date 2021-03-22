@@ -1624,6 +1624,7 @@ typedef domain.CustomerBindingID CustomerBindingID
 typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
+    2: optional RecurrentPaymentToolID rec_payment_tool_id
     1: required DisposablePaymentResource payment_resource
 }
 
