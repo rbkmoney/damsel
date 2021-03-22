@@ -142,6 +142,8 @@ struct InvoiceDetails {
     1: required string product
     2: optional string description
     3: optional InvoiceCart cart
+    /* Информация о банковском счете, к операциям с которым возможно относится данный инвойс */
+    4: optional InvoiceBankAccount bank_account
 }
 
 struct InvoiceCart {
@@ -154,6 +156,15 @@ struct InvoiceLine {
     3: required Cash price
     /* Taxes and other stuff goes here */
     4: required map<string, msgpack.Value> metadata
+}
+
+union InvoiceBankAccount {
+    1: InvoiceRussianBankAccount russian
+}
+
+struct InvoiceRussianBankAccount {
+    1: required string account
+    2: required string bank_bik
 }
 
 struct InvoiceUnpaid    {}
