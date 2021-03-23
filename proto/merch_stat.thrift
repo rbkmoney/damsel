@@ -268,7 +268,6 @@ struct StatSplitInvoice {
     7 : required string currency_symbolic_code
     8 : optional base.Content context
     9 : optional domain.PartialInvoiceCart cart
-    10: optional string external_id
 }
 
 /**

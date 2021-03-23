@@ -159,7 +159,6 @@ struct InvoiceLine {
 
 struct SplitInvoiceCart {
     1: required list<PartialInvoiceCart> partial_carts
-    3: required Cash fees
 }
 
 struct PartialInvoiceCart {
