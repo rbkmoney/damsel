@@ -2932,6 +2932,7 @@ struct_info('CustomerBindingChanged') ->
 
 struct_info('CustomerBindingParams') ->
     {struct, struct, [
+        {3, optional, string, 'customer_binding_id', undefined},
         {2, optional, string, 'rec_payment_tool_id', undefined},
         {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
     ]};

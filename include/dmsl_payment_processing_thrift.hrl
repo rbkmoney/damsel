@@ -532,6 +532,7 @@
 
 %% struct 'CustomerBindingParams'
 -record('payproc_CustomerBindingParams', {
+    'customer_binding_id' :: dmsl_payment_processing_thrift:'CustomerBindingID'() | undefined,
     'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'() | undefined,
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
