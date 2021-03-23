@@ -10,7 +10,6 @@ include "domain.thrift"
 
 /** Предметная область */
 
-typedef base.ID CashFlowID
 typedef domain.AccountID AccountID
 typedef domain.MerchantCashFlowAccount MerchantCashFlowAccount
 typedef domain.ProviderCashFlowAccount ProviderCashFlowAccount
@@ -18,40 +17,7 @@ typedef domain.SystemCashFlowAccount SystemCashFlowAccount
 typedef domain.ExternalCashFlowAccount ExternalCashFlowAccount
 
 struct CashFlow {
-    1: required CashFlowID id
-    2: required CashFlowSource source
-    3: required base.Timestamp created_at
-    4: required list<CashFlowTransaction> transactions
-}
-
-union CashFlowSource {
-    1: PaymentCashFlowSource payment
-    2: RefundCashFlowSource refund
-    3: AdjustmentCashFlowSource adjustment
-    4: ChargebackCashFlowSource chargeback
-}
-
-struct PaymentCashFlowSource {
-    1: required domain.InvoiceID invoice_id
-    2: required domain.InvoicePaymentID payment_id
-}
-
-struct RefundCashFlowSource {
-    1: required domain.InvoiceID invoice_id
-    2: required domain.InvoicePaymentID payment_id
-    3: required domain.InvoicePaymentRefundID refund_id
-}
-
-struct AdjustmentCashFlowSource {
-    1: required domain.InvoiceID invoice_id
-    2: required domain.InvoicePaymentID payment_id
-    3: required domain.InvoicePaymentAdjustmentID adjustment_id
-}
-
-struct ChargebackCashFlowSource {
-    1: required domain.InvoiceID invoice_id
-    2: required domain.InvoicePaymentID payment_id
-    3: required domain.InvoicePaymentChargebackID chargeback_id
+    1: required list<CashFlowTransaction> transactions
 }
 
 struct CashFlowTransaction {
@@ -106,20 +72,4 @@ struct SystemTransactionAccount {
 
 struct ExternalTransactionAccount {
     1: required ExternalCashFlowAccount account_type
-}
-
-/**
- * Один из возможных вариантов события, порождённого графом финансовых потоков.
- */
-union Change {
-    1: CreatedChange created
-    2: UpdatedChange updated
-}
-
-struct CreatedChange {
-    1: CashFlow cash_flow
-}
-
-struct UpdatedChange {
-    1: CashFlow updated_cash_flow
 }
