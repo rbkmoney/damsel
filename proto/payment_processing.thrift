@@ -1545,6 +1545,7 @@ typedef domain.CustomerID CustomerID
 typedef domain.Metadata   Metadata
 
 struct CustomerParams {
+    5: optional CustomerID         customer_id
     1: required PartyID            party_id
     2: required ShopID             shop_id
     3: required domain.ContactInfo contact_info
