@@ -286,6 +286,7 @@
 
 %% struct 'InvoiceTemplateCreateParams'
 -record('payproc_InvoiceTemplateCreateParams', {
+    'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'() | undefined,
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
@@ -481,6 +482,7 @@
 
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
+    'customer_id' :: dmsl_payment_processing_thrift:'CustomerID'() | undefined,
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
