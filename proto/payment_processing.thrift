@@ -549,7 +549,7 @@ struct InvoiceWithTemplateParams {
 }
 
 struct InvoiceTemplateCreateParams {
-    10: optional InvoiceTemplateID             template_id
+    10: optional domain.InvoiceTemplateID      template_id
     1:  required PartyID                       party_id
     2:  required ShopID                        shop_id
     4:  required domain.LifetimeInterval       invoice_lifetime
