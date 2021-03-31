@@ -76,7 +76,9 @@ struct CardInfo {
     2: optional string cardholder_name
     3: optional string last_4_digits
     4: optional CardClass card_class
-    5: optional domain.BankCardPaymentSystem payment_system
+    6: optional domain.PaymentSystemRef payment_system
+    /** Deprecated **/
+    5: optional domain.LegacyBankCardPaymentSystem payment_system_deprecated
 }
 
 enum CardClass {

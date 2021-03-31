@@ -366,7 +366,8 @@ struct_info('CardInfo') ->
         {2, optional, string, 'cardholder_name', undefined},
         {3, optional, string, 'last_4_digits', undefined},
         {4, optional, {enum, {dmsl_payment_tool_provider_thrift, 'CardClass'}}, 'card_class', undefined},
-        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined}
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined}
     ]};
 
 struct_info('CardPaymentData') ->

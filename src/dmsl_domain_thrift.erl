@@ -94,13 +94,13 @@
     'CumulativeLimitPeriod'/0,
     'PayoutMethod'/0,
     'Residence'/0,
-    'BankCardPaymentSystem'/0,
-    'BankCardTokenProvider'/0,
+    'LegacyBankCardPaymentSystem'/0,
+    'LegacyBankCardTokenProvider'/0,
     'TokenizationMethod'/0,
     'CryptoCurrency'/0,
-    'MobileOperator'/0,
-    'TerminalPaymentProvider'/0,
-    'DigitalWalletProvider'/0,
+    'LegacyMobileOperator'/0,
+    'LegacyTerminalPaymentProvider'/0,
+    'LegacyDigitalWalletProvider'/0,
     'MerchantCashFlowAccount'/0,
     'ProviderCashFlowAccount'/0,
     'SystemCashFlowAccount'/0,
@@ -296,6 +296,10 @@
     'PaymentMethod'/0,
     'BankCardPaymentMethod'/0,
     'TokenizedBankCard'/0,
+    'PaymentSystemRef'/0,
+    'PaymentSystem'/0,
+    'BankCardTokenServiceRef'/0,
+    'BankCardTokenService'/0,
     'P2PTool'/0,
     'PaymentTool'/0,
     'DisposablePaymentResource'/0,
@@ -305,11 +309,22 @@
     'BankCardCategory'/0,
     'CryptoWallet'/0,
     'MobileCommerce'/0,
+    'MobileOperatorRef'/0,
+    'MobileOperator'/0,
     'MobilePhone'/0,
     'PaymentTerminal'/0,
+    'PaymentServiceRef'/0,
+    'PaymentService'/0,
     'DigitalWallet'/0,
     'BankRef'/0,
     'Bank'/0,
+    'PaymentCardValidationRule'/0,
+    'PaymentCardNumber'/0,
+    'PaymentCardNumberChecksum'/0,
+    'PaymentCardNumberChecksumLuhn'/0,
+    'PaymentCardCVC'/0,
+    'PaymentCardExpirationDate'/0,
+    'PaymentCardExactExpirationDate'/0,
     'PaymentMethodRef'/0,
     'PaymentMethodDefinition'/0,
     'PaymentMethodSelector'/0,
@@ -369,6 +384,8 @@
     'CashValueSelector'/0,
     'CashValueDecision'/0,
     'ProviderAccount'/0,
+    'PaymentSystemSelector'/0,
+    'PaymentSystemDecision'/0,
     'ProviderSelector'/0,
     'ProviderDecision'/0,
     'WithdrawalProviderSelector'/0,
@@ -394,6 +411,8 @@
     'WithdrawalTerminalDecision'/0,
     'Predicate'/0,
     'Condition'/0,
+    'BinDataCondition'/0,
+    'StringCondition'/0,
     'P2PToolCondition'/0,
     'PaymentToolCondition'/0,
     'BankCardCondition'/0,
@@ -472,6 +491,20 @@
     'RoutingRulesObject'/0,
     'CriterionObject'/0,
     'DocumentTypeObject'/0,
+    'PaymentServiceObject'/0,
+    'PaymentSystemObject'/0,
+    'BankCardTokenServiceObject'/0,
+    'MobileOperatorObject'/0,
+    'LegacyMobileOperatorMappingRef'/0,
+    'LegacyMobileOperatorObject'/0,
+    'LegacyBankCardPaymentSystemRef'/0,
+    'LegacyBankCardPaymentSystemObject'/0,
+    'LegacyBankCardTokenProviderRef'/0,
+    'LegacyBankCardTokenProviderObject'/0,
+    'LegacyTerminalPaymentProviderRef'/0,
+    'LegacyTerminalPaymentProviderObject'/0,
+    'LegacyDigitalWalletProviderRef'/0,
+    'LegacyDigitalWalletProviderObject'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -599,13 +632,13 @@
     'CumulativeLimitPeriod' |
     'PayoutMethod' |
     'Residence' |
-    'BankCardPaymentSystem' |
-    'BankCardTokenProvider' |
+    'LegacyBankCardPaymentSystem' |
+    'LegacyBankCardTokenProvider' |
     'TokenizationMethod' |
     'CryptoCurrency' |
-    'MobileOperator' |
-    'TerminalPaymentProvider' |
-    'DigitalWalletProvider' |
+    'LegacyMobileOperator' |
+    'LegacyTerminalPaymentProvider' |
+    'LegacyDigitalWalletProvider' |
     'MerchantCashFlowAccount' |
     'ProviderCashFlowAccount' |
     'SystemCashFlowAccount' |
@@ -916,8 +949,8 @@
     'jam' |
     'jpn'.
 
-%% enum 'BankCardPaymentSystem'
--type 'BankCardPaymentSystem'() ::
+%% enum 'LegacyBankCardPaymentSystem'
+-type 'LegacyBankCardPaymentSystem'() ::
     'visa' |
     'mastercard' |
     'visaelectron' |
@@ -936,8 +969,8 @@
     'dummy' |
     'uzcard'.
 
-%% enum 'BankCardTokenProvider'
--type 'BankCardTokenProvider'() ::
+%% enum 'LegacyBankCardTokenProvider'
+-type 'LegacyBankCardTokenProvider'() ::
     'applepay' |
     'googlepay' |
     'samsungpay' |
@@ -958,16 +991,16 @@
     'zcash' |
     'usdt'.
 
-%% enum 'MobileOperator'
--type 'MobileOperator'() ::
+%% enum 'LegacyMobileOperator'
+-type 'LegacyMobileOperator'() ::
     'mts' |
     'beeline' |
     'megafone' |
     'tele2' |
     'yota'.
 
-%% enum 'TerminalPaymentProvider'
--type 'TerminalPaymentProvider'() ::
+%% enum 'LegacyTerminalPaymentProvider'
+-type 'LegacyTerminalPaymentProvider'() ::
     'euroset' |
     'wechat' |
     'alipay' |
@@ -976,8 +1009,8 @@
     'uzcard' |
     'rbs'.
 
-%% enum 'DigitalWalletProvider'
--type 'DigitalWalletProvider'() ::
+%% enum 'LegacyDigitalWalletProvider'
+-type 'LegacyDigitalWalletProvider'() ::
     'qiwi' |
     'rbkmoney' |
     'yandex_money'.
@@ -1213,6 +1246,10 @@
     'PaymentMethod' |
     'BankCardPaymentMethod' |
     'TokenizedBankCard' |
+    'PaymentSystemRef' |
+    'PaymentSystem' |
+    'BankCardTokenServiceRef' |
+    'BankCardTokenService' |
     'P2PTool' |
     'PaymentTool' |
     'DisposablePaymentResource' |
@@ -1222,11 +1259,22 @@
     'BankCardCategory' |
     'CryptoWallet' |
     'MobileCommerce' |
+    'MobileOperatorRef' |
+    'MobileOperator' |
     'MobilePhone' |
     'PaymentTerminal' |
+    'PaymentServiceRef' |
+    'PaymentService' |
     'DigitalWallet' |
     'BankRef' |
     'Bank' |
+    'PaymentCardValidationRule' |
+    'PaymentCardNumber' |
+    'PaymentCardNumberChecksum' |
+    'PaymentCardNumberChecksumLuhn' |
+    'PaymentCardCVC' |
+    'PaymentCardExpirationDate' |
+    'PaymentCardExactExpirationDate' |
     'PaymentMethodRef' |
     'PaymentMethodDefinition' |
     'PaymentMethodSelector' |
@@ -1286,6 +1334,8 @@
     'CashValueSelector' |
     'CashValueDecision' |
     'ProviderAccount' |
+    'PaymentSystemSelector' |
+    'PaymentSystemDecision' |
     'ProviderSelector' |
     'ProviderDecision' |
     'WithdrawalProviderSelector' |
@@ -1311,6 +1361,8 @@
     'WithdrawalTerminalDecision' |
     'Predicate' |
     'Condition' |
+    'BinDataCondition' |
+    'StringCondition' |
     'P2PToolCondition' |
     'PaymentToolCondition' |
     'BankCardCondition' |
@@ -1389,6 +1441,20 @@
     'RoutingRulesObject' |
     'CriterionObject' |
     'DocumentTypeObject' |
+    'PaymentServiceObject' |
+    'PaymentSystemObject' |
+    'BankCardTokenServiceObject' |
+    'MobileOperatorObject' |
+    'LegacyMobileOperatorMappingRef' |
+    'LegacyMobileOperatorObject' |
+    'LegacyBankCardPaymentSystemRef' |
+    'LegacyBankCardPaymentSystemObject' |
+    'LegacyBankCardTokenProviderRef' |
+    'LegacyBankCardTokenProviderObject' |
+    'LegacyTerminalPaymentProviderRef' |
+    'LegacyTerminalPaymentProviderObject' |
+    'LegacyDigitalWalletProviderRef' |
+    'LegacyDigitalWalletProviderObject' |
     'Reference' |
     'DomainObject'.
 
@@ -2034,20 +2100,35 @@
 
 %% union 'PaymentMethod'
 -type 'PaymentMethod'() ::
-    {'payment_terminal', 'TerminalPaymentProvider'()} |
-    {'digital_wallet', 'DigitalWalletProvider'()} |
+    {'payment_terminal', 'PaymentServiceRef'()} |
+    {'digital_wallet', 'PaymentServiceRef'()} |
     {'crypto_currency', 'CryptoCurrency'()} |
-    {'mobile', 'MobileOperator'()} |
+    {'mobile', 'MobileOperatorRef'()} |
     {'bank_card', 'BankCardPaymentMethod'()} |
-    {'bank_card_deprecated', 'BankCardPaymentSystem'()} |
+    {'bank_card_deprecated', 'LegacyBankCardPaymentSystem'()} |
+    {'payment_terminal_deprecated', 'LegacyTerminalPaymentProvider'()} |
+    {'digital_wallet_deprecated', 'LegacyDigitalWalletProvider'()} |
     {'tokenized_bank_card_deprecated', 'TokenizedBankCard'()} |
-    {'empty_cvv_bank_card_deprecated', 'BankCardPaymentSystem'()}.
+    {'empty_cvv_bank_card_deprecated', 'LegacyBankCardPaymentSystem'()} |
+    {'mobile_deprecated', 'LegacyMobileOperator'()}.
 
 %% struct 'BankCardPaymentMethod'
 -type 'BankCardPaymentMethod'() :: #'domain_BankCardPaymentMethod'{}.
 
 %% struct 'TokenizedBankCard'
 -type 'TokenizedBankCard'() :: #'domain_TokenizedBankCard'{}.
+
+%% struct 'PaymentSystemRef'
+-type 'PaymentSystemRef'() :: #'domain_PaymentSystemRef'{}.
+
+%% struct 'PaymentSystem'
+-type 'PaymentSystem'() :: #'domain_PaymentSystem'{}.
+
+%% struct 'BankCardTokenServiceRef'
+-type 'BankCardTokenServiceRef'() :: #'domain_BankCardTokenServiceRef'{}.
+
+%% struct 'BankCardTokenService'
+-type 'BankCardTokenService'() :: #'domain_BankCardTokenService'{}.
 
 %% struct 'P2PTool'
 -type 'P2PTool'() :: #'domain_P2PTool'{}.
@@ -2081,11 +2162,23 @@
 %% struct 'MobileCommerce'
 -type 'MobileCommerce'() :: #'domain_MobileCommerce'{}.
 
+%% struct 'MobileOperatorRef'
+-type 'MobileOperatorRef'() :: #'domain_MobileOperatorRef'{}.
+
+%% struct 'MobileOperator'
+-type 'MobileOperator'() :: #'domain_MobileOperator'{}.
+
 %% struct 'MobilePhone'
 -type 'MobilePhone'() :: #'domain_MobilePhone'{}.
 
 %% struct 'PaymentTerminal'
 -type 'PaymentTerminal'() :: #'domain_PaymentTerminal'{}.
+
+%% struct 'PaymentServiceRef'
+-type 'PaymentServiceRef'() :: #'domain_PaymentServiceRef'{}.
+
+%% struct 'PaymentService'
+-type 'PaymentService'() :: #'domain_PaymentService'{}.
 
 %% struct 'DigitalWallet'
 -type 'DigitalWallet'() :: #'domain_DigitalWallet'{}.
@@ -2095,6 +2188,35 @@
 
 %% struct 'Bank'
 -type 'Bank'() :: #'domain_Bank'{}.
+
+%% union 'PaymentCardValidationRule'
+-type 'PaymentCardValidationRule'() ::
+    {'card_number', 'PaymentCardNumber'()} |
+    {'exp_date', 'PaymentCardExpirationDate'()} |
+    {'cvc', 'PaymentCardCVC'()}.
+
+%% union 'PaymentCardNumber'
+-type 'PaymentCardNumber'() ::
+    {'ranges', ordsets:ordset(dmsl_base_thrift:'IntegerRange'())} |
+    {'checksum', 'PaymentCardNumberChecksum'()}.
+
+%% union 'PaymentCardNumberChecksum'
+-type 'PaymentCardNumberChecksum'() ::
+    {'luhn', 'PaymentCardNumberChecksumLuhn'()}.
+
+%% struct 'PaymentCardNumberChecksumLuhn'
+-type 'PaymentCardNumberChecksumLuhn'() :: #'domain_PaymentCardNumberChecksumLuhn'{}.
+
+%% union 'PaymentCardCVC'
+-type 'PaymentCardCVC'() ::
+    {'length', dmsl_base_thrift:'IntegerRange'()}.
+
+%% union 'PaymentCardExpirationDate'
+-type 'PaymentCardExpirationDate'() ::
+    {'exact_exp_date', 'PaymentCardExactExpirationDate'()}.
+
+%% struct 'PaymentCardExactExpirationDate'
+-type 'PaymentCardExactExpirationDate'() :: #'domain_PaymentCardExactExpirationDate'{}.
 
 %% struct 'PaymentMethodRef'
 -type 'PaymentMethodRef'() :: #'domain_PaymentMethodRef'{}.
@@ -2306,6 +2428,14 @@
 %% struct 'ProviderAccount'
 -type 'ProviderAccount'() :: #'domain_ProviderAccount'{}.
 
+%% union 'PaymentSystemSelector'
+-type 'PaymentSystemSelector'() ::
+    {'decisions', ['PaymentSystemDecision'()]} |
+    {'value', 'PaymentSystemRef'()}.
+
+%% struct 'PaymentSystemDecision'
+-type 'PaymentSystemDecision'() :: #'domain_PaymentSystemDecision'{}.
+
 %% union 'ProviderSelector'
 -type 'ProviderSelector'() ::
     {'decisions', ['ProviderDecision'()]} |
@@ -2408,7 +2538,16 @@
     {'party', 'PartyCondition'()} |
     {'payout_method_is', 'PayoutMethodRef'()} |
     {'identification_level_is', atom()} |
-    {'p2p_tool', 'P2PToolCondition'()}.
+    {'p2p_tool', 'P2PToolCondition'()} |
+    {'bin_data', 'BinDataCondition'()}.
+
+%% struct 'BinDataCondition'
+-type 'BinDataCondition'() :: #'domain_BinDataCondition'{}.
+
+%% union 'StringCondition'
+-type 'StringCondition'() ::
+    {'matches', binary()} |
+    {'equals', binary()}.
 
 %% struct 'P2PToolCondition'
 -type 'P2PToolCondition'() :: #'domain_P2PToolCondition'{}.
@@ -2416,8 +2555,8 @@
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
     {'bank_card', 'BankCardCondition'()} |
-    {'payment_terminal', 'PaymentTerminalCondition'()} |
     {'digital_wallet', 'DigitalWalletCondition'()} |
+    {'payment_terminal', 'PaymentTerminalCondition'()} |
     {'crypto_currency', 'CryptoCurrencyCondition'()} |
     {'mobile_commerce', 'MobileCommerceCondition'()}.
 
@@ -2441,14 +2580,16 @@
 
 %% union 'PaymentTerminalConditionDefinition'
 -type 'PaymentTerminalConditionDefinition'() ::
-    {'provider_is', atom()}.
+    {'payment_service_is', 'PaymentServiceRef'()} |
+    {'provider_is_deprecated', atom()}.
 
 %% struct 'DigitalWalletCondition'
 -type 'DigitalWalletCondition'() :: #'domain_DigitalWalletCondition'{}.
 
 %% union 'DigitalWalletConditionDefinition'
 -type 'DigitalWalletConditionDefinition'() ::
-    {'provider_is', atom()}.
+    {'payment_service_is', 'PaymentServiceRef'()} |
+    {'provider_is_deprecated', atom()}.
 
 %% struct 'CryptoCurrencyCondition'
 -type 'CryptoCurrencyCondition'() :: #'domain_CryptoCurrencyCondition'{}.
@@ -2462,7 +2603,8 @@
 
 %% union 'MobileCommerceConditionDefinition'
 -type 'MobileCommerceConditionDefinition'() ::
-    {'operator_is', atom()}.
+    {'operator_is', 'MobileOperatorRef'()} |
+    {'operator_is_deprecated', atom()}.
 
 %% struct 'PartyCondition'
 -type 'PartyCondition'() :: #'domain_PartyCondition'{}.
@@ -2668,6 +2810,48 @@
 %% struct 'DocumentTypeObject'
 -type 'DocumentTypeObject'() :: #'domain_DocumentTypeObject'{}.
 
+%% struct 'PaymentServiceObject'
+-type 'PaymentServiceObject'() :: #'domain_PaymentServiceObject'{}.
+
+%% struct 'PaymentSystemObject'
+-type 'PaymentSystemObject'() :: #'domain_PaymentSystemObject'{}.
+
+%% struct 'BankCardTokenServiceObject'
+-type 'BankCardTokenServiceObject'() :: #'domain_BankCardTokenServiceObject'{}.
+
+%% struct 'MobileOperatorObject'
+-type 'MobileOperatorObject'() :: #'domain_MobileOperatorObject'{}.
+
+%% struct 'LegacyMobileOperatorMappingRef'
+-type 'LegacyMobileOperatorMappingRef'() :: #'domain_LegacyMobileOperatorMappingRef'{}.
+
+%% struct 'LegacyMobileOperatorObject'
+-type 'LegacyMobileOperatorObject'() :: #'domain_LegacyMobileOperatorObject'{}.
+
+%% struct 'LegacyBankCardPaymentSystemRef'
+-type 'LegacyBankCardPaymentSystemRef'() :: #'domain_LegacyBankCardPaymentSystemRef'{}.
+
+%% struct 'LegacyBankCardPaymentSystemObject'
+-type 'LegacyBankCardPaymentSystemObject'() :: #'domain_LegacyBankCardPaymentSystemObject'{}.
+
+%% struct 'LegacyBankCardTokenProviderRef'
+-type 'LegacyBankCardTokenProviderRef'() :: #'domain_LegacyBankCardTokenProviderRef'{}.
+
+%% struct 'LegacyBankCardTokenProviderObject'
+-type 'LegacyBankCardTokenProviderObject'() :: #'domain_LegacyBankCardTokenProviderObject'{}.
+
+%% struct 'LegacyTerminalPaymentProviderRef'
+-type 'LegacyTerminalPaymentProviderRef'() :: #'domain_LegacyTerminalPaymentProviderRef'{}.
+
+%% struct 'LegacyTerminalPaymentProviderObject'
+-type 'LegacyTerminalPaymentProviderObject'() :: #'domain_LegacyTerminalPaymentProviderObject'{}.
+
+%% struct 'LegacyDigitalWalletProviderRef'
+-type 'LegacyDigitalWalletProviderRef'() :: #'domain_LegacyDigitalWalletProviderRef'{}.
+
+%% struct 'LegacyDigitalWalletProviderObject'
+-type 'LegacyDigitalWalletProviderObject'() :: #'domain_LegacyDigitalWalletProviderObject'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -2696,6 +2880,15 @@
     {'bank_card_category', 'BankCardCategoryRef'()} |
     {'criterion', 'CriterionRef'()} |
     {'document_type', 'DocumentTypeRef'()} |
+    {'payment_service', 'PaymentServiceRef'()} |
+    {'payment_system', 'PaymentSystemRef'()} |
+    {'payment_token', 'BankCardTokenServiceRef'()} |
+    {'mobile_operator', 'MobileOperatorRef'()} |
+    {'mobile_operator_legacy', 'LegacyMobileOperatorMappingRef'()} |
+    {'payment_system_legacy', 'LegacyBankCardPaymentSystemRef'()} |
+    {'payment_token_legacy', 'LegacyBankCardTokenProviderRef'()} |
+    {'terminal_provider_legacy', 'LegacyTerminalPaymentProviderRef'()} |
+    {'payment_service_legacy', 'LegacyDigitalWalletProviderRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2728,6 +2921,15 @@
     {'bank_card_category', 'BankCardCategoryObject'()} |
     {'criterion', 'CriterionObject'()} |
     {'document_type', 'DocumentTypeObject'()} |
+    {'payment_service', 'PaymentServiceObject'()} |
+    {'payment_system', 'PaymentSystemObject'()} |
+    {'payment_token', 'BankCardTokenServiceObject'()} |
+    {'mobile_operator', 'MobileOperatorObject'()} |
+    {'mobile_operator_legacy', 'LegacyMobileOperatorObject'()} |
+    {'payment_system_legacy', 'LegacyBankCardPaymentSystemObject'()} |
+    {'payment_token_legacy', 'LegacyBankCardTokenProviderObject'()} |
+    {'terminal_provider_legacy', 'LegacyTerminalPaymentProviderObject'()} |
+    {'payment_service_legacy', 'LegacyDigitalWalletProviderObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2769,13 +2971,13 @@
     'CumulativeLimitPeriod'() |
     'PayoutMethod'() |
     'Residence'() |
-    'BankCardPaymentSystem'() |
-    'BankCardTokenProvider'() |
+    'LegacyBankCardPaymentSystem'() |
+    'LegacyBankCardTokenProvider'() |
     'TokenizationMethod'() |
     'CryptoCurrency'() |
-    'MobileOperator'() |
-    'TerminalPaymentProvider'() |
-    'DigitalWalletProvider'() |
+    'LegacyMobileOperator'() |
+    'LegacyTerminalPaymentProvider'() |
+    'LegacyDigitalWalletProvider'() |
     'MerchantCashFlowAccount'() |
     'ProviderCashFlowAccount'() |
     'SystemCashFlowAccount'() |
@@ -2860,13 +3062,13 @@ enums() ->
         'CumulativeLimitPeriod',
         'PayoutMethod',
         'Residence',
-        'BankCardPaymentSystem',
-        'BankCardTokenProvider',
+        'LegacyBankCardPaymentSystem',
+        'LegacyBankCardTokenProvider',
         'TokenizationMethod',
         'CryptoCurrency',
-        'MobileOperator',
-        'TerminalPaymentProvider',
-        'DigitalWalletProvider',
+        'LegacyMobileOperator',
+        'LegacyTerminalPaymentProvider',
+        'LegacyDigitalWalletProvider',
         'MerchantCashFlowAccount',
         'ProviderCashFlowAccount',
         'SystemCashFlowAccount',
@@ -3066,6 +3268,10 @@ structs() ->
         'PaymentMethod',
         'BankCardPaymentMethod',
         'TokenizedBankCard',
+        'PaymentSystemRef',
+        'PaymentSystem',
+        'BankCardTokenServiceRef',
+        'BankCardTokenService',
         'P2PTool',
         'PaymentTool',
         'DisposablePaymentResource',
@@ -3075,11 +3281,22 @@ structs() ->
         'BankCardCategory',
         'CryptoWallet',
         'MobileCommerce',
+        'MobileOperatorRef',
+        'MobileOperator',
         'MobilePhone',
         'PaymentTerminal',
+        'PaymentServiceRef',
+        'PaymentService',
         'DigitalWallet',
         'BankRef',
         'Bank',
+        'PaymentCardValidationRule',
+        'PaymentCardNumber',
+        'PaymentCardNumberChecksum',
+        'PaymentCardNumberChecksumLuhn',
+        'PaymentCardCVC',
+        'PaymentCardExpirationDate',
+        'PaymentCardExactExpirationDate',
         'PaymentMethodRef',
         'PaymentMethodDefinition',
         'PaymentMethodSelector',
@@ -3139,6 +3356,8 @@ structs() ->
         'CashValueSelector',
         'CashValueDecision',
         'ProviderAccount',
+        'PaymentSystemSelector',
+        'PaymentSystemDecision',
         'ProviderSelector',
         'ProviderDecision',
         'WithdrawalProviderSelector',
@@ -3164,6 +3383,8 @@ structs() ->
         'WithdrawalTerminalDecision',
         'Predicate',
         'Condition',
+        'BinDataCondition',
+        'StringCondition',
         'P2PToolCondition',
         'PaymentToolCondition',
         'BankCardCondition',
@@ -3242,6 +3463,20 @@ structs() ->
         'RoutingRulesObject',
         'CriterionObject',
         'DocumentTypeObject',
+        'PaymentServiceObject',
+        'PaymentSystemObject',
+        'BankCardTokenServiceObject',
+        'MobileOperatorObject',
+        'LegacyMobileOperatorMappingRef',
+        'LegacyMobileOperatorObject',
+        'LegacyBankCardPaymentSystemRef',
+        'LegacyBankCardPaymentSystemObject',
+        'LegacyBankCardTokenProviderRef',
+        'LegacyBankCardTokenProviderObject',
+        'LegacyTerminalPaymentProviderRef',
+        'LegacyTerminalPaymentProviderObject',
+        'LegacyDigitalWalletProviderRef',
+        'LegacyDigitalWalletProviderObject',
         'Reference',
         'DomainObject'
     ].
@@ -3725,7 +3960,7 @@ enum_info('Residence') ->
         {'jpn', 250}
     ]};
 
-enum_info('BankCardPaymentSystem') ->
+enum_info('LegacyBankCardPaymentSystem') ->
     {enum, [
         {'visa', 0},
         {'mastercard', 1},
@@ -3746,7 +3981,7 @@ enum_info('BankCardPaymentSystem') ->
         {'uzcard', 16}
     ]};
 
-enum_info('BankCardTokenProvider') ->
+enum_info('LegacyBankCardTokenProvider') ->
     {enum, [
         {'applepay', 0},
         {'googlepay', 1},
@@ -3771,7 +4006,7 @@ enum_info('CryptoCurrency') ->
         {'usdt', 6}
     ]};
 
-enum_info('MobileOperator') ->
+enum_info('LegacyMobileOperator') ->
     {enum, [
         {'mts', 1},
         {'beeline', 2},
@@ -3780,7 +4015,7 @@ enum_info('MobileOperator') ->
         {'yota', 5}
     ]};
 
-enum_info('TerminalPaymentProvider') ->
+enum_info('LegacyTerminalPaymentProvider') ->
     {enum, [
         {'euroset', 0},
         {'wechat', 1},
@@ -3791,7 +4026,7 @@ enum_info('TerminalPaymentProvider') ->
         {'rbs', 6}
     ]};
 
-enum_info('DigitalWalletProvider') ->
+enum_info('LegacyDigitalWalletProvider') ->
     {enum, [
         {'qiwi', 0},
         {'rbkmoney', 1},
@@ -5036,29 +5271,59 @@ struct_info('TurnoverLimitDecision') ->
 
 struct_info('PaymentMethod') ->
     {struct, union, [
-        {2, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'payment_terminal', undefined},
-        {3, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'digital_wallet', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_terminal', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'digital_wallet', undefined},
         {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-        {7, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'mobile', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'mobile', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardPaymentMethod'}}, 'bank_card', undefined},
-        {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'bank_card_deprecated', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'bank_card_deprecated', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'LegacyTerminalPaymentProvider'}}, 'payment_terminal_deprecated', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'LegacyDigitalWalletProvider'}}, 'digital_wallet_deprecated', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card_deprecated', undefined},
-        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'empty_cvv_bank_card_deprecated', undefined}
+        {5, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'empty_cvv_bank_card_deprecated', undefined},
+        {7, optional, {enum, {dmsl_domain_thrift, 'LegacyMobileOperator'}}, 'mobile_deprecated', undefined}
     ]};
 
 struct_info('BankCardPaymentMethod') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
         {2, optional, bool, 'is_cvv_empty', false},
-        {3, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
-        {4, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined}
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_deprecated', undefined}
     ]};
 
 struct_info('TokenizedBankCard') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
-        {2, required, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
-        {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined}
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_deprecated', undefined}
+    ]};
+
+struct_info('PaymentSystemRef') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined}
+    ]};
+
+struct_info('PaymentSystem') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined},
+        {3, optional, {set, {struct, union, {dmsl_domain_thrift, 'PaymentCardValidationRule'}}}, 'validation_rules', undefined}
+    ]};
+
+struct_info('BankCardTokenServiceRef') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined}
+    ]};
+
+struct_info('BankCardTokenService') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
     ]};
 
 struct_info('P2PTool') ->
@@ -5086,10 +5351,10 @@ struct_info('DisposablePaymentResource') ->
 struct_info('BankCard') ->
     {struct, struct, [
         {1, required, string, 'token', undefined},
-        {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
         {3, required, string, 'bin', undefined},
         {4, required, string, 'last_digits', undefined},
-        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined},
+        {15, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
         {12, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
         {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
         {7, optional, string, 'bank_name', undefined},
@@ -5097,7 +5362,9 @@ struct_info('BankCard') ->
         {9, optional, bool, 'is_cvv_empty', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardExpDate'}}, 'exp_date', undefined},
         {11, optional, string, 'cardholder_name', undefined},
-        {13, optional, string, 'category', undefined}
+        {13, optional, string, 'category', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_deprecated', undefined}
     ]};
 
 struct_info('BankCardExpDate') ->
@@ -5127,8 +5394,20 @@ struct_info('CryptoWallet') ->
 
 struct_info('MobileCommerce') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator', undefined},
-        {2, required, {struct, struct, {dmsl_domain_thrift, 'MobilePhone'}}, 'phone', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'operator', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'MobilePhone'}}, 'phone', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyMobileOperator'}}, 'operator_deprecated', undefined}
+    ]};
+
+struct_info('MobileOperatorRef') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined}
+    ]};
+
+struct_info('MobileOperator') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
     ]};
 
 struct_info('MobilePhone') ->
@@ -5139,14 +5418,27 @@ struct_info('MobilePhone') ->
 
 struct_info('PaymentTerminal') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'terminal_type', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_service', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyTerminalPaymentProvider'}}, 'terminal_type_deprecated', undefined}
+    ]};
+
+struct_info('PaymentServiceRef') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined}
+    ]};
+
+struct_info('PaymentService') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
     ]};
 
 struct_info('DigitalWallet') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_service', undefined},
         {2, required, string, 'id', undefined},
-        {3, optional, string, 'token', undefined}
+        {3, optional, string, 'token', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyDigitalWalletProvider'}}, 'provider_deprecated', undefined}
     ]};
 
 struct_info('BankRef') ->
@@ -5161,6 +5453,40 @@ struct_info('Bank') ->
         {4, optional, {set, string}, 'binbase_id_patterns', undefined},
         {3, required, {set, string}, 'bins', undefined}
     ]};
+
+struct_info('PaymentCardValidationRule') ->
+    {struct, union, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentCardNumber'}}, 'card_number', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentCardExpirationDate'}}, 'exp_date', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'PaymentCardCVC'}}, 'cvc', undefined}
+    ]};
+
+struct_info('PaymentCardNumber') ->
+    {struct, union, [
+        {1, optional, {set, {struct, struct, {dmsl_base_thrift, 'IntegerRange'}}}, 'ranges', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentCardNumberChecksum'}}, 'checksum', undefined}
+    ]};
+
+struct_info('PaymentCardNumberChecksum') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentCardNumberChecksumLuhn'}}, 'luhn', undefined}
+    ]};
+
+struct_info('PaymentCardNumberChecksumLuhn') ->
+    {struct, struct, []};
+
+struct_info('PaymentCardCVC') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_base_thrift, 'IntegerRange'}}, 'length', undefined}
+    ]};
+
+struct_info('PaymentCardExpirationDate') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentCardExactExpirationDate'}}, 'exact_exp_date', undefined}
+    ]};
+
+struct_info('PaymentCardExactExpirationDate') ->
+    {struct, struct, []};
 
 struct_info('PaymentMethodRef') ->
     {struct, struct, [
@@ -5540,6 +5866,18 @@ struct_info('ProviderAccount') ->
         {1, required, i64, 'settlement', undefined}
     ]};
 
+struct_info('PaymentSystemSelector') ->
+    {struct, union, [
+        {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemDecision'}}}, 'decisions', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'value', undefined}
+    ]};
+
+struct_info('PaymentSystemDecision') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'if_', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'PaymentSystemSelector'}}, 'then_', undefined}
+    ]};
+
 struct_info('ProviderSelector') ->
     {struct, union, [
         {1, optional, {list, {struct, struct, {dmsl_domain_thrift, 'ProviderDecision'}}}, 'decisions', undefined},
@@ -5711,7 +6049,20 @@ struct_info('Condition') ->
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
         {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
         {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
-        {9, optional, {struct, struct, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'BinDataCondition'}}, 'bin_data', undefined}
+    ]};
+
+struct_info('BinDataCondition') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'StringCondition'}}, 'payment_system', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'StringCondition'}}, 'bank_name', undefined}
+    ]};
+
+struct_info('StringCondition') ->
+    {struct, union, [
+        {1, optional, string, 'matches', undefined},
+        {2, optional, string, 'equals', undefined}
     ]};
 
 struct_info('P2PToolCondition') ->
@@ -5723,8 +6074,8 @@ struct_info('P2PToolCondition') ->
 struct_info('PaymentToolCondition') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCondition'}}, 'bank_card', undefined},
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWalletCondition'}}, 'digital_wallet', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminalCondition'}}, 'payment_terminal', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyCondition'}}, 'crypto_currency', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerceCondition'}}, 'mobile_commerce', undefined}
     ]};
@@ -5736,7 +6087,7 @@ struct_info('BankCardCondition') ->
 
 struct_info('BankCardConditionDefinition') ->
     {struct, union, [
-        {1, optional, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_is', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
         {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
@@ -5746,9 +6097,11 @@ struct_info('BankCardConditionDefinition') ->
 
 struct_info('PaymentSystemCondition') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system_is', undefined},
-        {2, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider_is', undefined},
-        {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method_is', undefined}
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system_is', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'token_service_is', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method_is', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_is_deprecated', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_is_deprecated', undefined}
     ]};
 
 struct_info('PaymentTerminalCondition') ->
@@ -5758,7 +6111,8 @@ struct_info('PaymentTerminalCondition') ->
 
 struct_info('PaymentTerminalConditionDefinition') ->
     {struct, union, [
-        {1, optional, {enum, {dmsl_domain_thrift, 'TerminalPaymentProvider'}}, 'provider_is', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_service_is', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyTerminalPaymentProvider'}}, 'provider_is_deprecated', undefined}
     ]};
 
 struct_info('DigitalWalletCondition') ->
@@ -5768,7 +6122,8 @@ struct_info('DigitalWalletCondition') ->
 
 struct_info('DigitalWalletConditionDefinition') ->
     {struct, union, [
-        {1, optional, {enum, {dmsl_domain_thrift, 'DigitalWalletProvider'}}, 'provider_is', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_service_is', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyDigitalWalletProvider'}}, 'provider_is_deprecated', undefined}
     ]};
 
 struct_info('CryptoCurrencyCondition') ->
@@ -5788,7 +6143,8 @@ struct_info('MobileCommerceCondition') ->
 
 struct_info('MobileCommerceConditionDefinition') ->
     {struct, union, [
-        {1, optional, {enum, {dmsl_domain_thrift, 'MobileOperator'}}, 'operator_is', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'operator_is', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyMobileOperator'}}, 'operator_is_deprecated', undefined}
     ]};
 
 struct_info('PartyCondition') ->
@@ -5930,6 +6286,7 @@ struct_info('PaymentInstitution') ->
         {20, optional, {struct, struct, {dmsl_domain_thrift, 'RoutingRules'}}, 'p2p_transfer_routing_rules', undefined},
         {17, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'withdrawal_providers', undefined},
         {18, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'p2p_providers', undefined},
+        {21, optional, {struct, union, {dmsl_domain_thrift, 'PaymentSystemSelector'}}, 'payment_system', undefined},
         {13, optional, {struct, union, {dmsl_domain_thrift, 'WithdrawalProviderSelector'}}, 'withdrawal_providers_legacy', undefined},
         {14, optional, {struct, union, {dmsl_domain_thrift, 'P2PProviderSelector'}}, 'p2p_providers_legacy', undefined},
         {5, optional, {struct, union, {dmsl_domain_thrift, 'ProviderSelector'}}, 'providers', undefined}
@@ -6191,6 +6548,85 @@ struct_info('DocumentTypeObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'DocumentType'}}, 'data', undefined}
     ]};
 
+struct_info('PaymentServiceObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentService'}}, 'data', undefined}
+    ]};
+
+struct_info('PaymentSystemObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentSystem'}}, 'data', undefined}
+    ]};
+
+struct_info('BankCardTokenServiceObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenService'}}, 'data', undefined}
+    ]};
+
+struct_info('MobileOperatorObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'MobileOperator'}}, 'data', undefined}
+    ]};
+
+struct_info('LegacyMobileOperatorMappingRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'LegacyMobileOperator'}}, 'id', undefined}
+    ]};
+
+struct_info('LegacyMobileOperatorObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'LegacyMobileOperatorMappingRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'data', undefined}
+    ]};
+
+struct_info('LegacyBankCardPaymentSystemRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'id', undefined}
+    ]};
+
+struct_info('LegacyBankCardPaymentSystemObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystemRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'data', undefined}
+    ]};
+
+struct_info('LegacyBankCardTokenProviderRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'id', undefined}
+    ]};
+
+struct_info('LegacyBankCardTokenProviderObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardTokenProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'data', undefined}
+    ]};
+
+struct_info('LegacyTerminalPaymentProviderRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'LegacyTerminalPaymentProvider'}}, 'id', undefined}
+    ]};
+
+struct_info('LegacyTerminalPaymentProviderObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'LegacyTerminalPaymentProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'data', undefined}
+    ]};
+
+struct_info('LegacyDigitalWalletProviderRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'LegacyDigitalWalletProvider'}}, 'id', undefined}
+    ]};
+
+struct_info('LegacyDigitalWalletProviderObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'data', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -6219,6 +6655,15 @@ struct_info('Reference') ->
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'bank_card_category', undefined},
         {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionRef'}}, 'criterion', undefined},
         {32, optional, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeRef'}}, 'document_type', undefined},
+        {33, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_service', undefined},
+        {34, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
+        {35, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {36, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'mobile_operator', undefined},
+        {37, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyMobileOperatorMappingRef'}}, 'mobile_operator_legacy', undefined},
+        {38, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystemRef'}}, 'payment_system_legacy', undefined},
+        {39, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardTokenProviderRef'}}, 'payment_token_legacy', undefined},
+        {40, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyTerminalPaymentProviderRef'}}, 'terminal_provider_legacy', undefined},
+        {41, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderRef'}}, 'payment_service_legacy', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -6252,6 +6697,15 @@ struct_info('DomainObject') ->
         {28, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryObject'}}, 'bank_card_category', undefined},
         {29, optional, {struct, struct, {dmsl_domain_thrift, 'CriterionObject'}}, 'criterion', undefined},
         {32, optional, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeObject'}}, 'document_type', undefined},
+        {33, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceObject'}}, 'payment_service', undefined},
+        {34, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemObject'}}, 'payment_system', undefined},
+        {35, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceObject'}}, 'payment_token', undefined},
+        {36, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorObject'}}, 'mobile_operator', undefined},
+        {37, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyMobileOperatorObject'}}, 'mobile_operator_legacy', undefined},
+        {38, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystemObject'}}, 'payment_system_legacy', undefined},
+        {39, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardTokenProviderObject'}}, 'payment_token_legacy', undefined},
+        {40, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyTerminalPaymentProviderObject'}}, 'terminal_provider_legacy', undefined},
+        {41, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderObject'}}, 'payment_service_legacy', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -6705,6 +7159,18 @@ record_name('BankCardPaymentMethod') ->
 record_name('TokenizedBankCard') ->
     'domain_TokenizedBankCard';
 
+record_name('PaymentSystemRef') ->
+    'domain_PaymentSystemRef';
+
+record_name('PaymentSystem') ->
+    'domain_PaymentSystem';
+
+record_name('BankCardTokenServiceRef') ->
+    'domain_BankCardTokenServiceRef';
+
+record_name('BankCardTokenService') ->
+    'domain_BankCardTokenService';
+
 record_name('P2PTool') ->
     'domain_P2PTool';
 
@@ -6729,11 +7195,23 @@ record_name('CryptoWallet') ->
 record_name('MobileCommerce') ->
     'domain_MobileCommerce';
 
+record_name('MobileOperatorRef') ->
+    'domain_MobileOperatorRef';
+
+record_name('MobileOperator') ->
+    'domain_MobileOperator';
+
 record_name('MobilePhone') ->
     'domain_MobilePhone';
 
 record_name('PaymentTerminal') ->
     'domain_PaymentTerminal';
+
+record_name('PaymentServiceRef') ->
+    'domain_PaymentServiceRef';
+
+record_name('PaymentService') ->
+    'domain_PaymentService';
 
 record_name('DigitalWallet') ->
     'domain_DigitalWallet';
@@ -6743,6 +7221,12 @@ record_name('BankRef') ->
 
 record_name('Bank') ->
     'domain_Bank';
+
+record_name('PaymentCardNumberChecksumLuhn') ->
+    'domain_PaymentCardNumberChecksumLuhn';
+
+record_name('PaymentCardExactExpirationDate') ->
+    'domain_PaymentCardExactExpirationDate';
 
 record_name('PaymentMethodRef') ->
     'domain_PaymentMethodRef';
@@ -6879,6 +7363,9 @@ record_name('CashValueDecision') ->
 record_name('ProviderAccount') ->
     'domain_ProviderAccount';
 
+record_name('PaymentSystemDecision') ->
+    'domain_PaymentSystemDecision';
+
 record_name('ProviderDecision') ->
     'domain_ProviderDecision';
 
@@ -6926,6 +7413,9 @@ record_name('WithdrawalTerminal') ->
 
 record_name('WithdrawalTerminalDecision') ->
     'domain_WithdrawalTerminalDecision';
+
+record_name('BinDataCondition') ->
+    'domain_BinDataCondition';
 
 record_name('P2PToolCondition') ->
     'domain_P2PToolCondition';
@@ -7130,6 +7620,48 @@ record_name('CriterionObject') ->
 
 record_name('DocumentTypeObject') ->
     'domain_DocumentTypeObject';
+
+record_name('PaymentServiceObject') ->
+    'domain_PaymentServiceObject';
+
+record_name('PaymentSystemObject') ->
+    'domain_PaymentSystemObject';
+
+record_name('BankCardTokenServiceObject') ->
+    'domain_BankCardTokenServiceObject';
+
+record_name('MobileOperatorObject') ->
+    'domain_MobileOperatorObject';
+
+record_name('LegacyMobileOperatorMappingRef') ->
+    'domain_LegacyMobileOperatorMappingRef';
+
+record_name('LegacyMobileOperatorObject') ->
+    'domain_LegacyMobileOperatorObject';
+
+record_name('LegacyBankCardPaymentSystemRef') ->
+    'domain_LegacyBankCardPaymentSystemRef';
+
+record_name('LegacyBankCardPaymentSystemObject') ->
+    'domain_LegacyBankCardPaymentSystemObject';
+
+record_name('LegacyBankCardTokenProviderRef') ->
+    'domain_LegacyBankCardTokenProviderRef';
+
+record_name('LegacyBankCardTokenProviderObject') ->
+    'domain_LegacyBankCardTokenProviderObject';
+
+record_name('LegacyTerminalPaymentProviderRef') ->
+    'domain_LegacyTerminalPaymentProviderRef';
+
+record_name('LegacyTerminalPaymentProviderObject') ->
+    'domain_LegacyTerminalPaymentProviderObject';
+
+record_name('LegacyDigitalWalletProviderRef') ->
+    'domain_LegacyDigitalWalletProviderRef';
+
+record_name('LegacyDigitalWalletProviderObject') ->
+    'domain_LegacyDigitalWalletProviderObject';
 
 record_name(_) -> error(badarg).
 

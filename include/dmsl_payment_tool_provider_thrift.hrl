@@ -74,7 +74,8 @@
     'cardholder_name' :: binary() | undefined,
     'last_4_digits' :: binary() | undefined,
     'card_class' :: dmsl_payment_tool_provider_thrift:'CardClass'() | undefined,
-    'payment_system' :: atom() | undefined
+    'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
+    'payment_system_deprecated' :: atom() | undefined
 }).
 
 %% struct 'TokenizedCard'

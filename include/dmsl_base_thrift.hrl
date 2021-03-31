@@ -53,6 +53,12 @@
     'q' :: integer()
 }).
 
+%% struct 'IntegerRange'
+-record('IntegerRange', {
+    'lower' :: integer() | undefined,
+    'upper' :: integer() | undefined
+}).
+
 %% exception 'InvalidRequest'
 -record('InvalidRequest', {
     'errors' :: [binary()]

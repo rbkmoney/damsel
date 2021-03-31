@@ -955,17 +955,44 @@
 
 %% struct 'BankCardPaymentMethod'
 -record('domain_BankCardPaymentMethod', {
-    'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
+    'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'is_cvv_empty' = false :: boolean() | undefined,
-    'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'() | undefined,
-    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined
+    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined,
+    'payment_system_deprecated' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystem'() | undefined,
+    'token_provider_deprecated' :: dmsl_domain_thrift:'LegacyBankCardTokenProvider'() | undefined
 }).
 
 %% struct 'TokenizedBankCard'
 -record('domain_TokenizedBankCard', {
-    'payment_system' :: dmsl_domain_thrift:'BankCardPaymentSystem'(),
-    'token_provider' :: dmsl_domain_thrift:'BankCardTokenProvider'(),
-    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined
+    'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
+    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined,
+    'payment_system_deprecated' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystem'() | undefined,
+    'token_provider_deprecated' :: dmsl_domain_thrift:'LegacyBankCardTokenProvider'() | undefined
+}).
+
+%% struct 'PaymentSystemRef'
+-record('domain_PaymentSystemRef', {
+    'id' :: binary()
+}).
+
+%% struct 'PaymentSystem'
+-record('domain_PaymentSystem', {
+    'name' :: binary(),
+    'description' :: binary() | undefined,
+    'validation_rules' :: ordsets:ordset(dmsl_domain_thrift:'PaymentCardValidationRule'()) | undefined
+}).
+
+%% struct 'BankCardTokenServiceRef'
+-record('domain_BankCardTokenServiceRef', {
+    'id' :: binary()
+}).
+
+%% struct 'BankCardTokenService'
+-record('domain_BankCardTokenService', {
+    'name' :: binary(),
+    'description' :: binary() | undefined
 }).
 
 %% struct 'P2PTool'
@@ -984,10 +1011,10 @@
 %% struct 'BankCard'
 -record('domain_BankCard', {
     'token' :: dmsl_domain_thrift:'Token'(),
-    'payment_system' :: atom(),
+    'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'bin' :: binary(),
     'last_digits' :: binary(),
-    'token_provider' :: atom() | undefined,
+    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
     'tokenization_method' :: atom() | undefined,
     'issuer_country' :: atom() | undefined,
     'bank_name' :: binary() | undefined,
@@ -995,7 +1022,9 @@
     'is_cvv_empty' :: boolean() | undefined,
     'exp_date' :: dmsl_domain_thrift:'BankCardExpDate'() | undefined,
     'cardholder_name' :: binary() | undefined,
-    'category' :: binary() | undefined
+    'category' :: binary() | undefined,
+    'payment_system_deprecated' :: atom() | undefined,
+    'token_provider_deprecated' :: atom() | undefined
 }).
 
 %% struct 'BankCardExpDate'
@@ -1025,8 +1054,20 @@
 
 %% struct 'MobileCommerce'
 -record('domain_MobileCommerce', {
-    'operator' :: dmsl_domain_thrift:'MobileOperator'(),
-    'phone' :: dmsl_domain_thrift:'MobilePhone'()
+    'operator' :: dmsl_domain_thrift:'MobileOperatorRef'() | undefined,
+    'phone' :: dmsl_domain_thrift:'MobilePhone'(),
+    'operator_deprecated' :: dmsl_domain_thrift:'LegacyMobileOperator'() | undefined
+}).
+
+%% struct 'MobileOperatorRef'
+-record('domain_MobileOperatorRef', {
+    'id' :: binary()
+}).
+
+%% struct 'MobileOperator'
+-record('domain_MobileOperator', {
+    'name' :: binary(),
+    'description' :: binary() | undefined
 }).
 
 %% struct 'MobilePhone'
@@ -1037,14 +1078,27 @@
 
 %% struct 'PaymentTerminal'
 -record('domain_PaymentTerminal', {
-    'terminal_type' :: dmsl_domain_thrift:'TerminalPaymentProvider'()
+    'payment_service' :: dmsl_domain_thrift:'PaymentServiceRef'() | undefined,
+    'terminal_type_deprecated' :: dmsl_domain_thrift:'LegacyTerminalPaymentProvider'() | undefined
+}).
+
+%% struct 'PaymentServiceRef'
+-record('domain_PaymentServiceRef', {
+    'id' :: binary()
+}).
+
+%% struct 'PaymentService'
+-record('domain_PaymentService', {
+    'name' :: binary(),
+    'description' :: binary() | undefined
 }).
 
 %% struct 'DigitalWallet'
 -record('domain_DigitalWallet', {
-    'provider' :: dmsl_domain_thrift:'DigitalWalletProvider'(),
+    'payment_service' :: dmsl_domain_thrift:'PaymentServiceRef'() | undefined,
     'id' :: dmsl_domain_thrift:'DigitalWalletID'(),
-    'token' :: dmsl_domain_thrift:'Token'() | undefined
+    'token' :: dmsl_domain_thrift:'Token'() | undefined,
+    'provider_deprecated' :: dmsl_domain_thrift:'LegacyDigitalWalletProvider'() | undefined
 }).
 
 %% struct 'BankRef'
@@ -1059,6 +1113,12 @@
     'binbase_id_patterns' :: ordsets:ordset(binary()) | undefined,
     'bins' :: ordsets:ordset(binary())
 }).
+
+%% struct 'PaymentCardNumberChecksumLuhn'
+-record('domain_PaymentCardNumberChecksumLuhn', {}).
+
+%% struct 'PaymentCardExactExpirationDate'
+-record('domain_PaymentCardExactExpirationDate', {}).
 
 %% struct 'PaymentMethodRef'
 -record('domain_PaymentMethodRef', {
@@ -1349,6 +1409,12 @@
     'settlement' :: dmsl_domain_thrift:'AccountID'()
 }).
 
+%% struct 'PaymentSystemDecision'
+-record('domain_PaymentSystemDecision', {
+    'if_' :: dmsl_domain_thrift:'Predicate'(),
+    'then_' :: dmsl_domain_thrift:'PaymentSystemSelector'()
+}).
+
 %% struct 'ProviderDecision'
 -record('domain_ProviderDecision', {
     'if_' :: dmsl_domain_thrift:'Predicate'(),
@@ -1458,6 +1524,12 @@
     'then_' :: dmsl_domain_thrift:'WithdrawalTerminalSelector'()
 }).
 
+%% struct 'BinDataCondition'
+-record('domain_BinDataCondition', {
+    'payment_system' :: dmsl_domain_thrift:'StringCondition'() | undefined,
+    'bank_name' :: dmsl_domain_thrift:'StringCondition'() | undefined
+}).
+
 %% struct 'P2PToolCondition'
 -record('domain_P2PToolCondition', {
     'sender_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined,
@@ -1471,9 +1543,11 @@
 
 %% struct 'PaymentSystemCondition'
 -record('domain_PaymentSystemCondition', {
-    'payment_system_is' :: atom(),
-    'token_provider_is' :: atom() | undefined,
-    'tokenization_method_is' :: atom() | undefined
+    'payment_system_is' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
+    'token_service_is' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'tokenization_method_is' :: atom() | undefined,
+    'payment_system_is_deprecated' :: atom() | undefined,
+    'token_provider_is_deprecated' :: atom() | undefined
 }).
 
 %% struct 'PaymentTerminalCondition'
@@ -1616,6 +1690,7 @@
     'p2p_transfer_routing_rules' :: dmsl_domain_thrift:'RoutingRules'() | undefined,
     'withdrawal_providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined,
     'p2p_providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined,
+    'payment_system' :: dmsl_domain_thrift:'PaymentSystemSelector'() | undefined,
     'withdrawal_providers_legacy' :: dmsl_domain_thrift:'WithdrawalProviderSelector'() | undefined,
     'p2p_providers_legacy' :: dmsl_domain_thrift:'P2PProviderSelector'() | undefined,
     'providers' :: dmsl_domain_thrift:'ProviderSelector'() | undefined
@@ -1869,6 +1944,85 @@
 -record('domain_DocumentTypeObject', {
     'ref' :: dmsl_domain_thrift:'DocumentTypeRef'(),
     'data' :: dmsl_domain_thrift:'DocumentType'()
+}).
+
+%% struct 'PaymentServiceObject'
+-record('domain_PaymentServiceObject', {
+    'ref' :: dmsl_domain_thrift:'PaymentServiceRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentService'()
+}).
+
+%% struct 'PaymentSystemObject'
+-record('domain_PaymentSystemObject', {
+    'ref' :: dmsl_domain_thrift:'PaymentSystemRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentSystem'()
+}).
+
+%% struct 'BankCardTokenServiceObject'
+-record('domain_BankCardTokenServiceObject', {
+    'ref' :: dmsl_domain_thrift:'BankCardTokenServiceRef'(),
+    'data' :: dmsl_domain_thrift:'BankCardTokenService'()
+}).
+
+%% struct 'MobileOperatorObject'
+-record('domain_MobileOperatorObject', {
+    'ref' :: dmsl_domain_thrift:'MobileOperatorRef'(),
+    'data' :: dmsl_domain_thrift:'MobileOperator'()
+}).
+
+%% struct 'LegacyMobileOperatorMappingRef'
+-record('domain_LegacyMobileOperatorMappingRef', {
+    'id' :: atom()
+}).
+
+%% struct 'LegacyMobileOperatorObject'
+-record('domain_LegacyMobileOperatorObject', {
+    'ref' :: dmsl_domain_thrift:'LegacyMobileOperatorMappingRef'(),
+    'data' :: dmsl_domain_thrift:'MobileOperatorRef'()
+}).
+
+%% struct 'LegacyBankCardPaymentSystemRef'
+-record('domain_LegacyBankCardPaymentSystemRef', {
+    'id' :: atom()
+}).
+
+%% struct 'LegacyBankCardPaymentSystemObject'
+-record('domain_LegacyBankCardPaymentSystemObject', {
+    'ref' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystemRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentSystemRef'()
+}).
+
+%% struct 'LegacyBankCardTokenProviderRef'
+-record('domain_LegacyBankCardTokenProviderRef', {
+    'id' :: atom()
+}).
+
+%% struct 'LegacyBankCardTokenProviderObject'
+-record('domain_LegacyBankCardTokenProviderObject', {
+    'ref' :: dmsl_domain_thrift:'LegacyBankCardTokenProviderRef'(),
+    'data' :: dmsl_domain_thrift:'BankCardTokenServiceRef'()
+}).
+
+%% struct 'LegacyTerminalPaymentProviderRef'
+-record('domain_LegacyTerminalPaymentProviderRef', {
+    'id' :: atom()
+}).
+
+%% struct 'LegacyTerminalPaymentProviderObject'
+-record('domain_LegacyTerminalPaymentProviderObject', {
+    'ref' :: dmsl_domain_thrift:'LegacyTerminalPaymentProviderRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentServiceRef'()
+}).
+
+%% struct 'LegacyDigitalWalletProviderRef'
+-record('domain_LegacyDigitalWalletProviderRef', {
+    'id' :: atom()
+}).
+
+%% struct 'LegacyDigitalWalletProviderObject'
+-record('domain_LegacyDigitalWalletProviderObject', {
+    'ref' :: dmsl_domain_thrift:'LegacyDigitalWalletProviderRef'(),
+    'data' :: dmsl_domain_thrift:'PaymentServiceRef'()
 }).
 
 -endif.

@@ -61,7 +61,8 @@
     'ScheduleMonth'/0,
     'ScheduleYear'/0,
     'Rational'/0,
-    'Timer'/0
+    'Timer'/0,
+    'IntegerRange'/0
 ]).
 -export_type([
     'InvalidRequest'/0
@@ -150,7 +151,8 @@
     'ScheduleMonth' |
     'ScheduleYear' |
     'Rational' |
-    'Timer'.
+    'Timer' |
+    'IntegerRange'.
 
 -type exception_name() ::
     'InvalidRequest'.
@@ -200,6 +202,9 @@
 -type 'Timer'() ::
     {'timeout', 'Timeout'()} |
     {'deadline', 'Timestamp'()}.
+
+%% struct 'IntegerRange'
+-type 'IntegerRange'() :: #'IntegerRange'{}.
 
 %% exception 'InvalidRequest'
 -type 'InvalidRequest'() :: #'InvalidRequest'{}.
@@ -282,7 +287,8 @@ structs() ->
         'ScheduleMonth',
         'ScheduleYear',
         'Rational',
-        'Timer'
+        'Timer',
+        'IntegerRange'
     ].
 
 -spec services() -> [].
@@ -451,6 +457,12 @@ struct_info('Timer') ->
         {2, optional, string, 'deadline', undefined}
     ]};
 
+struct_info('IntegerRange') ->
+    {struct, struct, [
+        {1, optional, i64, 'lower', undefined},
+        {2, optional, i64, 'upper', undefined}
+    ]};
+
 struct_info('InvalidRequest') ->
     {struct, exception, [
         {1, required, {list, string}, 'errors', undefined}
@@ -480,6 +492,9 @@ record_name('ScheduleEvery') ->
 
 record_name('Rational') ->
     'Rational';
+
+record_name('IntegerRange') ->
+    'IntegerRange';
 
 record_name('InvalidRequest') ->
     'InvalidRequest';

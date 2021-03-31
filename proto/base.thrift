@@ -203,3 +203,11 @@ exception InvalidRequest {
     /** Список пригодных для восприятия человеком ошибок во входных данных */
     1: required list<string> errors
 }
+
+/**
+* Диапазон допустимых целых значений, lower =< upper.
+**/
+struct IntegerRange {
+    1: optional i64 lower
+    2: optional i64 upper
+}

@@ -125,10 +125,12 @@
 %% struct 'BankCard'
 -record('merchstat_BankCard', {
     'token' :: dmsl_domain_thrift:'Token'(),
-    'payment_system' :: atom(),
+    'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'bin' :: binary(),
     'masked_pan' :: binary(),
-    'token_provider' :: atom() | undefined
+    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'payment_system_deprecated' :: atom() | undefined,
+    'token_provider_deprecated' :: atom() | undefined
 }).
 
 %% struct 'PaymentTerminal'

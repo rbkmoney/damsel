@@ -854,10 +854,12 @@ struct_info('MobilePhone') ->
 struct_info('BankCard') ->
     {struct, struct, [
         {1, required, string, 'token', undefined},
-        {2, required, {enum, {dmsl_domain_thrift, 'BankCardPaymentSystem'}}, 'payment_system', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
         {3, required, string, 'bin', undefined},
         {4, required, string, 'masked_pan', undefined},
-        {5, optional, {enum, {dmsl_domain_thrift, 'BankCardTokenProvider'}}, 'token_provider', undefined}
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined},
+        {5, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_deprecated', undefined}
     ]};
 
 struct_info('PaymentTerminal') ->
