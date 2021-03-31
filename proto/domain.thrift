@@ -1567,31 +1567,41 @@ struct TurnoverLimitDecision {
 /* Payment methods */
 
 union PaymentMethod {
-    2: TerminalPaymentProvider payment_terminal
-    3: DigitalWalletProvider digital_wallet
+    9: PaymentServiceRef payment_terminal
+   10: PaymentServiceRef digital_wallet
     6: CryptoCurrency crypto_currency
-    7: MobileOperator mobile
+   11: MobileOperatorRef mobile
     8: BankCardPaymentMethod bank_card
     // Deprecated, use BankCardPaymentMethod instead
-    1: BankCardPaymentSystem bank_card_deprecated
+    1: LegacyBankCardPaymentSystem bank_card_deprecated
+    2: LegacyTerminalPaymentProvider payment_terminal_deprecated
+    3: LegacyDigitalWalletProvider digital_wallet_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
-    5: BankCardPaymentSystem empty_cvv_bank_card_deprecated
+    5: LegacyBankCardPaymentSystem empty_cvv_bank_card_deprecated
+    7: LegacyMobileOperator mobile_deprecated
 }
 
 struct BankCardPaymentMethod {
-    1: required BankCardPaymentSystem payment_system
+    5: optional PaymentSystemRef      payment_system
     2: optional bool                  is_cvv_empty = false
-    3: optional BankCardTokenProvider token_provider
+    6: optional BankCardTokenServiceRef payment_token
     4: optional TokenizationMethod    tokenization_method
+    /** Deprecated **/
+    1: optional LegacyBankCardPaymentSystem payment_system_deprecated
+    3: optional LegacyBankCardTokenProvider token_provider_deprecated
 }
 
 struct TokenizedBankCard {
-    1: required BankCardPaymentSystem payment_system
-    2: required BankCardTokenProvider token_provider
+    4: optional PaymentSystemRef      payment_system
+    5: optional BankCardTokenServiceRef payment_token
     3: optional TokenizationMethod    tokenization_method
+    /** Deprecated **/
+    1: optional LegacyBankCardPaymentSystem payment_system_deprecated
+    2: optional LegacyBankCardTokenProvider token_provider_deprecated
 }
 
-enum BankCardPaymentSystem {
+/** Deprecated **/
+enum LegacyBankCardPaymentSystem {
     visa
     mastercard
     visaelectron
@@ -1611,14 +1621,34 @@ enum BankCardPaymentSystem {
     uzcard
 }
 
+struct PaymentSystemRef {
+    1: required string id
+}
+
+struct PaymentSystem {
+  1: required string name
+  2: optional string description
+  3: optional set<PaymentCardValidationRule> validation_rules
+}
+
 /** Тип платежного токена **/
 
-enum BankCardTokenProvider {
+enum LegacyBankCardTokenProvider {
     applepay
     googlepay
     samsungpay
     yandexpay
 }
+
+struct BankCardTokenServiceRef {
+    1: required string id
+}
+
+struct BankCardTokenService {
+  1: required string name
+  2: optional string description
+}
+
 
 typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
@@ -1652,10 +1682,10 @@ enum TokenizationMethod {
 
 struct BankCard {
     1: required Token token
-    2: required BankCardPaymentSystem payment_system
+   14: optional PaymentSystemRef payment_system
     3: required string bin
     4: required string last_digits
-    5: optional BankCardTokenProvider token_provider
+   15: optional BankCardTokenServiceRef payment_token
    12: optional TokenizationMethod tokenization_method
     6: optional Residence issuer_country
     7: optional string bank_name
@@ -1664,6 +1694,9 @@ struct BankCard {
    10: optional BankCardExpDate exp_date
    11: optional string cardholder_name
    13: optional string category
+   /** Deprecated **/
+   2: optional LegacyBankCardPaymentSystem payment_system_deprecated
+   5: optional LegacyBankCardTokenProvider token_provider_deprecated
 }
 
 /** Дата экспирации */
@@ -1700,16 +1733,27 @@ enum CryptoCurrency {
 }
 
 struct MobileCommerce {
-    1: required MobileOperator operator
+    3: optional MobileOperatorRef operator
     2: required MobilePhone    phone
+    /** Deprecated **/
+    1: optional LegacyMobileOperator operator_deprecated
 }
 
-enum MobileOperator {
+enum LegacyMobileOperator {
     mts      = 1
     beeline  = 2
     megafone = 3
     tele2    = 4
     yota     = 5
+}
+
+struct MobileOperatorRef {
+    1: required string id
+}
+
+struct MobileOperator {
+  1: required string name
+  2: optional string description
 }
 
 /**
@@ -1725,13 +1769,18 @@ struct MobilePhone {
 
 /** Платеж через терминал **/
 struct PaymentTerminal {
-    1: required TerminalPaymentProvider terminal_type
+    2: optional PaymentServiceRef payment_service
+
+    /** Deprecated **/
+    1: optional LegacyTerminalPaymentProvider terminal_type_deprecated
 }
 
 /**
 *  Вид платежного терминала
 **/
-enum TerminalPaymentProvider {
+
+/** Deprecated **/
+enum LegacyTerminalPaymentProvider {
     euroset
     wechat
     alipay
@@ -1741,15 +1790,27 @@ enum TerminalPaymentProvider {
     rbs // Рунет Бизнес Системы
 }
 
+struct PaymentServiceRef {
+    1: required string id
+}
+
+struct PaymentService {
+  1: required string name
+  2: optional string description
+}
+
 typedef string DigitalWalletID
 
 struct DigitalWallet {
-    1: required DigitalWalletProvider provider
+    4: optional PaymentServiceRef     payment_service
     2: required DigitalWalletID       id
     3: optional Token                 token
+    // Deprecated
+    1: optional LegacyDigitalWalletProvider provider_deprecated
 }
 
-enum DigitalWalletProvider {
+/** Deprecated **/
+enum LegacyDigitalWalletProvider {
     qiwi
     rbkmoney
     yandex_money
@@ -1765,6 +1826,34 @@ struct Bank {
     /* legacy */
     3: required set<string> bins
 }
+
+union PaymentCardValidationRule {
+    1: PaymentCardNumber card_number
+    2: PaymentCardExpirationDate exp_date
+    3: PaymentCardCVC cvc
+}
+
+union PaymentCardNumber {
+    1: set<base.IntegerRange> ranges
+    2: PaymentCardNumberChecksum checksum
+}
+
+union PaymentCardNumberChecksum {
+    1: PaymentCardNumberChecksumLuhn luhn
+}
+
+struct PaymentCardNumberChecksumLuhn {}
+
+
+union PaymentCardCVC {
+    1: base.IntegerRange length
+}
+
+union PaymentCardExpirationDate {
+    1: PaymentCardExactExpirationDate exact_exp_date
+}
+
+struct PaymentCardExactExpirationDate {}
 
 struct PaymentMethodRef { 1: required PaymentMethod id }
 
@@ -2217,6 +2306,16 @@ struct ProviderAccount {
     1: required AccountID settlement
 }
 
+union PaymentSystemSelector {
+    1: list<PaymentSystemDecision> decisions
+    2: PaymentSystemRef value
+}
+
+struct PaymentSystemDecision {
+    1: required Predicate if_
+    2: required PaymentSystemSelector then_
+}
+
 union ProviderSelector {
     1: list<ProviderDecision> decisions
     2: set<ProviderRef> value
@@ -2384,6 +2483,17 @@ union Condition {
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
     9: P2PToolCondition p2p_tool
+   10: BinDataCondition bin_data
+}
+
+struct BinDataCondition {
+    1: optional StringCondition payment_system
+    2: optional StringCondition bank_name
+}
+
+union StringCondition {
+    1: string matches
+    2: string equals
 }
 
 struct P2PToolCondition {
@@ -2393,8 +2503,8 @@ struct P2PToolCondition {
 
 union PaymentToolCondition {
     1: BankCardCondition bank_card
-    2: PaymentTerminalCondition payment_terminal
     3: DigitalWalletCondition digital_wallet
+    2: PaymentTerminalCondition payment_terminal
     4: CryptoCurrencyCondition crypto_currency
     5: MobileCommerceCondition mobile_commerce
 }
@@ -2404,7 +2514,7 @@ struct BankCardCondition {
 }
 
 union BankCardConditionDefinition {
-    1: BankCardPaymentSystem payment_system_is // deprecated
+    1: LegacyBankCardPaymentSystem payment_system_is // deprecated
     2: BankRef issuer_bank_is
     3: PaymentSystemCondition payment_system
     4: Residence issuer_country_is
@@ -2413,9 +2523,12 @@ union BankCardConditionDefinition {
 }
 
 struct PaymentSystemCondition {
-    1: required BankCardPaymentSystem payment_system_is
-    2: optional BankCardTokenProvider token_provider_is
+    4: optional PaymentSystemRef      payment_system_is
+    5: optional BankCardTokenServiceRef token_service_is
     3: optional TokenizationMethod    tokenization_method_is
+    /** Deprecated **/
+    1: optional LegacyBankCardPaymentSystem payment_system_is_deprecated
+    2: optional LegacyBankCardTokenProvider token_provider_is_deprecated
 }
 
 struct PaymentTerminalCondition {
@@ -2423,7 +2536,9 @@ struct PaymentTerminalCondition {
 }
 
 union PaymentTerminalConditionDefinition {
-    1: TerminalPaymentProvider provider_is
+    2: PaymentServiceRef payment_service_is
+    /** Deprecated **/
+    1: LegacyTerminalPaymentProvider provider_is_deprecated
 }
 
 struct DigitalWalletCondition {
@@ -2431,7 +2546,9 @@ struct DigitalWalletCondition {
 }
 
 union DigitalWalletConditionDefinition {
-    1: DigitalWalletProvider provider_is
+    2: PaymentServiceRef payment_service_is
+    /** Deprecated **/
+    1: LegacyDigitalWalletProvider provider_is_deprecated
 }
 
 struct CryptoCurrencyCondition {
@@ -2447,7 +2564,9 @@ struct MobileCommerceCondition {
 }
 
 union MobileCommerceConditionDefinition {
-    1: MobileOperator operator_is
+    2: MobileOperatorRef operator_is
+    /** Deprecated **/
+    1: LegacyMobileOperator operator_is_deprecated
 }
 
 struct PartyCondition {
@@ -2567,6 +2686,7 @@ struct PaymentInstitution {
     20: optional RoutingRules p2p_transfer_routing_rules
     17: optional ProviderSelector withdrawal_providers
     18: optional ProviderSelector p2p_providers
+    21: optional PaymentSystemSelector payment_system
 
     // Deprecated
     13: optional WithdrawalProviderSelector withdrawal_providers_legacy
@@ -2799,6 +2919,71 @@ struct DocumentTypeObject {
     2: required DocumentType data
 }
 
+struct PaymentServiceObject {
+    1: required PaymentServiceRef ref
+    2: required PaymentService data
+}
+
+struct PaymentSystemObject {
+    1: required PaymentSystemRef ref
+    2: required PaymentSystem data
+}
+
+struct BankCardTokenServiceObject {
+    1: required BankCardTokenServiceRef ref
+    2: required BankCardTokenService data
+}
+
+struct MobileOperatorObject {
+    1: required MobileOperatorRef ref
+    2: required MobileOperator data
+}
+
+struct LegacyMobileOperatorMappingRef {
+    1: required LegacyMobileOperator id
+}
+
+struct LegacyMobileOperatorObject {
+    1: required LegacyMobileOperatorMappingRef ref
+    2: required MobileOperatorRef data
+}
+
+struct LegacyBankCardPaymentSystemRef {
+    1: required LegacyBankCardPaymentSystem id
+}
+
+struct LegacyBankCardPaymentSystemObject {
+    1: required LegacyBankCardPaymentSystemRef ref
+    2: required PaymentSystemRef data
+}
+
+struct LegacyBankCardTokenProviderRef {
+    1: required LegacyBankCardTokenProvider id
+}
+
+struct LegacyBankCardTokenProviderObject {
+    1: required LegacyBankCardTokenProviderRef ref
+    2: required BankCardTokenServiceRef data
+}
+
+struct LegacyTerminalPaymentProviderRef {
+    1: required LegacyTerminalPaymentProvider id
+}
+
+struct LegacyTerminalPaymentProviderObject {
+    1: required LegacyTerminalPaymentProviderRef ref
+    2: required PaymentServiceRef data
+}
+
+struct LegacyDigitalWalletProviderRef {
+    1: required LegacyDigitalWalletProvider id
+}
+
+struct LegacyDigitalWalletProviderObject {
+    1: required LegacyDigitalWalletProviderRef ref
+    2: required PaymentServiceRef data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -2835,6 +3020,16 @@ union Reference {
     28 : BankCardCategoryRef        bank_card_category
     29 : CriterionRef               criterion
     32 : DocumentTypeRef            document_type
+    33 : PaymentServiceRef          payment_service
+    34 : PaymentSystemRef           payment_system
+    35 : BankCardTokenServiceRef    payment_token
+    36 : MobileOperatorRef          mobile_operator
+
+    37 : LegacyMobileOperatorMappingRef    mobile_operator_legacy
+    38 : LegacyBankCardPaymentSystemRef payment_system_legacy
+    39 : LegacyBankCardTokenProviderRef payment_token_legacy
+    40 : LegacyTerminalPaymentProviderRef terminal_provider_legacy
+    41 : LegacyDigitalWalletProviderRef payment_service_legacy
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -2871,6 +3066,16 @@ union DomainObject {
     28 : BankCardCategoryObject     bank_card_category
     29 : CriterionObject            criterion
     32 : DocumentTypeObject         document_type
+    33 : PaymentServiceObject       payment_service
+    34 : PaymentSystemObject        payment_system
+    35 : BankCardTokenServiceObject payment_token
+    36 : MobileOperatorObject       mobile_operator
+
+    37 : LegacyMobileOperatorObject mobile_operator_legacy
+    38 : LegacyBankCardPaymentSystemObject payment_system_legacy
+    39 : LegacyBankCardTokenProviderObject payment_token_legacy
+    40 : LegacyTerminalPaymentProviderObject terminal_provider_legacy
+    41 : LegacyDigitalWalletProviderObject payment_service_legacy
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
