@@ -29,7 +29,8 @@
 
 %% struct 'CryptoCurrencyPayload'
 -record('ptt_CryptoCurrencyPayload', {
-    'crypto_currency' :: atom()
+    'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrencyRef'() | undefined,
+    'crypto_currency_deprecated' :: atom() | undefined
 }).
 
 %% struct 'MobileCommercePayload'

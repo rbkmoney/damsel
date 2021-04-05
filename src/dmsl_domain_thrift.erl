@@ -97,7 +97,7 @@
     'LegacyBankCardPaymentSystem'/0,
     'LegacyBankCardTokenProvider'/0,
     'TokenizationMethod'/0,
-    'CryptoCurrency'/0,
+    'LegacyCryptoCurrency'/0,
     'LegacyMobileOperator'/0,
     'LegacyTerminalPaymentProvider'/0,
     'LegacyDigitalWalletProvider'/0,
@@ -308,6 +308,8 @@
     'BankCardCategoryRef'/0,
     'BankCardCategory'/0,
     'CryptoWallet'/0,
+    'CryptoCurrencyRef'/0,
+    'CryptoCurrency'/0,
     'MobileCommerce'/0,
     'MobileOperatorRef'/0,
     'MobileOperator'/0,
@@ -505,6 +507,9 @@
     'LegacyTerminalPaymentProviderObject'/0,
     'LegacyDigitalWalletProviderRef'/0,
     'LegacyDigitalWalletProviderObject'/0,
+    'CryptoCurrencyObject'/0,
+    'LegacyCryptoCurrencyRef'/0,
+    'LegacyCryptoCurrencyObject'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -635,7 +640,7 @@
     'LegacyBankCardPaymentSystem' |
     'LegacyBankCardTokenProvider' |
     'TokenizationMethod' |
-    'CryptoCurrency' |
+    'LegacyCryptoCurrency' |
     'LegacyMobileOperator' |
     'LegacyTerminalPaymentProvider' |
     'LegacyDigitalWalletProvider' |
@@ -981,8 +986,8 @@
     'dpan' |
     'none'.
 
-%% enum 'CryptoCurrency'
--type 'CryptoCurrency'() ::
+%% enum 'LegacyCryptoCurrency'
+-type 'LegacyCryptoCurrency'() ::
     'bitcoin' |
     'litecoin' |
     'bitcoin_cash' |
@@ -1258,6 +1263,8 @@
     'BankCardCategoryRef' |
     'BankCardCategory' |
     'CryptoWallet' |
+    'CryptoCurrencyRef' |
+    'CryptoCurrency' |
     'MobileCommerce' |
     'MobileOperatorRef' |
     'MobileOperator' |
@@ -1455,6 +1462,9 @@
     'LegacyTerminalPaymentProviderObject' |
     'LegacyDigitalWalletProviderRef' |
     'LegacyDigitalWalletProviderObject' |
+    'CryptoCurrencyObject' |
+    'LegacyCryptoCurrencyRef' |
+    'LegacyCryptoCurrencyObject' |
     'Reference' |
     'DomainObject'.
 
@@ -2102,7 +2112,7 @@
 -type 'PaymentMethod'() ::
     {'payment_terminal', 'PaymentServiceRef'()} |
     {'digital_wallet', 'PaymentServiceRef'()} |
-    {'crypto_currency', 'CryptoCurrency'()} |
+    {'crypto_currency', 'CryptoCurrencyRef'()} |
     {'mobile', 'MobileOperatorRef'()} |
     {'bank_card', 'BankCardPaymentMethod'()} |
     {'bank_card_deprecated', 'LegacyBankCardPaymentSystem'()} |
@@ -2110,6 +2120,7 @@
     {'digital_wallet_deprecated', 'LegacyDigitalWalletProvider'()} |
     {'tokenized_bank_card_deprecated', 'TokenizedBankCard'()} |
     {'empty_cvv_bank_card_deprecated', 'LegacyBankCardPaymentSystem'()} |
+    {'crypto_currency_deprecated', 'LegacyCryptoCurrency'()} |
     {'mobile_deprecated', 'LegacyMobileOperator'()}.
 
 %% struct 'BankCardPaymentMethod'
@@ -2138,8 +2149,9 @@
     {'bank_card', 'BankCard'()} |
     {'payment_terminal', 'PaymentTerminal'()} |
     {'digital_wallet', 'DigitalWallet'()} |
-    {'crypto_currency', 'CryptoCurrency'()} |
-    {'mobile_commerce', 'MobileCommerce'()}.
+    {'mobile_commerce', 'MobileCommerce'()} |
+    {'crypto_currency', 'CryptoCurrencyRef'()} |
+    {'crypto_currency_deprecated', 'LegacyCryptoCurrency'()}.
 
 %% struct 'DisposablePaymentResource'
 -type 'DisposablePaymentResource'() :: #'domain_DisposablePaymentResource'{}.
@@ -2158,6 +2170,12 @@
 
 %% struct 'CryptoWallet'
 -type 'CryptoWallet'() :: #'domain_CryptoWallet'{}.
+
+%% struct 'CryptoCurrencyRef'
+-type 'CryptoCurrencyRef'() :: #'domain_CryptoCurrencyRef'{}.
+
+%% struct 'CryptoCurrency'
+-type 'CryptoCurrency'() :: #'domain_CryptoCurrency'{}.
 
 %% struct 'MobileCommerce'
 -type 'MobileCommerce'() :: #'domain_MobileCommerce'{}.
@@ -2596,7 +2614,8 @@
 
 %% union 'CryptoCurrencyConditionDefinition'
 -type 'CryptoCurrencyConditionDefinition'() ::
-    {'crypto_currency_is', atom()}.
+    {'crypto_currency_is', 'CryptoCurrencyRef'()} |
+    {'crypto_currency_is_deprecated', atom()}.
 
 %% struct 'MobileCommerceCondition'
 -type 'MobileCommerceCondition'() :: #'domain_MobileCommerceCondition'{}.
@@ -2852,6 +2871,15 @@
 %% struct 'LegacyDigitalWalletProviderObject'
 -type 'LegacyDigitalWalletProviderObject'() :: #'domain_LegacyDigitalWalletProviderObject'{}.
 
+%% struct 'CryptoCurrencyObject'
+-type 'CryptoCurrencyObject'() :: #'domain_CryptoCurrencyObject'{}.
+
+%% struct 'LegacyCryptoCurrencyRef'
+-type 'LegacyCryptoCurrencyRef'() :: #'domain_LegacyCryptoCurrencyRef'{}.
+
+%% struct 'LegacyCryptoCurrencyObject'
+-type 'LegacyCryptoCurrencyObject'() :: #'domain_LegacyCryptoCurrencyObject'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -2889,6 +2917,8 @@
     {'payment_token_legacy', 'LegacyBankCardTokenProviderRef'()} |
     {'terminal_provider_legacy', 'LegacyTerminalPaymentProviderRef'()} |
     {'payment_service_legacy', 'LegacyDigitalWalletProviderRef'()} |
+    {'crypto_currency', 'CryptoCurrencyRef'()} |
+    {'crypto_currency_legacy', 'LegacyCryptoCurrencyRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2930,6 +2960,8 @@
     {'payment_token_legacy', 'LegacyBankCardTokenProviderObject'()} |
     {'terminal_provider_legacy', 'LegacyTerminalPaymentProviderObject'()} |
     {'payment_service_legacy', 'LegacyDigitalWalletProviderObject'()} |
+    {'crypto_currency', 'CryptoCurrencyObject'()} |
+    {'crypto_currency_legacy', 'LegacyCryptoCurrencyObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -2974,7 +3006,7 @@
     'LegacyBankCardPaymentSystem'() |
     'LegacyBankCardTokenProvider'() |
     'TokenizationMethod'() |
-    'CryptoCurrency'() |
+    'LegacyCryptoCurrency'() |
     'LegacyMobileOperator'() |
     'LegacyTerminalPaymentProvider'() |
     'LegacyDigitalWalletProvider'() |
@@ -3065,7 +3097,7 @@ enums() ->
         'LegacyBankCardPaymentSystem',
         'LegacyBankCardTokenProvider',
         'TokenizationMethod',
-        'CryptoCurrency',
+        'LegacyCryptoCurrency',
         'LegacyMobileOperator',
         'LegacyTerminalPaymentProvider',
         'LegacyDigitalWalletProvider',
@@ -3280,6 +3312,8 @@ structs() ->
         'BankCardCategoryRef',
         'BankCardCategory',
         'CryptoWallet',
+        'CryptoCurrencyRef',
+        'CryptoCurrency',
         'MobileCommerce',
         'MobileOperatorRef',
         'MobileOperator',
@@ -3477,6 +3511,9 @@ structs() ->
         'LegacyTerminalPaymentProviderObject',
         'LegacyDigitalWalletProviderRef',
         'LegacyDigitalWalletProviderObject',
+        'CryptoCurrencyObject',
+        'LegacyCryptoCurrencyRef',
+        'LegacyCryptoCurrencyObject',
         'Reference',
         'DomainObject'
     ].
@@ -3995,7 +4032,7 @@ enum_info('TokenizationMethod') ->
         {'none', 1}
     ]};
 
-enum_info('CryptoCurrency') ->
+enum_info('LegacyCryptoCurrency') ->
     {enum, [
         {'bitcoin', 0},
         {'litecoin', 1},
@@ -5273,7 +5310,7 @@ struct_info('PaymentMethod') ->
     {struct, union, [
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_terminal', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'digital_wallet', undefined},
-        {6, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency', undefined},
         {11, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'mobile', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardPaymentMethod'}}, 'bank_card', undefined},
         {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'bank_card_deprecated', undefined},
@@ -5281,6 +5318,7 @@ struct_info('PaymentMethod') ->
         {3, optional, {enum, {dmsl_domain_thrift, 'LegacyDigitalWalletProvider'}}, 'digital_wallet_deprecated', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'TokenizedBankCard'}}, 'tokenized_bank_card_deprecated', undefined},
         {5, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'empty_cvv_bank_card_deprecated', undefined},
+        {6, optional, {enum, {dmsl_domain_thrift, 'LegacyCryptoCurrency'}}, 'crypto_currency_deprecated', undefined},
         {7, optional, {enum, {dmsl_domain_thrift, 'LegacyMobileOperator'}}, 'mobile_deprecated', undefined}
     ]};
 
@@ -5337,8 +5375,9 @@ struct_info('PaymentTool') ->
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'BankCard'}}, 'bank_card', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentTerminal'}}, 'payment_terminal', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'DigitalWallet'}}, 'digital_wallet', undefined},
-        {4, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-        {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined}
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'MobileCommerce'}}, 'mobile_commerce', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'LegacyCryptoCurrency'}}, 'crypto_currency_deprecated', undefined}
     ]};
 
 struct_info('DisposablePaymentResource') ->
@@ -5388,8 +5427,20 @@ struct_info('BankCardCategory') ->
 struct_info('CryptoWallet') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
-        {2, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined},
-        {3, optional, string, 'destination_tag', undefined}
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency', undefined},
+        {3, optional, string, 'destination_tag', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'LegacyCryptoCurrency'}}, 'crypto_currency_deprecated', undefined}
+    ]};
+
+struct_info('CryptoCurrencyRef') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined}
+    ]};
+
+struct_info('CryptoCurrency') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
     ]};
 
 struct_info('MobileCommerce') ->
@@ -6133,7 +6184,8 @@ struct_info('CryptoCurrencyCondition') ->
 
 struct_info('CryptoCurrencyConditionDefinition') ->
     {struct, union, [
-        {1, optional, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency_is', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency_is', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyCryptoCurrency'}}, 'crypto_currency_is_deprecated', undefined}
     ]};
 
 struct_info('MobileCommerceCondition') ->
@@ -6627,6 +6679,23 @@ struct_info('LegacyDigitalWalletProviderObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'data', undefined}
     ]};
 
+struct_info('CryptoCurrencyObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'data', undefined}
+    ]};
+
+struct_info('LegacyCryptoCurrencyRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'LegacyCryptoCurrency'}}, 'id', undefined}
+    ]};
+
+struct_info('LegacyCryptoCurrencyObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'data', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -6664,6 +6733,8 @@ struct_info('Reference') ->
         {39, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardTokenProviderRef'}}, 'payment_token_legacy', undefined},
         {40, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyTerminalPaymentProviderRef'}}, 'terminal_provider_legacy', undefined},
         {41, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderRef'}}, 'payment_service_legacy', undefined},
+        {42, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency', undefined},
+        {43, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyRef'}}, 'crypto_currency_legacy', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -6706,6 +6777,8 @@ struct_info('DomainObject') ->
         {39, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardTokenProviderObject'}}, 'payment_token_legacy', undefined},
         {40, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyTerminalPaymentProviderObject'}}, 'terminal_provider_legacy', undefined},
         {41, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderObject'}}, 'payment_service_legacy', undefined},
+        {42, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyObject'}}, 'crypto_currency', undefined},
+        {43, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyObject'}}, 'crypto_currency_legacy', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -7192,6 +7265,12 @@ record_name('BankCardCategory') ->
 record_name('CryptoWallet') ->
     'domain_CryptoWallet';
 
+record_name('CryptoCurrencyRef') ->
+    'domain_CryptoCurrencyRef';
+
+record_name('CryptoCurrency') ->
+    'domain_CryptoCurrency';
+
 record_name('MobileCommerce') ->
     'domain_MobileCommerce';
 
@@ -7662,6 +7741,15 @@ record_name('LegacyDigitalWalletProviderRef') ->
 
 record_name('LegacyDigitalWalletProviderObject') ->
     'domain_LegacyDigitalWalletProviderObject';
+
+record_name('CryptoCurrencyObject') ->
+    'domain_CryptoCurrencyObject';
+
+record_name('LegacyCryptoCurrencyRef') ->
+    'domain_LegacyCryptoCurrencyRef';
+
+record_name('LegacyCryptoCurrencyObject') ->
+    'domain_LegacyCryptoCurrencyObject';
 
 record_name(_) -> error(badarg).
 

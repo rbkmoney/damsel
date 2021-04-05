@@ -203,7 +203,8 @@ struct_info('DigitalWalletPayload') ->
 
 struct_info('CryptoCurrencyPayload') ->
     {struct, struct, [
-        {1, required, {enum, {dmsl_domain_thrift, 'CryptoCurrency'}}, 'crypto_currency', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency', undefined},
+        {1, optional, {enum, {dmsl_domain_thrift, 'LegacyCryptoCurrency'}}, 'crypto_currency_deprecated', undefined}
     ]};
 
 struct_info('MobileCommercePayload') ->

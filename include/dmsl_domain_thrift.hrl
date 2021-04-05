@@ -1048,8 +1048,20 @@
 %% struct 'CryptoWallet'
 -record('domain_CryptoWallet', {
     'id' :: binary(),
-    'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrency'(),
-    'destination_tag' :: binary() | undefined
+    'crypto_currency' :: dmsl_domain_thrift:'CryptoCurrencyRef'() | undefined,
+    'destination_tag' :: binary() | undefined,
+    'crypto_currency_deprecated' :: dmsl_domain_thrift:'LegacyCryptoCurrency'() | undefined
+}).
+
+%% struct 'CryptoCurrencyRef'
+-record('domain_CryptoCurrencyRef', {
+    'id' :: binary()
+}).
+
+%% struct 'CryptoCurrency'
+-record('domain_CryptoCurrency', {
+    'name' :: binary(),
+    'description' :: binary() | undefined
 }).
 
 %% struct 'MobileCommerce'
@@ -2023,6 +2035,23 @@
 -record('domain_LegacyDigitalWalletProviderObject', {
     'ref' :: dmsl_domain_thrift:'LegacyDigitalWalletProviderRef'(),
     'data' :: dmsl_domain_thrift:'PaymentServiceRef'()
+}).
+
+%% struct 'CryptoCurrencyObject'
+-record('domain_CryptoCurrencyObject', {
+    'ref' :: dmsl_domain_thrift:'CryptoCurrencyRef'(),
+    'data' :: dmsl_domain_thrift:'CryptoCurrency'()
+}).
+
+%% struct 'LegacyCryptoCurrencyRef'
+-record('domain_LegacyCryptoCurrencyRef', {
+    'id' :: atom()
+}).
+
+%% struct 'LegacyCryptoCurrencyObject'
+-record('domain_LegacyCryptoCurrencyObject', {
+    'ref' :: dmsl_domain_thrift:'LegacyCryptoCurrencyRef'(),
+    'data' :: dmsl_domain_thrift:'CryptoCurrencyRef'()
 }).
 
 -endif.
