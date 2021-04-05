@@ -38,7 +38,9 @@ struct DigitalWalletPayload {
 }
 
 struct CryptoCurrencyPayload {
-    1: required domain.CryptoCurrency crypto_currency
+    2: optional domain.CryptoCurrencyRef crypto_currency
+    // Deprecated
+    1: optional domain.LegacyCryptoCurrency crypto_currency_deprecated
 }
 
 struct MobileCommercePayload {

@@ -1569,7 +1569,7 @@ struct TurnoverLimitDecision {
 union PaymentMethod {
     9: PaymentServiceRef payment_terminal
    10: PaymentServiceRef digital_wallet
-    6: CryptoCurrency crypto_currency
+   12: CryptoCurrencyRef crypto_currency
    11: MobileOperatorRef mobile
     8: BankCardPaymentMethod bank_card
     // Deprecated, use BankCardPaymentMethod instead
@@ -1578,6 +1578,7 @@ union PaymentMethod {
     3: LegacyDigitalWalletProvider digital_wallet_deprecated
     4: TokenizedBankCard tokenized_bank_card_deprecated
     5: LegacyBankCardPaymentSystem empty_cvv_bank_card_deprecated
+    6: LegacyCryptoCurrency crypto_currency_deprecated
     7: LegacyMobileOperator mobile_deprecated
 }
 
@@ -1663,8 +1664,11 @@ union PaymentTool {
     1: BankCard bank_card
     2: PaymentTerminal payment_terminal
     3: DigitalWallet digital_wallet
-    4: CryptoCurrency crypto_currency
     5: MobileCommerce mobile_commerce
+    6: CryptoCurrencyRef crypto_currency
+
+    // Deprecated
+    4: LegacyCryptoCurrency crypto_currency_deprecated
 }
 
 struct DisposablePaymentResource {
@@ -1717,12 +1721,15 @@ struct BankCardCategory {
 
 struct CryptoWallet {
     1: required string id // ID or wallet of the recipient in the third-party payment system
-    2: required CryptoCurrency crypto_currency
+    4: optional CryptoCurrencyRef crypto_currency
     // A destination tag is a unique 9-digit figure assigned to each Ripple (XRP) account
     3: optional string destination_tag
+
+    // Deprecated
+    2: optional LegacyCryptoCurrency crypto_currency_deprecated
 }
 
-enum CryptoCurrency {
+enum LegacyCryptoCurrency {
     bitcoin
     litecoin
     bitcoin_cash
@@ -1730,6 +1737,15 @@ enum CryptoCurrency {
     ethereum
     zcash
     usdt
+}
+
+struct CryptoCurrencyRef {
+    1: required string id
+}
+
+struct CryptoCurrency {
+  1: required string name
+  2: optional string description
 }
 
 struct MobileCommerce {
@@ -2556,7 +2572,10 @@ struct CryptoCurrencyCondition {
 }
 
 union CryptoCurrencyConditionDefinition {
-    1: CryptoCurrency crypto_currency_is
+    2: CryptoCurrencyRef crypto_currency_is
+
+    //Deprecated
+    1: LegacyCryptoCurrency crypto_currency_is_deprecated
 }
 
 struct MobileCommerceCondition {
@@ -2984,6 +3003,20 @@ struct LegacyDigitalWalletProviderObject {
     2: required PaymentServiceRef data
 }
 
+struct CryptoCurrencyObject {
+    1: required CryptoCurrencyRef ref
+    2: required CryptoCurrency data
+}
+
+struct LegacyCryptoCurrencyRef {
+    1: required LegacyCryptoCurrencyRef id
+}
+
+struct LegacyCryptoCurrencyObject {
+    1: required LegacyCryptoCurrencyRef ref
+    2: required CryptoCurrencyRef data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -3031,6 +3064,9 @@ union Reference {
     40 : LegacyTerminalPaymentProviderRef terminal_provider_legacy
     41 : LegacyDigitalWalletProviderRef payment_service_legacy
 
+    42 : CryptoCurrencyRef          crypto_currency
+    43 : LegacyCryptoCurrencyRef    crypto_currency_legacy
+
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
 
@@ -3076,6 +3112,9 @@ union DomainObject {
     39 : LegacyBankCardTokenProviderObject payment_token_legacy
     40 : LegacyTerminalPaymentProviderObject terminal_provider_legacy
     41 : LegacyDigitalWalletProviderObject payment_service_legacy
+
+    42 : CryptoCurrencyObject       crypto_currency
+    43 : LegacyCryptoCurrencyObject crypto_currency_legacy
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
