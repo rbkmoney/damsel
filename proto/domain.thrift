@@ -3009,7 +3009,7 @@ struct CryptoCurrencyObject {
 }
 
 struct LegacyCryptoCurrencyRef {
-    1: required LegacyCryptoCurrencyRef id
+    1: required LegacyCryptoCurrency id
 }
 
 struct LegacyCryptoCurrencyObject {
