@@ -142,7 +142,8 @@ struct InvoiceDetails {
     1: required string product
     2: optional string description
     3: optional InvoiceCart cart
-    4: optional SplitInvoiceCart split_cart
+    /** Распределение денежных средств между разными магазинами в рамках одного инвойса. */
+    4: optional Allocation allocation
 }
 
 struct InvoiceCart {
@@ -157,19 +158,32 @@ struct InvoiceLine {
     4: required map<string, msgpack.Value> metadata
 }
 
-struct SplitInvoiceCart {
-    1: required list<PartialInvoiceCart> partial_carts
+struct Allocation {
+    1: required list<AllocationTransaction> transactions
 }
 
-struct PartialInvoiceCart {
-    1: required list<InvoiceLine> lines
-    2: required PartialInvoiceCartOwner owner
-    3: required Cash cost
+/** Транзакция - единица распределения денежных средств. */
+struct AllocationTransaction {
+    /** Этому магазину мы хотим перевести часть денежных средств. */
+    1: required AllocationTransactionTarget target
+    /** Общая сумма денежных средств транзакции. */
+    2: optional Cash total
+    /** Комиссия вычитаемая из общей суммы. */
+    3: optional AllocationTransactionFee fee
+    /** Сумма, которая будет переведена выбранному магазину. */
+    4: optional Cash amount
+    5: optional InvoiceCart cart
 }
 
-struct PartialInvoiceCartOwner {
-    1 : required PartyID owner_id
-    2 : required ShopID shop_id
+struct AllocationTransactionTarget {
+    1: required PartyID owner_id
+    2: required ShopID shop_id
+}
+
+struct AllocationTransactionFee {
+    1: required base.Rational rational
+    2: optional Cash amount
+    3: optional AllocationTransactionTarget target
 }
 
 struct InvoiceUnpaid    {}
@@ -207,7 +221,7 @@ struct InvoicePaymentCaptured  {
     1: optional string reason
     2: optional Cash cost
     3: optional InvoiceCart cart
-    4: optional SplitInvoiceCart split_cart
+    4: optional Allocation allocation
 }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
@@ -236,7 +250,7 @@ struct InvoiceTemplate {
 union InvoiceTemplateDetails {
     1: InvoiceCart cart
     2: InvoiceTemplateProduct product
-    3: SplitInvoiceCart split_cart
+    3: Allocation allocation
 }
 
 struct InvoiceTemplateProduct {
@@ -572,7 +586,7 @@ struct InvoicePaymentRefund {
     5 : optional string reason
     8 : optional InvoiceCart cart
     9 : optional string external_id
-    10: optional SplitInvoiceCart split_cart
+    10: optional Allocation allocation
 }
 
 union InvoicePaymentRefundStatus {
