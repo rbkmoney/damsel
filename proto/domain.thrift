@@ -136,14 +136,13 @@ struct Invoice {
     12: optional InvoiceTemplateID template_id
     14: optional string external_id
     15: optional InvoiceClientInfo client_info
+    16: optional Allocation allocation
 }
 
 struct InvoiceDetails {
     1: required string product
     2: optional string description
     3: optional InvoiceCart cart
-    /** Распределение денежных средств между разными магазинами в рамках одного инвойса. */
-    4: optional Allocation allocation
 }
 
 struct InvoiceCart {
@@ -158,33 +157,75 @@ struct InvoiceLine {
     4: required map<string, msgpack.Value> metadata
 }
 
+//
+
+struct AllocationPrototype {
+    1: required list<AllocationTransactionPrototype> transactions
+}
+
+/** Прототип транзакции распределения денежных средств. */
+struct AllocationTransactionPrototype {
+    /** По этому назначению переводится часть денежных средств. */
+    1: required AllocationTransactionTarget target
+    /** Общая сумма денежных средств транзакции. */
+    2: required Cash total
+    /** Комиссия вычитаемая из общей суммы. */
+    3: optional AllocationTransactionPrototypeFee fee
+    4: optional AllocationTransactionDetails details
+}
+
+union AllocationTransactionPrototypeFee {
+    1: AllocationTransactionPrototypeFeeShare share
+    2: AllocationTransactionPrototypeFeeAmount amount
+}
+
+struct AllocationTransactionPrototypeFeeShare {
+    1: required base.Rational rational
+}
+
+struct AllocationTransactionPrototypeFeeAmount {
+    1: required Cash amount
+}
+
+//
+
 struct Allocation {
     1: required list<AllocationTransaction> transactions
 }
 
 /** Транзакция - единица распределения денежных средств. */
 struct AllocationTransaction {
-    /** Этому магазину мы хотим перевести часть денежных средств. */
+    /** По этому назначению переводится часть денежных средств. */
     1: required AllocationTransactionTarget target
     /** Общая сумма денежных средств транзакции. */
-    2: optional Cash total
+    2: required Cash total
     /** Комиссия вычитаемая из общей суммы. */
     3: optional AllocationTransactionFee fee
-    /** Сумма, которая будет переведена выбранному магазину. */
-    4: optional Cash amount
-    5: optional InvoiceCart cart
+    /** Сумма, которая будет переведена по назначению. */
+    4: required Cash amount
+    5: optional AllocationTransactionDetails details
 }
 
-struct AllocationTransactionTarget {
+union AllocationTransactionTarget {
+    1: AllocationTransactionTargetShop shop
+}
+
+struct AllocationTransactionTargetShop {
     1: required PartyID owner_id
     2: required ShopID shop_id
 }
 
 struct AllocationTransactionFee {
-    1: required base.Rational rational
-    2: optional Cash amount
-    3: optional AllocationTransactionTarget target
+    1: required Cash amount
+    2: required AllocationTransactionTarget target
+    /** Заполняется если в качестве прототипа при создании использовалась AllocationTransactionPrototypeFeeShare. */
+    3: optional base.Rational rational
 }
+
+struct AllocationTransactionDetails {
+    1: optional InvoiceCart cart
+}
+
 
 struct InvoiceUnpaid    {}
 struct InvoicePaid      {}
@@ -250,7 +291,6 @@ struct InvoiceTemplate {
 union InvoiceTemplateDetails {
     1: InvoiceCart cart
     2: InvoiceTemplateProduct product
-    3: Allocation allocation
 }
 
 struct InvoiceTemplateProduct {

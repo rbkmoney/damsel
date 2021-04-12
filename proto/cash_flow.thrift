@@ -50,7 +50,7 @@ struct MerchantTransactionAccount {
 
 struct MerchantTransactionAccountOwner {
     1: required domain.PartyID party_id
-    2: optional domain.ShopID shop_id
+    2: required domain.ShopID shop_id
 }
 
 struct ProviderTransactionAccount {
@@ -63,7 +63,7 @@ struct ProviderTransactionAccount {
 
 struct ProviderTransactionAccountOwner {
     1: required domain.ProviderRef provider_ref
-    2: optional domain.ProviderTerminalRef terminal_ref
+    2: required domain.ProviderTerminalRef terminal_ref
 }
 
 struct SystemTransactionAccount {
