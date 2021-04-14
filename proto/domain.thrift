@@ -167,23 +167,39 @@ struct AllocationPrototype {
 struct AllocationTransactionPrototype {
     /** По этому назначению переводится часть денежных средств. */
     1: required AllocationTransactionTarget target
+    2: required AllocationTransactionPrototypeBody body
+    3: optional AllocationTransactionDetails details
+}
+
+union AllocationTransactionPrototypeBody {
+    1: AllocationTransactionPrototypeBodyAmount amount
+    2: AllocationTransactionPrototypeBodyTotal total
+}
+
+struct AllocationTransactionPrototypeBodyAmount {
+    /** Сумма, которая будет переведена по назначению. */
+    1: required Cash amount
+}
+
+struct AllocationTransactionPrototypeBodyTotal {
     /** Общая сумма денежных средств транзакции. */
-    2: required Cash total
+    1: required Cash total
     /** Комиссия вычитаемая из общей суммы. */
-    3: optional AllocationTransactionPrototypeFee fee
-    4: optional AllocationTransactionDetails details
+    2: required AllocationTransactionPrototypeFee fee
 }
 
 union AllocationTransactionPrototypeFee {
-    1: AllocationTransactionPrototypeFeeShare share
-    2: AllocationTransactionPrototypeFeeAmount amount
+    1: AllocationTransactionPrototypeFeeFixed fixed
+    2: AllocationTransactionPrototypeFeeShare share
 }
 
 struct AllocationTransactionPrototypeFeeShare {
-    1: required base.Rational rational
+    1: required base.Rational parts
+    2: required CashFlowConstant of
+    3: optional RoundingMethod rounding_method
 }
 
-struct AllocationTransactionPrototypeFeeAmount {
+struct AllocationTransactionPrototypeFeeFixed {
     1: required Cash amount
 }
 
@@ -197,13 +213,10 @@ struct Allocation {
 struct AllocationTransaction {
     /** По этому назначению переводится часть денежных средств. */
     1: required AllocationTransactionTarget target
-    /** Общая сумма денежных средств транзакции. */
-    2: required Cash total
-    /** Комиссия вычитаемая из общей суммы. */
-    3: optional AllocationTransactionFee fee
     /** Сумма, которая будет переведена по назначению. */
-    4: required Cash amount
-    5: optional AllocationTransactionDetails details
+    2: required Cash amount
+    3: optional AllocationTransactionBody body
+    4: optional AllocationTransactionDetails details
 }
 
 union AllocationTransactionTarget {
@@ -215,17 +228,23 @@ struct AllocationTransactionTargetShop {
     2: required ShopID shop_id
 }
 
+struct AllocationTransactionBody {
+    /** Общая сумма денежных средств транзакции. */
+    1: required Cash total
+    /** Комиссия вычитаемая из общей суммы. */
+    2: required Cash amount
+    3: optional AllocationTransactionFee fee
+}
+
 struct AllocationTransactionFee {
-    1: required Cash amount
-    2: required AllocationTransactionTarget target
-    /** Заполняется если в качестве прототипа при создании использовалась AllocationTransactionPrototypeFeeShare. */
-    3: optional base.Rational rational
+    1: required base.Rational parts
+    2: required CashFlowConstant of
+    3: optional RoundingMethod rounding_method
 }
 
 struct AllocationTransactionDetails {
     1: optional InvoiceCart cart
 }
-
 
 struct InvoiceUnpaid    {}
 struct InvoicePaid      {}
