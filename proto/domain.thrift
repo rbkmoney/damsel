@@ -1572,6 +1572,7 @@ union PaymentMethod {
    12: CryptoCurrencyRef crypto_currency
    11: MobileOperatorRef mobile
     8: BankCardPaymentMethod bank_card
+   13: BankCardPaymentMethod empty_cvv_bank_card
     // Deprecated, use BankCardPaymentMethod instead
     1: LegacyBankCardPaymentSystem bank_card_deprecated
     2: LegacyTerminalPaymentProvider payment_terminal_deprecated
