@@ -2667,7 +2667,6 @@ service PartyManagement {
 
     domain.Globals ComputeGlobals (
         1: UserInfo user,
-        2: domain.GlobalsRef globals_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )

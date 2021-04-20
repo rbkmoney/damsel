@@ -6037,7 +6037,6 @@ function_info('PartyManagement', 'ComputeProviderTerminalTerms', exceptions) ->
 function_info('PartyManagement', 'ComputeGlobals', params_type) ->
     {struct, struct, [
         {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-        {2, undefined, {struct, struct, {dmsl_domain_thrift, 'GlobalsRef'}}, 'globals_ref', undefined},
         {3, undefined, i64, 'domain_revision', undefined},
         {4, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
     ]};
