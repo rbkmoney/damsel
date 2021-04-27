@@ -195,8 +195,7 @@ union AllocationTransactionPrototypeFee {
 
 struct AllocationTransactionPrototypeFeeShare {
     1: required base.Rational parts
-    2: required CashFlowConstant of
-    3: optional RoundingMethod rounding_method
+    2: optional RoundingMethod rounding_method
 }
 
 struct AllocationTransactionPrototypeFeeFixed {
@@ -229,17 +228,18 @@ struct AllocationTransactionTargetShop {
 }
 
 struct AllocationTransactionBody {
+    /** По этому назначению переводится часть денежных средств. */
+    1: required AllocationTransactionTarget target
     /** Общая сумма денежных средств транзакции. */
-    1: required Cash total
-    /** Комиссия вычитаемая из общей суммы. */
-    2: required Cash amount
-    3: optional AllocationTransactionFee fee
+    2: required Cash total
+    /** Комиссия вычитаемая из общей суммы, будет переведена по назначению. */
+    3: required Cash amount
+    4: optional AllocationTransactionFee fee
 }
 
 struct AllocationTransactionFee {
     1: required base.Rational parts
-    2: required CashFlowConstant of
-    3: optional RoundingMethod rounding_method
+    2: optional RoundingMethod rounding_method
 }
 
 struct AllocationTransactionDetails {
