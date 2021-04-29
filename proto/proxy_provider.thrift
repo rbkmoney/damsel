@@ -201,6 +201,7 @@ struct InvoicePayment {
     2: required base.Timestamp          created_at
     3: optional domain.TransactionInfo  trx
     6: required PaymentResource         payment_resource
+    10: optional domain.PayerSessionInfo payer_session_info
     5: required Cash                    cost
     7: required domain.ContactInfo      contact_info
     8: optional bool                    make_recurrent
