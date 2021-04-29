@@ -130,6 +130,7 @@
     'domain_revision' :: dmsl_domain_thrift:'DataRevision'(),
     'flow' :: dmsl_domain_thrift:'InvoicePaymentFlow'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
+    'payer_session_info' :: dmsl_domain_thrift:'PayerSessionInfo'() | undefined,
     'party_revision' :: dmsl_domain_thrift:'PartyRevision'() | undefined,
     'owner_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
@@ -220,6 +221,11 @@
 -record('domain_ClientInfo', {
     'ip_address' :: dmsl_domain_thrift:'IPAddress'() | undefined,
     'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined
+}).
+
+%% struct 'PayerSessionInfo'
+-record('domain_PayerSessionInfo', {
+    'redirect_url' :: dmsl_domain_thrift:'URITemplate'() | undefined
 }).
 
 %% struct 'PaymentRoute'

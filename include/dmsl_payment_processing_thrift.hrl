@@ -308,6 +308,7 @@
 %% struct 'InvoicePaymentParams'
 -record('payproc_InvoicePaymentParams', {
     'payer' :: dmsl_payment_processing_thrift:'PayerParams'(),
+    'payer_session_info' :: dmsl_domain_thrift:'PayerSessionInfo'() | undefined,
     'flow' :: dmsl_payment_processing_thrift:'InvoicePaymentParamsFlow'(),
     'make_recurrent' :: boolean() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentID'() | undefined,

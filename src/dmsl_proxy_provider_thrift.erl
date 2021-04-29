@@ -520,6 +520,7 @@ struct_info('InvoicePayment') ->
         {2, required, string, 'created_at', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined},
         {6, required, {struct, union, {dmsl_proxy_provider_thrift, 'PaymentResource'}}, 'payment_resource', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PayerSessionInfo'}}, 'payer_session_info', undefined},
         {5, required, {struct, struct, {dmsl_proxy_provider_thrift, 'Cash'}}, 'cost', undefined},
         {7, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
         {8, optional, bool, 'make_recurrent', undefined},

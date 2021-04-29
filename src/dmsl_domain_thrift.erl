@@ -39,6 +39,7 @@
     'FailureReason'/0,
     'Amount'/0,
     'AccountID'/0,
+    'URITemplate'/0,
     'InvoiceID'/0,
     'InvoiceAdjustmentID'/0,
     'InvoicePaymentID'/0,
@@ -151,6 +152,7 @@
     'CustomerPayer'/0,
     'RecurrentPayer'/0,
     'ClientInfo'/0,
+    'PayerSessionInfo'/0,
     'PaymentRoute'/0,
     'RecurrentParentPayment'/0,
     'InvoiceAdjustment'/0,
@@ -527,6 +529,7 @@
     'FailureReason' |
     'Amount' |
     'AccountID' |
+    'URITemplate' |
     'InvoiceID' |
     'InvoiceAdjustmentID' |
     'InvoicePaymentID' |
@@ -579,6 +582,7 @@
 -type 'FailureReason'() :: binary().
 -type 'Amount'() :: integer().
 -type 'AccountID'() :: integer().
+-type 'URITemplate'() :: binary().
 -type 'InvoiceID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoiceAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoicePaymentID'() :: dmsl_base_thrift:'ID'().
@@ -1106,6 +1110,7 @@
     'CustomerPayer' |
     'RecurrentPayer' |
     'ClientInfo' |
+    'PayerSessionInfo' |
     'PaymentRoute' |
     'RecurrentParentPayment' |
     'InvoiceAdjustment' |
@@ -1615,6 +1620,9 @@
 
 %% struct 'ClientInfo'
 -type 'ClientInfo'() :: #'domain_ClientInfo'{}.
+
+%% struct 'PayerSessionInfo'
+-type 'PayerSessionInfo'() :: #'domain_PayerSessionInfo'{}.
 
 %% struct 'PaymentRoute'
 -type 'PaymentRoute'() :: #'domain_PaymentRoute'{}.
@@ -3035,6 +3043,7 @@ typedefs() ->
         'FailureReason',
         'Amount',
         'AccountID',
+        'URITemplate',
         'InvoiceID',
         'InvoiceAdjustmentID',
         'InvoicePaymentID',
@@ -3155,6 +3164,7 @@ structs() ->
         'CustomerPayer',
         'RecurrentPayer',
         'ClientInfo',
+        'PayerSessionInfo',
         'PaymentRoute',
         'RecurrentParentPayment',
         'InvoiceAdjustment',
@@ -3550,6 +3560,9 @@ typedef_info('Amount') ->
 
 typedef_info('AccountID') ->
     i64;
+
+typedef_info('URITemplate') ->
+    string;
 
 typedef_info('InvoiceID') ->
     string;
@@ -4266,6 +4279,7 @@ struct_info('InvoicePayment') ->
         {10, required, i64, 'domain_revision', undefined},
         {13, required, {struct, union, {dmsl_domain_thrift, 'InvoicePaymentFlow'}}, 'flow', undefined},
         {14, required, {struct, union, {dmsl_domain_thrift, 'Payer'}}, 'payer', undefined},
+        {21, optional, {struct, struct, {dmsl_domain_thrift, 'PayerSessionInfo'}}, 'payer_session_info', undefined},
         {15, optional, i64, 'party_revision', undefined},
         {16, optional, string, 'owner_id', undefined},
         {17, optional, string, 'shop_id', undefined},
@@ -4395,6 +4409,11 @@ struct_info('ClientInfo') ->
     {struct, struct, [
         {1, optional, string, 'ip_address', undefined},
         {2, optional, string, 'fingerprint', undefined}
+    ]};
+
+struct_info('PayerSessionInfo') ->
+    {struct, struct, [
+        {1, optional, string, 'redirect_url', undefined}
     ]};
 
 struct_info('PaymentRoute') ->
@@ -6883,6 +6902,9 @@ record_name('RecurrentPayer') ->
 
 record_name('ClientInfo') ->
     'domain_ClientInfo';
+
+record_name('PayerSessionInfo') ->
+    'domain_PayerSessionInfo';
 
 record_name('PaymentRoute') ->
     'domain_PaymentRoute';

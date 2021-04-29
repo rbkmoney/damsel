@@ -120,6 +120,7 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'payment_resource' :: dmsl_proxy_provider_thrift:'PaymentResource'(),
+    'payer_session_info' :: dmsl_domain_thrift:'PayerSessionInfo'() | undefined,
     'cost' :: dmsl_proxy_provider_thrift:'Cash'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
     'make_recurrent' :: boolean() | undefined,

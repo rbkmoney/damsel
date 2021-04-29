@@ -2651,6 +2651,7 @@ struct_info('InvoiceTemplateUpdateParams') ->
 struct_info('InvoicePaymentParams') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_payment_processing_thrift, 'PayerParams'}}, 'payer', undefined},
+        {8, optional, {struct, struct, {dmsl_domain_thrift, 'PayerSessionInfo'}}, 'payer_session_info', undefined},
         {2, required, {struct, union, {dmsl_payment_processing_thrift, 'InvoicePaymentParamsFlow'}}, 'flow', undefined},
         {3, optional, bool, 'make_recurrent', undefined},
         {4, optional, string, 'id', undefined},
