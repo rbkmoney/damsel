@@ -622,7 +622,7 @@ struct Invoice {
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
     6: optional domain.PaymentRoute route
-    7: optional FinalCashFlow deprecated_w
+    7: optional FinalCashFlow deprecated_cash_flow
     10: optional cash_flow.CashFlow cash_flow
     2: required list<InvoicePaymentAdjustment> adjustments
     4: required list<InvoicePaymentRefund> refunds
@@ -636,7 +636,7 @@ struct InvoicePayment {
 struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefund refund
     2: required list<InvoiceRefundSession> sessions
-    3: optional FinalCashFlow deprecated_ow
+    3: optional FinalCashFlow deprecated_cash_flow
     4: optional cash_flow.CashFlow cash_flow
 }
 
@@ -654,7 +654,7 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 struct InvoicePaymentChargeback {
     1: required domain.InvoicePaymentChargeback chargeback
-    2: optional FinalCashFlow deprecated_ow
+    2: optional FinalCashFlow deprecated_cash_flow
     3: optional cash_flow.CashFlow cash_flow
 }
 
