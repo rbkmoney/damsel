@@ -569,6 +569,7 @@ struct InvoiceTemplateUpdateParams {
 
 struct InvoicePaymentParams {
     1: required PayerParams payer
+    8: optional domain.PayerSessionInfo payer_session_info
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
     4: optional domain.InvoicePaymentID id
@@ -2670,7 +2671,6 @@ service PartyManagement {
 
     domain.Globals ComputeGlobals (
         1: UserInfo user,
-        2: domain.GlobalsRef globals_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )

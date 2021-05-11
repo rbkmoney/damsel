@@ -72,6 +72,11 @@ struct Cash {
     2: required CurrencyRef currency
 }
 
+/**
+ * Строковый шаблон согласно [RFC6570](https://tools.ietf.org/html/rfc6570) Level 4.
+ */
+typedef string URITemplate
+
 /* Contractor transactions */
 
 struct TransactionInfo {
@@ -188,6 +193,7 @@ struct InvoicePayment {
     10: required DataRevision domain_revision
     13: required InvoicePaymentFlow flow
     14: required Payer payer
+    21: optional PayerSessionInfo payer_session_info
     15: optional PartyRevision party_revision
     16: optional PartyID owner_id
     17: optional ShopID shop_id
@@ -345,6 +351,20 @@ struct RecurrentPayer {
 struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
+}
+
+struct PayerSessionInfo {
+    /**
+     * Адрес, куда необходимо перенаправить user agent плательщика по
+     * завершении различных активностей в браузере, вроде авторизации
+     * списания средств механизмом 3DS 2.0, если они потребуются.
+     *
+     * Необходимо указывать только в случае интерактивного проведения
+     * платежа, например при помощи платёжной формы. И только тогда,
+     * когда обычные средства абстракции вроде user interaction не
+     * применимы.
+     */
+    1: optional URITemplate redirect_url
 }
 
 struct PaymentRoute {
@@ -1830,6 +1850,7 @@ enum LegacyDigitalWalletProvider {
     qiwi
     rbkmoney
     yandex_money
+    webmoney
 }
 
 struct BankRef { 1: required ObjectID id }
