@@ -1022,7 +1022,8 @@
 -type 'LegacyDigitalWalletProvider'() ::
     'qiwi' |
     'rbkmoney' |
-    'yandex_money'.
+    'yandex_money' |
+    'webmoney'.
 
 %% enum 'MerchantCashFlowAccount'
 -type 'MerchantCashFlowAccount'() ::
@@ -4080,7 +4081,8 @@ enum_info('LegacyDigitalWalletProvider') ->
     {enum, [
         {'qiwi', 0},
         {'rbkmoney', 1},
-        {'yandex_money', 2}
+        {'yandex_money', 2},
+        {'webmoney', 3}
     ]};
 
 enum_info('MerchantCashFlowAccount') ->

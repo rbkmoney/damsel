@@ -1850,6 +1850,7 @@ enum LegacyDigitalWalletProvider {
     qiwi
     rbkmoney
     yandex_money
+    webmoney
 }
 
 struct BankRef { 1: required ObjectID id }
