@@ -207,8 +207,8 @@ struct InvoicePaymentStarted {
     /** Выбранный маршрут обработки платежа. */
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
-    3: optional domain.FinalCashFlow cash_flow
-    5: optional cash_flow.CashFlow new_cash_flow
+    3: optional domain.FinalCashFlow deprecated_cash_flow
+    5: optional cash_flow.CashFlow cash_flow
 }
 
 struct InvoicePaymentClockUpdate {
@@ -240,8 +240,8 @@ struct InvoicePaymentRouteChanged {
  */
 struct InvoicePaymentCashFlowChanged {
     /** Данные финансового взаимодействия. */
-    1: required domain.FinalCashFlow cash_flow
-    2: optional cash_flow.CashFlow new_cash_flow
+    1: required domain.FinalCashFlow deprecated_cash_flow
+    2: optional cash_flow.CashFlow cash_flow
 }
 
 /**
@@ -383,8 +383,8 @@ struct InvoicePaymentChargebackStatusChanged {
  * Событие об изменении кэшфлоу чарджбека
  */
 struct InvoicePaymentChargebackCashFlowChanged {
-    1: required domain.FinalCashFlow cash_flow
-    2: optional cash_flow.CashFlow new_cash_flow
+    1: required domain.FinalCashFlow deprecated_cash_flow
+    2: optional cash_flow.CashFlow cash_flow
 }
 
 /**
@@ -439,8 +439,8 @@ union InvoicePaymentRefundChangePayload {
  */
 struct InvoicePaymentRefundCreated {
     1: required domain.InvoicePaymentRefund refund
-    2: required domain.FinalCashFlow cash_flow
-    4: optional cash_flow.CashFlow new_cash_flow
+    2: required domain.FinalCashFlow deprecated_cash_flow
+    4: optional cash_flow.CashFlow cash_flow
 
     /**
     * Данные проведённой вручную транзакции.
@@ -622,8 +622,8 @@ struct Invoice {
 struct InvoicePayment {
     1: required domain.InvoicePayment payment
     6: optional domain.PaymentRoute route
-    7: optional FinalCashFlow cash_flow
-    10: optional cash_flow.CashFlow new_cash_flow
+    7: optional FinalCashFlow deprecated_w
+    10: optional cash_flow.CashFlow cash_flow
     2: required list<InvoicePaymentAdjustment> adjustments
     4: required list<InvoicePaymentRefund> refunds
     5: required list<InvoicePaymentSession> sessions
@@ -636,8 +636,8 @@ struct InvoicePayment {
 struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefund refund
     2: required list<InvoiceRefundSession> sessions
-    3: optional FinalCashFlow cash_flow
-    4: optional cash_flow.CashFlow new_cash_flow
+    3: optional FinalCashFlow deprecated_ow
+    4: optional cash_flow.CashFlow cash_flow
 }
 
 struct InvoicePaymentSession {
@@ -654,8 +654,8 @@ typedef domain.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 struct InvoicePaymentChargeback {
     1: required domain.InvoicePaymentChargeback chargeback
-    2: optional FinalCashFlow cash_flow
-    3: optional cash_flow.CashFlow new_cash_flow
+    2: optional FinalCashFlow deprecated_ow
+    3: optional cash_flow.CashFlow cash_flow
 }
 
 /**

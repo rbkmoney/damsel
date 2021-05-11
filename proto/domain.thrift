@@ -159,16 +159,24 @@ struct InvoiceLine {
 
 //
 
+typedef base.ID AllocationTransactionID
+
+/**
+    Прототип - является структурой данных, которую формирует третья сторона
+    в момент создания инвойса. С помощью данных прототипа создается структура
+    распределения денежных средств для использования внутри системы. */
+
 struct AllocationPrototype {
     1: required list<AllocationTransactionPrototype> transactions
 }
 
 /** Прототип транзакции распределения денежных средств. */
 struct AllocationTransactionPrototype {
+    1: required AllocationTransactionID id
     /** По этому назначению переводится часть денежных средств. */
-    1: required AllocationTransactionTarget target
-    2: required AllocationTransactionPrototypeBody body
-    3: optional AllocationTransactionDetails details
+    2: required AllocationTransactionTarget target
+    3: required AllocationTransactionPrototypeBody body
+    4: optional AllocationTransactionDetails details
 }
 
 union AllocationTransactionPrototypeBody {
@@ -210,12 +218,17 @@ struct Allocation {
 
 /** Транзакция - единица распределения денежных средств. */
 struct AllocationTransaction {
+    1: required AllocationTransactionID id
     /** По этому назначению переводится часть денежных средств. */
-    1: required AllocationTransactionTarget target
+    2: required AllocationTransactionTarget target
     /** Сумма, которая будет переведена по назначению. */
-    2: required Cash amount
-    3: optional AllocationTransactionBody body
-    4: optional AllocationTransactionDetails details
+    3: required Cash amount
+    /**
+        Описывает содержимое транзакции в том случае, если был
+        использован вариант прототипа с AllocationTransactionPrototypeBody.total
+    */
+    4: optional AllocationTransactionBody body
+    5: optional AllocationTransactionDetails details
 }
 
 union AllocationTransactionTarget {
@@ -229,11 +242,11 @@ struct AllocationTransactionTargetShop {
 
 struct AllocationTransactionBody {
     /** По этому назначению переводится часть денежных средств. */
-    1: required AllocationTransactionTarget target
+    1: required AllocationTransactionTarget fee_target
     /** Общая сумма денежных средств транзакции. */
     2: required Cash total
     /** Комиссия вычитаемая из общей суммы, будет переведена по назначению. */
-    3: required Cash amount
+    3: required Cash fee_amount
     4: optional AllocationTransactionFee fee
 }
 
