@@ -778,6 +778,10 @@ struct InternationalLegalEntity {
     4: optional string actual_address
     /* Регистрационный номер */
     5: optional string registered_number
+    /* Страна Мерчанта */
+    6: optional string country
+    /* Экономическая зона/блок Мерчанта: ЕЭЗ */
+    7: optional string trade_bloc
 }
 
 enum ContractorIdentificationLevel {
