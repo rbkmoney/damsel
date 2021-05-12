@@ -2664,7 +2664,7 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
             3: TerminalNotFound ex3,
-            4: ProvisionTermSetNotFound ex4
+            4: ProvisionTermSetUndefined ex4
         )
 
     /* Globals */
