@@ -203,7 +203,8 @@ union AllocationTransactionPrototypeFee {
 
 struct AllocationTransactionPrototypeFeeShare {
     1: required base.Rational parts
-    2: required RoundingMethod rounding_method
+    /** Метод по умолчанию round_half_away_from_zero. */
+    2: optional RoundingMethod rounding_method
 }
 
 struct AllocationTransactionPrototypeFeeFixed {
@@ -256,7 +257,8 @@ struct AllocationTransactionBodyTotal {
 
 struct AllocationTransactionFeeShare {
     1: required base.Rational parts
-    2: required RoundingMethod rounding_method
+    /** Метод по умолчанию round_half_away_from_zero. */
+    2: optional RoundingMethod rounding_method
 }
 
 struct AllocationTransactionDetails {
