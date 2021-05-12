@@ -2425,6 +2425,8 @@ exception ProviderNotFound {}
 
 exception TerminalNotFound {}
 
+exception ProvisionTermSetUndefined {}
+
 exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
@@ -2661,7 +2663,8 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
-            3: TerminalNotFound ex3
+            3: TerminalNotFound ex3,
+            4: ProvisionTermSetUndefined ex4
         )
 
     /* Globals */

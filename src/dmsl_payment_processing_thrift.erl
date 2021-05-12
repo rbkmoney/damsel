@@ -338,6 +338,7 @@
     'ContractTemplateNotFound'/0,
     'ProviderNotFound'/0,
     'TerminalNotFound'/0,
+    'ProvisionTermSetUndefined'/0,
     'GlobalsNotFound'/0,
     'RuleSetNotFound'/0,
     'VarsetPartyNotMatch'/0
@@ -688,6 +689,7 @@
     'ContractTemplateNotFound' |
     'ProviderNotFound' |
     'TerminalNotFound' |
+    'ProvisionTermSetUndefined' |
     'GlobalsNotFound' |
     'RuleSetNotFound' |
     'VarsetPartyNotMatch'.
@@ -1720,6 +1722,9 @@
 
 %% exception 'TerminalNotFound'
 -type 'TerminalNotFound'() :: #'payproc_TerminalNotFound'{}.
+
+%% exception 'ProvisionTermSetUndefined'
+-type 'ProvisionTermSetUndefined'() :: #'payproc_ProvisionTermSetUndefined'{}.
 
 %% exception 'GlobalsNotFound'
 -type 'GlobalsNotFound'() :: #'payproc_GlobalsNotFound'{}.
@@ -3872,6 +3877,9 @@ struct_info('ProviderNotFound') ->
 struct_info('TerminalNotFound') ->
     {struct, exception, []};
 
+struct_info('ProvisionTermSetUndefined') ->
+    {struct, exception, []};
+
 struct_info('GlobalsNotFound') ->
     {struct, exception, []};
 
@@ -4586,6 +4594,9 @@ record_name('ProviderNotFound') ->
 
 record_name('TerminalNotFound') ->
     'payproc_TerminalNotFound';
+
+record_name('ProvisionTermSetUndefined') ->
+    'payproc_ProvisionTermSetUndefined';
 
 record_name('GlobalsNotFound') ->
     'payproc_GlobalsNotFound';
@@ -6033,7 +6044,8 @@ function_info('PartyManagement', 'ComputeProviderTerminalTerms', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProviderNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'TerminalNotFound'}}, 'ex3', undefined}
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'TerminalNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ProvisionTermSetUndefined'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'ComputeGlobals', params_type) ->
     {struct, struct, [

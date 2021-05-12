@@ -1260,6 +1260,9 @@
 %% exception 'TerminalNotFound'
 -record('payproc_TerminalNotFound', {}).
 
+%% exception 'ProvisionTermSetUndefined'
+-record('payproc_ProvisionTermSetUndefined', {}).
+
 %% exception 'GlobalsNotFound'
 -record('payproc_GlobalsNotFound', {}).
 
