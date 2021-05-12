@@ -629,6 +629,7 @@ struct InvoicePayment {
     5: required list<InvoicePaymentSession> sessions
     8: optional list<InvoicePaymentChargeback> chargebacks
     9: optional domain.TransactionInfo last_transaction_info
+    11: optional domain.Allocation allocaton
     # deprecated
     3: required list<domain.InvoicePaymentRefund> legacy_refunds
 }
