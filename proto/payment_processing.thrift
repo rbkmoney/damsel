@@ -2425,7 +2425,7 @@ exception ProviderNotFound {}
 
 exception TerminalNotFound {}
 
-exception ProvisionTermSetNotFound {}
+exception ProvisionTermSetUndefined {}
 
 exception GlobalsNotFound {}
 
