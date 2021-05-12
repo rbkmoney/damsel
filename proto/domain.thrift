@@ -779,7 +779,7 @@ struct InternationalLegalEntity {
     /* Регистрационный номер */
     5: optional string registered_number
     /* Страна Мерчанта */
-    6: optional string country
+    6: optional Residence country
     /* Экономическая зона/блок Мерчанта: ЕЭЗ */
     7: optional string trade_bloc
 }
