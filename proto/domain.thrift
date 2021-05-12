@@ -781,7 +781,16 @@ struct InternationalLegalEntity {
     /* Страна Мерчанта */
     6: optional Residence country
     /* Экономическая зона/блок Мерчанта: ЕЭЗ */
-    7: optional string trade_bloc
+    7: optional TradeBlocRef trade_bloc
+}
+
+struct TradeBlocRef {
+    1: required string id
+}
+
+struct TradeBloc {
+    1: required string name
+    2: optional string description
 }
 
 enum ContractorIdentificationLevel {
