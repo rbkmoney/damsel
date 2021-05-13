@@ -141,6 +141,7 @@ struct Invoice {
     12: optional InvoiceTemplateID template_id
     14: optional string external_id
     15: optional InvoiceClientInfo client_info
+    16: optional Allocation allocation
 }
 
 struct InvoiceDetails {
@@ -170,6 +171,114 @@ union InvoiceBankAccount {
 struct InvoiceRussianBankAccount {
     1: required string account
     2: required string bank_bik
+}
+
+//
+
+typedef base.ID AllocationTransactionID
+
+/**
+    Прототип - является структурой данных, которую формирует третья сторона
+    в момент создания инвойса. С помощью данных прототипа создается структура
+    распределения денежных средств для использования внутри системы. */
+
+struct AllocationPrototype {
+    1: required list<AllocationTransactionPrototype> transactions
+}
+
+/** Прототип транзакции распределения денежных средств. */
+struct AllocationTransactionPrototype {
+    1: required AllocationTransactionID id
+    /** По этому назначению переводится часть денежных средств. */
+    2: required AllocationTransactionTarget target
+    3: required AllocationTransactionPrototypeBody body
+    4: optional AllocationTransactionDetails details
+}
+
+union AllocationTransactionPrototypeBody {
+    1: AllocationTransactionPrototypeBodyAmount amount
+    2: AllocationTransactionPrototypeBodyTotal total
+}
+
+struct AllocationTransactionPrototypeBodyAmount {
+    /** Сумма, которая будет переведена по назначению. */
+    1: required Cash amount
+}
+
+struct AllocationTransactionPrototypeBodyTotal {
+    /** Общая сумма денежных средств транзакции. */
+    1: required Cash total
+    /** Комиссия вычитаемая из общей суммы. */
+    2: required AllocationTransactionPrototypeFee fee
+}
+
+union AllocationTransactionPrototypeFee {
+    1: AllocationTransactionPrototypeFeeFixed fixed
+    2: AllocationTransactionPrototypeFeeShare share
+}
+
+struct AllocationTransactionPrototypeFeeShare {
+    1: required base.Rational parts
+    /** Метод по умолчанию round_half_away_from_zero. */
+    2: optional RoundingMethod rounding_method
+}
+
+struct AllocationTransactionPrototypeFeeFixed {
+    1: required Cash amount
+}
+
+//
+
+struct Allocation {
+    1: required list<AllocationTransaction> transactions
+}
+
+/** Транзакция - единица распределения денежных средств. */
+struct AllocationTransaction {
+    1: required AllocationTransactionID id
+    /** По этому назначению переводится часть денежных средств. */
+    2: required AllocationTransactionTarget target
+    /** Сумма, которая будет переведена по назначению. */
+    3: required Cash amount
+    /**
+        Описывает содержимое транзакции в том случае, если был
+        использован вариант прототипа с AllocationTransactionPrototypeBody.total
+    */
+    4: optional AllocationTransactionBodyTotal body
+    5: optional AllocationTransactionDetails details
+}
+
+union AllocationTransactionTarget {
+    1: AllocationTransactionTargetShop shop
+}
+
+struct AllocationTransactionTargetShop {
+    1: required PartyID owner_id
+    2: required ShopID shop_id
+}
+
+struct AllocationTransactionBodyTotal {
+    /** По этому назначению переводится часть денежных средств. */
+    1: required AllocationTransactionTarget fee_target
+    /** Общая сумма денежных средств транзакции. */
+    2: required Cash total
+    /** Комиссия вычитаемая из общей суммы, будет переведена по назначению. */
+    3: required Cash fee_amount
+    /**
+        Описывает комиссию в относительных величинах в том случае, если был
+        использован вариант прототипа с AllocationTransactionPrototypeFee.share
+    */
+    4: optional AllocationTransactionFeeShare fee
+}
+
+struct AllocationTransactionFeeShare {
+    1: required base.Rational parts
+    /** Метод по умолчанию round_half_away_from_zero. */
+    2: optional RoundingMethod rounding_method
+}
+
+struct AllocationTransactionDetails {
+    1: optional InvoiceCart cart
 }
 
 struct InvoiceUnpaid    {}
@@ -208,6 +317,7 @@ struct InvoicePaymentCaptured  {
     1: optional string reason
     2: optional Cash cost
     3: optional InvoiceCart cart
+    4: optional Allocation allocation
 }
 struct InvoicePaymentCancelled { 1: optional string reason }
 struct InvoicePaymentRefunded  {}
@@ -576,15 +686,16 @@ struct InvoicePaymentChargebackCancelled {}
 /* Refunds */
 
 struct InvoicePaymentRefund {
-    1: required InvoicePaymentRefundID id
-    2: required InvoicePaymentRefundStatus status
-    3: required base.Timestamp created_at
-    4: required DataRevision domain_revision
-    7: optional PartyRevision party_revision
-    6: optional Cash cash
-    5: optional string reason
-    8: optional InvoiceCart cart
-    9: optional string external_id
+    1 : required InvoicePaymentRefundID id
+    2 : required InvoicePaymentRefundStatus status
+    3 : required base.Timestamp created_at
+    4 : required DataRevision domain_revision
+    7 : optional PartyRevision party_revision
+    6 : optional Cash cash
+    5 : optional string reason
+    8 : optional InvoiceCart cart
+    9 : optional string external_id
+    10: optional Allocation allocation
 }
 
 union InvoicePaymentRefundStatus {

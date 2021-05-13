@@ -232,6 +232,7 @@ struct StatInvoice {
     11: optional base.Content context
     12: optional domain.InvoiceCart cart
     13: optional string external_id
+    14: optional domain.Allocation allocation
 }
 
 struct EnrichedStatInvoice {
