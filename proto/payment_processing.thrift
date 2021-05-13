@@ -555,13 +555,14 @@ struct InvoiceWithTemplateParams {
 }
 
 struct InvoiceTemplateCreateParams {
-    1: required PartyID party_id
-    2: required ShopID shop_id
-    4: required domain.LifetimeInterval invoice_lifetime
-    7: required string product # for backward compatibility
-    8: optional string description
-    9: required domain.InvoiceTemplateDetails details
-    6: required domain.InvoiceContext context
+    10: optional domain.InvoiceTemplateID      template_id
+    1:  required PartyID                       party_id
+    2:  required ShopID                        shop_id
+    4:  required domain.LifetimeInterval       invoice_lifetime
+    7:  required string                        product # for backward compatibility
+    8:  optional string                        description
+    9:  required domain.InvoiceTemplateDetails details
+    6:  required domain.InvoiceContext         context
 }
 
 struct InvoiceTemplateUpdateParams {
@@ -574,6 +575,7 @@ struct InvoiceTemplateUpdateParams {
 
 struct InvoicePaymentParams {
     1: required PayerParams payer
+    8: optional domain.PayerSessionInfo payer_session_info
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
     4: optional domain.InvoicePaymentID id
@@ -1561,6 +1563,7 @@ typedef domain.CustomerID CustomerID
 typedef domain.Metadata   Metadata
 
 struct CustomerParams {
+    5: optional CustomerID         customer_id
     1: required PartyID            party_id
     2: required ShopID             shop_id
     3: required domain.ContactInfo contact_info
@@ -1640,6 +1643,8 @@ typedef domain.CustomerBindingID CustomerBindingID
 typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
+    3: optional CustomerBindingID         customer_binding_id
+    2: optional RecurrentPaymentToolID    rec_payment_tool_id
     1: required DisposablePaymentResource payment_resource
 }
 
@@ -2436,6 +2441,8 @@ exception ProviderNotFound {}
 
 exception TerminalNotFound {}
 
+exception ProvisionTermSetUndefined {}
+
 exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
@@ -2672,14 +2679,14 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
-            3: TerminalNotFound ex3
+            3: TerminalNotFound ex3,
+            4: ProvisionTermSetUndefined ex4
         )
 
     /* Globals */
 
     domain.Globals ComputeGlobals (
         1: UserInfo user,
-        2: domain.GlobalsRef globals_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )

@@ -1,0 +1,6 @@
+/proto/ @rbkmoney/erlang @rbkmoney/java @rbkmoney/frontend
+/rebar.* @rbkmoney/erlang
+/src/ @rbkmoney/erlang
+/pom.xml @rbkmoney/java
+/package-lock.json @rbkmoney/frontend
+/package.json @rbkmoney/frontend
