@@ -569,6 +569,7 @@ struct InvoiceTemplateUpdateParams {
 
 struct InvoicePaymentParams {
     1: required PayerParams payer
+    8: optional domain.PayerSessionInfo payer_session_info
     2: required InvoicePaymentParamsFlow flow
     3: optional bool make_recurrent
     4: optional domain.InvoicePaymentID id
@@ -2424,6 +2425,8 @@ exception ProviderNotFound {}
 
 exception TerminalNotFound {}
 
+exception ProvisionTermSetUndefined {}
+
 exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
@@ -2660,14 +2663,14 @@ service PartyManagement {
         throws (
             1: InvalidUser ex1,
             2: ProviderNotFound ex2,
-            3: TerminalNotFound ex3
+            3: TerminalNotFound ex3,
+            4: ProvisionTermSetUndefined ex4
         )
 
     /* Globals */
 
     domain.Globals ComputeGlobals (
         1: UserInfo user,
-        2: domain.GlobalsRef globals_ref,
         3: domain.DataRevision domain_revision,
         4: Varset varset
     )
