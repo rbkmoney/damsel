@@ -6,6 +6,7 @@ namespace erlang paytoolprv
 
 struct WrappedPaymentTool {
     1: required PaymentRequest request
+    2: optional domain.PaymentInstitutionRealm realm
 }
 
 union PaymentRequest {
