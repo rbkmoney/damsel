@@ -784,8 +784,10 @@ struct InternationalLegalEntity {
     7: optional TradeBlocRef trade_bloc
 }
 
+typedef base.ID TradeBlocID
+
 struct TradeBlocRef {
-    1: required string id
+    1: required TradeBlocID id
 }
 
 struct TradeBloc {
