@@ -784,12 +784,6 @@ struct InternationalLegalEntity {
     7: optional TradeBlocRef trade_bloc
 }
 
-typedef base.ID TradeBlocID
-
-struct TradeBlocRef {
-    1: required TradeBlocID id
-}
-
 struct TradeBloc {
     1: required string name
     2: optional string description
@@ -3032,6 +3026,16 @@ struct LegacyCryptoCurrencyObject {
     2: required CryptoCurrencyRef data
 }
 
+
+struct TradeBlocRef {
+    1: required ObjectID id
+}
+
+struct TradeBlocObject {
+    1: required TradeBlocRef ref
+    2: required TradeBloc data
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -3081,6 +3085,7 @@ union Reference {
 
     42 : CryptoCurrencyRef          crypto_currency
     43 : LegacyCryptoCurrencyRef    crypto_currency_legacy
+    44 : TradeBlocRef               trade_bloc
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -3130,6 +3135,8 @@ union DomainObject {
 
     42 : CryptoCurrencyObject       crypto_currency
     43 : LegacyCryptoCurrencyObject crypto_currency_legacy
+
+    44 : TradeBlocObject               trade_bloc
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
