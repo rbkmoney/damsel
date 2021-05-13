@@ -3047,9 +3047,10 @@ struct LegacyCryptoCurrencyObject {
     2: required CryptoCurrencyRef data
 }
 
+typedef base.ID TradeBlocID
 
 struct TradeBlocRef {
-    1: required ObjectID id
+    1: required TradeBlocID id
 }
 
 struct TradeBlocObject {
