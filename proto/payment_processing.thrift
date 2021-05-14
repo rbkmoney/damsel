@@ -549,7 +549,7 @@ struct InvoiceWithTemplateParams {
 }
 
 struct InvoiceTemplateCreateParams {
-    10: optional domain.InvoiceTemplateID      template_id
+    10: required domain.InvoiceTemplateID      template_id
     1:  required PartyID                       party_id
     2:  required ShopID                        shop_id
     4:  required domain.LifetimeInterval       invoice_lifetime
@@ -1547,7 +1547,7 @@ typedef domain.CustomerID CustomerID
 typedef domain.Metadata   Metadata
 
 struct CustomerParams {
-    5: optional CustomerID         customer_id
+    5: required CustomerID         customer_id
     1: required PartyID            party_id
     2: required ShopID             shop_id
     3: required domain.ContactInfo contact_info
@@ -1627,8 +1627,8 @@ typedef domain.CustomerBindingID CustomerBindingID
 typedef domain.DisposablePaymentResource DisposablePaymentResource
 
 struct CustomerBindingParams {
-    3: optional CustomerBindingID         customer_binding_id
-    2: optional RecurrentPaymentToolID    rec_payment_tool_id
+    3: required CustomerBindingID         customer_binding_id
+    2: required RecurrentPaymentToolID    rec_payment_tool_id
     1: required DisposablePaymentResource payment_resource
 }
 
