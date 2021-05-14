@@ -2618,7 +2618,7 @@ struct_info('InvoiceParams') ->
         {4, required, string, 'due', undefined},
         {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
         {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-        {7, optional, string, 'id', undefined},
+        {7, required, string, 'id', undefined},
         {8, optional, string, 'external_id', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined}
     ]};
@@ -2628,7 +2628,7 @@ struct_info('InvoiceWithTemplateParams') ->
         {1, required, string, 'template_id', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
         {3, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-        {4, optional, string, 'id', undefined},
+        {4, required, string, 'id', undefined},
         {5, optional, string, 'external_id', undefined}
     ]};
 

@@ -270,7 +270,7 @@
     'due' :: dmsl_base_thrift:'Timestamp'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'(),
-    'id' :: dmsl_domain_thrift:'InvoiceID'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoiceID'(),
     'external_id' :: binary() | undefined,
     'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined
 }).
@@ -280,7 +280,7 @@
     'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'(),
     'cost' :: dmsl_domain_thrift:'Cash'() | undefined,
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined,
-    'id' :: dmsl_domain_thrift:'InvoiceID'() | undefined,
+    'id' :: dmsl_domain_thrift:'InvoiceID'(),
     'external_id' :: binary() | undefined
 }).
 
