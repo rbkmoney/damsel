@@ -164,7 +164,7 @@
 %% struct 'InternationalBankDetails'
 -record('merchstat_InternationalBankDetails', {
     'bic' :: binary() | undefined,
-    'country' :: atom() | undefined,
+    'country' :: dmsl_domain_thrift:'Residence'() | undefined,
     'name' :: binary() | undefined,
     'address' :: binary() | undefined,
     'aba_rtn' :: binary() | undefined

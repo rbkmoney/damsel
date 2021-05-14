@@ -64,10 +64,12 @@
     'ScoreID'/0,
     'ContractorID'/0,
     'IdentityDocumentToken'/0,
+    'TradeBlocID'/0,
     'PayoutToolID'/0,
     'ContractID'/0,
     'ContractAdjustmentID'/0,
     'CurrencySymbolicCode'/0,
+    'Residence'/0,
     'CalendarHolidaySet'/0,
     'TurnoverLimitID'/0,
     'CustomerID'/0,
@@ -94,7 +96,7 @@
     'CategoryType'/0,
     'CumulativeLimitPeriod'/0,
     'PayoutMethod'/0,
-    'Residence'/0,
+    'CountryCode'/0,
     'LegacyBankCardPaymentSystem'/0,
     'LegacyBankCardTokenProvider'/0,
     'TokenizationMethod'/0,
@@ -220,6 +222,10 @@
     'LegalEntity'/0,
     'RussianLegalEntity'/0,
     'InternationalLegalEntity'/0,
+    'CountryRef'/0,
+    'Country'/0,
+    'TradeBlocRef'/0,
+    'TradeBloc'/0,
     'RussianBankAccount'/0,
     'InternationalBankAccount'/0,
     'InternationalBankDetails'/0,
@@ -512,6 +518,8 @@
     'CryptoCurrencyObject'/0,
     'LegacyCryptoCurrencyRef'/0,
     'LegacyCryptoCurrencyObject'/0,
+    'CountryObject'/0,
+    'TradeBlocObject'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -554,10 +562,12 @@
     'ScoreID' |
     'ContractorID' |
     'IdentityDocumentToken' |
+    'TradeBlocID' |
     'PayoutToolID' |
     'ContractID' |
     'ContractAdjustmentID' |
     'CurrencySymbolicCode' |
+    'Residence' |
     'CalendarHolidaySet' |
     'TurnoverLimitID' |
     'CustomerID' |
@@ -607,10 +617,12 @@
 -type 'ScoreID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractorID'() :: dmsl_base_thrift:'ID'().
 -type 'IdentityDocumentToken'() :: dmsl_base_thrift:'Opaque'().
+-type 'TradeBlocID'() :: dmsl_base_thrift:'ID'().
 -type 'PayoutToolID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractID'() :: dmsl_base_thrift:'ID'().
 -type 'ContractAdjustmentID'() :: dmsl_base_thrift:'ID'().
 -type 'CurrencySymbolicCode'() :: binary().
+-type 'Residence'() :: 'CountryCode'().
 -type 'CalendarHolidaySet'() :: #{dmsl_base_thrift:'Year'() => ordsets:ordset('CalendarHoliday'())}.
 -type 'TurnoverLimitID'() :: dmsl_base_thrift:'ID'().
 -type 'CustomerID'() :: dmsl_base_thrift:'ID'().
@@ -640,7 +652,7 @@
     'CategoryType' |
     'CumulativeLimitPeriod' |
     'PayoutMethod' |
-    'Residence' |
+    'CountryCode' |
     'LegacyBankCardPaymentSystem' |
     'LegacyBankCardTokenProvider' |
     'TokenizationMethod' |
@@ -704,8 +716,8 @@
     'international_bank_account' |
     'wallet_info'.
 
-%% enum 'Residence'
--type 'Residence'() ::
+%% enum 'CountryCode'
+-type 'CountryCode'() ::
     'abh' |
     'aus' |
     'aut' |
@@ -1179,6 +1191,10 @@
     'LegalEntity' |
     'RussianLegalEntity' |
     'InternationalLegalEntity' |
+    'CountryRef' |
+    'Country' |
+    'TradeBlocRef' |
+    'TradeBloc' |
     'RussianBankAccount' |
     'InternationalBankAccount' |
     'InternationalBankDetails' |
@@ -1471,6 +1487,8 @@
     'CryptoCurrencyObject' |
     'LegacyCryptoCurrencyRef' |
     'LegacyCryptoCurrencyObject' |
+    'CountryObject' |
+    'TradeBlocObject' |
     'Reference' |
     'DomainObject'.
 
@@ -1862,6 +1880,18 @@
 
 %% struct 'InternationalLegalEntity'
 -type 'InternationalLegalEntity'() :: #'domain_InternationalLegalEntity'{}.
+
+%% struct 'CountryRef'
+-type 'CountryRef'() :: #'domain_CountryRef'{}.
+
+%% struct 'Country'
+-type 'Country'() :: #'domain_Country'{}.
+
+%% struct 'TradeBlocRef'
+-type 'TradeBlocRef'() :: #'domain_TradeBlocRef'{}.
+
+%% struct 'TradeBloc'
+-type 'TradeBloc'() :: #'domain_TradeBloc'{}.
 
 %% struct 'RussianBankAccount'
 -type 'RussianBankAccount'() :: #'domain_RussianBankAccount'{}.
@@ -2595,7 +2625,7 @@
     {'payment_system_is', atom()} |
     {'issuer_bank_is', 'BankRef'()} |
     {'payment_system', 'PaymentSystemCondition'()} |
-    {'issuer_country_is', atom()} |
+    {'issuer_country_is', 'Residence'()} |
     {'empty_cvv_is', boolean()} |
     {'category_is', 'BankCardCategoryRef'()}.
 
@@ -2889,6 +2919,12 @@
 %% struct 'LegacyCryptoCurrencyObject'
 -type 'LegacyCryptoCurrencyObject'() :: #'domain_LegacyCryptoCurrencyObject'{}.
 
+%% struct 'CountryObject'
+-type 'CountryObject'() :: #'domain_CountryObject'{}.
+
+%% struct 'TradeBlocObject'
+-type 'TradeBlocObject'() :: #'domain_TradeBlocObject'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -2928,6 +2964,8 @@
     {'payment_service_legacy', 'LegacyDigitalWalletProviderRef'()} |
     {'crypto_currency', 'CryptoCurrencyRef'()} |
     {'crypto_currency_legacy', 'LegacyCryptoCurrencyRef'()} |
+    {'country', 'CountryRef'()} |
+    {'trade_bloc', 'TradeBlocRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()}.
@@ -2971,6 +3009,8 @@
     {'payment_service_legacy', 'LegacyDigitalWalletProviderObject'()} |
     {'crypto_currency', 'CryptoCurrencyObject'()} |
     {'crypto_currency_legacy', 'LegacyCryptoCurrencyObject'()} |
+    {'country', 'CountryObject'()} |
+    {'trade_bloc', 'TradeBlocObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()}.
@@ -3011,7 +3051,7 @@
     'CategoryType'() |
     'CumulativeLimitPeriod'() |
     'PayoutMethod'() |
-    'Residence'() |
+    'CountryCode'() |
     'LegacyBankCardPaymentSystem'() |
     'LegacyBankCardTokenProvider'() |
     'TokenizationMethod'() |
@@ -3069,10 +3109,12 @@ typedefs() ->
         'ScoreID',
         'ContractorID',
         'IdentityDocumentToken',
+        'TradeBlocID',
         'PayoutToolID',
         'ContractID',
         'ContractAdjustmentID',
         'CurrencySymbolicCode',
+        'Residence',
         'CalendarHolidaySet',
         'TurnoverLimitID',
         'CustomerID',
@@ -3103,7 +3145,7 @@ enums() ->
         'CategoryType',
         'CumulativeLimitPeriod',
         'PayoutMethod',
-        'Residence',
+        'CountryCode',
         'LegacyBankCardPaymentSystem',
         'LegacyBankCardTokenProvider',
         'TokenizationMethod',
@@ -3233,6 +3275,10 @@ structs() ->
         'LegalEntity',
         'RussianLegalEntity',
         'InternationalLegalEntity',
+        'CountryRef',
+        'Country',
+        'TradeBlocRef',
+        'TradeBloc',
         'RussianBankAccount',
         'InternationalBankAccount',
         'InternationalBankDetails',
@@ -3525,6 +3571,8 @@ structs() ->
         'CryptoCurrencyObject',
         'LegacyCryptoCurrencyRef',
         'LegacyCryptoCurrencyObject',
+        'CountryObject',
+        'TradeBlocObject',
         'Reference',
         'DomainObject'
     ].
@@ -3637,6 +3685,9 @@ typedef_info('ContractorID') ->
 typedef_info('IdentityDocumentToken') ->
     string;
 
+typedef_info('TradeBlocID') ->
+    string;
+
 typedef_info('PayoutToolID') ->
     string;
 
@@ -3648,6 +3699,9 @@ typedef_info('ContractAdjustmentID') ->
 
 typedef_info('CurrencySymbolicCode') ->
     string;
+
+typedef_info('Residence') ->
+    {enum, {dmsl_domain_thrift, 'CountryCode'}};
 
 typedef_info('CalendarHolidaySet') ->
     {map, i32, {set, {struct, struct, {dmsl_domain_thrift, 'CalendarHoliday'}}}};
@@ -3756,7 +3810,7 @@ enum_info('PayoutMethod') ->
         {'wallet_info', 2}
     ]};
 
-enum_info('Residence') ->
+enum_info('CountryCode') ->
     {enum, [
         {'abh', 0},
         {'aus', 1},
@@ -4824,7 +4878,30 @@ struct_info('InternationalLegalEntity') ->
         {2, optional, string, 'trading_name', undefined},
         {3, required, string, 'registered_address', undefined},
         {4, optional, string, 'actual_address', undefined},
-        {5, optional, string, 'registered_number', undefined}
+        {5, optional, string, 'registered_number', undefined},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'CountryRef'}}, 'country', undefined}
+    ]};
+
+struct_info('CountryRef') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'id', undefined}
+    ]};
+
+struct_info('Country') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, undefined, {set, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}}, 'trade_blocs', undefined}
+    ]};
+
+struct_info('TradeBlocRef') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined}
+    ]};
+
+struct_info('TradeBloc') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, optional, string, 'description', undefined}
     ]};
 
 struct_info('RussianBankAccount') ->
@@ -4847,7 +4924,7 @@ struct_info('InternationalBankAccount') ->
 struct_info('InternationalBankDetails') ->
     {struct, struct, [
         {1, optional, string, 'bic', undefined},
-        {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'country', undefined},
         {3, optional, string, 'name', undefined},
         {4, optional, string, 'address', undefined},
         {5, optional, string, 'aba_rtn', undefined}
@@ -5416,7 +5493,7 @@ struct_info('BankCard') ->
         {4, required, string, 'last_digits', undefined},
         {15, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
         {12, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
-        {6, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country', undefined},
+        {6, optional, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'issuer_country', undefined},
         {7, optional, string, 'bank_name', undefined},
         {8, optional, {map, string, {struct, union, {dmsl_msgpack_thrift, 'Value'}}}, 'metadata', undefined},
         {9, optional, bool, 'is_cvv_empty', undefined},
@@ -6162,7 +6239,7 @@ struct_info('BankCardConditionDefinition') ->
         {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_is', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'BankRef'}}, 'issuer_bank_is', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemCondition'}}, 'payment_system', undefined},
-        {4, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'issuer_country_is', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'issuer_country_is', undefined},
         {5, optional, bool, 'empty_cvv_is', undefined},
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardCategoryRef'}}, 'category_is', undefined}
     ]};
@@ -6350,7 +6427,7 @@ struct_info('PaymentInstitution') ->
         {10, optional, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_wallet_contract_template', undefined},
         {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
         {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
-        {8, required, {set, {enum, {dmsl_domain_thrift, 'Residence'}}}, 'residences', undefined},
+        {8, required, {set, {enum, {dmsl_domain_thrift, 'CountryCode'}}}, 'residences', undefined},
         {11, optional, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'wallet_system_account_set', undefined},
         {12, optional, string, 'identity', undefined},
         {15, optional, {struct, union, {dmsl_domain_thrift, 'P2PInspectorSelector'}}, 'p2p_inspector', undefined},
@@ -6717,6 +6794,18 @@ struct_info('LegacyCryptoCurrencyObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'data', undefined}
     ]};
 
+struct_info('CountryObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CountryRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Country'}}, 'data', undefined}
+    ]};
+
+struct_info('TradeBlocObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TradeBloc'}}, 'data', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -6756,6 +6845,8 @@ struct_info('Reference') ->
         {41, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderRef'}}, 'payment_service_legacy', undefined},
         {42, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyRef'}}, 'crypto_currency', undefined},
         {43, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyRef'}}, 'crypto_currency_legacy', undefined},
+        {44, optional, {struct, struct, {dmsl_domain_thrift, 'CountryRef'}}, 'country', undefined},
+        {45, optional, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}, 'trade_bloc', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
@@ -6800,6 +6891,8 @@ struct_info('DomainObject') ->
         {41, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyDigitalWalletProviderObject'}}, 'payment_service_legacy', undefined},
         {42, optional, {struct, struct, {dmsl_domain_thrift, 'CryptoCurrencyObject'}}, 'crypto_currency', undefined},
         {43, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyObject'}}, 'crypto_currency_legacy', undefined},
+        {44, optional, {struct, struct, {dmsl_domain_thrift, 'CountryObject'}}, 'country', undefined},
+        {45, optional, {struct, struct, {dmsl_domain_thrift, 'TradeBlocObject'}}, 'trade_bloc', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
@@ -7066,6 +7159,18 @@ record_name('RussianLegalEntity') ->
 
 record_name('InternationalLegalEntity') ->
     'domain_InternationalLegalEntity';
+
+record_name('CountryRef') ->
+    'domain_CountryRef';
+
+record_name('Country') ->
+    'domain_Country';
+
+record_name('TradeBlocRef') ->
+    'domain_TradeBlocRef';
+
+record_name('TradeBloc') ->
+    'domain_TradeBloc';
 
 record_name('RussianBankAccount') ->
     'domain_RussianBankAccount';
@@ -7774,6 +7879,12 @@ record_name('LegacyCryptoCurrencyRef') ->
 
 record_name('LegacyCryptoCurrencyObject') ->
     'domain_LegacyCryptoCurrencyObject';
+
+record_name('CountryObject') ->
+    'domain_CountryObject';
+
+record_name('TradeBlocObject') ->
+    'domain_TradeBlocObject';
 
 record_name(_) -> error(badarg).
 

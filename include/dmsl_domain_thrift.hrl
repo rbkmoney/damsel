@@ -541,7 +541,30 @@
     'trading_name' :: binary() | undefined,
     'registered_address' :: binary(),
     'actual_address' :: binary() | undefined,
-    'registered_number' :: binary() | undefined
+    'registered_number' :: binary() | undefined,
+    'country' :: dmsl_domain_thrift:'CountryRef'() | undefined
+}).
+
+%% struct 'CountryRef'
+-record('domain_CountryRef', {
+    'id' :: dmsl_domain_thrift:'CountryCode'()
+}).
+
+%% struct 'Country'
+-record('domain_Country', {
+    'name' :: binary(),
+    'trade_blocs' :: ordsets:ordset(dmsl_domain_thrift:'TradeBlocRef'())
+}).
+
+%% struct 'TradeBlocRef'
+-record('domain_TradeBlocRef', {
+    'id' :: dmsl_domain_thrift:'TradeBlocID'()
+}).
+
+%% struct 'TradeBloc'
+-record('domain_TradeBloc', {
+    'name' :: binary(),
+    'description' :: binary() | undefined
 }).
 
 %% struct 'RussianBankAccount'
@@ -1022,7 +1045,7 @@
     'last_digits' :: binary(),
     'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
     'tokenization_method' :: atom() | undefined,
-    'issuer_country' :: atom() | undefined,
+    'issuer_country' :: dmsl_domain_thrift:'Residence'() | undefined,
     'bank_name' :: binary() | undefined,
     'metadata' :: #{binary() => dmsl_msgpack_thrift:'Value'()} | undefined,
     'is_cvv_empty' :: boolean() | undefined,
@@ -1699,7 +1722,7 @@
     'default_wallet_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'() | undefined,
     'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
     'realm' :: dmsl_domain_thrift:'PaymentInstitutionRealm'(),
-    'residences' :: ordsets:ordset(atom()),
+    'residences' :: ordsets:ordset(dmsl_domain_thrift:'Residence'()),
     'wallet_system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'() | undefined,
     'identity' :: binary() | undefined,
     'p2p_inspector' :: dmsl_domain_thrift:'P2PInspectorSelector'() | undefined,
@@ -2058,6 +2081,18 @@
 -record('domain_LegacyCryptoCurrencyObject', {
     'ref' :: dmsl_domain_thrift:'LegacyCryptoCurrencyRef'(),
     'data' :: dmsl_domain_thrift:'CryptoCurrencyRef'()
+}).
+
+%% struct 'CountryObject'
+-record('domain_CountryObject', {
+    'ref' :: dmsl_domain_thrift:'CountryRef'(),
+    'data' :: dmsl_domain_thrift:'Country'()
+}).
+
+%% struct 'TradeBlocObject'
+-record('domain_TradeBlocObject', {
+    'ref' :: dmsl_domain_thrift:'TradeBlocRef'(),
+    'data' :: dmsl_domain_thrift:'TradeBloc'()
 }).
 
 -endif.

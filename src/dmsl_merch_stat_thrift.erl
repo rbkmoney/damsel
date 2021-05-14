@@ -893,7 +893,7 @@ struct_info('InternationalBankAccount') ->
 struct_info('InternationalBankDetails') ->
     {struct, struct, [
         {1, optional, string, 'bic', undefined},
-        {2, optional, {enum, {dmsl_domain_thrift, 'Residence'}}, 'country', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'country', undefined},
         {3, optional, string, 'name', undefined},
         {4, optional, string, 'address', undefined},
         {5, optional, string, 'aba_rtn', undefined}
