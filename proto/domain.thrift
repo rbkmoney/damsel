@@ -799,9 +799,24 @@ struct InternationalLegalEntity {
     /* Регистрационный номер */
     5: optional string registered_number
     /* Страна Мерчанта */
-    6: optional Residence residence
-    /* Экономическая зона/блок Мерчанта: ЕЭЗ */
-    7: optional TradeBlocRef trade_bloc
+    6: optional CountryRef country
+}
+
+struct CountryRef {
+    1: required CountryCode id
+}
+
+struct Country {
+    1: required string name
+    2: set<TradeBlocRef> trade_blocs
+}
+
+typedef base.ID TradeBlocID
+
+/* Экономическая зона/блок Мерчанта: напр. ЕЭЗ */
+/* См. https://en.wikipedia.org/wiki/Trade_bloc */
+struct TradeBlocRef {
+    1: required TradeBlocID id
 }
 
 struct TradeBloc {
@@ -1250,11 +1265,13 @@ struct CategoryDecision {
     2: required CategorySelector then_
 }
 
-/* Резиденция */
-// Для обозначения спользуется alpha-3 код по стандарту ISO_3166-1
-// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+/* (Налоговая) Резиденция Мерчанта */
+typedef CountryCode Residence
 
-enum Residence {
+/* Код страны */
+// Для обозначения используется alpha-3 код по стандарту ISO_3166-1
+// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+enum CountryCode {
     ABH =   0  /*Abkhazia*/
     AUS =   1  /*Australia*/
     AUT =   2  /*Austria*/
@@ -3047,10 +3064,9 @@ struct LegacyCryptoCurrencyObject {
     2: required CryptoCurrencyRef data
 }
 
-typedef base.ID TradeBlocID
-
-struct TradeBlocRef {
-    1: required TradeBlocID id
+struct CountryObject {
+    1: required CountryRef ref
+    2: required Country data
 }
 
 struct TradeBlocObject {
@@ -3107,7 +3123,8 @@ union Reference {
 
     42 : CryptoCurrencyRef          crypto_currency
     43 : LegacyCryptoCurrencyRef    crypto_currency_legacy
-    44 : TradeBlocRef               trade_bloc
+    44 : CountryRef                 country
+    45 : TradeBlocRef               trade_bloc
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -3158,7 +3175,8 @@ union DomainObject {
     42 : CryptoCurrencyObject       crypto_currency
     43 : LegacyCryptoCurrencyObject crypto_currency_legacy
 
-    44 : TradeBlocObject               trade_bloc
+    44 : CountryObject              country
+    45 : TradeBlocObject            trade_bloc
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
