@@ -2634,7 +2634,7 @@ struct_info('InvoiceWithTemplateParams') ->
 
 struct_info('InvoiceTemplateCreateParams') ->
     {struct, struct, [
-        {10, optional, string, 'template_id', undefined},
+        {10, required, string, 'template_id', undefined},
         {1, required, string, 'party_id', undefined},
         {2, required, string, 'shop_id', undefined},
         {4, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
@@ -2874,7 +2874,7 @@ struct_info('InvoiceTermsViolationReason') ->
 
 struct_info('CustomerParams') ->
     {struct, struct, [
-        {5, optional, string, 'customer_id', undefined},
+        {5, required, string, 'customer_id', undefined},
         {1, required, string, 'party_id', undefined},
         {2, required, string, 'shop_id', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
@@ -2940,8 +2940,8 @@ struct_info('CustomerBindingChanged') ->
 
 struct_info('CustomerBindingParams') ->
     {struct, struct, [
-        {3, optional, string, 'customer_binding_id', undefined},
-        {2, optional, string, 'rec_payment_tool_id', undefined},
+        {3, required, string, 'customer_binding_id', undefined},
+        {2, required, string, 'rec_payment_tool_id', undefined},
         {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
     ]};
 

@@ -286,7 +286,7 @@
 
 %% struct 'InvoiceTemplateCreateParams'
 -record('payproc_InvoiceTemplateCreateParams', {
-    'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'() | undefined,
+    'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'(),
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
@@ -483,7 +483,7 @@
 
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
-    'customer_id' :: dmsl_payment_processing_thrift:'CustomerID'() | undefined,
+    'customer_id' :: dmsl_payment_processing_thrift:'CustomerID'(),
     'party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'contact_info' :: dmsl_domain_thrift:'ContactInfo'(),
@@ -535,8 +535,8 @@
 
 %% struct 'CustomerBindingParams'
 -record('payproc_CustomerBindingParams', {
-    'customer_binding_id' :: dmsl_payment_processing_thrift:'CustomerBindingID'() | undefined,
-    'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'() | undefined,
+    'customer_binding_id' :: dmsl_payment_processing_thrift:'CustomerBindingID'(),
+    'rec_payment_tool_id' :: dmsl_payment_processing_thrift:'RecurrentPaymentToolID'(),
     'payment_resource' :: dmsl_payment_processing_thrift:'DisposablePaymentResource'()
 }).
 
