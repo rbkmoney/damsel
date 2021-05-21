@@ -894,6 +894,11 @@ union PayoutToolInfo {
     1: RussianBankAccount russian_bank_account
     2: InternationalBankAccount international_bank_account
     3: WalletInfo wallet_info
+    4: NKOInfo nko //TODO
+}
+
+struct NKOInfo { //TODO
+    1: required string id
 }
 
 typedef base.ID ContractID

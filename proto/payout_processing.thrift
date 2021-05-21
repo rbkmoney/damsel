@@ -75,36 +75,6 @@ struct PayoutCreated {
     1: required Payout payout
 }
 
-/**
-  * Виды операций над денежными средствами
-  */
-enum OperationType {
-    payment
-    refund
-    adjustment
-    chargeback
-}
-
-/**
-* Расшифровка части суммы вывода
-* Описание части суммы вывода, сгруппированное по виду движения денежных средств
-*/
-struct PayoutSummaryItem {
-    1: required domain.Amount amount
-    2: required domain.Amount fee
-    3: required string currency_symbolic_code
-    4: required base.Timestamp from_time
-    5: required base.Timestamp to_time
-    6: required OperationType operation_type
-    /* Количество движений данного вида в выводе */
-    7: required i32 count
-}
-
-/**
-* Список описаний денежных сумм, из которых состоит сумма вывода
-*/
-typedef list<PayoutSummaryItem> PayoutSummary
-
 struct Payout {
     1 : required PayoutID id
     2 : required domain.PartyID party_id
@@ -118,7 +88,6 @@ struct Payout {
     13: required domain.CurrencyRef currency
     6 : required domain.FinalCashFlow payout_flow
     7 : required PayoutType type
-    8 : optional PayoutSummary summary
     10: optional Metadata metadata
 }
 
@@ -166,6 +135,11 @@ struct PayoutConfirmed {}
 union PayoutType {
     2: PayoutAccount bank_account
     3: Wallet wallet
+    4: NKO nko //TODO
+}
+
+struct NKO { //TODO
+    1: required string id
 }
 
 struct Wallet {
@@ -303,17 +277,6 @@ struct PayoutParams {
 }
 
 /**
-* Параметры для генерации выплаты
-* time_range - диапазон времени, за который будет сформированы выплаты
-* shop - параметры магазина. Если не указан, то генерируются выплаты за все магазины,
-* имеющие платежи/возвраты/корректировки за указанный time_range
-**/
-struct GeneratePayoutParams {
-    1: required TimeRange time_range
-    2: required ShopParams shop_params
-}
-
-/**
 * Атрибуты поиска выплат
 **/
 struct PayoutSearchCriteria {
@@ -381,12 +344,6 @@ service PayoutManagement {
             3: base.InvalidRequest ex3
         )
 
-    /********************* Вывод на счет ************************/
-    /**
-     * Сгенерировать выводы за указанный промежуток времени
-     */
-    list<PayoutID> GeneratePayouts (1: GeneratePayoutParams params) throws (1: base.InvalidRequest ex1)
-
     /**
      * Подтвердить выплату.
      */
@@ -402,8 +359,4 @@ service PayoutManagement {
     **/
     PayoutSearchResponse GetPayoutsInfo (1: PayoutSearchRequest request) throws (1: base.InvalidRequest ex1)
 
-    /**
-     * Сгенерировать отчет по выплатам
-     */
-    void GenerateReport(1: set<PayoutID> payout_ids) throws (1: base.InvalidRequest ex1)
 }
