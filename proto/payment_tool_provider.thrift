@@ -6,6 +6,7 @@ namespace erlang paytoolprv
 
 struct WrappedPaymentTool {
     1: required PaymentRequest request
+    /** Режим рабочего окружения платежной организации */
     2: optional domain.PaymentInstitutionRealm realm
 }
 
@@ -78,7 +79,7 @@ struct CardInfo {
     3: optional string last_4_digits
     4: optional CardClass card_class
     6: optional domain.PaymentSystemRef payment_system
-    /** Deprecated **/
+    // Deprecated
     5: optional domain.LegacyBankCardPaymentSystem payment_system_deprecated
 }
 

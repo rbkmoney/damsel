@@ -13,8 +13,10 @@ namespace erlang ptt
 struct PaymentToolToken {
     1: required PaymentToolTokenPayload payload
     2: optional base.Timestamp valid_until
-    3: optional domain.ShopID  shop_id
-    4: optional domain.InvoiceID invoice_id
+    /** Разрешить оплачивать только указанный счёт  */
+    3: optional domain.InvoiceID invoice_id
+    /** Разрешить оплачивать только указаному плательщику */
+    4: optional domain.CustomerID customer_id
 }
 
 /**
