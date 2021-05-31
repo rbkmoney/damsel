@@ -35,9 +35,7 @@ struct ExternalUser {}
 struct ServiceUser {}
 
 union Clock {
-    // для новых операций
     1: VectorClock vector
-    // для старых операций, для обратной совместимости. Не рекоммендуется к использованию.
     2: LatestClock latest
 }
 
@@ -232,12 +230,6 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
-}
-
-struct InvoicePaymentLimitChecked {
-    1: optional base.ID limit_id
-    2: optional base.ID limit_change_id
-    3: optional Clock   clock
 }
 
 struct InvoicePaymentClockUpdate {
@@ -495,6 +487,15 @@ struct InvoicePaymentRefundStatusChanged {
 
 struct InvoicePaymentRefundRollbackStarted {
     1: required domain.OperationFailure reason
+}
+
+/**
+ * Событие проверки лимитов возврата платежа
+ */
+struct InvoicePaymentRefundLimitChecked {
+    1: optional base.ID limit_id
+    2: optional base.ID limit_change_id
+    3: optional Clock   clock
 }
 
 /**
