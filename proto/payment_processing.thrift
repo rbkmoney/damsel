@@ -34,6 +34,10 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
+struct VectorClock {
+    1: required base.Opaque state
+}
+
 /* Events */
 
 typedef list<Event> Events
@@ -158,6 +162,8 @@ struct InvoiceAdjustmentChange {
 union InvoiceAdjustmentChangePayload {
     1: InvoiceAdjustmentCreated       invoice_adjustment_created
     2: InvoiceAdjustmentStatusChanged invoice_adjustment_status_changed
+
+    3: InvoiceAdjustmentLimitChecks   invoice_adjustment_limit_checks
 }
 
 /**
@@ -172,6 +178,15 @@ struct InvoiceAdjustmentCreated {
  */
 struct InvoiceAdjustmentStatusChanged {
     1: required domain.InvoiceAdjustmentStatus status
+}
+
+/**
+ * Событие проверки лимитов корректировки платежа
+ */
+struct InvoiceAdjustmentLimitChecks {
+    1: optional base.ID LimitID
+    2: optional base.ID LimitChangeID
+    3: optional VectorClock clock
 }
 
 /**
@@ -191,6 +206,8 @@ union InvoicePaymentChangePayload {
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
     15: InvoicePaymentClockUpdate           invoice_payment_clock_update
+
+    16: InvoicePaymentLimitChecks           invoice_payment_limit_checks
 }
 
 /**
@@ -255,6 +272,15 @@ struct InvoicePaymentStatusChanged {
 struct InvoicePaymentSessionChange {
     1: required domain.TargetInvoicePaymentStatus target
     2: required SessionChangePayload payload
+}
+
+/**
+ * Событие проверки лимитов платежа.
+ */
+struct InvoicePaymentLimitChecks {
+    1: optional base.ID LimitID
+    2: optional base.ID LimitChangeID
+    3: optional VectorClock clock
 }
 
 /**
