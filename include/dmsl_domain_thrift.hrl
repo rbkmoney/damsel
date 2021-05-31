@@ -614,6 +614,9 @@
     'payout_tool_info' :: dmsl_domain_thrift:'PayoutToolInfo'()
 }).
 
+%% struct 'PaymentInstitutionAccount'
+-record('domain_PaymentInstitutionAccount', {}).
+
 %% struct 'Contract'
 -record('domain_Contract', {
     'id' :: dmsl_domain_thrift:'ContractID'(),

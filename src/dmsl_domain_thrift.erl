@@ -234,6 +234,7 @@
     'RussianPrivateEntity'/0,
     'PayoutTool'/0,
     'PayoutToolInfo'/0,
+    'PaymentInstitutionAccount'/0,
     'Contract'/0,
     'LegalAgreement'/0,
     'ReportPreferences'/0,
@@ -1203,6 +1204,7 @@
     'RussianPrivateEntity' |
     'PayoutTool' |
     'PayoutToolInfo' |
+    'PaymentInstitutionAccount' |
     'Contract' |
     'LegalAgreement' |
     'ReportPreferences' |
@@ -1919,7 +1921,11 @@
 -type 'PayoutToolInfo'() ::
     {'russian_bank_account', 'RussianBankAccount'()} |
     {'international_bank_account', 'InternationalBankAccount'()} |
-    {'wallet_info', 'WalletInfo'()}.
+    {'wallet_info', 'WalletInfo'()} |
+    {'payment_institution_account', 'PaymentInstitutionAccount'()}.
+
+%% struct 'PaymentInstitutionAccount'
+-type 'PaymentInstitutionAccount'() :: #'domain_PaymentInstitutionAccount'{}.
 
 %% struct 'Contract'
 -type 'Contract'() :: #'domain_Contract'{}.
@@ -3287,6 +3293,7 @@ structs() ->
         'RussianPrivateEntity',
         'PayoutTool',
         'PayoutToolInfo',
+        'PaymentInstitutionAccount',
         'Contract',
         'LegalAgreement',
         'ReportPreferences',
@@ -4960,8 +4967,12 @@ struct_info('PayoutToolInfo') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'international_bank_account', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'WalletInfo'}}, 'wallet_info', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'WalletInfo'}}, 'wallet_info', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionAccount'}}, 'payment_institution_account', undefined}
     ]};
+
+struct_info('PaymentInstitutionAccount') ->
+    {struct, struct, []};
 
 struct_info('Contract') ->
     {struct, struct, [
@@ -7189,6 +7200,9 @@ record_name('RussianPrivateEntity') ->
 
 record_name('PayoutTool') ->
     'domain_PayoutTool';
+
+record_name('PaymentInstitutionAccount') ->
+    'domain_PaymentInstitutionAccount';
 
 record_name('Contract') ->
     'domain_Contract';
