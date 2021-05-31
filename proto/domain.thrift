@@ -898,7 +898,6 @@ union PayoutToolInfo {
 }
 
 struct PaymentInstitutionAccount {
-    1: optional AccountID account_id
 }
 
 typedef base.ID ContractID
