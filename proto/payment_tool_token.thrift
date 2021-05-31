@@ -19,11 +19,11 @@ struct PaymentToolToken {
 /**
     Ограничения использования токена.
  */
-union RestrictionUsing {
+struct RestrictionUsing {
     /** Разрешить оплачивать только указанный счёт  */
-    1: domain.InvoiceID invoice_id
+    1: domain.InvoiceID invoice_link
     /** Разрешить оплачивать только указаному плательщику */
-    2: domain.CustomerID customer_id
+    2: domain.CustomerID customer_link
 }
 
 /**
