@@ -34,8 +34,18 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
+union Clock {
+    // для новых операций
+    1: VectorClock vector
+    // для старых операций, для обратной совместимости. Не рекоммендуется к использованию.
+    2: LatestClock latest
+}
+
 struct VectorClock {
     1: required base.Opaque state
+}
+
+struct LatestClock {
 }
 
 /* Events */
@@ -162,8 +172,7 @@ struct InvoiceAdjustmentChange {
 union InvoiceAdjustmentChangePayload {
     1: InvoiceAdjustmentCreated       invoice_adjustment_created
     2: InvoiceAdjustmentStatusChanged invoice_adjustment_status_changed
-
-    3: InvoiceAdjustmentLimitChecks   invoice_adjustment_limit_checks
+    3: InvoiceAdjustmentLimitChecked  invoice_adjustment_limit_checked
 }
 
 /**
@@ -183,10 +192,10 @@ struct InvoiceAdjustmentStatusChanged {
 /**
  * Событие проверки лимитов корректировки платежа
  */
-struct InvoiceAdjustmentLimitChecks {
-    1: optional base.ID LimitID
-    2: optional base.ID LimitChangeID
-    3: optional VectorClock clock
+struct InvoiceAdjustmentLimitChecked {
+    1: optional base.ID limit_id
+    2: optional base.ID limit_change_id
+    3: optional Clock   clock
 }
 
 /**
@@ -206,8 +215,7 @@ union InvoicePaymentChangePayload {
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
     15: InvoicePaymentClockUpdate           invoice_payment_clock_update
-
-    16: InvoicePaymentLimitChecks           invoice_payment_limit_checks
+    16: InvoicePaymentLimitChecked          invoice_payment_limit_checked
 }
 
 /**
@@ -224,6 +232,12 @@ struct InvoicePaymentStarted {
     2: optional domain.PaymentRoute route
     /** Данные финансового взаимодействия. */
     3: optional domain.FinalCashFlow cash_flow
+}
+
+struct InvoicePaymentLimitChecked {
+    1: optional base.ID limit_id
+    2: optional base.ID limit_change_id
+    3: optional Clock   clock
 }
 
 struct InvoicePaymentClockUpdate {
@@ -277,10 +291,10 @@ struct InvoicePaymentSessionChange {
 /**
  * Событие проверки лимитов платежа.
  */
-struct InvoicePaymentLimitChecks {
-    1: optional base.ID LimitID
-    2: optional base.ID LimitChangeID
-    3: optional VectorClock clock
+struct InvoicePaymentLimitChecked {
+    1: optional base.ID limit_id
+    2: optional base.ID limit_change_id
+    3: optional Clock   clock
 }
 
 /**
@@ -454,6 +468,7 @@ union InvoicePaymentRefundChangePayload {
     3: InvoicePaymentSessionChange         invoice_payment_session_change
     4: InvoicePaymentRefundRollbackStarted invoice_payment_refund_rollback_started
     5: InvoicePaymentClockUpdate           invoice_payment_refund_clock_update
+    6: InvoicePaymentRefundLimitChecked    invoice_payment_refund_limit_checked
 }
 
 /**
