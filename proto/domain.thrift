@@ -894,10 +894,10 @@ union PayoutToolInfo {
     1: RussianBankAccount russian_bank_account
     2: InternationalBankAccount international_bank_account
     3: WalletInfo wallet_info
-    4: NKOInfo nko_info
+    4: PaymentInstitutionAccount nko_info
 }
 
-struct NKOInfo {
+struct PaymentInstitutionAccount {
     1: optional AccountID account_id
 }
 
