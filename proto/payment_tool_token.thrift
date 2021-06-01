@@ -21,9 +21,9 @@ struct PaymentToolToken {
  */
 struct RestrictionUsing {
     /** Разрешить оплачивать только указанный счёт  */
-    1: optional domain.InvoiceID invoice_link
+    1: optional domain.InvoiceID invoice_id
     /** Разрешить оплачивать только указаному плательщику */
-    2: optional domain.CustomerID customer_link
+    2: optional domain.CustomerID customer_id
 }
 
 /**
