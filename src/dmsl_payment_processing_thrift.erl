@@ -58,6 +58,9 @@
     'ClaimEffects'/0
 ]).
 -export_type([
+    'LimitStatus'/0
+]).
+-export_type([
     'UserInfo'/0,
     'UserType'/0,
     'InternalUser'/0,
@@ -409,7 +412,13 @@
 %%
 %% enums
 %%
--type enum_name() :: none().
+-type enum_name() ::
+    'LimitStatus'.
+
+%% enum 'LimitStatus'
+-type 'LimitStatus'() ::
+    'ok' |
+    'overflow'.
 
 %%
 %% structs, unions and exceptions
@@ -1929,7 +1938,8 @@
 -type struct_info() ::
     {struct, struct_flavour(), [struct_field_info()]}.
 
--type enum_choice() :: none().
+-type enum_choice() ::
+    'LimitStatus'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -1966,10 +1976,12 @@ typedefs() ->
         'ClaimEffects'
     ].
 
--spec enums() -> [].
+-spec enums() -> [enum_name()].
 
 enums() ->
-    [].
+    [
+        'LimitStatus'
+    ].
 
 -spec structs() -> [struct_name()].
 
@@ -2287,7 +2299,13 @@ typedef_info('ClaimEffects') ->
 
 typedef_info(_) -> erlang:error(badarg).
 
--spec enum_info(_) -> no_return().
+-spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('LimitStatus') ->
+    {enum, [
+        {'ok', 0},
+        {'overflow', 1}
+    ]};
 
 enum_info(_) -> erlang:error(badarg).
 
@@ -2414,7 +2432,8 @@ struct_info('InvoiceAdjustmentLimitChecked') ->
     {struct, struct, [
         {1, optional, {list, string}, 'limit_ids', undefined},
         {2, optional, string, 'limit_change_id', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined}
+        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
+        {4, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentChangePayload') ->
@@ -2483,7 +2502,8 @@ struct_info('InvoicePaymentLimitChecked') ->
     {struct, struct, [
         {1, optional, {list, string}, 'limit_ids', undefined},
         {2, optional, string, 'limit_change_id', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined}
+        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
+        {4, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('SessionChangePayload') ->
@@ -2647,7 +2667,8 @@ struct_info('InvoicePaymentRefundLimitChecked') ->
     {struct, struct, [
         {1, optional, {list, string}, 'limit_ids', undefined},
         {2, optional, string, 'limit_change_id', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined}
+        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
+        {4, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustmentChange') ->
