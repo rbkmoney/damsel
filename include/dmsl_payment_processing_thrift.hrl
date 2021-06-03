@@ -78,7 +78,7 @@
 
 %% struct 'InvoiceAdjustmentLimitChecked'
 -record('payproc_InvoiceAdjustmentLimitChecked', {
-    'limit_id' :: dmsl_base_thrift:'ID'() | undefined,
+    'limit_ids' :: [dmsl_base_thrift:'ID'()] | undefined,
     'limit_change_id' :: dmsl_base_thrift:'ID'() | undefined,
     'clock' :: dmsl_payment_processing_thrift:'Clock'() | undefined
 }).
@@ -129,7 +129,7 @@
 
 %% struct 'InvoicePaymentLimitChecked'
 -record('payproc_InvoicePaymentLimitChecked', {
-    'limit_id' :: dmsl_base_thrift:'ID'() | undefined,
+    'limit_ids' :: [dmsl_base_thrift:'ID'()] | undefined,
     'limit_change_id' :: dmsl_base_thrift:'ID'() | undefined,
     'clock' :: dmsl_payment_processing_thrift:'Clock'() | undefined
 }).
@@ -254,7 +254,7 @@
 
 %% struct 'InvoicePaymentRefundLimitChecked'
 -record('payproc_InvoicePaymentRefundLimitChecked', {
-    'limit_id' :: dmsl_base_thrift:'ID'() | undefined,
+    'limit_ids' :: [dmsl_base_thrift:'ID'()] | undefined,
     'limit_change_id' :: dmsl_base_thrift:'ID'() | undefined,
     'clock' :: dmsl_payment_processing_thrift:'Clock'() | undefined
 }).

@@ -180,6 +180,12 @@
     'modification' :: dmsl_claim_management_thrift:'StatusModification'()
 }).
 
+%% struct 'ExternalInfoModificationUnit'
+-record('claim_management_ExternalInfoModificationUnit', {
+    'document_id' :: dmsl_claim_management_thrift:'DocumentID'(),
+    'roistat_id' :: dmsl_claim_management_thrift:'DocumentID'() | undefined
+}).
+
 %% struct 'ModificationUnit'
 -record('claim_management_ModificationUnit', {
     'modification_id' :: dmsl_claim_management_thrift:'ModificationID'(),

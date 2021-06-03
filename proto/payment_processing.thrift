@@ -191,7 +191,7 @@ struct InvoiceAdjustmentStatusChanged {
  * Событие проверки лимитов корректировки платежа
  */
 struct InvoiceAdjustmentLimitChecked {
-    1: optional base.ID limit_id
+    1: optional list<base.ID> limit_ids
     2: optional base.ID limit_change_id
     3: optional Clock   clock
 }
@@ -284,7 +284,7 @@ struct InvoicePaymentSessionChange {
  * Событие проверки лимитов платежа.
  */
 struct InvoicePaymentLimitChecked {
-    1: optional base.ID limit_id
+    1: optional list<base.ID> limit_ids
     2: optional base.ID limit_change_id
     3: optional Clock   clock
 }
@@ -493,7 +493,7 @@ struct InvoicePaymentRefundRollbackStarted {
  * Событие проверки лимитов возврата платежа
  */
 struct InvoicePaymentRefundLimitChecked {
-    1: optional base.ID limit_id
+    1: optional list<base.ID> limit_ids
     2: optional base.ID limit_change_id
     3: optional Clock   clock
 }

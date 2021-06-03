@@ -2412,7 +2412,7 @@ struct_info('InvoiceAdjustmentStatusChanged') ->
 
 struct_info('InvoiceAdjustmentLimitChecked') ->
     {struct, struct, [
-        {1, optional, string, 'limit_id', undefined},
+        {1, optional, {list, string}, 'limit_ids', undefined},
         {2, optional, string, 'limit_change_id', undefined},
         {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined}
     ]};
@@ -2481,7 +2481,7 @@ struct_info('InvoicePaymentSessionChange') ->
 
 struct_info('InvoicePaymentLimitChecked') ->
     {struct, struct, [
-        {1, optional, string, 'limit_id', undefined},
+        {1, optional, {list, string}, 'limit_ids', undefined},
         {2, optional, string, 'limit_change_id', undefined},
         {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined}
     ]};
@@ -2645,7 +2645,7 @@ struct_info('InvoicePaymentRefundRollbackStarted') ->
 
 struct_info('InvoicePaymentRefundLimitChecked') ->
     {struct, struct, [
-        {1, optional, string, 'limit_id', undefined},
+        {1, optional, {list, string}, 'limit_ids', undefined},
         {2, optional, string, 'limit_change_id', undefined},
         {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined}
     ]};
