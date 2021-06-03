@@ -46,6 +46,11 @@ struct VectorClock {
 struct LatestClock {
 }
 
+enum LimitStatus {
+    ok
+    overflow
+}
+
 /* Events */
 
 typedef list<Event> Events
@@ -192,8 +197,9 @@ struct InvoiceAdjustmentStatusChanged {
  */
 struct InvoiceAdjustmentLimitChecked {
     1: optional list<base.ID> limit_ids
-    2: optional base.ID limit_change_id
-    3: optional Clock   clock
+    2: optional base.ID       limit_change_id
+    3: optional Clock         clock
+    4: optional LimitStatus   status
 }
 
 /**
@@ -285,8 +291,9 @@ struct InvoicePaymentSessionChange {
  */
 struct InvoicePaymentLimitChecked {
     1: optional list<base.ID> limit_ids
-    2: optional base.ID limit_change_id
-    3: optional Clock   clock
+    2: optional base.ID       limit_change_id
+    3: optional Clock         clock
+    4: optional LimitStatus   status
 }
 
 /**
@@ -494,8 +501,9 @@ struct InvoicePaymentRefundRollbackStarted {
  */
 struct InvoicePaymentRefundLimitChecked {
     1: optional list<base.ID> limit_ids
-    2: optional base.ID limit_change_id
-    3: optional Clock   clock
+    2: optional base.ID       limit_change_id
+    3: optional Clock         clock
+    4: optional LimitStatus   status
 }
 
 /**
