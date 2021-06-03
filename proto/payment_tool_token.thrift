@@ -8,21 +8,22 @@ namespace erlang ptt
     Платежный токен, который передается плательщику. Платежный токен содержит
     чувствительные данные, которые сериализуются в thrift-binary и шифруются перед отправкой клиенту.
     Платежный токен может иметь срок действия, по истечении которого становится недействительным.
-    Использование токена может быть ограничено заданными условиями.
+    Токен может быть привязан к определённой сущности, что делает его неприменимым для оплаты в остальных
+    случаях.
 */
 struct PaymentToolToken {
     1: required PaymentToolTokenPayload payload
     2: optional base.Timestamp valid_until
-    3: optional RestrictionUsing restriction
+    3: optional PaymentToolTokenLink link
 }
 
 /**
-    Ограничения использования токена.
+    Возможные привязки токена.
  */
-struct RestrictionUsing {
-    /** Разрешить оплачивать только указанный счёт  */
+union PaymentToolTokenLink {
+    /** Можно оплатить только указанный счёт  */
     1: optional domain.InvoiceID invoice_id
-    /** Разрешить оплачивать только указаному плательщику */
+    /** Может оплачивать только указаный плательщик */
     2: optional domain.CustomerID customer_id
 }
 
