@@ -22,9 +22,9 @@ struct PaymentToolToken {
  */
 union PaymentToolTokenLink {
     /** Можно оплатить только указанный счёт  */
-    1: optional domain.InvoiceID invoice_id
+    1: domain.InvoiceID invoice_id
     /** Может оплачивать только указаный плательщик */
-    2: optional domain.CustomerID customer_id
+    2: domain.CustomerID customer_id
 }
 
 /**
