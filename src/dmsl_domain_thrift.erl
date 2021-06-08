@@ -4897,7 +4897,7 @@ struct_info('CountryRef') ->
 struct_info('Country') ->
     {struct, struct, [
         {1, required, string, 'name', undefined},
-        {2, undefined, {set, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}}, 'trade_blocs', undefined}
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}}, 'trade_blocs', undefined}
     ]};
 
 struct_info('TradeBlocRef') ->
