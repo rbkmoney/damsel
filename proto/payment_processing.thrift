@@ -51,6 +51,12 @@ enum LimitStatus {
     overflow
 }
 
+struct LimitResult {
+    1: optional list<base.ID> limit_ids
+    2: optional Clock         clock
+    3: optional LimitStatus   status
+}
+
 /* Events */
 
 typedef list<Event> Events
@@ -197,9 +203,8 @@ struct InvoiceAdjustmentStatusChanged {
  */
 struct InvoiceAdjustmentLimitChecked {
     1: optional list<base.ID> limit_ids
-    2: optional base.ID       limit_change_id
-    3: optional Clock         clock
-    4: optional LimitStatus   status
+    2: optional Clock         clock
+    3: optional LimitStatus   status
 }
 
 /**
@@ -290,10 +295,7 @@ struct InvoicePaymentSessionChange {
  * Событие проверки лимитов платежа.
  */
 struct InvoicePaymentLimitChecked {
-    1: optional list<base.ID> limit_ids
-    2: optional base.ID       limit_change_id
-    3: optional Clock         clock
-    4: optional LimitStatus   status
+    1: optional list<LimitResult> results
 }
 
 /**
@@ -501,9 +503,8 @@ struct InvoicePaymentRefundRollbackStarted {
  */
 struct InvoicePaymentRefundLimitChecked {
     1: optional list<base.ID> limit_ids
-    2: optional base.ID       limit_change_id
-    3: optional Clock         clock
-    4: optional LimitStatus   status
+    2: optional Clock         clock
+    3: optional LimitStatus   status
 }
 
 /**

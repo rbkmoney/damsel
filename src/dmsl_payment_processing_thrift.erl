@@ -69,6 +69,7 @@
     'Clock'/0,
     'VectorClock'/0,
     'LatestClock'/0,
+    'LimitResult'/0,
     'Event'/0,
     'EventSource'/0,
     'EventPayload'/0,
@@ -432,6 +433,7 @@
     'Clock' |
     'VectorClock' |
     'LatestClock' |
+    'LimitResult' |
     'Event' |
     'EventSource' |
     'EventPayload' |
@@ -743,6 +745,9 @@
 
 %% struct 'LatestClock'
 -type 'LatestClock'() :: #'payproc_LatestClock'{}.
+
+%% struct 'LimitResult'
+-type 'LimitResult'() :: #'payproc_LimitResult'{}.
 
 %% struct 'Event'
 -type 'Event'() :: #'payproc_Event'{}.
@@ -1995,6 +2000,7 @@ structs() ->
         'Clock',
         'VectorClock',
         'LatestClock',
+        'LimitResult',
         'Event',
         'EventSource',
         'EventPayload',
@@ -2347,6 +2353,13 @@ struct_info('VectorClock') ->
 struct_info('LatestClock') ->
     {struct, struct, []};
 
+struct_info('LimitResult') ->
+    {struct, struct, [
+        {1, optional, {list, string}, 'limit_ids', undefined},
+        {2, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
+        {3, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
+    ]};
+
 struct_info('Event') ->
     {struct, struct, [
         {1, required, i64, 'id', undefined},
@@ -2431,9 +2444,8 @@ struct_info('InvoiceAdjustmentStatusChanged') ->
 struct_info('InvoiceAdjustmentLimitChecked') ->
     {struct, struct, [
         {1, optional, {list, string}, 'limit_ids', undefined},
-        {2, optional, string, 'limit_change_id', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
-        {4, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
+        {2, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
+        {3, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentChangePayload') ->
@@ -2500,10 +2512,7 @@ struct_info('InvoicePaymentSessionChange') ->
 
 struct_info('InvoicePaymentLimitChecked') ->
     {struct, struct, [
-        {1, optional, {list, string}, 'limit_ids', undefined},
-        {2, optional, string, 'limit_change_id', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
-        {4, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
+        {1, optional, {list, {struct, struct, {dmsl_payment_processing_thrift, 'LimitResult'}}}, 'results', undefined}
     ]};
 
 struct_info('SessionChangePayload') ->
@@ -2666,9 +2675,8 @@ struct_info('InvoicePaymentRefundRollbackStarted') ->
 struct_info('InvoicePaymentRefundLimitChecked') ->
     {struct, struct, [
         {1, optional, {list, string}, 'limit_ids', undefined},
-        {2, optional, string, 'limit_change_id', undefined},
-        {3, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
-        {4, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
+        {2, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
+        {3, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustmentChange') ->
@@ -4013,6 +4021,9 @@ record_name('VectorClock') ->
 
 record_name('LatestClock') ->
     'payproc_LatestClock';
+
+record_name('LimitResult') ->
+    'payproc_LimitResult';
 
 record_name('Event') ->
     'payproc_Event';

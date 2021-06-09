@@ -553,7 +553,7 @@
 %% struct 'Country'
 -record('domain_Country', {
     'name' :: binary(),
-    'trade_blocs' :: ordsets:ordset(dmsl_domain_thrift:'TradeBlocRef'())
+    'trade_blocs' :: ordsets:ordset(dmsl_domain_thrift:'TradeBlocRef'()) | undefined
 }).
 
 %% struct 'TradeBlocRef'
