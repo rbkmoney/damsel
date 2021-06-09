@@ -808,7 +808,7 @@ struct CountryRef {
 
 struct Country {
     1: required string name
-    2: set<TradeBlocRef> trade_blocs
+    2: optional set<TradeBlocRef> trade_blocs
 }
 
 typedef base.ID TradeBlocID
