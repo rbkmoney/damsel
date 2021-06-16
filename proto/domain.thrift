@@ -1157,6 +1157,7 @@ struct PaymentsServiceTerms {
      9: optional PaymentHoldsServiceTerms holds
      8: optional PaymentRefundsServiceTerms refunds
     10: optional PaymentChargebackServiceTerms chargebacks
+    11: optional PaymentAllocationServiceTerms allocations
 }
 
 struct PaymentHoldsServiceTerms {
@@ -1183,6 +1184,15 @@ struct PaymentRefundsServiceTerms {
 
 struct PartialRefundsServiceTerms {
     1: optional CashLimitSelector cash_limit
+}
+
+struct PaymentAllocationServiceTerms {
+    /** NOTE
+     * Если распределения средств (allocations) разрешены на этом уровне, они также автоматически
+     * разрешены для возвратов (refunds) платежей, при создании которых было указано распределение
+     * средств (allocation).
+     */
+    1: optional Predicate allowed
 }
 
 /* Recurrent payment tools service terms */
