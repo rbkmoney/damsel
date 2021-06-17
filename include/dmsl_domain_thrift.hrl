@@ -812,7 +812,8 @@
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsServiceTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined,
-    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined,
+    'allocations' :: dmsl_domain_thrift:'PaymentAllocationServiceTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsServiceTerms'
@@ -843,6 +844,11 @@
 %% struct 'PartialRefundsServiceTerms'
 -record('domain_PartialRefundsServiceTerms', {
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
+}).
+
+%% struct 'PaymentAllocationServiceTerms'
+-record('domain_PaymentAllocationServiceTerms', {
+    'allowed' :: dmsl_domain_thrift:'Predicate'() | undefined
 }).
 
 %% struct 'RecurrentPaytoolsServiceTerms'

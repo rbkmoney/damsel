@@ -274,6 +274,7 @@
     'PaymentChargebackServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
     'PartialRefundsServiceTerms'/0,
+    'PaymentAllocationServiceTerms'/0,
     'RecurrentPaytoolsServiceTerms'/0,
     'PayoutsServiceTerms'/0,
     'PayoutCompilationPolicy'/0,
@@ -1250,6 +1251,7 @@
     'PaymentChargebackServiceTerms' |
     'PaymentRefundsServiceTerms' |
     'PartialRefundsServiceTerms' |
+    'PaymentAllocationServiceTerms' |
     'RecurrentPaytoolsServiceTerms' |
     'PayoutsServiceTerms' |
     'PayoutCompilationPolicy' |
@@ -2072,6 +2074,9 @@
 
 %% struct 'PartialRefundsServiceTerms'
 -type 'PartialRefundsServiceTerms'() :: #'domain_PartialRefundsServiceTerms'{}.
+
+%% struct 'PaymentAllocationServiceTerms'
+-type 'PaymentAllocationServiceTerms'() :: #'domain_PaymentAllocationServiceTerms'{}.
 
 %% struct 'RecurrentPaytoolsServiceTerms'
 -type 'RecurrentPaytoolsServiceTerms'() :: #'domain_RecurrentPaytoolsServiceTerms'{}.
@@ -3370,6 +3375,7 @@ structs() ->
         'PaymentChargebackServiceTerms',
         'PaymentRefundsServiceTerms',
         'PartialRefundsServiceTerms',
+        'PaymentAllocationServiceTerms',
         'RecurrentPaytoolsServiceTerms',
         'PayoutsServiceTerms',
         'PayoutCompilationPolicy',
@@ -5251,7 +5257,8 @@ struct_info('PaymentsServiceTerms') ->
         {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentAllocationServiceTerms'}}, 'allocations', undefined}
     ]};
 
 struct_info('PaymentHoldsServiceTerms') ->
@@ -5282,6 +5289,11 @@ struct_info('PaymentRefundsServiceTerms') ->
 struct_info('PartialRefundsServiceTerms') ->
     {struct, struct, [
         {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
+
+struct_info('PaymentAllocationServiceTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allowed', undefined}
     ]};
 
 struct_info('RecurrentPaytoolsServiceTerms') ->
@@ -7394,6 +7406,9 @@ record_name('PaymentRefundsServiceTerms') ->
 
 record_name('PartialRefundsServiceTerms') ->
     'domain_PartialRefundsServiceTerms';
+
+record_name('PaymentAllocationServiceTerms') ->
+    'domain_PaymentAllocationServiceTerms';
 
 record_name('RecurrentPaytoolsServiceTerms') ->
     'domain_RecurrentPaytoolsServiceTerms';
