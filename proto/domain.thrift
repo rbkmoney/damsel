@@ -5,6 +5,7 @@
 include "base.thrift"
 include "msgpack.thrift"
 include "json.thrift"
+include "cash_flow.thrift"
 
 namespace java com.rbkmoney.damsel.domain
 namespace erlang domain
@@ -536,8 +537,10 @@ struct InvoicePaymentAdjustment {
     3: required base.Timestamp created_at
     4: required DataRevision domain_revision
     5: required string reason
-    6: required FinalCashFlow new_cash_flow
-    7: required FinalCashFlow old_cash_flow_inverse
+    6: required FinalCashFlow deprecated_new_cash_flow
+    7: required FinalCashFlow deprecated_old_cash_flow_inverse
+    10: optional cash_flow.CashFlow new_cash_flow
+    11: optional cash_flow.CashFlow old_cash_flow_inverse
     8: optional PartyRevision party_revision
     9: optional InvoicePaymentAdjustmentState state
 }
