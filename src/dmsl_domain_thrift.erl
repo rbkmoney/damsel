@@ -5293,7 +5293,7 @@ struct_info('PartialRefundsServiceTerms') ->
 
 struct_info('PaymentAllocationServiceTerms') ->
     {struct, struct, [
-        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allowed', undefined}
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined}
     ]};
 
 struct_info('RecurrentPaytoolsServiceTerms') ->

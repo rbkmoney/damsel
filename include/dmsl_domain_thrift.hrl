@@ -848,7 +848,7 @@
 
 %% struct 'PaymentAllocationServiceTerms'
 -record('domain_PaymentAllocationServiceTerms', {
-    'allowed' :: dmsl_domain_thrift:'Predicate'() | undefined
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined
 }).
 
 %% struct 'RecurrentPaytoolsServiceTerms'

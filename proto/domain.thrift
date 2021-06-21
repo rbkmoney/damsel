@@ -1192,7 +1192,7 @@ struct PaymentAllocationServiceTerms {
      * разрешены для возвратов (refunds) платежей, при создании которых было указано распределение
      * средств (allocation).
      */
-    1: optional Predicate allowed
+    1: optional Predicate allow
 }
 
 /* Recurrent payment tools service terms */
