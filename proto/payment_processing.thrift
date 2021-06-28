@@ -9,7 +9,7 @@ include "timeout_behaviour.thrift"
 include "repairing.thrift"
 include "msgpack.thrift"
 include "cash_flow.thrift"
-include "invoice_adjustments.thrift"
+include "adjustments.thrift"
 
 namespace java com.rbkmoney.damsel.payment_processing
 namespace erlang payproc
@@ -166,14 +166,14 @@ union InvoiceAdjustmentChangePayload {
  * Событие о создании корректировки инвойса
  */
 struct InvoiceAdjustmentCreated {
-    1: required invoice_adjustments.InvoiceAdjustment adjustment
+    1: required adjustments.InvoiceAdjustment adjustment
 }
 
 /**
  * Событие об изменении статуса корректировки платежа
  */
 struct InvoiceAdjustmentStatusChanged {
-    1: required invoice_adjustments.InvoiceAdjustmentStatus status
+    1: required adjustments.InvoiceAdjustmentStatus status
 }
 
 /**
@@ -483,14 +483,14 @@ union InvoicePaymentAdjustmentChangePayload {
  * Событие о создании корректировки платежа
  */
 struct InvoicePaymentAdjustmentCreated {
-    1: required invoice_adjustments.InvoicePaymentAdjustment adjustment
+    1: required adjustments.InvoicePaymentAdjustment adjustment
 }
 
 /**
  * Событие об изменении статуса корректировки платежа
  */
 struct InvoicePaymentAdjustmentStatusChanged {
-    1: required invoice_adjustments.InvoicePaymentAdjustmentStatus status
+    1: required adjustments.InvoicePaymentAdjustmentStatus status
 }
 
 /**
@@ -653,8 +653,8 @@ struct InvoiceRefundSession {
     1: optional domain.TransactionInfo transaction_info
 }
 
-typedef invoice_adjustments.InvoiceAdjustment InvoiceAdjustment
-typedef invoice_adjustments.InvoicePaymentAdjustment InvoicePaymentAdjustment
+typedef adjustments.InvoiceAdjustment InvoiceAdjustment
+typedef adjustments.InvoicePaymentAdjustment InvoicePaymentAdjustment
 
 struct InvoicePaymentChargeback {
     1: required domain.InvoicePaymentChargeback chargeback
@@ -826,7 +826,7 @@ struct InvoiceAdjustmentParams {
  * Сценарий поправки к инвойсу.
  */
 union InvoiceAdjustmentScenario {
-    1: invoice_adjustments.InvoiceAdjustmentStatusChange status_change
+    1: adjustments.InvoiceAdjustmentStatusChange status_change
 }
 
 /**
@@ -843,8 +843,8 @@ struct InvoicePaymentAdjustmentParams {
  * Сценарий поправки к платежу.
  */
 union InvoicePaymentAdjustmentScenario {
-    1: invoice_adjustments.InvoicePaymentAdjustmentCashFlow cash_flow
-    2: invoice_adjustments.InvoicePaymentAdjustmentStatusChange status_change
+    1: adjustments.InvoicePaymentAdjustmentCashFlow cash_flow
+    2: adjustments.InvoicePaymentAdjustmentStatusChange status_change
 }
 
 /* Сценарий, проверяющий состояние упавшей машины и, в случае если
@@ -914,7 +914,7 @@ exception InvoiceAdjustmentPending {
 }
 exception InvoiceAdjustmentStatusUnacceptable {}
 exception InvalidInvoiceAdjustmentStatus {
-    1: required invoice_adjustments.InvoiceAdjustmentStatus status
+    1: required adjustments.InvoiceAdjustmentStatus status
 }
 
 exception InvoicePaymentNotFound {}
@@ -972,7 +972,7 @@ exception InvoicePaymentAlreadyHasStatus {
 }
 
 exception InvalidPaymentAdjustmentStatus {
-    1: required invoice_adjustments.InvoicePaymentAdjustmentStatus status
+    1: required adjustments.InvoicePaymentAdjustmentStatus status
 }
 
 exception InvoiceTemplateNotFound {}
