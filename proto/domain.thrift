@@ -487,6 +487,105 @@ struct RecurrentParentPayment {
     2: required InvoicePaymentID payment_id
 }
 
+/* Adjustments */
+
+struct InvoiceAdjustment {
+    1: required InvoiceAdjustmentID id
+    2: required string reason
+    3: required base.Timestamp created_at
+    4: required InvoiceAdjustmentStatus status
+    5: required DataRevision domain_revision
+    6: optional PartyRevision party_revision
+    7: optional InvoiceAdjustmentState state
+}
+
+struct InvoiceAdjustmentPending   {}
+struct InvoiceAdjustmentProcessed {}
+struct InvoiceAdjustmentCaptured  { 1: required base.Timestamp at }
+struct InvoiceAdjustmentCancelled { 1: required base.Timestamp at }
+
+union InvoiceAdjustmentStatus {
+    1: InvoiceAdjustmentPending   pending
+    2: InvoiceAdjustmentCaptured  captured
+    3: InvoiceAdjustmentCancelled cancelled
+    4: InvoiceAdjustmentProcessed processed
+}
+
+/**
+ * Специфическое для выбранного сценария состояние поправки к инвойсу.
+ */
+union InvoiceAdjustmentState {
+    1: InvoiceAdjustmentStatusChangeState status_change
+}
+
+struct InvoiceAdjustmentStatusChangeState {
+    1: required InvoiceAdjustmentStatusChange scenario
+}
+
+/**
+ * Параметры поправки к инвойсу, используемые для смены его статуса.
+ */
+struct InvoiceAdjustmentStatusChange {
+    /** Статус, в который необходимо перевести инвойс. */
+    1: required InvoiceStatus target_status
+}
+
+struct InvoicePaymentAdjustment {
+    1: required InvoicePaymentAdjustmentID id
+    2: required InvoicePaymentAdjustmentStatus status
+    3: required base.Timestamp created_at
+    4: required DataRevision domain_revision
+    5: required string reason
+    6: required FinalCashFlow new_cash_flow
+    7: required FinalCashFlow old_cash_flow_inverse
+    8: optional PartyRevision party_revision
+    9: optional InvoicePaymentAdjustmentState state
+}
+
+struct InvoicePaymentAdjustmentPending   {}
+struct InvoicePaymentAdjustmentProcessed {}
+struct InvoicePaymentAdjustmentCaptured  { 1: required base.Timestamp at }
+struct InvoicePaymentAdjustmentCancelled { 1: required base.Timestamp at }
+
+union InvoicePaymentAdjustmentStatus {
+    1: InvoicePaymentAdjustmentPending     pending
+    2: InvoicePaymentAdjustmentCaptured   captured
+    3: InvoicePaymentAdjustmentCancelled cancelled
+    4: InvoicePaymentAdjustmentProcessed processed
+}
+
+/**
+ * Специфическое для выбранного сценария состояние поправки к платежу.
+ */
+union InvoicePaymentAdjustmentState {
+    1: InvoicePaymentAdjustmentCashFlowState cash_flow
+    2: InvoicePaymentAdjustmentStatusChangeState status_change
+}
+
+struct InvoicePaymentAdjustmentCashFlowState {
+    1: required InvoicePaymentAdjustmentCashFlow scenario
+}
+
+struct InvoicePaymentAdjustmentStatusChangeState {
+    1: required InvoicePaymentAdjustmentStatusChange scenario
+}
+
+/**
+ * Параметры поправки к платежу, используемые для пересчёта графа финансовых потоков.
+ */
+struct InvoicePaymentAdjustmentCashFlow {
+    /** Ревизия, относительно которой необходимо пересчитать граф финансовых потоков. */
+    1: optional DataRevision domain_revision
+}
+
+/**
+ * Параметры поправки к платежу, используемые для смены его статуса.
+ */
+struct InvoicePaymentAdjustmentStatusChange {
+    /** Статус, в который необходимо перевести платёж. */
+    1: required InvoicePaymentStatus target_status
+}
+
 /**
  * Процесс выполнения платежа.
  */
@@ -2121,6 +2220,49 @@ struct FinalCashFlowPosting {
 struct FinalCashFlowAccount {
     1: required CashFlowAccount account_type
     2: required AccountID account_id
+    3: optional TransactionAccount transaction_account
+}
+
+/** Счёт в графе финансовых потоков. */
+union TransactionAccount {
+    1: MerchantTransactionAccount merchant
+    2: ProviderTransactionAccount provider
+    3: SystemTransactionAccount system
+    4: ExternalTransactionAccount external
+}
+
+struct MerchantTransactionAccount {
+    1: required MerchantCashFlowAccount account_type
+    /**
+     * Идентификатор бизнес-объекта, владельца аккаунта.
+     */
+    2: required MerchantTransactionAccountOwner account_owner
+}
+
+struct MerchantTransactionAccountOwner {
+    1: required PartyID party_id
+    2: required ShopID shop_id
+}
+
+struct ProviderTransactionAccount {
+    1: required ProviderCashFlowAccount account_type
+    /**
+     * Идентификатор бизнес-объекта, владельца аккаунта.
+     */
+    2: required ProviderTransactionAccountOwner account_owner
+}
+
+struct ProviderTransactionAccountOwner {
+    1: required ProviderRef provider_ref
+    2: required ProviderTerminalRef terminal_ref
+}
+
+struct SystemTransactionAccount {
+    1: required SystemCashFlowAccount account_type
+}
+
+struct ExternalTransactionAccount {
+    1: required ExternalCashFlowAccount account_type
 }
 
 /** Объём финансовой проводки. */
