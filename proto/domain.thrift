@@ -2232,11 +2232,11 @@ union TransactionAccount {
 }
 
 struct MerchantTransactionAccount {
-    1: required MerchantCashFlowAccount account_type
+    1: required MerchantCashFlowAccount type
     /**
      * Идентификатор бизнес-объекта, владельца аккаунта.
      */
-    2: required MerchantTransactionAccountOwner account_owner
+    2: required MerchantTransactionAccountOwner owner
 }
 
 struct MerchantTransactionAccountOwner {
@@ -2245,11 +2245,11 @@ struct MerchantTransactionAccountOwner {
 }
 
 struct ProviderTransactionAccount {
-    1: required ProviderCashFlowAccount account_type
+    1: required ProviderCashFlowAccount type
     /**
      * Идентификатор бизнес-объекта, владельца аккаунта.
      */
-    2: required ProviderTransactionAccountOwner account_owner
+    2: required ProviderTransactionAccountOwner owner
 }
 
 struct ProviderTransactionAccountOwner {
@@ -2258,11 +2258,11 @@ struct ProviderTransactionAccountOwner {
 }
 
 struct SystemTransactionAccount {
-    1: required SystemCashFlowAccount account_type
+    1: required SystemCashFlowAccount type
 }
 
 struct ExternalTransactionAccount {
-    1: required ExternalCashFlowAccount account_type
+    1: required ExternalCashFlowAccount type
 }
 
 /** Объём финансовой проводки. */
