@@ -94,6 +94,7 @@
     'StatusChanged'/0,
     'StatusModification'/0,
     'StatusModificationUnit'/0,
+    'ExternalInfoModificationUnit'/0,
     'ClaimModification'/0,
     'PartyModification'/0,
     'PartyModificationChange'/0,
@@ -223,6 +224,7 @@
     'StatusChanged' |
     'StatusModification' |
     'StatusModificationUnit' |
+    'ExternalInfoModificationUnit' |
     'ClaimModification' |
     'PartyModification' |
     'PartyModificationChange' |
@@ -427,12 +429,16 @@
 %% struct 'StatusModificationUnit'
 -type 'StatusModificationUnit'() :: #'claim_management_StatusModificationUnit'{}.
 
+%% struct 'ExternalInfoModificationUnit'
+-type 'ExternalInfoModificationUnit'() :: #'claim_management_ExternalInfoModificationUnit'{}.
+
 %% union 'ClaimModification'
 -type 'ClaimModification'() ::
     {'document_modification', 'DocumentModificationUnit'()} |
     {'file_modification', 'FileModificationUnit'()} |
     {'comment_modification', 'CommentModificationUnit'()} |
-    {'status_modification', 'StatusModificationUnit'()}.
+    {'status_modification', 'StatusModificationUnit'()} |
+    {'external_info_modification', 'ExternalInfoModificationUnit'()}.
 
 %% union 'PartyModification'
 -type 'PartyModification'() ::
@@ -689,6 +695,7 @@ structs() ->
         'StatusChanged',
         'StatusModification',
         'StatusModificationUnit',
+        'ExternalInfoModificationUnit',
         'ClaimModification',
         'PartyModification',
         'PartyModificationChange',
@@ -1031,12 +1038,19 @@ struct_info('StatusModificationUnit') ->
         {2, required, {struct, union, {dmsl_claim_management_thrift, 'StatusModification'}}, 'modification', undefined}
     ]};
 
+struct_info('ExternalInfoModificationUnit') ->
+    {struct, struct, [
+        {1, required, string, 'document_id', undefined},
+        {2, optional, string, 'roistat_id', undefined}
+    ]};
+
 struct_info('ClaimModification') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentModificationUnit'}}, 'document_modification', undefined},
         {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'FileModificationUnit'}}, 'file_modification', undefined},
         {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'CommentModificationUnit'}}, 'comment_modification', undefined},
-        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'StatusModificationUnit'}}, 'status_modification', undefined}
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'StatusModificationUnit'}}, 'status_modification', undefined},
+        {5, optional, {struct, struct, {dmsl_claim_management_thrift, 'ExternalInfoModificationUnit'}}, 'external_info_modification', undefined}
     ]};
 
 struct_info('PartyModification') ->
@@ -1334,6 +1348,9 @@ record_name('StatusChanged') ->
 
 record_name('StatusModificationUnit') ->
     'claim_management_StatusModificationUnit';
+
+record_name('ExternalInfoModificationUnit') ->
+    'claim_management_ExternalInfoModificationUnit';
 
 record_name('ModificationUnit') ->
     'claim_management_ModificationUnit';

@@ -2623,7 +2623,7 @@ struct_info('InvoiceParams') ->
         {4, required, string, 'due', undefined},
         {5, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
         {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-        {7, optional, string, 'id', undefined},
+        {7, required, string, 'id', undefined},
         {8, optional, string, 'external_id', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
@@ -2634,13 +2634,13 @@ struct_info('InvoiceWithTemplateParams') ->
         {1, required, string, 'template_id', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
         {3, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
-        {4, optional, string, 'id', undefined},
+        {4, required, string, 'id', undefined},
         {5, optional, string, 'external_id', undefined}
     ]};
 
 struct_info('InvoiceTemplateCreateParams') ->
     {struct, struct, [
-        {10, optional, string, 'template_id', undefined},
+        {10, required, string, 'template_id', undefined},
         {1, required, string, 'party_id', undefined},
         {2, required, string, 'shop_id', undefined},
         {4, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
@@ -2886,7 +2886,7 @@ struct_info('InvoiceTermsViolationReason') ->
 
 struct_info('CustomerParams') ->
     {struct, struct, [
-        {5, optional, string, 'customer_id', undefined},
+        {5, required, string, 'customer_id', undefined},
         {1, required, string, 'party_id', undefined},
         {2, required, string, 'shop_id', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'ContactInfo'}}, 'contact_info', undefined},
@@ -2952,8 +2952,8 @@ struct_info('CustomerBindingChanged') ->
 
 struct_info('CustomerBindingParams') ->
     {struct, struct, [
-        {3, optional, string, 'customer_binding_id', undefined},
-        {2, optional, string, 'rec_payment_tool_id', undefined},
+        {3, required, string, 'customer_binding_id', undefined},
+        {2, required, string, 'rec_payment_tool_id', undefined},
         {1, required, {struct, struct, {dmsl_domain_thrift, 'DisposablePaymentResource'}}, 'payment_resource', undefined}
     ]};
 

@@ -240,11 +240,17 @@ struct StatusModificationUnit {
     2: required StatusModification modification
 }
 
+struct ExternalInfoModificationUnit {
+    1: required DocumentID document_id
+    2: optional DocumentID roistat_id
+}
+
 union ClaimModification {
     1: DocumentModificationUnit document_modification
     2: FileModificationUnit file_modification
     3: CommentModificationUnit comment_modification
     4: StatusModificationUnit status_modification
+    5: ExternalInfoModificationUnit external_info_modification
 }
 
 union PartyModification {
