@@ -887,6 +887,7 @@ struct InvoiceRepairParams {
 // Exceptions
 
 // forward-declared
+
 exception PartyNotFound {}
 exception PartyNotExistsYet {}
 exception InvalidPartyRevision {}
@@ -1011,6 +1012,10 @@ exception AmountExceededCaptureBalance {
 
 exception InvoicePaymentChargebackPending {}
 
+exception InvoiceInvalidAllocation {}
+
+exception InvoiceRefundCartConflict {}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -1022,7 +1027,8 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7,
-            8: InvoiceTermsViolated ex8
+            8: InvoiceTermsViolated ex8,
+            9: InvoiceInvalidAllocation ex9
         )
 
     Invoice CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
@@ -1176,7 +1182,8 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: InvoiceInvalidAllocation ex11
         )
 
     void CapturePaymentNew (
@@ -1195,7 +1202,8 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: InvoiceInvalidAllocation ex11
         )
     /**
      * Создать поправку к платежу.
@@ -1413,7 +1421,9 @@ service Invoicing {
             11: InvalidPartyStatus ex11
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
-            14: InvoicePaymentChargebackPending ex14
+            14: InvoicePaymentChargebackPending ex14,
+            15: InvoiceInvalidAllocation ex15,
+            16: RefundCartConflict ex16
         )
 
 
@@ -1439,7 +1449,9 @@ service Invoicing {
             11: InvalidShopStatus ex11
             12: InvalidContractStatus ex12
             13: base.InvalidRequest ex13
-            14: InvoicePaymentChargebackPending ex14
+            14: InvoicePaymentChargebackPending ex14,
+            15: InvoiceInvalidAllocation ex15,
+            16: InvoiceRefundCartConflict ex16
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
