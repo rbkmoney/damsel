@@ -1423,7 +1423,7 @@ service Invoicing {
             13: InvalidContractStatus ex13
             14: InvoicePaymentChargebackPending ex14,
             15: InvoiceInvalidAllocation ex15,
-            16: RefundCartConflict ex16
+            16: InvoiceRefundCartConflict ex16
         )
 
 
