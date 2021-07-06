@@ -371,6 +371,13 @@
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
     'FinalCashFlowAccount'/0,
+    'TransactionAccount'/0,
+    'MerchantTransactionAccount'/0,
+    'MerchantTransactionAccountOwner'/0,
+    'ProviderTransactionAccount'/0,
+    'ProviderTransactionAccountOwner'/0,
+    'SystemTransactionAccount'/0,
+    'ExternalTransactionAccount'/0,
     'CashVolume'/0,
     'CashVolumeFixed'/0,
     'CashVolumeShare'/0,
@@ -1359,6 +1366,13 @@
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
     'FinalCashFlowAccount' |
+    'TransactionAccount' |
+    'MerchantTransactionAccount' |
+    'MerchantTransactionAccountOwner' |
+    'ProviderTransactionAccount' |
+    'ProviderTransactionAccountOwner' |
+    'SystemTransactionAccount' |
+    'ExternalTransactionAccount' |
     'CashVolume' |
     'CashVolumeFixed' |
     'CashVolumeShare' |
@@ -2436,6 +2450,31 @@
 
 %% struct 'FinalCashFlowAccount'
 -type 'FinalCashFlowAccount'() :: #'domain_FinalCashFlowAccount'{}.
+
+%% union 'TransactionAccount'
+-type 'TransactionAccount'() ::
+    {'merchant', 'MerchantTransactionAccount'()} |
+    {'provider', 'ProviderTransactionAccount'()} |
+    {'system', 'SystemTransactionAccount'()} |
+    {'external', 'ExternalTransactionAccount'()}.
+
+%% struct 'MerchantTransactionAccount'
+-type 'MerchantTransactionAccount'() :: #'domain_MerchantTransactionAccount'{}.
+
+%% struct 'MerchantTransactionAccountOwner'
+-type 'MerchantTransactionAccountOwner'() :: #'domain_MerchantTransactionAccountOwner'{}.
+
+%% struct 'ProviderTransactionAccount'
+-type 'ProviderTransactionAccount'() :: #'domain_ProviderTransactionAccount'{}.
+
+%% struct 'ProviderTransactionAccountOwner'
+-type 'ProviderTransactionAccountOwner'() :: #'domain_ProviderTransactionAccountOwner'{}.
+
+%% struct 'SystemTransactionAccount'
+-type 'SystemTransactionAccount'() :: #'domain_SystemTransactionAccount'{}.
+
+%% struct 'ExternalTransactionAccount'
+-type 'ExternalTransactionAccount'() :: #'domain_ExternalTransactionAccount'{}.
 
 %% union 'CashVolume'
 -type 'CashVolume'() ::
@@ -3518,6 +3557,13 @@ structs() ->
         'CashFlowPosting',
         'FinalCashFlowPosting',
         'FinalCashFlowAccount',
+        'TransactionAccount',
+        'MerchantTransactionAccount',
+        'MerchantTransactionAccountOwner',
+        'ProviderTransactionAccount',
+        'ProviderTransactionAccountOwner',
+        'SystemTransactionAccount',
+        'ExternalTransactionAccount',
         'CashVolume',
         'CashVolumeFixed',
         'CashVolumeShare',
@@ -5963,7 +6009,50 @@ struct_info('FinalCashFlowPosting') ->
 struct_info('FinalCashFlowAccount') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'account_type', undefined},
-        {2, required, i64, 'account_id', undefined}
+        {2, required, i64, 'account_id', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'TransactionAccount'}}, 'transaction_account', undefined}
+    ]};
+
+struct_info('TransactionAccount') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'MerchantTransactionAccount'}}, 'merchant', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderTransactionAccount'}}, 'provider', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'SystemTransactionAccount'}}, 'system', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalTransactionAccount'}}, 'external', undefined}
+    ]};
+
+struct_info('MerchantTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'type', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'MerchantTransactionAccountOwner'}}, 'owner', undefined}
+    ]};
+
+struct_info('MerchantTransactionAccountOwner') ->
+    {struct, struct, [
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined}
+    ]};
+
+struct_info('ProviderTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'ProviderCashFlowAccount'}}, 'type', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ProviderTransactionAccountOwner'}}, 'owner', undefined}
+    ]};
+
+struct_info('ProviderTransactionAccountOwner') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ProviderTerminalRef'}}, 'terminal_ref', undefined}
+    ]};
+
+struct_info('SystemTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'SystemCashFlowAccount'}}, 'type', undefined}
+    ]};
+
+struct_info('ExternalTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'ExternalCashFlowAccount'}}, 'type', undefined}
     ]};
 
 struct_info('CashVolume') ->
@@ -7732,6 +7821,24 @@ record_name('FinalCashFlowPosting') ->
 
 record_name('FinalCashFlowAccount') ->
     'domain_FinalCashFlowAccount';
+
+record_name('MerchantTransactionAccount') ->
+    'domain_MerchantTransactionAccount';
+
+record_name('MerchantTransactionAccountOwner') ->
+    'domain_MerchantTransactionAccountOwner';
+
+record_name('ProviderTransactionAccount') ->
+    'domain_ProviderTransactionAccount';
+
+record_name('ProviderTransactionAccountOwner') ->
+    'domain_ProviderTransactionAccountOwner';
+
+record_name('SystemTransactionAccount') ->
+    'domain_SystemTransactionAccount';
+
+record_name('ExternalTransactionAccount') ->
+    'domain_ExternalTransactionAccount';
 
 record_name('CashVolumeFixed') ->
     'domain_CashVolumeFixed';

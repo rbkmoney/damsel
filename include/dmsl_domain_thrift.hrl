@@ -1316,7 +1316,42 @@
 %% struct 'FinalCashFlowAccount'
 -record('domain_FinalCashFlowAccount', {
     'account_type' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'account_id' :: dmsl_domain_thrift:'AccountID'()
+    'account_id' :: dmsl_domain_thrift:'AccountID'(),
+    'transaction_account' :: dmsl_domain_thrift:'TransactionAccount'() | undefined
+}).
+
+%% struct 'MerchantTransactionAccount'
+-record('domain_MerchantTransactionAccount', {
+    'type' :: atom(),
+    'owner' :: dmsl_domain_thrift:'MerchantTransactionAccountOwner'()
+}).
+
+%% struct 'MerchantTransactionAccountOwner'
+-record('domain_MerchantTransactionAccountOwner', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'()
+}).
+
+%% struct 'ProviderTransactionAccount'
+-record('domain_ProviderTransactionAccount', {
+    'type' :: atom(),
+    'owner' :: dmsl_domain_thrift:'ProviderTransactionAccountOwner'()
+}).
+
+%% struct 'ProviderTransactionAccountOwner'
+-record('domain_ProviderTransactionAccountOwner', {
+    'provider_ref' :: dmsl_domain_thrift:'ProviderRef'(),
+    'terminal_ref' :: dmsl_domain_thrift:'ProviderTerminalRef'()
+}).
+
+%% struct 'SystemTransactionAccount'
+-record('domain_SystemTransactionAccount', {
+    'type' :: atom()
+}).
+
+%% struct 'ExternalTransactionAccount'
+-record('domain_ExternalTransactionAccount', {
+    'type' :: atom()
 }).
 
 %% struct 'CashVolumeFixed'

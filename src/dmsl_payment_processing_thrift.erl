@@ -1864,8 +1864,7 @@
     'ComputeRoutingRuleset' |
     'ComputePaymentInstitutionTerms' |
     'ComputePaymentInstitution' |
-    'ComputePayoutCashFlow' |
-    'ComputePayoutCashFlow2'.
+    'ComputePayoutCashFlow'.
 
 -export_type(['PartyManagement_service_functions'/0]).
 
@@ -2377,8 +2376,7 @@ struct_info('InvoicePaymentStarted') ->
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
         {4, optional, {enum, {dmsl_domain_thrift, 'RiskScore'}}, 'risk_score', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-        {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {5, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined}
+        {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
 struct_info('InvoicePaymentClockUpdate') ->
@@ -2403,8 +2401,7 @@ struct_info('InvoicePaymentRouteChanged') ->
 
 struct_info('InvoicePaymentCashFlowChanged') ->
     {struct, struct, [
-        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {2, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined}
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
 struct_info('InvoicePaymentStatusChanged') ->
@@ -2519,8 +2516,7 @@ struct_info('InvoicePaymentChargebackStatusChanged') ->
 
 struct_info('InvoicePaymentChargebackCashFlowChanged') ->
     {struct, struct, [
-        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {2, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined}
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackBodyChanged') ->
@@ -2561,8 +2557,7 @@ struct_info('InvoicePaymentRefundChangePayload') ->
 struct_info('InvoicePaymentRefundCreated') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
-        {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {4, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined},
+        {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined}
     ]};
 
@@ -2720,8 +2715,7 @@ struct_info('InvoicePayment') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePayment'}}, 'payment', undefined},
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
-        {7, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {10, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined},
+        {7, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined},
         {2, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentAdjustment'}}}, 'adjustments', undefined},
         {4, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefund'}}}, 'refunds', undefined},
         {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
@@ -2735,8 +2729,7 @@ struct_info('InvoicePaymentRefund') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}, 'refund', undefined},
         {2, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRefundSession'}}}, 'sessions', undefined},
-        {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {4, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined}
+        {3, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
 struct_info('InvoicePaymentSession') ->
@@ -2753,8 +2746,7 @@ struct_info('InvoiceRefundSession') ->
 struct_info('InvoicePaymentChargeback') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentChargeback'}}, 'chargeback', undefined},
-        {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'deprecated_cash_flow', undefined},
-        {3, optional, {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}}, 'cash_flow', undefined}
+        {2, optional, {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}}, 'cash_flow', undefined}
     ]};
 
 struct_info('InvoicePaymentChargebackParams') ->
@@ -4732,8 +4724,7 @@ functions('PartyManagement') ->
         'ComputeRoutingRuleset',
         'ComputePaymentInstitutionTerms',
         'ComputePaymentInstitution',
-        'ComputePayoutCashFlow',
-        'ComputePayoutCashFlow2'
+        'ComputePayoutCashFlow'
     ];
 
 functions('EventSink') ->
@@ -6139,23 +6130,6 @@ function_info('PartyManagement', 'ComputePayoutCashFlow', params_type) ->
 function_info('PartyManagement', 'ComputePayoutCashFlow', reply_type) ->
     {list, {struct, struct, {dmsl_domain_thrift, 'FinalCashFlowPosting'}}};
 function_info('PartyManagement', 'ComputePayoutCashFlow', exceptions) ->
-    {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'OperationNotPermitted'}}, 'ex5', undefined},
-        {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PayoutToolNotFound'}}, 'ex6', undefined}
-    ]};
-function_info('PartyManagement', 'ComputePayoutCashFlow2', params_type) ->
-    {struct, struct, [
-        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-        {2, undefined, string, 'party_id', undefined},
-        {3, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'PayoutParams'}}, 'params', undefined}
-    ]};
-function_info('PartyManagement', 'ComputePayoutCashFlow2', reply_type) ->
-    {struct, struct, {dmsl_cash_flow_thrift, 'CashFlow'}};
-function_info('PartyManagement', 'ComputePayoutCashFlow2', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},

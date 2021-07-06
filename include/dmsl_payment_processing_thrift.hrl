@@ -7,7 +7,6 @@
 -include("dmsl_timeout_behaviour_thrift.hrl").
 -include("dmsl_repairing_thrift.hrl").
 -include("dmsl_msgpack_thrift.hrl").
--include("dmsl_cash_flow_thrift.hrl").
 
 
 
@@ -74,8 +73,7 @@
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
     'risk_score' :: atom() | undefined,
     'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
-    'deprecated_cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'() | undefined,
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'() | undefined
 }).
 
 %% struct 'InvoicePaymentClockUpdate'
@@ -100,8 +98,7 @@
 
 %% struct 'InvoicePaymentCashFlowChanged'
 -record('payproc_InvoicePaymentCashFlowChanged', {
-    'deprecated_cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
 %% struct 'InvoicePaymentStatusChanged'
@@ -187,8 +184,7 @@
 
 %% struct 'InvoicePaymentChargebackCashFlowChanged'
 -record('payproc_InvoicePaymentChargebackCashFlowChanged', {
-    'deprecated_cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'()
 }).
 
 %% struct 'InvoicePaymentChargebackBodyChanged'
@@ -220,8 +216,7 @@
 %% struct 'InvoicePaymentRefundCreated'
 -record('payproc_InvoicePaymentRefundCreated', {
     'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
-    'deprecated_cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined,
+    'cash_flow' :: dmsl_domain_thrift:'FinalCashFlow'(),
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
@@ -359,8 +354,7 @@
 -record('payproc_InvoicePayment', {
     'payment' :: dmsl_domain_thrift:'InvoicePayment'(),
     'route' :: dmsl_domain_thrift:'PaymentRoute'() | undefined,
-    'deprecated_cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined,
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined,
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined,
     'adjustments' :: [dmsl_payment_processing_thrift:'InvoicePaymentAdjustment'()],
     'refunds' :: [dmsl_payment_processing_thrift:'InvoicePaymentRefund'()],
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
@@ -374,8 +368,7 @@
 -record('payproc_InvoicePaymentRefund', {
     'refund' :: dmsl_domain_thrift:'InvoicePaymentRefund'(),
     'sessions' :: [dmsl_payment_processing_thrift:'InvoiceRefundSession'()],
-    'deprecated_cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined,
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined
 }).
 
 %% struct 'InvoicePaymentSession'
@@ -392,8 +385,7 @@
 %% struct 'InvoicePaymentChargeback'
 -record('payproc_InvoicePaymentChargeback', {
     'chargeback' :: dmsl_domain_thrift:'InvoicePaymentChargeback'(),
-    'deprecated_cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined,
-    'cash_flow' :: dmsl_cash_flow_thrift:'CashFlow'() | undefined
+    'cash_flow' :: dmsl_payment_processing_thrift:'FinalCashFlow'() | undefined
 }).
 
 %% struct 'InvoicePaymentChargebackParams'
