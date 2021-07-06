@@ -2250,6 +2250,49 @@ struct FinalCashFlowPosting {
 struct FinalCashFlowAccount {
     1: required CashFlowAccount account_type
     2: required AccountID account_id
+    3: optional TransactionAccount transaction_account
+}
+
+/** Счёт в графе финансовых потоков. */
+union TransactionAccount {
+    1: MerchantTransactionAccount merchant
+    2: ProviderTransactionAccount provider
+    3: SystemTransactionAccount system
+    4: ExternalTransactionAccount external
+}
+
+struct MerchantTransactionAccount {
+    1: required MerchantCashFlowAccount type
+    /**
+     * Идентификатор бизнес-объекта, владельца аккаунта.
+     */
+    2: required MerchantTransactionAccountOwner owner
+}
+
+struct MerchantTransactionAccountOwner {
+    1: required PartyID party_id
+    2: required ShopID shop_id
+}
+
+struct ProviderTransactionAccount {
+    1: required ProviderCashFlowAccount type
+    /**
+     * Идентификатор бизнес-объекта, владельца аккаунта.
+     */
+    2: required ProviderTransactionAccountOwner owner
+}
+
+struct ProviderTransactionAccountOwner {
+    1: required ProviderRef provider_ref
+    2: required ProviderTerminalRef terminal_ref
+}
+
+struct SystemTransactionAccount {
+    1: required SystemCashFlowAccount type
+}
+
+struct ExternalTransactionAccount {
+    1: required ExternalCashFlowAccount type
 }
 
 /** Объём финансовой проводки. */
