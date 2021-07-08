@@ -191,6 +191,7 @@ union InvoicePaymentChangePayload {
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
     15: InvoicePaymentClockUpdate           invoice_payment_clock_update
+    16: InvoicePaymentRouteDeclined         invoice_payment_route_declined
 }
 
 /**
@@ -232,6 +233,14 @@ struct InvoicePaymentRouteChanged {
     /** Выбранный маршрут обработки платежа. */
     1: required domain.PaymentRoute route
 }
+
+/**
+ * Событие о невозможности использовать маршрут обработки платежа.
+ */
+struct InvoicePaymentRouteDeclined {
+
+}
+
 
 /**
  * Событие об изменении данных финансового взаимодействия.
