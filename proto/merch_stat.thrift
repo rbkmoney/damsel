@@ -192,29 +192,6 @@ enum DigitalWalletProvider {
     qiwi
 }
 
-struct RussianBankAccount {
-    1: required string account
-    2: required string bank_name
-    3: required string bank_post_account
-    4: required string bank_bik
-}
-
-struct InternationalBankAccount {
-    1: optional string                   number
-    2: optional InternationalBankDetails bank
-    3: optional InternationalBankAccount correspondent_account
-    4: optional string iban           // International Bank Account Number (ISO 13616)
-    5: optional string account_holder
-}
-
-struct InternationalBankDetails {
-    1: optional string           bic         // Business Identifier Code (ISO 9362)
-    2: optional domain.Residence country
-    3: optional string           name
-    4: optional string           address
-    5: optional string           aba_rtn     // ABA Routing Transit Number
-}
-
 /**
 * Информация об инвойсе.
 */
@@ -281,55 +258,12 @@ struct StatPayout {
     6 : required domain.Amount amount
     7 : required domain.Amount fee
     8 : required string currency_symbolic_code
-    9 : required PayoutType type
-    10: optional PayoutSummary summary
-}
-
-enum OperationType {
-    payment
-    refund
-}
-
-struct PayoutSummaryItem {
-    1: required domain.Amount amount
-    2: required domain.Amount fee
-    3: required string currency_symbolic_code
-    4: required base.Timestamp from_time
-    5: required base.Timestamp to_time
-    6: required OperationType operation_type
-    7: required i32 count
-}
-
-typedef list<PayoutSummaryItem> PayoutSummary
-
-union PayoutType {
-    1: PayoutCard bank_card
-    2: PayoutAccount bank_account
-    3: Wallet wallet
-}
-
-struct Wallet {
-    1: required domain.WalletID wallet_id
-}
-
-struct PayoutCard {
-    1: required BankCard card
+    9 : required domain.PayoutToolInfo payout_tool_info
 }
 
 union PayoutAccount {
-    1: RussianPayoutAccount       russian_payout_account
-    2: InternationalPayoutAccount international_payout_account
-}
-
-struct RussianPayoutAccount {
-    1: required RussianBankAccount bank_account
-    2: required string inn
-    3: required string purpose
-}
-
-struct InternationalPayoutAccount {
-   1: required InternationalBankAccount bank_account
-   2: required string purpose
+    1: domain.RussianBankAccount       russian_bank_account
+    2: domain.InternationalBankAccount international_bank_account
 }
 
 union PayoutStatus {
