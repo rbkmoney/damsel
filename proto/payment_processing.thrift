@@ -191,6 +191,7 @@ union InvoicePaymentChangePayload {
     13: InvoicePaymentChargebackChange      invoice_payment_chargeback_change
     14: InvoicePaymentRollbackStarted       invoice_payment_rollback_started
     15: InvoicePaymentClockUpdate           invoice_payment_clock_update
+    16: InvoicePaymentRouteDeclined         invoice_payment_route_declined
 }
 
 /**
@@ -216,6 +217,9 @@ struct InvoicePaymentClockUpdate {
 struct InvoicePaymentRollbackStarted {
     1: required domain.OperationFailure reason
 }
+
+
+struct InvoicePaymentRouteDeclined {}
 
 /**
  * Событие об изменении оценки риска платежа.
