@@ -144,32 +144,6 @@
     'id' :: dmsl_merch_stat_thrift:'DigitalWalletID'()
 }).
 
-%% struct 'RussianBankAccount'
--record('merchstat_RussianBankAccount', {
-    'account' :: binary(),
-    'bank_name' :: binary(),
-    'bank_post_account' :: binary(),
-    'bank_bik' :: binary()
-}).
-
-%% struct 'InternationalBankAccount'
--record('merchstat_InternationalBankAccount', {
-    'number' :: binary() | undefined,
-    'bank' :: dmsl_merch_stat_thrift:'InternationalBankDetails'() | undefined,
-    'correspondent_account' :: dmsl_merch_stat_thrift:'InternationalBankAccount'() | undefined,
-    'iban' :: binary() | undefined,
-    'account_holder' :: binary() | undefined
-}).
-
-%% struct 'InternationalBankDetails'
--record('merchstat_InternationalBankDetails', {
-    'bic' :: binary() | undefined,
-    'country' :: dmsl_domain_thrift:'Residence'() | undefined,
-    'name' :: binary() | undefined,
-    'address' :: binary() | undefined,
-    'aba_rtn' :: binary() | undefined
-}).
-
 %% struct 'StatInvoice'
 -record('merchstat_StatInvoice', {
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
@@ -231,42 +205,7 @@
     'amount' :: dmsl_domain_thrift:'Amount'(),
     'fee' :: dmsl_domain_thrift:'Amount'(),
     'currency_symbolic_code' :: binary(),
-    'type' :: dmsl_merch_stat_thrift:'PayoutType'(),
-    'summary' :: dmsl_merch_stat_thrift:'PayoutSummary'() | undefined
-}).
-
-%% struct 'PayoutSummaryItem'
--record('merchstat_PayoutSummaryItem', {
-    'amount' :: dmsl_domain_thrift:'Amount'(),
-    'fee' :: dmsl_domain_thrift:'Amount'(),
-    'currency_symbolic_code' :: binary(),
-    'from_time' :: dmsl_base_thrift:'Timestamp'(),
-    'to_time' :: dmsl_base_thrift:'Timestamp'(),
-    'operation_type' :: atom(),
-    'count' :: integer()
-}).
-
-%% struct 'Wallet'
--record('merchstat_Wallet', {
-    'wallet_id' :: dmsl_domain_thrift:'WalletID'()
-}).
-
-%% struct 'PayoutCard'
--record('merchstat_PayoutCard', {
-    'card' :: dmsl_merch_stat_thrift:'BankCard'()
-}).
-
-%% struct 'RussianPayoutAccount'
--record('merchstat_RussianPayoutAccount', {
-    'bank_account' :: dmsl_merch_stat_thrift:'RussianBankAccount'(),
-    'inn' :: binary(),
-    'purpose' :: binary()
-}).
-
-%% struct 'InternationalPayoutAccount'
--record('merchstat_InternationalPayoutAccount', {
-    'bank_account' :: dmsl_merch_stat_thrift:'InternationalBankAccount'(),
-    'purpose' :: binary()
+    'payout_tool_info' :: dmsl_domain_thrift:'PayoutToolInfo'()
 }).
 
 %% struct 'PayoutUnpaid'
