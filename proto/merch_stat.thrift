@@ -248,6 +248,7 @@ typedef base.ID PayoutID
 
 /**
 * Информация о выплате
+* 
 */
 struct StatPayout {
     1 : required PayoutID id
