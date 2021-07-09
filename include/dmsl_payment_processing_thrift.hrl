@@ -272,7 +272,8 @@
     'context' :: dmsl_domain_thrift:'InvoiceContext'(),
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
     'external_id' :: binary() | undefined,
-    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined
+    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
 }).
 
 %% struct 'InvoiceWithTemplateParams'
@@ -359,6 +360,7 @@
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
     'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined,
     'last_transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'allocaton' :: dmsl_domain_thrift:'Allocation'() | undefined,
     'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
 }).
 
@@ -431,14 +433,16 @@
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
 }).
 
 %% struct 'InvoicePaymentCaptureParams'
 -record('payproc_InvoicePaymentCaptureParams', {
     'reason' :: binary(),
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
 }).
 
 %% struct 'InvoiceAdjustmentParams'

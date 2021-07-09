@@ -808,7 +808,8 @@ struct_info('StatInvoice') ->
         {10, required, string, 'currency_symbolic_code', undefined},
         {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-        {13, optional, string, 'external_id', undefined}
+        {13, optional, string, 'external_id', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('EnrichedStatInvoice') ->

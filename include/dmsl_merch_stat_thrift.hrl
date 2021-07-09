@@ -158,7 +158,8 @@
     'currency_symbolic_code' :: binary(),
     'context' :: dmsl_base_thrift:'Content'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'EnrichedStatInvoice'

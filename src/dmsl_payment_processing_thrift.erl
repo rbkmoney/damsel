@@ -2620,7 +2620,8 @@ struct_info('InvoiceParams') ->
         {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {7, required, string, 'id', undefined},
         {8, optional, string, 'external_id', undefined},
-        {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined}
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoiceWithTemplateParams') ->
@@ -2720,6 +2721,7 @@ struct_info('InvoicePayment') ->
         {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
         {8, optional, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'last_transaction_info', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocaton', undefined},
         {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
     ]};
 
@@ -2792,14 +2794,16 @@ struct_info('InvoicePaymentRefundParams') ->
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
         {5, optional, string, 'id', undefined},
-        {6, optional, string, 'external_id', undefined}
+        {6, optional, string, 'external_id', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoicePaymentCaptureParams') ->
     {struct, struct, [
         {1, required, string, 'reason', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoiceAdjustmentParams') ->

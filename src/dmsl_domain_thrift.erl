@@ -52,6 +52,7 @@
     'PaymentSessionID'/0,
     'Fingerprint'/0,
     'IPAddress'/0,
+    'AllocationTransactionID'/0,
     'InvoiceTemplateID'/0,
     'ChargebackCode'/0,
     'PartyID'/0,
@@ -128,6 +129,21 @@
     'InvoiceLine'/0,
     'InvoiceBankAccount'/0,
     'InvoiceRussianBankAccount'/0,
+    'AllocationPrototype'/0,
+    'AllocationTransactionPrototype'/0,
+    'AllocationTransactionPrototypeBody'/0,
+    'AllocationTransactionPrototypeBodyAmount'/0,
+    'AllocationTransactionPrototypeBodyTotal'/0,
+    'AllocationTransactionPrototypeFee'/0,
+    'AllocationTransactionPrototypeFeeShare'/0,
+    'AllocationTransactionPrototypeFeeFixed'/0,
+    'Allocation'/0,
+    'AllocationTransaction'/0,
+    'AllocationTransactionTarget'/0,
+    'AllocationTransactionTargetShop'/0,
+    'AllocationTransactionBodyTotal'/0,
+    'AllocationTransactionFeeShare'/0,
+    'AllocationTransactionDetails'/0,
     'InvoiceUnpaid'/0,
     'InvoicePaid'/0,
     'InvoiceCancelled'/0,
@@ -265,6 +281,7 @@
     'PaymentChargebackServiceTerms'/0,
     'PaymentRefundsServiceTerms'/0,
     'PartialRefundsServiceTerms'/0,
+    'PaymentAllocationServiceTerms'/0,
     'RecurrentPaytoolsServiceTerms'/0,
     'PayoutsServiceTerms'/0,
     'PayoutCompilationPolicy'/0,
@@ -354,6 +371,13 @@
     'CashFlowPosting'/0,
     'FinalCashFlowPosting'/0,
     'FinalCashFlowAccount'/0,
+    'TransactionAccount'/0,
+    'MerchantTransactionAccount'/0,
+    'MerchantTransactionAccountOwner'/0,
+    'ProviderTransactionAccount'/0,
+    'ProviderTransactionAccountOwner'/0,
+    'SystemTransactionAccount'/0,
+    'ExternalTransactionAccount'/0,
     'CashVolume'/0,
     'CashVolumeFixed'/0,
     'CashVolumeShare'/0,
@@ -551,6 +575,7 @@
     'PaymentSessionID' |
     'Fingerprint' |
     'IPAddress' |
+    'AllocationTransactionID' |
     'InvoiceTemplateID' |
     'ChargebackCode' |
     'PartyID' |
@@ -606,6 +631,7 @@
 -type 'PaymentSessionID'() :: binary().
 -type 'Fingerprint'() :: binary().
 -type 'IPAddress'() :: binary().
+-type 'AllocationTransactionID'() :: dmsl_base_thrift:'ID'().
 -type 'InvoiceTemplateID'() :: dmsl_base_thrift:'ID'().
 -type 'ChargebackCode'() :: binary().
 -type 'PartyID'() :: dmsl_base_thrift:'ID'().
@@ -1098,6 +1124,21 @@
     'InvoiceLine' |
     'InvoiceBankAccount' |
     'InvoiceRussianBankAccount' |
+    'AllocationPrototype' |
+    'AllocationTransactionPrototype' |
+    'AllocationTransactionPrototypeBody' |
+    'AllocationTransactionPrototypeBodyAmount' |
+    'AllocationTransactionPrototypeBodyTotal' |
+    'AllocationTransactionPrototypeFee' |
+    'AllocationTransactionPrototypeFeeShare' |
+    'AllocationTransactionPrototypeFeeFixed' |
+    'Allocation' |
+    'AllocationTransaction' |
+    'AllocationTransactionTarget' |
+    'AllocationTransactionTargetShop' |
+    'AllocationTransactionBodyTotal' |
+    'AllocationTransactionFeeShare' |
+    'AllocationTransactionDetails' |
     'InvoiceUnpaid' |
     'InvoicePaid' |
     'InvoiceCancelled' |
@@ -1235,6 +1276,7 @@
     'PaymentChargebackServiceTerms' |
     'PaymentRefundsServiceTerms' |
     'PartialRefundsServiceTerms' |
+    'PaymentAllocationServiceTerms' |
     'RecurrentPaytoolsServiceTerms' |
     'PayoutsServiceTerms' |
     'PayoutCompilationPolicy' |
@@ -1324,6 +1366,13 @@
     'CashFlowPosting' |
     'FinalCashFlowPosting' |
     'FinalCashFlowAccount' |
+    'TransactionAccount' |
+    'MerchantTransactionAccount' |
+    'MerchantTransactionAccountOwner' |
+    'ProviderTransactionAccount' |
+    'ProviderTransactionAccountOwner' |
+    'SystemTransactionAccount' |
+    'ExternalTransactionAccount' |
     'CashVolume' |
     'CashVolumeFixed' |
     'CashVolumeShare' |
@@ -1540,6 +1589,56 @@
 
 %% struct 'InvoiceRussianBankAccount'
 -type 'InvoiceRussianBankAccount'() :: #'domain_InvoiceRussianBankAccount'{}.
+
+%% struct 'AllocationPrototype'
+-type 'AllocationPrototype'() :: #'domain_AllocationPrototype'{}.
+
+%% struct 'AllocationTransactionPrototype'
+-type 'AllocationTransactionPrototype'() :: #'domain_AllocationTransactionPrototype'{}.
+
+%% union 'AllocationTransactionPrototypeBody'
+-type 'AllocationTransactionPrototypeBody'() ::
+    {'amount', 'AllocationTransactionPrototypeBodyAmount'()} |
+    {'total', 'AllocationTransactionPrototypeBodyTotal'()}.
+
+%% struct 'AllocationTransactionPrototypeBodyAmount'
+-type 'AllocationTransactionPrototypeBodyAmount'() :: #'domain_AllocationTransactionPrototypeBodyAmount'{}.
+
+%% struct 'AllocationTransactionPrototypeBodyTotal'
+-type 'AllocationTransactionPrototypeBodyTotal'() :: #'domain_AllocationTransactionPrototypeBodyTotal'{}.
+
+%% union 'AllocationTransactionPrototypeFee'
+-type 'AllocationTransactionPrototypeFee'() ::
+    {'fixed', 'AllocationTransactionPrototypeFeeFixed'()} |
+    {'share', 'AllocationTransactionPrototypeFeeShare'()}.
+
+%% struct 'AllocationTransactionPrototypeFeeShare'
+-type 'AllocationTransactionPrototypeFeeShare'() :: #'domain_AllocationTransactionPrototypeFeeShare'{}.
+
+%% struct 'AllocationTransactionPrototypeFeeFixed'
+-type 'AllocationTransactionPrototypeFeeFixed'() :: #'domain_AllocationTransactionPrototypeFeeFixed'{}.
+
+%% struct 'Allocation'
+-type 'Allocation'() :: #'domain_Allocation'{}.
+
+%% struct 'AllocationTransaction'
+-type 'AllocationTransaction'() :: #'domain_AllocationTransaction'{}.
+
+%% union 'AllocationTransactionTarget'
+-type 'AllocationTransactionTarget'() ::
+    {'shop', 'AllocationTransactionTargetShop'()}.
+
+%% struct 'AllocationTransactionTargetShop'
+-type 'AllocationTransactionTargetShop'() :: #'domain_AllocationTransactionTargetShop'{}.
+
+%% struct 'AllocationTransactionBodyTotal'
+-type 'AllocationTransactionBodyTotal'() :: #'domain_AllocationTransactionBodyTotal'{}.
+
+%% struct 'AllocationTransactionFeeShare'
+-type 'AllocationTransactionFeeShare'() :: #'domain_AllocationTransactionFeeShare'{}.
+
+%% struct 'AllocationTransactionDetails'
+-type 'AllocationTransactionDetails'() :: #'domain_AllocationTransactionDetails'{}.
 
 %% struct 'InvoiceUnpaid'
 -type 'InvoiceUnpaid'() :: #'domain_InvoiceUnpaid'{}.
@@ -2026,6 +2125,9 @@
 %% struct 'PartialRefundsServiceTerms'
 -type 'PartialRefundsServiceTerms'() :: #'domain_PartialRefundsServiceTerms'{}.
 
+%% struct 'PaymentAllocationServiceTerms'
+-type 'PaymentAllocationServiceTerms'() :: #'domain_PaymentAllocationServiceTerms'{}.
+
 %% struct 'RecurrentPaytoolsServiceTerms'
 -type 'RecurrentPaytoolsServiceTerms'() :: #'domain_RecurrentPaytoolsServiceTerms'{}.
 
@@ -2348,6 +2450,31 @@
 
 %% struct 'FinalCashFlowAccount'
 -type 'FinalCashFlowAccount'() :: #'domain_FinalCashFlowAccount'{}.
+
+%% union 'TransactionAccount'
+-type 'TransactionAccount'() ::
+    {'merchant', 'MerchantTransactionAccount'()} |
+    {'provider', 'ProviderTransactionAccount'()} |
+    {'system', 'SystemTransactionAccount'()} |
+    {'external', 'ExternalTransactionAccount'()}.
+
+%% struct 'MerchantTransactionAccount'
+-type 'MerchantTransactionAccount'() :: #'domain_MerchantTransactionAccount'{}.
+
+%% struct 'MerchantTransactionAccountOwner'
+-type 'MerchantTransactionAccountOwner'() :: #'domain_MerchantTransactionAccountOwner'{}.
+
+%% struct 'ProviderTransactionAccount'
+-type 'ProviderTransactionAccount'() :: #'domain_ProviderTransactionAccount'{}.
+
+%% struct 'ProviderTransactionAccountOwner'
+-type 'ProviderTransactionAccountOwner'() :: #'domain_ProviderTransactionAccountOwner'{}.
+
+%% struct 'SystemTransactionAccount'
+-type 'SystemTransactionAccount'() :: #'domain_SystemTransactionAccount'{}.
+
+%% struct 'ExternalTransactionAccount'
+-type 'ExternalTransactionAccount'() :: #'domain_ExternalTransactionAccount'{}.
 
 %% union 'CashVolume'
 -type 'CashVolume'() ::
@@ -3103,6 +3230,7 @@ typedefs() ->
         'PaymentSessionID',
         'Fingerprint',
         'IPAddress',
+        'AllocationTransactionID',
         'InvoiceTemplateID',
         'ChargebackCode',
         'PartyID',
@@ -3187,6 +3315,21 @@ structs() ->
         'InvoiceLine',
         'InvoiceBankAccount',
         'InvoiceRussianBankAccount',
+        'AllocationPrototype',
+        'AllocationTransactionPrototype',
+        'AllocationTransactionPrototypeBody',
+        'AllocationTransactionPrototypeBodyAmount',
+        'AllocationTransactionPrototypeBodyTotal',
+        'AllocationTransactionPrototypeFee',
+        'AllocationTransactionPrototypeFeeShare',
+        'AllocationTransactionPrototypeFeeFixed',
+        'Allocation',
+        'AllocationTransaction',
+        'AllocationTransactionTarget',
+        'AllocationTransactionTargetShop',
+        'AllocationTransactionBodyTotal',
+        'AllocationTransactionFeeShare',
+        'AllocationTransactionDetails',
         'InvoiceUnpaid',
         'InvoicePaid',
         'InvoiceCancelled',
@@ -3324,6 +3467,7 @@ structs() ->
         'PaymentChargebackServiceTerms',
         'PaymentRefundsServiceTerms',
         'PartialRefundsServiceTerms',
+        'PaymentAllocationServiceTerms',
         'RecurrentPaytoolsServiceTerms',
         'PayoutsServiceTerms',
         'PayoutCompilationPolicy',
@@ -3413,6 +3557,13 @@ structs() ->
         'CashFlowPosting',
         'FinalCashFlowPosting',
         'FinalCashFlowAccount',
+        'TransactionAccount',
+        'MerchantTransactionAccount',
+        'MerchantTransactionAccountOwner',
+        'ProviderTransactionAccount',
+        'ProviderTransactionAccountOwner',
+        'SystemTransactionAccount',
+        'ExternalTransactionAccount',
         'CashVolume',
         'CashVolumeFixed',
         'CashVolumeShare',
@@ -3654,6 +3805,9 @@ typedef_info('Fingerprint') ->
     string;
 
 typedef_info('IPAddress') ->
+    string;
+
+typedef_info('AllocationTransactionID') ->
     string;
 
 typedef_info('InvoiceTemplateID') ->
@@ -4273,7 +4427,8 @@ struct_info('Invoice') ->
         {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {12, optional, string, 'template_id', undefined},
         {14, optional, string, 'external_id', undefined},
-        {15, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined}
+        {15, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined},
+        {16, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoiceDetails') ->
@@ -4306,6 +4461,97 @@ struct_info('InvoiceRussianBankAccount') ->
     {struct, struct, [
         {1, required, string, 'account', undefined},
         {2, required, string, 'bank_bik', undefined}
+    ]};
+
+struct_info('AllocationPrototype') ->
+    {struct, struct, [
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototype'}}}, 'transactions', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototype') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionTarget'}}, 'target', undefined},
+        {3, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionPrototypeBody'}}, 'body', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionDetails'}}, 'details', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototypeBody') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototypeBodyAmount'}}, 'amount', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototypeBodyTotal'}}, 'total', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototypeBodyAmount') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototypeBodyTotal') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'total', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionPrototypeFee'}}, 'fee', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototypeFee') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototypeFeeFixed'}}, 'fixed', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototypeFeeShare'}}, 'share', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototypeFeeShare') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
+    ]};
+
+struct_info('AllocationTransactionPrototypeFeeFixed') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined}
+    ]};
+
+struct_info('Allocation') ->
+    {struct, struct, [
+        {1, required, {list, {struct, struct, {dmsl_domain_thrift, 'AllocationTransaction'}}}, 'transactions', undefined}
+    ]};
+
+struct_info('AllocationTransaction') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionTarget'}}, 'target', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionBodyTotal'}}, 'body', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionDetails'}}, 'details', undefined}
+    ]};
+
+struct_info('AllocationTransactionTarget') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionTargetShop'}}, 'shop', undefined}
+    ]};
+
+struct_info('AllocationTransactionTargetShop') ->
+    {struct, struct, [
+        {1, required, string, 'owner_id', undefined},
+        {2, required, string, 'shop_id', undefined}
+    ]};
+
+struct_info('AllocationTransactionBodyTotal') ->
+    {struct, struct, [
+        {1, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionTarget'}}, 'fee_target', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'total', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'fee_amount', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionFeeShare'}}, 'fee', undefined}
+    ]};
+
+struct_info('AllocationTransactionFeeShare') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
+    ]};
+
+struct_info('AllocationTransactionDetails') ->
+    {struct, struct, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
     ]};
 
 struct_info('InvoiceUnpaid') ->
@@ -4361,7 +4607,8 @@ struct_info('InvoicePaymentCaptured') ->
     {struct, struct, [
         {1, optional, string, 'reason', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cost', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoicePaymentCancelled') ->
@@ -4706,7 +4953,8 @@ struct_info('InvoicePaymentRefund') ->
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
         {5, optional, string, 'reason', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-        {9, optional, string, 'external_id', undefined}
+        {9, optional, string, 'external_id', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundStatus') ->
@@ -5143,7 +5391,8 @@ struct_info('PaymentsServiceTerms') ->
         {6, optional, {struct, union, {dmsl_domain_thrift, 'CashFlowSelector'}}, 'fees', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentHoldsServiceTerms'}}, 'holds', undefined},
         {8, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentRefundsServiceTerms'}}, 'refunds', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined}
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentChargebackServiceTerms'}}, 'chargebacks', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentAllocationServiceTerms'}}, 'allocations', undefined}
     ]};
 
 struct_info('PaymentHoldsServiceTerms') ->
@@ -5174,6 +5423,11 @@ struct_info('PaymentRefundsServiceTerms') ->
 struct_info('PartialRefundsServiceTerms') ->
     {struct, struct, [
         {1, optional, {struct, union, {dmsl_domain_thrift, 'CashLimitSelector'}}, 'cash_limit', undefined}
+    ]};
+
+struct_info('PaymentAllocationServiceTerms') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allow', undefined}
     ]};
 
 struct_info('RecurrentPaytoolsServiceTerms') ->
@@ -5755,7 +6009,50 @@ struct_info('FinalCashFlowPosting') ->
 struct_info('FinalCashFlowAccount') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'CashFlowAccount'}}, 'account_type', undefined},
-        {2, required, i64, 'account_id', undefined}
+        {2, required, i64, 'account_id', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'TransactionAccount'}}, 'transaction_account', undefined}
+    ]};
+
+struct_info('TransactionAccount') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'MerchantTransactionAccount'}}, 'merchant', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderTransactionAccount'}}, 'provider', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'SystemTransactionAccount'}}, 'system', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'ExternalTransactionAccount'}}, 'external', undefined}
+    ]};
+
+struct_info('MerchantTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'MerchantCashFlowAccount'}}, 'type', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'MerchantTransactionAccountOwner'}}, 'owner', undefined}
+    ]};
+
+struct_info('MerchantTransactionAccountOwner') ->
+    {struct, struct, [
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined}
+    ]};
+
+struct_info('ProviderTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'ProviderCashFlowAccount'}}, 'type', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ProviderTransactionAccountOwner'}}, 'owner', undefined}
+    ]};
+
+struct_info('ProviderTransactionAccountOwner') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ProviderTerminalRef'}}, 'terminal_ref', undefined}
+    ]};
+
+struct_info('SystemTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'SystemCashFlowAccount'}}, 'type', undefined}
+    ]};
+
+struct_info('ExternalTransactionAccount') ->
+    {struct, struct, [
+        {1, required, {enum, {dmsl_domain_thrift, 'ExternalCashFlowAccount'}}, 'type', undefined}
     ]};
 
 struct_info('CashVolume') ->
@@ -6949,6 +7246,42 @@ record_name('InvoiceLine') ->
 record_name('InvoiceRussianBankAccount') ->
     'domain_InvoiceRussianBankAccount';
 
+record_name('AllocationPrototype') ->
+    'domain_AllocationPrototype';
+
+record_name('AllocationTransactionPrototype') ->
+    'domain_AllocationTransactionPrototype';
+
+record_name('AllocationTransactionPrototypeBodyAmount') ->
+    'domain_AllocationTransactionPrototypeBodyAmount';
+
+record_name('AllocationTransactionPrototypeBodyTotal') ->
+    'domain_AllocationTransactionPrototypeBodyTotal';
+
+record_name('AllocationTransactionPrototypeFeeShare') ->
+    'domain_AllocationTransactionPrototypeFeeShare';
+
+record_name('AllocationTransactionPrototypeFeeFixed') ->
+    'domain_AllocationTransactionPrototypeFeeFixed';
+
+record_name('Allocation') ->
+    'domain_Allocation';
+
+record_name('AllocationTransaction') ->
+    'domain_AllocationTransaction';
+
+record_name('AllocationTransactionTargetShop') ->
+    'domain_AllocationTransactionTargetShop';
+
+record_name('AllocationTransactionBodyTotal') ->
+    'domain_AllocationTransactionBodyTotal';
+
+record_name('AllocationTransactionFeeShare') ->
+    'domain_AllocationTransactionFeeShare';
+
+record_name('AllocationTransactionDetails') ->
+    'domain_AllocationTransactionDetails';
+
 record_name('InvoiceUnpaid') ->
     'domain_InvoiceUnpaid';
 
@@ -7282,6 +7615,9 @@ record_name('PaymentRefundsServiceTerms') ->
 record_name('PartialRefundsServiceTerms') ->
     'domain_PartialRefundsServiceTerms';
 
+record_name('PaymentAllocationServiceTerms') ->
+    'domain_PaymentAllocationServiceTerms';
+
 record_name('RecurrentPaytoolsServiceTerms') ->
     'domain_RecurrentPaytoolsServiceTerms';
 
@@ -7485,6 +7821,24 @@ record_name('FinalCashFlowPosting') ->
 
 record_name('FinalCashFlowAccount') ->
     'domain_FinalCashFlowAccount';
+
+record_name('MerchantTransactionAccount') ->
+    'domain_MerchantTransactionAccount';
+
+record_name('MerchantTransactionAccountOwner') ->
+    'domain_MerchantTransactionAccountOwner';
+
+record_name('ProviderTransactionAccount') ->
+    'domain_ProviderTransactionAccount';
+
+record_name('ProviderTransactionAccountOwner') ->
+    'domain_ProviderTransactionAccountOwner';
+
+record_name('SystemTransactionAccount') ->
+    'domain_SystemTransactionAccount';
+
+record_name('ExternalTransactionAccount') ->
+    'domain_ExternalTransactionAccount';
 
 record_name('CashVolumeFixed') ->
     'domain_CashVolumeFixed';

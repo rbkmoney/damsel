@@ -538,6 +538,7 @@ struct InvoiceParams {
     7: required domain.InvoiceID id
     8: optional string external_id
     9: optional domain.InvoiceClientInfo client_info
+    10: optional domain.AllocationPrototype allocation
 }
 
 struct InvoiceWithTemplateParams {
@@ -624,6 +625,7 @@ struct InvoicePayment {
     5: required list<InvoicePaymentSession> sessions
     8: optional list<InvoicePaymentChargeback> chargebacks
     9: optional domain.TransactionInfo last_transaction_info
+    11: optional domain.Allocation allocaton
     # deprecated
     3: required list<domain.InvoicePaymentRefund> legacy_refunds
 }
@@ -779,6 +781,11 @@ struct InvoicePaymentRefundParams {
      * Внешний идентификатор объекта
      */
     6: optional string external_id
+    /**
+     * Распределение денежных средств возврата.
+     * Используется при частичном возврате, содержит транзакции, которые нужно вернуть.
+     */
+    7: optional domain.AllocationPrototype allocation
 }
 
 /**
@@ -793,6 +800,7 @@ struct InvoicePaymentCaptureParams {
      */
     2: optional domain.Cash cash
     3: optional domain.InvoiceCart cart
+    4: optional domain.AllocationPrototype allocation
 }
 
 /**
