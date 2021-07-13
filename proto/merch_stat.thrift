@@ -247,7 +247,7 @@ typedef base.ID PayoutID
 
 /**
 * Информация о выплате
-* 
+*
 */
 struct StatPayout {
     1 : required PayoutID id
@@ -259,11 +259,6 @@ struct StatPayout {
     7 : required domain.Amount fee
     8 : required string currency_symbolic_code
     9 : required domain.PayoutToolInfo payout_tool_info
-}
-
-union PayoutAccount {
-    1: domain.RussianBankAccount       russian_bank_account
-    2: domain.InternationalBankAccount international_bank_account
 }
 
 union PayoutStatus {
