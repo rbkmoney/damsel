@@ -2284,7 +2284,7 @@ struct ProviderTransactionAccount {
 
 struct ProviderTransactionAccountOwner {
     1: required ProviderRef provider_ref
-    2: required ProviderTerminalRef terminal_ref
+    2: required TerminalRef terminal_ref
 }
 
 struct SystemTransactionAccount {

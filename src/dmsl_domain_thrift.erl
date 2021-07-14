@@ -6042,7 +6042,7 @@ struct_info('ProviderTransactionAccount') ->
 struct_info('ProviderTransactionAccountOwner') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_ref', undefined},
-        {2, required, {struct, struct, {dmsl_domain_thrift, 'ProviderTerminalRef'}}, 'terminal_ref', undefined}
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_ref', undefined}
     ]};
 
 struct_info('SystemTransactionAccount') ->

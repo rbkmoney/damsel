@@ -1341,7 +1341,7 @@
 %% struct 'ProviderTransactionAccountOwner'
 -record('domain_ProviderTransactionAccountOwner', {
     'provider_ref' :: dmsl_domain_thrift:'ProviderRef'(),
-    'terminal_ref' :: dmsl_domain_thrift:'ProviderTerminalRef'()
+    'terminal_ref' :: dmsl_domain_thrift:'TerminalRef'()
 }).
 
 %% struct 'SystemTransactionAccount'
