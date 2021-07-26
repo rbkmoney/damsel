@@ -465,7 +465,13 @@
 
 %% struct 'InvoiceRepairFailSession'
 -record('payproc_InvoiceRepairFailSession', {
-    'failure' :: dmsl_domain_thrift:'Failure'()
+    'failure' :: dmsl_domain_thrift:'Failure'(),
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'InvoiceRepairFulfillSession'
+-record('payproc_InvoiceRepairFulfillSession', {
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'InvoiceRepairComplex'
