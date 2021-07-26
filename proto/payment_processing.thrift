@@ -853,10 +853,8 @@ struct InvoiceRepairFailSession {
 
 /*  Сценарий, позволяющий сымитировать положительный результат похода к адаптеру */
 
-struct InvoiceRepairFullfillSession {
-    // см. `proxy_provider` `Success`
-    1:  optional domain.Token token
-    2:  optional domain.TransactionInfo trx
+struct InvoiceRepairFulfillSession {
+    1:  optional domain.TransactionInfo trx
 }
 
 /* Комбинированная структура */
@@ -870,7 +868,7 @@ union InvoiceRepairScenario{
     2: InvoiceRepairFailPreProcessing fail_pre_processing
     3: InvoiceRepairSkipInspector skip_inspector
     4: InvoiceRepairFailSession fail_session
-    5: InvoiceRepairFullfillSession fullfill_session
+    5: InvoiceRepairFulfillSession fulfill_session
 }
 
 /* Параметры adhoc починки упавшей машины. */
