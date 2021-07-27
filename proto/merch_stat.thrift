@@ -452,6 +452,11 @@ service MerchantStatistics {
     StatResponse GetPayments(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
+     * Возвращает набор данных о рефандах
+     */
+    StatResponse GetRefunds(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+    /**
      *  Возвращает набор данных об инвойсах
      */
     StatResponse GetInvoices(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
