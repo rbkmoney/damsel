@@ -34,6 +34,7 @@ struct StatPayment {
     20: optional string external_id
     21: optional domain.ProviderRef provider_id
     22: optional domain.TerminalRef terminal_id
+    23: optional domain.Allocation allocation
 }
 
 union Payer {
@@ -294,6 +295,7 @@ struct StatRefund {
     11: optional string reason
     12: optional domain.InvoiceCart cart
     13: optional string external_id
+    14: optional domain.Allocation allocation
 }
 
 union InvoicePaymentRefundStatus {
