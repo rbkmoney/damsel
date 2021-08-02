@@ -1202,6 +1202,7 @@ enum PayoutMethod {
     russian_bank_account
     international_bank_account
     wallet_info
+    payment_institution_account
 }
 
 struct PayoutMethodRef { 1: required PayoutMethod id }
