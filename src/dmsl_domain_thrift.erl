@@ -715,7 +715,8 @@
 -type 'PayoutMethod'() ::
     'russian_bank_account' |
     'international_bank_account' |
-    'wallet_info'.
+    'wallet_info' |
+    'payment_institution_account'.
 
 %% enum 'CountryCode'
 -type 'CountryCode'() ::
@@ -3814,7 +3815,8 @@ enum_info('PayoutMethod') ->
     {enum, [
         {'russian_bank_account', 0},
         {'international_bank_account', 1},
-        {'wallet_info', 2}
+        {'wallet_info', 2},
+        {'payment_institution_account', 3}
     ]};
 
 enum_info('CountryCode') ->

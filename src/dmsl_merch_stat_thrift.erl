@@ -34,7 +34,6 @@
 -export_type([
     'DigitalWalletID'/0,
     'PayoutID'/0,
-    'PayoutSummary'/0,
     'StatInfo'/0,
     'InvalidRequest'/0
 ]).
@@ -43,8 +42,7 @@
     'MobileOperator'/0,
     'CryptoCurrency'/0,
     'TerminalPaymentProvider'/0,
-    'DigitalWalletProvider'/0,
-    'OperationType'/0
+    'DigitalWalletProvider'/0
 ]).
 -export_type([
     'StatPayment'/0,
@@ -72,9 +70,6 @@
     'BankCard'/0,
     'PaymentTerminal'/0,
     'DigitalWallet'/0,
-    'RussianBankAccount'/0,
-    'InternationalBankAccount'/0,
-    'InternationalBankDetails'/0,
     'StatInvoice'/0,
     'EnrichedStatInvoice'/0,
     'InvoiceUnpaid'/0,
@@ -84,13 +79,6 @@
     'InvoiceStatus'/0,
     'StatCustomer'/0,
     'StatPayout'/0,
-    'PayoutSummaryItem'/0,
-    'PayoutType'/0,
-    'Wallet'/0,
-    'PayoutCard'/0,
-    'PayoutAccount'/0,
-    'RussianPayoutAccount'/0,
-    'InternationalPayoutAccount'/0,
     'PayoutStatus'/0,
     'PayoutUnpaid'/0,
     'PayoutPaid'/0,
@@ -118,13 +106,11 @@
 -type typedef_name() ::
     'DigitalWalletID' |
     'PayoutID' |
-    'PayoutSummary' |
     'StatInfo' |
     'InvalidRequest'.
 
 -type 'DigitalWalletID'() :: binary().
 -type 'PayoutID'() :: dmsl_base_thrift:'ID'().
--type 'PayoutSummary'() :: ['PayoutSummaryItem'()].
 -type 'StatInfo'() :: #{binary() => binary()}.
 -type 'InvalidRequest'() :: dmsl_base_thrift:'InvalidRequest'().
 
@@ -136,8 +122,7 @@
     'MobileOperator' |
     'CryptoCurrency' |
     'TerminalPaymentProvider' |
-    'DigitalWalletProvider' |
-    'OperationType'.
+    'DigitalWalletProvider'.
 
 %% enum 'OnHoldExpiration'
 -type 'OnHoldExpiration'() ::
@@ -175,11 +160,6 @@
 -type 'DigitalWalletProvider'() ::
     'qiwi'.
 
-%% enum 'OperationType'
--type 'OperationType'() ::
-    'payment' |
-    'refund'.
-
 %%
 %% structs, unions and exceptions
 %%
@@ -209,9 +189,6 @@
     'BankCard' |
     'PaymentTerminal' |
     'DigitalWallet' |
-    'RussianBankAccount' |
-    'InternationalBankAccount' |
-    'InternationalBankDetails' |
     'StatInvoice' |
     'EnrichedStatInvoice' |
     'InvoiceUnpaid' |
@@ -221,13 +198,6 @@
     'InvoiceStatus' |
     'StatCustomer' |
     'StatPayout' |
-    'PayoutSummaryItem' |
-    'PayoutType' |
-    'Wallet' |
-    'PayoutCard' |
-    'PayoutAccount' |
-    'RussianPayoutAccount' |
-    'InternationalPayoutAccount' |
     'PayoutStatus' |
     'PayoutUnpaid' |
     'PayoutPaid' |
@@ -340,15 +310,6 @@
 %% struct 'DigitalWallet'
 -type 'DigitalWallet'() :: #'merchstat_DigitalWallet'{}.
 
-%% struct 'RussianBankAccount'
--type 'RussianBankAccount'() :: #'merchstat_RussianBankAccount'{}.
-
-%% struct 'InternationalBankAccount'
--type 'InternationalBankAccount'() :: #'merchstat_InternationalBankAccount'{}.
-
-%% struct 'InternationalBankDetails'
--type 'InternationalBankDetails'() :: #'merchstat_InternationalBankDetails'{}.
-
 %% struct 'StatInvoice'
 -type 'StatInvoice'() :: #'merchstat_StatInvoice'{}.
 
@@ -379,32 +340,6 @@
 
 %% struct 'StatPayout'
 -type 'StatPayout'() :: #'merchstat_StatPayout'{}.
-
-%% struct 'PayoutSummaryItem'
--type 'PayoutSummaryItem'() :: #'merchstat_PayoutSummaryItem'{}.
-
-%% union 'PayoutType'
--type 'PayoutType'() ::
-    {'bank_card', 'PayoutCard'()} |
-    {'bank_account', 'PayoutAccount'()} |
-    {'wallet', 'Wallet'()}.
-
-%% struct 'Wallet'
--type 'Wallet'() :: #'merchstat_Wallet'{}.
-
-%% struct 'PayoutCard'
--type 'PayoutCard'() :: #'merchstat_PayoutCard'{}.
-
-%% union 'PayoutAccount'
--type 'PayoutAccount'() ::
-    {'russian_payout_account', 'RussianPayoutAccount'()} |
-    {'international_payout_account', 'InternationalPayoutAccount'()}.
-
-%% struct 'RussianPayoutAccount'
--type 'RussianPayoutAccount'() :: #'merchstat_RussianPayoutAccount'{}.
-
-%% struct 'InternationalPayoutAccount'
--type 'InternationalPayoutAccount'() :: #'merchstat_InternationalPayoutAccount'{}.
 
 %% union 'PayoutStatus'
 -type 'PayoutStatus'() ::
@@ -518,8 +453,7 @@
     'MobileOperator'() |
     'CryptoCurrency'() |
     'TerminalPaymentProvider'() |
-    'DigitalWalletProvider'() |
-    'OperationType'().
+    'DigitalWalletProvider'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -532,7 +466,6 @@ typedefs() ->
     [
         'DigitalWalletID',
         'PayoutID',
-        'PayoutSummary',
         'StatInfo',
         'InvalidRequest'
     ].
@@ -545,8 +478,7 @@ enums() ->
         'MobileOperator',
         'CryptoCurrency',
         'TerminalPaymentProvider',
-        'DigitalWalletProvider',
-        'OperationType'
+        'DigitalWalletProvider'
     ].
 
 -spec structs() -> [struct_name()].
@@ -578,9 +510,6 @@ structs() ->
         'BankCard',
         'PaymentTerminal',
         'DigitalWallet',
-        'RussianBankAccount',
-        'InternationalBankAccount',
-        'InternationalBankDetails',
         'StatInvoice',
         'EnrichedStatInvoice',
         'InvoiceUnpaid',
@@ -590,13 +519,6 @@ structs() ->
         'InvoiceStatus',
         'StatCustomer',
         'StatPayout',
-        'PayoutSummaryItem',
-        'PayoutType',
-        'Wallet',
-        'PayoutCard',
-        'PayoutAccount',
-        'RussianPayoutAccount',
-        'InternationalPayoutAccount',
         'PayoutStatus',
         'PayoutUnpaid',
         'PayoutPaid',
@@ -633,9 +555,6 @@ typedef_info('DigitalWalletID') ->
 
 typedef_info('PayoutID') ->
     string;
-
-typedef_info('PayoutSummary') ->
-    {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}};
 
 typedef_info('StatInfo') ->
     {map, string, string};
@@ -686,12 +605,6 @@ enum_info('TerminalPaymentProvider') ->
 enum_info('DigitalWalletProvider') ->
     {enum, [
         {'qiwi', 0}
-    ]};
-
-enum_info('OperationType') ->
-    {enum, [
-        {'payment', 0},
-        {'refund', 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -874,32 +787,6 @@ struct_info('DigitalWallet') ->
         {2, required, string, 'id', undefined}
     ]};
 
-struct_info('RussianBankAccount') ->
-    {struct, struct, [
-        {1, required, string, 'account', undefined},
-        {2, required, string, 'bank_name', undefined},
-        {3, required, string, 'bank_post_account', undefined},
-        {4, required, string, 'bank_bik', undefined}
-    ]};
-
-struct_info('InternationalBankAccount') ->
-    {struct, struct, [
-        {1, optional, string, 'number', undefined},
-        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankDetails'}}, 'bank', undefined},
-        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'correspondent_account', undefined},
-        {4, optional, string, 'iban', undefined},
-        {5, optional, string, 'account_holder', undefined}
-    ]};
-
-struct_info('InternationalBankDetails') ->
-    {struct, struct, [
-        {1, optional, string, 'bic', undefined},
-        {2, optional, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'country', undefined},
-        {3, optional, string, 'name', undefined},
-        {4, optional, string, 'address', undefined},
-        {5, optional, string, 'aba_rtn', undefined}
-    ]};
-
 struct_info('StatInvoice') ->
     {struct, struct, [
         {1, required, string, 'id', undefined},
@@ -968,55 +855,7 @@ struct_info('StatPayout') ->
         {6, required, i64, 'amount', undefined},
         {7, required, i64, 'fee', undefined},
         {8, required, string, 'currency_symbolic_code', undefined},
-        {9, required, {struct, union, {dmsl_merch_stat_thrift, 'PayoutType'}}, 'type', undefined},
-        {10, optional, {list, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutSummaryItem'}}}, 'summary', undefined}
-    ]};
-
-struct_info('PayoutSummaryItem') ->
-    {struct, struct, [
-        {1, required, i64, 'amount', undefined},
-        {2, required, i64, 'fee', undefined},
-        {3, required, string, 'currency_symbolic_code', undefined},
-        {4, required, string, 'from_time', undefined},
-        {5, required, string, 'to_time', undefined},
-        {6, required, {enum, {dmsl_merch_stat_thrift, 'OperationType'}}, 'operation_type', undefined},
-        {7, required, i32, 'count', undefined}
-    ]};
-
-struct_info('PayoutType') ->
-    {struct, union, [
-        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutCard'}}, 'bank_card', undefined},
-        {2, optional, {struct, union, {dmsl_merch_stat_thrift, 'PayoutAccount'}}, 'bank_account', undefined},
-        {3, optional, {struct, struct, {dmsl_merch_stat_thrift, 'Wallet'}}, 'wallet', undefined}
-    ]};
-
-struct_info('Wallet') ->
-    {struct, struct, [
-        {1, required, string, 'wallet_id', undefined}
-    ]};
-
-struct_info('PayoutCard') ->
-    {struct, struct, [
-        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'BankCard'}}, 'card', undefined}
-    ]};
-
-struct_info('PayoutAccount') ->
-    {struct, union, [
-        {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'RussianPayoutAccount'}}, 'russian_payout_account', undefined},
-        {2, optional, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalPayoutAccount'}}, 'international_payout_account', undefined}
-    ]};
-
-struct_info('RussianPayoutAccount') ->
-    {struct, struct, [
-        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'RussianBankAccount'}}, 'bank_account', undefined},
-        {2, required, string, 'inn', undefined},
-        {3, required, string, 'purpose', undefined}
-    ]};
-
-struct_info('InternationalPayoutAccount') ->
-    {struct, struct, [
-        {1, required, {struct, struct, {dmsl_merch_stat_thrift, 'InternationalBankAccount'}}, 'bank_account', undefined},
-        {2, required, string, 'purpose', undefined}
+        {9, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined}
     ]};
 
 struct_info('PayoutStatus') ->
@@ -1195,15 +1034,6 @@ record_name('PaymentTerminal') ->
 record_name('DigitalWallet') ->
     'merchstat_DigitalWallet';
 
-record_name('RussianBankAccount') ->
-    'merchstat_RussianBankAccount';
-
-record_name('InternationalBankAccount') ->
-    'merchstat_InternationalBankAccount';
-
-record_name('InternationalBankDetails') ->
-    'merchstat_InternationalBankDetails';
-
 record_name('StatInvoice') ->
     'merchstat_StatInvoice';
 
@@ -1227,21 +1057,6 @@ record_name('StatCustomer') ->
 
 record_name('StatPayout') ->
     'merchstat_StatPayout';
-
-record_name('PayoutSummaryItem') ->
-    'merchstat_PayoutSummaryItem';
-
-record_name('Wallet') ->
-    'merchstat_Wallet';
-
-record_name('PayoutCard') ->
-    'merchstat_PayoutCard';
-
-record_name('RussianPayoutAccount') ->
-    'merchstat_RussianPayoutAccount';
-
-record_name('InternationalPayoutAccount') ->
-    'merchstat_InternationalPayoutAccount';
 
 record_name('PayoutUnpaid') ->
     'merchstat_PayoutUnpaid';
