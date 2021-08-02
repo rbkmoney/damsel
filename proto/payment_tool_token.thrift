@@ -10,13 +10,13 @@ namespace erlang ptt
     Платежный токен может иметь срок действия, по истечении которого становится недействительным.
 
     Токен может быть привязан к определённой сущности - это сделает невозможным
-    его использование в остальных случаях. Для контроля привязки используется контекст TokenLink
-    из https://github.com/rbkmoney/bouncer-proto/blob/master/proto/context_v1.thrift
+    его использование в остальных случаях. Контроль осуществляется средствами bouncer
+    https://github.com/rbkmoney/bouncer-proto/blob/master/proto/context_v1.thrift
 */
 struct PaymentToolToken {
     1: required PaymentToolTokenPayload payload
     2: optional base.Timestamp valid_until
-    3: optional binary token_link
+    3: optional base.Opaque bouncer_data
 }
 
 /**
