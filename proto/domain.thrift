@@ -2667,7 +2667,7 @@ struct DocumentType {
 }
 
 struct BinData {
-    1: optional string payment_system
+    1: required string payment_system
     2: optional string bank_name
 }
 
