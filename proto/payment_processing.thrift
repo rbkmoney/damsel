@@ -1959,6 +1959,7 @@ struct Varset {
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
     11: optional domain.PartyID party_id
+    12: optional domain.BinData bin_data
 }
 
 struct PartyParams {

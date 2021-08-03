@@ -683,7 +683,8 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'identification_level' :: atom() | undefined,
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined,
-    'party_id' :: dmsl_domain_thrift:'PartyID'() | undefined
+    'party_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
+    'bin_data' :: dmsl_domain_thrift:'BinData'() | undefined
 }).
 
 %% struct 'PartyParams'

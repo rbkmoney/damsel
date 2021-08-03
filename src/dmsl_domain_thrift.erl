@@ -443,6 +443,7 @@
     'Criterion'/0,
     'DocumentTypeRef'/0,
     'DocumentType'/0,
+    'BinData'/0,
     'ProxyRef'/0,
     'ProxyDefinition'/0,
     'Proxy'/0,
@@ -1414,6 +1415,7 @@
     'Criterion' |
     'DocumentTypeRef' |
     'DocumentType' |
+    'BinData' |
     'ProxyRef' |
     'ProxyDefinition' |
     'Proxy' |
@@ -2692,6 +2694,9 @@
 %% struct 'DocumentType'
 -type 'DocumentType'() :: #'domain_DocumentType'{}.
 
+%% struct 'BinData'
+-type 'BinData'() :: #'domain_BinData'{}.
+
 %% struct 'ProxyRef'
 -type 'ProxyRef'() :: #'domain_ProxyRef'{}.
 
@@ -3503,6 +3508,7 @@ structs() ->
         'Criterion',
         'DocumentTypeRef',
         'DocumentType',
+        'BinData',
         'ProxyRef',
         'ProxyDefinition',
         'Proxy',
@@ -6346,6 +6352,12 @@ struct_info('DocumentType') ->
         {2, optional, string, 'description', undefined}
     ]};
 
+struct_info('BinData') ->
+    {struct, struct, [
+        {1, required, string, 'payment_system', undefined},
+        {2, optional, string, 'bank_name', undefined}
+    ]};
+
 struct_info('ProxyRef') ->
     {struct, struct, [
         {1, required, i32, 'id', undefined}
@@ -7676,6 +7688,9 @@ record_name('DocumentTypeRef') ->
 
 record_name('DocumentType') ->
     'domain_DocumentType';
+
+record_name('BinData') ->
+    'domain_BinData';
 
 record_name('ProxyRef') ->
     'domain_ProxyRef';
