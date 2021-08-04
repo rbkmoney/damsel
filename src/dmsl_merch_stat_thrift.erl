@@ -414,6 +414,7 @@
 
 -type 'MerchantStatistics_service_functions'() ::
     'GetPayments' |
+    'GetRefunds' |
     'GetInvoices' |
     'GetCustomers' |
     'GetPayouts' |
@@ -1100,6 +1101,7 @@ record_name(_) -> error(badarg).
 functions('MerchantStatistics') ->
     [
         'GetPayments',
+        'GetRefunds',
         'GetInvoices',
         'GetCustomers',
         'GetPayouts',
@@ -1124,6 +1126,17 @@ function_info('MerchantStatistics', 'GetPayments', params_type) ->
 function_info('MerchantStatistics', 'GetPayments', reply_type) ->
     {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
 function_info('MerchantStatistics', 'GetPayments', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
+    ]};
+function_info('MerchantStatistics', 'GetRefunds', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
+function_info('MerchantStatistics', 'GetRefunds', reply_type) ->
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetRefunds', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
