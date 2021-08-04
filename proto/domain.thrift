@@ -2666,6 +2666,11 @@ struct DocumentType {
     2: optional string description
 }
 
+struct BinData {
+    1: required string payment_system
+    2: optional string bank_name
+}
+
 /* Proxies */
 
 typedef base.StringMap ProxyOptions
