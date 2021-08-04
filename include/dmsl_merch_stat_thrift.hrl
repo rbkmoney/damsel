@@ -29,7 +29,8 @@
     'additional_transaction_info' :: dmsl_domain_thrift:'AdditionalTransactionInfo'() | undefined,
     'external_id' :: binary() | undefined,
     'provider_id' :: dmsl_domain_thrift:'ProviderRef'() | undefined,
-    'terminal_id' :: dmsl_domain_thrift:'TerminalRef'() | undefined
+    'terminal_id' :: dmsl_domain_thrift:'TerminalRef'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'RecurrentParentPayment'
@@ -236,7 +237,8 @@
     'currency_symbolic_code' :: binary(),
     'reason' :: binary() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundPending'
