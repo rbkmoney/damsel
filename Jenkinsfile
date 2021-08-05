@@ -14,26 +14,14 @@ build('damsel', 'docker-host') {
         gitUtils = load("${env.JENKINS_LIB}/gitUtils.groovy")
     }
 
-    pipeDefault() {
-
-        runStage('compile') {
+    runStage('compile') {
+        withGithubPrivkey {
             sh "make wc_compile"
-        }
-
-        // Erlang
-        runStage('Generate Erlang lib') {
-          sh "make wc_release-erlang"
-        }
-        if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME.startsWith('epic/')) {
-          runStage('Publish Erlang lib') {
-            dir("_release/erlang") {
-              gitUtils.push(commitMsg: "Generated from commit: $COMMIT_ID \n\non $BRANCH_NAME in $RBK_REPO_URL\n\nChanges:\n$COMMIT_MSG",
-                            files: "*", branch: "release/erlang/$BRANCH_NAME", orphan: true)
-            }
-          }
         }
     }
 
-    env.skipSonar = 'true'
-    pipeJavaProto()
+    pipeDefault() {
+        env.skipSonar = 'true'
+        pipeJavaProto()
+    }
 }

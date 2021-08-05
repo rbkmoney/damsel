@@ -1,0 +1,11 @@
+{application, damsel, [
+    {description, "Thrift proto for damsel"},
+    {vsn, "0.1.0"},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {maintainers, [
+        "RBK Money https://rbk.money"
+    ]}
+]}.
