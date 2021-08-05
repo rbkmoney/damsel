@@ -248,9 +248,8 @@ struct StatCustomer {
 typedef base.ID PayoutID
 
 /**
-* Информация о выплате
-* 
-*/
+ * Информация о выплате
+ */
 struct StatPayout {
     1 : required PayoutID id
     2 : required domain.PartyID party_id
@@ -261,11 +260,6 @@ struct StatPayout {
     7 : required domain.Amount fee
     8 : required string currency_symbolic_code
     9 : required domain.PayoutToolInfo payout_tool_info
-}
-
-union PayoutAccount {
-    1: domain.RussianBankAccount       russian_bank_account
-    2: domain.InternationalBankAccount international_bank_account
 }
 
 union PayoutStatus {
@@ -388,6 +382,11 @@ service MerchantStatistics {
      * Возвращает набор данных о платежах
      */
     StatResponse GetPayments(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
+
+    /**
+     * Возвращает набор данных о рефандах
+     */
+    StatResponse GetRefunds(1: StatRequest req) throws (1: InvalidRequest ex1, 3: BadToken ex3)
 
     /**
      *  Возвращает набор данных об инвойсах

@@ -231,6 +231,7 @@ struct InvoicePaymentRiskScoreChanged {
 struct InvoicePaymentRouteChanged {
     /** Выбранный маршрут обработки платежа. */
     1: required domain.PaymentRoute route
+    2: optional set<domain.PaymentRoute> candidates
 }
 
 /**
@@ -852,10 +853,17 @@ struct InvoiceRepairSkipInspector {
     1:  required domain.RiskScore risk_score
 }
 
-/* Сценарий, использующий заданную ошибку, чтобы сконструировать результат похода к адаптеру */
+/* Сценарий, позволяющий сымитировать отрицательный результат похода к адаптеру */
 
 struct InvoiceRepairFailSession {
     1:  required domain.Failure failure
+    2:  optional domain.TransactionInfo trx
+}
+
+/*  Сценарий, позволяющий сымитировать положительный результат похода к адаптеру */
+
+struct InvoiceRepairFulfillSession {
+    1:  optional domain.TransactionInfo trx
 }
 
 /* Комбинированная структура */
@@ -869,6 +877,7 @@ union InvoiceRepairScenario{
     2: InvoiceRepairFailPreProcessing fail_pre_processing
     3: InvoiceRepairSkipInspector skip_inspector
     4: InvoiceRepairFailSession fail_session
+    5: InvoiceRepairFulfillSession fulfill_session
 }
 
 /* Параметры adhoc починки упавшей машины. */
@@ -1959,6 +1968,7 @@ struct Varset {
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
     11: optional domain.PartyID party_id
+    12: optional domain.BinData bin_data
 }
 
 struct PartyParams {
