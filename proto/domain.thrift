@@ -1202,6 +1202,7 @@ enum PayoutMethod {
     russian_bank_account
     international_bank_account
     wallet_info
+    payment_institution_account
 }
 
 struct PayoutMethodRef { 1: required PayoutMethod id }
@@ -2663,6 +2664,11 @@ struct DocumentTypeRef { 1: required ObjectID id }
 struct DocumentType {
     1: required string name
     2: optional string description
+}
+
+struct BinData {
+    1: required string payment_system
+    2: optional string bank_name
 }
 
 /* Proxies */
