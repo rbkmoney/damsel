@@ -231,6 +231,7 @@ struct InvoicePaymentRiskScoreChanged {
 struct InvoicePaymentRouteChanged {
     /** Выбранный маршрут обработки платежа. */
     1: required domain.PaymentRoute route
+    2: optional set<domain.PaymentRoute> candidates
 }
 
 /**

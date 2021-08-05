@@ -2403,7 +2403,8 @@ struct_info('InvoicePaymentRiskScoreChanged') ->
 
 struct_info('InvoicePaymentRouteChanged') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}}, 'candidates', undefined}
     ]};
 
 struct_info('InvoicePaymentCashFlowChanged') ->

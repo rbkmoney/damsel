@@ -93,7 +93,8 @@
 
 %% struct 'InvoicePaymentRouteChanged'
 -record('payproc_InvoicePaymentRouteChanged', {
-    'route' :: dmsl_domain_thrift:'PaymentRoute'()
+    'route' :: dmsl_domain_thrift:'PaymentRoute'(),
+    'candidates' :: ordsets:ordset(dmsl_domain_thrift:'PaymentRoute'()) | undefined
 }).
 
 %% struct 'InvoicePaymentCashFlowChanged'
