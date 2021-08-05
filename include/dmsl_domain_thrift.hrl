@@ -1761,6 +1761,12 @@
     'description' :: binary() | undefined
 }).
 
+%% struct 'BinData'
+-record('domain_BinData', {
+    'payment_system' :: binary(),
+    'bank_name' :: binary() | undefined
+}).
+
 %% struct 'ProxyRef'
 -record('domain_ProxyRef', {
     'id' :: dmsl_domain_thrift:'ObjectID'()

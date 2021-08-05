@@ -79,7 +79,6 @@
     'InvoiceStatus'/0,
     'StatCustomer'/0,
     'StatPayout'/0,
-    'PayoutAccount'/0,
     'PayoutStatus'/0,
     'PayoutUnpaid'/0,
     'PayoutPaid'/0,
@@ -199,7 +198,6 @@
     'InvoiceStatus' |
     'StatCustomer' |
     'StatPayout' |
-    'PayoutAccount' |
     'PayoutStatus' |
     'PayoutUnpaid' |
     'PayoutPaid' |
@@ -343,11 +341,6 @@
 %% struct 'StatPayout'
 -type 'StatPayout'() :: #'merchstat_StatPayout'{}.
 
-%% union 'PayoutAccount'
--type 'PayoutAccount'() ::
-    {'russian_bank_account', dmsl_domain_thrift:'RussianBankAccount'()} |
-    {'international_bank_account', dmsl_domain_thrift:'InternationalBankAccount'()}.
-
 %% union 'PayoutStatus'
 -type 'PayoutStatus'() ::
     {'unpaid', 'PayoutUnpaid'()} |
@@ -421,6 +414,7 @@
 
 -type 'MerchantStatistics_service_functions'() ::
     'GetPayments' |
+    'GetRefunds' |
     'GetInvoices' |
     'GetCustomers' |
     'GetPayouts' |
@@ -525,7 +519,6 @@ structs() ->
         'InvoiceStatus',
         'StatCustomer',
         'StatPayout',
-        'PayoutAccount',
         'PayoutStatus',
         'PayoutUnpaid',
         'PayoutPaid',
@@ -867,12 +860,6 @@ struct_info('StatPayout') ->
         {9, required, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'payout_tool_info', undefined}
     ]};
 
-struct_info('PayoutAccount') ->
-    {struct, union, [
-        {1, optional, {struct, struct, {dmsl_domain_thrift, 'RussianBankAccount'}}, 'russian_bank_account', undefined},
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'InternationalBankAccount'}}, 'international_bank_account', undefined}
-    ]};
-
 struct_info('PayoutStatus') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_merch_stat_thrift, 'PayoutUnpaid'}}, 'unpaid', undefined},
@@ -1117,6 +1104,7 @@ record_name(_) -> error(badarg).
 functions('MerchantStatistics') ->
     [
         'GetPayments',
+        'GetRefunds',
         'GetInvoices',
         'GetCustomers',
         'GetPayouts',
@@ -1141,6 +1129,17 @@ function_info('MerchantStatistics', 'GetPayments', params_type) ->
 function_info('MerchantStatistics', 'GetPayments', reply_type) ->
     {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
 function_info('MerchantStatistics', 'GetPayments', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
+        {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
+    ]};
+function_info('MerchantStatistics', 'GetRefunds', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_merch_stat_thrift, 'StatRequest'}}, 'req', undefined}
+    ]};
+function_info('MerchantStatistics', 'GetRefunds', reply_type) ->
+    {struct, struct, {dmsl_merch_stat_thrift, 'StatResponse'}};
+function_info('MerchantStatistics', 'GetRefunds', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined},
         {3, undefined, {struct, exception, {dmsl_merch_stat_thrift, 'BadToken'}}, 'ex3', undefined}
