@@ -14,13 +14,17 @@ build('damsel', 'docker-host') {
         gitUtils = load("${env.JENKINS_LIB}/gitUtils.groovy")
     }
 
-    runStage('compile') {
-        withGithubPrivkey {
-            sh "make wc_compile"
-        }
-    }
-
     pipeDefault() {
+        runStage('compile') {
+            withGithubPrivkey {
+                sh "make wc_compile"
+            }
+        }
+
+        runStage('Generate Erlang lib') {
+            sh "make wc_release-erlang"
+        }
+
         env.skipSonar = 'true'
         pipeJavaProto()
     }
