@@ -492,6 +492,9 @@
 %% struct 'InvoiceUnpayable'
 -record('payproc_InvoiceUnpayable', {}).
 
+%% struct 'InvoiceUnallocatable'
+-record('payproc_InvoiceUnallocatable', {}).
+
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
     'customer_id' :: dmsl_payment_processing_thrift:'CustomerID'(),

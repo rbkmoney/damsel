@@ -157,6 +157,7 @@
     'InvoiceRepairParams'/0,
     'InvalidStatus'/0,
     'InvoiceUnpayable'/0,
+    'InvoiceUnallocatable'/0,
     'InvoiceTermsViolationReason'/0,
     'CustomerParams'/0,
     'Customer'/0,
@@ -509,6 +510,7 @@
     'InvoiceRepairParams' |
     'InvalidStatus' |
     'InvoiceUnpayable' |
+    'InvoiceUnallocatable' |
     'InvoiceTermsViolationReason' |
     'CustomerParams' |
     'Customer' |
@@ -1066,9 +1068,13 @@
 %% struct 'InvoiceUnpayable'
 -type 'InvoiceUnpayable'() :: #'payproc_InvoiceUnpayable'{}.
 
+%% struct 'InvoiceUnallocatable'
+-type 'InvoiceUnallocatable'() :: #'payproc_InvoiceUnallocatable'{}.
+
 %% union 'InvoiceTermsViolationReason'
 -type 'InvoiceTermsViolationReason'() ::
-    {'invoice_unpayable', 'InvoiceUnpayable'()}.
+    {'invoice_unpayable', 'InvoiceUnpayable'()} |
+    {'invoice_unallocatable', 'InvoiceUnallocatable'()}.
 
 %% struct 'CustomerParams'
 -type 'CustomerParams'() :: #'payproc_CustomerParams'{}.
@@ -2045,6 +2051,7 @@ structs() ->
         'InvoiceRepairParams',
         'InvalidStatus',
         'InvoiceUnpayable',
+        'InvoiceUnallocatable',
         'InvoiceTermsViolationReason',
         'CustomerParams',
         'Customer',
@@ -2886,9 +2893,13 @@ struct_info('InvalidStatus') ->
 struct_info('InvoiceUnpayable') ->
     {struct, struct, []};
 
+struct_info('InvoiceUnallocatable') ->
+    {struct, struct, []};
+
 struct_info('InvoiceTermsViolationReason') ->
     {struct, union, [
-        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceUnpayable'}}, 'invoice_unpayable', undefined}
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceUnpayable'}}, 'invoice_unpayable', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceUnallocatable'}}, 'invoice_unallocatable', undefined}
     ]};
 
 struct_info('CustomerParams') ->
@@ -4158,6 +4169,9 @@ record_name('InvoiceRepairParams') ->
 
 record_name('InvoiceUnpayable') ->
     'payproc_InvoiceUnpayable';
+
+record_name('InvoiceUnallocatable') ->
+    'payproc_InvoiceUnallocatable';
 
 record_name('CustomerParams') ->
     'payproc_CustomerParams';
