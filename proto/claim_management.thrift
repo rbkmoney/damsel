@@ -15,6 +15,10 @@ typedef base.ID CommentID
 typedef base.ID UserID
 typedef base.ID CashRegisterID
 typedef i32 CashRegisterProviderID
+typedef domain.ContractID  ContractID
+typedef domain.ShopID  ShopID
+typedef domain.ContractorID ContractorID
+typedef domain.PayoutToolID PayoutToolID
 
 typedef string MetadataKey
 typedef msgpack.Value MetadataValue
@@ -31,9 +35,80 @@ exception InvalidClaimRevision {}
 exception BadContinuationToken { 1: string reason }
 exception LimitExceeded { 1: string reason }
 exception ChangesetConflict { 1: required ClaimID conflicted_id }
+
+union InvalidStatus {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+}
+
+union InvalidChangesetReason {
+    1: InvalidContract invalid_contract
+    2: InvalidShop invalid_shop
+    3: InvalidContractor invalid_contractor
+}
+
+struct InvalidContract {
+    1: required ContractID id
+    2: required InvalidContractReason reason
+}
+
+struct InvalidShop {
+    1: required ShopID id
+    2: required InvalidShopReason reason
+}
+
+struct InvalidContractor {
+    1: required ContractorID id
+    2: required InvalidContractorReason reason
+}
+
+union InvalidContractReason {
+    1: ContractID not_exists
+    2: ContractID already_exists
+    3: domain.ContractStatus invalid_status
+    4: domain.ContractAdjustmentID contract_adjustment_already_exists
+    5: domain.PayoutToolID payout_tool_not_exists
+    6: domain.PayoutToolID payout_tool_already_exists
+    7: InvalidObjectReference invalid_object_reference
+    8: ContractorNotExists contractor_not_exists
+}
+
+union InvalidShopReason {
+    1: ShopID not_exists
+    2: ShopID already_exists
+    3: ShopID no_account
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+    6: ShopPayoutToolInvalid payout_tool_invalid
+    7: InvalidObjectReference invalid_object_reference
+}
+
+union InvalidContractorReason {
+    1: ContractorID not_exists
+    2: ContractorID already_exists
+}
+
+struct ContractorNotExists {
+    1: optional ContractorID id
+}
+
+struct ContractTermsViolated {
+    1: required ContractID contract_id
+    2: required domain.TermSet terms
+}
+
+struct ShopPayoutToolInvalid {
+    1: optional domain.PayoutToolID payout_tool_id
+}
+
+struct InvalidObjectReference {
+    1: optional domain.Reference ref
+}
+
 exception InvalidChangeset {
-    1: required string reason
+    3: optional InvalidChangesetReason reason
     2: required ModificationChangeset invalid_changeset
+    1: optional string reason_legacy
 }
 exception InvalidClaimStatus {
     1: required ClaimStatus status
