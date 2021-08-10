@@ -980,8 +980,11 @@ exception InvoiceTemplateRemoved {}
 
 struct InvoiceUnpayable {}
 
+struct InvoiceUnallocatable {}
+
 union InvoiceTermsViolationReason {
-    1: InvoiceUnpayable invoice_unpayable
+    1: InvoiceUnpayable invoice_unpayable,
+    2: InvoiceUnallocatable invoice_unallocatable
 }
 
 exception InvoiceTermsViolated {
