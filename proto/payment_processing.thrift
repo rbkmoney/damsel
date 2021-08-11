@@ -496,8 +496,7 @@ struct InvoicePaymentRecTokenAcquired {
 }
 
 struct InvoicePaymentCaptureStarted {
-    1: required InvoicePaymentCaptureParamsLegacy params
-    2: optional domain.Allocation allocation
+    1: required InvoicePaymentCaptureData data
 }
 
 /**
@@ -806,12 +805,20 @@ struct InvoicePaymentCaptureParams {
 }
 
 /**
- * Параметры подтверждаемого платежа для старых ивентов.
+ * Параметры подтверждаемого платежа.
  */
-struct InvoicePaymentCaptureParamsLegacy {
+struct InvoicePaymentCaptureParams {
     1: required string reason
     2: optional domain.Cash cash
     3: optional domain.InvoiceCart cart
+    4: optional domain.AllocationPrototype allocation_prototype
+}
+
+struct InvoicePaymentCaptureData {
+    1: required string reason
+    2: optional domain.Cash cash
+    3: optional domain.InvoiceCart cart
+    4: optional domain.Allocation allocation
 }
 
 /**
@@ -1172,6 +1179,25 @@ service Invoicing {
             6: OperationNotPermitted ex6,
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8
+        )
+
+    void CapturePaymentLegacy (
+        1: UserInfo user,
+        2: domain.InvoiceID id,
+        3: domain.InvoicePaymentID payment_id
+        4: InvoicePaymentCaptureData params
+    )
+        throws (
+            1: InvalidUser ex1,
+            2: InvoiceNotFound ex2,
+            3: InvoicePaymentNotFound ex3,
+            4: InvalidPaymentStatus ex4,
+            5: base.InvalidRequest ex5,
+            6: OperationNotPermitted ex6,
+            7: InvalidPartyStatus ex7,
+            8: InvalidShopStatus ex8,
+            9: InconsistentCaptureCurrency ex9,
+            10: AmountExceededCaptureBalance ex10
         )
 
     void CapturePayment (
