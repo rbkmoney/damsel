@@ -496,7 +496,8 @@ struct InvoicePaymentRecTokenAcquired {
 }
 
 struct InvoicePaymentCaptureStarted {
-    1: required InvoicePaymentCaptureParams params
+    1: required InvoicePaymentCaptureParamsLegacy params
+    2: optional domain.Allocation allocation
 }
 
 /**
@@ -802,6 +803,15 @@ struct InvoicePaymentCaptureParams {
     2: optional domain.Cash cash
     3: optional domain.InvoiceCart cart
     4: optional domain.AllocationPrototype allocation
+}
+
+/**
+ * Параметры подтверждаемого платежа для старых ивентов.
+ */
+struct InvoicePaymentCaptureParamsLegacy {
+    1: required string reason
+    2: optional domain.Cash cash
+    3: optional domain.InvoiceCart cart
 }
 
 /**
