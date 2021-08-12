@@ -1185,25 +1185,6 @@ service Invoicing {
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
-        4: InvoicePaymentCaptureData params
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: InvoiceNotFound ex2,
-            3: InvoicePaymentNotFound ex3,
-            4: InvalidPaymentStatus ex4,
-            5: base.InvalidRequest ex5,
-            6: OperationNotPermitted ex6,
-            7: InvalidPartyStatus ex7,
-            8: InvalidShopStatus ex8,
-            9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
-        )
-
-    void CapturePayment2 (
-        1: UserInfo user,
-        2: domain.InvoiceID id,
-        3: domain.InvoicePaymentID payment_id
         4: InvoicePaymentCaptureParams params
     )
         throws (
