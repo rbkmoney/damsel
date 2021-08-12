@@ -161,6 +161,7 @@
     'InvoiceRepairFailPreProcessing'/0,
     'InvoiceRepairSkipInspector'/0,
     'InvoiceRepairFailSession'/0,
+    'InvoiceRepairFulfillSession'/0,
     'InvoiceRepairComplex'/0,
     'InvoiceRepairScenario'/0,
     'InvoiceRepairParams'/0,
@@ -525,6 +526,7 @@
     'InvoiceRepairFailPreProcessing' |
     'InvoiceRepairSkipInspector' |
     'InvoiceRepairFailSession' |
+    'InvoiceRepairFulfillSession' |
     'InvoiceRepairComplex' |
     'InvoiceRepairScenario' |
     'InvoiceRepairParams' |
@@ -1088,6 +1090,9 @@
 %% struct 'InvoiceRepairFailSession'
 -type 'InvoiceRepairFailSession'() :: #'payproc_InvoiceRepairFailSession'{}.
 
+%% struct 'InvoiceRepairFulfillSession'
+-type 'InvoiceRepairFulfillSession'() :: #'payproc_InvoiceRepairFulfillSession'{}.
+
 %% struct 'InvoiceRepairComplex'
 -type 'InvoiceRepairComplex'() :: #'payproc_InvoiceRepairComplex'{}.
 
@@ -1096,7 +1101,8 @@
     {'complex', 'InvoiceRepairComplex'()} |
     {'fail_pre_processing', 'InvoiceRepairFailPreProcessing'()} |
     {'skip_inspector', 'InvoiceRepairSkipInspector'()} |
-    {'fail_session', 'InvoiceRepairFailSession'()}.
+    {'fail_session', 'InvoiceRepairFailSession'()} |
+    {'fulfill_session', 'InvoiceRepairFulfillSession'()}.
 
 %% struct 'InvoiceRepairParams'
 -type 'InvoiceRepairParams'() :: #'payproc_InvoiceRepairParams'{}.
@@ -2092,6 +2098,7 @@ structs() ->
         'InvoiceRepairFailPreProcessing',
         'InvoiceRepairSkipInspector',
         'InvoiceRepairFailSession',
+        'InvoiceRepairFulfillSession',
         'InvoiceRepairComplex',
         'InvoiceRepairScenario',
         'InvoiceRepairParams',
@@ -2491,7 +2498,8 @@ struct_info('InvoicePaymentRiskScoreChanged') ->
 
 struct_info('InvoicePaymentRouteChanged') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined}
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}, 'route', undefined},
+        {2, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentRoute'}}}, 'candidates', undefined}
     ]};
 
 struct_info('InvoicePaymentCashFlowChanged') ->
@@ -2945,7 +2953,13 @@ struct_info('InvoiceRepairSkipInspector') ->
 
 struct_info('InvoiceRepairFailSession') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined}
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Failure'}}, 'failure', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
+    ]};
+
+struct_info('InvoiceRepairFulfillSession') ->
+    {struct, struct, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'trx', undefined}
     ]};
 
 struct_info('InvoiceRepairComplex') ->
@@ -2958,7 +2972,8 @@ struct_info('InvoiceRepairScenario') ->
         {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairComplex'}}, 'complex', undefined},
         {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailPreProcessing'}}, 'fail_pre_processing', undefined},
         {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairSkipInspector'}}, 'skip_inspector', undefined},
-        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailSession'}}, 'fail_session', undefined}
+        {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFailSession'}}, 'fail_session', undefined},
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceRepairFulfillSession'}}, 'fulfill_session', undefined}
     ]};
 
 struct_info('InvoiceRepairParams') ->
@@ -3223,7 +3238,8 @@ struct_info('Varset') ->
         {8, optional, string, 'shop_id', undefined},
         {9, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level', undefined},
         {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
-        {11, optional, string, 'party_id', undefined}
+        {11, optional, string, 'party_id', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'BinData'}}, 'bin_data', undefined}
     ]};
 
 struct_info('PartyParams') ->
@@ -4252,6 +4268,9 @@ record_name('InvoiceRepairSkipInspector') ->
 
 record_name('InvoiceRepairFailSession') ->
     'payproc_InvoiceRepairFailSession';
+
+record_name('InvoiceRepairFulfillSession') ->
+    'payproc_InvoiceRepairFulfillSession';
 
 record_name('InvoiceRepairComplex') ->
     'payproc_InvoiceRepairComplex';

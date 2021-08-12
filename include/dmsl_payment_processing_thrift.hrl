@@ -115,7 +115,8 @@
 
 %% struct 'InvoicePaymentRouteChanged'
 -record('payproc_InvoicePaymentRouteChanged', {
-    'route' :: dmsl_domain_thrift:'PaymentRoute'()
+    'route' :: dmsl_domain_thrift:'PaymentRoute'(),
+    'candidates' :: ordsets:ordset(dmsl_domain_thrift:'PaymentRoute'()) | undefined
 }).
 
 %% struct 'InvoicePaymentCashFlowChanged'
@@ -499,7 +500,13 @@
 
 %% struct 'InvoiceRepairFailSession'
 -record('payproc_InvoiceRepairFailSession', {
-    'failure' :: dmsl_domain_thrift:'Failure'()
+    'failure' :: dmsl_domain_thrift:'Failure'(),
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
+}).
+
+%% struct 'InvoiceRepairFulfillSession'
+-record('payproc_InvoiceRepairFulfillSession', {
+    'trx' :: dmsl_domain_thrift:'TransactionInfo'() | undefined
 }).
 
 %% struct 'InvoiceRepairComplex'
@@ -711,7 +718,8 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'identification_level' :: atom() | undefined,
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined,
-    'party_id' :: dmsl_domain_thrift:'PartyID'() | undefined
+    'party_id' :: dmsl_domain_thrift:'PartyID'() | undefined,
+    'bin_data' :: dmsl_domain_thrift:'BinData'() | undefined
 }).
 
 %% struct 'PartyParams'
