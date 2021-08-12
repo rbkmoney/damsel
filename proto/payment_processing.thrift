@@ -1181,7 +1181,7 @@ service Invoicing {
             8: InvalidShopStatus ex8
         )
 
-    void CapturePaymentLegacy (
+    void CapturePayment (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
@@ -1200,7 +1200,7 @@ service Invoicing {
             10: AmountExceededCaptureBalance ex10
         )
 
-    void CapturePayment (
+    void CapturePayment2 (
         1: UserInfo user,
         2: domain.InvoiceID id,
         3: domain.InvoicePaymentID payment_id
