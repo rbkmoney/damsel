@@ -804,16 +804,6 @@ struct InvoicePaymentCaptureParams {
     4: optional domain.AllocationPrototype allocation
 }
 
-/**
- * Параметры подтверждаемого платежа.
- */
-struct InvoicePaymentCaptureParams {
-    1: required string reason
-    2: optional domain.Cash cash
-    3: optional domain.InvoiceCart cart
-    4: optional domain.AllocationPrototype allocation_prototype
-}
-
 struct InvoicePaymentCaptureData {
     1: required string reason
     2: optional domain.Cash cash
