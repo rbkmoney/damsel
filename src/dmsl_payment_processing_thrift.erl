@@ -144,6 +144,7 @@
     'InvoicePaymentChargebackCancelParams'/0,
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentCaptureParams'/0,
+    'InvoicePaymentCaptureData'/0,
     'InvoiceAdjustmentParams'/0,
     'InvoiceAdjustmentScenario'/0,
     'InvoicePaymentAdjustmentParams'/0,
@@ -497,6 +498,7 @@
     'InvoicePaymentChargebackCancelParams' |
     'InvoicePaymentRefundParams' |
     'InvoicePaymentCaptureParams' |
+    'InvoicePaymentCaptureData' |
     'InvoiceAdjustmentParams' |
     'InvoiceAdjustmentScenario' |
     'InvoicePaymentAdjustmentParams' |
@@ -1018,6 +1020,9 @@
 
 %% struct 'InvoicePaymentCaptureParams'
 -type 'InvoicePaymentCaptureParams'() :: #'payproc_InvoicePaymentCaptureParams'{}.
+
+%% struct 'InvoicePaymentCaptureData'
+-type 'InvoicePaymentCaptureData'() :: #'payproc_InvoicePaymentCaptureData'{}.
 
 %% struct 'InvoiceAdjustmentParams'
 -type 'InvoiceAdjustmentParams'() :: #'payproc_InvoiceAdjustmentParams'{}.
@@ -2038,6 +2043,7 @@ structs() ->
         'InvoicePaymentChargebackCancelParams',
         'InvoicePaymentRefundParams',
         'InvoicePaymentCaptureParams',
+        'InvoicePaymentCaptureData',
         'InvoiceAdjustmentParams',
         'InvoiceAdjustmentScenario',
         'InvoicePaymentAdjustmentParams',
@@ -2616,7 +2622,7 @@ struct_info('InvoicePaymentRecTokenAcquired') ->
 
 struct_info('InvoicePaymentCaptureStarted') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
+        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureData'}}, 'data', undefined}
     ]};
 
 struct_info('EventRange') ->
@@ -2819,6 +2825,14 @@ struct_info('InvoicePaymentCaptureParams') ->
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
+    ]};
+
+struct_info('InvoicePaymentCaptureData') ->
+    {struct, struct, [
+        {1, required, string, 'reason', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoiceAdjustmentParams') ->
@@ -4142,6 +4156,9 @@ record_name('InvoicePaymentRefundParams') ->
 
 record_name('InvoicePaymentCaptureParams') ->
     'payproc_InvoicePaymentCaptureParams';
+
+record_name('InvoicePaymentCaptureData') ->
+    'payproc_InvoicePaymentCaptureData';
 
 record_name('InvoiceAdjustmentParams') ->
     'payproc_InvoiceAdjustmentParams';

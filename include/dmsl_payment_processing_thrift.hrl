@@ -254,7 +254,7 @@
 
 %% struct 'InvoicePaymentCaptureStarted'
 -record('payproc_InvoicePaymentCaptureStarted', {
-    'params' :: dmsl_payment_processing_thrift:'InvoicePaymentCaptureParams'()
+    'data' :: dmsl_payment_processing_thrift:'InvoicePaymentCaptureData'()
 }).
 
 %% struct 'EventRange'
@@ -444,6 +444,14 @@
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
+}).
+
+%% struct 'InvoicePaymentCaptureData'
+-record('payproc_InvoicePaymentCaptureData', {
+    'reason' :: binary(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'InvoiceAdjustmentParams'
