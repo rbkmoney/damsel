@@ -496,7 +496,7 @@ struct InvoicePaymentRecTokenAcquired {
 }
 
 struct InvoicePaymentCaptureStarted {
-    1: required InvoicePaymentCaptureParams params
+    1: required InvoicePaymentCaptureData data
 }
 
 /**
@@ -802,6 +802,13 @@ struct InvoicePaymentCaptureParams {
     2: optional domain.Cash cash
     3: optional domain.InvoiceCart cart
     4: optional domain.AllocationPrototype allocation
+}
+
+struct InvoicePaymentCaptureData {
+    1: required string reason
+    2: optional domain.Cash cash
+    3: optional domain.InvoiceCart cart
+    4: optional domain.Allocation allocation
 }
 
 /**
