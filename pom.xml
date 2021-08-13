@@ -10,6 +10,7 @@
         <version>1.0.5</version>
     </parent>
 
+
     <artifactId>damsel</artifactId>
     <version>SNAPSHOT</version>
     <packaging>jar</packaging>
