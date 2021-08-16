@@ -34,27 +34,14 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
-union Clock {
-    1: VectorClock vector
-    2: LatestClock latest
-}
-
-struct VectorClock {
-    1: required base.Opaque state
-}
-
-struct LatestClock {
-}
-
-enum LimitStatus {
-    ok
-    overflow
+enum LimitClockAction {
+    update
+    clear
 }
 
 struct LimitResult {
-    1: optional list<base.ID> limit_ids
-    2: optional Clock         clock
-    3: optional LimitStatus   status
+    1: required base.ID            limit_id
+    2: optional domain.VectorClock clock
 }
 
 /* Events */
@@ -181,7 +168,6 @@ struct InvoiceAdjustmentChange {
 union InvoiceAdjustmentChangePayload {
     1: InvoiceAdjustmentCreated       invoice_adjustment_created
     2: InvoiceAdjustmentStatusChanged invoice_adjustment_status_changed
-    3: InvoiceAdjustmentLimitChecked  invoice_adjustment_limit_checked
 }
 
 /**
@@ -196,15 +182,6 @@ struct InvoiceAdjustmentCreated {
  */
 struct InvoiceAdjustmentStatusChanged {
     1: required domain.InvoiceAdjustmentStatus status
-}
-
-/**
- * Событие проверки лимитов корректировки платежа
- */
-struct InvoiceAdjustmentLimitChecked {
-    1: optional list<base.ID> limit_ids
-    2: optional Clock         clock
-    3: optional LimitStatus   status
 }
 
 /**
@@ -296,7 +273,8 @@ struct InvoicePaymentSessionChange {
  * Событие проверки лимитов платежа.
  */
 struct InvoicePaymentLimitChecked {
-    1: optional list<LimitResult> results
+    1: required list<LimitResult> results
+    2: LimitClockAction           action
 }
 
 /**
@@ -470,7 +448,6 @@ union InvoicePaymentRefundChangePayload {
     3: InvoicePaymentSessionChange         invoice_payment_session_change
     4: InvoicePaymentRefundRollbackStarted invoice_payment_refund_rollback_started
     5: InvoicePaymentClockUpdate           invoice_payment_refund_clock_update
-    6: InvoicePaymentRefundLimitChecked    invoice_payment_refund_limit_checked
 }
 
 /**
@@ -497,15 +474,6 @@ struct InvoicePaymentRefundStatusChanged {
 
 struct InvoicePaymentRefundRollbackStarted {
     1: required domain.OperationFailure reason
-}
-
-/**
- * Событие проверки лимитов возврата платежа
- */
-struct InvoicePaymentRefundLimitChecked {
-    1: optional list<base.ID> limit_ids
-    2: optional Clock         clock
-    3: optional LimitStatus   status
 }
 
 /**

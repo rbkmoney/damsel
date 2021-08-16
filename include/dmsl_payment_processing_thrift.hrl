@@ -25,19 +25,10 @@
 %% struct 'ServiceUser'
 -record('payproc_ServiceUser', {}).
 
-%% struct 'VectorClock'
--record('payproc_VectorClock', {
-    'state' :: dmsl_base_thrift:'Opaque'()
-}).
-
-%% struct 'LatestClock'
--record('payproc_LatestClock', {}).
-
 %% struct 'LimitResult'
 -record('payproc_LimitResult', {
-    'limit_ids' :: [dmsl_base_thrift:'ID'()] | undefined,
-    'clock' :: dmsl_payment_processing_thrift:'Clock'() | undefined,
-    'status' :: atom() | undefined
+    'limit_id' :: dmsl_base_thrift:'ID'(),
+    'clock' :: dmsl_domain_thrift:'VectorClock'() | undefined
 }).
 
 %% struct 'Event'
@@ -81,13 +72,6 @@
 %% struct 'InvoiceAdjustmentStatusChanged'
 -record('payproc_InvoiceAdjustmentStatusChanged', {
     'status' :: dmsl_domain_thrift:'InvoiceAdjustmentStatus'()
-}).
-
-%% struct 'InvoiceAdjustmentLimitChecked'
--record('payproc_InvoiceAdjustmentLimitChecked', {
-    'limit_ids' :: [dmsl_base_thrift:'ID'()] | undefined,
-    'clock' :: dmsl_payment_processing_thrift:'Clock'() | undefined,
-    'status' :: atom() | undefined
 }).
 
 %% struct 'InvoicePaymentStarted'
@@ -137,7 +121,8 @@
 
 %% struct 'InvoicePaymentLimitChecked'
 -record('payproc_InvoicePaymentLimitChecked', {
-    'results' :: [dmsl_payment_processing_thrift:'LimitResult'()] | undefined
+    'results' :: [dmsl_payment_processing_thrift:'LimitResult'()],
+    'action' :: atom()
 }).
 
 %% struct 'SessionStarted'
@@ -256,13 +241,6 @@
 %% struct 'InvoicePaymentRefundRollbackStarted'
 -record('payproc_InvoicePaymentRefundRollbackStarted', {
     'reason' :: dmsl_domain_thrift:'OperationFailure'()
-}).
-
-%% struct 'InvoicePaymentRefundLimitChecked'
--record('payproc_InvoicePaymentRefundLimitChecked', {
-    'limit_ids' :: [dmsl_base_thrift:'ID'()] | undefined,
-    'clock' :: dmsl_payment_processing_thrift:'Clock'() | undefined,
-    'status' :: atom() | undefined
 }).
 
 %% struct 'InvoicePaymentAdjustmentChange'

@@ -58,7 +58,7 @@
     'ClaimEffects'/0
 ]).
 -export_type([
-    'LimitStatus'/0
+    'LimitClockAction'/0
 ]).
 -export_type([
     'UserInfo'/0,
@@ -66,9 +66,6 @@
     'InternalUser'/0,
     'ExternalUser'/0,
     'ServiceUser'/0,
-    'Clock'/0,
-    'VectorClock'/0,
-    'LatestClock'/0,
     'LimitResult'/0,
     'Event'/0,
     'EventSource'/0,
@@ -82,7 +79,6 @@
     'InvoiceAdjustmentChangePayload'/0,
     'InvoiceAdjustmentCreated'/0,
     'InvoiceAdjustmentStatusChanged'/0,
-    'InvoiceAdjustmentLimitChecked'/0,
     'InvoicePaymentChangePayload'/0,
     'InvoicePaymentStarted'/0,
     'InvoicePaymentClockUpdate'/0,
@@ -121,7 +117,6 @@
     'InvoicePaymentRefundCreated'/0,
     'InvoicePaymentRefundStatusChanged'/0,
     'InvoicePaymentRefundRollbackStarted'/0,
-    'InvoicePaymentRefundLimitChecked'/0,
     'InvoicePaymentAdjustmentChange'/0,
     'InvoicePaymentAdjustmentChangePayload'/0,
     'InvoicePaymentAdjustmentCreated'/0,
@@ -415,12 +410,12 @@
 %% enums
 %%
 -type enum_name() ::
-    'LimitStatus'.
+    'LimitClockAction'.
 
-%% enum 'LimitStatus'
--type 'LimitStatus'() ::
-    'ok' |
-    'overflow'.
+%% enum 'LimitClockAction'
+-type 'LimitClockAction'() ::
+    'update' |
+    'clear'.
 
 %%
 %% structs, unions and exceptions
@@ -431,9 +426,6 @@
     'InternalUser' |
     'ExternalUser' |
     'ServiceUser' |
-    'Clock' |
-    'VectorClock' |
-    'LatestClock' |
     'LimitResult' |
     'Event' |
     'EventSource' |
@@ -447,7 +439,6 @@
     'InvoiceAdjustmentChangePayload' |
     'InvoiceAdjustmentCreated' |
     'InvoiceAdjustmentStatusChanged' |
-    'InvoiceAdjustmentLimitChecked' |
     'InvoicePaymentChangePayload' |
     'InvoicePaymentStarted' |
     'InvoicePaymentClockUpdate' |
@@ -486,7 +477,6 @@
     'InvoicePaymentRefundCreated' |
     'InvoicePaymentRefundStatusChanged' |
     'InvoicePaymentRefundRollbackStarted' |
-    'InvoicePaymentRefundLimitChecked' |
     'InvoicePaymentAdjustmentChange' |
     'InvoicePaymentAdjustmentChangePayload' |
     'InvoicePaymentAdjustmentCreated' |
@@ -737,17 +727,6 @@
 %% struct 'ServiceUser'
 -type 'ServiceUser'() :: #'payproc_ServiceUser'{}.
 
-%% union 'Clock'
--type 'Clock'() ::
-    {'vector', 'VectorClock'()} |
-    {'latest', 'LatestClock'()}.
-
-%% struct 'VectorClock'
--type 'VectorClock'() :: #'payproc_VectorClock'{}.
-
-%% struct 'LatestClock'
--type 'LatestClock'() :: #'payproc_LatestClock'{}.
-
 %% struct 'LimitResult'
 -type 'LimitResult'() :: #'payproc_LimitResult'{}.
 
@@ -796,17 +775,13 @@
 %% union 'InvoiceAdjustmentChangePayload'
 -type 'InvoiceAdjustmentChangePayload'() ::
     {'invoice_adjustment_created', 'InvoiceAdjustmentCreated'()} |
-    {'invoice_adjustment_status_changed', 'InvoiceAdjustmentStatusChanged'()} |
-    {'invoice_adjustment_limit_checked', 'InvoiceAdjustmentLimitChecked'()}.
+    {'invoice_adjustment_status_changed', 'InvoiceAdjustmentStatusChanged'()}.
 
 %% struct 'InvoiceAdjustmentCreated'
 -type 'InvoiceAdjustmentCreated'() :: #'payproc_InvoiceAdjustmentCreated'{}.
 
 %% struct 'InvoiceAdjustmentStatusChanged'
 -type 'InvoiceAdjustmentStatusChanged'() :: #'payproc_InvoiceAdjustmentStatusChanged'{}.
-
-%% struct 'InvoiceAdjustmentLimitChecked'
--type 'InvoiceAdjustmentLimitChecked'() :: #'payproc_InvoiceAdjustmentLimitChecked'{}.
 
 %% union 'InvoicePaymentChangePayload'
 -type 'InvoicePaymentChangePayload'() ::
@@ -947,8 +922,7 @@
     {'invoice_payment_refund_status_changed', 'InvoicePaymentRefundStatusChanged'()} |
     {'invoice_payment_session_change', 'InvoicePaymentSessionChange'()} |
     {'invoice_payment_refund_rollback_started', 'InvoicePaymentRefundRollbackStarted'()} |
-    {'invoice_payment_refund_clock_update', 'InvoicePaymentClockUpdate'()} |
-    {'invoice_payment_refund_limit_checked', 'InvoicePaymentRefundLimitChecked'()}.
+    {'invoice_payment_refund_clock_update', 'InvoicePaymentClockUpdate'()}.
 
 %% struct 'InvoicePaymentRefundCreated'
 -type 'InvoicePaymentRefundCreated'() :: #'payproc_InvoicePaymentRefundCreated'{}.
@@ -958,9 +932,6 @@
 
 %% struct 'InvoicePaymentRefundRollbackStarted'
 -type 'InvoicePaymentRefundRollbackStarted'() :: #'payproc_InvoicePaymentRefundRollbackStarted'{}.
-
-%% struct 'InvoicePaymentRefundLimitChecked'
--type 'InvoicePaymentRefundLimitChecked'() :: #'payproc_InvoicePaymentRefundLimitChecked'{}.
 
 %% struct 'InvoicePaymentAdjustmentChange'
 -type 'InvoicePaymentAdjustmentChange'() :: #'payproc_InvoicePaymentAdjustmentChange'{}.
@@ -1950,7 +1921,7 @@
     {struct, struct_flavour(), [struct_field_info()]}.
 
 -type enum_choice() ::
-    'LimitStatus'().
+    'LimitClockAction'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -1991,7 +1962,7 @@ typedefs() ->
 
 enums() ->
     [
-        'LimitStatus'
+        'LimitClockAction'
     ].
 
 -spec structs() -> [struct_name()].
@@ -2003,9 +1974,6 @@ structs() ->
         'InternalUser',
         'ExternalUser',
         'ServiceUser',
-        'Clock',
-        'VectorClock',
-        'LatestClock',
         'LimitResult',
         'Event',
         'EventSource',
@@ -2019,7 +1987,6 @@ structs() ->
         'InvoiceAdjustmentChangePayload',
         'InvoiceAdjustmentCreated',
         'InvoiceAdjustmentStatusChanged',
-        'InvoiceAdjustmentLimitChecked',
         'InvoicePaymentChangePayload',
         'InvoicePaymentStarted',
         'InvoicePaymentClockUpdate',
@@ -2058,7 +2025,6 @@ structs() ->
         'InvoicePaymentRefundCreated',
         'InvoicePaymentRefundStatusChanged',
         'InvoicePaymentRefundRollbackStarted',
-        'InvoicePaymentRefundLimitChecked',
         'InvoicePaymentAdjustmentChange',
         'InvoicePaymentAdjustmentChangePayload',
         'InvoicePaymentAdjustmentCreated',
@@ -2314,10 +2280,10 @@ typedef_info(_) -> erlang:error(badarg).
 
 -spec enum_info(enum_name()) -> enum_info() | no_return().
 
-enum_info('LimitStatus') ->
+enum_info('LimitClockAction') ->
     {enum, [
-        {'ok', 0},
-        {'overflow', 1}
+        {'update', 0},
+        {'clear', 1}
     ]};
 
 enum_info(_) -> erlang:error(badarg).
@@ -2346,25 +2312,10 @@ struct_info('ExternalUser') ->
 struct_info('ServiceUser') ->
     {struct, struct, []};
 
-struct_info('Clock') ->
-    {struct, union, [
-        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'VectorClock'}}, 'vector', undefined},
-        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'LatestClock'}}, 'latest', undefined}
-    ]};
-
-struct_info('VectorClock') ->
-    {struct, struct, [
-        {1, required, string, 'state', undefined}
-    ]};
-
-struct_info('LatestClock') ->
-    {struct, struct, []};
-
 struct_info('LimitResult') ->
     {struct, struct, [
-        {1, optional, {list, string}, 'limit_ids', undefined},
-        {2, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
-        {3, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
+        {1, required, string, 'limit_id', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'VectorClock'}}, 'clock', undefined}
     ]};
 
 struct_info('Event') ->
@@ -2434,8 +2385,7 @@ struct_info('InvoiceAdjustmentChange') ->
 struct_info('InvoiceAdjustmentChangePayload') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentCreated'}}, 'invoice_adjustment_created', undefined},
-        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentStatusChanged'}}, 'invoice_adjustment_status_changed', undefined},
-        {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentLimitChecked'}}, 'invoice_adjustment_limit_checked', undefined}
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceAdjustmentStatusChanged'}}, 'invoice_adjustment_status_changed', undefined}
     ]};
 
 struct_info('InvoiceAdjustmentCreated') ->
@@ -2446,13 +2396,6 @@ struct_info('InvoiceAdjustmentCreated') ->
 struct_info('InvoiceAdjustmentStatusChanged') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'InvoiceAdjustmentStatus'}}, 'status', undefined}
-    ]};
-
-struct_info('InvoiceAdjustmentLimitChecked') ->
-    {struct, struct, [
-        {1, optional, {list, string}, 'limit_ids', undefined},
-        {2, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
-        {3, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentChangePayload') ->
@@ -2520,7 +2463,8 @@ struct_info('InvoicePaymentSessionChange') ->
 
 struct_info('InvoicePaymentLimitChecked') ->
     {struct, struct, [
-        {1, optional, {list, {struct, struct, {dmsl_payment_processing_thrift, 'LimitResult'}}}, 'results', undefined}
+        {1, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'LimitResult'}}}, 'results', undefined},
+        {2, undefined, {enum, {dmsl_payment_processing_thrift, 'LimitClockAction'}}, 'action', undefined}
     ]};
 
 struct_info('SessionChangePayload') ->
@@ -2659,8 +2603,7 @@ struct_info('InvoicePaymentRefundChangePayload') ->
         {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundStatusChanged'}}, 'invoice_payment_refund_status_changed', undefined},
         {3, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSessionChange'}}, 'invoice_payment_session_change', undefined},
         {4, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundRollbackStarted'}}, 'invoice_payment_refund_rollback_started', undefined},
-        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentClockUpdate'}}, 'invoice_payment_refund_clock_update', undefined},
-        {6, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentRefundLimitChecked'}}, 'invoice_payment_refund_limit_checked', undefined}
+        {5, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentClockUpdate'}}, 'invoice_payment_refund_clock_update', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundCreated') ->
@@ -2678,13 +2621,6 @@ struct_info('InvoicePaymentRefundStatusChanged') ->
 struct_info('InvoicePaymentRefundRollbackStarted') ->
     {struct, struct, [
         {1, required, {struct, union, {dmsl_domain_thrift, 'OperationFailure'}}, 'reason', undefined}
-    ]};
-
-struct_info('InvoicePaymentRefundLimitChecked') ->
-    {struct, struct, [
-        {1, optional, {list, string}, 'limit_ids', undefined},
-        {2, optional, {struct, union, {dmsl_payment_processing_thrift, 'Clock'}}, 'clock', undefined},
-        {3, optional, {enum, {dmsl_payment_processing_thrift, 'LimitStatus'}}, 'status', undefined}
     ]};
 
 struct_info('InvoicePaymentAdjustmentChange') ->
@@ -4032,12 +3968,6 @@ record_name('ExternalUser') ->
 record_name('ServiceUser') ->
     'payproc_ServiceUser';
 
-record_name('VectorClock') ->
-    'payproc_VectorClock';
-
-record_name('LatestClock') ->
-    'payproc_LatestClock';
-
 record_name('LimitResult') ->
     'payproc_LimitResult';
 
@@ -4061,9 +3991,6 @@ record_name('InvoiceAdjustmentCreated') ->
 
 record_name('InvoiceAdjustmentStatusChanged') ->
     'payproc_InvoiceAdjustmentStatusChanged';
-
-record_name('InvoiceAdjustmentLimitChecked') ->
-    'payproc_InvoiceAdjustmentLimitChecked';
 
 record_name('InvoicePaymentStarted') ->
     'payproc_InvoicePaymentStarted';
@@ -4163,9 +4090,6 @@ record_name('InvoicePaymentRefundStatusChanged') ->
 
 record_name('InvoicePaymentRefundRollbackStarted') ->
     'payproc_InvoicePaymentRefundRollbackStarted';
-
-record_name('InvoicePaymentRefundLimitChecked') ->
-    'payproc_InvoicePaymentRefundLimitChecked';
 
 record_name('InvoicePaymentAdjustmentChange') ->
     'payproc_InvoicePaymentAdjustmentChange';
