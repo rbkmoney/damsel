@@ -1022,6 +1022,8 @@ exception AmountExceededCaptureBalance {
 
 exception InvoicePaymentChargebackPending {}
 
+exception AllocationNotAllowed {}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -1187,7 +1189,8 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: AllocationNotAllowed ex11
         )
 
     void CapturePaymentNew (
@@ -1206,7 +1209,8 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: AllocationNotAllowed ex11
         )
     /**
      * Создать поправку к платежу.
