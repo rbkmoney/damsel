@@ -351,6 +351,7 @@ struct RecurrentPayer {
 struct ClientInfo {
     1: optional IPAddress ip_address
     2: optional Fingerprint fingerprint
+    3: optional string url
 }
 
 struct PayerSessionInfo {
