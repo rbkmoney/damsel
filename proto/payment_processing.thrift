@@ -1041,7 +1041,9 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7,
-            8: InvoiceTermsViolated ex8
+            8: InvoiceTermsViolated ex8,
+            9: AllocationNotAllowed ex9,
+            10: AllocationExceededPaymentAmount ex10
         )
 
     Invoice CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
@@ -1196,7 +1198,8 @@ service Invoicing {
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
             10: AmountExceededCaptureBalance ex10,
-            11: AllocationNotAllowed ex11
+            11: AllocationNotAllowed ex11,
+            12: AllocationExceededPaymentAmount ex12
         )
 
     void CapturePaymentNew (
@@ -1216,7 +1219,8 @@ service Invoicing {
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
             10: AmountExceededCaptureBalance ex10,
-            11: AllocationNotAllowed ex11
+            11: AllocationNotAllowed ex11,
+            12: AllocationExceededPaymentAmount ex12
         )
     /**
      * Создать поправку к платежу.
