@@ -1024,6 +1024,12 @@ exception InvoicePaymentChargebackPending {}
 
 exception AllocationNotAllowed {}
 
+exception AllocationExceededPaymentAmount {}
+
+exception AllocationWrongTransactionBodyType {}
+
+exception AllocationWrongTransactionFeeType {}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -1429,6 +1435,9 @@ service Invoicing {
             12: InvalidShopStatus ex12
             13: InvalidContractStatus ex13
             14: InvoicePaymentChargebackPending ex14
+            15: AllocationExceededPaymentAmount ex15
+            16: AllocationWrongTransactionBodyType ex16
+            17: AllocationWrongTransactionFeeType ex17
         )
 
 
@@ -1455,6 +1464,9 @@ service Invoicing {
             12: InvalidContractStatus ex12
             13: base.InvalidRequest ex13
             14: InvoicePaymentChargebackPending ex14
+            15: AllocationExceededPaymentAmount ex15
+            16: AllocationWrongTransactionBodyType ex16
+            17: AllocationWrongTransactionFeeType ex17
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
