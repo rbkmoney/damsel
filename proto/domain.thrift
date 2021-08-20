@@ -1673,8 +1673,10 @@ enum LegacyBankCardPaymentSystem {
     uzcard
 }
 
+typedef string PaymentSystemID
+
 struct PaymentSystemRef {
-    1: required string id
+    1: required PaymentSystemID id
 }
 
 struct PaymentSystem {
