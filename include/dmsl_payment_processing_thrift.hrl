@@ -121,8 +121,7 @@
 
 %% struct 'InvoicePaymentLimitChecked'
 -record('payproc_InvoicePaymentLimitChecked', {
-    'results' :: [dmsl_payment_processing_thrift:'LimitResult'()],
-    'action' :: atom()
+    'results' :: [dmsl_payment_processing_thrift:'LimitResult'()]
 }).
 
 %% struct 'SessionStarted'

@@ -58,9 +58,6 @@
     'ClaimEffects'/0
 ]).
 -export_type([
-    'LimitClockAction'/0
-]).
--export_type([
     'UserInfo'/0,
     'UserType'/0,
     'InternalUser'/0,
@@ -409,13 +406,7 @@
 %%
 %% enums
 %%
--type enum_name() ::
-    'LimitClockAction'.
-
-%% enum 'LimitClockAction'
--type 'LimitClockAction'() ::
-    'update' |
-    'clear'.
+-type enum_name() :: none().
 
 %%
 %% structs, unions and exceptions
@@ -1920,8 +1911,7 @@
 -type struct_info() ::
     {struct, struct_flavour(), [struct_field_info()]}.
 
--type enum_choice() ::
-    'LimitClockAction'().
+-type enum_choice() :: none().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -1958,12 +1948,10 @@ typedefs() ->
         'ClaimEffects'
     ].
 
--spec enums() -> [enum_name()].
+-spec enums() -> [].
 
 enums() ->
-    [
-        'LimitClockAction'
-    ].
+    [].
 
 -spec structs() -> [struct_name()].
 
@@ -2278,13 +2266,7 @@ typedef_info('ClaimEffects') ->
 
 typedef_info(_) -> erlang:error(badarg).
 
--spec enum_info(enum_name()) -> enum_info() | no_return().
-
-enum_info('LimitClockAction') ->
-    {enum, [
-        {'update', 0},
-        {'clear', 1}
-    ]};
+-spec enum_info(_) -> no_return().
 
 enum_info(_) -> erlang:error(badarg).
 
@@ -2463,8 +2445,7 @@ struct_info('InvoicePaymentSessionChange') ->
 
 struct_info('InvoicePaymentLimitChecked') ->
     {struct, struct, [
-        {1, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'LimitResult'}}}, 'results', undefined},
-        {2, undefined, {enum, {dmsl_payment_processing_thrift, 'LimitClockAction'}}, 'action', undefined}
+        {1, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'LimitResult'}}}, 'results', undefined}
     ]};
 
 struct_info('SessionChangePayload') ->
