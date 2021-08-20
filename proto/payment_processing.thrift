@@ -34,11 +34,6 @@ struct ExternalUser {}
 
 struct ServiceUser {}
 
-enum LimitClockAction {
-    update
-    clear
-}
-
 struct LimitResult {
     1: required base.ID            limit_id
     2: optional domain.VectorClock clock
@@ -270,11 +265,10 @@ struct InvoicePaymentSessionChange {
 }
 
 /**
- * Событие проверки лимитов платежа.
+ * Событие об обновлении векторных часов при выполнении ф-ций лимитера.
  */
 struct InvoicePaymentLimitChecked {
     1: required list<LimitResult> results
-    2: LimitClockAction           action
 }
 
 /**
