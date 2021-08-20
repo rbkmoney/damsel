@@ -4479,7 +4479,8 @@ struct_info('RecurrentPayer') ->
 struct_info('ClientInfo') ->
     {struct, struct, [
         {1, optional, string, 'ip_address', undefined},
-        {2, optional, string, 'fingerprint', undefined}
+        {2, optional, string, 'fingerprint', undefined},
+        {3, optional, string, 'url', undefined}
     ]};
 
 struct_info('PayerSessionInfo') ->
