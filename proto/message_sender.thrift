@@ -36,9 +36,54 @@ struct MessageMail {
     5: optional MessageAttachments attachments
 }
 
+struct ShopExclusionRule {
+    1: required list<string> shop_ids
+}
+
+union MessageExclusionRule {
+    1: ShopExclusionRule shop_rule
+}
+
+struct MessageExclusion {
+    1: required string name
+    2: required MessageExclusionRule rule
+}
+
+struct MessageExclusionRef {
+    1: required i64 id
+}
+
+enum ExclusionType {
+    SHOP
+}
+
+struct MessageExclusionObject {
+    1: required MessageExclusionRef ref
+    2: required MessageExclusion exclusion
+}
+
+exception ExclusionNotFound {}
+
 service MessageSender {
     /**
     * Отправка сообщения.
     **/
     void send(1: Message message) throws (1: base.InvalidRequest ex1)
+
+    /**
+    * Добавить исключение для отправки
+    **/
+    MessageExclusionObject addExclusionRule(1: MessageExclusion rule)
+
+    MessageExclusionObject getExclusionRule(1: MessageExclusionRef ref) throws (1: ExclusionNotFound ex1)
+
+    /**
+    * Получить список исключений
+    **/
+    list<MessageExclusionObject> getExclusionRules(1: optional ExclusionType type)
+
+    /**
+    * Удалить исключение
+    **/
+    void removeExclusionRule(1: MessageExclusionRef ref) throws (1: ExclusionNotFound ex1)
 }
