@@ -10,7 +10,6 @@
         <version>1.0.5</version>
     </parent>
 
-    <groupId>com.rbkmoney</groupId>
     <artifactId>damsel</artifactId>
     <version>SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -47,9 +46,17 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
-
+        <resources>
+            <resource>
+                <directory>${project.basedir}/proto</directory>
+                <targetPath>${project.build.outputDirectory}/proto</targetPath>
+                <includes>
+                    <include>*.thrift</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
-            <!-- THRIFT -->
             <plugin>
                 <groupId>org.apache.thrift</groupId>
                 <artifactId>thrift-maven-plugin</artifactId>
@@ -69,7 +76,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
