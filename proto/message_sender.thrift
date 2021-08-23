@@ -73,7 +73,7 @@ service MessageSender {
     /**
     * Добавить исключение для отправки
     **/
-    void addExclusionRule(1: MessageExclusion rule)
+    MessageExclusionObject addExclusionRule(1: MessageExclusion rule)
 
     MessageExclusionObject getExclusionRule(1: MessageExclusionRef ref) throws (1: ExclusionNotFound ex1)
 
