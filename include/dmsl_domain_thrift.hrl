@@ -220,7 +220,8 @@
 %% struct 'ClientInfo'
 -record('domain_ClientInfo', {
     'ip_address' :: dmsl_domain_thrift:'IPAddress'() | undefined,
-    'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined
+    'fingerprint' :: dmsl_domain_thrift:'Fingerprint'() | undefined,
+    'url' :: binary() | undefined
 }).
 
 %% struct 'PayerSessionInfo'

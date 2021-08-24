@@ -35,10 +35,21 @@
     'MessageAttachments'/0
 ]).
 -export_type([
+    'ExclusionType'/0
+]).
+-export_type([
     'MessageAttachment'/0,
     'Message'/0,
     'MailBody'/0,
-    'MessageMail'/0
+    'MessageMail'/0,
+    'ShopExclusionRule'/0,
+    'MessageExclusionRule'/0,
+    'MessageExclusion'/0,
+    'MessageExclusionRef'/0,
+    'MessageExclusionObject'/0
+]).
+-export_type([
+    'ExclusionNotFound'/0
 ]).
 
 -type namespace() :: 'message_sender'.
@@ -54,7 +65,12 @@
 %%
 %% enums
 %%
--type enum_name() :: none().
+-type enum_name() ::
+    'ExclusionType'.
+
+%% enum 'ExclusionType'
+-type 'ExclusionType'() ::
+    'shop'.
 
 %%
 %% structs, unions and exceptions
@@ -63,9 +79,15 @@
     'MessageAttachment' |
     'Message' |
     'MailBody' |
-    'MessageMail'.
+    'MessageMail' |
+    'ShopExclusionRule' |
+    'MessageExclusionRule' |
+    'MessageExclusion' |
+    'MessageExclusionRef' |
+    'MessageExclusionObject'.
 
--type exception_name() :: none().
+-type exception_name() ::
+    'ExclusionNotFound'.
 
 %% struct 'MessageAttachment'
 -type 'MessageAttachment'() :: #'message_sender_MessageAttachment'{}.
@@ -80,6 +102,25 @@
 %% struct 'MessageMail'
 -type 'MessageMail'() :: #'message_sender_MessageMail'{}.
 
+%% struct 'ShopExclusionRule'
+-type 'ShopExclusionRule'() :: #'message_sender_ShopExclusionRule'{}.
+
+%% union 'MessageExclusionRule'
+-type 'MessageExclusionRule'() ::
+    {'shop_rule', 'ShopExclusionRule'()}.
+
+%% struct 'MessageExclusion'
+-type 'MessageExclusion'() :: #'message_sender_MessageExclusion'{}.
+
+%% struct 'MessageExclusionRef'
+-type 'MessageExclusionRef'() :: #'message_sender_MessageExclusionRef'{}.
+
+%% struct 'MessageExclusionObject'
+-type 'MessageExclusionObject'() :: #'message_sender_MessageExclusionObject'{}.
+
+%% exception 'ExclusionNotFound'
+-type 'ExclusionNotFound'() :: #'message_sender_ExclusionNotFound'{}.
+
 %%
 %% services and functions
 %%
@@ -90,7 +131,11 @@
     'MessageSender_service_functions'().
 
 -type 'MessageSender_service_functions'() ::
-    'send'.
+    'send' |
+    'addExclusionRule' |
+    'getExclusionRule' |
+    'getExclusionRules' |
+    'removeExclusionRule'.
 
 -export_type(['MessageSender_service_functions'/0]).
 
@@ -114,7 +159,8 @@
 -type struct_info() ::
     {struct, struct_flavour(), [struct_field_info()]}.
 
--type enum_choice() :: none().
+-type enum_choice() ::
+    'ExclusionType'().
 
 -type enum_field_info() ::
     {enum_choice(), integer()}.
@@ -128,10 +174,12 @@ typedefs() ->
         'MessageAttachments'
     ].
 
--spec enums() -> [].
+-spec enums() -> [enum_name()].
 
 enums() ->
-    [].
+    [
+        'ExclusionType'
+    ].
 
 -spec structs() -> [struct_name()].
 
@@ -140,7 +188,12 @@ structs() ->
         'MessageAttachment',
         'Message',
         'MailBody',
-        'MessageMail'
+        'MessageMail',
+        'ShopExclusionRule',
+        'MessageExclusionRule',
+        'MessageExclusion',
+        'MessageExclusionRef',
+        'MessageExclusionObject'
     ].
 
 -spec services() -> [service_name()].
@@ -162,7 +215,12 @@ typedef_info('MessageAttachments') ->
 
 typedef_info(_) -> erlang:error(badarg).
 
--spec enum_info(_) -> no_return().
+-spec enum_info(enum_name()) -> enum_info() | no_return().
+
+enum_info('ExclusionType') ->
+    {enum, [
+        {'shop', 0}
+    ]};
 
 enum_info(_) -> erlang:error(badarg).
 
@@ -195,6 +253,36 @@ struct_info('MessageMail') ->
         {5, optional, {list, {struct, struct, {dmsl_message_sender_thrift, 'MessageAttachment'}}}, 'attachments', undefined}
     ]};
 
+struct_info('ShopExclusionRule') ->
+    {struct, struct, [
+        {1, required, {list, string}, 'shop_ids', undefined}
+    ]};
+
+struct_info('MessageExclusionRule') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_message_sender_thrift, 'ShopExclusionRule'}}, 'shop_rule', undefined}
+    ]};
+
+struct_info('MessageExclusion') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined},
+        {2, required, {struct, union, {dmsl_message_sender_thrift, 'MessageExclusionRule'}}, 'rule', undefined}
+    ]};
+
+struct_info('MessageExclusionRef') ->
+    {struct, struct, [
+        {1, required, i64, 'id', undefined}
+    ]};
+
+struct_info('MessageExclusionObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusionRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusion'}}, 'exclusion', undefined}
+    ]};
+
+struct_info('ExclusionNotFound') ->
+    {struct, exception, []};
+
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -208,13 +296,32 @@ record_name('MailBody') ->
 record_name('MessageMail') ->
     'message_sender_MessageMail';
 
+record_name('ShopExclusionRule') ->
+    'message_sender_ShopExclusionRule';
+
+record_name('MessageExclusion') ->
+    'message_sender_MessageExclusion';
+
+record_name('MessageExclusionRef') ->
+    'message_sender_MessageExclusionRef';
+
+record_name('MessageExclusionObject') ->
+    'message_sender_MessageExclusionObject';
+
+record_name('ExclusionNotFound') ->
+    'message_sender_ExclusionNotFound';
+
 record_name(_) -> error(badarg).
 
 -spec functions(service_name()) -> [function_name()] | no_return().
 
 functions('MessageSender') ->
     [
-        'send'
+        'send',
+        'addExclusionRule',
+        'getExclusionRule',
+        'getExclusionRules',
+        'removeExclusionRule'
     ];
 
 functions(_) -> error(badarg).
@@ -231,6 +338,42 @@ function_info('MessageSender', 'send', reply_type) ->
 function_info('MessageSender', 'send', exceptions) ->
     {struct, struct, [
         {1, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex1', undefined}
+    ]};
+function_info('MessageSender', 'addExclusionRule', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusion'}}, 'rule', undefined}
+    ]};
+function_info('MessageSender', 'addExclusionRule', reply_type) ->
+    {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusionObject'}};
+function_info('MessageSender', 'addExclusionRule', exceptions) ->
+    {struct, struct, []};
+function_info('MessageSender', 'getExclusionRule', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusionRef'}}, 'ref', undefined}
+    ]};
+function_info('MessageSender', 'getExclusionRule', reply_type) ->
+    {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusionObject'}};
+function_info('MessageSender', 'getExclusionRule', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_message_sender_thrift, 'ExclusionNotFound'}}, 'ex1', undefined}
+    ]};
+function_info('MessageSender', 'getExclusionRules', params_type) ->
+    {struct, struct, [
+        {1, undefined, {enum, {dmsl_message_sender_thrift, 'ExclusionType'}}, 'type', undefined}
+    ]};
+function_info('MessageSender', 'getExclusionRules', reply_type) ->
+    {list, {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusionObject'}}};
+function_info('MessageSender', 'getExclusionRules', exceptions) ->
+    {struct, struct, []};
+function_info('MessageSender', 'removeExclusionRule', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_message_sender_thrift, 'MessageExclusionRef'}}, 'ref', undefined}
+    ]};
+function_info('MessageSender', 'removeExclusionRule', reply_type) ->
+    {struct, struct, []};
+function_info('MessageSender', 'removeExclusionRule', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_message_sender_thrift, 'ExclusionNotFound'}}, 'ex1', undefined}
     ]};
 
 function_info(_Service, _Function, _InfoType) -> erlang:error(badarg).
