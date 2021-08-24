@@ -231,6 +231,7 @@ struct InvoicePaymentRiskScoreChanged {
 struct InvoicePaymentRouteChanged {
     /** Выбранный маршрут обработки платежа. */
     1: required domain.PaymentRoute route
+    2: optional set<domain.PaymentRoute> candidates
 }
 
 /**
@@ -1959,6 +1960,7 @@ struct Varset {
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
     11: optional domain.PartyID party_id
+    12: optional domain.BinData bin_data
 }
 
 struct PartyParams {
