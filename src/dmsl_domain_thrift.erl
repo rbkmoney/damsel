@@ -135,7 +135,6 @@
     'AllocationTransactionPrototypeBodyAmount'/0,
     'AllocationTransactionPrototypeBodyTotal'/0,
     'AllocationTransactionPrototypeFee'/0,
-    'AllocationTransactionPrototypeFeeShare'/0,
     'AllocationTransactionPrototypeFeeFixed'/0,
     'Allocation'/0,
     'AllocationTransaction'/0,
@@ -1132,7 +1131,6 @@
     'AllocationTransactionPrototypeBodyAmount' |
     'AllocationTransactionPrototypeBodyTotal' |
     'AllocationTransactionPrototypeFee' |
-    'AllocationTransactionPrototypeFeeShare' |
     'AllocationTransactionPrototypeFeeFixed' |
     'Allocation' |
     'AllocationTransaction' |
@@ -1613,10 +1611,7 @@
 %% union 'AllocationTransactionPrototypeFee'
 -type 'AllocationTransactionPrototypeFee'() ::
     {'fixed', 'AllocationTransactionPrototypeFeeFixed'()} |
-    {'share', 'AllocationTransactionPrototypeFeeShare'()}.
-
-%% struct 'AllocationTransactionPrototypeFeeShare'
--type 'AllocationTransactionPrototypeFeeShare'() :: #'domain_AllocationTransactionPrototypeFeeShare'{}.
+    {'share', 'AllocationTransactionFeeShare'()}.
 
 %% struct 'AllocationTransactionPrototypeFeeFixed'
 -type 'AllocationTransactionPrototypeFeeFixed'() :: #'domain_AllocationTransactionPrototypeFeeFixed'{}.
@@ -3327,7 +3322,6 @@ structs() ->
         'AllocationTransactionPrototypeBodyAmount',
         'AllocationTransactionPrototypeBodyTotal',
         'AllocationTransactionPrototypeFee',
-        'AllocationTransactionPrototypeFeeShare',
         'AllocationTransactionPrototypeFeeFixed',
         'Allocation',
         'AllocationTransaction',
@@ -4504,13 +4498,7 @@ struct_info('AllocationTransactionPrototypeBodyTotal') ->
 struct_info('AllocationTransactionPrototypeFee') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototypeFeeFixed'}}, 'fixed', undefined},
-        {2, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototypeFeeShare'}}, 'share', undefined}
-    ]};
-
-struct_info('AllocationTransactionPrototypeFeeShare') ->
-    {struct, struct, [
-        {1, required, {struct, struct, {dmsl_base_thrift, 'Rational'}}, 'parts', undefined},
-        {2, optional, {enum, {dmsl_domain_thrift, 'RoundingMethod'}}, 'rounding_method', undefined}
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionFeeShare'}}, 'share', undefined}
     ]};
 
 struct_info('AllocationTransactionPrototypeFeeFixed') ->
@@ -7271,9 +7259,6 @@ record_name('AllocationTransactionPrototypeBodyAmount') ->
 
 record_name('AllocationTransactionPrototypeBodyTotal') ->
     'domain_AllocationTransactionPrototypeBodyTotal';
-
-record_name('AllocationTransactionPrototypeFeeShare') ->
-    'domain_AllocationTransactionPrototypeFeeShare';
 
 record_name('AllocationTransactionPrototypeFeeFixed') ->
     'domain_AllocationTransactionPrototypeFeeFixed';

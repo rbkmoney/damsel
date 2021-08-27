@@ -129,12 +129,6 @@
     'fee' :: dmsl_domain_thrift:'AllocationTransactionPrototypeFee'()
 }).
 
-%% struct 'AllocationTransactionPrototypeFeeShare'
--record('domain_AllocationTransactionPrototypeFeeShare', {
-    'parts' :: dmsl_base_thrift:'Rational'(),
-    'rounding_method' :: dmsl_domain_thrift:'RoundingMethod'() | undefined
-}).
-
 %% struct 'AllocationTransactionPrototypeFeeFixed'
 -record('domain_AllocationTransactionPrototypeFeeFixed', {
     'amount' :: dmsl_domain_thrift:'Cash'()
