@@ -112,7 +112,6 @@
 
 %% struct 'AllocationTransactionPrototype'
 -record('domain_AllocationTransactionPrototype', {
-    'id' :: dmsl_domain_thrift:'AllocationTransactionID'(),
     'target' :: dmsl_domain_thrift:'AllocationTransactionTarget'(),
     'body' :: dmsl_domain_thrift:'AllocationTransactionPrototypeBody'(),
     'details' :: dmsl_domain_thrift:'AllocationTransactionDetails'() | undefined

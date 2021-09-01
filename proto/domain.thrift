@@ -188,11 +188,10 @@ struct AllocationPrototype {
 
 /** Прототип транзакции распределения денежных средств. */
 struct AllocationTransactionPrototype {
-    1: required AllocationTransactionID id
     /** По этому назначению переводится часть денежных средств. */
-    2: required AllocationTransactionTarget target
-    3: required AllocationTransactionPrototypeBody body
-    4: optional AllocationTransactionDetails details
+    1: required AllocationTransactionTarget target
+    2: required AllocationTransactionPrototypeBody body
+    3: optional AllocationTransactionDetails details
 }
 
 union AllocationTransactionPrototypeBody {

@@ -4472,10 +4472,9 @@ struct_info('AllocationPrototype') ->
 
 struct_info('AllocationTransactionPrototype') ->
     {struct, struct, [
-        {1, required, string, 'id', undefined},
-        {2, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionTarget'}}, 'target', undefined},
-        {3, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionPrototypeBody'}}, 'body', undefined},
-        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionDetails'}}, 'details', undefined}
+        {1, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionTarget'}}, 'target', undefined},
+        {2, required, {struct, union, {dmsl_domain_thrift, 'AllocationTransactionPrototypeBody'}}, 'body', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionDetails'}}, 'details', undefined}
     ]};
 
 struct_info('AllocationTransactionPrototypeBody') ->
