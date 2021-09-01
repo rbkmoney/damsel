@@ -1026,9 +1026,23 @@ exception AllocationNotAllowed {}
 
 exception AllocationExceededPaymentAmount {}
 
-exception AllocationWrongTransactionBodyType {}
+exception AllocationTransactionBodyMismatch {
+    1: optional string reason
+}
 
-exception AllocationWrongTransactionFeeType {}
+exception AllocationTransactionFeeMismatch {
+    1: optional string reason
+}
+
+exception AllocationNoTransactionToRefund {}
+
+exception AllocationMultipleTransactionsToRefund {}
+
+exception AllocationTransactionRefundTooBig {}
+
+exception AllocationTransactionDetailsMismatch {
+    1: optional string reason
+}
 
 service Invoicing {
 
@@ -1440,8 +1454,12 @@ service Invoicing {
             13: InvalidContractStatus ex13
             14: InvoicePaymentChargebackPending ex14
             15: AllocationExceededPaymentAmount ex15
-            16: AllocationWrongTransactionBodyType ex16
-            17: AllocationWrongTransactionFeeType ex17
+            16: AllocationTransactionBodyMismatch ex16
+            17: AllocationTransactionFeeMismatch ex17
+            18: AllocationNoTransactionToRefund ex18
+            19: AllocationMultipleTransactionsToRefund ex19
+            20: AllocationTransactionRefundTooBig ex20
+            21: AllocationTransactionDetailsMismatch ex21
         )
 
 
@@ -1469,8 +1487,12 @@ service Invoicing {
             13: base.InvalidRequest ex13
             14: InvoicePaymentChargebackPending ex14
             15: AllocationExceededPaymentAmount ex15
-            16: AllocationWrongTransactionBodyType ex16
-            17: AllocationWrongTransactionFeeType ex17
+            16: AllocationTransactionBodyMismatch ex16
+            17: AllocationTransactionFeeMismatch ex17
+            18: AllocationNoTransactionToRefund ex18
+            19: AllocationMultipleTransactionsToRefund ex19
+            20: AllocationTransactionRefundTooBig ex20
+            21: AllocationTransactionDetailsMismatch ex21
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
