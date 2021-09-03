@@ -880,7 +880,7 @@ struct RussianPrivateEntity {
     2: required string second_name
     3: required string middle_name
     4: required ContactInfo contact_info
-    5: required string inn;
+    5: required string inn
 }
 
 typedef base.ID PayoutToolID
