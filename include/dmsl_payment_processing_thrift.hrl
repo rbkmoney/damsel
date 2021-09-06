@@ -361,7 +361,7 @@
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
     'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined,
     'last_transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
-    'allocaton' :: dmsl_domain_thrift:'Allocation'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined,
     'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
 }).
 
