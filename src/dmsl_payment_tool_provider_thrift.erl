@@ -284,7 +284,8 @@ enum_info(_) -> erlang:error(badarg).
 
 struct_info('WrappedPaymentTool') ->
     {struct, struct, [
-        {1, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentRequest'}}, 'request', undefined}
+        {1, required, {struct, union, {dmsl_payment_tool_provider_thrift, 'PaymentRequest'}}, 'request', undefined},
+        {2, optional, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined}
     ]};
 
 struct_info('PaymentRequest') ->
