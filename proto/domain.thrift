@@ -1621,6 +1621,11 @@ struct TurnoverLimitDecision {
 
 /* Payment methods */
 
+enum TokenizationMethod {
+    dpan
+    none
+}
+
 union PaymentMethod {
     9: PaymentServiceRef payment_terminal
    10: PaymentServiceRef digital_wallet
@@ -1733,11 +1738,6 @@ struct DisposablePaymentResource {
 }
 
 typedef string Token
-
-enum TokenizationMethod {
-    dpan
-    none
-}
 
 struct BankCard {
     1: required Token token
