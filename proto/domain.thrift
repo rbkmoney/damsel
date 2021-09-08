@@ -13,8 +13,8 @@ typedef i64        DataRevision
 typedef i32        ObjectID
 typedef json.Value Metadata
 
-const i32          WEIGHT = 0
-const i32          PRIORITY = 1000
+const i32          CANDIDATE_WEIGHT = 0
+const i32          CANDIDATE_PRIORITY = 1000
 
 /* Common */
 
@@ -1641,7 +1641,7 @@ struct BankCardPaymentMethod {
     5: optional PaymentSystemRef      payment_system
     2: optional bool                  is_cvv_empty = false
     6: optional BankCardTokenServiceRef payment_token
-    4: optional TokenizationMethod    tokenization_method = none
+    4: optional TokenizationMethod    tokenization_method = TokenizationMethod.none
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
     3: optional LegacyBankCardTokenProvider token_provider_deprecated
@@ -2814,8 +2814,8 @@ struct RoutingCandidate {
     1: optional string description
     2: required Predicate allowed
     3: required TerminalRef terminal
-    4: optional i32 weight = WEIGHT
-    5: optional i32 priority = PRIORITY
+    4: optional i32 weight = CANDIDATE_WEIGHT
+    5: optional i32 priority = CANDIDATE_PRIORITY
 }
 
 /* legacy */
