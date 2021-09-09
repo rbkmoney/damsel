@@ -97,9 +97,9 @@
     'CumulativeLimitPeriod'/0,
     'PayoutMethod'/0,
     'CountryCode'/0,
+    'TokenizationMethod'/0,
     'LegacyBankCardPaymentSystem'/0,
     'LegacyBankCardTokenProvider'/0,
-    'TokenizationMethod'/0,
     'LegacyCryptoCurrency'/0,
     'LegacyMobileOperator'/0,
     'LegacyTerminalPaymentProvider'/0,
@@ -655,9 +655,9 @@
     'CumulativeLimitPeriod' |
     'PayoutMethod' |
     'CountryCode' |
+    'TokenizationMethod' |
     'LegacyBankCardPaymentSystem' |
     'LegacyBankCardTokenProvider' |
-    'TokenizationMethod' |
     'LegacyCryptoCurrency' |
     'LegacyMobileOperator' |
     'LegacyTerminalPaymentProvider' |
@@ -973,6 +973,11 @@
     'jam' |
     'jpn'.
 
+%% enum 'TokenizationMethod'
+-type 'TokenizationMethod'() ::
+    'dpan' |
+    'none'.
+
 %% enum 'LegacyBankCardPaymentSystem'
 -type 'LegacyBankCardPaymentSystem'() ::
     'visa' |
@@ -999,11 +1004,6 @@
     'googlepay' |
     'samsungpay' |
     'yandexpay'.
-
-%% enum 'TokenizationMethod'
--type 'TokenizationMethod'() ::
-    'dpan' |
-    'none'.
 
 %% enum 'LegacyCryptoCurrency'
 -type 'LegacyCryptoCurrency'() ::
@@ -3064,9 +3064,9 @@
     'CumulativeLimitPeriod'() |
     'PayoutMethod'() |
     'CountryCode'() |
+    'TokenizationMethod'() |
     'LegacyBankCardPaymentSystem'() |
     'LegacyBankCardTokenProvider'() |
-    'TokenizationMethod'() |
     'LegacyCryptoCurrency'() |
     'LegacyMobileOperator'() |
     'LegacyTerminalPaymentProvider'() |
@@ -3158,9 +3158,9 @@ enums() ->
         'CumulativeLimitPeriod',
         'PayoutMethod',
         'CountryCode',
+        'TokenizationMethod',
         'LegacyBankCardPaymentSystem',
         'LegacyBankCardTokenProvider',
-        'TokenizationMethod',
         'LegacyCryptoCurrency',
         'LegacyMobileOperator',
         'LegacyTerminalPaymentProvider',
@@ -4080,6 +4080,12 @@ enum_info('CountryCode') ->
         {'jpn', 250}
     ]};
 
+enum_info('TokenizationMethod') ->
+    {enum, [
+        {'dpan', 0},
+        {'none', 1}
+    ]};
+
 enum_info('LegacyBankCardPaymentSystem') ->
     {enum, [
         {'visa', 0},
@@ -4107,12 +4113,6 @@ enum_info('LegacyBankCardTokenProvider') ->
         {'googlepay', 1},
         {'samsungpay', 2},
         {'yandexpay', 3}
-    ]};
-
-enum_info('TokenizationMethod') ->
-    {enum, [
-        {'dpan', 0},
-        {'none', 1}
     ]};
 
 enum_info('LegacyCryptoCurrency') ->
@@ -6512,7 +6512,7 @@ struct_info('RoutingCandidate') ->
         {1, optional, string, 'description', undefined},
         {2, required, {struct, union, {dmsl_domain_thrift, 'Predicate'}}, 'allowed', undefined},
         {3, required, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal', undefined},
-        {4, optional, i32, 'weight', undefined},
+        {4, optional, i32, 'weight', 0},
         {5, optional, i32, 'priority', 1000}
     ]};
 

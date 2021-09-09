@@ -13,6 +13,9 @@ typedef i64        DataRevision
 typedef i32        ObjectID
 typedef json.Value Metadata
 
+const i32          CANDIDATE_WEIGHT = 0
+const i32          CANDIDATE_PRIORITY = 1000
+
 /* Common */
 
 /** Контактная информация. **/
@@ -1620,6 +1623,11 @@ struct TurnoverLimitDecision {
 
 /* Payment methods */
 
+enum TokenizationMethod {
+    dpan
+    none
+}
+
 union PaymentMethod {
     9: PaymentServiceRef payment_terminal
    10: PaymentServiceRef digital_wallet
@@ -1732,11 +1740,6 @@ struct DisposablePaymentResource {
 }
 
 typedef string Token
-
-enum TokenizationMethod {
-    dpan
-    none
-}
 
 struct BankCard {
     1: required Token token
@@ -2813,8 +2816,8 @@ struct RoutingCandidate {
     1: optional string description
     2: required Predicate allowed
     3: required TerminalRef terminal
-    4: optional i32 weight
-    5: optional i32 priority = 1000
+    4: optional i32 weight = CANDIDATE_WEIGHT
+    5: optional i32 priority = CANDIDATE_PRIORITY
 }
 
 /* legacy */
