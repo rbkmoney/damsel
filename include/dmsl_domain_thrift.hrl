@@ -175,7 +175,9 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
     'product' :: binary(),
+    'name' :: binary() | undefined,
     'description' :: binary() | undefined,
+    'created_at' :: dmsl_base_thrift:'Timestamp'() | undefined,
     'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
 }).

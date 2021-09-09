@@ -4395,7 +4395,9 @@ struct_info('InvoiceTemplate') ->
         {3, required, string, 'shop_id', undefined},
         {5, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
         {9, required, string, 'product', undefined},
+        {11, optional, string, 'name', undefined},
         {10, optional, string, 'description', undefined},
+        {12, optional, string, 'created_at', undefined},
         {8, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
         {7, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
     ]};
