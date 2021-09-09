@@ -557,7 +557,6 @@ struct InvoiceTemplateCreateParams {
     7:  required string                        product # for backward compatibility
     11: required string                        name
     8:  optional string                        description
-    12: required base.Timestamp                created_at
     9:  required domain.InvoiceTemplateDetails details
     6:  required domain.InvoiceContext         context
 }
