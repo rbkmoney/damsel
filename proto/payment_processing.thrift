@@ -555,7 +555,9 @@ struct InvoiceTemplateCreateParams {
     2:  required ShopID                        shop_id
     4:  required domain.LifetimeInterval       invoice_lifetime
     7:  required string                        product # for backward compatibility
+    11: required string                        name
     8:  optional string                        description
+    12: required base.Timestamp                created_at
     9:  required domain.InvoiceTemplateDetails details
     6:  required domain.InvoiceContext         context
 }
@@ -563,6 +565,7 @@ struct InvoiceTemplateCreateParams {
 struct InvoiceTemplateUpdateParams {
     2: optional domain.LifetimeInterval invoice_lifetime
     5: optional string product # for backward compatibility
+    8: optional string name
     6: optional string description
     7: optional domain.InvoiceTemplateDetails details
     4: optional domain.InvoiceContext context
