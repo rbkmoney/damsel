@@ -1655,7 +1655,7 @@ struct BankCardPaymentMethod {
 struct TokenizedBankCard {
     4: optional PaymentSystemRef      payment_system
     5: optional BankCardTokenServiceRef payment_token
-    3: optional TokenizationMethod    tokenization_method
+    3: optional TokenizationMethod    tokenization_method = TokenizationMethod.none
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
     2: optional LegacyBankCardTokenProvider token_provider_deprecated
@@ -1745,7 +1745,7 @@ struct BankCard {
     3: required string bin
     4: required string last_digits
    15: optional BankCardTokenServiceRef payment_token
-   12: optional TokenizationMethod tokenization_method
+   12: optional TokenizationMethod tokenization_method = TokenizationMethod.none
     6: optional Residence issuer_country
     7: optional string bank_name
     8: optional map<string, msgpack.Value> metadata
