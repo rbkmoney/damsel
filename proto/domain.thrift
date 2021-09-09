@@ -231,7 +231,9 @@ struct InvoiceTemplate {
     3:  required ShopID shop_id
     5:  required LifetimeInterval invoice_lifetime
     9:  required string product # for backward compatibility
+    11: optional string name
     10: optional string description
+    12: optional base.Timestamp created_at
     8:  required InvoiceTemplateDetails details
     7:  optional InvoiceContext context
 }
@@ -2013,9 +2015,9 @@ enum MerchantCashFlowAccount {
     guarantee
 
     /**
-         * Счёт выплаченных средств:
-         *  - учёт средств выплаченных мерчанту.
-         */
+      * Счёт выплаченных средств:
+      *  - учёт средств выплаченных мерчанту.
+      */
     payout
 
 }
