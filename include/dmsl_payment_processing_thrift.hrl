@@ -292,7 +292,7 @@
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
     'product' :: binary(),
-    'name' :: binary(),
+    'name' :: binary() | undefined,
     'description' :: binary() | undefined,
     'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'()
