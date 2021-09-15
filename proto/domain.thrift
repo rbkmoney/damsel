@@ -1648,7 +1648,7 @@ struct BankCardPaymentMethod {
     5: optional PaymentSystemRef      payment_system
     2: optional bool                  is_cvv_empty = false
     6: optional BankCardTokenServiceRef payment_token
-    4: optional TokenizationMethod    tokenization_method
+    4: optional TokenizationMethod    tokenization_method = TokenizationMethod.dpan
     /** Deprecated **/
     1: optional LegacyBankCardPaymentSystem payment_system_deprecated
     3: optional LegacyBankCardTokenProvider token_provider_deprecated
