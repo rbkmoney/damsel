@@ -8,7 +8,8 @@
 
 %% struct 'WrappedPaymentTool'
 -record('paytoolprv_WrappedPaymentTool', {
-    'request' :: dmsl_payment_tool_provider_thrift:'PaymentRequest'()
+    'request' :: dmsl_payment_tool_provider_thrift:'PaymentRequest'(),
+    'realm' :: atom() | undefined
 }).
 
 %% struct 'ApplePayRequest'

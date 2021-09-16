@@ -6,6 +6,10 @@
 -include("dmsl_json_thrift.hrl").
 
 
+-define(DOMAIN_CANDIDATE_WEIGHT, 0).
+
+-define(DOMAIN_CANDIDATE_PRIORITY, 1000).
+
 
 %% struct 'ContactInfo'
 -record('domain_ContactInfo', {
@@ -175,7 +179,9 @@
     'shop_id' :: dmsl_domain_thrift:'ShopID'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
     'product' :: binary(),
+    'name' :: binary() | undefined,
     'description' :: binary() | undefined,
+    'created_at' :: dmsl_base_thrift:'Timestamp'() | undefined,
     'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
 }).
@@ -991,7 +997,7 @@
     'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'is_cvv_empty' = false :: boolean() | undefined,
     'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
-    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined,
+    'tokenization_method' :: atom() | undefined,
     'payment_system_deprecated' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystem'() | undefined,
     'token_provider_deprecated' :: dmsl_domain_thrift:'LegacyBankCardTokenProvider'() | undefined
 }).
@@ -1000,7 +1006,7 @@
 -record('domain_TokenizedBankCard', {
     'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
-    'tokenization_method' :: dmsl_domain_thrift:'TokenizationMethod'() | undefined,
+    'tokenization_method' :: atom() | undefined,
     'payment_system_deprecated' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystem'() | undefined,
     'token_provider_deprecated' :: dmsl_domain_thrift:'LegacyBankCardTokenProvider'() | undefined
 }).
@@ -1783,7 +1789,7 @@
     'description' :: binary() | undefined,
     'allowed' :: dmsl_domain_thrift:'Predicate'(),
     'terminal' :: dmsl_domain_thrift:'TerminalRef'(),
-    'weight' :: integer() | undefined,
+    'weight' = 0 :: integer() | undefined,
     'priority' = 1000 :: integer() | undefined
 }).
 
