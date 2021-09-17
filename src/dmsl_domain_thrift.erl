@@ -2967,7 +2967,7 @@
     {'document_type', 'DocumentTypeRef'()} |
     {'payment_service', 'PaymentServiceRef'()} |
     {'payment_system', 'PaymentSystemRef'()} |
-    {'payment_token', 'BankCardTokenServiceRef'()} |
+    {'token_service', 'BankCardTokenServiceRef'()} |
     {'mobile_operator', 'MobileOperatorRef'()} |
     {'mobile_operator_legacy', 'LegacyMobileOperatorMappingRef'()} |
     {'payment_system_legacy', 'LegacyBankCardPaymentSystemRef'()} |
@@ -5446,8 +5446,8 @@ struct_info('BankCardPaymentMethod') ->
     {struct, struct, [
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
         {2, optional, bool, 'is_cvv_empty', false},
-        {6, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
-        {4, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', 'dpan'},
+        {6, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'token_service', undefined},
+        {4, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
         {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined},
         {3, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_deprecated', undefined}
     ]};
@@ -5455,7 +5455,7 @@ struct_info('BankCardPaymentMethod') ->
 struct_info('TokenizedBankCard') ->
     {struct, struct, [
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
-        {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'token_service', undefined},
         {3, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
         {1, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystem'}}, 'payment_system_deprecated', undefined},
         {2, optional, {enum, {dmsl_domain_thrift, 'LegacyBankCardTokenProvider'}}, 'token_provider_deprecated', undefined}
@@ -5513,7 +5513,7 @@ struct_info('BankCard') ->
         {14, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
         {3, required, string, 'bin', undefined},
         {4, required, string, 'last_digits', undefined},
-        {15, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {15, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'token_service', undefined},
         {12, optional, {enum, {dmsl_domain_thrift, 'TokenizationMethod'}}, 'tokenization_method', undefined},
         {6, optional, {enum, {dmsl_domain_thrift, 'CountryCode'}}, 'issuer_country', undefined},
         {7, optional, string, 'bank_name', undefined},
@@ -6864,7 +6864,7 @@ struct_info('Reference') ->
         {32, optional, {struct, struct, {dmsl_domain_thrift, 'DocumentTypeRef'}}, 'document_type', undefined},
         {33, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentServiceRef'}}, 'payment_service', undefined},
         {34, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentSystemRef'}}, 'payment_system', undefined},
-        {35, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'payment_token', undefined},
+        {35, optional, {struct, struct, {dmsl_domain_thrift, 'BankCardTokenServiceRef'}}, 'token_service', undefined},
         {36, optional, {struct, struct, {dmsl_domain_thrift, 'MobileOperatorRef'}}, 'mobile_operator', undefined},
         {37, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyMobileOperatorMappingRef'}}, 'mobile_operator_legacy', undefined},
         {38, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyBankCardPaymentSystemRef'}}, 'payment_system_legacy', undefined},

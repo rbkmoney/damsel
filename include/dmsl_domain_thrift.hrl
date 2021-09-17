@@ -996,8 +996,8 @@
 -record('domain_BankCardPaymentMethod', {
     'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'is_cvv_empty' = false :: boolean() | undefined,
-    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
-    'tokenization_method' = 'dpan' :: atom() | undefined,
+    'token_service' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'tokenization_method' :: atom() | undefined,
     'payment_system_deprecated' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystem'() | undefined,
     'token_provider_deprecated' :: dmsl_domain_thrift:'LegacyBankCardTokenProvider'() | undefined
 }).
@@ -1005,7 +1005,7 @@
 %% struct 'TokenizedBankCard'
 -record('domain_TokenizedBankCard', {
     'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
-    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'token_service' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
     'tokenization_method' :: atom() | undefined,
     'payment_system_deprecated' :: dmsl_domain_thrift:'LegacyBankCardPaymentSystem'() | undefined,
     'token_provider_deprecated' :: dmsl_domain_thrift:'LegacyBankCardTokenProvider'() | undefined
@@ -1053,7 +1053,7 @@
     'payment_system' :: dmsl_domain_thrift:'PaymentSystemRef'() | undefined,
     'bin' :: binary(),
     'last_digits' :: binary(),
-    'payment_token' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
+    'token_service' :: dmsl_domain_thrift:'BankCardTokenServiceRef'() | undefined,
     'tokenization_method' :: atom() | undefined,
     'issuer_country' :: dmsl_domain_thrift:'Residence'() | undefined,
     'bank_name' :: binary() | undefined,
