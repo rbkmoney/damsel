@@ -42,6 +42,14 @@ union InvalidStatus {
 }
 
 union InvalidChangesetReason {
+    1: InvalidClaimChangesetReason invalid_claim_changeset
+    2: InvalidPartyChangesetReason invalid_party_changeset
+}
+
+// TODO: Fill with claim modification errors
+union InvalidClaimChangesetReason{}
+
+union InvalidPartyChangesetReason {
     1: InvalidContract invalid_contract
     2: InvalidShop invalid_shop
     3: InvalidContractor invalid_contractor
@@ -97,8 +105,25 @@ struct ContractTermsViolated {
     2: required domain.TermSet terms
 }
 
-struct ShopPayoutToolInvalid {
-    1: optional domain.PayoutToolID payout_tool_id
+union ShopPayoutToolInvalid {
+    1: NoPayoutToolForAutomaticPayouts no_payout_tool_for_auto_payouts
+    2: CurrencyMismatch currency_mismatch
+    3: NoPayoutToolInContract no_payout_tool_in_contract
+}
+
+struct NoPayoutToolForAutomaticPayouts{
+    1: required domain.BusinessScheduleRef payout_schedule
+}
+
+struct CurrencyMismatch {
+    1: required domain.Currency shop_account_currency
+    2: required PayoutToolID payout_tool_id
+    3: required domain.Currency payout_tool_currency
+}
+
+struct NoPayoutToolInContract {
+    1: required ContractID contract_id
+    2: required PayoutToolID payout_tool_id
 }
 
 struct InvalidObjectReference {
