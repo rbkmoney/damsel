@@ -15,10 +15,6 @@ typedef base.ID CommentID
 typedef base.ID UserID
 typedef base.ID CashRegisterID
 typedef i32 CashRegisterProviderID
-typedef domain.ContractID  ContractID
-typedef domain.ShopID  ShopID
-typedef domain.ContractorID ContractorID
-typedef domain.PayoutToolID PayoutToolID
 
 typedef string MetadataKey
 typedef msgpack.Value MetadataValue
@@ -49,6 +45,9 @@ union InvalidChangesetReason {
 // TODO: Fill with claim modification errors
 union InvalidClaimChangesetReason{}
 
+// Placeholder type for reasons without additional information
+struct InvalidClaimConcreteReason{}
+
 union InvalidPartyChangesetReason {
     1: InvalidContract invalid_contract
     2: InvalidShop invalid_shop
@@ -56,23 +55,23 @@ union InvalidPartyChangesetReason {
 }
 
 struct InvalidContract {
-    1: required ContractID id
+    1: required domain.ContractID id
     2: required InvalidContractReason reason
 }
 
 struct InvalidShop {
-    1: required ShopID id
+    1: required domain.ShopID id
     2: required InvalidShopReason reason
 }
 
 struct InvalidContractor {
-    1: required ContractorID id
+    1: required domain.ContractorID id
     2: required InvalidContractorReason reason
 }
 
 union InvalidContractReason {
-    1: ContractID not_exists
-    2: ContractID already_exists
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
     3: domain.ContractStatus invalid_status
     4: domain.ContractAdjustmentID contract_adjustment_already_exists
     5: domain.PayoutToolID payout_tool_not_exists
@@ -82,48 +81,48 @@ union InvalidContractReason {
 }
 
 union InvalidShopReason {
-    1: ShopID not_exists
-    2: ShopID already_exists
-    3: ShopID account_not_exists
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
+    3: InvalidClaimConcreteReason account_not_exists
     4: InvalidStatus invalid_status
     5: ContractTermsViolated contract_terms_violated
-    6: ShopPayoutToolInvalid payout_tool_invalid
+    6: InvalidShopPayoutTool payout_tool_invalid
     7: InvalidObjectReference invalid_object_reference
 }
 
 union InvalidContractorReason {
-    1: ContractorID not_exists
-    2: ContractorID already_exists
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
 }
 
 struct ContractorNotExists {
-    1: optional ContractorID id
+    1: optional domain.ContractorID id
 }
 
 struct ContractTermsViolated {
-    1: required ContractID contract_id
+    1: required domain.ContractID contract_id
     2: required domain.TermSet terms
 }
 
-union ShopPayoutToolInvalid {
-    1: NoPayoutToolForAutomaticPayouts no_payout_tool_for_auto_payouts
-    2: CurrencyMismatch currency_mismatch
-    3: NoPayoutToolInContract no_payout_tool_in_contract
+union InvalidShopPayoutTool {
+    1: PayoutToolNotSetForPayouts not_set_for_payouts
+    2: PayoutToolCurrencyMismatch currency_mismatch
+    3: PayoutToolNotInContract not_in_contract
 }
 
-struct NoPayoutToolForAutomaticPayouts{
+struct PayoutToolNotSetForPayouts {
     1: required domain.BusinessScheduleRef payout_schedule
 }
 
-struct CurrencyMismatch {
+struct PayoutToolCurrencyMismatch {
     1: required domain.Currency shop_account_currency
-    2: required PayoutToolID payout_tool_id
+    2: required domain.PayoutToolID payout_tool_id
     3: required domain.Currency payout_tool_currency
 }
 
-struct NoPayoutToolInContract {
-    1: required ContractID contract_id
-    2: required PayoutToolID payout_tool_id
+struct PayoutToolNotInContract {
+    1: required domain.ContractID contract_id
+    2: required domain.PayoutToolID payout_tool_id
 }
 
 struct InvalidObjectReference {
