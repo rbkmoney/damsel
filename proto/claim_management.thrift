@@ -84,7 +84,7 @@ union InvalidContractReason {
 union InvalidShopReason {
     1: ShopID not_exists
     2: ShopID already_exists
-    3: ShopID no_account
+    3: ShopID account_not_exists
     4: InvalidStatus invalid_status
     5: ContractTermsViolated contract_terms_violated
     6: ShopPayoutToolInvalid payout_tool_invalid
