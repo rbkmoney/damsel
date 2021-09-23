@@ -49,6 +49,24 @@
     'ModificationChangeset'/0
 ]).
 -export_type([
+    'InvalidStatus'/0,
+    'InvalidChangesetReason'/0,
+    'InvalidClaimChangesetReason'/0,
+    'InvalidClaimConcreteReason'/0,
+    'InvalidPartyChangesetReason'/0,
+    'InvalidContract'/0,
+    'InvalidShop'/0,
+    'InvalidContractor'/0,
+    'InvalidContractReason'/0,
+    'InvalidShopReason'/0,
+    'InvalidContractorReason'/0,
+    'ContractorNotExists'/0,
+    'ContractTermsViolated'/0,
+    'InvalidShopPayoutTool'/0,
+    'PayoutToolNotSetForPayouts'/0,
+    'PayoutToolCurrencyMismatch'/0,
+    'PayoutToolNotInContract'/0,
+    'InvalidObjectReference'/0,
     'UserInfo'/0,
     'UserType'/0,
     'InternalUser'/0,
@@ -179,6 +197,24 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
+    'InvalidStatus' |
+    'InvalidChangesetReason' |
+    'InvalidClaimChangesetReason' |
+    'InvalidClaimConcreteReason' |
+    'InvalidPartyChangesetReason' |
+    'InvalidContract' |
+    'InvalidShop' |
+    'InvalidContractor' |
+    'InvalidContractReason' |
+    'InvalidShopReason' |
+    'InvalidContractorReason' |
+    'ContractorNotExists' |
+    'ContractTermsViolated' |
+    'InvalidShopPayoutTool' |
+    'PayoutToolNotSetForPayouts' |
+    'PayoutToolCurrencyMismatch' |
+    'PayoutToolNotInContract' |
+    'InvalidObjectReference' |
     'UserInfo' |
     'UserType' |
     'InternalUser' |
@@ -260,6 +296,87 @@
     'InvalidChangeset' |
     'InvalidClaimStatus' |
     'MetadataKeyNotFound'.
+
+%% union 'InvalidStatus'
+-type 'InvalidStatus'() ::
+    {'blocking', dmsl_domain_thrift:'Blocking'()} |
+    {'suspension', dmsl_domain_thrift:'Suspension'()}.
+
+%% union 'InvalidChangesetReason'
+-type 'InvalidChangesetReason'() ::
+    {'invalid_claim_changeset', 'InvalidClaimChangesetReason'()} |
+    {'invalid_party_changeset', 'InvalidPartyChangesetReason'()}.
+
+%% union 'InvalidClaimChangesetReason'
+-type 'InvalidClaimChangesetReason'() :: none().
+
+%% struct 'InvalidClaimConcreteReason'
+-type 'InvalidClaimConcreteReason'() :: #'claim_management_InvalidClaimConcreteReason'{}.
+
+%% union 'InvalidPartyChangesetReason'
+-type 'InvalidPartyChangesetReason'() ::
+    {'invalid_contract', 'InvalidContract'()} |
+    {'invalid_shop', 'InvalidShop'()} |
+    {'invalid_contractor', 'InvalidContractor'()}.
+
+%% struct 'InvalidContract'
+-type 'InvalidContract'() :: #'claim_management_InvalidContract'{}.
+
+%% struct 'InvalidShop'
+-type 'InvalidShop'() :: #'claim_management_InvalidShop'{}.
+
+%% struct 'InvalidContractor'
+-type 'InvalidContractor'() :: #'claim_management_InvalidContractor'{}.
+
+%% union 'InvalidContractReason'
+-type 'InvalidContractReason'() ::
+    {'not_exists', 'InvalidClaimConcreteReason'()} |
+    {'already_exists', 'InvalidClaimConcreteReason'()} |
+    {'invalid_status', dmsl_domain_thrift:'ContractStatus'()} |
+    {'contract_adjustment_already_exists', dmsl_domain_thrift:'ContractAdjustmentID'()} |
+    {'payout_tool_not_exists', dmsl_domain_thrift:'PayoutToolID'()} |
+    {'payout_tool_already_exists', dmsl_domain_thrift:'PayoutToolID'()} |
+    {'invalid_object_reference', 'InvalidObjectReference'()} |
+    {'contractor_not_exists', 'ContractorNotExists'()}.
+
+%% union 'InvalidShopReason'
+-type 'InvalidShopReason'() ::
+    {'not_exists', 'InvalidClaimConcreteReason'()} |
+    {'already_exists', 'InvalidClaimConcreteReason'()} |
+    {'account_not_exists', 'InvalidClaimConcreteReason'()} |
+    {'invalid_status', 'InvalidStatus'()} |
+    {'contract_terms_violated', 'ContractTermsViolated'()} |
+    {'payout_tool_invalid', 'InvalidShopPayoutTool'()} |
+    {'invalid_object_reference', 'InvalidObjectReference'()}.
+
+%% union 'InvalidContractorReason'
+-type 'InvalidContractorReason'() ::
+    {'not_exists', 'InvalidClaimConcreteReason'()} |
+    {'already_exists', 'InvalidClaimConcreteReason'()}.
+
+%% struct 'ContractorNotExists'
+-type 'ContractorNotExists'() :: #'claim_management_ContractorNotExists'{}.
+
+%% struct 'ContractTermsViolated'
+-type 'ContractTermsViolated'() :: #'claim_management_ContractTermsViolated'{}.
+
+%% union 'InvalidShopPayoutTool'
+-type 'InvalidShopPayoutTool'() ::
+    {'not_set_for_payouts', 'PayoutToolNotSetForPayouts'()} |
+    {'currency_mismatch', 'PayoutToolCurrencyMismatch'()} |
+    {'not_in_contract', 'PayoutToolNotInContract'()}.
+
+%% struct 'PayoutToolNotSetForPayouts'
+-type 'PayoutToolNotSetForPayouts'() :: #'claim_management_PayoutToolNotSetForPayouts'{}.
+
+%% struct 'PayoutToolCurrencyMismatch'
+-type 'PayoutToolCurrencyMismatch'() :: #'claim_management_PayoutToolCurrencyMismatch'{}.
+
+%% struct 'PayoutToolNotInContract'
+-type 'PayoutToolNotInContract'() :: #'claim_management_PayoutToolNotInContract'{}.
+
+%% struct 'InvalidObjectReference'
+-type 'InvalidObjectReference'() :: #'claim_management_InvalidObjectReference'{}.
 
 %% struct 'UserInfo'
 -type 'UserInfo'() :: #'claim_management_UserInfo'{}.
@@ -650,6 +767,24 @@ enums() ->
 
 structs() ->
     [
+        'InvalidStatus',
+        'InvalidChangesetReason',
+        'InvalidClaimChangesetReason',
+        'InvalidClaimConcreteReason',
+        'InvalidPartyChangesetReason',
+        'InvalidContract',
+        'InvalidShop',
+        'InvalidContractor',
+        'InvalidContractReason',
+        'InvalidShopReason',
+        'InvalidContractorReason',
+        'ContractorNotExists',
+        'ContractTermsViolated',
+        'InvalidShopPayoutTool',
+        'PayoutToolNotSetForPayouts',
+        'PayoutToolCurrencyMismatch',
+        'PayoutToolNotInContract',
+        'InvalidObjectReference',
         'UserInfo',
         'UserType',
         'InternalUser',
@@ -787,6 +922,119 @@ typedef_info(_) -> erlang:error(badarg).
 enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
+
+struct_info('InvalidStatus') ->
+    {struct, union, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Blocking'}}, 'blocking', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'Suspension'}}, 'suspension', undefined}
+    ]};
+
+struct_info('InvalidChangesetReason') ->
+    {struct, union, [
+        {1, optional, {struct, union, {dmsl_claim_management_thrift, 'InvalidClaimChangesetReason'}}, 'invalid_claim_changeset', undefined},
+        {2, optional, {struct, union, {dmsl_claim_management_thrift, 'InvalidPartyChangesetReason'}}, 'invalid_party_changeset', undefined}
+    ]};
+
+struct_info('InvalidClaimChangesetReason') ->
+    {struct, union, []};
+
+struct_info('InvalidClaimConcreteReason') ->
+    {struct, struct, []};
+
+struct_info('InvalidPartyChangesetReason') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidContract'}}, 'invalid_contract', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidShop'}}, 'invalid_shop', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidContractor'}}, 'invalid_contractor', undefined}
+    ]};
+
+struct_info('InvalidContract') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'InvalidContractReason'}}, 'reason', undefined}
+    ]};
+
+struct_info('InvalidShop') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'InvalidShopReason'}}, 'reason', undefined}
+    ]};
+
+struct_info('InvalidContractor') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'InvalidContractorReason'}}, 'reason', undefined}
+    ]};
+
+struct_info('InvalidContractReason') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'not_exists', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'already_exists', undefined},
+        {3, optional, {struct, union, {dmsl_domain_thrift, 'ContractStatus'}}, 'invalid_status', undefined},
+        {4, optional, string, 'contract_adjustment_already_exists', undefined},
+        {5, optional, string, 'payout_tool_not_exists', undefined},
+        {6, optional, string, 'payout_tool_already_exists', undefined},
+        {7, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined},
+        {8, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorNotExists'}}, 'contractor_not_exists', undefined}
+    ]};
+
+struct_info('InvalidShopReason') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'not_exists', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'already_exists', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'account_not_exists', undefined},
+        {4, optional, {struct, union, {dmsl_claim_management_thrift, 'InvalidStatus'}}, 'invalid_status', undefined},
+        {5, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractTermsViolated'}}, 'contract_terms_violated', undefined},
+        {6, optional, {struct, union, {dmsl_claim_management_thrift, 'InvalidShopPayoutTool'}}, 'payout_tool_invalid', undefined},
+        {7, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidObjectReference'}}, 'invalid_object_reference', undefined}
+    ]};
+
+struct_info('InvalidContractorReason') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'not_exists', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'InvalidClaimConcreteReason'}}, 'already_exists', undefined}
+    ]};
+
+struct_info('ContractorNotExists') ->
+    {struct, struct, [
+        {1, optional, string, 'id', undefined}
+    ]};
+
+struct_info('ContractTermsViolated') ->
+    {struct, struct, [
+        {1, required, string, 'contract_id', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'TermSet'}}, 'terms', undefined}
+    ]};
+
+struct_info('InvalidShopPayoutTool') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolNotSetForPayouts'}}, 'not_set_for_payouts', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolCurrencyMismatch'}}, 'currency_mismatch', undefined},
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'PayoutToolNotInContract'}}, 'not_in_contract', undefined}
+    ]};
+
+struct_info('PayoutToolNotSetForPayouts') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'BusinessScheduleRef'}}, 'payout_schedule', undefined}
+    ]};
+
+struct_info('PayoutToolCurrencyMismatch') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'shop_account_currency', undefined},
+        {2, required, string, 'payout_tool_id', undefined},
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'payout_tool_currency', undefined}
+    ]};
+
+struct_info('PayoutToolNotInContract') ->
+    {struct, struct, [
+        {1, required, string, 'contract_id', undefined},
+        {2, required, string, 'payout_tool_id', undefined}
+    ]};
+
+struct_info('InvalidObjectReference') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'Reference'}}, 'ref', undefined}
+    ]};
 
 struct_info('UserInfo') ->
     {struct, struct, [
@@ -1231,8 +1479,9 @@ struct_info('ChangesetConflict') ->
 
 struct_info('InvalidChangeset') ->
     {struct, exception, [
-        {1, required, string, 'reason', undefined},
-        {2, required, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'invalid_changeset', undefined}
+        {3, optional, {struct, union, {dmsl_claim_management_thrift, 'InvalidChangesetReason'}}, 'reason', undefined},
+        {2, required, {list, {struct, union, {dmsl_claim_management_thrift, 'Modification'}}}, 'invalid_changeset', undefined},
+        {1, optional, string, 'reason_legacy', undefined}
     ]};
 
 struct_info('InvalidClaimStatus') ->
@@ -1246,6 +1495,36 @@ struct_info('MetadataKeyNotFound') ->
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
+
+record_name('InvalidClaimConcreteReason') ->
+    'claim_management_InvalidClaimConcreteReason';
+
+record_name('InvalidContract') ->
+    'claim_management_InvalidContract';
+
+record_name('InvalidShop') ->
+    'claim_management_InvalidShop';
+
+record_name('InvalidContractor') ->
+    'claim_management_InvalidContractor';
+
+record_name('ContractorNotExists') ->
+    'claim_management_ContractorNotExists';
+
+record_name('ContractTermsViolated') ->
+    'claim_management_ContractTermsViolated';
+
+record_name('PayoutToolNotSetForPayouts') ->
+    'claim_management_PayoutToolNotSetForPayouts';
+
+record_name('PayoutToolCurrencyMismatch') ->
+    'claim_management_PayoutToolCurrencyMismatch';
+
+record_name('PayoutToolNotInContract') ->
+    'claim_management_PayoutToolNotInContract';
+
+record_name('InvalidObjectReference') ->
+    'claim_management_InvalidObjectReference';
 
 record_name('UserInfo') ->
     'claim_management_UserInfo';

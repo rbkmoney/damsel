@@ -7,6 +7,61 @@
 
 
 
+%% struct 'InvalidClaimConcreteReason'
+-record('claim_management_InvalidClaimConcreteReason', {}).
+
+%% struct 'InvalidContract'
+-record('claim_management_InvalidContract', {
+    'id' :: dmsl_domain_thrift:'ContractID'(),
+    'reason' :: dmsl_claim_management_thrift:'InvalidContractReason'()
+}).
+
+%% struct 'InvalidShop'
+-record('claim_management_InvalidShop', {
+    'id' :: dmsl_domain_thrift:'ShopID'(),
+    'reason' :: dmsl_claim_management_thrift:'InvalidShopReason'()
+}).
+
+%% struct 'InvalidContractor'
+-record('claim_management_InvalidContractor', {
+    'id' :: dmsl_domain_thrift:'ContractorID'(),
+    'reason' :: dmsl_claim_management_thrift:'InvalidContractorReason'()
+}).
+
+%% struct 'ContractorNotExists'
+-record('claim_management_ContractorNotExists', {
+    'id' :: dmsl_domain_thrift:'ContractorID'() | undefined
+}).
+
+%% struct 'ContractTermsViolated'
+-record('claim_management_ContractTermsViolated', {
+    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'terms' :: dmsl_domain_thrift:'TermSet'()
+}).
+
+%% struct 'PayoutToolNotSetForPayouts'
+-record('claim_management_PayoutToolNotSetForPayouts', {
+    'payout_schedule' :: dmsl_domain_thrift:'BusinessScheduleRef'()
+}).
+
+%% struct 'PayoutToolCurrencyMismatch'
+-record('claim_management_PayoutToolCurrencyMismatch', {
+    'shop_account_currency' :: dmsl_domain_thrift:'Currency'(),
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
+    'payout_tool_currency' :: dmsl_domain_thrift:'Currency'()
+}).
+
+%% struct 'PayoutToolNotInContract'
+-record('claim_management_PayoutToolNotInContract', {
+    'contract_id' :: dmsl_domain_thrift:'ContractID'(),
+    'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'()
+}).
+
+%% struct 'InvalidObjectReference'
+-record('claim_management_InvalidObjectReference', {
+    'ref' :: dmsl_domain_thrift:'Reference'() | undefined
+}).
+
 %% struct 'UserInfo'
 -record('claim_management_UserInfo', {
     'id' :: dmsl_claim_management_thrift:'UserID'(),
@@ -314,8 +369,9 @@
 
 %% exception 'InvalidChangeset'
 -record('claim_management_InvalidChangeset', {
-    'reason' :: binary(),
-    'invalid_changeset' :: dmsl_claim_management_thrift:'ModificationChangeset'()
+    'reason' :: dmsl_claim_management_thrift:'InvalidChangesetReason'() | undefined,
+    'invalid_changeset' :: dmsl_claim_management_thrift:'ModificationChangeset'(),
+    'reason_legacy' :: binary() | undefined
 }).
 
 %% exception 'InvalidClaimStatus'
