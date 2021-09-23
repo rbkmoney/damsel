@@ -8,7 +8,7 @@ namespace erlang paytoolprv
     Атрибуты магазина в системе упакованные в идентификатор передаваемый провайдеру.
     Например, как gatewayMerchantID для GooglePay или YandexPay
 */
-struct TokenProviderGatewayMerchantID {
+struct MerchantID {
   1: required domain.PartyID party_id
   2: required domain.ShopID shop_id
   3: optional domain.PaymentInstitutionRealm realm
