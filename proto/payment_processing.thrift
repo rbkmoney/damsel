@@ -2331,6 +2331,20 @@ struct PayoutParams {
     4: optional domain.PayoutToolID payout_tool_id
 }
 
+/*
+ * Совокупные данные о магазине получаемые запросом PartyManagment:AggregateShopData
+ */
+struct AggregatedShopData {
+    1: required domain.Shop shop
+    2: required domain.Contract contract
+    /*
+     * PaymentInstitution с ref заданным в Contract.payment_institution.
+     * Опциональный. Может быть не найден по причине отсутствия контроля
+     * ссылочной целостности в domain.
+     */
+    3: optional domain.PaymentInstitution payment_institution
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -2555,6 +2569,9 @@ service PartyManagement {
             4: ShopNotFound ex4,
             5: VarsetPartyNotMatch ex5
         )
+
+    AggregatedShopData AggregateShopData(1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     /* Wallet */
 
