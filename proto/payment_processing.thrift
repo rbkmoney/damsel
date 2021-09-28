@@ -2574,6 +2574,14 @@ service PartyManagement {
             4: VarsetPartyNotMatch ex4
         )
 
+    /* Claim */
+
+    Claim GetClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ClaimNotFound ex3)
+
+    list<Claim> GetClaims (1: UserInfo user, 2: PartyID party_id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
+
     /* Event polling */
 
     Events GetEvents (1: UserInfo user, 2: PartyID party_id, 3: EventRange range)
