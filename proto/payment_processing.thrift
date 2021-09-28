@@ -2335,6 +2335,15 @@ struct PayoutParams {
 
 exception PartyExists {}
 exception ContractNotFound {}
+exception ClaimNotFound {}
+exception InvalidClaimRevision {}
+
+exception InvalidClaimStatus {
+    1: required ClaimStatus status
+}
+
+exception ChangesetConflict { 1: required ClaimID conflicted_id }
+exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
     1: InvalidContract invalid_contract
