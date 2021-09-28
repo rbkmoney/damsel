@@ -2337,7 +2337,6 @@ struct PayoutParams {
 struct AggregatedShopData {
     1: required domain.Shop shop
     2: required domain.Contract contract
-    3: required domain.PaymentInstitution payment_institution
 }
 
 // Exceptions
@@ -2566,7 +2565,7 @@ service PartyManagement {
         )
 
     AggregatedShopData AggregateShopData(1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: PaymentInstitutionNotFound ex4)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     /* Wallet */
 
