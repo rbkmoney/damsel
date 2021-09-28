@@ -2115,8 +2115,8 @@ struct WalletAccountParams {
 
 // Claims
 
-typedef i64 ClaimID
-typedef i32 ClaimRevision
+typedef base.ClaimID ClaimID
+typedef base.ClaimRevision ClaimRevision
 
 struct Claim {
     1: required ClaimID id
@@ -2335,15 +2335,6 @@ struct PayoutParams {
 
 exception PartyExists {}
 exception ContractNotFound {}
-exception ClaimNotFound {}
-exception InvalidClaimRevision {}
-
-exception InvalidClaimStatus {
-    1: required ClaimStatus status
-}
-
-exception ChangesetConflict { 1: required ClaimID conflicted_id }
-exception InvalidChangeset { 1: required InvalidChangesetReason reason }
 
 union InvalidChangesetReason {
     1: InvalidContract invalid_contract
@@ -2572,66 +2563,6 @@ service PartyManagement {
             2: PartyNotFound ex2,
             3: PartyNotExistsYet ex3,
             4: VarsetPartyNotMatch ex4
-        )
-
-    /* Claim */
-
-    Claim CreateClaim (1: UserInfo user, 2: PartyID party_id, 3: PartyChangeset changeset)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: ChangesetConflict ex4,
-            5: InvalidChangeset ex5,
-            6: base.InvalidRequest ex6
-        )
-
-    Claim GetClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ClaimNotFound ex3)
-
-    list<Claim> GetClaims (1: UserInfo user, 2: PartyID party_id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2)
-
-    void AcceptClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4,
-            5: InvalidClaimRevision ex5,
-            6: InvalidChangeset ex6
-        )
-
-    void UpdateClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: PartyChangeset changeset)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: ClaimNotFound ex4,
-            5: InvalidClaimStatus ex5,
-            6: InvalidClaimRevision ex6,
-            7: ChangesetConflict ex7,
-            8: InvalidChangeset ex8,
-            9: base.InvalidRequest ex9
-        )
-
-    void DenyClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: string reason)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: ClaimNotFound ex3,
-            4: InvalidClaimStatus ex4,
-            5: InvalidClaimRevision ex5
-        )
-
-    void RevokeClaim (1: UserInfo user, 2: PartyID party_id, 3: ClaimID id, 4: ClaimRevision revision, 5: string reason)
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: InvalidPartyStatus ex3,
-            4: ClaimNotFound ex4,
-            5: InvalidClaimStatus ex5,
-            6: InvalidClaimRevision ex6
         )
 
     /* Event polling */

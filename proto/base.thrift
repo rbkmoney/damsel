@@ -211,3 +211,13 @@ struct IntegerRange {
     1: optional i64 lower
     2: optional i64 upper
 }
+
+/**
+* Идентификатор заявок
+**/
+typedef i64 ClaimID
+
+/**
+* Ревизия заявок
+**/
+typedef i32 ClaimRevision
