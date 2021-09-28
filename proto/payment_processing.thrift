@@ -2537,7 +2537,7 @@ service PartyManagement {
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
 
     ShopContract GetShopContract(1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
-        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ContractNotFound ex4)
 
     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
