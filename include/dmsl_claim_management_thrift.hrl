@@ -22,6 +22,12 @@
     'reason' :: dmsl_claim_management_thrift:'InvalidShopReason'()
 }).
 
+%% struct 'InvalidWallet'
+-record('claim_management_InvalidWallet', {
+    'id' :: dmsl_domain_thrift:'WalletID'(),
+    'reason' :: dmsl_claim_management_thrift:'InvalidWalletReason'()
+}).
+
 %% struct 'InvalidContractor'
 -record('claim_management_InvalidContractor', {
     'id' :: dmsl_domain_thrift:'ContractorID'(),
