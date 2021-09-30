@@ -961,6 +961,12 @@
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
 }).
 
+%% struct 'ShopContract'
+-record('payproc_ShopContract', {
+    'shop' :: dmsl_domain_thrift:'Shop'(),
+    'contract' :: dmsl_domain_thrift:'Contract'()
+}).
+
 %% struct 'InvalidContract'
 -record('payproc_InvalidContract', {
     'id' :: dmsl_payment_processing_thrift:'ContractID'(),
