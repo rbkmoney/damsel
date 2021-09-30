@@ -31,9 +31,122 @@ exception InvalidClaimRevision {}
 exception BadContinuationToken { 1: string reason }
 exception LimitExceeded { 1: string reason }
 exception ChangesetConflict { 1: required ClaimID conflicted_id }
+
+union InvalidStatus {
+    1: domain.Blocking blocking
+    2: domain.Suspension suspension
+}
+
+union InvalidChangesetReason {
+    1: InvalidClaimChangesetReason invalid_claim_changeset
+    2: InvalidPartyChangesetReason invalid_party_changeset
+}
+
+// TODO: Fill with claim modification errors
+union InvalidClaimChangesetReason{}
+
+// Placeholder type for reasons without additional information
+struct InvalidClaimConcreteReason{}
+
+union InvalidPartyChangesetReason {
+    1: InvalidContract invalid_contract
+    2: InvalidShop invalid_shop
+    3: InvalidWallet invalid_wallet
+    4: InvalidContractor invalid_contractor
+}
+
+struct InvalidContract {
+    1: required domain.ContractID id
+    2: required InvalidContractReason reason
+}
+
+struct InvalidShop {
+    1: required domain.ShopID id
+    2: required InvalidShopReason reason
+}
+
+struct InvalidWallet {
+    1: required domain.WalletID id
+    2: required InvalidWalletReason reason
+}
+
+struct InvalidContractor {
+    1: required domain.ContractorID id
+    2: required InvalidContractorReason reason
+}
+
+union InvalidContractReason {
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
+    3: domain.ContractStatus invalid_status
+    4: domain.ContractAdjustmentID contract_adjustment_already_exists
+    5: domain.PayoutToolID payout_tool_not_exists
+    6: domain.PayoutToolID payout_tool_already_exists
+    7: InvalidObjectReference invalid_object_reference
+    8: ContractorNotExists contractor_not_exists
+}
+
+union InvalidShopReason {
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
+    3: InvalidClaimConcreteReason account_not_exists
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+    6: InvalidShopPayoutTool payout_tool_invalid
+    7: InvalidObjectReference invalid_object_reference
+}
+
+union InvalidWalletReason {
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
+    3: InvalidClaimConcreteReason account_not_exists
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
+}
+
+union InvalidContractorReason {
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
+}
+
+struct ContractorNotExists {
+    1: optional domain.ContractorID id
+}
+
+struct ContractTermsViolated {
+    1: required domain.ContractID contract_id
+    2: required domain.TermSet terms
+}
+
+union InvalidShopPayoutTool {
+    1: PayoutToolNotSetForPayouts not_set_for_payouts
+    2: PayoutToolCurrencyMismatch currency_mismatch
+    3: PayoutToolNotInContract not_in_contract
+}
+
+struct PayoutToolNotSetForPayouts {
+    1: required domain.BusinessScheduleRef payout_schedule
+}
+
+struct PayoutToolCurrencyMismatch {
+    1: required domain.Currency shop_account_currency
+    2: required domain.PayoutToolID payout_tool_id
+    3: required domain.Currency payout_tool_currency
+}
+
+struct PayoutToolNotInContract {
+    1: required domain.ContractID contract_id
+    2: required domain.PayoutToolID payout_tool_id
+}
+
+struct InvalidObjectReference {
+    1: optional domain.Reference ref
+}
+
 exception InvalidChangeset {
-    1: required string reason
+    3: optional InvalidChangesetReason reason
     2: required ModificationChangeset invalid_changeset
+    1: optional string reason_legacy
 }
 exception InvalidClaimStatus {
     1: required ClaimStatus status
