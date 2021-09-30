@@ -51,7 +51,8 @@ struct InvalidClaimConcreteReason{}
 union InvalidPartyChangesetReason {
     1: InvalidContract invalid_contract
     2: InvalidShop invalid_shop
-    3: InvalidContractor invalid_contractor
+    3: InvalidWallet invalid_wallet
+    4: InvalidContractor invalid_contractor
 }
 
 struct InvalidContract {
@@ -62,6 +63,11 @@ struct InvalidContract {
 struct InvalidShop {
     1: required domain.ShopID id
     2: required InvalidShopReason reason
+}
+
+struct InvalidWallet {
+    1: required domain.WalletID id
+    2: required InvalidWalletReason reason
 }
 
 struct InvalidContractor {
@@ -88,6 +94,14 @@ union InvalidShopReason {
     5: ContractTermsViolated contract_terms_violated
     6: InvalidShopPayoutTool payout_tool_invalid
     7: InvalidObjectReference invalid_object_reference
+}
+
+union InvalidWalletReason {
+    1: InvalidClaimConcreteReason not_exists
+    2: InvalidClaimConcreteReason already_exists
+    3: InvalidClaimConcreteReason account_not_exists
+    4: InvalidStatus invalid_status
+    5: ContractTermsViolated contract_terms_violated
 }
 
 union InvalidContractorReason {
