@@ -2331,6 +2331,14 @@ struct PayoutParams {
     4: optional domain.PayoutToolID payout_tool_id
 }
 
+/*
+ * Контракт магазина
+ */
+struct ShopContract {
+    1: required domain.Shop shop
+    2: required domain.Contract contract
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -2527,6 +2535,9 @@ service PartyManagement {
 
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
+
+    ShopContract GetShopContract(1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ContractNotFound ex4)
 
     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
