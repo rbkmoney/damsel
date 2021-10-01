@@ -92,8 +92,9 @@ union InvalidShopReason {
     3: InvalidClaimConcreteReason account_not_exists
     4: InvalidStatus invalid_status
     5: ContractTermsViolated contract_terms_violated
-    6: InvalidShopPayoutTool payout_tool_invalid
+    6: InvalidShopPayoutTool invalid_payout_tool
     7: InvalidObjectReference invalid_object_reference
+    8: InvalidCashRegister invalid_cash_register
 }
 
 union InvalidWalletReason {
@@ -141,6 +142,10 @@ struct PayoutToolNotInContract {
 
 struct InvalidObjectReference {
     1: optional domain.Reference ref
+}
+
+union InvalidCashRegister {
+    1: CashRegisterID not_applicable
 }
 
 exception InvalidChangeset {
