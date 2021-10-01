@@ -145,7 +145,7 @@ struct InvalidObjectReference {
 }
 
 union InvalidCashRegister {
-    1: InvalidClaimConcreteReason not_applicable
+    1: CashRegisterID not_applicable
 }
 
 exception InvalidChangeset {
