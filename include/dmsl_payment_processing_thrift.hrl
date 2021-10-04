@@ -1204,6 +1204,18 @@
 %% exception 'InvoicePaymentChargebackPending'
 -record('payproc_InvoicePaymentChargebackPending', {}).
 
+%% exception 'AllocationNotAllowed'
+-record('payproc_AllocationNotAllowed', {}).
+
+%% exception 'AllocationExceededPaymentAmount'
+-record('payproc_AllocationExceededPaymentAmount', {}).
+
+%% exception 'AllocationInvalidTransaction'
+-record('payproc_AllocationInvalidTransaction', {
+    'transaction' :: dmsl_payment_processing_thrift:'FailedAllocationTransaction'(),
+    'reason' :: binary()
+}).
+
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {
     'status' :: dmsl_payment_processing_thrift:'CustomerStatus'()
