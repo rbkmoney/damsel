@@ -1022,6 +1022,20 @@ exception AmountExceededCaptureBalance {
 
 exception InvoicePaymentChargebackPending {}
 
+exception AllocationNotAllowed {}
+
+exception AllocationExceededPaymentAmount {}
+
+exception AllocationInvalidTransaction {
+    1: required FailedAllocationTransaction transaction
+    2: required string reason
+}
+
+union FailedAllocationTransaction {
+    1: domain.AllocationTransaction transaction
+    2: domain.AllocationTransactionPrototype transaction_prototype
+}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -1033,7 +1047,10 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7,
-            8: InvoiceTermsViolated ex8
+            8: InvoiceTermsViolated ex8,
+            9: AllocationNotAllowed ex9,
+            10: AllocationExceededPaymentAmount ex10,
+            11: AllocationInvalidTransaction ex11
         )
 
     Invoice CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
@@ -1187,7 +1204,10 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: AllocationNotAllowed ex11,
+            12: AllocationExceededPaymentAmount ex12,
+            13: AllocationInvalidTransaction ex13
         )
 
     void CapturePaymentNew (
@@ -1206,7 +1226,10 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: AllocationNotAllowed ex11,
+            12: AllocationExceededPaymentAmount ex12,
+            13: AllocationInvalidTransaction ex13
         )
     /**
      * Создать поправку к платежу.
@@ -1418,13 +1441,16 @@ service Invoicing {
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
-            8: base.InvalidRequest ex8
-            9: InvoicePaymentAmountExceeded ex9
-            10: InconsistentRefundCurrency ex10
-            11: InvalidPartyStatus ex11
-            12: InvalidShopStatus ex12
-            13: InvalidContractStatus ex13
-            14: InvoicePaymentChargebackPending ex14
+            8: base.InvalidRequest ex8,
+            9: InvoicePaymentAmountExceeded ex9,
+            10: InconsistentRefundCurrency ex10,
+            11: InvalidPartyStatus ex11,
+            12: InvalidShopStatus ex12,
+            13: InvalidContractStatus ex13,
+            14: InvoicePaymentChargebackPending ex14,
+            15: AllocationNotAllowed ex15,
+            16: AllocationExceededPaymentAmount ex16,
+            17: AllocationInvalidTransaction ex17
         )
 
 
@@ -1444,13 +1470,16 @@ service Invoicing {
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
-            8: InvoicePaymentAmountExceeded ex8
-            9: InconsistentRefundCurrency ex9
-            10: InvalidPartyStatus ex10
-            11: InvalidShopStatus ex11
-            12: InvalidContractStatus ex12
-            13: base.InvalidRequest ex13
-            14: InvoicePaymentChargebackPending ex14
+            8: InvoicePaymentAmountExceeded ex8,
+            9: InconsistentRefundCurrency ex9,
+            10: InvalidPartyStatus ex10,
+            11: InvalidShopStatus ex11,
+            12: InvalidContractStatus ex12,
+            13: base.InvalidRequest ex13,
+            14: InvoicePaymentChargebackPending ex14,
+            15: AllocationNotAllowed ex15,
+            16: AllocationExceededPaymentAmount ex16,
+            17: AllocationInvalidTransaction ex17
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
