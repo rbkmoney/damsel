@@ -2484,9 +2484,6 @@ struct Terminal {
     16: optional MerchantID external_merchant_id
     /* Код классификации вида деятельности мерчанта. */
     17: optional MerchantCategoryCode mcc
-
-    // deprecated
-    12: optional PaymentsProvisionTerms terms_legacy
 }
 
 union TerminalSelector {

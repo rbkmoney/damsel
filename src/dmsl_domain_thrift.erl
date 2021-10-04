@@ -6145,8 +6145,7 @@ struct_info('Terminal') ->
         {14, optional, {struct, struct, {dmsl_domain_thrift, 'ProvisionTermSet'}}, 'terms', undefined},
         {15, optional, string, 'external_terminal_id', undefined},
         {16, optional, string, 'external_merchant_id', undefined},
-        {17, optional, string, 'mcc', undefined},
-        {12, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentsProvisionTerms'}}, 'terms_legacy', undefined}
+        {17, optional, string, 'mcc', undefined}
     ]};
 
 struct_info('TerminalSelector') ->
