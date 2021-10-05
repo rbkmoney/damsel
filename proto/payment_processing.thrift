@@ -1036,6 +1036,8 @@ union FailedAllocationTransaction {
     2: domain.AllocationTransactionPrototype transaction_prototype
 }
 
+exception AllocationNotFound {}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -1450,7 +1452,8 @@ service Invoicing {
             14: InvoicePaymentChargebackPending ex14,
             15: AllocationNotAllowed ex15,
             16: AllocationExceededPaymentAmount ex16,
-            17: AllocationInvalidTransaction ex17
+            17: AllocationInvalidTransaction ex17,
+            18: AllocationNotFound ex18
         )
 
 
@@ -1479,7 +1482,8 @@ service Invoicing {
             14: InvoicePaymentChargebackPending ex14,
             15: AllocationNotAllowed ex15,
             16: AllocationExceededPaymentAmount ex16,
-            17: AllocationInvalidTransaction ex17
+            17: AllocationInvalidTransaction ex17,
+            18: AllocationNotFound ex18
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
