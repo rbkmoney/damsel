@@ -1138,7 +1138,6 @@ struct WalletServiceTerms {
     2: optional CashLimitSelector wallet_limit
     3: optional CumulativeLimitSelector turnover_limit
     4: optional WithdrawalServiceTerms withdrawals
-    5: optional P2PServiceTerms p2p
     6: optional W2WServiceTerms w2w
 }
 
@@ -1172,24 +1171,6 @@ struct WithdrawalServiceTerms {
     2: optional CashLimitSelector cash_limit
     3: optional CashFlowSelector cash_flow
     4: optional AttemptLimitSelector attempt_limit
-}
-
-/** P2P service terms **/
-
-struct P2PServiceTerms {
-    1: optional Predicate allow
-    2: optional CurrencySelector currencies
-    3: optional CashLimitSelector cash_limit
-    4: optional CashFlowSelector cash_flow
-    5: optional FeeSelector fees
-    6: optional LifetimeSelector quote_lifetime
-    7: optional P2PTemplateServiceTerms templates
-}
-
-/** P2P template service terms **/
-
-struct P2PTemplateServiceTerms {
-    1: optional Predicate allow
 }
 
 /** W2W service terms **/
@@ -1716,11 +1697,6 @@ struct BankCardTokenService {
 typedef base.ID CustomerID
 typedef base.ID CustomerBindingID
 typedef base.ID RecurrentPaymentToolID
-
-struct P2PTool {
-    1: required PaymentTool sender
-    2: required PaymentTool receiver
-}
 
 union PaymentTool {
     1: BankCard bank_card
@@ -2269,17 +2245,6 @@ struct WithdrawalProvider {
     7: optional WithdrawalTerminalSelector terminal
 }
 
-// P2PProvider is deprecated, use Provider instead
-struct P2PProviderRef { 1: required ObjectID id }
-struct P2PProvider {
-    1: required string name
-    2: optional string description
-    3: required Proxy proxy
-    4: optional string identity
-    6: optional P2PProvisionTerms p2p_terms
-    7: optional ProviderAccountSet accounts = {}
-}
-
 struct ProvisionTermSet {
     1: optional PaymentsProvisionTerms payments
     2: optional RecurrentPaytoolsProvisionTerms recurrent_paytools
@@ -2345,7 +2310,6 @@ struct RecurrentPaytoolsProvisionTerms {
 struct WalletProvisionTerms {
     1: optional CumulativeLimitSelector turnover_limit
     2: optional WithdrawalProvisionTerms withdrawals
-    3: optional P2PProvisionTerms p2p
 }
 
 struct WithdrawalProvisionTerms {
@@ -2354,14 +2318,6 @@ struct WithdrawalProvisionTerms {
     2: optional PayoutMethodSelector payout_methods
     3: optional CashLimitSelector cash_limit
     4: optional CashFlowSelector cash_flow
-}
-
-struct P2PProvisionTerms {
-    5: optional Predicate allow
-    1: optional CurrencySelector currencies
-    2: optional CashLimitSelector cash_limit
-    3: optional CashFlowSelector cash_flow
-    4: optional FeeSelector fees
 }
 
 union CashValueSelector {
@@ -2410,16 +2366,6 @@ struct WithdrawalProviderDecision {
     2: required WithdrawalProviderSelector then_
 }
 
-union P2PProviderSelector {
-    1: list<P2PProviderDecision> decisions
-    2: set<P2PProviderRef> value
-}
-
-struct P2PProviderDecision {
-    1: required Predicate if_
-    2: required P2PProviderSelector then_
-}
-
 /** Inspectors */
 
 struct InspectorRef { 1: required ObjectID id }
@@ -2439,25 +2385,6 @@ union InspectorSelector {
 struct InspectorDecision {
     1: required Predicate if_
     2: required InspectorSelector then_
-}
-
-struct P2PInspectorRef { 1: required ObjectID id }
-
-struct P2PInspector {
-    1: required string name
-    2: required string description
-    3: required Proxy proxy
-    4: optional map<ScoreID, RiskScore> fallback_risk_score
-}
-
-union P2PInspectorSelector {
-    1: list<P2PInspectorDecision> decisions
-    2: P2PInspectorRef value
-}
-
-struct P2PInspectorDecision {
-    1: required Predicate if_
-    2: required P2PInspectorSelector then_
 }
 
 typedef string ExternalTerminalID
@@ -2553,7 +2480,6 @@ union Condition {
     6: PartyCondition party
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
-    9: P2PToolCondition p2p_tool
    10: BinDataCondition bin_data
 }
 
@@ -2565,11 +2491,6 @@ struct BinDataCondition {
 union StringCondition {
     1: string matches
     2: string equals
-}
-
-struct P2PToolCondition {
-    1: optional PaymentToolCondition sender_is
-    2: optional PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {
@@ -2759,17 +2680,13 @@ struct PaymentInstitution {
     /* TODO: separated system accounts for wallets look weird */
     11: optional SystemAccountSetSelector wallet_system_account_set
     12: optional string identity
-    15: optional P2PInspectorSelector p2p_inspector
     16: optional RoutingRules payment_routing_rules
     19: optional RoutingRules withdrawal_routing_rules
-    20: optional RoutingRules p2p_transfer_routing_rules
     17: optional ProviderSelector withdrawal_providers
-    18: optional ProviderSelector p2p_providers
     21: optional PaymentSystemSelector payment_system
 
     // Deprecated
     13: optional WithdrawalProviderSelector withdrawal_providers_legacy
-    14: optional P2PProviderSelector p2p_providers_legacy
     5: optional ProviderSelector providers
 }
 
@@ -2933,11 +2850,6 @@ struct WithdrawalProviderObject {
     2: required WithdrawalProvider data
 }
 
-struct P2PProviderObject {
-    1: required P2PProviderRef ref
-    2: required P2PProvider data
-}
-
 struct TerminalObject {
     1: required TerminalRef ref
     2: required Terminal data
@@ -2951,11 +2863,6 @@ struct WithdrawalTerminalObject {
 struct InspectorObject {
     1: required InspectorRef ref
     2: required Inspector data
-}
-
-struct P2PInspectorObject {
-    1: required P2PInspectorRef ref
-    2: required P2PInspector data
 }
 
 struct PaymentInstitutionObject {
@@ -3110,14 +3017,12 @@ union Reference {
     7  : ProviderRef                provider
     8  : TerminalRef                terminal
     15 : InspectorRef               inspector
-    25 : P2PInspectorRef            p2p_inspector
     14 : SystemAccountSetRef        system_account_set
     16 : ExternalAccountSetRef      external_account_set
     9  : ProxyRef                   proxy
     11 : GlobalsRef                 globals
     22 : WithdrawalProviderRef      withdrawal_provider
     23 : CashRegisterProviderRef    cash_register_provider
-    24 : P2PProviderRef             p2p_provider
     26 : RoutingRulesetRef          routing_rules
     27 : WithdrawalTerminalRef      withdrawal_terminal
     28 : BankCardCategoryRef        bank_card_category
@@ -3161,14 +3066,12 @@ union DomainObject {
     7  : ProviderObject             provider
     8  : TerminalObject             terminal
     15 : InspectorObject            inspector
-    25 : P2PInspectorObject         p2p_inspector
     14 : SystemAccountSetObject     system_account_set
     16 : ExternalAccountSetObject   external_account_set
     9  : ProxyObject                proxy
     11 : GlobalsObject              globals
     22 : WithdrawalProviderObject   withdrawal_provider
     23 : CashRegisterProviderObject cash_register_provider
-    24 : P2PProviderObject          p2p_provider
     26 : RoutingRulesObject         routing_rules
     27 : WithdrawalTerminalObject   withdrawal_terminal
     28 : BankCardCategoryObject     bank_card_category
