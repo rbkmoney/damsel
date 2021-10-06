@@ -6,6 +6,13 @@
 
 
 
+%% struct 'MerchantID'
+-record('paytoolprv_MerchantID', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'(),
+    'realm' :: atom() | undefined
+}).
+
 %% struct 'WrappedPaymentTool'
 -record('paytoolprv_WrappedPaymentTool', {
     'request' :: dmsl_payment_tool_provider_thrift:'PaymentRequest'(),
