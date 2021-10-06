@@ -322,6 +322,7 @@
     'AllocationNotAllowed'/0,
     'AllocationExceededPaymentAmount'/0,
     'AllocationInvalidTransaction'/0,
+    'AllocationNotFound'/0,
     'InvalidCustomerStatus'/0,
     'CustomerNotFound'/0,
     'InvalidPaymentTool'/0,
@@ -680,6 +681,7 @@
     'AllocationNotAllowed' |
     'AllocationExceededPaymentAmount' |
     'AllocationInvalidTransaction' |
+    'AllocationNotFound' |
     'InvalidCustomerStatus' |
     'CustomerNotFound' |
     'InvalidPaymentTool' |
@@ -1692,6 +1694,9 @@
 
 %% exception 'AllocationInvalidTransaction'
 -type 'AllocationInvalidTransaction'() :: #'payproc_AllocationInvalidTransaction'{}.
+
+%% exception 'AllocationNotFound'
+-type 'AllocationNotFound'() :: #'payproc_AllocationNotFound'{}.
 
 %% exception 'InvalidCustomerStatus'
 -type 'InvalidCustomerStatus'() :: #'payproc_InvalidCustomerStatus'{}.
@@ -3884,6 +3889,9 @@ struct_info('AllocationInvalidTransaction') ->
         {2, required, string, 'reason', undefined}
     ]};
 
+struct_info('AllocationNotFound') ->
+    {struct, exception, []};
+
 struct_info('InvalidCustomerStatus') ->
     {struct, exception, [
         {1, required, {struct, union, {dmsl_payment_processing_thrift, 'CustomerStatus'}}, 'status', undefined}
@@ -4630,6 +4638,9 @@ record_name('AllocationExceededPaymentAmount') ->
 record_name('AllocationInvalidTransaction') ->
     'payproc_AllocationInvalidTransaction';
 
+record_name('AllocationNotFound') ->
+    'payproc_AllocationNotFound';
+
 record_name('InvalidCustomerStatus') ->
     'payproc_InvalidCustomerStatus';
 
@@ -5308,7 +5319,8 @@ function_info('Invoicing', 'RefundPayment', exceptions) ->
         {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined},
         {15, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex15', undefined},
         {16, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex16', undefined},
-        {17, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex17', undefined}
+        {17, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex17', undefined},
+        {18, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotFound'}}, 'ex18', undefined}
     ]};
 function_info('Invoicing', 'CreateManualRefund', params_type) ->
     {struct, struct, [
@@ -5336,7 +5348,8 @@ function_info('Invoicing', 'CreateManualRefund', exceptions) ->
         {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined},
         {15, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex15', undefined},
         {16, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex16', undefined},
-        {17, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex17', undefined}
+        {17, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex17', undefined},
+        {18, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotFound'}}, 'ex18', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [

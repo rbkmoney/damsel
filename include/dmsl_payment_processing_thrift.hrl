@@ -1216,6 +1216,9 @@
     'reason' :: binary()
 }).
 
+%% exception 'AllocationNotFound'
+-record('payproc_AllocationNotFound', {}).
+
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {
     'status' :: dmsl_payment_processing_thrift:'CustomerStatus'()
