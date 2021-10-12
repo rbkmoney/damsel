@@ -964,7 +964,8 @@
 %% struct 'ShopContract'
 -record('payproc_ShopContract', {
     'shop' :: dmsl_domain_thrift:'Shop'(),
-    'contract' :: dmsl_domain_thrift:'Contract'()
+    'contract' :: dmsl_domain_thrift:'Contract'(),
+    'contractor' :: dmsl_domain_thrift:'PartyContractor'() | undefined
 }).
 
 %% struct 'InvalidContract'

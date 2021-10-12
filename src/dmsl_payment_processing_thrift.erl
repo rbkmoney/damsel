@@ -1817,7 +1817,8 @@
     'Delete' |
     'StartBinding' |
     'GetActiveBinding' |
-    'GetEvents'.
+    'GetEvents' |
+    'ComputeTerms'.
 
 -export_type(['CustomerManagement_service_functions'/0]).
 
@@ -3550,7 +3551,8 @@ struct_info('PayoutParams') ->
 struct_info('ShopContract') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'shop', undefined},
-        {2, required, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'contract', undefined}
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'contract', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'contractor', undefined}
     ]};
 
 struct_info('InvalidChangesetReason') ->
@@ -4699,7 +4701,8 @@ functions('CustomerManagement') ->
         'Delete',
         'StartBinding',
         'GetActiveBinding',
-        'GetEvents'
+        'GetEvents',
+        'ComputeTerms'
     ];
 
 functions('RecurrentPaymentTools') ->
@@ -5497,6 +5500,18 @@ function_info('CustomerManagement', 'GetEvents', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
+    ]};
+function_info('CustomerManagement', 'ComputeTerms', params_type) ->
+    {struct, struct, [
+        {1, undefined, string, 'customer_id', undefined},
+        {2, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
+    ]};
+function_info('CustomerManagement', 'ComputeTerms', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('CustomerManagement', 'ComputeTerms', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'ex2', undefined}
     ]};
 
 function_info('RecurrentPaymentTools', 'Create', params_type) ->
