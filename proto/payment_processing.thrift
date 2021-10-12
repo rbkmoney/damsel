@@ -2346,6 +2346,7 @@ struct PayoutParams {
 struct ShopContract {
     1: required domain.Shop shop
     2: required domain.Contract contract
+    3: optional domain.PartyContractor contractor
 }
 
 // Exceptions
