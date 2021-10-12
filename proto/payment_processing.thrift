@@ -1758,6 +1758,15 @@ service CustomerManagement {
             2: CustomerNotFound customer_not_found
             3: EventNotFound    event_not_found
         )
+
+    /* terms */
+
+    domain.TermSet ComputeTerms (
+        1: CustomerID customer_id,
+        2: PartyRevisionParam party_revision_param
+    )
+        throws (1: InvalidUser ex1, 2: CustomerNotFound ex2)
+
 }
 
 /* Recurrent Payment Tool */
@@ -2337,6 +2346,7 @@ struct PayoutParams {
 struct ShopContract {
     1: required domain.Shop shop
     2: required domain.Contract contract
+    3: optional domain.PartyContractor contractor
 }
 
 // Exceptions
