@@ -412,6 +412,7 @@
     'Condition'/0,
     'BinDataCondition'/0,
     'StringCondition'/0,
+    'P2PToolCondition'/0,
     'PaymentToolCondition'/0,
     'BankCardCondition'/0,
     'BankCardConditionDefinition'/0,
@@ -456,6 +457,12 @@
     'PartyPrototypeRef'/0,
     'PartyPrototype'/0,
     'PartyPrototypeObject'/0,
+    'P2PInspectorRef'/0,
+    'P2PInspector'/0,
+    'P2PInspectorObject'/0,
+    'P2PProviderObject'/0,
+    'P2PProviderRef'/0,
+    'P2PProvider'/0,
     'GlobalsRef'/0,
     'Globals'/0,
     'Dummy'/0,
@@ -1369,6 +1376,7 @@
     'Condition' |
     'BinDataCondition' |
     'StringCondition' |
+    'P2PToolCondition' |
     'PaymentToolCondition' |
     'BankCardCondition' |
     'BankCardConditionDefinition' |
@@ -1413,6 +1421,12 @@
     'PartyPrototypeRef' |
     'PartyPrototype' |
     'PartyPrototypeObject' |
+    'P2PInspectorRef' |
+    'P2PInspector' |
+    'P2PInspectorObject' |
+    'P2PProviderObject' |
+    'P2PProviderRef' |
+    'P2PProvider' |
     'GlobalsRef' |
     'Globals' |
     'Dummy' |
@@ -2534,7 +2548,8 @@
     {'party', 'PartyCondition'()} |
     {'payout_method_is', 'PayoutMethodRef'()} |
     {'identification_level_is', atom()} |
-    {'bin_data', 'BinDataCondition'()}.
+    {'bin_data', 'BinDataCondition'()} |
+    {'p2p_tool', 'P2PToolCondition'()}.
 
 %% struct 'BinDataCondition'
 -type 'BinDataCondition'() :: #'domain_BinDataCondition'{}.
@@ -2543,6 +2558,9 @@
 -type 'StringCondition'() ::
     {'matches', binary()} |
     {'equals', binary()}.
+
+%% struct 'P2PToolCondition'
+-type 'P2PToolCondition'() :: #'domain_P2PToolCondition'{}.
 
 %% union 'PaymentToolCondition'
 -type 'PaymentToolCondition'() ::
@@ -2703,6 +2721,24 @@
 
 %% struct 'PartyPrototypeObject'
 -type 'PartyPrototypeObject'() :: #'domain_PartyPrototypeObject'{}.
+
+%% struct 'P2PInspectorRef'
+-type 'P2PInspectorRef'() :: #'domain_P2PInspectorRef'{}.
+
+%% struct 'P2PInspector'
+-type 'P2PInspector'() :: #'domain_P2PInspector'{}.
+
+%% struct 'P2PInspectorObject'
+-type 'P2PInspectorObject'() :: #'domain_P2PInspectorObject'{}.
+
+%% struct 'P2PProviderObject'
+-type 'P2PProviderObject'() :: #'domain_P2PProviderObject'{}.
+
+%% struct 'P2PProviderRef'
+-type 'P2PProviderRef'() :: #'domain_P2PProviderRef'{}.
+
+%% struct 'P2PProvider'
+-type 'P2PProvider'() :: #'domain_P2PProvider'{}.
 
 %% struct 'GlobalsRef'
 -type 'GlobalsRef'() :: #'domain_GlobalsRef'{}.
@@ -2898,7 +2934,9 @@
     {'trade_bloc', 'TradeBlocRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
-    {'party_prototype', 'PartyPrototypeRef'()}.
+    {'party_prototype', 'PartyPrototypeRef'()} |
+    {'p2p_provider', 'P2PProviderRef'()} |
+    {'p2p_inspector', 'P2PInspectorRef'()}.
 
 %% union 'DomainObject'
 -type 'DomainObject'() ::
@@ -2941,7 +2979,9 @@
     {'trade_bloc', 'TradeBlocObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
-    {'party_prototype', 'PartyPrototypeObject'()}.
+    {'party_prototype', 'PartyPrototypeObject'()} |
+    {'p2p_provider', 'P2PProviderObject'()} |
+    {'p2p_inspector', 'P2PInspectorObject'()}.
 
 %%
 %% services and functions
@@ -3393,6 +3433,7 @@ structs() ->
         'Condition',
         'BinDataCondition',
         'StringCondition',
+        'P2PToolCondition',
         'PaymentToolCondition',
         'BankCardCondition',
         'BankCardConditionDefinition',
@@ -3437,6 +3478,12 @@ structs() ->
         'PartyPrototypeRef',
         'PartyPrototype',
         'PartyPrototypeObject',
+        'P2PInspectorRef',
+        'P2PInspector',
+        'P2PInspectorObject',
+        'P2PProviderObject',
+        'P2PProviderRef',
+        'P2PProvider',
         'GlobalsRef',
         'Globals',
         'Dummy',
@@ -6035,7 +6082,8 @@ struct_info('Condition') ->
         {6, optional, {struct, struct, {dmsl_domain_thrift, 'PartyCondition'}}, 'party', undefined},
         {7, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method_is', undefined},
         {8, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level_is', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'BinDataCondition'}}, 'bin_data', undefined}
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'BinDataCondition'}}, 'bin_data', undefined},
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'P2PToolCondition'}}, 'p2p_tool', undefined}
     ]};
 
 struct_info('BinDataCondition') ->
@@ -6048,6 +6096,12 @@ struct_info('StringCondition') ->
     {struct, union, [
         {1, optional, string, 'matches', undefined},
         {2, optional, string, 'equals', undefined}
+    ]};
+
+struct_info('P2PToolCondition') ->
+    {struct, struct, [
+        {1, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'sender_is', undefined},
+        {2, optional, {struct, union, {dmsl_domain_thrift, 'PaymentToolCondition'}}, 'receiver_is', undefined}
     ]};
 
 struct_info('PaymentToolCondition') ->
@@ -6333,6 +6387,34 @@ struct_info('PartyPrototypeObject') ->
         {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'ref', undefined},
         {2, required, {struct, struct, {dmsl_domain_thrift, 'PartyPrototype'}}, 'data', undefined}
     ]};
+
+struct_info('P2PInspectorRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('P2PInspector') ->
+    {struct, struct, []};
+
+struct_info('P2PInspectorObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PInspector'}}, 'data', undefined}
+    ]};
+
+struct_info('P2PProviderObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'P2PProvider'}}, 'data', undefined}
+    ]};
+
+struct_info('P2PProviderRef') ->
+    {struct, struct, [
+        {1, required, i32, 'id', undefined}
+    ]};
+
+struct_info('P2PProvider') ->
+    {struct, struct, []};
 
 struct_info('GlobalsRef') ->
     {struct, struct, []};
@@ -6667,7 +6749,9 @@ struct_info('Reference') ->
         {45, optional, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}, 'trade_bloc', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined}
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined},
+        {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderRef'}}, 'p2p_provider', undefined},
+        {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorRef'}}, 'p2p_inspector', undefined}
     ]};
 
 struct_info('DomainObject') ->
@@ -6711,7 +6795,9 @@ struct_info('DomainObject') ->
         {45, optional, {struct, struct, {dmsl_domain_thrift, 'TradeBlocObject'}}, 'trade_bloc', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
-        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined}
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined},
+        {24, optional, {struct, struct, {dmsl_domain_thrift, 'P2PProviderObject'}}, 'p2p_provider', undefined},
+        {25, optional, {struct, struct, {dmsl_domain_thrift, 'P2PInspectorObject'}}, 'p2p_inspector', undefined}
     ]};
 
 struct_info(_) -> erlang:error(badarg).
@@ -7414,6 +7500,9 @@ record_name('WithdrawalTerminalDecision') ->
 record_name('BinDataCondition') ->
     'domain_BinDataCondition';
 
+record_name('P2PToolCondition') ->
+    'domain_P2PToolCondition';
+
 record_name('BankCardCondition') ->
     'domain_BankCardCondition';
 
@@ -7515,6 +7604,24 @@ record_name('PartyPrototype') ->
 
 record_name('PartyPrototypeObject') ->
     'domain_PartyPrototypeObject';
+
+record_name('P2PInspectorRef') ->
+    'domain_P2PInspectorRef';
+
+record_name('P2PInspector') ->
+    'domain_P2PInspector';
+
+record_name('P2PInspectorObject') ->
+    'domain_P2PInspectorObject';
+
+record_name('P2PProviderObject') ->
+    'domain_P2PProviderObject';
+
+record_name('P2PProviderRef') ->
+    'domain_P2PProviderRef';
+
+record_name('P2PProvider') ->
+    'domain_P2PProvider';
 
 record_name('GlobalsRef') ->
     'domain_GlobalsRef';

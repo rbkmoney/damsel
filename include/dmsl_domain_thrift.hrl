@@ -1507,6 +1507,12 @@
     'bank_name' :: dmsl_domain_thrift:'StringCondition'() | undefined
 }).
 
+%% struct 'P2PToolCondition'
+-record('domain_P2PToolCondition', {
+    'sender_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined,
+    'receiver_is' :: dmsl_domain_thrift:'PaymentToolCondition'() | undefined
+}).
+
 %% struct 'BankCardCondition'
 -record('domain_BankCardCondition', {
     'definition' :: dmsl_domain_thrift:'BankCardConditionDefinition'() | undefined
@@ -1722,6 +1728,34 @@
     'ref' :: dmsl_domain_thrift:'PartyPrototypeRef'(),
     'data' :: dmsl_domain_thrift:'PartyPrototype'()
 }).
+
+%% struct 'P2PInspectorRef'
+-record('domain_P2PInspectorRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'P2PInspector'
+-record('domain_P2PInspector', {}).
+
+%% struct 'P2PInspectorObject'
+-record('domain_P2PInspectorObject', {
+    'ref' :: dmsl_domain_thrift:'P2PInspectorRef'(),
+    'data' :: dmsl_domain_thrift:'P2PInspector'()
+}).
+
+%% struct 'P2PProviderObject'
+-record('domain_P2PProviderObject', {
+    'ref' :: dmsl_domain_thrift:'P2PProviderRef'(),
+    'data' :: dmsl_domain_thrift:'P2PProvider'()
+}).
+
+%% struct 'P2PProviderRef'
+-record('domain_P2PProviderRef', {
+    'id' :: dmsl_domain_thrift:'ObjectID'()
+}).
+
+%% struct 'P2PProvider'
+-record('domain_P2PProvider', {}).
 
 %% struct 'GlobalsRef'
 -record('domain_GlobalsRef', {}).
