@@ -78,7 +78,8 @@
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined,
     'template_id' :: dmsl_domain_thrift:'InvoiceTemplateID'() | undefined,
     'external_id' :: binary() | undefined,
-    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined
+    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'InvoiceDetails'
@@ -106,6 +107,73 @@
 -record('domain_InvoiceRussianBankAccount', {
     'account' :: binary(),
     'bank_bik' :: binary()
+}).
+
+%% struct 'AllocationPrototype'
+-record('domain_AllocationPrototype', {
+    'transactions' :: [dmsl_domain_thrift:'AllocationTransactionPrototype'()]
+}).
+
+%% struct 'AllocationTransactionPrototype'
+-record('domain_AllocationTransactionPrototype', {
+    'target' :: dmsl_domain_thrift:'AllocationTransactionTarget'(),
+    'body' :: dmsl_domain_thrift:'AllocationTransactionPrototypeBody'(),
+    'details' :: dmsl_domain_thrift:'AllocationTransactionDetails'() | undefined
+}).
+
+%% struct 'AllocationTransactionPrototypeBodyAmount'
+-record('domain_AllocationTransactionPrototypeBodyAmount', {
+    'amount' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'AllocationTransactionPrototypeBodyTotal'
+-record('domain_AllocationTransactionPrototypeBodyTotal', {
+    'total' :: dmsl_domain_thrift:'Cash'(),
+    'fee' :: dmsl_domain_thrift:'AllocationTransactionPrototypeFee'()
+}).
+
+%% struct 'AllocationTransactionPrototypeFeeFixed'
+-record('domain_AllocationTransactionPrototypeFeeFixed', {
+    'amount' :: dmsl_domain_thrift:'Cash'()
+}).
+
+%% struct 'Allocation'
+-record('domain_Allocation', {
+    'transactions' :: [dmsl_domain_thrift:'AllocationTransaction'()]
+}).
+
+%% struct 'AllocationTransaction'
+-record('domain_AllocationTransaction', {
+    'id' :: dmsl_domain_thrift:'AllocationTransactionID'(),
+    'target' :: dmsl_domain_thrift:'AllocationTransactionTarget'(),
+    'amount' :: dmsl_domain_thrift:'Cash'(),
+    'body' :: dmsl_domain_thrift:'AllocationTransactionBodyTotal'() | undefined,
+    'details' :: dmsl_domain_thrift:'AllocationTransactionDetails'() | undefined
+}).
+
+%% struct 'AllocationTransactionTargetShop'
+-record('domain_AllocationTransactionTargetShop', {
+    'owner_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'()
+}).
+
+%% struct 'AllocationTransactionBodyTotal'
+-record('domain_AllocationTransactionBodyTotal', {
+    'fee_target' :: dmsl_domain_thrift:'AllocationTransactionTarget'(),
+    'total' :: dmsl_domain_thrift:'Cash'(),
+    'fee_amount' :: dmsl_domain_thrift:'Cash'(),
+    'fee' :: dmsl_domain_thrift:'AllocationTransactionFeeShare'() | undefined
+}).
+
+%% struct 'AllocationTransactionFeeShare'
+-record('domain_AllocationTransactionFeeShare', {
+    'parts' :: dmsl_base_thrift:'Rational'(),
+    'rounding_method' :: dmsl_domain_thrift:'RoundingMethod'() | undefined
+}).
+
+%% struct 'AllocationTransactionDetails'
+-record('domain_AllocationTransactionDetails', {
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
 }).
 
 %% struct 'InvoiceUnpaid'
@@ -153,7 +221,8 @@
 -record('domain_InvoicePaymentCaptured', {
     'reason' :: binary() | undefined,
     'cost' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'InvoicePaymentCancelled'
@@ -406,7 +475,8 @@
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
     'reason' :: binary() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'InvoicePaymentRefundPending'
@@ -768,7 +838,8 @@
     'fees' :: dmsl_domain_thrift:'CashFlowSelector'() | undefined,
     'holds' :: dmsl_domain_thrift:'PaymentHoldsServiceTerms'() | undefined,
     'refunds' :: dmsl_domain_thrift:'PaymentRefundsServiceTerms'() | undefined,
-    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined
+    'chargebacks' :: dmsl_domain_thrift:'PaymentChargebackServiceTerms'() | undefined,
+    'allocations' :: dmsl_domain_thrift:'PaymentAllocationServiceTerms'() | undefined
 }).
 
 %% struct 'PaymentHoldsServiceTerms'
@@ -799,6 +870,11 @@
 %% struct 'PartialRefundsServiceTerms'
 -record('domain_PartialRefundsServiceTerms', {
     'cash_limit' :: dmsl_domain_thrift:'CashLimitSelector'() | undefined
+}).
+
+%% struct 'PaymentAllocationServiceTerms'
+-record('domain_PaymentAllocationServiceTerms', {
+    'allow' :: dmsl_domain_thrift:'Predicate'() | undefined
 }).
 
 %% struct 'RecurrentPaytoolsServiceTerms'
@@ -1217,7 +1293,42 @@
 %% struct 'FinalCashFlowAccount'
 -record('domain_FinalCashFlowAccount', {
     'account_type' :: dmsl_domain_thrift:'CashFlowAccount'(),
-    'account_id' :: dmsl_domain_thrift:'AccountID'()
+    'account_id' :: dmsl_domain_thrift:'AccountID'(),
+    'transaction_account' :: dmsl_domain_thrift:'TransactionAccount'() | undefined
+}).
+
+%% struct 'MerchantTransactionAccount'
+-record('domain_MerchantTransactionAccount', {
+    'type' :: atom(),
+    'owner' :: dmsl_domain_thrift:'MerchantTransactionAccountOwner'()
+}).
+
+%% struct 'MerchantTransactionAccountOwner'
+-record('domain_MerchantTransactionAccountOwner', {
+    'party_id' :: dmsl_domain_thrift:'PartyID'(),
+    'shop_id' :: dmsl_domain_thrift:'ShopID'()
+}).
+
+%% struct 'ProviderTransactionAccount'
+-record('domain_ProviderTransactionAccount', {
+    'type' :: atom(),
+    'owner' :: dmsl_domain_thrift:'ProviderTransactionAccountOwner'()
+}).
+
+%% struct 'ProviderTransactionAccountOwner'
+-record('domain_ProviderTransactionAccountOwner', {
+    'provider_ref' :: dmsl_domain_thrift:'ProviderRef'(),
+    'terminal_ref' :: dmsl_domain_thrift:'TerminalRef'()
+}).
+
+%% struct 'SystemTransactionAccount'
+-record('domain_SystemTransactionAccount', {
+    'type' :: atom()
+}).
+
+%% struct 'ExternalTransactionAccount'
+-record('domain_ExternalTransactionAccount', {
+    'type' :: atom()
 }).
 
 %% struct 'CashVolumeFixed'

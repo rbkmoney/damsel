@@ -39,7 +39,8 @@
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
     'payer' :: dmsl_domain_thrift:'Payer'(),
     'cost' :: dmsl_domain_thrift:'Cash'(),
-    'make_recurrent' :: boolean() | undefined
+    'make_recurrent' :: boolean() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'Invoice'
