@@ -259,6 +259,7 @@
     'PartyRevisionChanged'/0,
     'PartyRevisionParam'/0,
     'PayoutParams'/0,
+    'ShopContract'/0,
     'InvalidChangesetReason'/0,
     'InvalidContract'/0,
     'InvalidShop'/0,
@@ -618,6 +619,7 @@
     'PartyRevisionChanged' |
     'PartyRevisionParam' |
     'PayoutParams' |
+    'ShopContract' |
     'InvalidChangesetReason' |
     'InvalidContract' |
     'InvalidShop' |
@@ -1486,6 +1488,9 @@
 %% struct 'PayoutParams'
 -type 'PayoutParams'() :: #'payproc_PayoutParams'{}.
 
+%% struct 'ShopContract'
+-type 'ShopContract'() :: #'payproc_ShopContract'{}.
+
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
     {'invalid_contract', 'InvalidContract'()} |
@@ -1850,7 +1855,8 @@
     'Delete' |
     'StartBinding' |
     'GetActiveBinding' |
-    'GetEvents'.
+    'GetEvents' |
+    'ComputeTerms'.
 
 -export_type(['CustomerManagement_service_functions'/0]).
 
@@ -1885,6 +1891,7 @@
     'GetContract' |
     'ComputeContractTerms' |
     'GetShop' |
+    'GetShopContract' |
     'SuspendShop' |
     'ActivateShop' |
     'BlockShop' |
@@ -2185,6 +2192,7 @@ structs() ->
         'PartyRevisionChanged',
         'PartyRevisionParam',
         'PayoutParams',
+        'ShopContract',
         'InvalidChangesetReason',
         'InvalidContract',
         'InvalidShop',
@@ -2689,6 +2697,7 @@ struct_info('InvoiceTemplateCreateParams') ->
         {2, required, string, 'shop_id', undefined},
         {4, required, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
         {7, required, string, 'product', undefined},
+        {11, optional, string, 'name', undefined},
         {8, optional, string, 'description', undefined},
         {9, required, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
         {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
@@ -2698,6 +2707,7 @@ struct_info('InvoiceTemplateUpdateParams') ->
     {struct, struct, [
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'LifetimeInterval'}}, 'invoice_lifetime', undefined},
         {5, optional, string, 'product', undefined},
+        {8, optional, string, 'name', undefined},
         {6, optional, string, 'description', undefined},
         {7, optional, {struct, union, {dmsl_domain_thrift, 'InvoiceTemplateDetails'}}, 'details', undefined},
         {4, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined}
@@ -3189,7 +3199,6 @@ struct_info('Varset') ->
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
         {6, optional, string, 'wallet_id', undefined},
-        {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTool'}}, 'p2p_tool', undefined},
         {8, optional, string, 'shop_id', undefined},
         {9, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level', undefined},
         {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
@@ -3599,6 +3608,13 @@ struct_info('PayoutParams') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
         {3, required, string, 'timestamp', undefined},
         {4, optional, string, 'payout_tool_id', undefined}
+    ]};
+
+struct_info('ShopContract') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'shop', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'contract', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'contractor', undefined}
     ]};
 
 struct_info('InvalidChangesetReason') ->
@@ -4470,6 +4486,9 @@ record_name('PartyRevisionChanged') ->
 record_name('PayoutParams') ->
     'payproc_PayoutParams';
 
+record_name('ShopContract') ->
+    'payproc_ShopContract';
+
 record_name('InvalidContract') ->
     'payproc_InvalidContract';
 
@@ -4777,7 +4796,8 @@ functions('CustomerManagement') ->
         'Delete',
         'StartBinding',
         'GetActiveBinding',
-        'GetEvents'
+        'GetEvents',
+        'ComputeTerms'
     ];
 
 functions('RecurrentPaymentTools') ->
@@ -4812,6 +4832,7 @@ functions('PartyManagement') ->
         'GetContract',
         'ComputeContractTerms',
         'GetShop',
+        'GetShopContract',
         'SuspendShop',
         'ActivateShop',
         'BlockShop',
@@ -5592,6 +5613,18 @@ function_info('CustomerManagement', 'GetEvents', exceptions) ->
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
     ]};
+function_info('CustomerManagement', 'ComputeTerms', params_type) ->
+    {struct, struct, [
+        {1, undefined, string, 'customer_id', undefined},
+        {2, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
+    ]};
+function_info('CustomerManagement', 'ComputeTerms', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('CustomerManagement', 'ComputeTerms', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'ex2', undefined}
+    ]};
 
 function_info('RecurrentPaymentTools', 'Create', params_type) ->
     {struct, struct, [
@@ -5885,6 +5918,21 @@ function_info('PartyManagement', 'GetShop', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'GetShopContract', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined}
+    ]};
+function_info('PartyManagement', 'GetShopContract', reply_type) ->
+    {struct, struct, {dmsl_payment_processing_thrift, 'ShopContract'}};
+function_info('PartyManagement', 'GetShopContract', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'SuspendShop', params_type) ->
     {struct, struct, [

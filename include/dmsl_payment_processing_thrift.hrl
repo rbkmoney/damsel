@@ -293,6 +293,7 @@
     'shop_id' :: dmsl_payment_processing_thrift:'ShopID'(),
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'(),
     'product' :: binary(),
+    'name' :: binary() | undefined,
     'description' :: binary() | undefined,
     'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'(),
     'context' :: dmsl_domain_thrift:'InvoiceContext'()
@@ -302,6 +303,7 @@
 -record('payproc_InvoiceTemplateUpdateParams', {
     'invoice_lifetime' :: dmsl_domain_thrift:'LifetimeInterval'() | undefined,
     'product' :: binary() | undefined,
+    'name' :: binary() | undefined,
     'description' :: binary() | undefined,
     'details' :: dmsl_domain_thrift:'InvoiceTemplateDetails'() | undefined,
     'context' :: dmsl_domain_thrift:'InvoiceContext'() | undefined
@@ -695,7 +697,6 @@
     'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
     'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
     'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined,
-    'p2p_tool' :: dmsl_domain_thrift:'P2PTool'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'identification_level' :: atom() | undefined,
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined,
@@ -972,6 +973,13 @@
     'amount' :: dmsl_domain_thrift:'Cash'(),
     'timestamp' :: dmsl_base_thrift:'Timestamp'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
+}).
+
+%% struct 'ShopContract'
+-record('payproc_ShopContract', {
+    'shop' :: dmsl_domain_thrift:'Shop'(),
+    'contract' :: dmsl_domain_thrift:'Contract'(),
+    'contractor' :: dmsl_domain_thrift:'PartyContractor'() | undefined
 }).
 
 %% struct 'InvalidContract'
