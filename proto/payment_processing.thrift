@@ -556,6 +556,7 @@ struct InvoiceTemplateCreateParams {
     2:  required ShopID                        shop_id
     4:  required domain.LifetimeInterval       invoice_lifetime
     7:  required string                        product # for backward compatibility
+    11: optional string                        name
     8:  optional string                        description
     9:  required domain.InvoiceTemplateDetails details
     6:  required domain.InvoiceContext         context
@@ -564,6 +565,7 @@ struct InvoiceTemplateCreateParams {
 struct InvoiceTemplateUpdateParams {
     2: optional domain.LifetimeInterval invoice_lifetime
     5: optional string product # for backward compatibility
+    8: optional string name
     6: optional string description
     7: optional domain.InvoiceTemplateDetails details
     4: optional domain.InvoiceContext context
@@ -1807,6 +1809,15 @@ service CustomerManagement {
             2: CustomerNotFound customer_not_found
             3: EventNotFound    event_not_found
         )
+
+    /* terms */
+
+    domain.TermSet ComputeTerms (
+        1: CustomerID customer_id,
+        2: PartyRevisionParam party_revision_param
+    )
+        throws (1: InvalidUser ex1, 2: CustomerNotFound ex2)
+
 }
 
 /* Recurrent Payment Tool */
@@ -2006,7 +2017,6 @@ struct Varset {
     4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
     6: optional domain.WalletID wallet_id
-    7: optional domain.P2PTool p2p_tool
     8: optional domain.ShopID shop_id
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
@@ -2380,6 +2390,15 @@ struct PayoutParams {
     4: optional domain.PayoutToolID payout_tool_id
 }
 
+/*
+ * Контракт магазина
+ */
+struct ShopContract {
+    1: required domain.Shop shop
+    2: required domain.Contract contract
+    3: optional domain.PartyContractor contractor
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -2576,6 +2595,9 @@ service PartyManagement {
 
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
+
+    ShopContract GetShopContract(1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ContractNotFound ex4)
 
     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
