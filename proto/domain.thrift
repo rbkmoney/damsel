@@ -2481,6 +2481,9 @@ union Condition {
     7: PayoutMethodRef payout_method_is
     8: ContractorIdentificationLevel identification_level_is
    10: BinDataCondition bin_data
+
+   // Legacy
+    9: P2PToolCondition p2p_tool
 }
 
 struct BinDataCondition {
@@ -2491,6 +2494,12 @@ struct BinDataCondition {
 union StringCondition {
     1: string matches
     2: string equals
+}
+
+// Legacy
+struct P2PToolCondition {
+    1: optional PaymentToolCondition sender_is
+    2: optional PaymentToolCondition receiver_is
 }
 
 union PaymentToolCondition {
@@ -2745,6 +2754,24 @@ struct PartyPrototypeObject {
     1: required PartyPrototypeRef ref
     2: required PartyPrototype data
 }
+
+struct P2PInspectorRef { 1: required ObjectID id }
+
+struct P2PInspector {}
+
+struct P2PInspectorObject {
+    1: required P2PInspectorRef ref
+    2: required P2PInspector data
+}
+
+struct P2PProviderObject {
+    1: required P2PProviderRef ref
+    2: required P2PProvider data
+}
+
+struct P2PProviderRef { 1: required ObjectID id }
+
+struct P2PProvider {}
 
 /* Root config */
 
@@ -3049,6 +3076,8 @@ union Reference {
 
     /* legacy */
     10 : PartyPrototypeRef          party_prototype
+    24 : P2PProviderRef             p2p_provider
+    25 : P2PInspectorRef            p2p_inspector
 }
 
 union DomainObject {
@@ -3099,6 +3128,8 @@ union DomainObject {
 
     /* legacy */
     10 : PartyPrototypeObject       party_prototype
+    24 : P2PProviderObject          p2p_provider
+    25 : P2PInspectorObject         p2p_inspector
 }
 
 /* Domain */
