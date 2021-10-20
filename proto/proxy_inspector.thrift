@@ -39,7 +39,6 @@ struct InvoicePayment {
     3: required domain.Payer payer
     4: required domain.Cash cost
     5: optional bool make_recurrent
-    6: optional domain.Allocation allocation
 }
 
 struct Invoice {
