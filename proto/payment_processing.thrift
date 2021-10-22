@@ -1973,6 +1973,17 @@ struct Varset {
     12: optional domain.BinData bin_data
 }
 
+struct ComputeShopTermsVarset {
+    1: optional domain.Cash amount
+    /* seems not used */
+    2: optional domain.PaymentMethodRef payment_method
+    3: optional domain.PayoutMethodRef payout_method
+    4: optional domain.WalletID wallet_id
+    5: optional domain.PaymentTool payment_tool
+    6: optional domain.BinData bin_data
+}
+
+
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
 }
@@ -2566,7 +2577,7 @@ service PartyManagement {
         3: ShopID id,
         4: base.Timestamp timestamp
         5: PartyRevisionParam party_revision
-        6: Varset varset
+        6: ComputeShopTermsVarset varset
     )
         throws (
             1: InvalidUser ex1,
