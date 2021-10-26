@@ -1081,9 +1081,9 @@ struct_info('PayoutToolNotSetForPayouts') ->
 
 struct_info('PayoutToolCurrencyMismatch') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'shop_account_currency', undefined},
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'shop_account_currency', undefined},
         {2, required, string, 'payout_tool_id', undefined},
-        {3, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'payout_tool_currency', undefined}
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'payout_tool_currency', undefined}
     ]};
 
 struct_info('PayoutToolNotInContract') ->

@@ -129,9 +129,9 @@ struct PayoutToolNotSetForPayouts {
 }
 
 struct PayoutToolCurrencyMismatch {
-    1: required domain.Currency shop_account_currency
+    1: required domain.CurrencyRef shop_account_currency
     2: required domain.PayoutToolID payout_tool_id
-    3: required domain.Currency payout_tool_currency
+    3: required domain.CurrencyRef payout_tool_currency
 }
 
 struct PayoutToolNotInContract {

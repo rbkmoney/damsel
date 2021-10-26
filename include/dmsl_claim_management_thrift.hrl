@@ -52,9 +52,9 @@
 
 %% struct 'PayoutToolCurrencyMismatch'
 -record('claim_management_PayoutToolCurrencyMismatch', {
-    'shop_account_currency' :: dmsl_domain_thrift:'Currency'(),
+    'shop_account_currency' :: dmsl_domain_thrift:'CurrencyRef'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
-    'payout_tool_currency' :: dmsl_domain_thrift:'Currency'()
+    'payout_tool_currency' :: dmsl_domain_thrift:'CurrencyRef'()
 }).
 
 %% struct 'PayoutToolNotInContract'
