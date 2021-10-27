@@ -254,7 +254,7 @@
 
 %% struct 'InvoicePaymentCaptureStarted'
 -record('payproc_InvoicePaymentCaptureStarted', {
-    'params' :: dmsl_payment_processing_thrift:'InvoicePaymentCaptureParams'()
+    'data' :: dmsl_payment_processing_thrift:'InvoicePaymentCaptureData'()
 }).
 
 %% struct 'EventRange'
@@ -273,7 +273,8 @@
     'context' :: dmsl_domain_thrift:'InvoiceContext'(),
     'id' :: dmsl_domain_thrift:'InvoiceID'(),
     'external_id' :: binary() | undefined,
-    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined
+    'client_info' :: dmsl_domain_thrift:'InvoiceClientInfo'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
 }).
 
 %% struct 'InvoiceWithTemplateParams'
@@ -362,6 +363,7 @@
     'sessions' :: [dmsl_payment_processing_thrift:'InvoicePaymentSession'()],
     'chargebacks' :: [dmsl_payment_processing_thrift:'InvoicePaymentChargeback'()] | undefined,
     'last_transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined,
     'legacy_refunds' :: [dmsl_domain_thrift:'InvoicePaymentRefund'()]
 }).
 
@@ -434,14 +436,24 @@
     'transaction_info' :: dmsl_domain_thrift:'TransactionInfo'() | undefined,
     'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
     'id' :: dmsl_domain_thrift:'InvoicePaymentRefundID'() | undefined,
-    'external_id' :: binary() | undefined
+    'external_id' :: binary() | undefined,
+    'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
 }).
 
 %% struct 'InvoicePaymentCaptureParams'
 -record('payproc_InvoicePaymentCaptureParams', {
     'reason' :: binary(),
     'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
-    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'AllocationPrototype'() | undefined
+}).
+
+%% struct 'InvoicePaymentCaptureData'
+-record('payproc_InvoicePaymentCaptureData', {
+    'reason' :: binary(),
+    'cash' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'cart' :: dmsl_domain_thrift:'InvoiceCart'() | undefined,
+    'allocation' :: dmsl_domain_thrift:'Allocation'() | undefined
 }).
 
 %% struct 'InvoiceAdjustmentParams'
@@ -489,6 +501,9 @@
 
 %% struct 'InvoiceUnpayable'
 -record('payproc_InvoiceUnpayable', {}).
+
+%% struct 'InvoiceUnallocatable'
+-record('payproc_InvoiceUnallocatable', {}).
 
 %% struct 'CustomerParams'
 -record('payproc_CustomerParams', {
@@ -682,7 +697,6 @@
     'payment_method' :: dmsl_domain_thrift:'PaymentMethodRef'() | undefined,
     'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
     'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined,
-    'p2p_tool' :: dmsl_domain_thrift:'P2PTool'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'identification_level' :: atom() | undefined,
     'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined,
@@ -961,6 +975,13 @@
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'() | undefined
 }).
 
+%% struct 'ShopContract'
+-record('payproc_ShopContract', {
+    'shop' :: dmsl_domain_thrift:'Shop'(),
+    'contract' :: dmsl_domain_thrift:'Contract'(),
+    'contractor' :: dmsl_domain_thrift:'PartyContractor'() | undefined
+}).
+
 %% struct 'InvalidContract'
 -record('payproc_InvalidContract', {
     'id' :: dmsl_payment_processing_thrift:'ContractID'(),
@@ -1190,6 +1211,21 @@
 
 %% exception 'InvoicePaymentChargebackPending'
 -record('payproc_InvoicePaymentChargebackPending', {}).
+
+%% exception 'AllocationNotAllowed'
+-record('payproc_AllocationNotAllowed', {}).
+
+%% exception 'AllocationExceededPaymentAmount'
+-record('payproc_AllocationExceededPaymentAmount', {}).
+
+%% exception 'AllocationInvalidTransaction'
+-record('payproc_AllocationInvalidTransaction', {
+    'transaction' :: dmsl_payment_processing_thrift:'FailedAllocationTransaction'(),
+    'reason' :: binary()
+}).
+
+%% exception 'AllocationNotFound'
+-record('payproc_AllocationNotFound', {}).
 
 %% exception 'InvalidCustomerStatus'
 -record('payproc_InvalidCustomerStatus', {

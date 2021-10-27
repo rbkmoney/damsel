@@ -144,6 +144,7 @@
     'InvoicePaymentChargebackCancelParams'/0,
     'InvoicePaymentRefundParams'/0,
     'InvoicePaymentCaptureParams'/0,
+    'InvoicePaymentCaptureData'/0,
     'InvoiceAdjustmentParams'/0,
     'InvoiceAdjustmentScenario'/0,
     'InvoicePaymentAdjustmentParams'/0,
@@ -157,7 +158,9 @@
     'InvoiceRepairParams'/0,
     'InvalidStatus'/0,
     'InvoiceUnpayable'/0,
+    'InvoiceUnallocatable'/0,
     'InvoiceTermsViolationReason'/0,
+    'FailedAllocationTransaction'/0,
     'CustomerParams'/0,
     'Customer'/0,
     'CustomerStatus'/0,
@@ -256,6 +259,7 @@
     'PartyRevisionChanged'/0,
     'PartyRevisionParam'/0,
     'PayoutParams'/0,
+    'ShopContract'/0,
     'InvalidChangesetReason'/0,
     'InvalidContract'/0,
     'InvalidShop'/0,
@@ -316,6 +320,10 @@
     'InconsistentCaptureCurrency'/0,
     'AmountExceededCaptureBalance'/0,
     'InvoicePaymentChargebackPending'/0,
+    'AllocationNotAllowed'/0,
+    'AllocationExceededPaymentAmount'/0,
+    'AllocationInvalidTransaction'/0,
+    'AllocationNotFound'/0,
     'InvalidCustomerStatus'/0,
     'CustomerNotFound'/0,
     'InvalidPaymentTool'/0,
@@ -496,6 +504,7 @@
     'InvoicePaymentChargebackCancelParams' |
     'InvoicePaymentRefundParams' |
     'InvoicePaymentCaptureParams' |
+    'InvoicePaymentCaptureData' |
     'InvoiceAdjustmentParams' |
     'InvoiceAdjustmentScenario' |
     'InvoicePaymentAdjustmentParams' |
@@ -509,7 +518,9 @@
     'InvoiceRepairParams' |
     'InvalidStatus' |
     'InvoiceUnpayable' |
+    'InvoiceUnallocatable' |
     'InvoiceTermsViolationReason' |
+    'FailedAllocationTransaction' |
     'CustomerParams' |
     'Customer' |
     'CustomerStatus' |
@@ -608,6 +619,7 @@
     'PartyRevisionChanged' |
     'PartyRevisionParam' |
     'PayoutParams' |
+    'ShopContract' |
     'InvalidChangesetReason' |
     'InvalidContract' |
     'InvalidShop' |
@@ -668,6 +680,10 @@
     'InconsistentCaptureCurrency' |
     'AmountExceededCaptureBalance' |
     'InvoicePaymentChargebackPending' |
+    'AllocationNotAllowed' |
+    'AllocationExceededPaymentAmount' |
+    'AllocationInvalidTransaction' |
+    'AllocationNotFound' |
     'InvalidCustomerStatus' |
     'CustomerNotFound' |
     'InvalidPaymentTool' |
@@ -1017,6 +1033,9 @@
 %% struct 'InvoicePaymentCaptureParams'
 -type 'InvoicePaymentCaptureParams'() :: #'payproc_InvoicePaymentCaptureParams'{}.
 
+%% struct 'InvoicePaymentCaptureData'
+-type 'InvoicePaymentCaptureData'() :: #'payproc_InvoicePaymentCaptureData'{}.
+
 %% struct 'InvoiceAdjustmentParams'
 -type 'InvoiceAdjustmentParams'() :: #'payproc_InvoiceAdjustmentParams'{}.
 
@@ -1066,9 +1085,18 @@
 %% struct 'InvoiceUnpayable'
 -type 'InvoiceUnpayable'() :: #'payproc_InvoiceUnpayable'{}.
 
+%% struct 'InvoiceUnallocatable'
+-type 'InvoiceUnallocatable'() :: #'payproc_InvoiceUnallocatable'{}.
+
 %% union 'InvoiceTermsViolationReason'
 -type 'InvoiceTermsViolationReason'() ::
-    {'invoice_unpayable', 'InvoiceUnpayable'()}.
+    {'invoice_unpayable', 'InvoiceUnpayable'()} |
+    {'invoice_unallocatable', 'InvoiceUnallocatable'()}.
+
+%% union 'FailedAllocationTransaction'
+-type 'FailedAllocationTransaction'() ::
+    {'transaction', dmsl_domain_thrift:'AllocationTransaction'()} |
+    {'transaction_prototype', dmsl_domain_thrift:'AllocationTransactionPrototype'()}.
 
 %% struct 'CustomerParams'
 -type 'CustomerParams'() :: #'payproc_CustomerParams'{}.
@@ -1460,6 +1488,9 @@
 %% struct 'PayoutParams'
 -type 'PayoutParams'() :: #'payproc_PayoutParams'{}.
 
+%% struct 'ShopContract'
+-type 'ShopContract'() :: #'payproc_ShopContract'{}.
+
 %% union 'InvalidChangesetReason'
 -type 'InvalidChangesetReason'() ::
     {'invalid_contract', 'InvalidContract'()} |
@@ -1660,6 +1691,18 @@
 %% exception 'InvoicePaymentChargebackPending'
 -type 'InvoicePaymentChargebackPending'() :: #'payproc_InvoicePaymentChargebackPending'{}.
 
+%% exception 'AllocationNotAllowed'
+-type 'AllocationNotAllowed'() :: #'payproc_AllocationNotAllowed'{}.
+
+%% exception 'AllocationExceededPaymentAmount'
+-type 'AllocationExceededPaymentAmount'() :: #'payproc_AllocationExceededPaymentAmount'{}.
+
+%% exception 'AllocationInvalidTransaction'
+-type 'AllocationInvalidTransaction'() :: #'payproc_AllocationInvalidTransaction'{}.
+
+%% exception 'AllocationNotFound'
+-type 'AllocationNotFound'() :: #'payproc_AllocationNotFound'{}.
+
 %% exception 'InvalidCustomerStatus'
 -type 'InvalidCustomerStatus'() :: #'payproc_InvalidCustomerStatus'{}.
 
@@ -1812,7 +1855,8 @@
     'Delete' |
     'StartBinding' |
     'GetActiveBinding' |
-    'GetEvents'.
+    'GetEvents' |
+    'ComputeTerms'.
 
 -export_type(['CustomerManagement_service_functions'/0]).
 
@@ -1847,6 +1891,7 @@
     'GetContract' |
     'ComputeContractTerms' |
     'GetShop' |
+    'GetShopContract' |
     'SuspendShop' |
     'ActivateShop' |
     'BlockShop' |
@@ -2032,6 +2077,7 @@ structs() ->
         'InvoicePaymentChargebackCancelParams',
         'InvoicePaymentRefundParams',
         'InvoicePaymentCaptureParams',
+        'InvoicePaymentCaptureData',
         'InvoiceAdjustmentParams',
         'InvoiceAdjustmentScenario',
         'InvoicePaymentAdjustmentParams',
@@ -2045,7 +2091,9 @@ structs() ->
         'InvoiceRepairParams',
         'InvalidStatus',
         'InvoiceUnpayable',
+        'InvoiceUnallocatable',
         'InvoiceTermsViolationReason',
+        'FailedAllocationTransaction',
         'CustomerParams',
         'Customer',
         'CustomerStatus',
@@ -2144,6 +2192,7 @@ structs() ->
         'PartyRevisionChanged',
         'PartyRevisionParam',
         'PayoutParams',
+        'ShopContract',
         'InvalidChangesetReason',
         'InvalidContract',
         'InvalidShop',
@@ -2609,7 +2658,7 @@ struct_info('InvoicePaymentRecTokenAcquired') ->
 
 struct_info('InvoicePaymentCaptureStarted') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureParams'}}, 'params', undefined}
+        {1, required, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentCaptureData'}}, 'data', undefined}
     ]};
 
 struct_info('EventRange') ->
@@ -2628,7 +2677,8 @@ struct_info('InvoiceParams') ->
         {6, required, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {7, required, string, 'id', undefined},
         {8, optional, string, 'external_id', undefined},
-        {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined}
+        {9, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceClientInfo'}}, 'client_info', undefined},
+        {10, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoiceWithTemplateParams') ->
@@ -2730,6 +2780,7 @@ struct_info('InvoicePayment') ->
         {5, required, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentSession'}}}, 'sessions', undefined},
         {8, optional, {list, {struct, struct, {dmsl_payment_processing_thrift, 'InvoicePaymentChargeback'}}}, 'chargebacks', undefined},
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'last_transaction_info', undefined},
+        {11, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined},
         {3, required, {list, {struct, struct, {dmsl_domain_thrift, 'InvoicePaymentRefund'}}}, 'legacy_refunds', undefined}
     ]};
 
@@ -2802,14 +2853,24 @@ struct_info('InvoicePaymentRefundParams') ->
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'TransactionInfo'}}, 'transaction_info', undefined},
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
         {5, optional, string, 'id', undefined},
-        {6, optional, string, 'external_id', undefined}
+        {6, optional, string, 'external_id', undefined},
+        {7, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoicePaymentCaptureParams') ->
     {struct, struct, [
         {1, required, string, 'reason', undefined},
         {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
-        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined}
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationPrototype'}}, 'allocation', undefined}
+    ]};
+
+struct_info('InvoicePaymentCaptureData') ->
+    {struct, struct, [
+        {1, required, string, 'reason', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'cash', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
+        {4, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoiceAdjustmentParams') ->
@@ -2884,9 +2945,19 @@ struct_info('InvalidStatus') ->
 struct_info('InvoiceUnpayable') ->
     {struct, struct, []};
 
+struct_info('InvoiceUnallocatable') ->
+    {struct, struct, []};
+
 struct_info('InvoiceTermsViolationReason') ->
     {struct, union, [
-        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceUnpayable'}}, 'invoice_unpayable', undefined}
+        {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceUnpayable'}}, 'invoice_unpayable', undefined},
+        {2, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvoiceUnallocatable'}}, 'invoice_unallocatable', undefined}
+    ]};
+
+struct_info('FailedAllocationTransaction') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransaction'}}, 'transaction', undefined},
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'AllocationTransactionPrototype'}}, 'transaction_prototype', undefined}
     ]};
 
 struct_info('CustomerParams') ->
@@ -3128,7 +3199,6 @@ struct_info('Varset') ->
         {4, optional, {struct, struct, {dmsl_domain_thrift, 'PaymentMethodRef'}}, 'payment_method', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
         {6, optional, string, 'wallet_id', undefined},
-        {7, optional, {struct, struct, {dmsl_domain_thrift, 'P2PTool'}}, 'p2p_tool', undefined},
         {8, optional, string, 'shop_id', undefined},
         {9, optional, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'identification_level', undefined},
         {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
@@ -3540,6 +3610,13 @@ struct_info('PayoutParams') ->
         {4, optional, string, 'payout_tool_id', undefined}
     ]};
 
+struct_info('ShopContract') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'Shop'}}, 'shop', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'Contract'}}, 'contract', undefined},
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'PartyContractor'}}, 'contractor', undefined}
+    ]};
+
 struct_info('InvalidChangesetReason') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_payment_processing_thrift, 'InvalidContract'}}, 'invalid_contract', undefined},
@@ -3814,6 +3891,21 @@ struct_info('AmountExceededCaptureBalance') ->
     ]};
 
 struct_info('InvoicePaymentChargebackPending') ->
+    {struct, exception, []};
+
+struct_info('AllocationNotAllowed') ->
+    {struct, exception, []};
+
+struct_info('AllocationExceededPaymentAmount') ->
+    {struct, exception, []};
+
+struct_info('AllocationInvalidTransaction') ->
+    {struct, exception, [
+        {1, required, {struct, union, {dmsl_payment_processing_thrift, 'FailedAllocationTransaction'}}, 'transaction', undefined},
+        {2, required, string, 'reason', undefined}
+    ]};
+
+struct_info('AllocationNotFound') ->
     {struct, exception, []};
 
 struct_info('InvalidCustomerStatus') ->
@@ -4130,6 +4222,9 @@ record_name('InvoicePaymentRefundParams') ->
 record_name('InvoicePaymentCaptureParams') ->
     'payproc_InvoicePaymentCaptureParams';
 
+record_name('InvoicePaymentCaptureData') ->
+    'payproc_InvoicePaymentCaptureData';
+
 record_name('InvoiceAdjustmentParams') ->
     'payproc_InvoiceAdjustmentParams';
 
@@ -4156,6 +4251,9 @@ record_name('InvoiceRepairParams') ->
 
 record_name('InvoiceUnpayable') ->
     'payproc_InvoiceUnpayable';
+
+record_name('InvoiceUnallocatable') ->
+    'payproc_InvoiceUnallocatable';
 
 record_name('CustomerParams') ->
     'payproc_CustomerParams';
@@ -4388,6 +4486,9 @@ record_name('PartyRevisionChanged') ->
 record_name('PayoutParams') ->
     'payproc_PayoutParams';
 
+record_name('ShopContract') ->
+    'payproc_ShopContract';
+
 record_name('InvalidContract') ->
     'payproc_InvalidContract';
 
@@ -4547,6 +4648,18 @@ record_name('AmountExceededCaptureBalance') ->
 record_name('InvoicePaymentChargebackPending') ->
     'payproc_InvoicePaymentChargebackPending';
 
+record_name('AllocationNotAllowed') ->
+    'payproc_AllocationNotAllowed';
+
+record_name('AllocationExceededPaymentAmount') ->
+    'payproc_AllocationExceededPaymentAmount';
+
+record_name('AllocationInvalidTransaction') ->
+    'payproc_AllocationInvalidTransaction';
+
+record_name('AllocationNotFound') ->
+    'payproc_AllocationNotFound';
+
 record_name('InvalidCustomerStatus') ->
     'payproc_InvalidCustomerStatus';
 
@@ -4683,7 +4796,8 @@ functions('CustomerManagement') ->
         'Delete',
         'StartBinding',
         'GetActiveBinding',
-        'GetEvents'
+        'GetEvents',
+        'ComputeTerms'
     ];
 
 functions('RecurrentPaymentTools') ->
@@ -4718,6 +4832,7 @@ functions('PartyManagement') ->
         'GetContract',
         'ComputeContractTerms',
         'GetShop',
+        'GetShopContract',
         'SuspendShop',
         'ActivateShop',
         'BlockShop',
@@ -4771,7 +4886,10 @@ function_info('Invoicing', 'Create', exceptions) ->
         {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex5', undefined},
         {6, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex6', undefined},
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex7', undefined},
-        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTermsViolated'}}, 'ex8', undefined}
+        {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoiceTermsViolated'}}, 'ex8', undefined},
+        {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex9', undefined},
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex10', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex11', undefined}
     ]};
 function_info('Invoicing', 'CreateWithTemplate', params_type) ->
     {struct, struct, [
@@ -4971,7 +5089,10 @@ function_info('Invoicing', 'CapturePayment', exceptions) ->
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined},
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentCaptureCurrency'}}, 'ex9', undefined},
-        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AmountExceededCaptureBalance'}}, 'ex10', undefined}
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AmountExceededCaptureBalance'}}, 'ex10', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex12', undefined},
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex13', undefined}
     ]};
 function_info('Invoicing', 'CapturePaymentNew', params_type) ->
     {struct, struct, [
@@ -4993,7 +5114,10 @@ function_info('Invoicing', 'CapturePaymentNew', exceptions) ->
         {7, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex7', undefined},
         {8, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex8', undefined},
         {9, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InconsistentCaptureCurrency'}}, 'ex9', undefined},
-        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AmountExceededCaptureBalance'}}, 'ex10', undefined}
+        {10, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AmountExceededCaptureBalance'}}, 'ex10', undefined},
+        {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex11', undefined},
+        {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex12', undefined},
+        {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex13', undefined}
     ]};
 function_info('Invoicing', 'CreatePaymentAdjustment', params_type) ->
     {struct, struct, [
@@ -5213,7 +5337,11 @@ function_info('Invoicing', 'RefundPayment', exceptions) ->
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidPartyStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex12', undefined},
         {13, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex13', undefined},
-        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined}
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined},
+        {15, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex15', undefined},
+        {16, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex16', undefined},
+        {17, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex17', undefined},
+        {18, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotFound'}}, 'ex18', undefined}
     ]};
 function_info('Invoicing', 'CreateManualRefund', params_type) ->
     {struct, struct, [
@@ -5238,7 +5366,11 @@ function_info('Invoicing', 'CreateManualRefund', exceptions) ->
         {11, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidShopStatus'}}, 'ex11', undefined},
         {12, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidContractStatus'}}, 'ex12', undefined},
         {13, undefined, {struct, exception, {dmsl_base_thrift, 'InvalidRequest'}}, 'ex13', undefined},
-        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined}
+        {14, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvoicePaymentChargebackPending'}}, 'ex14', undefined},
+        {15, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotAllowed'}}, 'ex15', undefined},
+        {16, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationExceededPaymentAmount'}}, 'ex16', undefined},
+        {17, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationInvalidTransaction'}}, 'ex17', undefined},
+        {18, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'AllocationNotFound'}}, 'ex18', undefined}
     ]};
 function_info('Invoicing', 'GetPaymentRefund', params_type) ->
     {struct, struct, [
@@ -5480,6 +5612,18 @@ function_info('CustomerManagement', 'GetEvents', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'invalid_user', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'customer_not_found', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'EventNotFound'}}, 'event_not_found', undefined}
+    ]};
+function_info('CustomerManagement', 'ComputeTerms', params_type) ->
+    {struct, struct, [
+        {1, undefined, string, 'customer_id', undefined},
+        {2, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision_param', undefined}
+    ]};
+function_info('CustomerManagement', 'ComputeTerms', reply_type) ->
+    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
+function_info('CustomerManagement', 'ComputeTerms', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'CustomerNotFound'}}, 'ex2', undefined}
     ]};
 
 function_info('RecurrentPaymentTools', 'Create', params_type) ->
@@ -5774,6 +5918,21 @@ function_info('PartyManagement', 'GetShop', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined}
+    ]};
+function_info('PartyManagement', 'GetShopContract', params_type) ->
+    {struct, struct, [
+        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
+        {2, undefined, string, 'party_id', undefined},
+        {3, undefined, string, 'id', undefined}
+    ]};
+function_info('PartyManagement', 'GetShopContract', reply_type) ->
+    {struct, struct, {dmsl_payment_processing_thrift, 'ShopContract'}};
+function_info('PartyManagement', 'GetShopContract', exceptions) ->
+    {struct, struct, [
+        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
+        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
+        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex3', undefined},
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'SuspendShop', params_type) ->
     {struct, struct, [

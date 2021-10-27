@@ -52,9 +52,9 @@
 
 %% struct 'PayoutToolCurrencyMismatch'
 -record('claim_management_PayoutToolCurrencyMismatch', {
-    'shop_account_currency' :: dmsl_domain_thrift:'Currency'(),
+    'shop_account_currency' :: dmsl_domain_thrift:'CurrencyRef'(),
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
-    'payout_tool_currency' :: dmsl_domain_thrift:'Currency'()
+    'payout_tool_currency' :: dmsl_domain_thrift:'CurrencyRef'()
 }).
 
 %% struct 'PayoutToolNotInContract'
@@ -187,6 +187,23 @@
 -record('claim_management_PayoutToolModificationUnit', {
     'payout_tool_id' :: dmsl_domain_thrift:'PayoutToolID'(),
     'modification' :: dmsl_claim_management_thrift:'PayoutToolModification'()
+}).
+
+%% struct 'WalletModificationUnit'
+-record('claim_management_WalletModificationUnit', {
+    'id' :: dmsl_domain_thrift:'WalletID'(),
+    'modification' :: dmsl_claim_management_thrift:'WalletModification'()
+}).
+
+%% struct 'WalletParams'
+-record('claim_management_WalletParams', {
+    'name' :: binary() | undefined,
+    'contract_id' :: dmsl_domain_thrift:'ContractID'()
+}).
+
+%% struct 'WalletAccountParams'
+-record('claim_management_WalletAccountParams', {
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'()
 }).
 
 %% struct 'DocumentCreated'

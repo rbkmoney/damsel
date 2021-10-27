@@ -633,7 +633,8 @@ struct_info('StatPayment') ->
         {19, optional, {struct, struct, {dmsl_domain_thrift, 'AdditionalTransactionInfo'}}, 'additional_transaction_info', undefined},
         {20, optional, string, 'external_id', undefined},
         {21, optional, {struct, struct, {dmsl_domain_thrift, 'ProviderRef'}}, 'provider_id', undefined},
-        {22, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_id', undefined}
+        {22, optional, {struct, struct, {dmsl_domain_thrift, 'TerminalRef'}}, 'terminal_id', undefined},
+        {23, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('Payer') ->
@@ -801,7 +802,8 @@ struct_info('StatInvoice') ->
         {10, required, string, 'currency_symbolic_code', undefined},
         {11, optional, {struct, struct, {dmsl_base_thrift, 'Content'}}, 'context', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-        {13, optional, string, 'external_id', undefined}
+        {13, optional, string, 'external_id', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('EnrichedStatInvoice') ->
@@ -894,7 +896,8 @@ struct_info('StatRefund') ->
         {10, required, string, 'currency_symbolic_code', undefined},
         {11, optional, string, 'reason', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'InvoiceCart'}}, 'cart', undefined},
-        {13, optional, string, 'external_id', undefined}
+        {13, optional, string, 'external_id', undefined},
+        {14, optional, {struct, struct, {dmsl_domain_thrift, 'Allocation'}}, 'allocation', undefined}
     ]};
 
 struct_info('InvoicePaymentRefundStatus') ->

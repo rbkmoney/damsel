@@ -35,6 +35,7 @@
     'CardClass'/0
 ]).
 -export_type([
+    'MerchantID'/0,
     'WrappedPaymentTool'/0,
     'PaymentRequest'/0,
     'ApplePayRequest'/0,
@@ -82,6 +83,7 @@
 %% structs, unions and exceptions
 %%
 -type struct_name() ::
+    'MerchantID' |
     'WrappedPaymentTool' |
     'PaymentRequest' |
     'ApplePayRequest' |
@@ -103,6 +105,9 @@
     'Auth3DS'.
 
 -type exception_name() :: none().
+
+%% struct 'MerchantID'
+-type 'MerchantID'() :: #'paytoolprv_MerchantID'{}.
 
 %% struct 'WrappedPaymentTool'
 -type 'WrappedPaymentTool'() :: #'paytoolprv_WrappedPaymentTool'{}.
@@ -230,6 +235,7 @@ enums() ->
 
 structs() ->
     [
+        'MerchantID',
         'WrappedPaymentTool',
         'PaymentRequest',
         'ApplePayRequest',
@@ -281,6 +287,13 @@ enum_info('CardClass') ->
 enum_info(_) -> erlang:error(badarg).
 
 -spec struct_info(struct_name() | exception_name()) -> struct_info() | no_return().
+
+struct_info('MerchantID') ->
+    {struct, struct, [
+        {1, required, string, 'party_id', undefined},
+        {2, required, string, 'shop_id', undefined},
+        {3, optional, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined}
+    ]};
 
 struct_info('WrappedPaymentTool') ->
     {struct, struct, [
@@ -410,6 +423,9 @@ struct_info('Auth3DS') ->
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
+
+record_name('MerchantID') ->
+    'paytoolprv_MerchantID';
 
 record_name('WrappedPaymentTool') ->
     'paytoolprv_WrappedPaymentTool';

@@ -97,6 +97,10 @@
     'ContractAdjustmentModification'/0,
     'PayoutToolModificationUnit'/0,
     'PayoutToolModification'/0,
+    'WalletModificationUnit'/0,
+    'WalletModification'/0,
+    'WalletParams'/0,
+    'WalletAccountParams'/0,
     'DocumentModification'/0,
     'DocumentCreated'/0,
     'DocumentChanged'/0,
@@ -247,6 +251,10 @@
     'ContractAdjustmentModification' |
     'PayoutToolModificationUnit' |
     'PayoutToolModification' |
+    'WalletModificationUnit' |
+    'WalletModification' |
+    'WalletParams' |
+    'WalletAccountParams' |
     'DocumentModification' |
     'DocumentCreated' |
     'DocumentChanged' |
@@ -502,6 +510,20 @@
     {'creation', 'PayoutToolParams'()} |
     {'info_modification', dmsl_domain_thrift:'PayoutToolInfo'()}.
 
+%% struct 'WalletModificationUnit'
+-type 'WalletModificationUnit'() :: #'claim_management_WalletModificationUnit'{}.
+
+%% union 'WalletModification'
+-type 'WalletModification'() ::
+    {'creation', 'WalletParams'()} |
+    {'account_creation', 'WalletAccountParams'()}.
+
+%% struct 'WalletParams'
+-type 'WalletParams'() :: #'claim_management_WalletParams'{}.
+
+%% struct 'WalletAccountParams'
+-type 'WalletAccountParams'() :: #'claim_management_WalletAccountParams'{}.
+
 %% union 'DocumentModification'
 -type 'DocumentModification'() ::
     {'creation', 'DocumentCreated'()} |
@@ -577,7 +599,8 @@
 -type 'PartyModification'() ::
     {'contractor_modification', 'ContractorModificationUnit'()} |
     {'contract_modification', 'ContractModificationUnit'()} |
-    {'shop_modification', 'ShopModificationUnit'()}.
+    {'shop_modification', 'ShopModificationUnit'()} |
+    {'wallet_modification', 'WalletModificationUnit'()}.
 
 %% union 'PartyModificationChange'
 -type 'PartyModificationChange'() ::
@@ -831,6 +854,10 @@ structs() ->
         'ContractAdjustmentModification',
         'PayoutToolModificationUnit',
         'PayoutToolModification',
+        'WalletModificationUnit',
+        'WalletModification',
+        'WalletParams',
+        'WalletAccountParams',
         'DocumentModification',
         'DocumentCreated',
         'DocumentChanged',
@@ -1054,9 +1081,9 @@ struct_info('PayoutToolNotSetForPayouts') ->
 
 struct_info('PayoutToolCurrencyMismatch') ->
     {struct, struct, [
-        {1, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'shop_account_currency', undefined},
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'shop_account_currency', undefined},
         {2, required, string, 'payout_tool_id', undefined},
-        {3, required, {struct, struct, {dmsl_domain_thrift, 'Currency'}}, 'payout_tool_currency', undefined}
+        {3, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'payout_tool_currency', undefined}
     ]};
 
 struct_info('PayoutToolNotInContract') ->
@@ -1243,6 +1270,29 @@ struct_info('PayoutToolModification') ->
         {2, optional, {struct, union, {dmsl_domain_thrift, 'PayoutToolInfo'}}, 'info_modification', undefined}
     ]};
 
+struct_info('WalletModificationUnit') ->
+    {struct, struct, [
+        {1, required, string, 'id', undefined},
+        {2, required, {struct, union, {dmsl_claim_management_thrift, 'WalletModification'}}, 'modification', undefined}
+    ]};
+
+struct_info('WalletModification') ->
+    {struct, union, [
+        {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'WalletParams'}}, 'creation', undefined},
+        {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'WalletAccountParams'}}, 'account_creation', undefined}
+    ]};
+
+struct_info('WalletParams') ->
+    {struct, struct, [
+        {1, optional, string, 'name', undefined},
+        {2, required, string, 'contract_id', undefined}
+    ]};
+
+struct_info('WalletAccountParams') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined}
+    ]};
+
 struct_info('DocumentModification') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'DocumentCreated'}}, 'creation', undefined},
@@ -1339,7 +1389,8 @@ struct_info('PartyModification') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractorModificationUnit'}}, 'contractor_modification', undefined},
         {2, optional, {struct, struct, {dmsl_claim_management_thrift, 'ContractModificationUnit'}}, 'contract_modification', undefined},
-        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined}
+        {3, optional, {struct, struct, {dmsl_claim_management_thrift, 'ShopModificationUnit'}}, 'shop_modification', undefined},
+        {4, optional, {struct, struct, {dmsl_claim_management_thrift, 'WalletModificationUnit'}}, 'wallet_modification', undefined}
     ]};
 
 struct_info('PartyModificationChange') ->
@@ -1625,6 +1676,15 @@ record_name('ContractAdjustmentParams') ->
 
 record_name('PayoutToolModificationUnit') ->
     'claim_management_PayoutToolModificationUnit';
+
+record_name('WalletModificationUnit') ->
+    'claim_management_WalletModificationUnit';
+
+record_name('WalletParams') ->
+    'claim_management_WalletParams';
+
+record_name('WalletAccountParams') ->
+    'claim_management_WalletAccountParams';
 
 record_name('DocumentCreated') ->
     'claim_management_DocumentCreated';
