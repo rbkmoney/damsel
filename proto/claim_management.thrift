@@ -129,9 +129,9 @@ struct PayoutToolNotSetForPayouts {
 }
 
 struct PayoutToolCurrencyMismatch {
-    1: required domain.Currency shop_account_currency
+    1: required domain.CurrencyRef shop_account_currency
     2: required domain.PayoutToolID payout_tool_id
-    3: required domain.Currency payout_tool_currency
+    3: required domain.CurrencyRef payout_tool_currency
 }
 
 struct PayoutToolNotInContract {
@@ -298,6 +298,25 @@ union PayoutToolModification {
     2: domain.PayoutToolInfo info_modification
 }
 
+struct WalletModificationUnit {
+    1: required domain.WalletID id
+    2: required WalletModification modification
+}
+
+union WalletModification {
+    1: WalletParams creation
+    2: WalletAccountParams account_creation
+}
+
+struct WalletParams {
+    1: optional string name
+    2: required domain.ContractID contract_id
+}
+
+struct WalletAccountParams {
+    1: required domain.CurrencyRef currency
+}
+
 union DocumentModification {
     1: DocumentCreated creation
     2: DocumentChanged changed
@@ -370,6 +389,7 @@ union PartyModification {
     1: ContractorModificationUnit contractor_modification
     2: ContractModificationUnit contract_modification
     3: ShopModificationUnit shop_modification
+    4: WalletModificationUnit wallet_modification
 }
 
 union PartyModificationChange {

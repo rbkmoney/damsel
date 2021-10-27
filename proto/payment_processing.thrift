@@ -496,7 +496,7 @@ struct InvoicePaymentRecTokenAcquired {
 }
 
 struct InvoicePaymentCaptureStarted {
-    1: required InvoicePaymentCaptureParams params
+    1: required InvoicePaymentCaptureData data
 }
 
 /**
@@ -539,6 +539,7 @@ struct InvoiceParams {
     7: required domain.InvoiceID id
     8: optional string external_id
     9: optional domain.InvoiceClientInfo client_info
+    10: optional domain.AllocationPrototype allocation
 }
 
 struct InvoiceWithTemplateParams {
@@ -627,6 +628,7 @@ struct InvoicePayment {
     5: required list<InvoicePaymentSession> sessions
     8: optional list<InvoicePaymentChargeback> chargebacks
     9: optional domain.TransactionInfo last_transaction_info
+    11: optional domain.Allocation allocation
     # deprecated
     3: required list<domain.InvoicePaymentRefund> legacy_refunds
 }
@@ -782,6 +784,11 @@ struct InvoicePaymentRefundParams {
      * Внешний идентификатор объекта
      */
     6: optional string external_id
+    /**
+     * Распределение денежных средств возврата.
+     * Используется при частичном возврате, содержит транзакции, которые нужно вернуть.
+     */
+    7: optional domain.AllocationPrototype allocation
 }
 
 /**
@@ -796,6 +803,14 @@ struct InvoicePaymentCaptureParams {
      */
     2: optional domain.Cash cash
     3: optional domain.InvoiceCart cart
+    4: optional domain.AllocationPrototype allocation
+}
+
+struct InvoicePaymentCaptureData {
+    1: required string reason
+    2: optional domain.Cash cash
+    3: optional domain.InvoiceCart cart
+    4: optional domain.Allocation allocation
 }
 
 /**
@@ -974,8 +989,11 @@ exception InvoiceTemplateRemoved {}
 
 struct InvoiceUnpayable {}
 
+struct InvoiceUnallocatable {}
+
 union InvoiceTermsViolationReason {
-    1: InvoiceUnpayable invoice_unpayable
+    1: InvoiceUnpayable invoice_unpayable,
+    2: InvoiceUnallocatable invoice_unallocatable
 }
 
 exception InvoiceTermsViolated {
@@ -1006,6 +1024,22 @@ exception AmountExceededCaptureBalance {
 
 exception InvoicePaymentChargebackPending {}
 
+exception AllocationNotAllowed {}
+
+exception AllocationExceededPaymentAmount {}
+
+exception AllocationInvalidTransaction {
+    1: required FailedAllocationTransaction transaction
+    2: required string reason
+}
+
+union FailedAllocationTransaction {
+    1: domain.AllocationTransaction transaction
+    2: domain.AllocationTransactionPrototype transaction_prototype
+}
+
+exception AllocationNotFound {}
+
 service Invoicing {
 
     Invoice Create (1: UserInfo user, 2: InvoiceParams params)
@@ -1017,7 +1051,10 @@ service Invoicing {
             5: InvalidPartyStatus ex5,
             6: InvalidShopStatus ex6,
             7: InvalidContractStatus ex7,
-            8: InvoiceTermsViolated ex8
+            8: InvoiceTermsViolated ex8,
+            9: AllocationNotAllowed ex9,
+            10: AllocationExceededPaymentAmount ex10,
+            11: AllocationInvalidTransaction ex11
         )
 
     Invoice CreateWithTemplate (1: UserInfo user, 2: InvoiceWithTemplateParams params)
@@ -1171,7 +1208,10 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: AllocationNotAllowed ex11,
+            12: AllocationExceededPaymentAmount ex12,
+            13: AllocationInvalidTransaction ex13
         )
 
     void CapturePaymentNew (
@@ -1190,7 +1230,10 @@ service Invoicing {
             7: InvalidPartyStatus ex7,
             8: InvalidShopStatus ex8,
             9: InconsistentCaptureCurrency ex9,
-            10: AmountExceededCaptureBalance ex10
+            10: AmountExceededCaptureBalance ex10,
+            11: AllocationNotAllowed ex11,
+            12: AllocationExceededPaymentAmount ex12,
+            13: AllocationInvalidTransaction ex13
         )
     /**
      * Создать поправку к платежу.
@@ -1402,13 +1445,17 @@ service Invoicing {
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
-            8: base.InvalidRequest ex8
-            9: InvoicePaymentAmountExceeded ex9
-            10: InconsistentRefundCurrency ex10
-            11: InvalidPartyStatus ex11
-            12: InvalidShopStatus ex12
-            13: InvalidContractStatus ex13
-            14: InvoicePaymentChargebackPending ex14
+            8: base.InvalidRequest ex8,
+            9: InvoicePaymentAmountExceeded ex9,
+            10: InconsistentRefundCurrency ex10,
+            11: InvalidPartyStatus ex11,
+            12: InvalidShopStatus ex12,
+            13: InvalidContractStatus ex13,
+            14: InvoicePaymentChargebackPending ex14,
+            15: AllocationNotAllowed ex15,
+            16: AllocationExceededPaymentAmount ex16,
+            17: AllocationInvalidTransaction ex17,
+            18: AllocationNotFound ex18
         )
 
 
@@ -1428,13 +1475,17 @@ service Invoicing {
             4: InvalidPaymentStatus ex4,
             6: OperationNotPermitted ex6,
             7: InsufficientAccountBalance ex7,
-            8: InvoicePaymentAmountExceeded ex8
-            9: InconsistentRefundCurrency ex9
-            10: InvalidPartyStatus ex10
-            11: InvalidShopStatus ex11
-            12: InvalidContractStatus ex12
-            13: base.InvalidRequest ex13
-            14: InvoicePaymentChargebackPending ex14
+            8: InvoicePaymentAmountExceeded ex8,
+            9: InconsistentRefundCurrency ex9,
+            10: InvalidPartyStatus ex10,
+            11: InvalidShopStatus ex11,
+            12: InvalidContractStatus ex12,
+            13: base.InvalidRequest ex13,
+            14: InvoicePaymentChargebackPending ex14,
+            15: AllocationNotAllowed ex15,
+            16: AllocationExceededPaymentAmount ex16,
+            17: AllocationInvalidTransaction ex17,
+            18: AllocationNotFound ex18
         )
 
     domain.InvoicePaymentRefund GetPaymentRefund (
@@ -1758,6 +1809,15 @@ service CustomerManagement {
             2: CustomerNotFound customer_not_found
             3: EventNotFound    event_not_found
         )
+
+    /* terms */
+
+    domain.TermSet ComputeTerms (
+        1: CustomerID customer_id,
+        2: PartyRevisionParam party_revision_param
+    )
+        throws (1: InvalidUser ex1, 2: CustomerNotFound ex2)
+
 }
 
 /* Recurrent Payment Tool */
@@ -1957,7 +2017,6 @@ struct Varset {
     4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
     6: optional domain.WalletID wallet_id
-    7: optional domain.P2PTool p2p_tool
     8: optional domain.ShopID shop_id
     9: optional domain.ContractorIdentificationLevel identification_level
     10: optional domain.PaymentTool payment_tool
@@ -2331,6 +2390,15 @@ struct PayoutParams {
     4: optional domain.PayoutToolID payout_tool_id
 }
 
+/*
+ * Контракт магазина
+ */
+struct ShopContract {
+    1: required domain.Shop shop
+    2: required domain.Contract contract
+    3: optional domain.PartyContractor contractor
+}
+
 // Exceptions
 
 exception PartyExists {}
@@ -2527,6 +2595,9 @@ service PartyManagement {
 
     domain.Shop GetShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3)
+
+    ShopContract GetShopContract(1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
+        throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: ContractNotFound ex4)
 
     void SuspendShop (1: UserInfo user, 2: PartyID party_id, 3: ShopID id)
         throws (1: InvalidUser ex1, 2: PartyNotFound ex2, 3: ShopNotFound ex3, 4: InvalidShopStatus ex4)
