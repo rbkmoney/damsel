@@ -34,6 +34,7 @@ struct StatPayment {
     20: optional string external_id
     21: optional domain.ProviderRef provider_id
     22: optional domain.TerminalRef terminal_id
+    23: optional domain.Allocation allocation
 }
 
 union Payer {
@@ -209,6 +210,7 @@ struct StatInvoice {
     11: optional base.Content context
     12: optional domain.InvoiceCart cart
     13: optional string external_id
+    14: optional domain.Allocation allocation
 }
 
 struct EnrichedStatInvoice {
@@ -246,9 +248,8 @@ struct StatCustomer {
 typedef base.ID PayoutID
 
 /**
-* Информация о выплате
-*
-*/
+ * Информация о выплате
+ */
 struct StatPayout {
     1 : required PayoutID id
     2 : required domain.PartyID party_id
@@ -288,6 +289,7 @@ struct StatRefund {
     11: optional string reason
     12: optional domain.InvoiceCart cart
     13: optional string external_id
+    14: optional domain.Allocation allocation
 }
 
 union InvoicePaymentRefundStatus {
