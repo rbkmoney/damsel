@@ -2026,23 +2026,15 @@ struct Varset {
 
 struct ComputeShopTermsVarset {
     3: optional domain.Cash amount
-
-    /* seems not used */
-    4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
-    6: optional domain.WalletID wallet_id
     10: optional domain.PaymentTool payment_tool
-    12: optional domain.BinData bin_data
 }
 
 struct ComputeContractTermsVarset {
     3: optional domain.Cash amount
     8: optional domain.ShopID shop_id
-    10: optional domain.PaymentTool payment_tool
-
-    /* fistful */
-    4: optional domain.PaymentMethodRef payment_method
     5: optional domain.PayoutMethodRef payout_method
+    10: optional domain.PaymentTool payment_tool
     6: optional domain.WalletID wallet_id
     12: optional domain.BinData bin_data
 }
@@ -2649,24 +2641,6 @@ service PartyManagement {
             3: PartyNotExistsYet ex3,
             4: ShopNotFound ex4,
             5: VarsetPartyNotMatch ex5
-        )
-
-    /* Wallet */
-
-    // deprecated
-    // do not use
-    domain.TermSet ComputeWalletTermsNew (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ContractID contract_id,
-        4: base.Timestamp timestamp
-        5: Varset varset
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: PartyNotExistsYet ex3,
-            4: VarsetPartyNotMatch ex4
         )
 
     /* Claim */
