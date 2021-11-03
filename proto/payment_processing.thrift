@@ -2527,10 +2527,6 @@ exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
 
-exception VarsetPartyNotMatch {
-    1: required PartyID varset_party_id
-    2: required PartyID agrument_party_id
-}
 
 // Service
 
@@ -2603,8 +2599,7 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: PartyNotExistsYet ex3
-            4: ContractNotFound ex4,
-            5: VarsetPartyNotMatch ex5
+            4: ContractNotFound ex4
         )
 
     /* Shop */
@@ -2639,8 +2634,7 @@ service PartyManagement {
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: PartyNotExistsYet ex3,
-            4: ShopNotFound ex4,
-            5: VarsetPartyNotMatch ex5
+            4: ShopNotFound ex4
         )
 
     /* Claim */
