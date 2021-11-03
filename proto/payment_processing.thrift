@@ -2024,6 +2024,22 @@ struct Varset {
     12: optional domain.BinData bin_data
 }
 
+struct ComputeShopTermsVarset {
+    3: optional domain.Cash amount
+    5: optional domain.PayoutMethodRef payout_method
+    10: optional domain.PaymentTool payment_tool
+}
+
+struct ComputeContractTermsVarset {
+    3: optional domain.Cash amount
+    8: optional domain.ShopID shop_id
+    5: optional domain.PayoutMethodRef payout_method
+    10: optional domain.PaymentTool payment_tool
+    6: optional domain.WalletID wallet_id
+    12: optional domain.BinData bin_data
+}
+
+
 struct PartyParams {
     1: required domain.PartyContactInfo contact_info
 }
@@ -2511,10 +2527,6 @@ exception GlobalsNotFound {}
 
 exception RuleSetNotFound {}
 
-exception VarsetPartyNotMatch {
-    1: required PartyID varset_party_id
-    2: required PartyID agrument_party_id
-}
 
 // Service
 
@@ -2581,14 +2593,13 @@ service PartyManagement {
         4: base.Timestamp timestamp
         5: PartyRevisionParam party_revision
         6: domain.DataRevision domain_revision
-        7: Varset varset
+        7: ComputeContractTermsVarset varset
     )
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: PartyNotExistsYet ex3
-            4: ContractNotFound ex4,
-            5: VarsetPartyNotMatch ex5
+            4: ContractNotFound ex4
         )
 
     /* Shop */
@@ -2617,32 +2628,13 @@ service PartyManagement {
         3: ShopID id,
         4: base.Timestamp timestamp
         5: PartyRevisionParam party_revision
-        6: Varset varset
+        6: ComputeShopTermsVarset varset
     )
         throws (
             1: InvalidUser ex1,
             2: PartyNotFound ex2,
             3: PartyNotExistsYet ex3,
-            4: ShopNotFound ex4,
-            5: VarsetPartyNotMatch ex5
-        )
-
-    /* Wallet */
-
-    // deprecated
-    // do not use
-    domain.TermSet ComputeWalletTermsNew (
-        1: UserInfo user,
-        2: PartyID party_id,
-        3: ContractID contract_id,
-        4: base.Timestamp timestamp
-        5: Varset varset
-    )
-        throws (
-            1: InvalidUser ex1,
-            2: PartyNotFound ex2,
-            3: PartyNotExistsYet ex3,
-            4: VarsetPartyNotMatch ex4
+            4: ShopNotFound ex4
         )
 
     /* Claim */
