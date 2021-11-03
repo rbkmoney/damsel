@@ -704,6 +704,23 @@
     'bin_data' :: dmsl_domain_thrift:'BinData'() | undefined
 }).
 
+%% struct 'ComputeShopTermsVarset'
+-record('payproc_ComputeShopTermsVarset', {
+    'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined
+}).
+
+%% struct 'ComputeContractTermsVarset'
+-record('payproc_ComputeContractTermsVarset', {
+    'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
+    'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
+    'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,
+    'payment_tool' :: dmsl_domain_thrift:'PaymentTool'() | undefined,
+    'wallet_id' :: dmsl_domain_thrift:'WalletID'() | undefined,
+    'bin_data' :: dmsl_domain_thrift:'BinData'() | undefined
+}).
+
 %% struct 'PartyParams'
 -record('payproc_PartyParams', {
     'contact_info' :: dmsl_domain_thrift:'PartyContactInfo'()
@@ -1314,11 +1331,5 @@
 
 %% exception 'RuleSetNotFound'
 -record('payproc_RuleSetNotFound', {}).
-
-%% exception 'VarsetPartyNotMatch'
--record('payproc_VarsetPartyNotMatch', {
-    'varset_party_id' :: dmsl_payment_processing_thrift:'PartyID'(),
-    'agrument_party_id' :: dmsl_payment_processing_thrift:'PartyID'()
-}).
 
 -endif.

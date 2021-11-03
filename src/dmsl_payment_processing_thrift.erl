@@ -199,6 +199,8 @@
     'RecurrentPaymentToolHasAbandoned'/0,
     'RecurrentPaymentToolHasFailed'/0,
     'Varset'/0,
+    'ComputeShopTermsVarset'/0,
+    'ComputeContractTermsVarset'/0,
     'PartyParams'/0,
     'PayoutToolParams'/0,
     'ShopParams'/0,
@@ -349,8 +351,7 @@
     'TerminalNotFound'/0,
     'ProvisionTermSetUndefined'/0,
     'GlobalsNotFound'/0,
-    'RuleSetNotFound'/0,
-    'VarsetPartyNotMatch'/0
+    'RuleSetNotFound'/0
 ]).
 
 -type namespace() :: 'payproc'.
@@ -559,6 +560,8 @@
     'RecurrentPaymentToolHasAbandoned' |
     'RecurrentPaymentToolHasFailed' |
     'Varset' |
+    'ComputeShopTermsVarset' |
+    'ComputeContractTermsVarset' |
     'PartyParams' |
     'PayoutToolParams' |
     'ShopParams' |
@@ -709,8 +712,7 @@
     'TerminalNotFound' |
     'ProvisionTermSetUndefined' |
     'GlobalsNotFound' |
-    'RuleSetNotFound' |
-    'VarsetPartyNotMatch'.
+    'RuleSetNotFound'.
 
 %% struct 'UserInfo'
 -type 'UserInfo'() :: #'payproc_UserInfo'{}.
@@ -1234,6 +1236,12 @@
 
 %% struct 'Varset'
 -type 'Varset'() :: #'payproc_Varset'{}.
+
+%% struct 'ComputeShopTermsVarset'
+-type 'ComputeShopTermsVarset'() :: #'payproc_ComputeShopTermsVarset'{}.
+
+%% struct 'ComputeContractTermsVarset'
+-type 'ComputeContractTermsVarset'() :: #'payproc_ComputeContractTermsVarset'{}.
 
 %% struct 'PartyParams'
 -type 'PartyParams'() :: #'payproc_PartyParams'{}.
@@ -1781,9 +1789,6 @@
 %% exception 'RuleSetNotFound'
 -type 'RuleSetNotFound'() :: #'payproc_RuleSetNotFound'{}.
 
-%% exception 'VarsetPartyNotMatch'
--type 'VarsetPartyNotMatch'() :: #'payproc_VarsetPartyNotMatch'{}.
-
 %%
 %% services and functions
 %%
@@ -1897,7 +1902,6 @@
     'BlockShop' |
     'UnblockShop' |
     'ComputeShopTerms' |
-    'ComputeWalletTermsNew' |
     'CreateClaim' |
     'GetClaim' |
     'GetClaims' |
@@ -2132,6 +2136,8 @@ structs() ->
         'RecurrentPaymentToolHasAbandoned',
         'RecurrentPaymentToolHasFailed',
         'Varset',
+        'ComputeShopTermsVarset',
+        'ComputeContractTermsVarset',
         'PartyParams',
         'PayoutToolParams',
         'ShopParams',
@@ -3206,6 +3212,23 @@ struct_info('Varset') ->
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'BinData'}}, 'bin_data', undefined}
     ]};
 
+struct_info('ComputeShopTermsVarset') ->
+    {struct, struct, [
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
+        {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined}
+    ]};
+
+struct_info('ComputeContractTermsVarset') ->
+    {struct, struct, [
+        {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
+        {8, optional, string, 'shop_id', undefined},
+        {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
+        {10, optional, {struct, union, {dmsl_domain_thrift, 'PaymentTool'}}, 'payment_tool', undefined},
+        {6, optional, string, 'wallet_id', undefined},
+        {12, optional, {struct, struct, {dmsl_domain_thrift, 'BinData'}}, 'bin_data', undefined}
+    ]};
+
 struct_info('PartyParams') ->
     {struct, struct, [
         {1, required, {struct, struct, {dmsl_domain_thrift, 'PartyContactInfo'}}, 'contact_info', undefined}
@@ -3996,12 +4019,6 @@ struct_info('GlobalsNotFound') ->
 struct_info('RuleSetNotFound') ->
     {struct, exception, []};
 
-struct_info('VarsetPartyNotMatch') ->
-    {struct, exception, [
-        {1, required, string, 'varset_party_id', undefined},
-        {2, required, string, 'agrument_party_id', undefined}
-    ]};
-
 struct_info(_) -> erlang:error(badarg).
 
 -spec record_name(struct_name() | exception_name()) -> atom() | no_return().
@@ -4350,6 +4367,12 @@ record_name('RecurrentPaymentToolHasFailed') ->
 
 record_name('Varset') ->
     'payproc_Varset';
+
+record_name('ComputeShopTermsVarset') ->
+    'payproc_ComputeShopTermsVarset';
+
+record_name('ComputeContractTermsVarset') ->
+    'payproc_ComputeContractTermsVarset';
 
 record_name('PartyParams') ->
     'payproc_PartyParams';
@@ -4738,9 +4761,6 @@ record_name('GlobalsNotFound') ->
 record_name('RuleSetNotFound') ->
     'payproc_RuleSetNotFound';
 
-record_name('VarsetPartyNotMatch') ->
-    'payproc_VarsetPartyNotMatch';
-
 record_name(_) -> error(badarg).
 
 -spec functions(service_name()) -> [function_name()] | no_return().
@@ -4838,7 +4858,6 @@ functions('PartyManagement') ->
         'BlockShop',
         'UnblockShop',
         'ComputeShopTerms',
-        'ComputeWalletTermsNew',
         'CreateClaim',
         'GetClaim',
         'GetClaims',
@@ -5893,7 +5912,7 @@ function_info('PartyManagement', 'ComputeContractTerms', params_type) ->
         {4, undefined, string, 'timestamp', undefined},
         {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
         {6, undefined, i64, 'domain_revision', undefined},
-        {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+        {7, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'ComputeContractTermsVarset'}}, 'varset', undefined}
     ]};
 function_info('PartyManagement', 'ComputeContractTerms', reply_type) ->
     {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -5902,8 +5921,7 @@ function_info('PartyManagement', 'ComputeContractTerms', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'VarsetPartyNotMatch'}}, 'ex5', undefined}
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ContractNotFound'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'GetShop', params_type) ->
     {struct, struct, [
@@ -6003,7 +6021,7 @@ function_info('PartyManagement', 'ComputeShopTerms', params_type) ->
         {3, undefined, string, 'id', undefined},
         {4, undefined, string, 'timestamp', undefined},
         {5, undefined, {struct, union, {dmsl_payment_processing_thrift, 'PartyRevisionParam'}}, 'party_revision', undefined},
-        {6, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
+        {6, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'ComputeShopTermsVarset'}}, 'varset', undefined}
     ]};
 function_info('PartyManagement', 'ComputeShopTerms', reply_type) ->
     {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
@@ -6012,25 +6030,7 @@ function_info('PartyManagement', 'ComputeShopTerms', exceptions) ->
         {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
         {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
         {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined},
-        {5, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'VarsetPartyNotMatch'}}, 'ex5', undefined}
-    ]};
-function_info('PartyManagement', 'ComputeWalletTermsNew', params_type) ->
-    {struct, struct, [
-        {1, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'UserInfo'}}, 'user', undefined},
-        {2, undefined, string, 'party_id', undefined},
-        {3, undefined, string, 'contract_id', undefined},
-        {4, undefined, string, 'timestamp', undefined},
-        {5, undefined, {struct, struct, {dmsl_payment_processing_thrift, 'Varset'}}, 'varset', undefined}
-    ]};
-function_info('PartyManagement', 'ComputeWalletTermsNew', reply_type) ->
-    {struct, struct, {dmsl_domain_thrift, 'TermSet'}};
-function_info('PartyManagement', 'ComputeWalletTermsNew', exceptions) ->
-    {struct, struct, [
-        {1, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'InvalidUser'}}, 'ex1', undefined},
-        {2, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotFound'}}, 'ex2', undefined},
-        {3, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'PartyNotExistsYet'}}, 'ex3', undefined},
-        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'VarsetPartyNotMatch'}}, 'ex4', undefined}
+        {4, undefined, {struct, exception, {dmsl_payment_processing_thrift, 'ShopNotFound'}}, 'ex4', undefined}
     ]};
 function_info('PartyManagement', 'CreateClaim', params_type) ->
     {struct, struct, [
