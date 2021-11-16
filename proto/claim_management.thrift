@@ -5,9 +5,9 @@ include "base.thrift"
 include "domain.thrift"
 include "msgpack.thrift"
 
-typedef i64 ClaimID
+typedef base.ClaimID ClaimID
 typedef i64 ModificationID
-typedef i32 ClaimRevision
+typedef base.ClaimRevision ClaimRevision
 typedef string ContinuationToken
 typedef base.ID FileID
 typedef base.ID DocumentID

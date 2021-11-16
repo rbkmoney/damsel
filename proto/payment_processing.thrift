@@ -2190,8 +2190,8 @@ struct WalletAccountParams {
 
 // Claims
 
-typedef i64 ClaimID
-typedef i32 ClaimRevision
+typedef base.ClaimID ClaimID
+typedef base.ClaimRevision ClaimRevision
 
 struct Claim {
     1: required ClaimID id
