@@ -2190,16 +2190,24 @@ struct WalletAccountParams {
 
 // Claims
 
-typedef i64 ClaimID
-typedef i32 ClaimRevision
+typedef base.ClaimID ClaimID
+typedef base.ClaimRevision ClaimRevision
 
 struct Claim {
     1: required ClaimID id
     2: required ClaimStatus status
-    3: required PartyChangeset changeset
+    3: optional PartyChangeset changeset
     4: required ClaimRevision revision
     5: required base.Timestamp created_at
     6: optional base.Timestamp updated_at
+    7: optional ClaimManagementClaimRef caused_by
+}
+
+// NOTE: Type for ClaimID and ClaimRevision must be in sync
+// with ClaimManagement's ClaimID and ClaimRevision
+struct ClaimManagementClaimRef {
+    1: required ClaimID id
+    2: required ClaimRevision revision
 }
 
 union ClaimStatus {
