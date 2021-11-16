@@ -42,7 +42,9 @@
     'Timezone'/0,
     'StringMap'/0,
     'Timeout'/0,
-    'Tag'/0
+    'Tag'/0,
+    'ClaimID'/0,
+    'ClaimRevision'/0
 ]).
 -export_type([
     'BoundType'/0,
@@ -84,7 +86,9 @@
     'Timezone' |
     'StringMap' |
     'Timeout' |
-    'Tag'.
+    'Tag' |
+    'ClaimID' |
+    'ClaimRevision'.
 
 -type 'ID'() :: binary().
 -type 'EventID'() :: integer().
@@ -97,6 +101,8 @@
 -type 'StringMap'() :: #{binary() => binary()}.
 -type 'Timeout'() :: integer().
 -type 'Tag'() :: binary().
+-type 'ClaimID'() :: integer().
+-type 'ClaimRevision'() :: integer().
 
 %%
 %% enums
@@ -260,7 +266,9 @@ typedefs() ->
         'Timezone',
         'StringMap',
         'Timeout',
-        'Tag'
+        'Tag',
+        'ClaimID',
+        'ClaimRevision'
     ].
 
 -spec enums() -> [enum_name()].
@@ -335,6 +343,12 @@ typedef_info('Timeout') ->
 
 typedef_info('Tag') ->
     string;
+
+typedef_info('ClaimID') ->
+    i64;
+
+typedef_info('ClaimRevision') ->
+    i32;
 
 typedef_info(_) -> erlang:error(badarg).
 

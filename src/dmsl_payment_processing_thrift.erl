@@ -228,6 +228,7 @@
     'WalletParams'/0,
     'WalletAccountParams'/0,
     'Claim'/0,
+    'ClaimManagementClaimRef'/0,
     'ClaimStatus'/0,
     'ClaimPending'/0,
     'ClaimAccepted'/0,
@@ -406,8 +407,8 @@
 -type 'ContractTemplateRef'() :: dmsl_domain_thrift:'ContractTemplateRef'().
 -type 'PaymentInstitutionRef'() :: dmsl_domain_thrift:'PaymentInstitutionRef'().
 -type 'PartyChangeset'() :: ['PartyModification'()].
--type 'ClaimID'() :: integer().
--type 'ClaimRevision'() :: integer().
+-type 'ClaimID'() :: dmsl_base_thrift:'ClaimID'().
+-type 'ClaimRevision'() :: dmsl_base_thrift:'ClaimRevision'().
 -type 'ClaimEffects'() :: ['ClaimEffect'()].
 
 %%
@@ -589,6 +590,7 @@
     'WalletParams' |
     'WalletAccountParams' |
     'Claim' |
+    'ClaimManagementClaimRef' |
     'ClaimStatus' |
     'ClaimPending' |
     'ClaimAccepted' |
@@ -1351,6 +1353,9 @@
 
 %% struct 'Claim'
 -type 'Claim'() :: #'payproc_Claim'{}.
+
+%% struct 'ClaimManagementClaimRef'
+-type 'ClaimManagementClaimRef'() :: #'payproc_ClaimManagementClaimRef'{}.
 
 %% union 'ClaimStatus'
 -type 'ClaimStatus'() ::
@@ -2165,6 +2170,7 @@ structs() ->
         'WalletParams',
         'WalletAccountParams',
         'Claim',
+        'ClaimManagementClaimRef',
         'ClaimStatus',
         'ClaimPending',
         'ClaimAccepted',
@@ -3400,10 +3406,17 @@ struct_info('Claim') ->
     {struct, struct, [
         {1, required, i64, 'id', undefined},
         {2, required, {struct, union, {dmsl_payment_processing_thrift, 'ClaimStatus'}}, 'status', undefined},
-        {3, required, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined},
+        {3, optional, {list, {struct, union, {dmsl_payment_processing_thrift, 'PartyModification'}}}, 'changeset', undefined},
         {4, required, i32, 'revision', undefined},
         {5, required, string, 'created_at', undefined},
-        {6, optional, string, 'updated_at', undefined}
+        {6, optional, string, 'updated_at', undefined},
+        {7, optional, {struct, struct, {dmsl_payment_processing_thrift, 'ClaimManagementClaimRef'}}, 'caused_by', undefined}
+    ]};
+
+struct_info('ClaimManagementClaimRef') ->
+    {struct, struct, [
+        {1, required, i64, 'id', undefined},
+        {2, required, i32, 'revision', undefined}
     ]};
 
 struct_info('ClaimStatus') ->
@@ -4433,6 +4446,9 @@ record_name('WalletAccountParams') ->
 
 record_name('Claim') ->
     'payproc_Claim';
+
+record_name('ClaimManagementClaimRef') ->
+    'payproc_ClaimManagementClaimRef';
 
 record_name('ClaimPending') ->
     'payproc_ClaimPending';

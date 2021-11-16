@@ -836,10 +836,17 @@
 -record('payproc_Claim', {
     'id' :: dmsl_payment_processing_thrift:'ClaimID'(),
     'status' :: dmsl_payment_processing_thrift:'ClaimStatus'(),
-    'changeset' :: dmsl_payment_processing_thrift:'PartyChangeset'(),
+    'changeset' :: dmsl_payment_processing_thrift:'PartyChangeset'() | undefined,
     'revision' :: dmsl_payment_processing_thrift:'ClaimRevision'(),
     'created_at' :: dmsl_base_thrift:'Timestamp'(),
-    'updated_at' :: dmsl_base_thrift:'Timestamp'() | undefined
+    'updated_at' :: dmsl_base_thrift:'Timestamp'() | undefined,
+    'caused_by' :: dmsl_payment_processing_thrift:'ClaimManagementClaimRef'() | undefined
+}).
+
+%% struct 'ClaimManagementClaimRef'
+-record('payproc_ClaimManagementClaimRef', {
+    'id' :: dmsl_payment_processing_thrift:'ClaimID'(),
+    'revision' :: dmsl_payment_processing_thrift:'ClaimRevision'()
 }).
 
 %% struct 'ClaimPending'

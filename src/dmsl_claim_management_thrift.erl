@@ -178,9 +178,9 @@
     'ClaimChangeset' |
     'ModificationChangeset'.
 
--type 'ClaimID'() :: integer().
+-type 'ClaimID'() :: dmsl_base_thrift:'ClaimID'().
 -type 'ModificationID'() :: integer().
--type 'ClaimRevision'() :: integer().
+-type 'ClaimRevision'() :: dmsl_base_thrift:'ClaimRevision'().
 -type 'ContinuationToken'() :: binary().
 -type 'FileID'() :: dmsl_base_thrift:'ID'().
 -type 'DocumentID'() :: dmsl_base_thrift:'ID'().
