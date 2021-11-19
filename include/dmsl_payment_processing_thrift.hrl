@@ -713,6 +713,7 @@
 
 %% struct 'ComputeContractTermsVarset'
 -record('payproc_ComputeContractTermsVarset', {
+    'currency' :: dmsl_domain_thrift:'CurrencyRef'() | undefined,
     'amount' :: dmsl_domain_thrift:'Cash'() | undefined,
     'shop_id' :: dmsl_domain_thrift:'ShopID'() | undefined,
     'payout_method' :: dmsl_domain_thrift:'PayoutMethodRef'() | undefined,

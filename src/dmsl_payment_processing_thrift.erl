@@ -3227,6 +3227,7 @@ struct_info('ComputeShopTermsVarset') ->
 
 struct_info('ComputeContractTermsVarset') ->
     {struct, struct, [
+        {2, optional, {struct, struct, {dmsl_domain_thrift, 'CurrencyRef'}}, 'currency', undefined},
         {3, optional, {struct, struct, {dmsl_domain_thrift, 'Cash'}}, 'amount', undefined},
         {8, optional, string, 'shop_id', undefined},
         {5, optional, {struct, struct, {dmsl_domain_thrift, 'PayoutMethodRef'}}, 'payout_method', undefined},
