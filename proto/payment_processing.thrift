@@ -2031,6 +2031,7 @@ struct ComputeShopTermsVarset {
 }
 
 struct ComputeContractTermsVarset {
+    2: optional domain.CurrencyRef currency
     3: optional domain.Cash amount
     8: optional domain.ShopID shop_id
     5: optional domain.PayoutMethodRef payout_method
