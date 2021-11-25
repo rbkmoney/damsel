@@ -3178,6 +3178,21 @@ struct TradeBlocObject {
     2: required TradeBloc data
 }
 
+struct IdentityAdmissionsObject {
+    1: required IdentityAdmissionRef ref
+    2: required IdentityAdmission data
+}
+
+struct IdentityAdmissionRef {
+    1: required string name
+}
+
+struct IdentityAdmission {
+    1: required PaymentInstitutionRef payment_institution
+    2: required ContractTemplateRef contract_termplate
+    3: required ContractorIdentificationLevel cotractor_level
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -3227,6 +3242,7 @@ union Reference {
     43 : LegacyCryptoCurrencyRef    crypto_currency_legacy
     44 : CountryRef                 country
     45 : TradeBlocRef               trade_bloc
+    46 : IdentityAdmissionRef       identity_admission
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -3279,6 +3295,8 @@ union DomainObject {
 
     44 : CountryObject              country
     45 : TradeBlocObject            trade_bloc
+
+    46 : IdentityAdmissionsObject   identity_admissions
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
