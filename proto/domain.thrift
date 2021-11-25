@@ -3189,22 +3189,8 @@ struct IdentityAdmissionRef {
 
 struct IdentityAdmission {
     1: required PaymentInstitutionRef payment_institution
-    2: required IdentityClass identity_class
-}
-
-struct IdentityClass {
-    1: required string name
     2: required ContractTemplateRef contract_termplate
-    3: required IdentityAuthLevelName initial_level
-    4: required map<IdentityAuthLevelName, IdentityAuthLevel> levels
-    # 5: optional IdentityAuthChallenges challenges
-}
-
-typedef string IdentityAuthLevelName
-
-struct IdentityAuthLevel {
-    1: required string name
-    2: required ContractorIdentificationLevel contractor_level
+    3: required ContractorIdentificationLevel cotractor_level
 }
 
 /* There are 2 requirements on Reference and DomainObject unions:
