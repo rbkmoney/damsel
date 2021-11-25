@@ -3178,16 +3178,16 @@ struct TradeBlocObject {
     2: required TradeBloc data
 }
 
-struct IdentityAdmissionsObject {
-    1: required IdentityAdmissionRef ref
-    2: required IdentityAdmission data
+struct IdentityProviderObject {
+    1: required IdentityProviderRef ref
+    2: required IdentityProvider data
 }
 
-struct IdentityAdmissionRef {
+struct IdentityProviderRef {
     1: required string name
 }
 
-struct IdentityAdmission {
+struct IdentityProvider {
     1: required PaymentInstitutionRef payment_institution
     2: required ContractTemplateRef contract_termplate
     3: required ContractorIdentificationLevel cotractor_level
@@ -3242,7 +3242,7 @@ union Reference {
     43 : LegacyCryptoCurrencyRef    crypto_currency_legacy
     44 : CountryRef                 country
     45 : TradeBlocRef               trade_bloc
-    46 : IdentityAdmissionRef       identity_admission
+    46 : IdentityProviderRef        identity_provider
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -3296,7 +3296,7 @@ union DomainObject {
     44 : CountryObject              country
     45 : TradeBlocObject            trade_bloc
 
-    46 : IdentityAdmissionsObject   identity_admissions
+    46 : IdentityProviderObject     identity_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
