@@ -2939,7 +2939,7 @@ struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     8: optional set<PaymentInstitutionRef> payment_institutions
     42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
-
+    43: optional set<IdentityProviderRef> identity_providers
 }
 
 /** Dummy (for integrity test purpose) */
