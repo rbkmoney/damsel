@@ -3189,8 +3189,8 @@ struct IdentityProviderRef {
 
 struct IdentityProvider {
     1: required PaymentInstitutionRef payment_institution
-    2: required ContractTemplateRef contract_termplate
-    3: required ContractorIdentificationLevel cotractor_level
+    2: required ContractTemplateRef contract_template
+    3: required ContractorIdentificationLevel contractor_level
 }
 
 /* There are 2 requirements on Reference and DomainObject unions:
