@@ -2839,7 +2839,6 @@ struct PaymentInstitution {
     9: optional CalendarRef calendar
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
-    10: optional ContractTemplateSelector default_wallet_contract_template
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
     8: required set<Residence> residences
