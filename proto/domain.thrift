@@ -2304,6 +2304,8 @@ union CashVolumeProduct {
     1: set<CashVolume> min_of
     /** Максимальный из полученных объёмов. */
     2: set<CashVolume> max_of
+    /** Сумма полученных объёмов. */
+    3: set<CashVolume> sum_of
 }
 
 union CashFlowSelector {
