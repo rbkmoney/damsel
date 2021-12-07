@@ -2839,7 +2839,6 @@ struct PaymentInstitution {
     9: optional CalendarRef calendar
     3: required SystemAccountSetSelector system_account_set
     4: required ContractTemplateSelector default_contract_template
-    10: optional ContractTemplateSelector default_wallet_contract_template
     6: required InspectorSelector inspector
     7: required PaymentInstitutionRealm realm
     8: required set<Residence> residences
@@ -2939,7 +2938,7 @@ struct Globals {
     4: required ExternalAccountSetSelector external_account_set
     8: optional set<PaymentInstitutionRef> payment_institutions
     42: optional ContractPaymentInstitutionDefaults contract_payment_institution_defaults
-
+    43: optional set<IdentityProviderRef> identity_providers
 }
 
 /** Dummy (for integrity test purpose) */
@@ -3178,6 +3177,21 @@ struct TradeBlocObject {
     2: required TradeBloc data
 }
 
+struct IdentityProviderObject {
+    1: required IdentityProviderRef ref
+    2: required IdentityProvider data
+}
+
+struct IdentityProviderRef {
+    1: required string name
+}
+
+struct IdentityProvider {
+    1: required PaymentInstitutionRef payment_institution
+    2: required ContractTemplateRef contract_template
+    3: required ContractorIdentificationLevel contractor_level
+}
+
 /* There are 2 requirements on Reference and DomainObject unions:
  * - all field types must be unique,
  * - all corresponding field names in both unions must match.
@@ -3227,6 +3241,7 @@ union Reference {
     43 : LegacyCryptoCurrencyRef    crypto_currency_legacy
     44 : CountryRef                 country
     45 : TradeBlocRef               trade_bloc
+    46 : IdentityProviderRef        identity_provider
 
     12 : DummyRef                   dummy
     13 : DummyLinkRef               dummy_link
@@ -3279,6 +3294,8 @@ union DomainObject {
 
     44 : CountryObject              country
     45 : TradeBlocObject            trade_bloc
+
+    46 : IdentityProviderObject     identity_provider
 
     12 : DummyObject                dummy
     13 : DummyLinkObject            dummy_link
