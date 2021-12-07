@@ -1772,7 +1772,6 @@
     'calendar' :: dmsl_domain_thrift:'CalendarRef'() | undefined,
     'system_account_set' :: dmsl_domain_thrift:'SystemAccountSetSelector'(),
     'default_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'(),
-    'default_wallet_contract_template' :: dmsl_domain_thrift:'ContractTemplateSelector'() | undefined,
     'inspector' :: dmsl_domain_thrift:'InspectorSelector'(),
     'realm' :: dmsl_domain_thrift:'PaymentInstitutionRealm'(),
     'residences' :: ordsets:ordset(dmsl_domain_thrift:'Residence'()),
@@ -1875,7 +1874,8 @@
 -record('domain_Globals', {
     'external_account_set' :: dmsl_domain_thrift:'ExternalAccountSetSelector'(),
     'payment_institutions' :: ordsets:ordset(dmsl_domain_thrift:'PaymentInstitutionRef'()) | undefined,
-    'contract_payment_institution_defaults' :: dmsl_domain_thrift:'ContractPaymentInstitutionDefaults'() | undefined
+    'contract_payment_institution_defaults' :: dmsl_domain_thrift:'ContractPaymentInstitutionDefaults'() | undefined,
+    'identity_providers' :: ordsets:ordset(dmsl_domain_thrift:'IdentityProviderRef'()) | undefined
 }).
 
 %% struct 'Dummy'
@@ -2158,6 +2158,24 @@
 -record('domain_TradeBlocObject', {
     'ref' :: dmsl_domain_thrift:'TradeBlocRef'(),
     'data' :: dmsl_domain_thrift:'TradeBloc'()
+}).
+
+%% struct 'IdentityProviderObject'
+-record('domain_IdentityProviderObject', {
+    'ref' :: dmsl_domain_thrift:'IdentityProviderRef'(),
+    'data' :: dmsl_domain_thrift:'IdentityProvider'()
+}).
+
+%% struct 'IdentityProviderRef'
+-record('domain_IdentityProviderRef', {
+    'name' :: binary()
+}).
+
+%% struct 'IdentityProvider'
+-record('domain_IdentityProvider', {
+    'payment_institution' :: dmsl_domain_thrift:'PaymentInstitutionRef'(),
+    'contract_template' :: dmsl_domain_thrift:'ContractTemplateRef'(),
+    'contractor_level' :: atom()
 }).
 
 -endif.

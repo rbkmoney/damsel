@@ -537,6 +537,9 @@
     'LegacyCryptoCurrencyObject'/0,
     'CountryObject'/0,
     'TradeBlocObject'/0,
+    'IdentityProviderObject'/0,
+    'IdentityProviderRef'/0,
+    'IdentityProvider'/0,
     'Reference'/0,
     'DomainObject'/0
 ]).
@@ -1525,6 +1528,9 @@
     'LegacyCryptoCurrencyObject' |
     'CountryObject' |
     'TradeBlocObject' |
+    'IdentityProviderObject' |
+    'IdentityProviderRef' |
+    'IdentityProvider' |
     'Reference' |
     'DomainObject'.
 
@@ -3015,6 +3021,15 @@
 %% struct 'TradeBlocObject'
 -type 'TradeBlocObject'() :: #'domain_TradeBlocObject'{}.
 
+%% struct 'IdentityProviderObject'
+-type 'IdentityProviderObject'() :: #'domain_IdentityProviderObject'{}.
+
+%% struct 'IdentityProviderRef'
+-type 'IdentityProviderRef'() :: #'domain_IdentityProviderRef'{}.
+
+%% struct 'IdentityProvider'
+-type 'IdentityProvider'() :: #'domain_IdentityProvider'{}.
+
 %% union 'Reference'
 -type 'Reference'() ::
     {'category', 'CategoryRef'()} |
@@ -3054,6 +3069,7 @@
     {'crypto_currency_legacy', 'LegacyCryptoCurrencyRef'()} |
     {'country', 'CountryRef'()} |
     {'trade_bloc', 'TradeBlocRef'()} |
+    {'identity_provider', 'IdentityProviderRef'()} |
     {'dummy', 'DummyRef'()} |
     {'dummy_link', 'DummyLinkRef'()} |
     {'party_prototype', 'PartyPrototypeRef'()} |
@@ -3099,6 +3115,7 @@
     {'crypto_currency_legacy', 'LegacyCryptoCurrencyObject'()} |
     {'country', 'CountryObject'()} |
     {'trade_bloc', 'TradeBlocObject'()} |
+    {'identity_provider', 'IdentityProviderObject'()} |
     {'dummy', 'DummyObject'()} |
     {'dummy_link', 'DummyLinkObject'()} |
     {'party_prototype', 'PartyPrototypeObject'()} |
@@ -3680,6 +3697,9 @@ structs() ->
         'LegacyCryptoCurrencyObject',
         'CountryObject',
         'TradeBlocObject',
+        'IdentityProviderObject',
+        'IdentityProviderRef',
+        'IdentityProvider',
         'Reference',
         'DomainObject'
     ].
@@ -6598,7 +6618,6 @@ struct_info('PaymentInstitution') ->
         {9, optional, {struct, struct, {dmsl_domain_thrift, 'CalendarRef'}}, 'calendar', undefined},
         {3, required, {struct, union, {dmsl_domain_thrift, 'SystemAccountSetSelector'}}, 'system_account_set', undefined},
         {4, required, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_contract_template', undefined},
-        {10, optional, {struct, union, {dmsl_domain_thrift, 'ContractTemplateSelector'}}, 'default_wallet_contract_template', undefined},
         {6, required, {struct, union, {dmsl_domain_thrift, 'InspectorSelector'}}, 'inspector', undefined},
         {7, required, {enum, {dmsl_domain_thrift, 'PaymentInstitutionRealm'}}, 'realm', undefined},
         {8, required, {set, {enum, {dmsl_domain_thrift, 'CountryCode'}}}, 'residences', undefined},
@@ -6707,7 +6726,8 @@ struct_info('Globals') ->
     {struct, struct, [
         {4, required, {struct, union, {dmsl_domain_thrift, 'ExternalAccountSetSelector'}}, 'external_account_set', undefined},
         {8, optional, {set, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}}, 'payment_institutions', undefined},
-        {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined}
+        {42, optional, {struct, struct, {dmsl_domain_thrift, 'ContractPaymentInstitutionDefaults'}}, 'contract_payment_institution_defaults', undefined},
+        {43, optional, {set, {struct, struct, {dmsl_domain_thrift, 'IdentityProviderRef'}}}, 'identity_providers', undefined}
     ]};
 
 struct_info('Dummy') ->
@@ -6992,6 +7012,24 @@ struct_info('TradeBlocObject') ->
         {2, required, {struct, struct, {dmsl_domain_thrift, 'TradeBloc'}}, 'data', undefined}
     ]};
 
+struct_info('IdentityProviderObject') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'IdentityProviderRef'}}, 'ref', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'IdentityProvider'}}, 'data', undefined}
+    ]};
+
+struct_info('IdentityProviderRef') ->
+    {struct, struct, [
+        {1, required, string, 'name', undefined}
+    ]};
+
+struct_info('IdentityProvider') ->
+    {struct, struct, [
+        {1, required, {struct, struct, {dmsl_domain_thrift, 'PaymentInstitutionRef'}}, 'payment_institution', undefined},
+        {2, required, {struct, struct, {dmsl_domain_thrift, 'ContractTemplateRef'}}, 'contract_template', undefined},
+        {3, required, {enum, {dmsl_domain_thrift, 'ContractorIdentificationLevel'}}, 'contractor_level', undefined}
+    ]};
+
 struct_info('Reference') ->
     {struct, union, [
         {1, optional, {struct, struct, {dmsl_domain_thrift, 'CategoryRef'}}, 'category', undefined},
@@ -7031,6 +7069,7 @@ struct_info('Reference') ->
         {43, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyRef'}}, 'crypto_currency_legacy', undefined},
         {44, optional, {struct, struct, {dmsl_domain_thrift, 'CountryRef'}}, 'country', undefined},
         {45, optional, {struct, struct, {dmsl_domain_thrift, 'TradeBlocRef'}}, 'trade_bloc', undefined},
+        {46, optional, {struct, struct, {dmsl_domain_thrift, 'IdentityProviderRef'}}, 'identity_provider', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyRef'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkRef'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeRef'}}, 'party_prototype', undefined},
@@ -7077,6 +7116,7 @@ struct_info('DomainObject') ->
         {43, optional, {struct, struct, {dmsl_domain_thrift, 'LegacyCryptoCurrencyObject'}}, 'crypto_currency_legacy', undefined},
         {44, optional, {struct, struct, {dmsl_domain_thrift, 'CountryObject'}}, 'country', undefined},
         {45, optional, {struct, struct, {dmsl_domain_thrift, 'TradeBlocObject'}}, 'trade_bloc', undefined},
+        {46, optional, {struct, struct, {dmsl_domain_thrift, 'IdentityProviderObject'}}, 'identity_provider', undefined},
         {12, optional, {struct, struct, {dmsl_domain_thrift, 'DummyObject'}}, 'dummy', undefined},
         {13, optional, {struct, struct, {dmsl_domain_thrift, 'DummyLinkObject'}}, 'dummy_link', undefined},
         {10, optional, {struct, struct, {dmsl_domain_thrift, 'PartyPrototypeObject'}}, 'party_prototype', undefined},
@@ -8113,6 +8153,15 @@ record_name('CountryObject') ->
 
 record_name('TradeBlocObject') ->
     'domain_TradeBlocObject';
+
+record_name('IdentityProviderObject') ->
+    'domain_IdentityProviderObject';
+
+record_name('IdentityProviderRef') ->
+    'domain_IdentityProviderRef';
+
+record_name('IdentityProvider') ->
+    'domain_IdentityProvider';
 
 record_name(_) -> error(badarg).
 
