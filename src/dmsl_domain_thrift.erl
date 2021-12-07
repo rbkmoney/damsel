@@ -2470,7 +2470,8 @@
 %% union 'CashVolumeProduct'
 -type 'CashVolumeProduct'() ::
     {'min_of', ordsets:ordset('CashVolume'())} |
-    {'max_of', ordsets:ordset('CashVolume'())}.
+    {'max_of', ordsets:ordset('CashVolume'())} |
+    {'sum_of', ordsets:ordset('CashVolume'())}.
 
 %% union 'CashFlowSelector'
 -type 'CashFlowSelector'() ::
@@ -6020,7 +6021,8 @@ struct_info('CashVolumeShare') ->
 struct_info('CashVolumeProduct') ->
     {struct, union, [
         {1, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'min_of', undefined},
-        {2, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'max_of', undefined}
+        {2, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'max_of', undefined},
+        {3, optional, {set, {struct, union, {dmsl_domain_thrift, 'CashVolume'}}}, 'sum_of', undefined}
     ]};
 
 struct_info('CashFlowSelector') ->
