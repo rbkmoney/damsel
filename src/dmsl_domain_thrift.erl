@@ -7022,7 +7022,7 @@ struct_info('IdentityProviderObject') ->
 
 struct_info('IdentityProviderRef') ->
     {struct, struct, [
-        {1, required, string, 'name', undefined}
+        {1, required, string, 'id', undefined}
     ]};
 
 struct_info('IdentityProvider') ->

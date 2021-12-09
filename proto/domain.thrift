@@ -3185,7 +3185,7 @@ struct IdentityProviderObject {
 }
 
 struct IdentityProviderRef {
-    1: required string name
+    1: required string id
 }
 
 struct IdentityProvider {

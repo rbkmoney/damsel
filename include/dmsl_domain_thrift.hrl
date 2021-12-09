@@ -2168,7 +2168,7 @@
 
 %% struct 'IdentityProviderRef'
 -record('domain_IdentityProviderRef', {
-    'name' :: binary()
+    'id' :: binary()
 }).
 
 %% struct 'IdentityProvider'
