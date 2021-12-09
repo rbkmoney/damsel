@@ -8,10 +8,15 @@ namespace erlang ptt
     Платежный токен, который передается плательщику. Платежный токен содержит
     чувствительные данные, которые сериализуются в thrift-binary и шифруются перед отправкой клиенту.
     Платежный токен может иметь срок действия, по истечении которого становится недействительным.
+
+    Токен может быть привязан к определённой сущности - это сделает невозможным
+    его использование в остальных случаях. Контроль осуществляется средствами bouncer
+    https://github.com/rbkmoney/bouncer-proto/blob/master/proto/context_v1.thrift
 */
 struct PaymentToolToken {
     1: required PaymentToolTokenPayload payload
     2: optional base.Timestamp valid_until
+    3: optional base.Opaque bouncer_data
 }
 
 /**
